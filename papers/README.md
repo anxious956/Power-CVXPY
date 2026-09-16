@@ -60,11 +60,24 @@ Also referenced, not papers: NREL PyPSCAD open grid-forming and grid-following m
 | Taylor & Domínguez-García, *Active Fault Detection in Static Systems*, IEEE TAC 70(8):5523–5529, 2025 | The theoretical parent of the whole line. Cited as [12] in the Geometry paper. | Paywalled. **Get through the NJIT library.** The 2023 conference paper (#2 above) covers much of it. |
 | Campbell & Nikoukhah, *Auxiliary Signal Design for Failure Detection*, Princeton UP 2004 | Where the auxiliary-signal idea comes from. Geometry ref [10]. | Book. Library. |
 | Kasztenny, *Distance elements for line protection applications near unconventional sources*, 2022 | The practitioner's statement of the problem, by the person who designs SEL relays. Geometry ref [4]. | IEEE / SEL. Try selinc.com, which posts many of its conference papers free. |
-| Kasztenny, Fischer & Hooshyar, *From complexity to consistency: reframing fault response requirements for IBRs*, SEL tech report 2026 | Argues IEEE 2800's phasor-based specification is the wrong frame and proposes a time-domain one. Very recent, directly about the signal our project depends on. | SEL tech report. Try selinc.com. |
+| Kasztenny, Fischer & Hooshyar, *From complexity to consistency: reframing fault response requirements for IBRs*, SEL tech report 2026 | Argues IEEE 2800's phasor-based specification is the wrong frame and proposes a time-domain one. Cited by **both** of Taylor's 2026 papers as the reason to hope inverters will become predictable. | Direct link found in Taylor's references: **https://selinc.com/api/download/141627/** — the site blocks automated downloads, so open it in a browser. |
 | Baeckeland, Venkatramanan, Dhople & Kleemann, *On the distance protection of power grids dominated by grid-forming inverters*, ISGT Europe 2022 | Geometry ref [5]. Baeckeland is a coauthor on Taylor's 2026 reachability paper. | IEEE only, not on arXiv. |
 | IEEE Std 2800-2022 | The standard that mandates negative-sequence injection, i.e. the reason the auxiliary signal is deployable at all. | Standard. NJIT library or IEEE subscription. |
+| **Baeckeland, Yang & Seo 2026, unified model of current-limiting GFM inverters**, IEEE TPWRS 41(1):198-213 | **The Simulink IEEE 14-bus model with five grid-forming inverters** that Taylor's 2026 reachability paper runs on. Getting this would cover most of work package 2. | DOI 10.1109/TPWRS.2025.3587224. Ask Prof. Taylor directly. |
+| Baeckeland PhD thesis, KU Leuven 2022 | Chapter 3 carries the 14-bus line data used in the Geometry example | KU Leuven repository |
+| Blanchini et al. 2017, SIAM J. Control Optim. | The duality argument the 2023 paper builds on | Journal |
+| Banaiemoqadam, Hooshyar & Azzouz 2020, dual current control | Prior art: make inverters relay-friendly by control instead of injection | IEEE TPWRD 36(5) |
+| Karimi, Yazdani & Iravani 2008 | Earliest use of negative-sequence injection we found, for islanding detection | IEEE TPEL 23(1) |
+| Adhikari, Brahma & Gadde 2021, source-agnostic time-domain distance relay | Closest competitor to the reachability paper | IEEE TPWRD 37(5) |
 
-## G. Reading order by role
+## G. Notes
+
+Full reading notes live in `papers/notes/`:
+- `A_taylor_line.md` — Taylor's five papers, read in full, with the reproducible examples,
+  every parameter of the 14-bus test system, the measured detection times, and the three
+  openings the authors name themselves.
+
+## H. Reading order by role
 
 1. **Everyone:** #2 in full (it is five pages), then #6 sections on the gaps.
 2. **Optimization:** #3 sections V and VI, then the TAC paper from the library.
@@ -72,7 +85,7 @@ Also referenced, not papers: NREL PyPSCAD open grid-forming and grid-following m
 4. **Detection:** #12, #17, #18, #10.
 5. **Embedded:** #18, #5.
 
-## H. What is and is not in the literature, as of 16 Sep 2026
+## I. What is and is not in the literature, as of 16 Sep 2026
 
 - ML fault detection on inverter grids: many papers (#12, #17, #14).
 - Auxiliary-signal fault detection: only Taylor's line (#1, #2, #3), all model-based, no learning.
