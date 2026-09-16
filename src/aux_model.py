@@ -38,11 +38,14 @@ class Params:
         return self.z0_ratio * self.z1
 
 
-def solve(p: Params, scen, srcL, i_R, delta, m=0.5, mr=0.0):
+def solve(p: Params, scen, srcL, i_R, delta, m=0.5, mr=0.0, inj0=0.0):
     """Static sequence-network solve. srcL = SG EMF or local IBR current (per p.local).
+    `inj0` is a zero-sequence current injected at the remote bus; a single-phase
+    line-to-neutral load draws equal positive-, negative- and zero-sequence current, so it
+    is the term that lets such a load be modeled as a confuser for a ground fault.
     Returns relay measurement y = [vL+, vL-, vL0, iL+, iL-, iL0] (complex)."""
     zl = {1: p.z1, 2: p.z1, 0: p.z0}
-    inj = {1: i_R, 2: delta, 0: 0.0}
+    inj = {1: i_R, 2: delta, 0: inj0}
     Rf = mr * p.rF
     idx = {}
     k = 0

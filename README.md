@@ -19,7 +19,7 @@ This repository is that next step, split into four parts:
 |---|------|------------------|-------|
 | 1 | **Design tool** | A CVXPY tool: input a grid model, output the smallest separating auxiliary signal | TBD |
 | 2 | **Simulation** | A Simulink / PSCAD test grid with SGs and inverters injecting the optimized signal; labeled fault waveforms | TBD |
-| 3 | **Detection** | Relay-side detection of the signal: Taylor's multiple-model Kalman filter vs a learned detector; shrink the signal until each fails | Asmar Hasanova |
+| 3 | **Detection** | Relay-side detection of the signal: conventional elements and Taylor's multiple-model Kalman filter vs a learned detector; shrink the signal until each fails | Asmar Hasanova |
 | 4 | **Embedded** | The detector on an edge board, decision latency measured against a one-cycle (16 ms) budget | TBD |
 
 ## What is already here (first result, 13 Sep 2026)
@@ -42,14 +42,42 @@ Left: which δ separate faults from normal (black = all). Middle: the five harde
 
 Full numbers and honest caveats: [results/RESULTS.md](results/RESULTS.md).
 
+## Second result: can the relay actually see the signal? (16 Sep 2026)
+
+A waveform generator (`src/waveforms.py`) drives the same circuit, so the design tool's
+certified δ and the detector's measured breaking point live on one system. Four detectors
+compete on the ambiguous regime the design tool itself flagged, high-resistance ground faults
+against a single-phase load switching on, with δ swept along the designed direction.
+
+| δ (pu) | \|i⁻\| threshold | \|Δi⁻\| incremental | engineered features + LR | 1D CNN |
+|---|---|---|---|---|
+| 0.000 | 0.0 % | 0.0 % | 99.8 % | 100 % |
+| 0.200 | 0.2 % | 0.0 % | 100 % | 100 % |
+| 0.514 | 0.0 % | 0.0 % | 100 % | 100 % |
+
+Three findings, one of them negative and worth keeping. A magnitude threshold on negative
+sequence is useless here and *more signal does not help it*, because as δ grows the injected
+current diverts into the fault and the relay sees less of it, not more. A conventional
+multivariate element built from sequence ratios and angles solves the regime completely, and
+the CNN matches it rather than beating it: the gain is in using the right quantities, not in
+learning. And in this regime the auxiliary signal is not the binding constraint at all.
+
+That last point says the confuser is too easy. The next iteration replaces it with the case
+protection actually finds hard, an out-of-zone fault near the reach point, which is also the
+decision Taylor's formulation is about. Details and caveats:
+[results/DETECTION.md](results/DETECTION.md).
+
+![detection sweep](results/detection_sweep.png)
+
 ## Quick start
 
 ```bash
 git clone https://github.com/anxious956/Power-CVXPY.git
 cd Power-CVXPY
 pip install -r requirements.txt
-python src/aux_signal_toy.py weak_sg        # ~40 s on a laptop, no GPU
-python src/sweep_delta0.py                  # regime sweep, ~1 min
+python src/aux_signal_toy.py weak_sg        # design tool, ~40 s, no GPU
+python src/sweep_delta0.py                  # which regimes need a signal, ~1 min
+python src/detect.py --quick                # detector comparison, ~1 min (full run ~3 min)
 ```
 
 Each run prints the ambiguous fault cases, the grid-search minimum, the CVXPY optimum, and writes a PNG and JSON into `results/`. Presets live at the bottom of `src/aux_model.py`; copy one and change a number to run your own case.
@@ -60,7 +88,10 @@ Each run prints the ambiguous fault cases, the grid-search minimum, the CVXPY op
 src/        aux_model.py      two-bus sequence model, zonotope sets, LP separation test, presets
             aux_signal_toy.py grid search + Farkas-dual optimization + figure
             sweep_delta0.py   which regimes need a signal at all
-results/    RESULTS.md, figures and JSON for every preset
+            waveforms.py      time-domain relay waveforms from the same circuit, with confusers
+            detect.py         detector comparison and the delta sweep
+results/    RESULTS.md   design-tool results, figures and JSON for every preset
+            DETECTION.md detector comparison, the delta sweep and its caveats
 papers/     README.md reading list with links, fetch.sh to download the open-access PDFs
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
             TEAM_BRIEF.md   onboarding note for the team
@@ -76,10 +107,13 @@ docs/       PLAN.md   project plan, milestones, deliverables, target venues
 
 - [x] Toy replication of the design method, three regimes, CVXPY optimum verified
 - [x] Literature collected, gap stated
+- [x] Waveform generator on the same circuit, with negative-sequence confusers
+- [x] First detector comparison: naive threshold vs engineered features vs CNN
+- [ ] Harder confuser: out-of-zone faults at the reach boundary
+- [ ] Multiple-model Kalman filter detector (Pirani et al. 2022) in the comparison
 - [ ] Advisor confirmed
 - [ ] Team roles assigned
-- [ ] Simulation test grid
-- [ ] Detector comparison
+- [ ] EMT simulation test grid (Simulink or PSCAD)
 - [ ] Embedded latency measurement
 - [ ] Conference paper (target: NAPS 2027)
 

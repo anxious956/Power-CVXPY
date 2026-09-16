@@ -1,0 +1,455 @@
+{
+  "far": 0.01,
+  "magnitudes": [
+    0.0,
+    0.025,
+    0.05,
+    0.075,
+    0.1,
+    0.15,
+    0.2,
+    0.3,
+    0.4,
+    0.514
+  ],
+  "n_train": 900,
+  "n_test": 450,
+  "noise": 0.01,
+  "design_delta": [
+    0.4725416047022092,
+    -0.20261044826170205,
+    0.5141464401504174
+  ],
+  "rows": [
+    {
+      "delta": 0.0,
+      "negseq": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.5122545174586168,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.011111111111111112,
+        "threshold": 0.5126354228153205,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 10
+        }
+      },
+      "engineered": {
+        "detection_rate": 0.9977777777777778,
+        "false_alarm": 0.0077777777777777776,
+        "threshold": -1.2236590641259966,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 2,
+          "unbalanced_load": 5
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.01,
+        "threshold": -0.2332584261894226,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 9
+        }
+      }
+    },
+    {
+      "delta": 0.025,
+      "negseq": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.015555555555555555,
+        "threshold": 0.5108529340098034,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 14
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.011111111111111112,
+        "threshold": 0.5125481828198777,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 10
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0033333333333333335,
+        "threshold": -1.4651564030580886,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 3
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.006666666666666667,
+        "threshold": -1.3979789018630981,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 6
+        }
+      }
+    },
+    {
+      "delta": 0.05,
+      "negseq": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.011111111111111112,
+        "threshold": 0.5196380304417211,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 10
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.5126656670783788,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0022222222222222222,
+        "threshold": -1.4301934973554609,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 2
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0077777777777777776,
+        "threshold": -2.268157958984375,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 7
+        }
+      }
+    },
+    {
+      "delta": 0.075,
+      "negseq": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.016666666666666666,
+        "threshold": 0.5302325020759713,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 15
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.5127250292924036,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0033333333333333335,
+        "threshold": -1.747436959476806,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 3
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": -1.732563853263855,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      }
+    },
+    {
+      "delta": 0.1,
+      "negseq": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.016666666666666666,
+        "threshold": 0.5438077826653438,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 15
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.5124593434979753,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0022222222222222222,
+        "threshold": -2.0287670133712155,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 2
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": -3.2134997844696045,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      }
+    },
+    {
+      "delta": 0.15,
+      "negseq": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.017777777777777778,
+        "threshold": 0.5739784488175622,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 16
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.512120229949789,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0044444444444444444,
+        "threshold": -2.099742700424531,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 4
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.01,
+        "threshold": -0.5386428833007812,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 9
+        }
+      }
+    },
+    {
+      "delta": 0.2,
+      "negseq": {
+        "detection_rate": 0.0022222222222222222,
+        "false_alarm": 0.013333333333333334,
+        "threshold": -0.04758239743614766,
+        "polarity": -1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 12
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.5119529080805443,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 11
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0033333333333333335,
+        "threshold": -2.0644284916857463,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 3
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.015555555555555555,
+        "threshold": -0.3380522131919861,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 14
+        }
+      }
+    },
+    {
+      "delta": 0.3,
+      "negseq": {
+        "detection_rate": 0.17555555555555555,
+        "false_alarm": 0.0077777777777777776,
+        "threshold": -0.046892171622189574,
+        "polarity": -1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 7
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.011111111111111112,
+        "threshold": 0.5137646361974603,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 10
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.008888888888888889,
+        "threshold": -2.631218946696384,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 8
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.013333333333333334,
+        "threshold": -1.8442107439041138,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 12
+        }
+      }
+    },
+    {
+      "delta": 0.4,
+      "negseq": {
+        "detection_rate": 0.08555555555555555,
+        "false_alarm": 0.013333333333333334,
+        "threshold": -0.05947519634551484,
+        "polarity": -1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 12
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.013333333333333334,
+        "threshold": 0.5146635230541633,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 12
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.014444444444444444,
+        "threshold": -2.7377323915815257,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 13
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.011111111111111112,
+        "threshold": -0.44696545600891113,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 10
+        }
+      }
+    },
+    {
+      "delta": 0.514,
+      "negseq": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.014444444444444444,
+        "threshold": 0.8218979081275626,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 13
+        }
+      },
+      "incremental": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.013333333333333334,
+        "threshold": 0.517571751344978,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 12
+        }
+      },
+      "engineered": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.006666666666666667,
+        "threshold": -2.084589665744522,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 6
+        }
+      },
+      "cnn": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.011111111111111112,
+        "threshold": -0.18649189174175262,
+        "polarity": 1,
+        "fp_by_event": {
+          "load_step": 0,
+          "unbalanced_load": 10
+        }
+      }
+    }
+  ]
+}
