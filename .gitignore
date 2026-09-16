@@ -1,0 +1,20 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# personal / not for the public repo
+email_to_taylor_draft.md
+*.docx
+*.pptx
+
+# papers: linked in papers/README.md, fetched by papers/fetch.sh, not redistributed
+papers/*.pdf
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
