@@ -1,0 +1,210 @@
+{
+  "far": 0.01,
+  "magnitudes": [
+    0.0,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.514
+  ],
+  "n_train": 900,
+  "n_test": 450,
+  "design_delta": [
+    0.4725416047022092,
+    -0.20261044826170205,
+    0.5141464401504174
+  ],
+  "rows": [
+    {
+      "delta": 0.0,
+      "reactance": {
+        "detection_rate": 0.027777777777777776,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.01689612269275093,
+        "polarity": -1
+      },
+      "negseq": {
+        "detection_rate": 0.06888888888888889,
+        "false_alarm": 0.005555555555555556,
+        "threshold": 0.9905648122680604,
+        "polarity": 1
+      },
+      "engineered": {
+        "detection_rate": 0.96,
+        "false_alarm": 0.01,
+        "threshold": 0.2775154253251282,
+        "polarity": 1
+      },
+      "cnn": {
+        "detection_rate": 0.7688888888888888,
+        "false_alarm": 0.0077777777777777776,
+        "threshold": 0.9622582793235779,
+        "polarity": 1
+      }
+    },
+    {
+      "delta": 0.05,
+      "reactance": {
+        "detection_rate": 0.012222222222222223,
+        "false_alarm": 0.013333333333333334,
+        "threshold": 0.7655813294970872,
+        "polarity": -1
+      },
+      "negseq": {
+        "detection_rate": 0.07444444444444444,
+        "false_alarm": 0.006666666666666667,
+        "threshold": 1.0021741271243136,
+        "polarity": 1
+      },
+      "engineered": {
+        "detection_rate": 0.9655555555555555,
+        "false_alarm": 0.008888888888888889,
+        "threshold": 0.10790421431734099,
+        "polarity": 1
+      },
+      "cnn": {
+        "detection_rate": 0.8366666666666667,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 1.1705893278121948,
+        "polarity": 1
+      }
+    },
+    {
+      "delta": 0.1,
+      "reactance": {
+        "detection_rate": 0.008888888888888889,
+        "false_alarm": 0.006666666666666667,
+        "threshold": 3.7552777636019807,
+        "polarity": -1
+      },
+      "negseq": {
+        "detection_rate": 0.07,
+        "false_alarm": 0.006666666666666667,
+        "threshold": 1.0225510420762653,
+        "polarity": 1
+      },
+      "engineered": {
+        "detection_rate": 0.9722222222222222,
+        "false_alarm": 0.0077777777777777776,
+        "threshold": 0.0233452669379568,
+        "polarity": 1
+      },
+      "cnn": {
+        "detection_rate": 0.8977777777777778,
+        "false_alarm": 0.014444444444444444,
+        "threshold": 1.4490227699279785,
+        "polarity": 1
+      }
+    },
+    {
+      "delta": 0.2,
+      "reactance": {
+        "detection_rate": 0.02,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 9.102959068500255,
+        "polarity": -1
+      },
+      "negseq": {
+        "detection_rate": 0.06777777777777778,
+        "false_alarm": 0.005555555555555556,
+        "threshold": 1.057694439887531,
+        "polarity": 1
+      },
+      "engineered": {
+        "detection_rate": 0.98,
+        "false_alarm": 0.005555555555555556,
+        "threshold": -0.02585013376624612,
+        "polarity": 1
+      },
+      "cnn": {
+        "detection_rate": 0.9344444444444444,
+        "false_alarm": 0.012222222222222223,
+        "threshold": 0.9811987280845642,
+        "polarity": 1
+      }
+    },
+    {
+      "delta": 0.3,
+      "reactance": {
+        "detection_rate": 0.0044444444444444444,
+        "false_alarm": 0.013333333333333334,
+        "threshold": 15.199471604054377,
+        "polarity": -1
+      },
+      "negseq": {
+        "detection_rate": 0.06777777777777778,
+        "false_alarm": 0.005555555555555556,
+        "threshold": 1.091383052532843,
+        "polarity": 1
+      },
+      "engineered": {
+        "detection_rate": 0.9833333333333333,
+        "false_alarm": 0.006666666666666667,
+        "threshold": -0.20740582011007158,
+        "polarity": 1
+      },
+      "cnn": {
+        "detection_rate": 0.9266666666666666,
+        "false_alarm": 0.013333333333333334,
+        "threshold": 1.7970142364501953,
+        "polarity": 1
+      }
+    },
+    {
+      "delta": 0.4,
+      "reactance": {
+        "detection_rate": 0.016666666666666666,
+        "false_alarm": 0.02,
+        "threshold": 14.783399482508838,
+        "polarity": -1
+      },
+      "negseq": {
+        "detection_rate": 0.06777777777777778,
+        "false_alarm": 0.005555555555555556,
+        "threshold": 1.1358229325216112,
+        "polarity": 1
+      },
+      "engineered": {
+        "detection_rate": 0.9933333333333333,
+        "false_alarm": 0.006666666666666667,
+        "threshold": -0.272482281920578,
+        "polarity": 1
+      },
+      "cnn": {
+        "detection_rate": 0.9622222222222222,
+        "false_alarm": 0.015555555555555555,
+        "threshold": -0.2201695740222931,
+        "polarity": 1
+      }
+    },
+    {
+      "delta": 0.514,
+      "reactance": {
+        "detection_rate": 0.011111111111111112,
+        "false_alarm": 0.0077777777777777776,
+        "threshold": 22.276054420264664,
+        "polarity": -1
+      },
+      "negseq": {
+        "detection_rate": 0.06666666666666667,
+        "false_alarm": 0.0044444444444444444,
+        "threshold": 1.1831515414075402,
+        "polarity": 1
+      },
+      "engineered": {
+        "detection_rate": 0.9944444444444445,
+        "false_alarm": 0.006666666666666667,
+        "threshold": -0.331973060593144,
+        "polarity": 1
+      },
+      "cnn": {
+        "detection_rate": 0.9855555555555555,
+        "false_alarm": 0.01,
+        "threshold": -0.9180548191070557,
+        "polarity": 1
+      }
+    }
+  ]
+}
