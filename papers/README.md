@@ -72,10 +72,16 @@ Also referenced, not papers: NREL PyPSCAD open grid-forming and grid-following m
 
 ## G. Notes
 
-Full reading notes live in `papers/notes/`:
-- `A_taylor_line.md` — Taylor's five papers, read in full, with the reproducible examples,
-  every parameter of the 14-bus test system, the measured detection times, and the three
-  openings the authors name themselves.
+All 18 papers have been read in full. Notes live in `papers/notes/`:
+
+- **`SYNTHESIS.md`** — start here. What the whole set says, what we can and cannot claim,
+  which dataset to use, and the project restated in one paragraph.
+- `A_taylor_line.md` — Taylor's five papers, with the reproducible examples, every parameter
+  of the 14-bus test system, the measured detection times, and the openings the authors name.
+- `B_problem_statement.md` — the Sandia gap analysis and two impact studies. Contains the
+  six "No literature found" entries and the current-limiter angle measurements.
+- `C_competing_methods.md` — the three alternatives, and exactly what they cost us in claims.
+- `D_ml_and_datasets.md` — the ML literature and a side-by-side of the four datasets.
 
 ## H. Reading order by role
 

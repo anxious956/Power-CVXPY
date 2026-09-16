@@ -108,9 +108,21 @@ docs/       PLAN.md   project plan, milestones, deliverables, target venues
 
 ## Reading order
 
-1. Everyone: Taylor & Domínguez-García, *Geometry of Distance Protection* (arXiv 2510.04379), Sections I, II, VI.
-2. Then Pirani, Hosseinzadeh, Taylor, Sinopoli, *Optimal Active Fault Detection in Inverter-Based Grids* (arXiv 2209.06760), abstract and Section I.
+All 18 papers in `papers/` have been read; notes are in `papers/notes/`.
+
+1. Everyone: [`papers/notes/SYNTHESIS.md`](papers/notes/SYNTHESIS.md), then Taylor &
+   Domínguez-García, *Auxiliary Signal-Based Distance Protection in Inverter-Dominated Power
+   Systems* (arXiv 2311.10880). It is five pages and it is the clearest statement of the idea.
+2. Then the Sandia gap analysis, the sections on what is missing.
 3. Per role: see [papers/README.md](papers/README.md).
+
+What the reading changed: three claims we might have made are already taken (incremental
+negative-sequence detection, protection-aware inverter control validated on hardware, and ML
+fault detection on inverter grids). What survives is that Taylor's method is the only one
+offering a separation **guarantee** rather than a parameter sweep, that nobody has compared
+the competing methods against each other, and that the auxiliary signal appears zero times in
+~600 references of ML literature. The project is repositioned accordingly in
+[`docs/PLAN.md`](docs/PLAN.md).
 
 ## Status
 
@@ -123,6 +135,8 @@ docs/       PLAN.md   project plan, milestones, deliverables, target venues
 - [ ] Error bars over seeds
 - [ ] Multiple-model Kalman filter detector (Pirani et al. 2022) in the comparison
 - [ ] Sequence-domain front end for the learned detector
+- [x] All 18 papers read, notes and synthesis written
+- [ ] EvEMTBench downloaded and opened
 - [ ] Advisor confirmed
 - [ ] Team roles assigned
 - [ ] EMT simulation test grid (Simulink or PSCAD)
