@@ -24,7 +24,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dataclasses import replace as _replace
-from zone_model import ZoneParams, solve_zone, apparent_impedance
+from zone_model import ZoneParams, solve_zone, loop_impedances, supervised_reactance
 from waveforms import _synth, SigParams, sequence_phasors, CYCLE, EVENT
 from detect import evaluate, train_cnn, FAR
 
@@ -85,37 +85,44 @@ def _phasors(x):
     return vpre, vpost, ipre, ipost
 
 
-def _zapp(vpost, ipost, loop):
+def _loops(vpost, ipost, g):
     y = np.array([vpost[1], vpost[2], vpost[0], ipost[1], ipost[2], ipost[0]])
-    return apparent_impedance(y, loop)
+    return loop_impedances(y, g.z1, g.z0_ratio * g.z1)
 
 
-def score_reactance(X):
-    """The textbook distance element: the reactance of the apparent impedance.
-    Smaller means closer, so the polarity search in evaluate() will pick 'low = in zone'."""
-    out = []
-    for x in X:
-        _, vpost, _, ipost = _phasors(x)
-        zg, zp = _zapp(vpost, ipost, "ag"), _zapp(vpost, ipost, "ab")
-        out.append(min(zg.imag, zp.imag))
-    return np.array(out)
+def _seq_vec(vpost, ipost):
+    return np.array([vpost[1], vpost[2], vpost[0], ipost[1], ipost[2], ipost[0]])
+
+
+def score_reactance(X, g):
+    """The textbook distance element, implemented the way a relay does it: six fault loops,
+    k0 compensation on the ground loops, each loop supervised by its own current so healthy
+    loops cannot vote, forward loops only, smallest reactance wins. Thresholding this score
+    is exactly setting a zone reach."""
+    z1, z0 = g.z1, g.z0_ratio * g.z1
+    return np.array([supervised_reactance(_seq_vec(*_phasors(x)[1::2]), z1, z0) for x in X])
 
 
 def score_negseq(X):
     return np.array([abs(sequence_phasors(x[3:], EVENT + CYCLE)[2]) for x in X])
 
 
-def zone_features(X):
+def zone_features(X, g):
     feats = []
     for x in X:
         vpre, vpost, ipre, ipost = _phasors(x)
-        zg, zp = _zapp(vpost, ipost, "ag"), _zapp(vpost, ipost, "ab")
+        L = _loops(vpost, ipost, g)
+        fwd = [z.imag for z in L.values() if z.imag > 0]
+        sup = supervised_reactance(_seq_vec(vpost, ipost), g.z1, g.z0_ratio * g.z1)
+        zg, zp = L["ag"], L["ab"]
         v0, v1, v2 = vpost; i0, i1, i2 = ipost
         dv0, dv1, dv2 = vpost - vpre; di0, di1, di2 = ipost - ipre
         e = 1e-9
         feats.append([
             zg.real, zg.imag, abs(zg), np.angle(zg),
             zp.real, zp.imag, abs(zp), np.angle(zp),
+            sup, min(fwd) if fwd else 10.0, len(fwd),
+            min((z.imag for z in L.values()), default=0.0),
             abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
             abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0),
             abs(i2) / (abs(i1) + e), abs(i0) / (abs(i1) + e), abs(i0) / (abs(i2) + e),
@@ -126,12 +133,12 @@ def zone_features(X):
     return np.nan_to_num(np.array(feats), nan=0.0, posinf=0.0, neginf=0.0)
 
 
-def score_engineered(Xtr, ytr, Xte, seed=0):
+def score_engineered(Xtr, ytr, Xte, g, seed=0):
     from sklearn.linear_model import LogisticRegression
     from sklearn.preprocessing import StandardScaler
     from sklearn.pipeline import make_pipeline
     clf = make_pipeline(StandardScaler(), LogisticRegression(max_iter=4000, random_state=seed))
-    ftr, fte = zone_features(Xtr), zone_features(Xte)
+    ftr, fte = zone_features(Xtr, g), zone_features(Xte, g)
     clf.fit(ftr, ytr)
     return clf.decision_function(ftr), clf.decision_function(fte)
 
@@ -142,6 +149,7 @@ def main():
     ap.add_argument("--epochs", type=int, default=20)
     ap.add_argument("--rf", type=float, default=0.3, help="max fault resistance, pu")
     ap.add_argument("--wide", action="store_true", help="sample the whole line, not just the boundary band")
+    ap.add_argument("--seeds", type=int, default=3)
     args = ap.parse_args()
 
     with open(os.path.join(OUT, "aux_signal_toy_weak_sg.json")) as f:
@@ -165,23 +173,39 @@ def main():
     print(f"fault resistance 0 to {grid.rF} pu in both  (line |z1| = {abs(grid.z1):.3f} pu)")
     print(f"delta swept along the designed direction ({np.degrees(np.angle(design_delta)):.1f} deg)")
     print(f"train {2*n_tr}+{2*n_tr}, test {2*n_te}+{2*n_te}, FAR budget {FAR:.0%}\n")
+    KEYS = ("reactance", "negseq", "engineered", "cnn")
     for t in mags:
         d = t * direction
         t0 = time.time()
-        Xtr, ytr, _ = make_zone_dataset(n_tr, np.random.default_rng(100), d, p, grid, not args.wide)
-        Xte, yte, kte = make_zone_dataset(n_te, np.random.default_rng(999), d, p, grid, not args.wide)
+        per_seed = {k: [] for k in KEYS}
+        for sd in range(args.seeds):
+            Xtr, ytr, _ = make_zone_dataset(n_tr, np.random.default_rng(100 + 17 * sd), d, p,
+                                            grid, not args.wide)
+            Xte, yte, _k = make_zone_dataset(n_te, np.random.default_rng(999 + 31 * sd), d, p,
+                                             grid, not args.wide)
+            per_seed["reactance"].append(evaluate(score_reactance(Xtr, grid), ytr,
+                                                  score_reactance(Xte, grid), yte))
+            per_seed["negseq"].append(evaluate(score_negseq(Xtr), ytr, score_negseq(Xte), yte))
+            e_tr, e_te = score_engineered(Xtr, ytr, Xte, grid, seed=sd)
+            per_seed["engineered"].append(evaluate(e_tr, ytr, e_te, yte))
+            s_tr, s_te = train_cnn(Xtr, ytr, Xte, epochs=args.epochs, seed=sd)
+            per_seed["cnn"].append(evaluate(s_tr, ytr, s_te, yte))
         row = dict(delta=t)
-        row["reactance"] = evaluate(score_reactance(Xtr), ytr, score_reactance(Xte), yte)
-        row["negseq"] = evaluate(score_negseq(Xtr), ytr, score_negseq(Xte), yte)
-        e_tr, e_te = score_engineered(Xtr, ytr, Xte)
-        row["engineered"] = evaluate(e_tr, ytr, e_te, yte)
-        s_tr, s_te = train_cnn(Xtr, ytr, Xte, epochs=args.epochs)
-        row["cnn"] = evaluate(s_tr, ytr, s_te, yte)
+        for k in KEYS:
+            g_ = lambda f: np.array([r[f] for r in per_seed[k]])
+            dr, au, d5 = g_("detection_rate"), g_("auc"), g_("detection_at_5pct")
+            row[k] = dict(detection_rate=float(dr.mean()), detection_std=float(dr.std()),
+                          auc=float(au.mean()), auc_std=float(au.std()),
+                          detection_at_5pct=float(d5.mean()),
+                          false_alarm=float(g_("false_alarm").mean()),
+                          seeds=[float(x) for x in dr])
         rows.append(row)
-        print(f"  |delta|={t:.3f}   reactance {row['reactance']['detection_rate']*100:5.1f}%   "
-              f"|i-| {row['negseq']['detection_rate']*100:5.1f}%   "
-              f"engineered {row['engineered']['detection_rate']*100:5.1f}%   "
-              f"CNN {row['cnn']['detection_rate']*100:5.1f}%   [{time.time()-t0:.0f}s]")
+        f = lambda k: f"{row[k]['auc']:.3f}+-{row[k]['auc_std']:.3f}"
+        d = lambda k: f"{row[k]['detection_rate']*100:.0f}"
+        print(f"  |delta|={t:.3f}  AUC  reactance {f('reactance')}  |i-| {f('negseq')}  "
+              f"engineered {f('engineered')}  CNN {f('cnn')}   "
+              f"| dep@1%FAR {d('reactance')}/{d('negseq')}/{d('engineered')}/{d('cnn')}  "
+              f"[{time.time()-t0:.0f}s]")
 
     import matplotlib
     matplotlib.use("Agg")
@@ -191,7 +215,9 @@ def main():
                             ("negseq", "|i⁻| magnitude", "s", "tab:blue"),
                             ("engineered", "engineered features + LR", "D", "tab:green"),
                             ("cnn", "learned (1D CNN, raw waveform)", "^", "tab:red")):
-        ax.plot(mags, [r[key]["detection_rate"] * 100 for r in rows], marker=mk, color=c, label=lab)
+        mu = np.array([r[key]["auc"] for r in rows])
+        sd = np.array([r[key]["auc_std"] for r in rows])
+        ax.errorbar(mags, mu, yerr=sd, marker=mk, color=c, label=lab, capsize=3, lw=1.6)
     ax.axvline(abs(design_delta), ls=":", lw=1.2, color="tab:green")
     ax.text(abs(design_delta), 20, "  design tool's\n  certified δ", fontsize=8, color="tab:green")
     ax.set_xlabel("auxiliary signal magnitude δ  (pu negative-sequence current)")

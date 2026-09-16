@@ -125,16 +125,62 @@ def solve_zone(p: ZoneParams, kind, srcL, iR, delta, m=0.5, mr=0.0, inj0=0.0):
     return np.array(v + i)
 
 
-def apparent_impedance(y, kind="ag"):
-    """Relay apparent impedance for the standard fault loops.
-    ag: phase-a-to-ground loop with zero-sequence compensation omitted (raw loop).
-    ab: phase-to-phase loop."""
+A3 = np.exp(2j * np.pi / 3)
+
+
+def _phase(y):
+    """Sequence measurement [v+,v-,v0,i+,i-,i0] -> phase quantities (va,vb,vc), (ia,ib,ic)."""
     v1, v2, v0, i1, i2, i0 = y
-    a = np.exp(2j * np.pi / 3)
+    v = (v1 + v2 + v0, A3**2 * v1 + A3 * v2 + v0, A3 * v1 + A3**2 * v2 + v0)
+    i = (i1 + i2 + i0, A3**2 * i1 + A3 * i2 + i0, A3 * i1 + A3**2 * i2 + i0)
+    return v, i
+
+
+def loop_impedances(y, z1, z0, with_current=False):
+    """All six fault loops as a real relay computes them.
+
+    Ground loops carry the zero-sequence (residual) compensation
+        Z = V_p / (I_p + k0 * 3 I0),   k0 = (Z0 - Z1) / (3 Z1)
+    without which a ground loop reads the wrong impedance by a large factor. Phase loops are
+    the plain difference quantities. Returns {'ag','bg','cg','ab','bc','ca': complex}, or
+    {name: (Z, |I_loop|)} when with_current, since a real relay supervises each loop by its
+    own current and only lets picked-up loops vote. Without that supervision a healthy loop
+    can return a small spurious reactance and make the element look far worse than it is.
+    """
+    (va, vb, vc), (ia, ib, ic) = _phase(y)
+    i0 = y[5]
+    k0 = (z0 - z1) / (3 * z1)
+    comp = k0 * 3 * i0
+    e = 1e-12
+    out = {}
+    for name, (vp, ip) in (("ag", (va, ia)), ("bg", (vb, ib)), ("cg", (vc, ic))):
+        iloop = ip + comp
+        out[name] = (vp / (iloop + e), abs(iloop)) if with_current else vp / (iloop + e)
+    for name, (vp, vq, ip, iq) in (("ab", (va, vb, ia, ib)), ("bc", (vb, vc, ib, ic)),
+                                   ("ca", (vc, va, ic, ia))):
+        iloop = ip - iq
+        out[name] = ((vp - vq) / (iloop + e), abs(iloop)) if with_current else (vp - vq) / (iloop + e)
+    return out
+
+
+def supervised_reactance(y, z1, z0, frac=0.5, default=10.0):
+    """Distance estimate a real element would produce: among loops whose own current is at
+    least `frac` of the largest loop current (a crude phase selector) and whose reactance is
+    forward, take the smallest reactance. Thresholding this is setting a zone reach."""
+    L = loop_impedances(y, z1, z0, with_current=True)
+    imax = max(c for _z, c in L.values())
+    if imax <= 0:
+        return default
+    cand = [z.imag for z, c in L.values() if c >= frac * imax and z.imag > 0]
+    return min(cand) if cand else default
+
+
+def apparent_impedance(y, kind="ag", z1=None, z0=None):
+    """One loop, selected by name. Ground loops use k0 compensation when z1 and z0 are given."""
+    if z1 is not None and z0 is not None:
+        return loop_impedances(y, z1, z0)[kind[:2] if kind[:2] in
+                                          ("ag", "bg", "cg", "ab", "bc", "ca") else "ag"]
+    (va, vb, vc), (ia, ib, ic) = _phase(y)
     if kind.startswith("ag"):
-        va = v1 + v2 + v0
-        ia = i1 + i2 + i0
         return va / ia
-    vab = (v1 + v2 + v0) - (a**2 * v1 + a * v2 + v0)
-    iab = (i1 + i2 + i0) - (a**2 * i1 + a * i2 + i0)
-    return vab / iab
+    return (va - vb) / (ia - ib)

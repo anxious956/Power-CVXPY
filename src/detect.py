@@ -82,24 +82,53 @@ def score_engineered(Xtr, ytr, Xte, seed=0):
     return clf.decision_function(ftr), clf.decision_function(fte)
 
 
-def evaluate(scores_tr, y_tr, scores_te, y_te, far=FAR):
-    """Threshold fixed on TRAIN at the false-alarm budget, applied to TEST.
+def _auc(scores, y):
+    """Area under the ROC curve, via the rank statistic. Threshold-free, so it is not
+    destroyed by a thin tail the way a fixed false-alarm operating point is."""
+    order = np.argsort(scores)
+    ranks = np.empty(len(scores), float)
+    ranks[order] = np.arange(1, len(scores) + 1)
+    # average ranks for ties
+    s_sorted = scores[order]
+    i = 0
+    while i < len(s_sorted):
+        j = i
+        while j + 1 < len(s_sorted) and s_sorted[j + 1] == s_sorted[i]:
+            j += 1
+        if j > i:
+            ranks[order[i:j + 1]] = (i + j + 2) / 2.0
+        i = j + 1
+    n1 = int((y == 1).sum()); n0 = int((y == 0).sum())
+    if n1 == 0 or n0 == 0:
+        return float("nan")
+    return float((ranks[y == 1].sum() - n1 * (n1 + 1) / 2) / (n1 * n0))
 
-    The polarity is chosen on the training set too: a fault may show up as an unusually
-    HIGH score or an unusually LOW one, and which it is depends on the injection. Letting
-    the baseline pick its own polarity is the fair version of the comparison.
+
+def evaluate(scores_tr, y_tr, scores_te, y_te, far=FAR):
+    """Threshold and polarity fixed on TRAIN, everything measured on TEST.
+
+    A fault may show up as an unusually HIGH score or an unusually LOW one depending on the
+    detector and the injection, so the polarity is chosen on the training set too; that is
+    the fair version of the comparison. Reports the operating point at the false-alarm
+    budget, a looser 5 % point, and the threshold-free AUC, which is not destroyed by a thin
+    tail the way a single strict operating point can be.
     """
+    def thr_at(s_tr, budget):
+        neg = np.sort(s_tr[y_tr == 0])
+        k = int(np.ceil((1 - budget) * len(neg))) - 1
+        return neg[min(max(k, 0), len(neg) - 1)]
+
     best = None
     for sign in (+1, -1):
         s_tr, s_te = sign * scores_tr, sign * scores_te
-        neg = np.sort(s_tr[y_tr == 0])
-        k = int(np.ceil((1 - far) * len(neg))) - 1
-        thr = neg[min(max(k, 0), len(neg) - 1)]
-        dr = float((s_te[y_te == 1] > thr).mean())
+        t1, t5 = thr_at(s_tr, far), thr_at(s_tr, 0.05)
+        dr = float((s_te[y_te == 1] > t1).mean())
         if best is None or dr > best["detection_rate"]:
             best = dict(detection_rate=dr,
-                        false_alarm=float((s_te[y_te == 0] > thr).mean()),
-                        threshold=float(thr), polarity=int(sign))
+                        false_alarm=float((s_te[y_te == 0] > t1).mean()),
+                        detection_at_5pct=float((s_te[y_te == 1] > t5).mean()),
+                        false_alarm_at_5pct=float((s_te[y_te == 0] > t5).mean()),
+                        auc=_auc(s_te, y_te), threshold=float(t1), polarity=int(sign))
     return best
 
 
