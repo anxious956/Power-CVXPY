@@ -1,0 +1,191 @@
+{
+  "testgrid_A": {
+    "chain_bit_identical": true,
+    "20": {
+      "max_abs_diff_ohm": 7.815970093361102e-14,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.9430335097001763,
+        "dep": 0.7888888888888889,
+        "ft": 0.0031746031746031746
+      },
+      "absolute_basis": {
+        "auc": 0.9430335097001763,
+        "dep": 0.7888888888888889,
+        "ft": 0.0031746031746031746
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -3.226720713551965e-14
+    },
+    "30": {
+      "max_abs_diff_ohm": 1.3145040611561853e-13,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.9470546737213403,
+        "dep": 0.85,
+        "ft": 0.0
+      },
+      "absolute_basis": {
+        "auc": 0.9470546737213403,
+        "dep": 0.85,
+        "ft": 0.0
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -0.0027815121864704453
+    },
+    "40": {
+      "max_abs_diff_ohm": 5.3290705182007514e-14,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.9462962962962963,
+        "dep": 0.85,
+        "ft": 0.0
+      },
+      "absolute_basis": {
+        "auc": 0.9462962962962963,
+        "dep": 0.85,
+        "ft": 0.0
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -4.2399594165511814e-14
+    },
+    "50": {
+      "max_abs_diff_ohm": 1.3145040611561853e-13,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.946278659611993,
+        "dep": 0.85,
+        "ft": 0.0
+      },
+      "absolute_basis": {
+        "auc": 0.946278659611993,
+        "dep": 0.85,
+        "ft": 0.0
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -0.0027815121864708486
+    }
+  },
+  "testgrid_B": {
+    "chain_bit_identical": true,
+    "20": {
+      "max_abs_diff_ohm": 1.2079226507921703e-13,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.8298765432098766,
+        "dep": 0.6055555555555555,
+        "ft": 0.14814814814814814
+      },
+      "absolute_basis": {
+        "auc": 0.8298765432098766,
+        "dep": 0.6055555555555555,
+        "ft": 0.14814814814814814
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -2.5299960087899222e-14
+    },
+    "30": {
+      "max_abs_diff_ohm": 3.623767952376511e-13,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.8728395061728396,
+        "dep": 0.5888888888888889,
+        "ft": 0.044444444444444446
+      },
+      "absolute_basis": {
+        "auc": 0.8728395061728396,
+        "dep": 0.5888888888888889,
+        "ft": 0.044444444444444446
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -0.0038047441292135956
+    },
+    "40": {
+      "max_abs_diff_ohm": 2.842170943040401e-14,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.8896296296296295,
+        "dep": 0.5888888888888889,
+        "ft": 0.044444444444444446
+      },
+      "absolute_basis": {
+        "auc": 0.8896296296296295,
+        "dep": 0.5888888888888889,
+        "ft": 0.044444444444444446
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -2.8009403503591793e-14
+    },
+    "50": {
+      "max_abs_diff_ohm": 3.197442310920451e-13,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.8911728395061729,
+        "dep": 0.5888888888888889,
+        "ft": 0.044444444444444446
+      },
+      "absolute_basis": {
+        "auc": 0.8911728395061729,
+        "dep": 0.5888888888888889,
+        "ft": 0.044444444444444446
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -0.0038047441292283005
+    }
+  },
+  "doubleline": {
+    "chain_bit_identical": true,
+    "20": {
+      "max_abs_diff_ohm": 4.618527782440651e-14,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.9331604938271606,
+        "dep": 0.8,
+        "ft": 0.0
+      },
+      "absolute_basis": {
+        "auc": 0.9331604938271606,
+        "dep": 0.8,
+        "ft": 0.0
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -2.6240648019245032e-14
+    },
+    "30": {
+      "max_abs_diff_ohm": 1.2079226507921703e-13,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.9334074074074075,
+        "dep": 0.8333333333333334,
+        "ft": 0.0
+      },
+      "absolute_basis": {
+        "auc": 0.9334074074074075,
+        "dep": 0.8333333333333334,
+        "ft": 0.0
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": 0.0021990689560638247
+    },
+    "40": {
+      "max_abs_diff_ohm": 3.907985046680551e-14,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.932962962962963,
+        "dep": 0.8333333333333334,
+        "ft": 0.0
+      },
+      "absolute_basis": {
+        "auc": 0.932962962962963,
+        "dep": 0.8333333333333334,
+        "ft": 0.0
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": -3.331507895118623e-14
+    },
+    "50": {
+      "max_abs_diff_ohm": 9.592326932761353e-14,
+      "agree": 1.0,
+      "orig": {
+        "auc": 0.9336296296296297,
+        "dep": 0.8333333333333334,
+        "ft": 0.0
+      },
+      "absolute_basis": {
+        "auc": 0.9336296296296297,
+        "dep": 0.8333333333333334,
+        "ft": 0.0
+      },
+      "post_vs_pre_rotation_in_phasor_view_deg": 0.0021990689560560162
+    }
+  }
+}

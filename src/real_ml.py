@@ -134,13 +134,18 @@ def raw_window(R, idx, t_ms, prefault=False):
 
 def phasor_view(R, idx, t_ms):
     """Rebuild a 1024-sample array whose phasor positions match what zone_detect expects:
-    pre-fault cycle at [256, 384) taken from [-40, -20] ms, post cycle at [640, 768) taken
+    pre-fault cycle at [256, 384) taken from [-40, -20] ms (shifted back by t mod 20 ms), post cycle at [640, 768) taken
     from the last full cycle before the decision time. Lets the rule and the engineered
     features see exactly the causal window and nothing after it."""
     ev = R["ev"]
     n_post = int(round(t_ms * FS / 1000))
     out = np.zeros((len(idx), 6, 1024))
-    out[:, :, EVENT - 2 * CYCLE:EVENT - CYCLE] = R["full"][idx, :, ev - 2 * CYCLE:ev - CYCLE]
+    # sequence_phasors uses a window-relative DFT basis, so the two source cycles must be a whole
+    # number of cycles apart or the post-fault phasors come out rotated against the pre-fault ones
+    # (180 deg at 30 and 50 ms, which corrupted the incremental currents used by phase selection).
+    # Shift the pre-fault cycle back by n_post mod CYCLE samples; it stays entirely before inception.
+    pre = ev - 2 * CYCLE - (n_post % CYCLE)
+    out[:, :, EVENT - 2 * CYCLE:EVENT - CYCLE] = R["full"][idx, :, pre:pre + CYCLE]
     out[:, :, EVENT + CYCLE:EVENT + 2 * CYCLE] = R["full"][idx, :, ev + n_post - CYCLE:ev + n_post]
     return out
 
