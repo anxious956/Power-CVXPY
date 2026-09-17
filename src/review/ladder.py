@@ -445,6 +445,7 @@ def run(name):
                     ii, dd = np.concatenate(idx_all), np.concatenate(dec_all)
                     yy, gg, b = y[ii], groups[ii], beyond[ii]
                     rf = R["rf"][zidx][ii]
+                    rfb = R["rf_bin"][zidx][ii] if "rf_bin" in R else None
                     dep = lambda s: dd[s][yy[s] == 1].mean()
                     ftb = lambda s: dd[s][b[s]].mean()
                     # per-class held-out: mean rate over folds, and the worst fold's deduplicated k/n with 95 % UCB
@@ -457,7 +458,12 @@ def run(name):
                     r = dict(own99_mode=mode, dependability=float(dep(slice(None))), false_trip_beyond=float(ftb(slice(None))),
                              dependability_ci=cm.grouped_bootstrap(dep, gg, 500), false_trip_beyond_ci=cm.grouped_bootstrap(ftb, gg, 500),
                              beyond_dedup=cm.dedup_rate(dd, R["dedup"][zidx][ii], b),
-                             dep_by_rf={f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)},
+                             dep_by_rf=({"1": float(dd[(yy == 1) & (rfb == "<=1")].mean()) if ((yy == 1) & (rfb == "<=1")).any() else float("nan"),
+                                         "10": float(dd[(yy == 1) & (rfb == "1-10")].mean()), "40": float(dd[(yy == 1) & (rfb == ">40")].mean())}
+                                        if "rf_bin" in R else {f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)}),
+                             dep_by_rf_bin=({bb: dict(rate=float(dd[(yy == 1) & (rfb == bb)].mean()) if ((yy == 1) & (rfb == bb)).any() else float("nan"),
+                                                     n=int(((yy == 1) & (rfb == bb)).sum())) for bb in ("<=1", "1-10", "10-40", ">40")}
+                                            if "rf_bin" in R else None),
                              held=perclass)
                     if chosen:
                         r["chosen_x_set"] = [c[0] for c in chosen]
