@@ -19,3 +19,6 @@ desktop.ini
 # datasets: far too large for git, and kept out of OneDrive sync where possible
 data/
 *.tar.gz
+
+# review run logs
+logs/
