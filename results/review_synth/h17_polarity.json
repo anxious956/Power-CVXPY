@@ -1,0 +1,1951 @@
+{
+  "zone": [
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.8,
+        "false_alarm": 0.026,
+        "detection_at_5pct": 0.894,
+        "false_alarm_at_5pct": 0.1,
+        "auc": 0.934148,
+        "threshold": -0.19675204064327081,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.8,
+        "false_alarm": 0.026,
+        "detection_at_5pct": 0.894,
+        "false_alarm_at_5pct": 0.1,
+        "auc": 0.934148,
+        "threshold": -0.19675204064327081,
+        "polarity": -1,
+        "auc_train": 0.9666081632653061
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.06,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.128,
+        "false_alarm_at_5pct": 0.07,
+        "auc": 0.576392,
+        "threshold": 0.9877848994740858,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.06,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.128,
+        "false_alarm_at_5pct": 0.07,
+        "auc": 0.576392,
+        "threshold": 0.9877848994740858,
+        "polarity": 1,
+        "auc_train": 0.5988714285714286
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.952,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.978,
+        "false_alarm_at_5pct": 0.054,
+        "auc": 0.991412,
+        "threshold": 0.09720298362969149,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.952,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.978,
+        "false_alarm_at_5pct": 0.054,
+        "auc": 0.991412,
+        "threshold": 0.09720298362969149,
+        "polarity": 1,
+        "auc_train": 0.9967183673469387
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.698,
+        "false_alarm": 0.002,
+        "detection_at_5pct": 0.884,
+        "false_alarm_at_5pct": 0.02,
+        "auc": 0.9641,
+        "threshold": -0.18640056031656224,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.698,
+        "false_alarm": 0.002,
+        "detection_at_5pct": 0.884,
+        "false_alarm_at_5pct": 0.02,
+        "auc": 0.9641,
+        "threshold": -0.18640056031656224,
+        "polarity": -1,
+        "auc_train": 0.9525897959183673
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.04,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.124,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.601944,
+        "threshold": 1.0090320620560977,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.04,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.124,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.601944,
+        "threshold": 1.0090320620560977,
+        "polarity": 1,
+        "auc_train": 0.5909020408163266
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.978,
+        "false_alarm": 0.028,
+        "detection_at_5pct": 0.992,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.993704,
+        "threshold": -0.15576617669412351,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.978,
+        "false_alarm": 0.028,
+        "detection_at_5pct": 0.992,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.993704,
+        "threshold": -0.15576617669412351,
+        "polarity": 1,
+        "auc_train": 0.9971877551020408
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.686,
+        "false_alarm": 0.008,
+        "detection_at_5pct": 0.916,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.960556,
+        "threshold": -0.18076744090338098,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.686,
+        "false_alarm": 0.008,
+        "detection_at_5pct": 0.916,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.960556,
+        "threshold": -0.18076744090338098,
+        "polarity": -1,
+        "auc_train": 0.9574959183673469
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.088,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.164,
+        "false_alarm_at_5pct": 0.068,
+        "auc": 0.597792,
+        "threshold": 0.9687487169396709,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.088,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.164,
+        "false_alarm_at_5pct": 0.068,
+        "auc": 0.597792,
+        "threshold": 0.9687487169396709,
+        "polarity": 1,
+        "auc_train": 0.6190163265306122
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.974,
+        "false_alarm": 0.014,
+        "detection_at_5pct": 0.988,
+        "false_alarm_at_5pct": 0.042,
+        "auc": 0.995744,
+        "threshold": -0.0020911514416114274,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.974,
+        "false_alarm": 0.014,
+        "detection_at_5pct": 0.988,
+        "false_alarm_at_5pct": 0.042,
+        "auc": 0.995744,
+        "threshold": -0.0020911514416114274,
+        "polarity": 1,
+        "auc_train": 0.9976775510204081
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 0,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.84,
+        "false_alarm": 0.034,
+        "detection_at_5pct": 0.874,
+        "false_alarm_at_5pct": 0.09,
+        "auc": 0.929516,
+        "threshold": -0.20925536079373236,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.84,
+        "false_alarm": 0.034,
+        "detection_at_5pct": 0.874,
+        "false_alarm_at_5pct": 0.09,
+        "auc": 0.929516,
+        "threshold": -0.20925536079373236,
+        "polarity": -1,
+        "auc_train": 0.9571469387755103
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.062,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.124,
+        "false_alarm_at_5pct": 0.074,
+        "auc": 0.567068,
+        "threshold": 1.0143427909889826,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.062,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.124,
+        "false_alarm_at_5pct": 0.074,
+        "auc": 0.567068,
+        "threshold": 1.0143427909889826,
+        "polarity": 1,
+        "auc_train": 0.5835877551020409
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.966,
+        "false_alarm": 0.022,
+        "detection_at_5pct": 0.982,
+        "false_alarm_at_5pct": 0.056,
+        "auc": 0.992788,
+        "threshold": -0.04078288906503402,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.966,
+        "false_alarm": 0.022,
+        "detection_at_5pct": 0.982,
+        "false_alarm_at_5pct": 0.056,
+        "auc": 0.992788,
+        "threshold": -0.04078288906503402,
+        "polarity": 1,
+        "auc_train": 0.9970204081632653
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 1,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.816,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.854,
+        "false_alarm_at_5pct": 0.024,
+        "auc": 0.9513,
+        "threshold": -0.20557278168778706,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.816,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.854,
+        "false_alarm_at_5pct": 0.024,
+        "auc": 0.9513,
+        "threshold": -0.20557278168778706,
+        "polarity": -1,
+        "auc_train": 0.9460775510204081
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.046,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.118,
+        "false_alarm_at_5pct": 0.046,
+        "auc": 0.589508,
+        "threshold": 1.0357562194168786,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.046,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.118,
+        "false_alarm_at_5pct": 0.046,
+        "auc": 0.589508,
+        "threshold": 1.0357562194168786,
+        "polarity": 1,
+        "auc_train": 0.5821530612244898
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.984,
+        "false_alarm": 0.026,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.994208,
+        "threshold": -0.23651574451341761,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.984,
+        "false_alarm": 0.026,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.994208,
+        "threshold": -0.23651574451341761,
+        "polarity": 1,
+        "auc_train": 0.9982673469387755
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 2,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.854,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.9,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.953284,
+        "threshold": -0.2041763415621945,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.854,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.9,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.953284,
+        "threshold": -0.2041763415621945,
+        "polarity": -1,
+        "auc_train": 0.9484795918367347
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.082,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.158,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.5844,
+        "threshold": 1.009660217658623,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.082,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.158,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.5844,
+        "threshold": 1.009660217658623,
+        "polarity": 1,
+        "auc_train": 0.6010734693877551
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.982,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.046,
+        "auc": 0.997224,
+        "threshold": -0.264161358408714,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.982,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.046,
+        "auc": 0.997224,
+        "threshold": -0.264161358408714,
+        "polarity": 1,
+        "auc_train": 0.9981755102040817
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 0,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.764,
+        "false_alarm": 0.016,
+        "detection_at_5pct": 0.776,
+        "false_alarm_at_5pct": 0.056,
+        "auc": 0.896412,
+        "threshold": -0.20623473060993724,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.764,
+        "false_alarm": 0.016,
+        "detection_at_5pct": 0.776,
+        "false_alarm_at_5pct": 0.056,
+        "auc": 0.896412,
+        "threshold": -0.20623473060993724,
+        "polarity": -1,
+        "auc_train": 0.9186551020408164
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.07,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 0.126,
+        "false_alarm_at_5pct": 0.072,
+        "auc": 0.54684,
+        "threshold": 1.0788505701317703,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.07,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 0.126,
+        "false_alarm_at_5pct": 0.072,
+        "auc": 0.54684,
+        "threshold": 1.0788505701317703,
+        "polarity": 1,
+        "auc_train": 0.5576040816326531
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.972,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.992,
+        "false_alarm_at_5pct": 0.064,
+        "auc": 0.995296,
+        "threshold": -0.1641452989335931,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.972,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.992,
+        "false_alarm_at_5pct": 0.064,
+        "auc": 0.995296,
+        "threshold": -0.1641452989335931,
+        "polarity": 1,
+        "auc_train": 0.9973183673469388
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 1,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.752,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.788,
+        "false_alarm_at_5pct": 0.05,
+        "auc": 0.91022,
+        "threshold": -0.20671050338289892,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.752,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.788,
+        "false_alarm_at_5pct": 0.05,
+        "auc": 0.91022,
+        "threshold": -0.20671050338289892,
+        "polarity": -1,
+        "auc_train": 0.9195326530612244
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.046,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.118,
+        "false_alarm_at_5pct": 0.044,
+        "auc": 0.564488,
+        "threshold": 1.11461960559982,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.046,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.118,
+        "false_alarm_at_5pct": 0.044,
+        "auc": 0.564488,
+        "threshold": 1.11461960559982,
+        "polarity": 1,
+        "auc_train": 0.5626530612244898
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.982,
+        "false_alarm": 0.038,
+        "detection_at_5pct": 0.992,
+        "false_alarm_at_5pct": 0.082,
+        "auc": 0.993928,
+        "threshold": -0.49680082063363284,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.982,
+        "false_alarm": 0.038,
+        "detection_at_5pct": 0.992,
+        "false_alarm_at_5pct": 0.082,
+        "auc": 0.993928,
+        "threshold": -0.49680082063363284,
+        "polarity": 1,
+        "auc_train": 0.9994795918367347
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 2,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.804,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.824,
+        "false_alarm_at_5pct": 0.052,
+        "auc": 0.92628,
+        "threshold": -0.20675689746746992,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.804,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.824,
+        "false_alarm_at_5pct": 0.052,
+        "auc": 0.92628,
+        "threshold": -0.20675689746746992,
+        "polarity": -1,
+        "auc_train": 0.918169387755102
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.086,
+        "false_alarm": 0.014,
+        "detection_at_5pct": 0.146,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.564692,
+        "threshold": 1.0776156925383105,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.086,
+        "false_alarm": 0.014,
+        "detection_at_5pct": 0.146,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.564692,
+        "threshold": 1.0776156925383105,
+        "polarity": 1,
+        "auc_train": 0.575965306122449
+      }
+    },
+    {
+      "delta": 0.3,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.988,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.995684,
+        "threshold": -0.5899033914569445,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.988,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.995684,
+        "threshold": -0.5899033914569445,
+        "polarity": 1,
+        "auc_train": 0.9991755102040817
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 0,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.7,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.718,
+        "false_alarm_at_5pct": 0.054,
+        "auc": 0.8523,
+        "threshold": -0.1953739062995372,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.7,
+        "false_alarm": 0.004,
+        "detection_at_5pct": 0.718,
+        "false_alarm_at_5pct": 0.054,
+        "auc": 0.8523,
+        "threshold": -0.1953739062995372,
+        "polarity": -1,
+        "auc_train": 0.8719775510204082
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.078,
+        "false_alarm": 0.024,
+        "detection_at_5pct": 0.122,
+        "false_alarm_at_5pct": 0.074,
+        "auc": 0.532272,
+        "threshold": 1.1519856908861472,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.078,
+        "false_alarm": 0.024,
+        "detection_at_5pct": 0.122,
+        "false_alarm_at_5pct": 0.074,
+        "auc": 0.532272,
+        "threshold": 1.1519856908861472,
+        "polarity": 1,
+        "auc_train": 0.5382489795918367
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.978,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.052,
+        "auc": 0.998132,
+        "threshold": -0.25209655073148285,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.978,
+        "false_alarm": 0.012,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.052,
+        "auc": 0.998132,
+        "threshold": -0.25209655073148285,
+        "polarity": 1,
+        "auc_train": 0.9978081632653061
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 1,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.68,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.704,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.859772,
+        "threshold": -0.19750930485254264,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.68,
+        "false_alarm": 0.018,
+        "detection_at_5pct": 0.704,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.859772,
+        "threshold": -0.19750930485254264,
+        "polarity": -1,
+        "auc_train": 0.8822020408163265
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.052,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.112,
+        "false_alarm_at_5pct": 0.042,
+        "auc": 0.545644,
+        "threshold": 1.1958597871340289,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.052,
+        "false_alarm": 0.0,
+        "detection_at_5pct": 0.112,
+        "false_alarm_at_5pct": 0.042,
+        "auc": 0.545644,
+        "threshold": 1.1958597871340289,
+        "polarity": 1,
+        "auc_train": 0.5494408163265306
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.986,
+        "false_alarm": 0.024,
+        "detection_at_5pct": 0.996,
+        "false_alarm_at_5pct": 0.068,
+        "auc": 0.998028,
+        "threshold": -0.6368577487287169,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.986,
+        "false_alarm": 0.024,
+        "detection_at_5pct": 0.996,
+        "false_alarm_at_5pct": 0.068,
+        "auc": 0.998028,
+        "threshold": -0.6368577487287169,
+        "polarity": 1,
+        "auc_train": 0.9995081632653061
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 2,
+      "det": "reactance",
+      "test_sign": {
+        "detection_rate": 0.706,
+        "false_alarm": 0.014,
+        "detection_at_5pct": 0.73,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.882556,
+        "threshold": -0.19733779286246889,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.706,
+        "false_alarm": 0.014,
+        "detection_at_5pct": 0.73,
+        "false_alarm_at_5pct": 0.048,
+        "auc": 0.882556,
+        "threshold": -0.19733779286246889,
+        "polarity": -1,
+        "auc_train": 0.8737836734693878
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.092,
+        "false_alarm": 0.016,
+        "detection_at_5pct": 0.142,
+        "false_alarm_at_5pct": 0.058,
+        "auc": 0.548812,
+        "threshold": 1.1466026361685833,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.092,
+        "false_alarm": 0.016,
+        "detection_at_5pct": 0.142,
+        "false_alarm_at_5pct": 0.058,
+        "auc": 0.548812,
+        "threshold": 1.1466026361685833,
+        "polarity": 1,
+        "auc_train": 0.5577020408163266
+      }
+    },
+    {
+      "delta": 0.514,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.992,
+        "false_alarm": 0.016,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.997932,
+        "threshold": -0.4775438579036241,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.992,
+        "false_alarm": 0.016,
+        "detection_at_5pct": 0.994,
+        "false_alarm_at_5pct": 0.062,
+        "auc": 0.997932,
+        "threshold": -0.4775438579036241,
+        "polarity": 1,
+        "auc_train": 0.9993142857142857
+      }
+    }
+  ],
+  "detect": [
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.58671875,
+        "threshold": 0.5017452673991044,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.58671875,
+        "threshold": 0.5017452673991044,
+        "polarity": 1,
+        "auc_train": 0.5913638888888889
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.58681875,
+        "threshold": 0.5022047869272499,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.58681875,
+        "threshold": 0.5022047869272499,
+        "polarity": 1,
+        "auc_train": 0.5914277777777778
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.9875,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.9975,
+        "false_alarm_at_5pct": 0.04,
+        "auc": 0.99958125,
+        "threshold": -1.0432213462972673,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.9875,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.9975,
+        "false_alarm_at_5pct": 0.04,
+        "auc": 0.99958125,
+        "threshold": -1.0432213462972673,
+        "polarity": 1,
+        "auc_train": 0.9999388888888889
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.573375,
+        "threshold": 0.5066069294677948,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.573375,
+        "threshold": 0.5066069294677948,
+        "polarity": 1,
+        "auc_train": 0.5859888888888889
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.57335625,
+        "threshold": 0.5055700331953847,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.57335625,
+        "threshold": 0.5055700331953847,
+        "polarity": 1,
+        "auc_train": 0.585775
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.995,
+        "false_alarm": 0.0375,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0775,
+        "auc": 0.9965625,
+        "threshold": -1.0313229371895476,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.995,
+        "false_alarm": 0.0375,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0775,
+        "auc": 0.9965625,
+        "threshold": -1.0313229371895476,
+        "polarity": 1,
+        "auc_train": 0.9998805555555556
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.025,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.553675,
+        "threshold": 0.5045004937237297,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.025,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.553675,
+        "threshold": 0.5045004937237297,
+        "polarity": 1,
+        "auc_train": 0.5996805555555556
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.025,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.5537625,
+        "threshold": 0.5041258960085079,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.025,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.5537625,
+        "threshold": 0.5041258960085079,
+        "polarity": 1,
+        "auc_train": 0.5994916666666666
+      }
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 0.995,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.99966875,
+        "threshold": -0.9195327390118706,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.995,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.99966875,
+        "threshold": -0.9195327390118706,
+        "polarity": 1,
+        "auc_train": 0.9998472222222222
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.035,
+        "auc": 0.536725,
+        "threshold": 0.5208737270582128,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.035,
+        "auc": 0.536725,
+        "threshold": 0.5208737270582128,
+        "polarity": 1,
+        "auc_train": 0.52725
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 0,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.035,
+        "auc": 0.5925,
+        "threshold": 0.5018157117645483,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.035,
+        "auc": 0.5925,
+        "threshold": 0.5018157117645483,
+        "polarity": 1,
+        "auc_train": 0.5983166666666667
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0225,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0675,
+        "auc": 0.9981375,
+        "threshold": -1.63598848158085,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0225,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0675,
+        "auc": 0.9981375,
+        "threshold": -1.63598848158085,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.055,
+        "auc": 0.50675625,
+        "threshold": 0.5073184785117615,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.055,
+        "auc": 0.50675625,
+        "threshold": 0.5073184785117615,
+        "polarity": 1,
+        "auc_train": 0.5302361111111111
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 1,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.578325,
+        "threshold": 0.5066228073200374,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.578325,
+        "threshold": 0.5066228073200374,
+        "polarity": 1,
+        "auc_train": 0.5910944444444445
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0275,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0875,
+        "auc": 0.9995125,
+        "threshold": -1.562155737057238,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0275,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0875,
+        "auc": 0.9995125,
+        "threshold": -1.562155737057238,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.07,
+        "auc": 0.50005625,
+        "threshold": 0.5226720251833945,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.07,
+        "auc": 0.50005625,
+        "threshold": 0.5226720251833945,
+        "polarity": 1,
+        "auc_train": 0.5495944444444445
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 2,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.025,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0575,
+        "auc": 0.56080625,
+        "threshold": 0.5042113377864755,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.025,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0575,
+        "auc": 0.56080625,
+        "threshold": 0.5042113377864755,
+        "polarity": 1,
+        "auc_train": 0.6051083333333334
+      }
+    },
+    {
+      "delta": 0.05,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.99976875,
+        "threshold": -1.6224317524192102,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.99976875,
+        "threshold": -1.6224317524192102,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.035,
+        "auc": 0.469575,
+        "threshold": 0.5567436005107201,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0325,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0825,
+        "auc": 0.530425,
+        "threshold": -0.03800740416923897,
+        "polarity": -1,
+        "auc_train": 0.5358
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 0,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.59796875,
+        "threshold": 0.5014399622911091,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.59796875,
+        "threshold": 0.5014399622911091,
+        "polarity": 1,
+        "auc_train": 0.6048138888888889
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.07,
+        "auc": 0.99981875,
+        "threshold": -1.5047810334185217,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.07,
+        "auc": 0.99981875,
+        "threshold": -1.5047810334185217,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.4394,
+        "threshold": 0.5280935425215414,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0625,
+        "auc": 0.5606,
+        "threshold": -0.030228081228839455,
+        "polarity": -1,
+        "auc_train": 0.529975
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 1,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.045,
+        "auc": 0.5834875,
+        "threshold": 0.5059367404234287,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.045,
+        "auc": 0.5834875,
+        "threshold": 0.5059367404234287,
+        "polarity": 1,
+        "auc_train": 0.5963
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0675,
+        "auc": 0.998525,
+        "threshold": -1.4238060631576492,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0675,
+        "auc": 0.998525,
+        "threshold": -1.4238060631576492,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0175,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0575,
+        "auc": 0.440825,
+        "threshold": 0.5451343581718487,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0025,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.045,
+        "auc": 0.559175,
+        "threshold": -0.02249763897555298,
+        "polarity": -1,
+        "auc_train": 0.5102055555555556
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 2,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0225,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0625,
+        "auc": 0.56784375,
+        "threshold": 0.5042968372698082,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0225,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0625,
+        "auc": 0.56784375,
+        "threshold": 0.5042968372698082,
+        "polarity": 1,
+        "auc_train": 0.6111916666666667
+      }
+    },
+    {
+      "delta": 0.1,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 1.0,
+        "threshold": -1.6095867757151971,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 1.0,
+        "threshold": -1.6095867757151971,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.1235,
+        "threshold": 0.6112238164406136,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 0.3575,
+        "false_alarm_at_5pct": 0.065,
+        "auc": 0.8765,
+        "threshold": -0.036720819833310034,
+        "polarity": -1,
+        "auc_train": 0.8964861111111111
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 0,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.60815,
+        "threshold": 0.5007285582152985,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0375,
+        "auc": 0.60815,
+        "threshold": 0.5007285582152985,
+        "polarity": 1,
+        "auc_train": 0.61785
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.045,
+        "auc": 0.99919375,
+        "threshold": -2.0896995224069466,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.045,
+        "auc": 0.99919375,
+        "threshold": -2.0896995224069466,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.005,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0525,
+        "auc": 0.10035,
+        "threshold": 0.5964556413143894,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.005,
+        "detection_at_5pct": 0.2275,
+        "false_alarm_at_5pct": 0.0425,
+        "auc": 0.89965,
+        "threshold": -0.0344881965237204,
+        "polarity": -1,
+        "auc_train": 0.8848666666666667
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 1,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0425,
+        "auc": 0.5931875,
+        "threshold": 0.5085974465079988,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0425,
+        "auc": 0.5931875,
+        "threshold": 0.5085974465079988,
+        "polarity": 1,
+        "auc_train": 0.6067972222222222
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.99999375,
+        "threshold": -2.158245915244977,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.99999375,
+        "threshold": -2.158245915244977,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0225,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.055,
+        "auc": 0.09613125,
+        "threshold": 0.6040428250569952,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 0.1375,
+        "false_alarm_at_5pct": 0.035,
+        "auc": 0.90386875,
+        "threshold": -0.04195488166224884,
+        "polarity": -1,
+        "auc_train": 0.8585611111111111
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 2,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.5809625,
+        "threshold": 0.5053307610698275,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.02,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.5809625,
+        "threshold": 0.5053307610698275,
+        "polarity": 1,
+        "auc_train": 0.62405
+      }
+    },
+    {
+      "delta": 0.2,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0775,
+        "auc": 0.99998125,
+        "threshold": -1.6273934103793377,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0125,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0775,
+        "auc": 0.99998125,
+        "threshold": -1.6273934103793377,
+        "polarity": 1,
+        "auc_train": 0.9999916666666666
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 0,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.19,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 0.995,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.97498125,
+        "threshold": -0.06969291831447105,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.19,
+        "false_alarm": 0.015,
+        "detection_at_5pct": 0.995,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.97498125,
+        "threshold": -0.06969291831447105,
+        "polarity": -1,
+        "auc_train": 0.979425
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 0,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0325,
+        "auc": 0.6275125,
+        "threshold": 0.5027647659503616,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.0325,
+        "auc": 0.6275125,
+        "threshold": 0.5027647659503616,
+        "polarity": 1,
+        "auc_train": 0.6447111111111111
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 0,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0425,
+        "auc": 1.0,
+        "threshold": -1.7524404597704484,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0425,
+        "auc": 1.0,
+        "threshold": -1.7524404597704484,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 1,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.1175,
+        "false_alarm": 0.005,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.04,
+        "auc": 0.98716875,
+        "threshold": -0.063533488148359,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.1175,
+        "false_alarm": 0.005,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.04,
+        "auc": 0.98716875,
+        "threshold": -0.063533488148359,
+        "polarity": -1,
+        "auc_train": 0.9805944444444444
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 1,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.04,
+        "auc": 0.610275,
+        "threshold": 0.5115210182152395,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.0075,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.04,
+        "auc": 0.610275,
+        "threshold": 0.5115210182152395,
+        "polarity": 1,
+        "auc_train": 0.6279333333333333
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 1,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0175,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.99995,
+        "threshold": -2.0590589681032196,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.0175,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0475,
+        "auc": 0.99995,
+        "threshold": -2.0590589681032196,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 2,
+      "det": "negseq",
+      "test_sign": {
+        "detection_rate": 0.0875,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.9975,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.9791,
+        "threshold": -0.05944465768875859,
+        "polarity": -1
+      },
+      "train_sign": {
+        "detection_rate": 0.0875,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.9975,
+        "false_alarm_at_5pct": 0.06,
+        "auc": 0.9791,
+        "threshold": -0.05944465768875859,
+        "polarity": -1,
+        "auc_train": 0.9811583333333334
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 2,
+      "det": "incremental",
+      "test_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.055,
+        "auc": 0.60293125,
+        "threshold": 0.5144636049556455,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 0.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 0.0,
+        "false_alarm_at_5pct": 0.055,
+        "auc": 0.60293125,
+        "threshold": 0.5144636049556455,
+        "polarity": 1,
+        "auc_train": 0.6507777777777778
+      }
+    },
+    {
+      "delta": 0.4,
+      "seed": 2,
+      "det": "engineered",
+      "test_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0825,
+        "auc": 0.99976875,
+        "threshold": -1.4710495974051916,
+        "polarity": 1
+      },
+      "train_sign": {
+        "detection_rate": 1.0,
+        "false_alarm": 0.01,
+        "detection_at_5pct": 1.0,
+        "false_alarm_at_5pct": 0.0825,
+        "auc": 0.99976875,
+        "threshold": -1.4710495974051916,
+        "polarity": 1,
+        "auc_train": 1.0
+      }
+    }
+  ],
+  "runtime_s": 315.7318739891052
+}

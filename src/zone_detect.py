@@ -26,18 +26,25 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dataclasses import replace as _replace
 from zone_model import ZoneParams, solve_zone, loop_impedances, supervised_reactance, phase_selected_reactance
 from waveforms import _synth, SigParams, sequence_phasors, CYCLE, EVENT
-from detect import evaluate, train_cnn, FAR
+from detect import evaluate, train_cnn, fit_lr_scores, FAR
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "results")
 os.makedirs(OUT, exist_ok=True)
 
 
-def generate(kind, rng, delta=0.0, p=None, grid=None, boundary=True):
+def generate(kind, rng, delta=0.0, p=None, grid=None, boundary=True, delta_pre=None, m_range=None):
     """kind: 'ag'/'ab' (in zone) or 'ag2'/'ab2' (out of zone). Returns (x, meta).
 
     boundary=True concentrates the sampling in the band where the two classes are genuinely
     ambiguous: just inside the reach versus just past the remote bus. Sampling the whole
     line instead fills the set with easy cases and flatters every detector.
+
+    Review options (defaults reproduce the original):
+      delta_pre  auxiliary signal in the PRE-event solve; None = same as delta (continuous
+                 injection). delta_pre=0 switches the signal on at the event (H4).
+      m_range    (lo, hi) overrides the fault-position band, e.g. (0.85, 1.0) for own-line faults
+                 past the reach (H9). The rng draw order is unchanged.
+    The returned meta also carries the noise-free sequence phasors 'pre' and 'post' (H20).
     """
     p = p or SigParams()
     g = grid or ZoneParams()
@@ -57,31 +64,57 @@ def generate(kind, rng, delta=0.0, p=None, grid=None, boundary=True):
         m = rng.uniform(0.02, 0.18) if boundary else rng.uniform(0.02, 0.9)
     else:
         m = rng.uniform(0.62, g.reach) if boundary else rng.uniform(0.05, g.reach)
+    if m_range is not None:            # map the draw linearly onto the new band (same rng order)
+        lo, hi = ((0.02, 0.18) if boundary else (0.02, 0.9)) if kind.endswith("2") else                  ((0.62, g.reach) if boundary else (0.05, g.reach))
+        m = m_range[0] + (m - lo) / (hi - lo) * (m_range[1] - m_range[0])
     mr = rng.uniform(0.0, 1.0)
-    pre = solve_zone(g, "N", srcL, iR, delta)
+    pre = solve_zone(g, "N", srcL, iR, delta if delta_pre is None else delta_pre)
     post = solve_zone(g, kind, srcL, iR, delta, m, mr)
     v = _synth(pre[:3], post[:3], p, rng, is_current=False)
     i = _synth(pre[3:], post[3:], p, rng, is_current=True)
-    return np.vstack([v, i]).astype(np.float32), dict(kind=kind, m=m, rf=mr * g.rF)
+    return np.vstack([v, i]).astype(np.float32), dict(kind=kind, m=m, rf=mr * g.rF, pre=pre,
+                                                        post=post, grid=g)
 
 
-def make_zone_dataset(n, rng, delta=0.0, p=None, grid=None, boundary=True):
-    X, y, kinds = [], [], []
-    for k in ("ag", "ab"):
-        for _ in range(n):
-            x, _mt = generate(k, rng, delta, p, grid, boundary)
-            X.append(x); y.append(1); kinds.append(k)
-    for k in ("ag2", "ab2"):
-        for _ in range(n):
-            x, _mt = generate(k, rng, delta, p, grid, boundary)
-            X.append(x); y.append(0); kinds.append(k)
+def make_zone_dataset(n, rng, delta=0.0, p=None, grid=None, boundary=True, delta_pre=None,
+                      kinds_pos=("ag", "ab"), kinds_neg=("ag2", "ab2"), m_range=None,
+                      return_meta=False):
+    X, y, kinds, metas = [], [], [], []
+    for label, ks in ((1, kinds_pos), (0, kinds_neg)):
+        for k in ks:
+            for _ in range(n):
+                x, mt = generate(k, rng, delta, p, grid, boundary, delta_pre, m_range)
+                X.append(x); y.append(label); kinds.append(k); metas.append(mt)
+    if return_meta:
+        return np.stack(X), np.array(y), np.array(kinds), metas
     return np.stack(X), np.array(y), np.array(kinds)
 
 
 # ------------------------------------------------------------------------- detectors
-def _phasors(x):
-    vpre = sequence_phasors(x[:3], EVENT - 2 * CYCLE); vpost = sequence_phasors(x[:3], EVENT + CYCLE)
-    ipre = sequence_phasors(x[3:], EVENT - 2 * CYCLE); ipost = sequence_phasors(x[3:], EVENT + CYCLE)
+def mimic_filter(x3, tau_samples):
+    """Digital mimic (DC-removal) filter y[n] = (1+tau) x[n] - tau x[n-1], tau in samples.
+    Returns the filtered block and its complex gain at the fundamental, by which a phasor of the
+    filtered signal must be divided to recover the unfiltered phasor (magnitude AND angle)."""
+    y = np.empty_like(x3, dtype=float)
+    y[:, 1:] = (1 + tau_samples) * x3[:, 1:] - tau_samples * x3[:, :-1]
+    y[:, 0] = x3[:, 0]
+    H = (1 + tau_samples) - tau_samples * np.exp(-2j * np.pi / CYCLE)
+    return y, H
+
+
+def line_tau_samples(g):
+    """DC time constant of a fault through the protected line, X/(omega R), in samples."""
+    return (g.z1.imag / g.z1.real) * CYCLE / (2 * np.pi)
+
+
+def _phasors(x, offset=0, mimic_tau=None):
+    """Pre-event window 2 cycles before the event, post-event window one cycle after it.
+    offset (samples) shifts both anchors, modelling a trigger-time error (H20); mimic_tau
+    (samples) applies a mimic filter to the currents (H20). Defaults reproduce the original."""
+    a_pre, a_post = EVENT - 2 * CYCLE + offset, EVENT + CYCLE + offset
+    xi, H = (x[3:], 1.0) if mimic_tau is None else mimic_filter(x[3:], mimic_tau)
+    vpre = sequence_phasors(x[:3], a_pre); vpost = sequence_phasors(x[:3], a_post)
+    ipre = sequence_phasors(xi, a_pre) / H; ipost = sequence_phasors(xi, a_post) / H
     return vpre, vpost, ipre, ipost
 
 
@@ -94,7 +127,7 @@ def _seq_vec(vpost, ipost):
     return np.array([vpost[1], vpost[2], vpost[0], ipost[1], ipost[2], ipost[0]])
 
 
-def score_reactance(X, g):
+def score_reactance(X, g, offsets=None, mimic_tau=None):
     """The textbook distance element, implemented the way a relay does it: six fault loops,
     k0 compensation on the ground loops, faulted-phase selection from incremental currents so
     that only the faulted loops are released, forward loops only, smallest reactance wins.
@@ -105,8 +138,9 @@ def score_reactance(X, g):
     faults at 99 % of the line; see zone_model.phase_selected_reactance."""
     z1, z0 = g.z1, g.z0_ratio * g.z1
     out = []
-    for x in X:
-        _, vpost, ipre, ipost = _phasors(x)
+    for j, x in enumerate(X):
+        off = 0 if offsets is None else int(offsets[j])
+        _, vpost, ipre, ipost = _phasors(x, off, mimic_tau)
         out.append(phase_selected_reactance(vpost, ipre, ipost, z1, z0))
     return np.array(out)
 
@@ -115,10 +149,26 @@ def score_negseq(X):
     return np.array([abs(sequence_phasors(x[3:], EVENT + CYCLE)[2]) for x in X])
 
 
-def zone_features(X, g):
+FLOOR = 1e-3        # pu; about the phasor noise floor, used by the fixed ratio features (H21)
+
+
+def _ang(a, b):
+    """Angle of a/b without dividing (no epsilon, no blow-up when b ~ 0)."""
+    return np.angle(a * np.conj(b))
+
+
+def _logratio(a, b, floor=FLOOR):
+    return np.log((abs(a) + floor) / (abs(b) + floor))
+
+
+def zone_features(X, g, fixed=False, raw=False, mimic_tau=None):
+    """fixed=False: the original 36 features (raw angles in [-pi, pi], ratios with e=1e-9, then
+    nan_to_num(posinf=0)). fixed=True (review H21): every angle enters as (sin, cos), every
+    ratio as log((|a|+floor)/(|b|+floor)); the linear features are unchanged.
+    raw=True returns the original matrix before nan_to_num (for counting defects)."""
     feats = []
     for x in X:
-        vpre, vpost, ipre, ipost = _phasors(x)
+        vpre, vpost, ipre, ipost = _phasors(x, 0, mimic_tau)
         L = _loops(vpost, ipost, g)
         fwd = [z.imag for z in L.values() if z.imag > 0]
         sup = phase_selected_reactance(vpost, ipre, ipost, g.z1, g.z0_ratio * g.z1)
@@ -126,29 +176,72 @@ def zone_features(X, g):
         v0, v1, v2 = vpost; i0, i1, i2 = ipost
         dv0, dv1, dv2 = vpost - vpre; di0, di1, di2 = ipost - ipre
         e = 1e-9
-        feats.append([
-            zg.real, zg.imag, abs(zg), np.angle(zg),
-            zp.real, zp.imag, abs(zp), np.angle(zp),
-            sup, min(fwd) if fwd else 10.0, len(fwd),
-            min((z.imag for z in L.values()), default=0.0),
-            abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
-            abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0),
-            abs(i2) / (abs(i1) + e), abs(i0) / (abs(i1) + e), abs(i0) / (abs(i2) + e),
-            np.angle(i2 / (i1 + e)), np.angle(i0 / (i1 + e)), np.angle(v2 / (i2 + e)),
-            np.angle(v0 / (i0 + e)), np.angle(dv2 / (di2 + e)), np.angle(dv1 / (di1 + e)),
-            abs(dv1 / (di1 + e)), abs(dv2 / (di2 + e)), abs(dv0 / (di0 + e)),
-        ])
-    return np.nan_to_num(np.array(feats), nan=0.0, posinf=0.0, neginf=0.0)
+        lin = [zg.real, zg.imag, abs(zg), zp.real, zp.imag, abs(zp),
+               sup, min(fwd) if fwd else 10.0, len(fwd),
+               min((z.imag for z in L.values()), default=0.0),
+               abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
+               abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0)]
+        if not fixed:
+            feats.append([
+                zg.real, zg.imag, abs(zg), np.angle(zg),
+                zp.real, zp.imag, abs(zp), np.angle(zp),
+                sup, min(fwd) if fwd else 10.0, len(fwd),
+                min((z.imag for z in L.values()), default=0.0),
+                abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
+                abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0),
+                abs(i2) / (abs(i1) + e), abs(i0) / (abs(i1) + e), abs(i0) / (abs(i2) + e),
+                np.angle(i2 / (i1 + e)), np.angle(i0 / (i1 + e)), np.angle(v2 / (i2 + e)),
+                np.angle(v0 / (i0 + e)), np.angle(dv2 / (di2 + e)), np.angle(dv1 / (di1 + e)),
+                abs(dv1 / (di1 + e)), abs(dv2 / (di2 + e)), abs(dv0 / (di0 + e)),
+            ])
+        else:
+            angs = [np.angle(zg), np.angle(zp), _ang(i2, i1), _ang(i0, i1), _ang(v2, i2),
+                    _ang(v0, i0), _ang(dv2, di2), _ang(dv1, di1)]
+            rats = [_logratio(i2, i1), _logratio(i0, i1), _logratio(i0, i2),
+                    _logratio(dv1, di1), _logratio(dv2, di2), _logratio(dv0, di0)]
+            feats.append(lin + [np.sin(a) for a in angs] + [np.cos(a) for a in angs] + rats)
+    F = np.array(feats)
+    if raw:
+        return F
+    return np.nan_to_num(F, nan=0.0, posinf=0.0, neginf=0.0)
 
 
-def score_engineered(Xtr, ytr, Xte, g, seed=0):
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.pipeline import make_pipeline
-    clf = make_pipeline(StandardScaler(), LogisticRegression(max_iter=4000, random_state=seed))
-    ftr, fte = zone_features(Xtr, g), zone_features(Xte, g)
-    clf.fit(ftr, ytr)
-    return clf.decision_function(ftr), clf.decision_function(fte)
+# column indices of the original zone_features, for the H21 defect count
+ZONE_ANGLE_COLS = [3, 7, 27, 28, 29, 30, 31, 32]
+ZONE_RATIO_COLS = [24, 25, 26, 33, 34, 35]
+
+
+def score_engineered(Xtr, ytr, Xte, g, seed=0, oof_folds=5, fixed_features=True, mimic_tau=None):
+    """oof_folds=0 reproduces the original in-sample training scores (review H18);
+    fixed_features=False the original feature encoding (review H21)."""
+    return fit_lr_scores(zone_features(Xtr, g, fixed_features, mimic_tau=mimic_tau), ytr,
+                         zone_features(Xte, g, fixed_features, mimic_tau=mimic_tau), seed=seed,
+                         max_iter=4000, oof_folds=oof_folds)
+
+
+KEYS = ("reactance", "negseq", "engineered", "cnn")
+# Review defaults for main(): OOF thresholds (H18), global CNN scaling (H19), fixed feature
+# encoding (H21), mimic filter on currents (H20); CNN test scores from the fold models (H18).
+# score_all(cfg={}) and main(--legacy) reproduce the original pipeline.
+DEFAULT_CFG = dict(oof_folds=5, oof_test="folds", cnn_norm="global", fixed_features=True, mimic=True)
+
+
+def score_all(Xtr, ytr, Xte, grid, seed=0, epochs=20, cfg=None):
+    """All four detectors on one train/test split -> {name: (train_scores, test_scores)}.
+    cfg holds the review switches; an empty cfg is the original pipeline."""
+    cfg = dict(cfg or {})
+    out = {}
+    mt = line_tau_samples(grid) if cfg.get("mimic", False) else None
+    out["reactance"] = (score_reactance(Xtr, grid, mimic_tau=mt), score_reactance(Xte, grid, mimic_tau=mt))
+    out["negseq"] = (score_negseq(Xtr), score_negseq(Xte))
+    oof = cfg.get("oof_folds", 0)
+    out["engineered"] = score_engineered(Xtr, ytr, Xte, grid, seed=seed, oof_folds=oof,
+                                         fixed_features=cfg.get("fixed_features", False),
+                                         mimic_tau=mt)
+    out["cnn"] = train_cnn(Xtr, ytr, Xte, epochs=epochs, seed=seed, oof_folds=oof,
+                           oof_test=cfg.get("oof_test", "full"),
+                           norm=cfg.get("cnn_norm", "per_waveform"))
+    return out
 
 
 def main():
@@ -158,7 +251,18 @@ def main():
     ap.add_argument("--rf", type=float, default=0.3, help="max fault resistance, pu")
     ap.add_argument("--wide", action="store_true", help="sample the whole line, not just the boundary band")
     ap.add_argument("--seeds", type=int, default=3)
+    ap.add_argument("--out", default=OUT, help="output directory (review: keep author results intact)")
+    ap.add_argument("--tag", default="zone_sweep", help="basename of the .json/.png/.npz outputs")
+    ap.add_argument("--polarity", choices=("train", "test"), default="train",
+                    help="'test' reproduces the original test-chosen sign (review H17)")
+    ap.add_argument("--legacy", action="store_true",
+                    help="original pipeline: test-chosen polarity, in-sample thresholds, "
+                         "per-waveform CNN scaling, raw angle/ratio features")
+    ap.add_argument("--no-mimic", action="store_true", help="no mimic filter on currents (review H20)")
+    ap.add_argument("--mimic", action="store_true", help="(default in the corrected pipeline; kept for old commands)")
     args = ap.parse_args()
+    os.makedirs(args.out, exist_ok=True)
+    dump = {}                                   # raw test scores per (delta, seed, detector)
 
     with open(os.path.join(OUT, "aux_signal_toy_weak_sg.json")) as f:
         o = json.load(f)["cvxpy_opt"]
@@ -181,7 +285,12 @@ def main():
     print(f"fault resistance 0 to {grid.rF} pu in both  (line |z1| = {abs(grid.z1):.3f} pu)")
     print(f"delta swept along the designed direction ({np.degrees(np.angle(design_delta)):.1f} deg)")
     print(f"train {2*n_tr}+{2*n_tr}, test {2*n_te}+{2*n_te}, FAR budget {FAR:.0%}\n")
-    KEYS = ("reactance", "negseq", "engineered", "cnn")
+    cfg = {} if args.legacy else dict(DEFAULT_CFG)
+    if args.legacy:
+        args.polarity = "test"
+    if args.no_mimic:
+        cfg["mimic"] = False
+    print(f"pipeline cfg {cfg}, polarity chosen on {args.polarity}")
     for t in mags:
         d = t * direction
         t0 = time.time()
@@ -191,13 +300,12 @@ def main():
                                             grid, not args.wide)
             Xte, yte, _k = make_zone_dataset(n_te, np.random.default_rng(999 + 31 * sd), d, p,
                                              grid, not args.wide)
-            per_seed["reactance"].append(evaluate(score_reactance(Xtr, grid), ytr,
-                                                  score_reactance(Xte, grid), yte))
-            per_seed["negseq"].append(evaluate(score_negseq(Xtr), ytr, score_negseq(Xte), yte))
-            e_tr, e_te = score_engineered(Xtr, ytr, Xte, grid, seed=sd)
-            per_seed["engineered"].append(evaluate(e_tr, ytr, e_te, yte))
-            s_tr, s_te = train_cnn(Xtr, ytr, Xte, epochs=args.epochs, seed=sd)
-            per_seed["cnn"].append(evaluate(s_tr, ytr, s_te, yte))
+            sc = score_all(Xtr, ytr, Xte, grid, seed=sd, epochs=args.epochs, cfg=cfg)
+            for k in KEYS:
+                per_seed[k].append(evaluate(sc[k][0], ytr, sc[k][1], yte, polarity=args.polarity))
+            dump[f"y_{t}_{sd}"] = yte; dump[f"kind_{t}_{sd}"] = _k
+            for k in KEYS:
+                dump[f"{k}_{t}_{sd}"] = sc[k][1]
         row = dict(delta=t)
         for k in KEYS:
             g_ = lambda f: np.array([r[f] for r in per_seed[k]])
@@ -206,7 +314,7 @@ def main():
                           auc=float(au.mean()), auc_std=float(au.std()),
                           detection_at_5pct=float(d5.mean()),
                           false_alarm=float(g_("false_alarm").mean()),
-                          seeds=[float(x) for x in dr])
+                          seeds=[float(x) for x in dr], per_seed=per_seed[k])
         rows.append(row)
         f = lambda k: f"{row[k]['auc']:.3f}+-{row[k]['auc_std']:.3f}"
         d = lambda k: f"{row[k]['detection_rate']*100:.0f}"
@@ -236,11 +344,13 @@ def main():
                  "In-zone vs out-of-zone, fault resistance and inverter infeed, mean ± sd over seeds")
     ax.grid(alpha=.3); ax.legend(fontsize=8, loc="upper left", bbox_to_anchor=(0.02, 0.48)); ax.set_ylim(0.45, 1.03)
     plt.tight_layout()
-    png = os.path.join(OUT, "zone_sweep.png")
+    png = os.path.join(args.out, args.tag + ".png")
     plt.savefig(png, dpi=140)
     json.dump(dict(far=FAR, magnitudes=mags, n_train=n_tr, n_test=n_te,
                    design_delta=[design_delta.real, design_delta.imag, abs(design_delta)],
-                   rows=rows), open(os.path.join(OUT, "zone_sweep.json"), "w"), indent=2)
+                   rows=rows, args=vars(args)),
+              open(os.path.join(args.out, args.tag + ".json"), "w"), indent=2)
+    np.savez_compressed(os.path.join(args.out, args.tag + "_scores.npz"), **dump)
     print("saved", os.path.relpath(png))
 
 

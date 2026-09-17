@@ -121,4 +121,6 @@ guarantee holds, where it breaks, and what the decision costs in milliseconds.
 
 - A working CVXPY implementation of the design method on a two-bus model, three regimes, the optimum verified against brute force.
 - A three-bus in-zone versus out-of-zone experiment, which happens to address the underreaching tests Taylor's 2026 paper names as future work.
-- 18 papers read, with notes, and six known gaps listed with sources.
+- 26 papers read, with notes, and eight known gaps listed with sources. The set now includes
+  the Taylor & Domínguez-García TAC 2025 paper, the Baeckeland current-limiting grid-forming
+  model, and six SEL practitioner references on settings and instrument transformers.
