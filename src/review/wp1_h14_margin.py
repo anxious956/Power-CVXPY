@@ -1,7 +1,7 @@
 """
 H14: separation margin.
 
-aux_model.separated_lp returns only a boolean (LP infeasible) and aux_signal_toy.py:243-254 asks
+aux_model.separated_lp returns only a boolean (LP infeasible) and aux_signal_toy.py:61-78 asks
 for lam.(cF - cN) >= h_Z(lam) + tau with tau = 1e-3 and ||lam||_inf <= 1, i.e. in unnormalized
 lambda units. Here the margin is measured as
 

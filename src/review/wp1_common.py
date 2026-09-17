@@ -393,7 +393,7 @@ def ms_polygons(ms, eps_total=None, ndir=180, R=3.0, cache=None):
 def alternating(ms, d0, mu=0.0, lam_mode="author", tau=1e-3, iters=30, extra_cons=None):
     """Alternating Farkas scheme.
     lam_mode='author': lam = argmax lam.v - h_Z(lam) s.t. ||lam||_inf <= 1, QP margin tau (as
-                       aux_signal_toy.py:237-262). Fails (QP infeasible) when a pair is not
+                       aux_signal_toy.py:61-86). Fails (QP infeasible) when a pair is not
                        separated at the current iterate, because then lam = 0.
     lam_mode='normalized': lam from gauge LP (works inside Z too), rescaled to ||lam||_1 = 1, QP
                        constraint lam.v(d) - h_Z(lam) >= mu, so mu is an inf-norm distance in pu.

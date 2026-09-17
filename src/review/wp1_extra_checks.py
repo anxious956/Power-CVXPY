@@ -3,7 +3,7 @@ Quick checks beyond H1-H16 (WP1 review):
   X1  the 'ab' scenario is a b-c fault: which loop reads m*X1 for a bolted fault (aux_model, zone_model),
       and the corrected a-b boundary conditions (wp1_models_fixed).
   X2  consequence for zone_detect: faulted-phase selection (score_reactance) vs the hard-coded L["ab"]
-      in zone_features (zone_detect.py:355); engineered-LR AUC with the loop fixed (quick sizes, 1 seed).
+      in zone_features (zone_detect.py:125); engineered-LR AUC with the loop fixed (quick sizes, 1 seed).
   X3  numerical conditioning of the dense solve with ibr_neg_z = 1e6; KCL residual.
   X4  zero-sequence compensation and sign conventions (k0, forward direction).
 

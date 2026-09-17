@@ -6,7 +6,7 @@ zonotope under an affine map of the 2-D d-plane, hence a convex polygon. The sep
 the complement of the union of 30 convex polygons: non-convex by construction. We compute every
 polygon from 180 support LPs (outer polygon = halfplane intersection), classify a 0.01-pu grid
 over |d| <= 1.5, and find the exact minimum-norm point outside all polygons (edge projections and
-edge-edge intersections). Then the author's alternating scheme (aux_signal_toy.py:237-262) is run
+edge-edge intersections). Then the author's alternating scheme (aux_signal_toy.py:61-86) is run
 from random starts.
 
   python src/review/wp1_h15_global.py [preset ...]        (~25 s per preset + ~15 s per 10 starts)
