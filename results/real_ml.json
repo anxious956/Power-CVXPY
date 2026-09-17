@@ -1,0 +1,768 @@
+{
+  "measurement": {
+    "noise_rel": 0.001,
+    "adc_bits": 16,
+    "v_full_scale_pu": 2.0,
+    "i_full_scale_x_prefault": 40.0
+  },
+  "shortcut_control": {
+    "testgrid_A": {
+      "MLP": 0.4981481481481481,
+      "gradient boosting": 0.47998236331569666,
+      "random forest": 0.5083333333333334
+    },
+    "testgrid_B": {
+      "MLP": 0.4932098765432099,
+      "gradient boosting": 0.5450617283950617,
+      "random forest": 0.518312757201646
+    }
+  },
+  "within": {
+    "testgrid_A": {
+      "10": {
+        "MLP": {
+          "auc": 0.8939594356261024,
+          "auc_sd": 0.08584130681988682,
+          "dependability": 0.5888888888888889,
+          "false_trip": 0.015873015873015872
+        },
+        "engineered + LR": {
+          "auc": 0.9772927689594356,
+          "auc_sd": 0.016305887238547326,
+          "dependability": 0.9166666666666666,
+          "false_trip": 0.031746031746031744
+        },
+        "gradient boosting": {
+          "auc": 0.9963403880070546,
+          "auc_sd": 0.003477659442100702,
+          "dependability": 0.9694444444444444,
+          "false_trip": 0.023809523809523808
+        },
+        "random forest": {
+          "auc": 0.9810405643738977,
+          "auc_sd": 0.01607111103539526,
+          "dependability": 0.9166666666666667,
+          "false_trip": 0.023809523809523808
+        }
+      },
+      "20": {
+        "zone-1 rule": {
+          "auc": 0.9430335097001763,
+          "auc_sd": 0.0,
+          "dependability": 0.7888888888888889,
+          "false_trip": 0.0031746031746031746
+        },
+        "MLP": {
+          "auc": 0.9240299823633158,
+          "auc_sd": 0.053896972123716295,
+          "dependability": 0.6499999999999999,
+          "false_trip": 0.012698412698412698
+        },
+        "engineered + LR": {
+          "auc": 1.0,
+          "auc_sd": 0.0,
+          "dependability": 1.0,
+          "false_trip": 0.03809523809523809
+        },
+        "gradient boosting": {
+          "auc": 0.9967372134038801,
+          "auc_sd": 0.004118269639800953,
+          "dependability": 0.9694444444444444,
+          "false_trip": 0.02222222222222222
+        },
+        "random forest": {
+          "auc": 0.987742504409171,
+          "auc_sd": 0.008490488314978211,
+          "dependability": 0.9222222222222222,
+          "false_trip": 0.019047619047619046
+        }
+      },
+      "30": {
+        "zone-1 rule": {
+          "auc": 0.9486419753086419,
+          "auc_sd": 0.0,
+          "dependability": 0.85,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.9407848324514992,
+          "auc_sd": 0.056604570095349666,
+          "dependability": 0.65,
+          "false_trip": 0.0015873015873015873
+        },
+        "engineered + LR": {
+          "auc": 0.9948853615520281,
+          "auc_sd": 0.003253239284955339,
+          "dependability": 0.9777777777777779,
+          "false_trip": 0.049206349206349205
+        },
+        "gradient boosting": {
+          "auc": 0.9974867724867724,
+          "auc_sd": 0.0029712055712224805,
+          "dependability": 0.975,
+          "false_trip": 0.020634920634920634
+        },
+        "random forest": {
+          "auc": 0.9943121693121691,
+          "auc_sd": 0.005275182101036193,
+          "dependability": 0.9499999999999998,
+          "false_trip": 0.019047619047619046
+        }
+      },
+      "40": {
+        "zone-1 rule": {
+          "auc": 0.9462962962962963,
+          "auc_sd": 0.0,
+          "dependability": 0.85,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.936552028218695,
+          "auc_sd": 0.05824528342176426,
+          "dependability": 0.7027777777777778,
+          "false_trip": 0.052380952380952375
+        },
+        "engineered + LR": {
+          "auc": 1.0,
+          "auc_sd": 0.0,
+          "dependability": 1.0,
+          "false_trip": 0.0365079365079365
+        },
+        "gradient boosting": {
+          "auc": 0.9977072310405644,
+          "auc_sd": 0.0022551520022124354,
+          "dependability": 0.9722222222222221,
+          "false_trip": 0.02857142857142857
+        },
+        "random forest": {
+          "auc": 0.9930335097001762,
+          "auc_sd": 0.005579126113482319,
+          "dependability": 0.9388888888888888,
+          "false_trip": 0.019047619047619046
+        }
+      },
+      "50": {
+        "zone-1 rule": {
+          "auc": 0.9478659611992946,
+          "auc_sd": 0.0,
+          "dependability": 0.85,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.9547619047619047,
+          "auc_sd": 0.05969672447876143,
+          "dependability": 0.8111111111111111,
+          "false_trip": 0.031746031746031744
+        },
+        "engineered + LR": {
+          "auc": 0.9945767195767197,
+          "auc_sd": 0.0029050381675536393,
+          "dependability": 0.9666666666666666,
+          "false_trip": 0.03968253968253968
+        },
+        "gradient boosting": {
+          "auc": 0.9975308641975309,
+          "auc_sd": 0.002564909977468914,
+          "dependability": 0.9805555555555555,
+          "false_trip": 0.01746031746031746
+        },
+        "random forest": {
+          "auc": 0.99320987654321,
+          "auc_sd": 0.007734168697824428,
+          "dependability": 0.9527777777777777,
+          "false_trip": 0.014285714285714285
+        }
+      }
+    },
+    "testgrid_B": {
+      "10": {
+        "MLP": {
+          "auc": 0.7835390946502058,
+          "auc_sd": 0.030895731490323607,
+          "dependability": 0.275,
+          "false_trip": 0.037037037037037035
+        },
+        "engineered + LR": {
+          "auc": 0.8947530864197532,
+          "auc_sd": 0.03273173653979729,
+          "dependability": 0.5944444444444443,
+          "false_trip": 0.05185185185185185
+        },
+        "gradient boosting": {
+          "auc": 0.9688271604938272,
+          "auc_sd": 0.011317340057678513,
+          "dependability": 0.8055555555555557,
+          "false_trip": 0.025925925925925925
+        },
+        "random forest": {
+          "auc": 0.9390432098765432,
+          "auc_sd": 0.019328494073813453,
+          "dependability": 0.7583333333333334,
+          "false_trip": 0.018518518518518517
+        }
+      },
+      "20": {
+        "zone-1 rule": {
+          "auc": 0.8298765432098766,
+          "auc_sd": 0.0,
+          "dependability": 0.6055555555555555,
+          "false_trip": 0.14814814814814814
+        },
+        "MLP": {
+          "auc": 0.8019547325102879,
+          "auc_sd": 0.06393559057292944,
+          "dependability": 0.33611111111111114,
+          "false_trip": 0.03333333333333333
+        },
+        "engineered + LR": {
+          "auc": 0.9994855967078189,
+          "auc_sd": 0.0006901444374999133,
+          "dependability": 0.9972222222222221,
+          "false_trip": 0.04444444444444444
+        },
+        "gradient boosting": {
+          "auc": 0.9639917695473251,
+          "auc_sd": 0.0178075691550772,
+          "dependability": 0.7750000000000001,
+          "false_trip": 0.037037037037037035
+        },
+        "random forest": {
+          "auc": 0.9578189300411522,
+          "auc_sd": 0.017216763888632844,
+          "dependability": 0.7833333333333332,
+          "false_trip": 0.018518518518518517
+        }
+      },
+      "30": {
+        "zone-1 rule": {
+          "auc": 0.7834362139917694,
+          "auc_sd": 0.0,
+          "dependability": 0.55,
+          "false_trip": 0.044444444444444446
+        },
+        "MLP": {
+          "auc": 0.8512345679012346,
+          "auc_sd": 0.04294007478873746,
+          "dependability": 0.3638888888888889,
+          "false_trip": 0.037037037037037035
+        },
+        "engineered + LR": {
+          "auc": 0.9868312757201647,
+          "auc_sd": 0.010798059064528328,
+          "dependability": 0.925,
+          "false_trip": 0.014814814814814814
+        },
+        "gradient boosting": {
+          "auc": 0.9718106995884774,
+          "auc_sd": 0.013264824247972196,
+          "dependability": 0.8055555555555556,
+          "false_trip": 0.04074074074074074
+        },
+        "random forest": {
+          "auc": 0.9587448559670783,
+          "auc_sd": 0.019467021534717348,
+          "dependability": 0.7833333333333333,
+          "false_trip": 0.037037037037037035
+        }
+      },
+      "40": {
+        "zone-1 rule": {
+          "auc": 0.8896296296296295,
+          "auc_sd": 0.0,
+          "dependability": 0.5888888888888889,
+          "false_trip": 0.044444444444444446
+        },
+        "MLP": {
+          "auc": 0.7978395061728394,
+          "auc_sd": 0.06796394722129348,
+          "dependability": 0.2111111111111111,
+          "false_trip": 0.0
+        },
+        "engineered + LR": {
+          "auc": 0.9982510288065842,
+          "auc_sd": 0.0052469135802468815,
+          "dependability": 0.9972222222222221,
+          "false_trip": 0.03333333333333333
+        },
+        "gradient boosting": {
+          "auc": 0.9732510288065844,
+          "auc_sd": 0.011739219609543964,
+          "dependability": 0.8055555555555556,
+          "false_trip": 0.03333333333333333
+        },
+        "random forest": {
+          "auc": 0.9631687242798354,
+          "auc_sd": 0.01620362205218175,
+          "dependability": 0.788888888888889,
+          "false_trip": 0.018518518518518517
+        }
+      },
+      "50": {
+        "zone-1 rule": {
+          "auc": 0.8055555555555557,
+          "auc_sd": 0.0,
+          "dependability": 0.5555555555555556,
+          "false_trip": 0.044444444444444446
+        },
+        "MLP": {
+          "auc": 0.8441358024691358,
+          "auc_sd": 0.0965218529803594,
+          "dependability": 0.2833333333333333,
+          "false_trip": 0.007407407407407407
+        },
+        "engineered + LR": {
+          "auc": 0.9763374485596706,
+          "auc_sd": 0.013326917625276775,
+          "dependability": 0.888888888888889,
+          "false_trip": 0.02222222222222222
+        },
+        "gradient boosting": {
+          "auc": 0.9725308641975309,
+          "auc_sd": 0.014923370568029795,
+          "dependability": 0.8027777777777778,
+          "false_trip": 0.03333333333333333
+        },
+        "random forest": {
+          "auc": 0.9705761316872428,
+          "auc_sd": 0.016349287207591396,
+          "dependability": 0.8055555555555556,
+          "false_trip": 0.025925925925925925
+        }
+      }
+    }
+  },
+  "cross": {
+    "testgrid_A->testgrid_B": {
+      "10": {
+        "MLP": {
+          "auc": 0.8374897119341563,
+          "dependability": 0.9555555555555556,
+          "false_trip": 0.6518518518518519
+        },
+        "gradient boosting": {
+          "auc": 0.6724897119341564,
+          "dependability": 0.9055555555555556,
+          "false_trip": 0.9703703703703703
+        },
+        "random forest": {
+          "auc": 0.7501851851851853,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.48436213991769544,
+          "dependability": 0.6722222222222223,
+          "false_trip": 0.6962962962962963
+        }
+      },
+      "20": {
+        "zone-1 rule": {
+          "auc": 0.8298765432098766,
+          "dependability": 0.6055555555555555,
+          "false_trip": 0.14814814814814814
+        },
+        "MLP": {
+          "auc": 0.8409053497942387,
+          "dependability": 0.85,
+          "false_trip": 0.3851851851851852
+        },
+        "gradient boosting": {
+          "auc": 0.7888065843621399,
+          "dependability": 0.9666666666666667,
+          "false_trip": 0.8666666666666667
+        },
+        "random forest": {
+          "auc": 0.8346296296296297,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.9113168724279835,
+          "dependability": 0.8333333333333334,
+          "false_trip": 0.1259259259259259
+        }
+      },
+      "30": {
+        "zone-1 rule": {
+          "auc": 0.7834362139917694,
+          "dependability": 0.55,
+          "false_trip": 0.044444444444444446
+        },
+        "MLP": {
+          "auc": 0.8564197530864197,
+          "dependability": 0.7111111111111111,
+          "false_trip": 0.2222222222222222
+        },
+        "gradient boosting": {
+          "auc": 0.7958847736625514,
+          "dependability": 0.9944444444444445,
+          "false_trip": 0.9851851851851852
+        },
+        "random forest": {
+          "auc": 0.7779423868312757,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.7298765432098766,
+          "dependability": 0.6611111111111111,
+          "false_trip": 0.1925925925925926
+        }
+      },
+      "40": {
+        "zone-1 rule": {
+          "auc": 0.8896296296296295,
+          "dependability": 0.5888888888888889,
+          "false_trip": 0.044444444444444446
+        },
+        "MLP": {
+          "auc": 0.7745679012345679,
+          "dependability": 0.5888888888888889,
+          "false_trip": 0.23703703703703705
+        },
+        "gradient boosting": {
+          "auc": 0.7228189300411523,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "random forest": {
+          "auc": 0.7464814814814815,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.8566666666666668,
+          "dependability": 0.9777777777777777,
+          "false_trip": 0.9259259259259259
+        }
+      },
+      "50": {
+        "zone-1 rule": {
+          "auc": 0.8055555555555557,
+          "dependability": 0.5555555555555556,
+          "false_trip": 0.044444444444444446
+        },
+        "MLP": {
+          "auc": 0.8519341563786008,
+          "dependability": 0.6777777777777778,
+          "false_trip": 0.17037037037037037
+        },
+        "gradient boosting": {
+          "auc": 0.7574074074074074,
+          "dependability": 1.0,
+          "false_trip": 0.9925925925925926
+        },
+        "random forest": {
+          "auc": 0.7728189300411523,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.718230452674897,
+          "dependability": 0.5888888888888889,
+          "false_trip": 0.15555555555555556
+        }
+      }
+    },
+    "testgrid_B->testgrid_A": {
+      "10": {
+        "MLP": {
+          "auc": 0.8244973544973545,
+          "dependability": 0.37222222222222223,
+          "false_trip": 0.0
+        },
+        "gradient boosting": {
+          "auc": 0.6126366843033509,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "random forest": {
+          "auc": 0.7360670194003527,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.9224162257495591,
+          "dependability": 0.9777777777777777,
+          "false_trip": 0.5396825396825397
+        }
+      },
+      "20": {
+        "zone-1 rule": {
+          "auc": 0.9430335097001763,
+          "dependability": 0.7888888888888889,
+          "false_trip": 0.0031746031746031746
+        },
+        "MLP": {
+          "auc": 0.9051146384479719,
+          "dependability": 0.7666666666666667,
+          "false_trip": 0.13015873015873017
+        },
+        "gradient boosting": {
+          "auc": 0.5896913580246913,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "random forest": {
+          "auc": 0.7238977072310406,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.991763668430335,
+          "dependability": 1.0,
+          "false_trip": 0.273015873015873
+        }
+      },
+      "30": {
+        "zone-1 rule": {
+          "auc": 0.9486419753086419,
+          "dependability": 0.85,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.7735449735449735,
+          "dependability": 0.5833333333333334,
+          "false_trip": 0.22857142857142856
+        },
+        "gradient boosting": {
+          "auc": 0.6127336860670194,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "random forest": {
+          "auc": 0.723289241622575,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.9560141093474427,
+          "dependability": 1.0,
+          "false_trip": 0.8476190476190476
+        }
+      },
+      "40": {
+        "zone-1 rule": {
+          "auc": 0.9462962962962963,
+          "dependability": 0.85,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.8135449735449735,
+          "dependability": 0.3333333333333333,
+          "false_trip": 0.0
+        },
+        "gradient boosting": {
+          "auc": 0.6906349206349206,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "random forest": {
+          "auc": 0.7517813051146385,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.9999118165784833,
+          "dependability": 1.0,
+          "false_trip": 0.9809523809523809
+        }
+      },
+      "50": {
+        "zone-1 rule": {
+          "auc": 0.9478659611992946,
+          "dependability": 0.85,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.9553615520282188,
+          "dependability": 0.8944444444444445,
+          "false_trip": 0.13968253968253969
+        },
+        "gradient boosting": {
+          "auc": 0.64831569664903,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "random forest": {
+          "auc": 0.7409876543209877,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.9610405643738977,
+          "dependability": 1.0,
+          "false_trip": 0.834920634920635
+        }
+      }
+    },
+    "testgrid_A->doubleline": {
+      "10": {
+        "MLP": {
+          "auc": 0.9408395061728395,
+          "dependability": 0.9166666666666666,
+          "false_trip": 0.21333333333333335
+        },
+        "gradient boosting": {
+          "auc": 0.894395061728395,
+          "dependability": 0.9444444444444444,
+          "false_trip": 0.39111111111111113
+        },
+        "random forest": {
+          "auc": 0.9155555555555557,
+          "dependability": 1.0,
+          "false_trip": 0.9911111111111112
+        },
+        "engineered + LR": {
+          "auc": 0.9669876543209877,
+          "dependability": 0.9944444444444445,
+          "false_trip": 0.9066666666666666
+        }
+      },
+      "20": {
+        "zone-1 rule": {
+          "auc": 0.9331604938271606,
+          "dependability": 0.8,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.9704938271604937,
+          "dependability": 0.9722222222222222,
+          "false_trip": 0.24888888888888888
+        },
+        "gradient boosting": {
+          "auc": 0.9437530864197531,
+          "dependability": 0.9722222222222222,
+          "false_trip": 0.4666666666666667
+        },
+        "random forest": {
+          "auc": 0.9583950617283951,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.9999012345679013,
+          "dependability": 1.0,
+          "false_trip": 0.9733333333333334
+        }
+      },
+      "30": {
+        "zone-1 rule": {
+          "auc": 0.9202222222222222,
+          "dependability": 0.8333333333333334,
+          "false_trip": 0.04
+        },
+        "MLP": {
+          "auc": 0.9658518518518519,
+          "dependability": 0.9555555555555556,
+          "false_trip": 0.19111111111111112
+        },
+        "gradient boosting": {
+          "auc": 0.9430864197530864,
+          "dependability": 0.9944444444444445,
+          "false_trip": 0.5377777777777778
+        },
+        "random forest": {
+          "auc": 0.9568888888888889,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.9512592592592591,
+          "dependability": 0.9833333333333333,
+          "false_trip": 0.8622222222222222
+        }
+      },
+      "40": {
+        "zone-1 rule": {
+          "auc": 0.932962962962963,
+          "dependability": 0.8333333333333334,
+          "false_trip": 0.0
+        },
+        "MLP": {
+          "auc": 0.8037530864197531,
+          "dependability": 0.8555555555555555,
+          "false_trip": 0.4666666666666667
+        },
+        "gradient boosting": {
+          "auc": 0.9508148148148148,
+          "dependability": 1.0,
+          "false_trip": 0.8
+        },
+        "random forest": {
+          "auc": 0.9490370370370371,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 1.0,
+          "dependability": 1.0,
+          "false_trip": 0.7422222222222222
+        }
+      },
+      "50": {
+        "zone-1 rule": {
+          "auc": 0.920148148148148,
+          "dependability": 0.8333333333333334,
+          "false_trip": 0.04
+        },
+        "MLP": {
+          "auc": 0.9540987654320988,
+          "dependability": 0.9166666666666666,
+          "false_trip": 0.16
+        },
+        "gradient boosting": {
+          "auc": 0.9480246913580246,
+          "dependability": 1.0,
+          "false_trip": 0.8044444444444444
+        },
+        "random forest": {
+          "auc": 0.9799876543209878,
+          "dependability": 1.0,
+          "false_trip": 1.0
+        },
+        "engineered + LR": {
+          "auc": 0.957283950617284,
+          "dependability": 0.9833333333333333,
+          "false_trip": 0.7422222222222222
+        }
+      }
+    }
+  },
+  "two_stage": {
+    "testgrid_A": {
+      "decision_ms": 20,
+      "far": 0.05,
+      "switching_events_per_test_fold": 10,
+      "switching": 0.0,
+      "in_zone": 0.470191811368282,
+      "out_of_zone": 0.02622950819672131,
+      "stage1_pass_in_zone": 0.559954989366754,
+      "stage2_pass_in_zone": 0.6455804926393162,
+      "stage1_auc_fault_vs_switching": 0.8129979035639414,
+      "switching_sd": 0.0,
+      "in_zone_sd": 0.16280004322136737,
+      "out_of_zone_sd": 0.05245901639344263,
+      "stage1_pass_in_zone_sd": 0.19286982595749344,
+      "stage2_pass_in_zone_sd": 0.1135257377713892,
+      "stage1_auc_fault_vs_switching_sd": 0.028242969966851314
+    },
+    "testgrid_B": {
+      "decision_ms": 20,
+      "far": 0.05,
+      "switching_events_per_test_fold": 10,
+      "switching": 0.0,
+      "in_zone": 0.10469322344322345,
+      "out_of_zone": 0.016666666666666666,
+      "stage1_pass_in_zone": 0.1830357142857143,
+      "stage2_pass_in_zone": 0.18205128205128204,
+      "stage1_auc_fault_vs_switching": 0.6229769392033543,
+      "switching_sd": 0.0,
+      "in_zone_sd": 0.07826200685721067,
+      "out_of_zone_sd": 0.03333333333333333,
+      "stage1_pass_in_zone_sd": 0.11730502044350356,
+      "stage2_pass_in_zone_sd": 0.08230232070514303,
+      "stage1_auc_fault_vs_switching_sd": 0.17179341700386916
+    }
+  }
+}

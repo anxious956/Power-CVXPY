@@ -1,5 +1,7 @@
 # First result on real EMT data: EvEMTBench `benchmark-DoubleLine`
 
+> **Correction, 17 Sep 2026.** The learned-detector numbers below (engineered model, CNN) were obtained on noise-free records with 80 ms windows and in-sample thresholds. The noise-free records let models read the label from pre-fault samples, so the in-distribution 1.000 scores are not valid. The zone-1 setting results are unaffected. See [REAL_ML.md](REAL_ML.md).
+
 17 Sep 2026. Code: `src/evemt.py` (loader), `src/real_zone.py` (experiment).
 Run: `python src/real_zone.py "data/benchmark-DoubleLine (1)_cache.npz"`.
 

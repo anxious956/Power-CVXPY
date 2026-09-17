@@ -125,6 +125,30 @@ Details: [results/REAL_TESTGRID.md](results/REAL_TESTGRID.md).
 
 ![relay B](results/real_testgrid_B.png)
 
+## Fifth result: a fair ML comparison on the same real data (17 Sep 2026)
+
+Causal windows of 10 to 50 ms, V/I scaled to each relay's reach, models chosen from the
+literature (MLP, gradient boosting, random forest, engineered features), a realistic
+measurement chain, thresholds from held-out scores, and training on one relay while testing
+on another. This supersedes the learned-detector numbers in the third and fourth results.
+
+- **The noise-free benchmark records leak the label.** Tree models predict in zone vs out of
+  zone from pre-fault samples alone with AUC 1.000, from 0.01 V simulation differences. With
+  0.1 % noise and a 16-bit ADC this drops to 0.48 to 0.55. Earlier perfect scores are withdrawn.
+- **On the relay it was tuned on, learning beats the fixed zone-1 setting**, most clearly under
+  remote infeed: at relay B, 20 ms, boosting 78 % dependability at 4 % false trips against the
+  setting's 61 % at 15 %.
+- **On a relay it never saw, the ranking partly survives but the trip threshold does not**:
+  false trips of 13 to 100 %, against 0 to 15 % for the setting, which is defined in units of
+  its own line.
+- **A learned fault detector does not separate faults from switching at 20 ms** (AUC 0.62 to 0.81).
+
+Five method errors were found and fixed along the way; all are listed in the details.
+
+Details: [results/REAL_ML.md](results/REAL_ML.md).
+
+![real ml](results/real_ml.png)
+
 ## Quick start
 
 ```bash
@@ -151,10 +175,12 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             zone_detect.py    detector comparison, in-zone vs out-of-zone (synthetic)
             evemt.py          EvEMTBench loader: reads the .tar.gz without unpacking, caches
             real_zone.py      in-zone vs out-of-zone on real EMT data (doubleline, testgrid_A, testgrid_B)
+            real_ml.py        fair ML vs zone-1 rule: causal windows, noise, cross-relay, two stages
 results/    RESULTS.md   design-tool results, figures and JSON for every preset
             DETECTION.md fault vs load study, and why that negative was too easy
             ZONE.md      in-zone vs out-of-zone, synthetic
             REAL_DOUBLELINE.md, REAL_TESTGRID.md  the same on real EMT data
+            REAL_ML.md        the fair ML comparison, with the errors found and fixed
 papers/     README.md reading list with links, fetch.sh to download the open-access PDFs
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
             TEAM_BRIEF.md   onboarding note for the team
@@ -192,6 +218,10 @@ the competing methods against each other, and that the auxiliary signal appears 
 - [x] All 18 papers read, notes and synthesis written
 - [x] EvEMTBench DoubleLine loaded straight from the archive; element validated on real EMT data
 - [x] Inverter grid (TestGrid110kV) run: limiter confirmed, inverters too small to matter, remote-infeed problem reproduced
+- [x] Fair ML comparison on real data: causal windows, measurement noise, cross-relay test, out-of-fold thresholds
+- [ ] Rule with a data-tuned reach as the stricter baseline; noise and CT saturation sweep
+- [ ] Report the pre-fault label leak to the EvEMTBench authors
+- [ ] Reproduce the Taylor 2023 example (|θ| vs fault location) with Clarabel
 - [ ] Inverter-dominated EMT grid (Baeckeland Simulink model, or our own)
 - [ ] Advisor confirmed
 - [ ] Team roles assigned
