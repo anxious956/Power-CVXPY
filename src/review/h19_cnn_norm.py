@@ -20,6 +20,7 @@ ap.add_argument("--epochs", type=int, default=12)
 ap.add_argument("--n-train", type=int, default=350)
 ap.add_argument("--n-test", type=int, default=250)
 ap.add_argument("--tag", default="h19_cnn_norm")
+ap.add_argument("--norms", nargs="+", default=["per_waveform", "global"])
 args = ap.parse_args()
 
 direction = design_direction()
@@ -29,14 +30,14 @@ for t in args.deltas:
     for sd in range(3):
         Xtr, ytr, _ = Z.make_zone_dataset(args.n_train, np.random.default_rng(100 + 17 * sd), t * direction, SigParams(), grid)
         Xte, yte, _ = Z.make_zone_dataset(args.n_test, np.random.default_rng(999 + 31 * sd), t * direction, SigParams(), grid)
-        for norm in ("per_waveform", "global"):
+        for norm in args.norms:
             a, b = D.train_cnn(Xtr, ytr, Xte, epochs=args.epochs, seed=sd, oof_folds=5, norm=norm)
             rows.append(dict(delta=t, seed=sd, norm=norm, **D.evaluate(a, ytr, b, yte, polarity="train")))
     print(f"delta={t} [{time.time()-t0:.0f}s]", flush=True)
 
 print("\ndelta  norm          AUC mean+-sd      dep@1% mean+-sd   FAR@1%")
 for t in args.deltas:
-    for norm in ("per_waveform", "global"):
+    for norm in args.norms:
         rr = [r for r in rows if r["delta"] == t and r["norm"] == norm]
         a = np.array([r["auc"] for r in rr]); d = np.array([r["detection_rate"] for r in rr]) * 100
         f = np.array([r["false_alarm"] for r in rr]) * 100

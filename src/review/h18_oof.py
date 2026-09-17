@@ -4,7 +4,8 @@ For each split, one full-train model and 5 fold models are fitted; the SAME test
 evaluated with three thresholds: in-sample train scores (original), out-of-fold train scores
 with the full model on test ("oof/full"), and out-of-fold train scores with the mean of the fold
 models on test ("oof/folds"). Polarity is chosen on train in all three (H17 fix applied).
-Zone study at --quick sizes, 3 seeds, deltas 0, .1, .3, .514; fault-vs-load at --quick sizes.
+Zone study at --quick sizes, 3 seeds, deltas 0 and .514; fault-vs-load at --quick sizes, deltas
+0 and .4 (the machine was shared; the end points of each sweep only).
 
   python src/review/h18_oof.py
 """
@@ -41,7 +42,7 @@ def cnn_variants(Xtr, ytr, Xte, seed, epochs):
 rows = []
 t0 = time.time()
 grid = replace(Z.ZoneParams(), rF=0.3)
-for t in (0.0, 0.10, 0.30, 0.514):
+for t in (0.0, 0.514):
     for sd in range(3):
         Xtr, ytr, _ = Z.make_zone_dataset(350, np.random.default_rng(100 + 17 * sd), t * direction, SigParams(), grid)
         Xte, yte, _ = Z.make_zone_dataset(250, np.random.default_rng(999 + 31 * sd), t * direction, SigParams(), grid)
@@ -53,7 +54,7 @@ for t in (0.0, 0.10, 0.30, 0.514):
                                  **D.evaluate(a, ytr, b, yte, polarity="train")))
     print(f"zone delta={t} [{time.time()-t0:.0f}s]", flush=True)
 
-for t in (0.0, 0.05, 0.10, 0.20, 0.40):
+for t in (0.0, 0.40):
     for sd in range(3):
         Xtr, ytr, _ = make_dataset(300, np.random.default_rng(100 + 17 * sd), delta=t * direction, hard=True)
         Xte, yte, _ = make_dataset(200, np.random.default_rng(999 + 31 * sd), delta=t * direction, hard=True)
