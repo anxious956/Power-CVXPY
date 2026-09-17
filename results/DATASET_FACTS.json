@@ -1,0 +1,343 @@
+{
+  "doubleline": {
+    "cache": "benchmark-DoubleLine (1)_cache.npz",
+    "relay": "Cub_2\\pex_MainBus1_MainLn1-2A",
+    "n_simulations": 1101,
+    "event_type_counts": {
+      "flt_1phg_shc": 207,
+      "flt_3ph_shc": 207,
+      "flt_2ph_shc": 207,
+      "flt_2phg_shc": 207,
+      "flt_1phg_shc_w_arc": 207,
+      "flt_1phg_incipient_w_arc": 21,
+      "flt_1phg_incipient": 21,
+      "switch_load_on": 3,
+      "switch_inrushHV": 3,
+      "switch_inrushLV": 3,
+      "switch_load_off": 3,
+      "switch_ohl_on": 3,
+      "switch_cap_off": 3,
+      "switch_cap_on": 3,
+      "switch_ohl_off": 3
+    },
+    "columns_that_vary": {
+      "file": 1101,
+      "Unnamed: 0": 1101,
+      "general/result_file_path": 1101,
+      "general/sim_idx": 1101,
+      "events/event_type": 15,
+      "events/event_target": 7,
+      "events/event_flt_target_line_location": 5,
+      "events/event_flt_shc_resistance": 3,
+      "events/event_phase_select_2ph": 3,
+      "events/event_phase_select_1ph": 3
+    },
+    "columns_constant": {
+      "general/vn": "110",
+      "general/fn": "50",
+      "general/grid_graph": "graph_benchmark.pickle",
+      "events/event_start": "1.1",
+      "events/event_flt_hif_resistance": "5000.0",
+      "events/event_iflt_duration": "0.005",
+      "arc/arc_tau": "0.0008",
+      "arc/arc_u0": "4000.0",
+      "arc/arc_r0": "0.15",
+      "events/event_iflt_arc_on": "False"
+    },
+    "operating_point_columns_present": [],
+    "counts": {
+      "in_zone": 180,
+      "out_of_zone": 225,
+      "shc": 1035,
+      "flt_any": 1077,
+      "flt_not_shc": 42,
+      "flt_not_shc_types": {
+        "flt_1phg_incipient": 21,
+        "flt_1phg_incipient_w_arc": 21
+      },
+      "switching": 24,
+      "flt_any_on_own_line_or_remote_bus_or_beyond": 744
+    },
+    "in_zone_by_type": {
+      "flt_1phg_shc": 36,
+      "flt_3ph_shc": 36,
+      "flt_1phg_shc_w_arc": 36,
+      "flt_2ph_shc": 36,
+      "flt_2phg_shc": 36
+    },
+    "out_of_zone_by_target": {
+      "MainLn2-3A": 90,
+      "MainLn2-3B": 90,
+      "MainBus2": 45
+    },
+    "sibling_groups": {
+      "n_groups": 135,
+      "size_histogram": {
+        "3": 135
+      }
+    },
+    "test_cases_with_sibling_in_train_stratifiedCV": [
+      0.951851851851852,
+      0.03333333333333333
+    ],
+    "test_cases_with_sibling_in_train_groupCV": [
+      0.0,
+      0.0
+    ],
+    "prefault_phase_voltage_peak_median": 92965.8828125,
+    "expected_peak_if_primary_V": 89814.62390204986,
+    "prefault_phase_current_peak_median": 484.0217590332031,
+    "prefault_voltage_spread_across_sims_rel_nominal": 0.0010633201372834094,
+    "prefault_current_spread_across_sims_rel_median_peak": 0.01782831504901171,
+    "prefault_voltage_max_abs_diff_across_sims_V": 2459.2578125,
+    "prefault_current_max_abs_diff_across_sims_A": 353.52120208740234,
+    "real_ml_noise_sigma_V": 89.81462390204986,
+    "threephase_sibling_max_rel_diff": {
+      "n_groups": 24,
+      "median": 0.0,
+      "max": 0.0
+    },
+    "adc_clipping": {
+      "i_pre_A": 548.191162109375,
+      "full_scale_A": 21927.646484375,
+      "sims_clipped": 13,
+      "in_zone_clipped": 13,
+      "in_zone_peak_over_prefault_median": 10.090773582458496,
+      "in_zone_peak_over_prefault_max": 56.70380783081055,
+      "by_location_in_zone": {
+        "1": 9,
+        "20": 4,
+        "50": 0,
+        "80": 0
+      }
+    }
+  },
+  "testgrid_A": {
+    "cache": "benchmark-TestGrid110kV_cache.meta.npz",
+    "relay": "Cub_HV_A_A-B-1\\pex_MainBus1_MainLn1-2A",
+    "n_simulations": 2435,
+    "event_type_counts": {
+      "flt_1phg_shc": 459,
+      "flt_2ph_shc": 459,
+      "flt_2phg_shc": 459,
+      "flt_3ph_shc": 459,
+      "flt_1phg_shc_w_arc": 459,
+      "flt_1phg_incipient": 45,
+      "flt_1phg_incipient_w_arc": 45,
+      "switch_inrushLV": 6,
+      "switch_inrushHV": 6,
+      "switch_load_on": 6,
+      "switch_cap_on": 6,
+      "switch_load_off": 6,
+      "switch_cap_off": 6,
+      "switch_ohl_on": 6,
+      "switch_ohl_off": 6,
+      "switch_ibr_trip": 2
+    },
+    "columns_that_vary": {
+      "file": 2435,
+      "Unnamed: 0": 2435,
+      "general/result_file_path": 2435,
+      "general/sim_idx": 2435,
+      "events/event_type": 16,
+      "events/event_target": 15,
+      "events/event_flt_target_line_location": 5,
+      "events/event_flt_shc_resistance": 3,
+      "events/event_phase_select_2ph": 3,
+      "events/event_phase_select_1ph": 3
+    },
+    "columns_constant": {
+      "general/vn": "110",
+      "general/fn": "50",
+      "general/grid_graph": "graph_benchmark.pickle",
+      "events/event_start": "1.1",
+      "events/event_flt_hif_resistance": "5000.0",
+      "events/event_iflt_duration": "0.005",
+      "arc/arc_tau": "0.0008",
+      "arc/arc_u0": "4000.0",
+      "arc/arc_r0": "0.15",
+      "events/event_iflt_arc_on": "False"
+    },
+    "operating_point_columns_present": [],
+    "counts": {
+      "in_zone": 180,
+      "out_of_zone": 315,
+      "shc": 2295,
+      "flt_any": 2385,
+      "flt_not_shc": 90,
+      "flt_not_shc_types": {
+        "flt_1phg_incipient": 45,
+        "flt_1phg_incipient_w_arc": 45
+      },
+      "switching": 50,
+      "flt_any_on_own_line_or_remote_bus_or_beyond": 975
+    },
+    "in_zone_by_type": {
+      "flt_1phg_shc": 36,
+      "flt_2ph_shc": 36,
+      "flt_2phg_shc": 36,
+      "flt_3ph_shc": 36,
+      "flt_1phg_shc_w_arc": 36
+    },
+    "out_of_zone_by_target": {
+      "MainLn2-3": 90,
+      "MainLn2-5": 90,
+      "MainLn2-6": 90,
+      "MainBus2": 45
+    },
+    "sibling_groups": {
+      "n_groups": 165,
+      "size_histogram": {
+        "3": 165
+      }
+    },
+    "test_cases_with_sibling_in_train_stratifiedCV": [
+      0.9636363636363636,
+      0.02641756935479196
+    ],
+    "test_cases_with_sibling_in_train_groupCV": [
+      0.0,
+      0.0
+    ],
+    "prefault_phase_voltage_peak_median": 91046.9609375,
+    "expected_peak_if_primary_V": 89814.62390204986,
+    "prefault_phase_current_peak_median": 462.2415466308594,
+    "prefault_voltage_spread_across_sims_rel_nominal": 0.001012025484194159,
+    "prefault_current_spread_across_sims_rel_median_peak": 0.011531607012140436,
+    "prefault_voltage_max_abs_diff_across_sims_V": 2418.15625,
+    "prefault_current_max_abs_diff_across_sims_A": 261.16243743896484,
+    "real_ml_noise_sigma_V": 89.81462390204986,
+    "threephase_sibling_max_rel_diff": {
+      "n_groups": 30,
+      "median": 0.0,
+      "max": 0.0
+    },
+    "adc_clipping": {
+      "i_pre_A": 504.98321533203125,
+      "full_scale_A": 20199.32861328125,
+      "sims_clipped": 14,
+      "in_zone_clipped": 14,
+      "in_zone_peak_over_prefault_median": 10.774993896484375,
+      "in_zone_peak_over_prefault_max": 64.17842864990234,
+      "by_location_in_zone": {
+        "1": 9,
+        "20": 5,
+        "50": 0,
+        "80": 0
+      }
+    }
+  },
+  "testgrid_B": {
+    "cache": "benchmark-TestGrid110kV_cache.meta.npz",
+    "relay": "Cub_HV_B_B-C\\pex_MainBus2_MainLn2-3",
+    "n_simulations": 2435,
+    "event_type_counts": {
+      "flt_1phg_shc": 459,
+      "flt_2ph_shc": 459,
+      "flt_2phg_shc": 459,
+      "flt_3ph_shc": 459,
+      "flt_1phg_shc_w_arc": 459,
+      "flt_1phg_incipient": 45,
+      "flt_1phg_incipient_w_arc": 45,
+      "switch_inrushLV": 6,
+      "switch_inrushHV": 6,
+      "switch_load_on": 6,
+      "switch_cap_on": 6,
+      "switch_load_off": 6,
+      "switch_cap_off": 6,
+      "switch_ohl_on": 6,
+      "switch_ohl_off": 6,
+      "switch_ibr_trip": 2
+    },
+    "columns_that_vary": {
+      "file": 2435,
+      "Unnamed: 0": 2435,
+      "general/result_file_path": 2435,
+      "general/sim_idx": 2435,
+      "events/event_type": 16,
+      "events/event_target": 15,
+      "events/event_flt_target_line_location": 5,
+      "events/event_flt_shc_resistance": 3,
+      "events/event_phase_select_2ph": 3,
+      "events/event_phase_select_1ph": 3
+    },
+    "columns_constant": {
+      "general/vn": "110",
+      "general/fn": "50",
+      "general/grid_graph": "graph_benchmark.pickle",
+      "events/event_start": "1.1",
+      "events/event_flt_hif_resistance": "5000.0",
+      "events/event_iflt_duration": "0.005",
+      "arc/arc_tau": "0.0008",
+      "arc/arc_u0": "4000.0",
+      "arc/arc_r0": "0.15",
+      "events/event_iflt_arc_on": "False"
+    },
+    "operating_point_columns_present": [],
+    "counts": {
+      "in_zone": 180,
+      "out_of_zone": 135,
+      "shc": 2295,
+      "flt_any": 2385,
+      "flt_not_shc": 90,
+      "flt_not_shc_types": {
+        "flt_1phg_incipient": 45,
+        "flt_1phg_incipient_w_arc": 45
+      },
+      "switching": 50,
+      "flt_any_on_own_line_or_remote_bus_or_beyond": 513
+    },
+    "in_zone_by_type": {
+      "flt_2ph_shc": 36,
+      "flt_1phg_shc": 36,
+      "flt_2phg_shc": 36,
+      "flt_3ph_shc": 36,
+      "flt_1phg_shc_w_arc": 36
+    },
+    "out_of_zone_by_target": {
+      "MainLn3-4": 90,
+      "MainBus3": 45
+    },
+    "sibling_groups": {
+      "n_groups": 105,
+      "size_histogram": {
+        "3": 105
+      }
+    },
+    "test_cases_with_sibling_in_train_stratifiedCV": [
+      0.9476190476190476,
+      0.05408484138857405
+    ],
+    "test_cases_with_sibling_in_train_groupCV": [
+      0.0,
+      0.0
+    ],
+    "prefault_phase_voltage_peak_median": 89488.9921875,
+    "expected_peak_if_primary_V": 89814.62390204986,
+    "prefault_phase_current_peak_median": 649.2124633789062,
+    "prefault_voltage_spread_across_sims_rel_nominal": 0.0012859729914249897,
+    "prefault_current_spread_across_sims_rel_median_peak": 0.010085586879397299,
+    "prefault_voltage_max_abs_diff_across_sims_V": 3274.3828125,
+    "prefault_current_max_abs_diff_across_sims_A": 323.8557405471802,
+    "real_ml_noise_sigma_V": 89.81462390204986,
+    "threephase_sibling_max_rel_diff": {
+      "n_groups": 18,
+      "median": 0.0,
+      "max": 0.0
+    },
+    "adc_clipping": {
+      "i_pre_A": 716.39404296875,
+      "full_scale_A": 28655.76171875,
+      "sims_clipped": 0,
+      "in_zone_clipped": 0,
+      "in_zone_peak_over_prefault_median": 4.258013725280762,
+      "in_zone_peak_over_prefault_max": 26.708045959472656,
+      "by_location_in_zone": {
+        "1": 0,
+        "20": 0,
+        "50": 0,
+        "80": 0
+      }
+    }
+  }
+}
