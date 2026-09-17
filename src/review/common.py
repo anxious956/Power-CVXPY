@@ -221,7 +221,16 @@ def seq_phasors(x3, end, n=SPC, H=1.0):
     return ph @ BM.T
 
 
-def phasors_at(R, idx, t_ms, window="full", mimic_i=False, pre_end_ms=-20.0):
+def lowpass(x, fc=400.0, order=2):
+    """Causal Butterworth low-pass applied identically to V and I, so V/I at 50 Hz is unaffected;
+    its complex gain at 50 Hz is returned for phasor normalisation."""
+    from scipy.signal import butter, lfilter, freqz
+    b, a = butter(order, fc / (FS / 2))
+    _, h = freqz(b, a, worN=[2 * np.pi * F0 / FS])
+    return lfilter(b, a, x, axis=-1), complex(h[0])
+
+
+def phasors_at(R, idx, t_ms, window="full", mimic_i=False, pre_end_ms=-20.0, lpf=None):
     """Pre-fault phasors from the cycle ending 20 ms before inception, post from the window ending at
     decision time t. Returns vpre, vpost, ipre, ipost as (m, 3) [s0, s+, s-]."""
     ev = R["ev"]
@@ -229,12 +238,16 @@ def phasors_at(R, idx, t_ms, window="full", mimic_i=False, pre_end_ms=-20.0):
     end = ev + int(round(t_ms * FS / 1000))
     pre_end = ev + int(round(pre_end_ms * FS / 1000))
     X = R["full"][idx]
-    xi, H = X[:, 3:], 1.0
+    xv, xi, H, Hv = X[:, :3], X[:, 3:], 1.0, 1.0
     if mimic_i:
         xi, H = mimic(X[:, 3:].astype(np.float64), tau_cycles=(R["lp"]["z1"].imag / R["lp"]["z1"].real) / (2 * np.pi))
-    vpre = seq_phasors(X[:, :3], pre_end)
+    if lpf:
+        xv, Hv = lowpass(xv.astype(np.float64), lpf)
+        xi, Hl = lowpass(xi.astype(np.float64), lpf)
+        H = H * Hl
+    vpre = seq_phasors(xv, pre_end, H=Hv)
     ipre = seq_phasors(xi, pre_end, H=H)
-    vpost = seq_phasors(X[:, :3], end, n)
+    vpost = seq_phasors(xv, end, n, H=Hv)
     ipost = seq_phasors(xi, end, n, H=H)
     return vpre, vpost, ipre, ipost
 
@@ -352,10 +365,10 @@ def incremental_distance(R, Lp, mask, reach=REACH):
     return ratio.max(1)
 
 
-def elements(R, idx, t_ms, window="full", mimic_i=False):
+def elements(R, idx, t_ms, window="full", mimic_i=False, lpf=None):
     """All phasor-based elements for cases idx at decision time t. Scores are 'lower = in zone' for
     reactance-type elements, 'higher = in zone' for the incremental element."""
-    vpre, vpost, ipre, ipost = phasors_at(R, idx, t_ms, window, mimic_i)
+    vpre, vpost, ipre, ipost = phasors_at(R, idx, t_ms, window, mimic_i, lpf=lpf)
     Lp = loops(R, vpost, ipost, vpre, ipre)
     mask = phase_selection(ipre, ipost)
     x_rule, Z = rule_reactance(Lp, mask)
