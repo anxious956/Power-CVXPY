@@ -193,6 +193,8 @@ def load_relay(name, chain=None, cubicle=None):
     behind = [k for u, v, k in C["graph"].edges(keys=True) if relay_bus in (u, v) and str(k).startswith("MainLn")
               and k not in (cfg["line"], cfg["parallel"])]
     reverse = shc & ((tgt == relay_bus) | np.isin(tgt, behind))
+    reverse_bus = shc & (tgt == relay_bus)                 # unambiguously reverse
+    reverse_lines = shc & np.isin(tgt, behind)             # in a meshed grid part of these are fed forward
     other = shc & ~(pos | neg | own99 | parallel | reverse)
     key = np.array([f"{t}|{l}|{e}|{r}" for t, l, e, r in zip(tgt, loc, et, rf)])
     _, groups = np.unique(key, return_inverse=True)
@@ -204,7 +206,7 @@ def load_relay(name, chain=None, cubicle=None):
                 z_reach=abs(REACH * lp["length_km"] * lp["z1"]),
                 et=et, tgt=tgt, loc=loc, rf=rf, phase=phase, groups=groups,
                 pos=pos, neg=neg, own99=own99, parallel=parallel, switching=switching, fault_any=fault_any,
-                reverse=reverse, other=other, relay_bus=relay_bus, behind_lines=behind,
+                reverse=reverse, reverse_bus=reverse_bus, reverse_lines=reverse_lines, other=other, relay_bus=relay_bus, behind_lines=behind,
                 graph=C["graph"], labels=L)
 
 
