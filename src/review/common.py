@@ -31,6 +31,7 @@ AM = np.array([[1, 1, 1], [1, A**2, A], [1, A, A**2]])     # [s0, s+, s-] -> [a,
 BM = np.linalg.inv(AM)
 V_NOM_PEAK = real_ml.V_NOM_PEAK
 LOOPS = ("ag", "bg", "cg", "ab", "bc", "ca")
+RELAY_BUS = dict(doubleline="MainBus1", testgrid_A="MainBus1", testgrid_B="MainBus2")
 
 _CACHE = {}
 
@@ -187,6 +188,12 @@ def load_relay(name, chain=None, cubicle=None):
     parallel = shc & (tgt == cfg["parallel"]) if cfg["parallel"] else np.zeros(len(L), bool)
     switching = np.char.startswith(et.astype(str), "switch")
     fault_any = np.char.startswith(et.astype(str), "flt")
+    # reverse faults: the relay's own bus and every line leaving it except the protected and parallel line
+    relay_bus = RELAY_BUS[name]
+    behind = [k for u, v, k in C["graph"].edges(keys=True) if relay_bus in (u, v) and str(k).startswith("MainLn")
+              and k not in (cfg["line"], cfg["parallel"])]
+    reverse = shc & ((tgt == relay_bus) | np.isin(tgt, behind))
+    other = shc & ~(pos | neg | own99 | parallel | reverse)
     key = np.array([f"{t}|{l}|{e}|{r}" for t, l, e, r in zip(tgt, loc, et, rf)])
     _, groups = np.unique(key, return_inverse=True)
     phase = np.where(np.char.find(et.astype(str), "1phg") >= 0, ph1,
@@ -197,6 +204,7 @@ def load_relay(name, chain=None, cubicle=None):
                 z_reach=abs(REACH * lp["length_km"] * lp["z1"]),
                 et=et, tgt=tgt, loc=loc, rf=rf, phase=phase, groups=groups,
                 pos=pos, neg=neg, own99=own99, parallel=parallel, switching=switching, fault_any=fault_any,
+                reverse=reverse, other=other, relay_bus=relay_bus, behind_lines=behind,
                 graph=C["graph"], labels=L)
 
 
@@ -314,6 +322,28 @@ def rule_reactance(Lp, mask, default=10.0):
     return np.where(np.isfinite(x), x, default), Z
 
 
+def i2_tilted_reactance(R, Lp, mask, tilt2_deg, tilt1_deg=None, default=10.0):
+    """Q-fair rung 3: negative-sequence polarised reactance line with a non-homogeneity (tilt) correction.
+
+    I2 at the relay is D2 * I2 at the fault, D2 = |D2| exp(j T2) the negative-sequence current
+    distribution factor at the reach point, so the fault current is in phase with I2 exp(-j T2):
+        m = Im(V (I2 e^{-jT2})*) / Im(Z1L I (I2 e^{-jT2})*),  returned as m * X1L (ohm).
+    T2 comes from the setting study (source impedances at both line ends), not from the EMT records.
+    Loops whose I2 polarising current is below 5 % of the loop current (three-phase faults) fall back
+    to the superimposed loop current with the positive-sequence tilt T1 (defaults to T2)."""
+    t2 = np.exp(-1j * np.deg2rad(tilt2_deg))
+    t1 = np.exp(-1j * np.deg2rad(tilt2_deg if tilt1_deg is None else tilt1_deg))
+    dI = Lp["I"] - Lp["Ipre"]
+    P = np.where(np.abs(Lp["I2pol"]) >= 0.05 * np.abs(Lp["I"]), Lp["I2pol"] * t2, dI * t1)
+    num = np.imag(Lp["V"] * np.conj(P))
+    den = np.imag(R["z1L"] * Lp["I"] * np.conj(P))
+    m = num / np.where(np.abs(den) > 1e-9, den, np.nan)
+    xm = m * R["z1L"].imag
+    X = np.where(mask & (xm > 0) & np.isfinite(xm), xm, np.inf)
+    x = X.min(1)
+    return np.where(np.isfinite(x), x, default)
+
+
 def polarised_reactance(R, Lp, mask, pol="takagi", default=10.0):
     """Reactance-line distance estimate with a polarising current that is (ideally) in phase with
     the fault current, so the fault-resistance term drops out of Im(V Ipol*):
@@ -339,6 +369,25 @@ def polarised_reactance(R, Lp, mask, pol="takagi", default=10.0):
     X = np.where(mask & (xm > 0) & np.isfinite(xm), xm, np.inf)
     x = X.min(1)
     return np.where(np.isfinite(x), x, default)
+
+
+def directional_forward(vpre, vpost, ipre, ipost, z1L, i2_frac=0.1):
+    """Negative-sequence directional element (forward when V2 = -Z_S2 I2, i.e. Re(V2 I2* e^{-j angle Z1L}) < 0),
+    falling back to superimposed positive-sequence quantities when |I2| < i2_frac |dI1| (symmetrical faults).
+    Replaces the repo rule's use of the sign of the loop reactance as its directional decision."""
+    ang = np.exp(-1j * np.angle(z1L))
+    v2, i2 = vpost[:, 2], ipost[:, 2]
+    dv1, di1 = vpost[:, 1] - vpre[:, 1], ipost[:, 1] - ipre[:, 1]
+    use2 = np.abs(i2) > i2_frac * np.abs(di1)
+    return np.where(use2, np.real(v2 * np.conj(i2) * ang) < 0, np.real(dv1 * np.conj(di1) * ang) < 0)
+
+
+def quad_inside(Lp, mask, x_set, r_right, r_left_frac=0.25):
+    """Any released loop inside a quadrilateral: X below the reactance line (negative X allowed) and R
+    between the left and right resistive blinders. Returns (inside, loop R, loop X)."""
+    Z = Lp["V"] / (Lp["I"] + 1e-12)
+    inside = mask & (Z.imag < x_set) & (Z.real < r_right) & (Z.real > -r_left_frac * r_right)
+    return inside.any(1), Z.real, Z.imag
 
 
 def loop_rx(Lp, mask):
