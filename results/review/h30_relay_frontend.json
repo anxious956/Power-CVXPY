@@ -1,0 +1,38 @@
+{
+ "result0.csv": {
+  "lag_samples_b_vs_a": 20,
+  "leak_a_rel_sigma_at_minus_k": {
+   "1": 0.3175704632417889,
+   "2": 0.25688941479757327,
+   "4": 0.1883955296793346,
+   "8": 0.022335662320888995
+  },
+  "sample_rms_diff_a_vs_b_rel_nominal": 0.0015604408661705085,
+  "phasor_rel_diff_10ms": 0.0020403162461685295,
+  "phasor_rel_diff_20ms": 0.001959767845473602
+ },
+ "result1.csv": {
+  "lag_samples_b_vs_a": 20,
+  "leak_a_rel_sigma_at_minus_k": {
+   "1": 0.23229952514211374,
+   "2": 0.17982199617229894,
+   "4": 0.13060972262297219,
+   "8": 0.016195067558920286
+  },
+  "sample_rms_diff_a_vs_b_rel_nominal": 0.0015104472618702137,
+  "phasor_rel_diff_10ms": 0.001958613666539632,
+  "phasor_rel_diff_20ms": 0.0019045451197923775
+ },
+ "result2.csv": {
+  "lag_samples_b_vs_a": 20,
+  "leak_a_rel_sigma_at_minus_k": {
+   "1": 0.17938343288039585,
+   "2": 0.14439328797438117,
+   "4": 0.10650751522448507,
+   "8": 0.012361338765073804
+  },
+  "sample_rms_diff_a_vs_b_rel_nominal": 0.001471695169215246,
+  "phasor_rel_diff_10ms": 0.0018833791571168353,
+  "phasor_rel_diff_20ms": 0.001864157981755764
+ }
+}

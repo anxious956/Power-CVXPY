@@ -17,7 +17,7 @@ from evemt import CHANNELS, FS_RAW, T0, EVENT_T
 from review import common as cm
 
 ROOT = cm.ROOT
-cub = "Cub_2\pex_MainBus1_MainLn1-2A"
+cub = "Cub_2\\pex_MainBus1_MainLn1-2A"
 out = {}
 for f in ("result0.csv", "result1.csv", "result2.csv"):
     df = pd.read_csv(os.path.join(ROOT, "data", "DoubleLine", "data", f), header=[0, 1], low_memory=False)

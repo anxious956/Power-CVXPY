@@ -53,7 +53,12 @@ def shifted(R, idx, delay, t_ms, fn):
 if __name__ == "__main__":
     t0 = time.time()
     res = {}
-    for name in ("testgrid_B", "testgrid_A", "doubleline"):
+    from review import frontend
+    for fe in ("current", "relay-bandwidth"):
+      if fe == "relay-bandwidth":
+        frontend.enable()                                  # H30: 3rd-order Butterworth 400 Hz before noise and ADC
+      res[fe] = {}
+      for name in ("testgrid_B", "testgrid_A", "doubleline"):
         R = cm.load_relay(name)
         R["g"] = type("G", (), dict(z1=R["lp"]["z1"], z0_ratio=R["lp"]["z0"] / R["lp"]["z1"]))
         S = ld.settings(R, name)
@@ -105,7 +110,8 @@ if __name__ == "__main__":
         for k, v in r.items():
             if k != "delay_ms":
                 print(f"[{name}] {k:40s} {json.dumps({kk: round(vv, 3) for kk, vv in v.items()})}", flush=True)
-        res[name] = r
+        res[fe][name] = r
+        print(f"[{fe}] {name} done", flush=True)
         json.dump(res, open(os.path.join(cm.ROOT, "results", "review", "h10_trigger.json"), "w"), indent=1)
         del R
     print(f"done [{time.time()-t0:.0f}s]")
