@@ -9,7 +9,10 @@ One-at-a-time sweep from real_ml's default chain, plus one combined realistic po
       installation state, field data from another)
   CVT transient, high-capacitance model (common.cvt_filter 'highC'), which meets IEC 61869-5 class T1 in
       src/review/cvt_class_check.py; the low-C model fails T1 (11.5 % residual at 20 ms against <= 10 %) and
-      is excluded (class limits quoted from memory, to be checked against the standard)
+      was EXCLUDED in the first pass. It is included now: results/review/sir.json shows it fails the
+      Kasztenny & Chowdhury 2023 eq. (6) transient-security criterion at 4 of the 6 relay/loop
+      combinations, so it is the case that decides whether zone 1 overreaches here.
+  CORRECTED fault-condition installation errors (VT 3-6 %, CT 5-10 %) -- see draw_installation_fault
   CT saturation, 1000/1 A, 5P20-like, remanence 0.8 (common.ct_saturation)
   relay front end: review.frontend (causal 3rd-order Butterworth 400 Hz, ADC full scale from CT rating)
   realistic combined: installation draw 1 + CVT highC + CT saturation (remanence 0.5) + relay front end + 0.1 % noise
@@ -40,9 +43,32 @@ CODE = ("src/review/q1_instrument.py", "src/review/ladder.py", "src/review/commo
 
 
 def draw_installation(name, k):
+    """Class-limit draw: VT/CVT class 3P, CT class 5P at rated current. These are ACCURACY-CLASS
+    limits near rated current, i.e. metering-range figures -- see draw_installation_fault()."""
     rng = np.random.default_rng(1000 + 17 * k + sum(map(ord, name)))
     return dict(gain_v=float(rng.uniform(-0.03, 0.03)), phase_v_deg=float(rng.uniform(-2, 2)),
                 gain_i=float(rng.uniform(-0.01, 0.01)), phase_i_deg=float(rng.uniform(-1, 1)))
+
+
+def draw_installation_fault(name, k):
+    """CORRECTED draw for FAULT conditions (papers/notes/E_practitioner_settings.md section 7).
+
+    Kasztenny 2021 section III.A-B gives the practitioner's figures for the regime a zone-1 study
+    cares about, which is not the metering range:
+      VT  "a voltage transformer may have a ratio error in the range of 3 to 6 percent" over a
+          protection voltage range; phase error "small (such as 2 to 4 degrees)";
+      CT  "You can expect a 5 to 10 percent ratio error from a typical protection-class current
+          transformer during fault conditions."
+    The +-1 % CT figure used by the class-limit draw above is therefore too small by 5-10x, and it
+    is the one that matters most: per eq. (9b) the voltage and current errors ADD in the impedance,
+    |dZ| = |dV| + |dI|. Magnitude is drawn uniformly inside the quoted band with a random sign.
+    CT phase error during faults is not given as a number in that paper; the 1-3 deg used here is an
+    assumption (saturation makes the current read low and lead, so the sign is not symmetric in
+    reality -- not modelled)."""
+    rng = np.random.default_rng(7000 + 17 * k + sum(map(ord, name)))
+    sgn = lambda: float(rng.choice([-1.0, 1.0]))
+    return dict(gain_v=sgn() * float(rng.uniform(0.03, 0.06)), phase_v_deg=sgn() * float(rng.uniform(2, 4)),
+                gain_i=sgn() * float(rng.uniform(0.05, 0.10)), phase_i_deg=sgn() * float(rng.uniform(1, 3)))
 
 
 def points(name):
@@ -54,6 +80,12 @@ def points(name):
     P["CT saturation rem 0.8"] = dict(ct=dict(remanence=0.8))
     P["relay front end (AA 400 Hz + CT full scale)"] = "relayfe"
     P["realistic combined (draw 1 + CVT + CT sat 0.5 + relay front end)"] = "combined"
+    # --- corrected points (note E). Both were flagged as wrong or missing in REVIEW.md section 12.
+    for k in range(2):
+        P[f"fault-condition installation error draw {k + 1} (VT 3-6 %, CT 5-10 %)"] = draw_installation_fault(name, k)
+    P["fault-condition installation mismatch (train draw 1, test draw 2)"] = "mismatch_fault"
+    P["CVT low-C (fails class T1)"] = dict(cvt="lowC")
+    P["worst realistic (fault-condition draw 1 + CVT low-C + CT sat 0.8)"] = "worst"
     return P
 
 
@@ -76,7 +108,11 @@ def evaluate_point(name, chain_train, chain_test, S):
     # tuned quadrilateral and learned models: fit on train chain, test on test chain
     P1tr, P1te = ld.pack(Rtr, sel, 20, "full", True), ld.pack(Rte, sel, 20, "full", True)
     xgrid = np.linspace(0.3 * S["x_set"], ld.X_CAP * S["x_line"], 21)
-    rgrid = S["r_set_g"] * np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0])
+    rgrid = S["r_set_g_legacy"] * np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0])
+    if ld.RSET_MODE == "polcap":                      # same absolute grid, truncated at the security cap
+        rgrid = rgrid[rgrid <= S["polarising_cap"]["r_cap_r2"]]
+        if rgrid.size == 0:
+            rgrid = np.array([S["polarising_cap"]["r_cap_r2"]])
     gtr = {(a, b): ld.evaluate_block(Rtr, *P1tr, S, "R2", x_set=a, r_set=b)[0] for a in xgrid for b in rgrid}
     gte = {(a, b): ld.evaluate_block(Rte, *P1te, S, "R2", x_set=a, r_set=b)[0] for a in xgrid for b in rgrid}
     Fr_tr, Fr_te = real_ml.raw_window(Rtr, sel, 20), real_ml.raw_window(Rte, sel, 20)
@@ -144,6 +180,11 @@ if __name__ == "__main__":
             else:
                 if chain == "mismatch":
                     r = evaluate_point(name, draw_installation(name, 0), draw_installation(name, 1), S)
+                elif chain == "mismatch_fault":
+                    r = evaluate_point(name, draw_installation_fault(name, 0), draw_installation_fault(name, 1), S)
+                elif chain == "worst":
+                    ch = dict(draw_installation_fault(name, 0), cvt="lowC", ct=dict(remanence=0.8))
+                    r = evaluate_point(name, ch, ch, S)
                 elif chain in ("relayfe", "combined"):
                     from review import frontend
                     ch = dict(frontend.RELAY_CHAIN)

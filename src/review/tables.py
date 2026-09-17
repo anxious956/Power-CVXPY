@@ -76,9 +76,66 @@ def zone_cv(front="current", mode="own99 guard", t="20 ms", splits=("stratified"
                       f"{pct(s['dependability'])} / {kn(s['beyond'])} / {hs('reverse_bus')} / {hs('switching')} |")
 
 
+def settings_table():
+    """Old -> new resistive reach under the Kasztenny 2021 eq. (19) polarising-error cap."""
+    O, N = R("ladder.json"), R("ladder_polcap.json")
+    if not O or not N:
+        return
+    print("")
+    print("#### Resistive reach: load-encroachment rule vs the polarising-error criterion")
+    print("")
+    print(r"| Relay | \|Z1L\| (Ω) | Θ untilted (R2/T2) | Θ residual (R3/R4) | R_set old g/p (Ω) | "
+          r"R_set new g/p (Ω) | Required arc+tower coverage (Ω) | Covers it? | Reach needed to keep the old R_set |")
+    print("|---|---|---|---|---|---|---|---|---|")
+    for name, lab in RELAYS:
+        if name not in N:
+            continue
+        s, o = N[name]["settings"], O[name]["settings"]
+        P = s["polarising_cap"]
+        cov = "yes" if s["coverage_ok_g"] else f"**no**, short by {s['coverage_deficit_g']:.1f} Ω"
+        print(f"| {lab} | {s['z1L_abs']:.2f} | {P['theta_r2_deg']:.2f}° | {P['theta_r3_deg']:.2f}° | "
+              f"{o['r_set_g']:.1f} / {o['r_set_p']:.1f} | **{s['r_set_g']:.1f} / {s['r_set_p']:.1f}** | "
+              f"{s['r_cov_g']:.1f} | {cov} | {s['reach_if_legacy_rset_kept']*100:.0f} % of line |")
+
+
+def sir_table():
+    S = R("sir.json")
+    if not S:
+        return
+    print("")
+    print("#### Source-to-line impedance ratio, and the CCVT transient margin it leaves")
+    print("")
+    print(r"| Relay | SIR \|Z_S\|/\|Z1L\| | SIR voltage-based, ground | phase | V at a remote-bus fault (LG) | "
+          r"IZ−V margin at 0.85 reach (G) | Regime |")
+    print("|---|---|---|---|---|---|---|")
+    for name, lab in RELAYS:
+        o = S["relays"].get(name)
+        if not o:
+            continue
+        print(f"| {lab} | {o['sir_impedance_ratio_seq1']:.2f} | {o['sir_voltage_G']:.2f} | {o['sir_voltage_P']:.2f} | "
+              f"{o['V_pu_remote_bus_G']*100:.1f} % | {o['op_signal_margin_G']*100:.2f} % | {o['regime_G']} |")
+    C = S.get("cvt_transient_margin")
+    if C:
+        print("")
+        print("Kasztenny & Chowdhury 2023 eq. (6): CCVT residual at 20 ms scaled by the voltage change")
+        print("at a remote-bus fault, against that margin.")
+        print("")
+        print("| CVT model | Passes class T1 | Residual at 20 ms, full collapse | Relay / loop | Scaled error | Margin | Secure? |")
+        print("|---|---|---|---|---|---|---|")
+        for variant, V in C.items():
+            for k, r in V["per_relay"].items():
+                print(f"| {variant} | {V['passes_class']['T1']} | {V['residual_20ms_full_collapse']*100:.2f} % | {k.replace('|', ' / ')} | "
+                      f"{r['scaled_cvt_error']*100:.2f} % | {r['op_signal_margin']*100:.2f} % | "
+                      f"{'yes' if r['secure_by_criterion'] else '**NO**'} |")
+
+
 if __name__ == "__main__":
-    ladder("ladder.json", "Conventional ladder, current front end")
-    ladder("ladder_relayfe.json", "Conventional ladder, relay front end (AA 400 Hz + CT full scale)")
+    settings_table()
+    sir_table()
+    ladder("ladder.json", "Conventional ladder, current front end — LEGACY R_set (load encroachment only)")
+    ladder("ladder_polcap.json", "Conventional ladder, current front end — CORRECTED R_set (polarising-error cap)")
+    ladder("ladder_relayfe.json", "Conventional ladder, relay front end — LEGACY R_set")
+    ladder("ladder_polcap_relayfe.json", "Conventional ladder, relay front end — CORRECTED R_set")
     for front in ("current", "relay front end", "CT full scale only"):
         for t in ("10 ms", "20 ms", "50 ms"):
             zone_cv(front, "own99 guard", t)

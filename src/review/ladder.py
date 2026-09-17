@@ -31,8 +31,12 @@ R2  + directional quad   R1 phasors and phase selection, plus
                            at the reach point) + 10 ohm tower footing for ground loops; capped by load
                            encroachment at worst-case load (assumed thermal rating from the conductor type,
                            0.9 pu voltage, 30 deg maximum load angle, both flow directions: R_set <= 0.8 Z_load,min)
-                           and by the zone-1 R/X limit (R_set <= 4.5 X_set ground, 3 X_set phase). The cap is
-                           used (maximum coverage the rules allow).
+                           and by the zone-1 R/X limit (R_set <= 4.5 X_set ground, 3 X_set phase), and
+                           - CORRECTED after note E - by the polarising-error limit of Kasztenny 2021
+                           eq. (19), R_set <= |Z1L| (1 - m0) / (2 sin(Theta/2)) with Theta the worst
+                           uncompensated non-homogeneity angle over the measured tilt band. The
+                           smallest cap is used. Set LADDER_RSET=legacy to reproduce the pre-note-E
+                           settings (load encroachment and R/X only).
 R3  + I2-pol tilt line   R2 with the reactance line measured by a negative-sequence polarised reactance element
                          tilted by the non-homogeneity angle at the reach point from the study's source impedances
                          at both ends (two-source formula). Worst case also reported over source impedances
@@ -66,6 +70,39 @@ R_TOWER = 10.0                               # assumption, ohm
 I_THERMAL_PER_CONDUCTOR = 900.0              # assumption: 435/55 Al/St about 900 A (EN 50182 tables, not re-verified)
 V_MIN_PU, LOAD_ANGLE_MAX = 0.9, 30.0
 X_CAP = 0.9                                  # tuned reach never beyond 0.9 X_line
+
+# Resistive-reach cap from the polarising phase error (Kasztenny 2021, "Settings considerations for
+# distance elements in line protection applications", 48th WPRC, section III.I, eqs. 18-20).
+# A quadrilateral's reactance line is only as accurate as the phase angle of its polarising current,
+# and that error is amplified by the resistive reach:
+#       dZ > 2 R_B sin(Theta/2)      <=>      m0 < 1 - 2 r_B sin(Theta/2)
+# with m0 the per-unit reactive reach and r_B the per-unit resistive reach, both in per unit of the
+# positive-sequence line impedance |Z1L|, and Theta the polarising phase error. Solved for R_set:
+#       R_set <= |Z1L| (1 - m0) / (2 sin(Theta/2)).
+# Theta per rung, from this review's own measured tilt band (source impedances +-25 % magnitude and
+# +-7.5 deg angle at both ends, `tilt_range_deg`):
+#   R2 / T2  untilted reactance line (X = Im Z), so the whole non-homogeneity angle is uncompensated
+#            -> Theta = worst |tilt| over the band;
+#   R3 / R4  I2-polarised line tilted by tilt_nominal_deg, so only the residual matters
+#            -> Theta = worst |tilt - tilt_nominal| over the band.
+# r_set_g / r_set_p are one shared setting across rungs, so the binding cap is the larger Theta (R2).
+# NOT INCLUDED, so the cap below is an upper bound on what is secure: Kasztenny also lists CT ratio
+# error, CT saturation, line charging current and multi-resistance faults as sources of Theta. The
+# 5-10 % CT ratio error expected during faults (same paper, section III.B; see
+# papers/notes/E_practitioner_settings.md section 7) is not quantified as an angle here.
+RSET_MODE = os.environ.get("LADDER_RSET", "polcap")     # "polcap" (corrected) or "legacy" (pre-note-E)
+
+
+def polarising_cap(z1L_abs, tilt_nominal_deg, tilt_range_deg, m0=None):
+    """Kasztenny 2021 eq. (19) solved for the resistive reach. Returns the per-rung polarising phase
+    errors and the resistive-reach cap each implies, in ohm."""
+    m0 = cm.REACH if m0 is None else m0
+    lo, hi = tilt_range_deg
+    th_r2 = max(abs(lo), abs(hi))                                   # untilted line: full non-homogeneity
+    th_r3 = max(abs(lo - tilt_nominal_deg), abs(hi - tilt_nominal_deg))   # tilted line: residual only
+    cap = lambda th: float(z1L_abs * (1 - m0) / (2 * np.sin(np.deg2rad(th) / 2))) if th > 0 else float("inf")
+    return dict(theta_r2_deg=float(th_r2), theta_r3_deg=float(th_r3),
+                r_cap_r2=cap(th_r2), r_cap_r3=cap(th_r3), binding="R2 (untilted reactance line)")
 TIMES = ((10, "half"), (20, "full"), (30, "full"), (50, "full"))
 SETS = ("pos", "neg", "own99", "parallel", "reverse_bus", "reverse_lines", "other", "switching")
 TYPES = ("flt_1phg_shc", "flt_1phg_shc_w_arc", "flt_2ph_shc", "flt_2phg_shc", "flt_3ph_shc")
@@ -116,21 +153,31 @@ def settings(R, name):
     r_cov_g = 1.2 * (r_arc_g + R_TOWER) / abs(1 + k0)
     r_cov_p = 1.2 * r_arc_p / 2
     load_cap = 0.8 * zload_min
-    r_set_g, r_set_p = min(load_cap, 4.5 * x_set), min(load_cap, 3.0 * x_set)
+    r_leg_g, r_leg_p = min(load_cap, 4.5 * x_set), min(load_cap, 3.0 * x_set)
     zload_bench = ss.prefault_load_impedance(net, rb, cfg["line"])
     zs, zr, _, zl = ss.source_impedances(net, rb, cfg["line"], 2)
     tilts = [tilt_from(zs * ms * np.exp(1j * np.deg2rad(a1)), zr * mr * np.exp(1j * np.deg2rad(a2)), zl)
              for ms, a1, mr, a2 in itertools.product(np.linspace(0.75, 1.25, 5), np.linspace(-7.5, 7.5, 5),
                                                      np.linspace(0.75, 1.25, 5), np.linspace(-7.5, 7.5, 5))]
     zs1, zr1, _, zl1 = ss.source_impedances(net, rb, cfg["line"], 1)
+    tilt_nom, tilt_rng = tilt_from(zs, zr, zl), [float(min(tilts)), float(max(tilts))]
+    PC = polarising_cap(abs(R["z1L"]), tilt_nom, tilt_rng)
+    if RSET_MODE == "polcap":
+        r_set_g, r_set_p = min(r_leg_g, PC["r_cap_r2"]), min(r_leg_p, PC["r_cap_r2"])
+    else:
+        r_set_g, r_set_p = r_leg_g, r_leg_p
     S = dict(x_line=float(xl), x_set=float(x_set), n_conductors_assumed=n_cond, i_thermal_A=float(i_th),
              z_load_min=float(zload_min), load_angle_max_deg=LOAD_ANGLE_MAX, load_cap=float(load_cap),
              i_fault_lg_reach_A=float(i_lg), i_fault_ll_reach_A=float(i_ll), r_arc_g=float(r_arc_g), r_arc_p=float(r_arc_p),
              r_cov_g=float(r_cov_g), r_cov_p=float(r_cov_p), r_set_g=float(r_set_g), r_set_p=float(r_set_p),
+             rset_mode=RSET_MODE, z1L_abs=float(abs(R["z1L"])), polarising_cap=PC,
+             r_set_g_legacy=float(r_leg_g), r_set_p_legacy=float(r_leg_p),
+             reach_if_legacy_rset_kept=float(1 - 2 * (r_leg_g / abs(R["z1L"])) * np.sin(np.deg2rad(PC["theta_r2_deg"]) / 2)),
              coverage_ok_g=bool(r_set_g >= r_cov_g), coverage_ok_p=bool(r_set_p >= r_cov_p),
+             coverage_deficit_g=float(max(0.0, r_cov_g - r_set_g)), coverage_deficit_p=float(max(0.0, r_cov_p - r_set_p)),
              r_set_if_0p7_benchmark_load=float(0.7 * abs(zload_bench)), z_load_benchmark=[zload_bench.real, zload_bench.imag],
-             Z_S2=[zs.real, zs.imag], Z_R2=[zr.real, zr.imag], tilt_nominal_deg=tilt_from(zs, zr, zl),
-             tilt1_nominal_deg=tilt_from(zs1, zr1, zl1), tilt_range_deg=[float(min(tilts)), float(max(tilts))],
+             Z_S2=[zs.real, zs.imag], Z_R2=[zr.real, zr.imag], tilt_nominal_deg=tilt_nom,
+             tilt1_nominal_deg=tilt_from(zs1, zr1, zl1), tilt_range_deg=tilt_rng,
              rf_design=float(r_arc_g + R_TOWER))
     S["x_set_study"], S["study_worst"] = study_reach(R, name, net, S)
     S["infeed_40ohm"] = infeed_factor(R, name, net)
@@ -338,7 +385,15 @@ def run(name):
         # tuned rungs on the zone_cv folds; own-99 % as guard band (default) and as hard negative (20 ms, grouped)
         cap = X_CAP * S["x_line"]
         xgrid = np.linspace(0.3 * S["x_set"], cap, 21)
-        rgrid = S["r_set_g"] * np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0])
+        # Absolute R_set candidates, identical in both RSET_MODEs, so that the only difference
+        # between the legacy and polcap runs is the security cap itself and not a moved grid.
+        # In polcap mode the candidates above the Kasztenny cap are removed: a tuned rung is still a
+        # conventional rung and a setting engineer cannot choose a resistive reach the criterion forbids.
+        rgrid = S["r_set_g_legacy"] * np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0])
+        if RSET_MODE == "polcap":
+            rgrid = rgrid[rgrid <= S["polarising_cap"]["r_cap_r2"]]
+            if rgrid.size == 0:
+                rgrid = np.array([S["polarising_cap"]["r_cap_r2"]])
         heldsets = ("own99", "parallel", "reverse_bus", "reverse_lines", "other", "switching")
         for mode in (("guard", "negative") if t == 20 else ("guard",)):
             zidx, y, groups = zone_task(R, mode)
@@ -356,7 +411,7 @@ def run(name):
                 for rung in ("T1", "T2"):
                     if rung == "T1" and t < 20:
                         continue
-                    dec_all, idx_all, held = [], [], {h: [] for h in hs}
+                    dec_all, idx_all, held, chosen = [], [], {h: [] for h in hs}, []
                     for f, tr, te, meta in splits(kind, R, zidx, y, groups):
                         if rung == "T1":
                             thr = max(cm.thr_at_far(-x0[tr][y[tr] == 0], FAR), -cap)
@@ -371,6 +426,7 @@ def run(name):
                                     if d > best[0]:
                                         best = (d, key)
                             dec = grid[best[1]][te]
+                            chosen.append((float(best[1][0]), float(best[1][1])))
                             for h, hp in Ph1.items():
                                 held[h].append(evaluate_block(R, *hp, S, "R2", x_set=best[1][0], r_set=best[1][1])[0])
                         dec_all.append(dec); idx_all.append(te)
@@ -391,6 +447,12 @@ def run(name):
                              beyond_dedup=cm.dedup_rate(dd, R["dedup"][zidx][ii], b),
                              dep_by_rf={f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)},
                              held=perclass)
+                    if chosen:
+                        r["chosen_x_set"] = [c[0] for c in chosen]
+                        r["chosen_r_set"] = [c[1] for c in chosen]
+                        r["chosen_r_set_at_cap"] = bool(RSET_MODE == "polcap" and
+                                                        max(c[1] for c in chosen) >= 0.999 * max(rgrid))
+                        r["r_set_candidates"] = [float(v) for v in rgrid]
                     res["tuned"][f"{t}|{kind}|{rung}|own99-{mode}"] = r
                     print(f"[{name}] {t:2d} ms {rung} {kind:10s} own99={mode:8s}: dep {r['dependability']*100:5.1f}  beyond "
                           f"{r['false_trip_beyond']*100:5.1f} (dedup {r['beyond_dedup']['k']}/{r['beyond_dedup']['n']}, UCB "
@@ -400,7 +462,8 @@ def run(name):
 
 
 if __name__ == "__main__":
-    path = os.path.join(cm.ROOT, "results", "review", "ladder.json")
+    suffix = "" if RSET_MODE == "legacy" else f"_{RSET_MODE}"
+    path = os.path.join(cm.ROOT, "results", "review", f"ladder{suffix}.json")
     out = {}
     for name in (sys.argv[1:] or ["testgrid_B", "testgrid_A", "doubleline"]):
         out[name] = run(name)

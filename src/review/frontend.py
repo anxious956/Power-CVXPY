@@ -80,7 +80,8 @@ if __name__ == "__main__":
         json.dump(res, open(os.path.join(cm.ROOT, "logs", f"zone_cv_{a.relay}_{tag}.manifest.json"), "w"), indent=1)
     else:
         from review import ladder
+        rs = "" if ladder.RSET_MODE == "legacy" else f"_{ladder.RSET_MODE}"
         out = {}
         for name in ("testgrid_B", "testgrid_A", "doubleline"):
             out[name] = ladder.run(name)
-            json.dump(out, open(os.path.join(cm.ROOT, "results", "review", f"ladder_{tag}.json"), "w"), indent=1, default=str)
+            json.dump(out, open(os.path.join(cm.ROOT, "results", "review", f"ladder{rs}_{tag}.json"), "w"), indent=1, default=str)

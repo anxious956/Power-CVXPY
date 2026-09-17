@@ -1,0 +1,234 @@
+{
+ "reach_m1": 0.85,
+ "commit": "0347de2816ccc920b0d8125f642fbd47e83d5dbc",
+ "definition_note": "impedance ratio |Z_S|/|Z1L|; voltage based per Kasztenny 2021 eqs. 30a/30b",
+ "reference_margin_vs_sir": {
+  "0.25": {
+   "V_line_end_pu": 0.8,
+   "op_signal_margin": 0.12000000000000002
+  },
+  "0.5": {
+   "V_line_end_pu": 0.6666666666666666,
+   "op_signal_margin": 0.10000000000000002
+  },
+  "1": {
+   "V_line_end_pu": 0.5,
+   "op_signal_margin": 0.07500000000000001
+  },
+  "2": {
+   "V_line_end_pu": 0.3333333333333333,
+   "op_signal_margin": 0.05000000000000001
+  },
+  "5": {
+   "V_line_end_pu": 0.16666666666666666,
+   "op_signal_margin": 0.025000000000000005
+  },
+  "10": {
+   "V_line_end_pu": 0.09090909090909091,
+   "op_signal_margin": 0.01363636363636364
+  },
+  "20": {
+   "V_line_end_pu": 0.047619047619047616,
+   "op_signal_margin": 0.0071428571428571435
+  },
+  "30": {
+   "V_line_end_pu": 0.03225806451612903,
+   "op_signal_margin": 0.004838709677419356
+  }
+ },
+ "relays": {
+  "testgrid_A": {
+   "Z_S_seq1": [
+    0.35845605237787764,
+    3.400072072573285
+   ],
+   "Z_R_seq1": [
+    0.9896507390936518,
+    4.967449186676743
+   ],
+   "sir_impedance_ratio_seq1": 0.5216532976919916,
+   "Z_S_seq2": [
+    0.35845605237787764,
+    3.400072072573285
+   ],
+   "Z_R_seq2": [
+    0.9896507390936518,
+    4.967449186676743
+   ],
+   "sir_impedance_ratio_seq2": 0.5216532976919916,
+   "V_pu_remote_bus_G": 0.42109503323165115,
+   "sir_voltage_G": 1.3747608522608337,
+   "V_pu_remote_bus_P": 0.3714240986126945,
+   "sir_voltage_P": 1.6923401139966368,
+   "reach_m1": 0.85,
+   "op_signal_margin_G": 0.06316425498474769,
+   "op_signal_margin_P": 0.05571361479190418,
+   "regime_G": "strong",
+   "regime_P": "strong"
+  },
+  "testgrid_B": {
+   "Z_S_seq1": [
+    1.1655625396741347,
+    5.576812654792931
+   ],
+   "Z_R_seq1": [
+    0.17699471613884366,
+    3.9315777920847146
+   ],
+   "sir_impedance_ratio_seq1": 0.5433050656970851,
+   "Z_S_seq2": [
+    1.1655625396741347,
+    5.576812654792931
+   ],
+   "Z_R_seq2": [
+    0.17699471613884366,
+    3.9315777920847146
+   ],
+   "sir_impedance_ratio_seq2": 0.5433050656970851,
+   "V_pu_remote_bus_G": 0.49116496887941075,
+   "sir_voltage_G": 1.0359758194512376,
+   "V_pu_remote_bus_P": 0.4670687233974476,
+   "sir_voltage_P": 1.1410125531977866,
+   "reach_m1": 0.85,
+   "op_signal_margin_G": 0.07367474533191162,
+   "op_signal_margin_P": 0.07006030850961714,
+   "regime_G": "strong",
+   "regime_P": "strong"
+  },
+  "doubleline": {
+   "Z_S_seq1": [
+    0.20920132700662927,
+    3.58653789109933
+   ],
+   "Z_R_seq1": [
+    0.7589128279413215,
+    4.813132214165299
+   ],
+   "sir_impedance_ratio_seq1": 0.685198887653278,
+   "Z_S_seq2": [
+    0.20920132700662927,
+    3.58653789109933
+   ],
+   "Z_R_seq2": [
+    0.7589128279413215,
+    4.813132214165299
+   ],
+   "sir_impedance_ratio_seq2": 0.685198887653278,
+   "V_pu_remote_bus_G": 0.4381303273953161,
+   "sir_voltage_G": 1.2824258844280374,
+   "V_pu_remote_bus_P": 0.3831376614929877,
+   "sir_voltage_P": 1.610027936442636,
+   "reach_m1": 0.85,
+   "op_signal_margin_G": 0.06571954910929743,
+   "op_signal_margin_P": 0.05747064922394817,
+   "regime_G": "strong",
+   "regime_P": "strong"
+  }
+ },
+ "cvt_transient_margin": {
+  "highC": {
+   "residual_20ms_full_collapse": 0.05889995380857008,
+   "passes_class": {
+    "T1": true,
+    "T2": false,
+    "T3": false
+   },
+   "per_relay": {
+    "testgrid_A|G": {
+     "voltage_change": 0.5789049667683488,
+     "scaled_cvt_error": 0.03409747580220754,
+     "op_signal_margin": 0.06316425498474769,
+     "ratio_margin_over_error": 1.85246131857826,
+     "secure_by_criterion": true
+    },
+    "testgrid_A|P": {
+     "voltage_change": 0.6285759013873056,
+     "scaled_cvt_error": 0.037023091556892596,
+     "op_signal_margin": 0.05571361479190418,
+     "ratio_margin_over_error": 1.5048342115430922,
+     "secure_by_criterion": true
+    },
+    "testgrid_B|G": {
+     "voltage_change": 0.5088350311205893,
+     "scaled_cvt_error": 0.029970359829185025,
+     "op_signal_margin": 0.07367474533191162,
+     "ratio_margin_over_error": 2.4582536129635466,
+     "secure_by_criterion": true
+    },
+    "testgrid_B|P": {
+     "voltage_change": 0.5329312766025525,
+     "scaled_cvt_error": 0.03138962757503262,
+     "op_signal_margin": 0.07006030850961714,
+     "ratio_margin_over_error": 2.231957303161611,
+     "secure_by_criterion": true
+    },
+    "doubleline|G": {
+     "voltage_change": 0.5618696726046839,
+     "scaled_cvt_error": 0.03309409776285227,
+     "op_signal_margin": 0.06571954910929743,
+     "ratio_margin_over_error": 1.9858389728656343,
+     "secure_by_criterion": true
+    },
+    "doubleline|P": {
+     "voltage_change": 0.6168623385070122,
+     "scaled_cvt_error": 0.03633316324430954,
+     "op_signal_margin": 0.05747064922394817,
+     "ratio_margin_over_error": 1.5817683926254111,
+     "secure_by_criterion": true
+    }
+   }
+  },
+  "lowC": {
+   "residual_20ms_full_collapse": 0.11469790701330629,
+   "passes_class": {
+    "T1": false,
+    "T2": false,
+    "T3": false
+   },
+   "per_relay": {
+    "testgrid_A|G": {
+     "voltage_change": 0.5789049667683488,
+     "scaled_cvt_error": 0.06639918804793724,
+     "op_signal_margin": 0.06316425498474769,
+     "ratio_margin_over_error": 0.95128053281534,
+     "secure_by_criterion": false
+    },
+    "testgrid_A|P": {
+     "voltage_change": 0.6285759013873056,
+     "scaled_cvt_error": 0.07209634028812635,
+     "op_signal_margin": 0.05571361479190418,
+     "ratio_margin_over_error": 0.7727661982459841,
+     "secure_by_criterion": false
+    },
+    "testgrid_B|G": {
+     "voltage_change": 0.5088350311205893,
+     "scaled_cvt_error": 0.05836231308458216,
+     "op_signal_margin": 0.07367474533191162,
+     "ratio_margin_over_error": 1.2623684949761633,
+     "secure_by_criterion": true
+    },
+    "testgrid_B|P": {
+     "voltage_change": 0.5329312766025525,
+     "scaled_cvt_error": 0.06112610200824217,
+     "op_signal_margin": 0.07006030850961714,
+     "ratio_margin_over_error": 1.146160252459257,
+     "secure_by_criterion": true
+    },
+    "doubleline|G": {
+     "voltage_change": 0.5618696726046839,
+     "scaled_cvt_error": 0.06444527546200889,
+     "op_signal_margin": 0.06571954910929743,
+     "ratio_margin_over_error": 1.0197729567940128,
+     "secure_by_criterion": true
+    },
+    "doubleline|P": {
+     "voltage_change": 0.6168623385070122,
+     "scaled_cvt_error": 0.07075281914208796,
+     "op_signal_margin": 0.05747064922394817,
+     "ratio_margin_over_error": 0.8122736298116103,
+     "secure_by_criterion": false
+    }
+   }
+  }
+ }
+}
