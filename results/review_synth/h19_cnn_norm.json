@@ -1,0 +1,175 @@
+{
+  "rows": [
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "norm": "per_waveform",
+      "detection_rate": 0.654,
+      "false_alarm": 0.004,
+      "detection_at_5pct": 0.79,
+      "false_alarm_at_5pct": 0.016,
+      "auc": 0.969968,
+      "threshold": 1.738447666168213,
+      "polarity": 1,
+      "auc_train": 0.9499591836734694
+    },
+    {
+      "delta": 0.0,
+      "seed": 0,
+      "norm": "global",
+      "detection_rate": 0.956,
+      "false_alarm": 0.0,
+      "detection_at_5pct": 0.99,
+      "false_alarm_at_5pct": 0.006,
+      "auc": 0.999808,
+      "threshold": 1.6115349531173706,
+      "polarity": 1,
+      "auc_train": 0.9970775510204082
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "norm": "per_waveform",
+      "detection_rate": 0.69,
+      "false_alarm": 0.008,
+      "detection_at_5pct": 0.834,
+      "false_alarm_at_5pct": 0.02,
+      "auc": 0.973256,
+      "threshold": 0.8415549397468567,
+      "polarity": 1,
+      "auc_train": 0.9523061224489796
+    },
+    {
+      "delta": 0.0,
+      "seed": 1,
+      "norm": "global",
+      "detection_rate": 0.95,
+      "false_alarm": 0.0,
+      "detection_at_5pct": 0.992,
+      "false_alarm_at_5pct": 0.006,
+      "auc": 0.999712,
+      "threshold": 1.3657032251358032,
+      "polarity": 1,
+      "auc_train": 0.9929816326530613
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "norm": "per_waveform",
+      "detection_rate": 0.712,
+      "false_alarm": 0.002,
+      "detection_at_5pct": 0.802,
+      "false_alarm_at_5pct": 0.016,
+      "auc": 0.969888,
+      "threshold": 1.7969661951065063,
+      "polarity": 1,
+      "auc_train": 0.9515183673469387
+    },
+    {
+      "delta": 0.0,
+      "seed": 2,
+      "norm": "global",
+      "detection_rate": 0.968,
+      "false_alarm": 0.0,
+      "detection_at_5pct": 0.994,
+      "false_alarm_at_5pct": 0.006,
+      "auc": 0.999824,
+      "threshold": 2.1373863220214844,
+      "polarity": 1,
+      "auc_train": 0.9944673469387755
+    },
+    {
+      "delta": 0.514,
+      "seed": 0,
+      "norm": "per_waveform",
+      "detection_rate": 0.898,
+      "false_alarm": 0.002,
+      "detection_at_5pct": 0.984,
+      "false_alarm_at_5pct": 0.024,
+      "auc": 0.998876,
+      "threshold": 2.4094505310058594,
+      "polarity": 1,
+      "auc_train": 0.994861224489796
+    },
+    {
+      "delta": 0.514,
+      "seed": 0,
+      "norm": "global",
+      "detection_rate": 0.976,
+      "false_alarm": 0.0,
+      "detection_at_5pct": 1.0,
+      "false_alarm_at_5pct": 0.01,
+      "auc": 0.999996,
+      "threshold": 1.907126784324646,
+      "polarity": 1,
+      "auc_train": 0.9983285714285715
+    },
+    {
+      "delta": 0.514,
+      "seed": 1,
+      "norm": "per_waveform",
+      "detection_rate": 0.894,
+      "false_alarm": 0.0,
+      "detection_at_5pct": 0.966,
+      "false_alarm_at_5pct": 0.008,
+      "auc": 0.999056,
+      "threshold": 2.793527841567993,
+      "polarity": 1,
+      "auc_train": 0.9754081632653061
+    },
+    {
+      "delta": 0.514,
+      "seed": 1,
+      "norm": "global",
+      "detection_rate": 0.982,
+      "false_alarm": 0.004,
+      "detection_at_5pct": 0.998,
+      "false_alarm_at_5pct": 0.018,
+      "auc": 0.999536,
+      "threshold": -0.09916248172521591,
+      "polarity": 1,
+      "auc_train": 0.998465306122449
+    },
+    {
+      "delta": 0.514,
+      "seed": 2,
+      "norm": "per_waveform",
+      "detection_rate": 0.938,
+      "false_alarm": 0.0,
+      "detection_at_5pct": 0.986,
+      "false_alarm_at_5pct": 0.014,
+      "auc": 0.999216,
+      "threshold": 2.0381438732147217,
+      "polarity": 1,
+      "auc_train": 0.9947122448979592
+    },
+    {
+      "delta": 0.514,
+      "seed": 2,
+      "norm": "global",
+      "detection_rate": 0.972,
+      "false_alarm": 0.0,
+      "detection_at_5pct": 0.996,
+      "false_alarm_at_5pct": 0.014,
+      "auc": 0.999876,
+      "threshold": 1.6894989013671875,
+      "polarity": 1,
+      "auc_train": 0.9975122448979592
+    }
+  ],
+  "args": {
+    "deltas": [
+      0.0,
+      0.514
+    ],
+    "epochs": 12,
+    "n_train": 350,
+    "n_test": 250,
+    "tag": "h19_cnn_norm",
+    "norms": [
+      "per_waveform",
+      "global"
+    ]
+  },
+  "runtime_s": 236.37317085266113
+}
