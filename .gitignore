@@ -9,9 +9,6 @@ email_to_taylor_draft.md
 *.docx
 *.pptx
 
-# papers: linked in papers/README.md, fetched by papers/fetch.sh, not redistributed
-papers/*.pdf
-
 # editors / OS
 .vscode/
 .idea/

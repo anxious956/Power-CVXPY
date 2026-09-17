@@ -1,7 +1,9 @@
 # Reading list: auxiliary-signal fault detection in inverter-dominated grids
 
-> PDFs are **not** committed to this repository. Run `bash papers/fetch.sh` after cloning to
-> download the open-access copies into this folder. Every entry below carries its link.
+> The 18 PDFs are committed here so the team has one place to read from. All are
+> open-access author copies (arXiv preprints, plus a US Department of Energy national
+> laboratory report). Every entry below also carries its original link, and
+> `bash papers/fetch.sh` re-downloads them all from source.
 
 Senior design, advisor (proposed) Prof. Joshua A. Taylor, NJIT ECE.
 Built by walking the reference lists of Taylor's own papers, so the set covers what he
