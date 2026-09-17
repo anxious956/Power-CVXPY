@@ -1,5 +1,21 @@
 # Real EMT data with inverters: EvEMTBench `benchmark-TestGrid110kV`
 
+> **Review correction (branch `review-fixes`, see [REVIEW.md](../REVIEW.md) N2).** The zone-1 setting
+> numbers below were produced by `zone_model.phase_selected_reactance`, which discards every released loop
+> with negative reactance (`zone_model.py:206`) and has no directional element. Re-run with the same
+> 20-40 ms phasor window on the same noise-free records (`src/review/real_zone_rerun.py`,
+> [review/real_zone_rerun.json](review/real_zone_rerun.json)): the table reproduces exactly, but the
+> explanation does not hold. At relay B **100 % of in-zone 40 ohm faults read negative reactance** on the
+> faulted loop (median R about 80 ohm, X about -16 ohm at 50 ms) and are thrown away as "reverse"; the claim
+> "misses every 40 ohm fault on its line" is a property of that element, not of the reactance effect alone.
+> A mimic filter, a separate negative-sequence/memory-polarised directional element and a quadrilateral set
+> from rules (rung R2) gives relay B: dependability 55.0 %, out-of-zone trips 0 % (was 4.4 %, 13.3 % at
+> 10 ohm), own line 99 % 0 % (was 6.7 %), reverse faults 0 % (was 3.1 %), switching 0 % (was 2 %). The 40 ohm
+> faults remain untripped by zone 1 because they appear at about 80 ohm, beyond the ~25 ohm resistive reach
+> that load-encroachment rules allow (assumed 1800 A thermal rating); that is a coverage limit of zone 1,
+> not an overlap problem. Relay A: the repo rule trips 4.4 % of reverse faults (10 % at 1 ohm); R2 0 %.
+> The learned-detector numbers below are superseded by REAL_ML.md and by the grouped re-run in REVIEW.md.
+
 > **Correction, 17 Sep 2026.** The learned-detector numbers below (engineered model, CNN) were obtained on noise-free records with 80 ms windows and in-sample thresholds. The noise-free records let models read the label from pre-fault samples, so the in-distribution 1.000 scores are not valid. The zone-1 setting results are unaffected. See [REAL_ML.md](REAL_ML.md).
 
 17 Sep 2026. Code: `src/evemt.py` (disk-streaming loader), `src/real_zone.py`.

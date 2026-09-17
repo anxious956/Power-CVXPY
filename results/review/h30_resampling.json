@@ -1,0 +1,239 @@
+{
+ "result0.csv": {
+  "info": {
+   "fs_check": 9599.999969292821,
+   "t0": 1.0,
+   "v_peak_prefault": 92976.28432378024
+  },
+  "resample_poly (non-causal, evemt.py)": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 51.97243075847528,
+    "2": 26.98090661291459,
+    "3": 16.99104387875374,
+    "4": 10.477335497330616,
+    "6": 4.063838396512488,
+    "8": 1.1442746895300953,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.03284680200544071,
+    "2": 0.009162626036611343,
+    "3": 0.011014269063799086,
+    "4": 0.0026633953605675314,
+    "6": 0.0008521364085265205,
+    "8": 0.00026037890719699615,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 9,
+   "earliest_ms": 1.40625
+  },
+  "causal FIR 121 taps": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 0,
+   "earliest_ms": 0.0
+  },
+  "causal Butterworth 4th order": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 0,
+   "earliest_ms": 0.0
+  }
+ },
+ "result1.csv": {
+  "info": {
+   "fs_check": 9599.999969292821,
+   "t0": 1.0,
+   "v_peak_prefault": 92976.31757339464
+  },
+  "resample_poly (non-causal, evemt.py)": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 55.96338976434587,
+    "2": 30.66526119464973,
+    "3": 19.446072832484074,
+    "4": 12.115670092930838,
+    "6": 4.4871624756153095,
+    "8": 1.1416284376148047,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.029940678068049165,
+    "2": 0.01050166777368267,
+    "3": 0.01042525914085058,
+    "4": 0.0035111892318162065,
+    "6": 0.0011777902178267369,
+    "8": 0.00030756350741780646,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 8,
+   "earliest_ms": 1.25
+  },
+  "causal FIR 121 taps": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 0,
+   "earliest_ms": 0.0
+  },
+  "causal Butterworth 4th order": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 0,
+   "earliest_ms": 0.0
+  }
+ },
+ "result2.csv": {
+  "info": {
+   "fs_check": 9599.999969292821,
+   "t0": 1.0,
+   "v_peak_prefault": 92976.31660174749
+  },
+  "resample_poly (non-causal, evemt.py)": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 42.85461818150958,
+    "2": 24.0773096357225,
+    "3": 15.160006335357044,
+    "4": 9.208505908086662,
+    "6": 2.9873941021910166,
+    "8": 0.5892152184601438,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.022833542210805188,
+    "2": 0.008754540640581438,
+    "3": 0.008089893449073642,
+    "4": 0.0029823752108524633,
+    "6": 0.0010015541632744914,
+    "8": 0.00023599397116651433,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 7,
+   "earliest_ms": 1.09375
+  },
+  "causal FIR 121 taps": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 0,
+   "earliest_ms": 0.0
+  },
+  "causal Butterworth 4th order": {
+   "v_leak_rel_noise_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "i_leak_rel_prefault_peak_at_minus_k": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "6": 0.0,
+    "8": 0.0,
+    "12": 0.0,
+    "16": 0.0
+   },
+   "earliest_sample_with_v_leak_above_noise_sigma": 0,
+   "earliest_ms": 0.0
+  }
+ }
+}
