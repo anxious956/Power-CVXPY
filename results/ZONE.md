@@ -1,16 +1,19 @@
 # In-zone vs out-of-zone: does the auxiliary signal actually help?
 
-Date 16 Sep 2026. Code: `src/zone_model.py`, `src/zone_detect.py`. Run: `python src/zone_detect.py`.
+Code: `src/zone_model.py`, `src/zone_detect.py`. Run: `python src/zone_detect.py --seeds 3`.
+Numbers below are from the full sweep of 16 Sep 2026, after the distance element was
+corrected (see "Correction" at the end).
 
-This is the experiment the project is about. The first detection study
+This is the experiment the project is about. The earlier detection study
 ([DETECTION.md](DETECTION.md)) used a load as the negative, and a conventional multivariate
 element solved it without any injection. The negative here is the case protection actually
 finds hard, and the one Taylor's formulation addresses: *the relay decides whether the fault
-is on its own line*.
+is on its own line*. It is also, word for word, the "underreaching test" that the 2026
+reachability paper names as future work.
 
 ## Setup
 
-Three buses: relay and a weak source at L, the protected line to R, an inverter and load at
+Three buses. Relay and a weak source at L, the protected line to R, an inverter and load at
 R, an adjacent line to S.
 
 ```
@@ -19,73 +22,83 @@ R, an adjacent line to S.
   source + RELAY          inverter + load             load
 ```
 
-- **Positives:** line-to-ground and line-to-line faults on the protected line, m ∈ [0.62, 0.85], inside the zone-1 reach.
+- **Positives:** LG and LL faults on the protected line, m ∈ [0.62, 0.85], inside the zone-1 reach.
 - **Negatives:** the same fault types on the adjacent line, m ∈ [0.02, 0.18], just past the remote bus.
-- Fault resistance 0 to 0.3 pu in both classes (line impedance is 0.201 pu).
-- Sampling is concentrated in the boundary band on purpose. Sampling the whole line fills the set with easy cases and flatters every detector.
-- **Unknown system conditions**, redrawn per sample: source impedance behind the relay ×[0.5, 1.8], both loads ×[0.6, 1.5], inverter output ×[0.5, 1.6] with ±0.4 rad, grounding impedance ×[0.6, 1.6]. These are exactly the uncertainties Taylor's sets are built around. Without them the map from measurement to class is nearly invertible and every detector scores 100 %.
+- Fault resistance 0 to 0.3 pu in both classes; the line impedance is 0.201 pu.
+- Sampling is concentrated in the boundary band deliberately. Sampling the whole line fills the set with easy cases and flatters every detector.
+- **System conditions the relay cannot measure, redrawn per sample:** source impedance behind the relay ×[0.5, 1.8], both loads ×[0.6, 1.5], inverter output ×[0.5, 1.6] with ±0.4 rad, grounding impedance ×[0.6, 1.6]. These are the uncertainties Taylor's sets exist for. Without them the map from measurement to class is nearly invertible and every detector scores 100 %.
 - The inverter injects the auxiliary signal continuously, in all four classes, swept along the direction the design tool chose (−23.2°).
 
-Thresholds and polarity fixed on train at a 1 % false-trip budget, measured on test. 3600 train and 1800 test cases per point.
+3600 train and 1800 test waveforms per point, three seeds, mean ± standard deviation.
 
 ## Result
 
+Primary metric is ROC AUC, which is threshold-free. Dependability at a 1 % false-trip budget
+is given too, but a single strict operating point is fragile to a thin tail and should not be
+read alone.
+
 | δ (pu) | apparent reactance | \|i⁻\| magnitude | engineered features + LR | 1D CNN on raw waveform |
 |---|---|---|---|---|
-| 0.000 | 2.8 % | 6.9 % | **96.0 %** | 76.9 % |
-| 0.050 | 1.2 % | 7.4 % | 96.6 % | 83.7 % |
-| 0.100 | 0.9 % | 7.0 % | 97.2 % | 89.8 % |
-| 0.200 | 2.0 % | 6.8 % | 98.0 % | 93.4 % |
-| 0.300 | 0.4 % | 6.8 % | 98.3 % | 92.7 % |
-| 0.400 | 1.7 % | 6.8 % | 99.3 % | 96.2 % |
-| 0.514 | 1.1 % | 6.7 % | **99.4 %** | 98.6 % |
+| 0.000 | **0.834** ± 0.006 | 0.594 ± 0.020 | 0.996 ± 0.000 | **0.982** ± 0.004 |
+| 0.050 | 0.823 ± 0.007 | 0.587 ± 0.019 | 0.998 ± 0.001 | 0.989 ± 0.002 |
+| 0.100 | 0.811 ± 0.007 | 0.581 ± 0.018 | 0.997 ± 0.001 | 0.994 ± 0.001 |
+| 0.200 | 0.790 ± 0.005 | 0.568 ± 0.016 | 0.999 ± 0.001 | 0.998 ± 0.001 |
+| 0.300 | 0.772 ± 0.009 | 0.559 ± 0.015 | 0.999 ± 0.001 | 0.999 ± 0.001 |
+| 0.400 | 0.760 ± 0.009 | 0.551 ± 0.014 | 0.999 ± 0.001 | 0.999 ± 0.001 |
+| 0.514 | **0.741** ± 0.012 | 0.543 ± 0.014 | 0.999 ± 0.001 | **1.000** ± 0.000 |
+
+Dependability at 1 % false trip, same order: reactance 5 → 2 %, |i⁻| 7 % flat, engineered
+98 → 99 %, CNN 80 → 99 %.
 
 ![zone sweep](zone_sweep.png)
 
 ## What it says
 
-**1. The auxiliary signal works, and the effect is monotone.** The engineered detector goes
-from 96.0 % to 99.4 %, the learned one from 76.9 % to 98.6 %. This is the first measurement
-we have that Taylor's scheme buys real discrimination on waveforms rather than on sets.
+**1. The auxiliary signal helps the learned detector and hurts the conventional one.** The CNN
+climbs from 0.982 to 1.000 AUC and its dependability from 80 % to 99 %. Over the same sweep
+the apparent-reactance element falls from 0.834 to 0.741, monotonically, well outside the
+seed spread. **More signal makes the textbook distance element worse.** Injected
+negative-sequence current distorts the very quantity that element is built on.
 
-**2. Conventional scalar elements cannot use it at all.** The apparent-reactance element sits
-near 1 % across the whole sweep, and a negative-sequence magnitude threshold near 7 %. In
-this regime both are worse than chance-at-budget. The guarantee lives in the joint
-measurement, so an element that collapses the measurement to one number throws it away.
-That has a practical consequence worth stating: **this scheme cannot be dropped into an
-existing relay's impedance element.** Cashing in the guarantee requires a multivariate
-decision, which is a change to the relay, not just to the inverter.
+That is a result with a practical consequence: **this scheme cannot be dropped into an
+existing relay's impedance element.** Cashing in the guarantee means changing the relay, not
+only the inverter. Anyone proposing auxiliary signals should measure what they do to the
+elements already in service.
 
-**3. Engineered features beat the learned detector everywhere, and the gap closes as δ
-grows.** At δ = 0 the difference is 19 points. At the certified δ it is under 1 point. The
-honest reading is that deep learning is not the contribution here; the right quantities are.
-The CNN has to learn the sequence transform from raw samples with 3600 examples, which is
-why it starts behind. With more data or a sequence-domain front end it would likely close the
-gap sooner, and that is worth testing rather than asserting.
+**2. Engineered features are at ceiling from the start and do not need the signal.** Logistic
+regression on sequence magnitudes, the i⁰/i⁻ and i⁻/i⁺ ratios, relative angles, the
+k0-compensated loop impedances and their incremental versions sits at 0.996 AUC with no
+injection at all. Deep learning is not the contribution here; the right quantities are. The
+CNN only catches up once the signal is large.
 
-**4. The theory-versus-practice gap is small but real.** The design tool certifies
-δ = 0.514 pu as separating every scenario pair. On waveforms, at that δ, the best detector
-reaches 99.4 %, not 100 %. The residual comes from everything the certificate does not cover:
-measurement noise, harmonics, the DC offset, and system conditions drawn outside the
-uncertainty box the tool was given. Quantifying that gap in EMT simulation, rather than in
-this phasor model, is the project.
+**3. The learned detector's gain is real but it is a gain over its own handicap.** It starts
+0.014 AUC behind the engineered features and ends level. The honest reading is that the signal
+compensates for the CNN having to learn the sequence transform from raw samples, not that
+learning beats engineering.
 
 ## Honest caveats
 
-- Static phasor circuit synthesized into waveforms, not EMT. No inverter dynamics, no
-  current-limiter action, no CT saturation, no travelling waves.
-- Three buses, one adjacent line, two fault types.
-- The reactance element here is a bare reactance comparison, not a tuned quadrilateral with
-  fault-resistance coverage and a directional supervision. A real relay would do better than
-  1 %. The point of that curve is its flatness in δ, not its level.
-- The CNN is small (~40 k parameters, 20 epochs per point) and untuned.
-- Detection is offline over a fixed post-event window. Latency is the WP4 question and is not
-  measured here.
-- Single seed per point. Error bars over seeds are the obvious next addition.
+- Static phasor circuit synthesised into waveforms, not EMT. No inverter dynamics, no current-limiter action, no CT saturation, no travelling waves. This is the main limitation and the reason to move to public EMT data.
+- Three buses, two fault types, one adjacent line.
+- The reactance element is a genuine implementation (six loops, k0 compensation, per-loop current supervision, forward loops only, smallest reactance wins) and reads exactly m·X₁ for a bolted fault with no parameter spread. Its low dependability here is the deliberately severe regime, not a broken element. Report the AUC, not the 1 % operating point, when comparing.
+- The CNN is small, about 40 k parameters, 20 epochs per point, untuned.
+- Detection is offline over a fixed post-event window. Latency is the WP4 question and is not measured here.
+- Three seeds. Enough to see that the reactance trend is real; not enough for a tight confidence interval.
+
+## Correction, 16 Sep 2026
+
+An earlier version of this file reported detection rates of 96.0 → 99.4 % for the engineered
+detector and described the reactance element as flat near 1 %. Those numbers came from a run
+in which **the ground fault loops had no zero-sequence (k0) compensation**, which reads the
+wrong impedance by a large factor and made the conventional baseline a straw man. The element
+was fixed (k0 = (Z₀ − Z₁)/(3Z₁), applied as I_p + k0·3I₀, validated against m·X₁ for bolted
+faults), per-loop current supervision was added, reporting moved to AUC with seed spread, and
+the full sweep was re-run. The table above is the corrected result. The direction of the main
+finding survived the fix; the magnitudes did not.
 
 ## Next
 
-1. Error bars: repeat each point over several seeds.
-2. Give the CNN a sequence-domain front end and see whether it matches the engineered features at δ = 0.
-3. Add the multiple-model Kalman filter from Pirani et al. 2022 as the fourth detector, since that is Taylor's own relay-side method.
-4. Replace this generator with EMT waveforms from WP2 and re-measure the same curve.
+1. Replace this generator with EvEMTBench waveforms (`benchmark-DoubleLine.tar.gz`, 1.9 GB, which carries the intermediate-infeed case) and re-measure the same curve.
+2. Add the multiple-model Kalman filter from Pirani et al. 2022 as a fourth detector.
+3. Give the learned detector a sequence-domain front end and see whether the δ = 0 gap closes.
+4. More seeds, and a proper confidence interval on the reactance trend.
