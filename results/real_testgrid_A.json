@@ -1,0 +1,99 @@
+{
+  "config": "testgrid_A",
+  "dataset": "EvEMTBench TestGrid110kV, relay bus 1 on line 1-2A, inverter at remote bus 2",
+  "relay": "Cub_HV_A_A-B-1\\pex_MainBus1_MainLn1-2A",
+  "line": "MainLn1-2A",
+  "line_km": 25.0,
+  "z1": [
+    0.033392484188079836,
+    0.26002458572387693
+  ],
+  "z0": [
+    0.11814492225646972,
+    0.9786188507080078
+  ],
+  "zone1_reach_ohm": 5.525522446632385,
+  "inverter_current": {
+    "Cubicle(1)\\pex_MainBus2_Ind2-2IBR": {
+      "prefault_I1_median_A": 209.6217282926858,
+      "fault_peak_ratio_median": 1.4642778635025024,
+      "fault_peak_ratio_p95": 2.0139968395233154,
+      "fault_peak_ratio_max": 2.6329174041748047
+    }
+  },
+  "relay_current_ratio_in_zone_median": 11.767661094665527,
+  "counts": {
+    "in_zone": 180,
+    "out_of_zone": 315,
+    "own99": 45,
+    "parallel": 225,
+    "nonfault": 50
+  },
+  "zone1_setting": {
+    "dependability": 0.85,
+    "false_trip_out_of_zone": 0.0,
+    "trip_own_line_99": 0.0,
+    "trip_parallel_line": 0.017777777777777778,
+    "trip_nonfault": 0.0
+  },
+  "zone1_breakdown": {
+    "in zone": {
+      "1 ohm": 1.0,
+      "10 ohm": 0.9,
+      "40 ohm": 0.65
+    },
+    "out of zone": {
+      "1 ohm": 0.0,
+      "10 ohm": 0.0,
+      "40 ohm": 0.0
+    },
+    "own line 99%": {
+      "1 ohm": 0.0,
+      "10 ohm": 0.0,
+      "40 ohm": 0.0
+    },
+    "parallel MainLn1-2B": {
+      "1 ohm": 0.04,
+      "10 ohm": 0.013333333333333334,
+      "40 ohm": 0.0
+    }
+  },
+  "cv": {
+    "reactance": {
+      "auc": 0.9468253968253968,
+      "auc_sd": 0.02007653322493534,
+      "dep_at_5pct": 0.8833333333333333,
+      "dep_at_5pct_sd": 0.051917947292134004
+    },
+    "negseq": {
+      "auc": 0.6934156378600825,
+      "auc_sd": 0.045232641938463984,
+      "dep_at_5pct": 0.3259259259259259,
+      "dep_at_5pct_sd": 0.07061361468495414
+    },
+    "engineered": {
+      "auc": 1.0,
+      "auc_sd": 0.0,
+      "dep_at_5pct": 1.0,
+      "dep_at_5pct_sd": 0.0
+    },
+    "cnn": {
+      "auc": 0.9360670194003528,
+      "auc_sd": 0.0334562834252105,
+      "dep_at_5pct": 0.7703703703703705,
+      "dep_at_5pct_sd": 0.09210985270700658
+    }
+  },
+  "heldout": {
+    "engineered": {
+      "own line 99%": 0.28888888888888886,
+      "parallel line MainLn1-2B": 0.0044444444444444444,
+      "non-fault events": 0.0
+    },
+    "zone-1 setting": {
+      "own line 99%": 0.0,
+      "parallel line MainLn1-2B": 0.017777777777777778,
+      "non-fault events": 0.0
+    }
+  }
+}

@@ -101,6 +101,30 @@ Details: [results/REAL_DOUBLELINE.md](results/REAL_DOUBLELINE.md).
 
 ![real doubleline](results/real_doubleline.png)
 
+## Fourth result: real EMT data with inverters (17 Sep 2026)
+
+EvEMTBench `benchmark-TestGrid110kV`: six buses, two 30 GVA external grids, and two
+grid-following inverters of 35 and 50 MVA. 2,435 simulations, read from an 8.9 GB archive by
+streaming to disk.
+
+- **The inverter current limiter is real and measured**: both inverters sit at about 1.15 to
+  1.2 pu of rating during faults.
+- **But the inverters are about 0.1 % of short-circuit capacity, so they change nothing.** A
+  relay with a strong source behind it behaves exactly as on the no-inverter grid, with 0 %
+  false trips. The inverter-dominated regime this project is about is not in the public data,
+  so simulation is required.
+- **The hard case does appear, from remote infeed.** A relay with a weak source behind it and a
+  30 GVA grid at the far end misses every 40 Ω fault on its line and overreaches onto the next
+  line 13 % of the time at 10 Ω. That is the uncertainty Taylor's bounded sets are built for,
+  on real EMT data.
+- **Learned detectors fail to generalise.** The engineered model, perfect in distribution,
+  calls 82 % of never-seen switching events and 42 % of faults at 99 % of the line in zone. The
+  physics rule calls 2 % and 7 %.
+
+Details: [results/REAL_TESTGRID.md](results/REAL_TESTGRID.md).
+
+![relay B](results/real_testgrid_B.png)
+
 ## Quick start
 
 ```bash
@@ -126,10 +150,11 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             zone_model.py     three-bus model: protected line, adjacent line, remote infeed
             zone_detect.py    detector comparison, in-zone vs out-of-zone (synthetic)
             evemt.py          EvEMTBench loader: reads the .tar.gz without unpacking, caches
-            real_zone.py      in-zone vs out-of-zone on real EMT data
+            real_zone.py      in-zone vs out-of-zone on real EMT data (doubleline, testgrid_A, testgrid_B)
 results/    RESULTS.md   design-tool results, figures and JSON for every preset
             DETECTION.md fault vs load study, and why that negative was too easy
-            ZONE.md      in-zone vs out-of-zone, the main detection result
+            ZONE.md      in-zone vs out-of-zone, synthetic
+            REAL_DOUBLELINE.md, REAL_TESTGRID.md  the same on real EMT data
 papers/     README.md reading list with links, fetch.sh to download the open-access PDFs
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
             TEAM_BRIEF.md   onboarding note for the team
@@ -166,7 +191,8 @@ the competing methods against each other, and that the auxiliary signal appears 
 - [ ] Sequence-domain front end for the learned detector
 - [x] All 18 papers read, notes and synthesis written
 - [x] EvEMTBench DoubleLine loaded straight from the archive; element validated on real EMT data
-- [ ] Inverter grid (TestGrid110kV) checked and run
+- [x] Inverter grid (TestGrid110kV) run: limiter confirmed, inverters too small to matter, remote-infeed problem reproduced
+- [ ] Inverter-dominated EMT grid (Baeckeland Simulink model, or our own)
 - [ ] Advisor confirmed
 - [ ] Team roles assigned
 - [ ] EMT simulation test grid (Simulink or PSCAD)
