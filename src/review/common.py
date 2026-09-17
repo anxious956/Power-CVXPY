@@ -31,7 +31,8 @@ AM = np.array([[1, 1, 1], [1, A**2, A], [1, A, A**2]])     # [s0, s+, s-] -> [a,
 BM = np.linalg.inv(AM)
 V_NOM_PEAK = real_ml.V_NOM_PEAK
 LOOPS = ("ag", "bg", "cg", "ab", "bc", "ca")
-RELAY_BUS = dict(doubleline="MainBus1", testgrid_A="MainBus1", testgrid_B="MainBus2")
+RELAY_BUS = dict(doubleline="MainBus1", testgrid_A="MainBus1", testgrid_B="MainBus2",
+                 adapt_A="MainBus1", adapt_B="MainBus2")
 
 _CACHE = {}
 

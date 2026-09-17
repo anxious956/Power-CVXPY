@@ -44,22 +44,38 @@ REACH = 0.85
 
 CONFIGS = {
     "doubleline": dict(
-        cache_glob="*DoubleLine*_cache.npz",
+        cache_glob="benchmark-DoubleLine*_cache.npz",
         title="EvEMTBench DoubleLine, no inverters",
         relay="Cub_2\\pex_MainBus1_MainLn1-2A", line="MainLn1-2A", remote_bus="MainBus2",
         beyond=["MainLn2-3A", "MainLn2-3B"], parallel="MainLn1-2B", ibr_cubicles=[]),
     "testgrid_A": dict(
-        cache_glob="*TestGrid110kV*_cache.meta.npz",
+        cache_glob="benchmark-TestGrid110kV*_cache.meta.npz",
         title="EvEMTBench TestGrid110kV, relay bus 1 on line 1-2A, inverter at remote bus 2",
         relay="Cub_HV_A_A-B-1\\pex_MainBus1_MainLn1-2A", line="MainLn1-2A", remote_bus="MainBus2",
         beyond=["MainLn2-3", "MainLn2-5", "MainLn2-6"], parallel="MainLn1-2B",
         ibr_cubicles=["Cubicle(1)\\pex_MainBus2_Ind2-2IBR"]),
     "testgrid_B": dict(
-        cache_glob="*TestGrid110kV*_cache.meta.npz",
+        cache_glob="benchmark-TestGrid110kV*_cache.meta.npz",
         title="EvEMTBench TestGrid110kV, relay bus 2 on line 2-3, inverter at remote bus 3",
         relay="Cub_HV_B_B-C\\pex_MainBus2_MainLn2-3", line="MainLn2-3", remote_bus="MainBus3",
         beyond=["MainLn3-4"], parallel=None,
         ibr_cubicles=["Cubicle(1)\\pex_MainBus3_Ind3-3IBR"]),
+    # EvEMTBench adapt_grid-TestGrid110kV: the same grid, cubicles and relays, but randomised events
+    # and randomised operating states (loads scaled 50-150 %). Cache built from the archive on D: by
+    # logs/build_adaptgrid_cache.py with the benchmark's 7 cubicles. The benchmark globs above are
+    # pinned to 'benchmark-' because this cache sorts first and would otherwise be picked up silently.
+    "adapt_A": dict(
+        cache_glob="adapt_grid-TestGrid110kV*_cache.meta.npz",
+        title="EvEMTBench adapt_grid-TestGrid110kV, relay bus 1 on line 1-2A, varied operating points",
+        relay="Cub_HV_A_A-B-1\\pex_MainBus1_MainLn1-2A", line="MainLn1-2A", remote_bus="MainBus2",
+        beyond=["MainLn2-3", "MainLn2-5", "MainLn2-6"], parallel="MainLn1-2B",
+        ibr_cubicles=["Cubicle(1)\\pex_MainBus2_Ind2-2IBR"], adaptgrid=True),
+    "adapt_B": dict(
+        cache_glob="adapt_grid-TestGrid110kV*_cache.meta.npz",
+        title="EvEMTBench adapt_grid-TestGrid110kV, relay bus 2 on line 2-3, varied operating points",
+        relay="Cub_HV_B_B-C\\pex_MainBus2_MainLn2-3", line="MainLn2-3", remote_bus="MainBus3",
+        beyond=["MainLn3-4"], parallel=None,
+        ibr_cubicles=["Cubicle(1)\\pex_MainBus3_Ind3-3IBR"], adaptgrid=True),
 }
 
 
