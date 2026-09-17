@@ -53,9 +53,11 @@ def ladder(fn, title):
 
 def zone_cv(front="current", mode="own99 guard", t="20 ms", splits=("stratified", "grouped", "lolo", "lorfo")):
     S = R("zone_cv_summary.json")
-    if not S:
+    if not S or not any(f"{n} | {front} | {mode} | {t} | {sp}" in S for n, _ in RELAYS for sp in splits):
         return
-    print(f"\n#### Learned models, {front} front end, {mode}, {t}\n")
+    label = {"current": "current front end", "relay front end": "relay front end (AA 400 Hz + CT full scale)",
+             "CT full scale only": "CT-based ADC full scale only"}[front]
+    print(f"\n#### Learned models, {label}, {mode.replace('own99', 'own-99 %')}, {t}\n")
     print("| Relay | Split | Model | AUC | Dependability [95 % CI] | Dep. at 40 Ω | Beyond / remote bus k/n (≤UCB) | Own 99 % (guard) | Relay-bus reverse | Lines behind | Parallel | Other | Switching | + directional: dep / beyond / reverse bus / switching |")
     print("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
     for name, lab in RELAYS:
