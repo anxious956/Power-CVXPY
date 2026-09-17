@@ -115,7 +115,23 @@ def score_negseq(X):
     return np.array([abs(sequence_phasors(x[3:], EVENT + CYCLE)[2]) for x in X])
 
 
-def zone_features(X, g):
+FLOOR = 1e-3        # pu; about the phasor noise floor, used by the fixed ratio features (H21)
+
+
+def _ang(a, b):
+    """Angle of a/b without dividing (no epsilon, no blow-up when b ~ 0)."""
+    return np.angle(a * np.conj(b))
+
+
+def _logratio(a, b, floor=FLOOR):
+    return np.log((abs(a) + floor) / (abs(b) + floor))
+
+
+def zone_features(X, g, fixed=False, raw=False):
+    """fixed=False: the original 36 features (raw angles in [-pi, pi], ratios with e=1e-9, then
+    nan_to_num(posinf=0)). fixed=True (review H21): every angle enters as (sin, cos), every
+    ratio as log((|a|+floor)/(|b|+floor)); the linear features are unchanged.
+    raw=True returns the original matrix before nan_to_num (for counting defects)."""
     feats = []
     for x in X:
         vpre, vpost, ipre, ipost = _phasors(x)
@@ -126,24 +142,46 @@ def zone_features(X, g):
         v0, v1, v2 = vpost; i0, i1, i2 = ipost
         dv0, dv1, dv2 = vpost - vpre; di0, di1, di2 = ipost - ipre
         e = 1e-9
-        feats.append([
-            zg.real, zg.imag, abs(zg), np.angle(zg),
-            zp.real, zp.imag, abs(zp), np.angle(zp),
-            sup, min(fwd) if fwd else 10.0, len(fwd),
-            min((z.imag for z in L.values()), default=0.0),
-            abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
-            abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0),
-            abs(i2) / (abs(i1) + e), abs(i0) / (abs(i1) + e), abs(i0) / (abs(i2) + e),
-            np.angle(i2 / (i1 + e)), np.angle(i0 / (i1 + e)), np.angle(v2 / (i2 + e)),
-            np.angle(v0 / (i0 + e)), np.angle(dv2 / (di2 + e)), np.angle(dv1 / (di1 + e)),
-            abs(dv1 / (di1 + e)), abs(dv2 / (di2 + e)), abs(dv0 / (di0 + e)),
-        ])
-    return np.nan_to_num(np.array(feats), nan=0.0, posinf=0.0, neginf=0.0)
+        lin = [zg.real, zg.imag, abs(zg), zp.real, zp.imag, abs(zp),
+               sup, min(fwd) if fwd else 10.0, len(fwd),
+               min((z.imag for z in L.values()), default=0.0),
+               abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
+               abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0)]
+        if not fixed:
+            feats.append([
+                zg.real, zg.imag, abs(zg), np.angle(zg),
+                zp.real, zp.imag, abs(zp), np.angle(zp),
+                sup, min(fwd) if fwd else 10.0, len(fwd),
+                min((z.imag for z in L.values()), default=0.0),
+                abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
+                abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0),
+                abs(i2) / (abs(i1) + e), abs(i0) / (abs(i1) + e), abs(i0) / (abs(i2) + e),
+                np.angle(i2 / (i1 + e)), np.angle(i0 / (i1 + e)), np.angle(v2 / (i2 + e)),
+                np.angle(v0 / (i0 + e)), np.angle(dv2 / (di2 + e)), np.angle(dv1 / (di1 + e)),
+                abs(dv1 / (di1 + e)), abs(dv2 / (di2 + e)), abs(dv0 / (di0 + e)),
+            ])
+        else:
+            angs = [np.angle(zg), np.angle(zp), _ang(i2, i1), _ang(i0, i1), _ang(v2, i2),
+                    _ang(v0, i0), _ang(dv2, di2), _ang(dv1, di1)]
+            rats = [_logratio(i2, i1), _logratio(i0, i1), _logratio(i0, i2),
+                    _logratio(dv1, di1), _logratio(dv2, di2), _logratio(dv0, di0)]
+            feats.append(lin + [np.sin(a) for a in angs] + [np.cos(a) for a in angs] + rats)
+    F = np.array(feats)
+    if raw:
+        return F
+    return np.nan_to_num(F, nan=0.0, posinf=0.0, neginf=0.0)
 
 
-def score_engineered(Xtr, ytr, Xte, g, seed=0, oof_folds=5):
-    """oof_folds=0 reproduces the original in-sample training scores (review H18)."""
-    return fit_lr_scores(zone_features(Xtr, g), ytr, zone_features(Xte, g), seed=seed,
+# column indices of the original zone_features, for the H21 defect count
+ZONE_ANGLE_COLS = [3, 7, 27, 28, 29, 30, 31, 32]
+ZONE_RATIO_COLS = [24, 25, 26, 33, 34, 35]
+
+
+def score_engineered(Xtr, ytr, Xte, g, seed=0, oof_folds=5, fixed_features=True):
+    """oof_folds=0 reproduces the original in-sample training scores (review H18);
+    fixed_features=False the original feature encoding (review H21)."""
+    return fit_lr_scores(zone_features(Xtr, g, fixed_features), ytr,
+                         zone_features(Xte, g, fixed_features), seed=seed,
                          max_iter=4000, oof_folds=oof_folds)
 
 
@@ -158,7 +196,8 @@ def score_all(Xtr, ytr, Xte, grid, seed=0, epochs=20, cfg=None):
     out["reactance"] = (score_reactance(Xtr, grid), score_reactance(Xte, grid))
     out["negseq"] = (score_negseq(Xtr), score_negseq(Xte))
     oof = cfg.get("oof_folds", 0)
-    out["engineered"] = score_engineered(Xtr, ytr, Xte, grid, seed=seed, oof_folds=oof)
+    out["engineered"] = score_engineered(Xtr, ytr, Xte, grid, seed=seed, oof_folds=oof,
+                                         fixed_features=cfg.get("fixed_features", False))
     out["cnn"] = train_cnn(Xtr, ytr, Xte, epochs=epochs, seed=seed, oof_folds=oof,
                            oof_test=cfg.get("oof_test", "full"),
                            norm=cfg.get("cnn_norm", "per_waveform"))

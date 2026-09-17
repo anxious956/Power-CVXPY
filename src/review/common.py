@@ -13,8 +13,8 @@ sys.path.insert(0, SRC)
 OUT = os.path.join(SRC, "..", "results", "review_synth")
 os.makedirs(OUT, exist_ok=True)
 
-ORIGINAL = dict(polarity="test", oof_folds=0, cnn_norm="per_waveform")
-FIXED = dict(polarity="train", oof_folds=5, cnn_norm="global")
+ORIGINAL = dict(polarity="test", oof_folds=0, cnn_norm="per_waveform", fixed_features=False)
+FIXED = dict(polarity="train", oof_folds=5, cnn_norm="global", fixed_features=True)
 
 
 def design_direction():

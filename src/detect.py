@@ -46,26 +46,38 @@ def score_incremental(X):
     return np.array(out)
 
 
-def relay_features(X):
+def relay_features(X, fixed=False):
     """The engineered feature vector a protection engineer would actually build:
     sequence magnitudes, the ratios and relative angles that directional and ground
     elements are made of, and their incremental (post minus pre) versions.
-    This is the strong conventional baseline; beating |i-| alone proves nothing."""
+    This is the strong conventional baseline; beating |i-| alone proves nothing.
+
+    fixed=True (review H21): angles as (sin, cos), ratios as log((|a|+1e-3)/(|b|+1e-3))."""
     feats = []
+    fl = 1e-3
+    lr = lambda a, b: np.log((abs(a) + fl) / (abs(b) + fl))
+    ang = lambda a, b: np.angle(a * np.conj(b))
     for x in X:
         vpre, vpost = sequence_phasors(x[:3], EVENT - 2 * CYCLE), sequence_phasors(x[:3], EVENT + CYCLE)
         ipre, ipost = sequence_phasors(x[3:], EVENT - 2 * CYCLE), sequence_phasors(x[3:], EVENT + CYCLE)
         v0, v1, v2 = vpost; i0, i1, i2 = ipost
         dv0, dv1, dv2 = vpost - vpre; di0, di1, di2 = ipost - ipre
         e = 1e-9
-        f = [abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
-             abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0),
-             abs(i2) / (abs(i1) + e), abs(i0) / (abs(i1) + e), abs(i0) / (abs(i2) + e),
-             abs(di0) / (abs(di2) + e), abs(di2) / (abs(di1) + e),
-             np.angle(i2 / (i1 + e)), np.angle(i0 / (i1 + e)), np.angle(i0 / (i2 + e)),
-             np.angle(v2 / (i2 + e)), np.angle(v0 / (i0 + e)),
-             np.angle(di2 / (di1 + e)), np.angle(dv2 / (di2 + e)), np.angle(dv0 / (di0 + e)),
-             abs(v2 / (i2 + e)), abs(v0 / (i0 + e)), abs(dv1 / (di1 + e))]
+        mags = [abs(v1), abs(v2), abs(v0), abs(i1), abs(i2), abs(i0),
+                abs(dv1), abs(dv2), abs(dv0), abs(di1), abs(di2), abs(di0)]
+        if not fixed:
+            f = mags + [
+                 abs(i2) / (abs(i1) + e), abs(i0) / (abs(i1) + e), abs(i0) / (abs(i2) + e),
+                 abs(di0) / (abs(di2) + e), abs(di2) / (abs(di1) + e),
+                 np.angle(i2 / (i1 + e)), np.angle(i0 / (i1 + e)), np.angle(i0 / (i2 + e)),
+                 np.angle(v2 / (i2 + e)), np.angle(v0 / (i0 + e)),
+                 np.angle(di2 / (di1 + e)), np.angle(dv2 / (di2 + e)), np.angle(dv0 / (di0 + e)),
+                 abs(v2 / (i2 + e)), abs(v0 / (i0 + e)), abs(dv1 / (di1 + e))]
+        else:
+            angs = [ang(i2, i1), ang(i0, i1), ang(i0, i2), ang(v2, i2), ang(v0, i0),
+                    ang(di2, di1), ang(dv2, di2), ang(dv0, di0)]
+            f = mags + [lr(i2, i1), lr(i0, i1), lr(i0, i2), lr(di0, di2), lr(di2, di1),
+                        lr(v2, i2), lr(v0, i0), lr(dv1, di1)] +                 [np.sin(a) for a in angs] + [np.cos(a) for a in angs]
         feats.append(f)
     return np.nan_to_num(np.array(feats), nan=0.0, posinf=0.0, neginf=0.0)
 
@@ -102,10 +114,12 @@ def fit_lr_scores(ftr, ytr, fte, seed=0, max_iter=3000, oof_folds=0):
     return s_tr, s_te
 
 
-def score_engineered(Xtr, ytr, Xte, seed=0, oof_folds=5):
+def score_engineered(Xtr, ytr, Xte, seed=0, oof_folds=5, fixed_features=True):
     """Logistic regression on relay_features: the conventional multivariate detector.
-    oof_folds=0 reproduces the original in-sample training scores."""
-    return fit_lr_scores(relay_features(Xtr), ytr, relay_features(Xte), seed=seed,
+    oof_folds=0 reproduces the original in-sample training scores; fixed_features=False the
+    original feature encoding."""
+    return fit_lr_scores(relay_features(Xtr, fixed_features), ytr,
+                         relay_features(Xte, fixed_features), seed=seed,
                          oof_folds=oof_folds)
 
 
