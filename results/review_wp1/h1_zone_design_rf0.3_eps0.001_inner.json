@@ -1,0 +1,321 @@
+{
+  "rf": 0.3,
+  "eps": 0.001,
+  "sources": "inner",
+  "n_in": 816,
+  "n_out": 697,
+  "n_pairs": 568752,
+  "pieces": 17,
+  "delta0": {
+    "box_candidates": 44190,
+    "lp_checked": 4000,
+    "unseparated_in_sample": 0,
+    "unseparated_pairs_estimate": 0.0,
+    "unseparated_fraction_of_all_pairs_estimate": 0.0,
+    "unseparated_by_kind": {},
+    "unseparated_same_piece": 0
+  },
+  "witnesses": [],
+  "n_pairs_alone_blocking_disk": 0,
+  "pairs_possibly_unseparated_in_box": 151583,
+  "lazy_rounds": [
+    {
+      "round": 0,
+      "polygons": 0,
+      "free_fraction": 1.0,
+      "best_free": [
+        [
+          0.0,
+          0.0
+        ],
+        0.0
+      ]
+    }
+  ],
+  "design": {
+    "grid_optimum": [
+      [
+        0.0,
+        0.0
+      ],
+      0.0,
+      0.0
+    ],
+    "polygon_exact_lower_bound": [
+      [
+        0.0,
+        0.0
+      ],
+      0.0
+    ],
+    "polygons_used": 0
+  },
+  "author_delta": {
+    "delta": [
+      [
+        0.4725416047022092,
+        -0.20261044826170205
+      ],
+      0.5141464401504174
+    ],
+    "box_candidates": 40670,
+    "lp_checked": 4000,
+    "unseparated_in_sample": 0,
+    "unseparated_pairs_estimate": 0.0
+  },
+  "scan": [
+    {
+      "mag": 0.25,
+      "ang": 0,
+      "box_candidates": 43676,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 30,
+      "box_candidates": 44925,
+      "lp_checked": 1000,
+      "unseparated": 44.925
+    },
+    {
+      "mag": 0.25,
+      "ang": 60,
+      "box_candidates": 46112,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 90,
+      "box_candidates": 46915,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 120,
+      "box_candidates": 46722,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 150,
+      "box_candidates": 45630,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 180,
+      "box_candidates": 44045,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 210,
+      "box_candidates": 42362,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 240,
+      "box_candidates": 41502,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 270,
+      "box_candidates": 41339,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 300,
+      "box_candidates": 41489,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.25,
+      "ang": 330,
+      "box_candidates": 42534,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 0,
+      "box_candidates": 42200,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 30,
+      "box_candidates": 44352,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 60,
+      "box_candidates": 46712,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 90,
+      "box_candidates": 48956,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 120,
+      "box_candidates": 48886,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 150,
+      "box_candidates": 46385,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 180,
+      "box_candidates": 43092,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 210,
+      "box_candidates": 40261,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 240,
+      "box_candidates": 39302,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 270,
+      "box_candidates": 39076,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 300,
+      "box_candidates": 39328,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 0.514,
+      "ang": 330,
+      "box_candidates": 40056,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 0,
+      "box_candidates": 37147,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 30,
+      "box_candidates": 39161,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 60,
+      "box_candidates": 42622,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 90,
+      "box_candidates": 49274,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 120,
+      "box_candidates": 53851,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 150,
+      "box_candidates": 46650,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 180,
+      "box_candidates": 39762,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 210,
+      "box_candidates": 35785,
+      "lp_checked": 1000,
+      "unseparated": 35.785
+    },
+    {
+      "mag": 1.0,
+      "ang": 240,
+      "box_candidates": 34329,
+      "lp_checked": 1000,
+      "unseparated": 68.658
+    },
+    {
+      "mag": 1.0,
+      "ang": 270,
+      "box_candidates": 34175,
+      "lp_checked": 1000,
+      "unseparated": 307.575
+    },
+    {
+      "mag": 1.0,
+      "ang": 300,
+      "box_candidates": 35836,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    },
+    {
+      "mag": 1.0,
+      "ang": 330,
+      "box_candidates": 36520,
+      "lp_checked": 1000,
+      "unseparated": 0.0
+    }
+  ],
+  "runtime_s": 537.3443868160248
+}
