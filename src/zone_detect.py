@@ -158,7 +158,11 @@ def main():
     ap.add_argument("--rf", type=float, default=0.3, help="max fault resistance, pu")
     ap.add_argument("--wide", action="store_true", help="sample the whole line, not just the boundary band")
     ap.add_argument("--seeds", type=int, default=3)
+    ap.add_argument("--out", default=OUT, help="output directory (review: keep author results intact)")
+    ap.add_argument("--tag", default="zone_sweep", help="basename of the .json/.png/.npz outputs")
     args = ap.parse_args()
+    os.makedirs(args.out, exist_ok=True)
+    dump = {}                                   # raw test scores per (delta, seed, detector)
 
     with open(os.path.join(OUT, "aux_signal_toy_weak_sg.json")) as f:
         o = json.load(f)["cvxpy_opt"]
@@ -198,6 +202,10 @@ def main():
             per_seed["engineered"].append(evaluate(e_tr, ytr, e_te, yte))
             s_tr, s_te = train_cnn(Xtr, ytr, Xte, epochs=args.epochs, seed=sd)
             per_seed["cnn"].append(evaluate(s_tr, ytr, s_te, yte))
+            dump[f"y_{t}_{sd}"] = yte; dump[f"kind_{t}_{sd}"] = _k
+            dump[f"reactance_{t}_{sd}"] = score_reactance(Xte, grid)
+            dump[f"negseq_{t}_{sd}"] = score_negseq(Xte)
+            dump[f"engineered_{t}_{sd}"] = e_te; dump[f"cnn_{t}_{sd}"] = s_te
         row = dict(delta=t)
         for k in KEYS:
             g_ = lambda f: np.array([r[f] for r in per_seed[k]])
@@ -236,11 +244,13 @@ def main():
                  "In-zone vs out-of-zone, fault resistance and inverter infeed, mean ± sd over seeds")
     ax.grid(alpha=.3); ax.legend(fontsize=8, loc="upper left", bbox_to_anchor=(0.02, 0.48)); ax.set_ylim(0.45, 1.03)
     plt.tight_layout()
-    png = os.path.join(OUT, "zone_sweep.png")
+    png = os.path.join(args.out, args.tag + ".png")
     plt.savefig(png, dpi=140)
     json.dump(dict(far=FAR, magnitudes=mags, n_train=n_tr, n_test=n_te,
                    design_delta=[design_delta.real, design_delta.imag, abs(design_delta)],
-                   rows=rows), open(os.path.join(OUT, "zone_sweep.json"), "w"), indent=2)
+                   rows=rows, args=vars(args)),
+              open(os.path.join(args.out, args.tag + ".json"), "w"), indent=2)
+    np.savez_compressed(os.path.join(args.out, args.tag + "_scores.npz"), **dump)
     print("saved", os.path.relpath(png))
 
 
