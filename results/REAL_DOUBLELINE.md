@@ -1,13 +1,14 @@
 # First result on real EMT data: EvEMTBench `benchmark-DoubleLine`
 
-> **Review correction (branch `review-fixes`, see [REVIEW.md](../REVIEW.md) N2).** The zone-1 setting
-> below has no directional element: the sign of the loop reactance decides direction
-> (`zone_model.py:206`). On faults at its own bus 1 (reverse, not in this document's held-out sets) it trips
-> **26.7 %** at 40 ms and **60 % of 1 ohm faults** (`src/review/real_zone_rerun.py`,
-> [review/real_zone_rerun.json](review/real_zone_rerun.json)). "Perfectly secure" held only because reverse
-> faults were not evaluated. With a mimic filter, separate directional element and rule-set quadrilateral
-> (rung R2): reverse 0 %, out-of-zone 0 %, parallel 0 % (was 2.7 %), dependability 60.0 % (was 83.3 %;
-> 40 ohm faults at about 38 ohm apparent resistance fall outside the ~20 ohm rule-based resistive reach).
+> **Review correction (see [REVIEW.md](../REVIEW.md), finding N2).** The claim below that the zone-1 setting is
+> **"perfectly secure" is contradicted**: reverse faults were not evaluated. The element has no directional element;
+> the sign of the loop reactance decides direction (`zone_model.py:206`). On faults at its own bus 1 it trips
+> **12 of 45 (26.7 %) at 40 ms, including 60 % of 1 ohm faults** (`src/review/real_zone_rerun.py`,
+> [review/real_zone_rerun.json](review/real_zone_rerun.json); 17.8-20 % at 20 ms with the 0.1 % measurement chain).
+> With a mimic filter, a separate directional element and a rule-set quadrilateral (rung R2): reverse 0/45,
+> out-of-zone 0 %, parallel line 0 % (was 2.7 %), dependability 60.0 % (was 83.3 %; 40 ohm faults at about 38 ohm
+> apparent resistance fall outside the ~20 ohm rule-based resistive reach). Only 24 switching events exist in this
+> grid, so "0 % of switching events" bounds the true rate only below 11.7 % (one-sided 95 %).
 
 > **Correction, 17 Sep 2026.** The learned-detector numbers below (engineered model, CNN) were obtained on noise-free records with 80 ms windows and in-sample thresholds. The noise-free records let models read the label from pre-fault samples, so the in-distribution 1.000 scores are not valid. The zone-1 setting results are unaffected. See [REAL_ML.md](REAL_ML.md).
 
