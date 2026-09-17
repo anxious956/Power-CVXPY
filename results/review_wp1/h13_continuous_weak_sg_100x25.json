@@ -1,0 +1,77 @@
+{
+  "settings": {
+    "presets": [
+      "weak_sg"
+    ],
+    "nm": 100,
+    "nmr": 25,
+    "nmc": 2000,
+    "rounds": 4
+  },
+  "weak_sg": {
+    "reported": [
+      [
+        0.4725416047022092,
+        -0.20261044826170205
+      ],
+      0.5141464401504174
+    ],
+    "grid_unseparated_at_reported": 0,
+    "dense_span_0.15_0.95": {
+      "points": 5000,
+      "unseparated": 0,
+      "by_type": {
+        "ag": 0,
+        "ab": 0
+      },
+      "m_range": null,
+      "mr_range": null
+    },
+    "dense_full_0.01_0.99": {
+      "points": 5000,
+      "unseparated": 0,
+      "by_type": {
+        "ag": 0,
+        "ab": 0
+      },
+      "m_range": null,
+      "mr_range": null
+    },
+    "mc_linear": {
+      "n": 2000,
+      "ambiguous_fault_samples": 0,
+      "ambiguous_examples": [],
+      "normal_samples_outside_N": 0
+    },
+    "mc_true": {
+      "n": 2000,
+      "ambiguous_fault_samples": 0,
+      "ambiguous_examples": [],
+      "normal_samples_outside_N": 1
+    },
+    "refinement": [
+      {
+        "round": 0,
+        "delta": [
+          [
+            0.463220713661235,
+            -0.1986139505255573
+          ],
+          0.5040048917502611,
+          -23.208076841206736
+        ],
+        "n_faults": 30,
+        "dense_unseparated": 0,
+        "dense_min_margin": Infinity
+      }
+    ],
+    "refined_full_range_unseparated": 5,
+    "refined_mc_linear": {
+      "n": 2000,
+      "ambiguous_fault_samples": 0,
+      "ambiguous_examples": [],
+      "normal_samples_outside_N": 0
+    },
+    "runtime_s": 36.66766119003296
+  }
+}

@@ -1,0 +1,1906 @@
+{
+  "easy": {
+    "preset": "easy",
+    "reported": [
+      [
+        1.979226611601139e-11,
+        -7.334804006652648e-11
+      ],
+      7.597149978516803e-11
+    ],
+    "grid_points_in_disk": 70681,
+    "separating_fraction_outer_polygons": 1.0,
+    "separating_components": 1,
+    "nonseparating_components": 0,
+    "bracket_margin0": {
+      "lower": 0.0,
+      "upper": 0.0,
+      "upper_point": [
+        0.0,
+        0.0
+      ],
+      "lower_point": [
+        0.0,
+        0.0
+      ],
+      "best_verified": 0.0,
+      "best_point": [
+        0.0,
+        0.0
+      ]
+    },
+    "global_min": [
+      [
+        0.0,
+        0.0
+      ],
+      0.0,
+      0.0
+    ],
+    "lp_min_margin_at_global": 0.416202222428143,
+    "reported_over_global": null,
+    "bracket_margin_1e-3": {
+      "lower": 0.0,
+      "upper": 0.0,
+      "upper_point": [
+        0.0,
+        0.0
+      ],
+      "lower_point": [
+        0.0,
+        0.0
+      ],
+      "best_verified": 0.0,
+      "best_point": [
+        0.0,
+        0.0
+      ]
+    },
+    "global_min_margin_1e-3": [
+      [
+        0.0,
+        0.0
+      ],
+      0.0,
+      0.0
+    ],
+    "t_polygons_grid_s": 0.22557806968688965,
+    "starts": [
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.16,
+          0.88
+        ],
+        "author_d": [
+          1.979226611600028e-11,
+          -7.334804006647801e-11
+        ],
+        "author_abs": 7.597149978511834e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.8,
+          -1.11
+        ],
+        "author_d": [
+          1.9792266115986457e-11,
+          -7.334804006641728e-11
+        ],
+        "author_abs": 7.597149978505611e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.21,
+          -1.36
+        ],
+        "author_d": [
+          1.979226611600285e-11,
+          -7.334804006648826e-11
+        ],
+        "author_abs": 7.597149978512891e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -1.13,
+          0.03
+        ],
+        "author_d": [
+          1.9792266115977695e-11,
+          -7.334804006638514e-11
+        ],
+        "author_abs": 7.59714997850228e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.08,
+          -0.46
+        ],
+        "author_d": [
+          1.9792266116001363e-11,
+          -7.334804006648234e-11
+        ],
+        "author_abs": 7.597149978512281e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.24,
+          -0.56
+        ],
+        "author_d": [
+          1.979226611601021e-11,
+          -7.334804006652042e-11
+        ],
+        "author_abs": 7.597149978516187e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.83,
+          -1.24
+        ],
+        "author_d": [
+          1.979226611597486e-11,
+          -7.334804006637941e-11
+        ],
+        "author_abs": 7.597149978501653e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -1.36,
+          0.33
+        ],
+        "author_d": [
+          1.97922661159901e-11,
+          -7.334804006643881e-11
+        ],
+        "author_abs": 7.597149978507785e-11,
+        "author_status": "converged",
+        "author_min_margin": 0.4162022224377939,
+        "normalized_d": [
+          1.8190715623289416e-11,
+          -1.5301696935441909e-10
+        ],
+        "normalized_abs": 1.5409443547804902e-10,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.41620222244505256
+      }
+    ],
+    "t_starts_s": 39.917746782302856
+  },
+  "weak_sg": {
+    "preset": "weak_sg",
+    "reported": [
+      [
+        0.4725416047022092,
+        -0.20261044826170205
+      ],
+      0.5141464401504174
+    ],
+    "grid_points_in_disk": 70681,
+    "separating_fraction_outer_polygons": 0.33385209603712457,
+    "separating_components": 1,
+    "nonseparating_components": 2,
+    "bracket_margin0": {
+      "lower": 0.5040038773521136,
+      "upper": 0.5102397401405819,
+      "upper_point": [
+        0.4661271969141697,
+        -0.20753319906864892
+      ],
+      "lower_point": [
+        0.4632197813383745,
+        -0.19861355080354648
+      ],
+      "polished": 0.5040048917502611,
+      "polished_point": [
+        0.463220713661235,
+        -0.1986139505255573
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0001412747984162e-07,
+      "best_verified": 0.5040048917502611,
+      "best_point": [
+        0.463220713661235,
+        -0.1986139505255573
+      ]
+    },
+    "global_min": [
+      [
+        0.463220713661235,
+        -0.1986139505255573
+      ],
+      0.5040048917502611,
+      -23.208076841206736
+    ],
+    "lp_min_margin_at_global": 1.0001412747984162e-07,
+    "reported_over_global": 1.0201219245411244,
+    "bracket_margin_1e-3": {
+      "lower": 0.5141464259412973,
+      "upper": 0.5205215023972525,
+      "upper_point": [
+        0.4755200541203123,
+        -0.2117151685338305
+      ],
+      "lower_point": [
+        0.4725415928378785,
+        -0.20261043987527033
+      ],
+      "polished": 0.5141474403359019,
+      "polished_point": [
+        0.4725425251597744,
+        -0.2026108395905404
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.000137781759225e-07,
+      "best_verified": 0.5141474403359019,
+      "best_point": [
+        0.4725425251597744,
+        -0.2026108395905404
+      ]
+    },
+    "global_min_margin_1e-3": [
+      [
+        0.4725425251597744,
+        -0.2026108395905404
+      ],
+      0.5141474403359019,
+      -23.20807684061567
+    ],
+    "t_polygons_grid_s": 13.44539761543274,
+    "starts": [
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.99,
+          0.29
+        ],
+        "author_d": [
+          0.4725416047018988,
+          -0.20261044826147256
+        ],
+        "author_abs": 0.5141464401500417,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000014009047542,
+        "normalized_d": [
+          0.47254159297862447,
+          -0.20261043990163394
+        ],
+        "normalized_abs": 0.5141464260810432,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000137782017
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.96,
+          -1.12
+        ],
+        "author_d": [
+          -0.1623266653348227,
+          -0.6058126607559373
+        ],
+        "author_abs": 0.627183327433783,
+        "author_status": "converged",
+        "author_min_margin": 0.0008573597999600132,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.28,
+          -1.34
+        ],
+        "author_d": [
+          -0.07338670964515397,
+          -0.622454983963726
+        ],
+        "author_abs": 0.6267661575211481,
+        "author_status": "converged",
+        "author_min_margin": 0.0006480114432331934,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.43,
+          -0.45
+        ],
+        "author_d": [
+          0.47254160470180234,
+          -0.2026104482614024
+        ],
+        "author_abs": 0.5141464401499254,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000014008932911,
+        "normalized_d": [
+          0.47254159297862447,
+          -0.20261043990163394
+        ],
+        "normalized_abs": 0.5141464260810432,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000137782017
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.56,
+          -0.67
+        ],
+        "author_d": [
+          -0.16232666533490206,
+          -0.6058126607559554
+        ],
+        "author_abs": 0.6271833274338211,
+        "author_status": "converged",
+        "author_min_margin": 0.0008573597999631204,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -1.28,
+          -0.71
+        ],
+        "author_d": [
+          -0.16232666533484374,
+          -0.6058126607558889
+        ],
+        "author_abs": 0.6271833274337417,
+        "author_status": "converged",
+        "author_min_margin": 0.0008573597999566589,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.8,
+          -1.23
+        ],
+        "author_d": [
+          -0.16232666533476778,
+          -0.6058126607559194
+        ],
+        "author_abs": 0.6271833274337516,
+        "author_status": "converged",
+        "author_min_margin": 0.0008573597999574462,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -1.39,
+          -0.24
+        ],
+        "author_d": [
+          -0.16232666533431706,
+          -0.6058126607563571
+        ],
+        "author_abs": 0.6271833274340576,
+        "author_status": "converged",
+        "author_min_margin": 0.000857359799982466,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.8,
+          0.37
+        ],
+        "author_d": [
+          -0.8,
+          0.37
+        ],
+        "author_abs": 0.8814193099768124,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.63,
+          0.56
+        ],
+        "author_d": [
+          -0.63,
+          0.56
+        ],
+        "author_abs": 0.8429116205154608,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.92,
+          0.77
+        ],
+        "author_d": [
+          -0.92,
+          0.77
+        ],
+        "author_abs": 1.1997082978791136,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.16277835858198772,
+          -0.6074983140267829
+        ],
+        "normalized_abs": 0.6289284502771598,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000012153787
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          0.35,
+          0.4
+        ],
+        "author_d": [
+          0.35,
+          0.4
+        ],
+        "author_abs": 0.5315072906367325,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          0.47254159297862447,
+          -0.20261043990163394
+        ],
+        "normalized_abs": 0.5141464260810432,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000137782017
+      }
+    ],
+    "t_starts_s": 63.67247223854065
+  },
+  "weak_sg_eps12": {
+    "preset": "weak_sg_eps12",
+    "reported": [
+      [
+        0.0,
+        0.4
+      ],
+      0.4
+    ],
+    "grid_points_in_disk": 70681,
+    "separating_fraction_outer_polygons": 0.007173073386058488,
+    "separating_components": 1,
+    "nonseparating_components": 1,
+    "bracket_margin0": {
+      "lower": 1.3185855170746397,
+      "upper": 1.3422039424779493,
+      "upper_point": [
+        1.2740010751995012,
+        -0.42241293019256015
+      ],
+      "lower_point": [
+        1.2450177811307745,
+        -0.4342792770869886
+      ],
+      "polished": 1.318586580576839,
+      "polished_point": [
+        1.2450190046997307,
+        -0.43427899835683187
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0004565376142693e-07,
+      "best_verified": 1.318586580576839,
+      "best_point": [
+        1.2450190046997307,
+        -0.43427899835683187
+      ]
+    },
+    "global_min": [
+      [
+        1.2450190046997307,
+        -0.43427899835683187
+      ],
+      1.318586580576839,
+      -19.22944331573206
+    ],
+    "lp_min_margin_at_global": 1.0004565376142693e-07,
+    "reported_over_global": 0.3033551272947226,
+    "bracket_margin_1e-3": {
+      "lower": 1.3292316402997548,
+      "upper": 1.353626704955046,
+      "upper_point": [
+        1.2868593608720382,
+        -0.419878841695392
+      ],
+      "lower_point": [
+        1.2572440628989807,
+        -0.43150216671442165
+      ],
+      "polished": 1.3292327065679814,
+      "polished_point": [
+        1.2572452855376142,
+        -0.43150188899179187
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0000049710523484e-07,
+      "best_verified": 1.3292327065679814,
+      "best_point": [
+        1.2572452855376142,
+        -0.43150188899179187
+      ]
+    },
+    "global_min_margin_1e-3": [
+      [
+        1.2572452855376142,
+        -0.43150188899179187
+      ],
+      1.3292327065679814,
+      -18.942844595233538
+    ],
+    "t_polygons_grid_s": 10.825008153915405,
+    "starts": [
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.49,
+          -0.12
+        ],
+        "author_d": [
+          1.2572440839656274,
+          -0.4315021619228523
+        ],
+        "author_abs": 1.3292316586700246,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228124491,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.31,
+          -0.41
+        ],
+        "author_d": [
+          1.2572440839656434,
+          -0.4315021619228277
+        ],
+        "author_abs": 1.3292316586700317,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228128932,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.34,
+          -0.43
+        ],
+        "author_d": [
+          1.2572440839656198,
+          -0.43150216192287427
+        ],
+        "author_abs": 1.3292316586700246,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228125602,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.44,
+          -0.27
+        ],
+        "author_d": [
+          1.257244083965621,
+          -0.4315021619228696
+        ],
+        "author_abs": 1.3292316586700241,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228125047,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.41,
+          -0.34
+        ],
+        "author_d": [
+          1.2572440839656247,
+          -0.43150216192286095
+        ],
+        "author_abs": 1.329231658670025,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228125047,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.35,
+          -0.35
+        ],
+        "author_d": [
+          1.2572440839656402,
+          -0.4315021619228234
+        ],
+        "author_abs": 1.3292316586700275,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228124491,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.3,
+          -0.42
+        ],
+        "author_d": [
+          1.2572440839657142,
+          -0.4315021619228659
+        ],
+        "author_abs": 1.3292316586701112,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228207758,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.45,
+          -0.22
+        ],
+        "author_d": [
+          1.2572440839656094,
+          -0.4315021619228977
+        ],
+        "author_abs": 1.3292316586700224,
+        "author_status": "converged",
+        "author_min_margin": 0.0010000017228125602,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          0.24,
+          0.11
+        ],
+        "author_d": [
+          0.24,
+          0.11
+        ],
+        "author_abs": 0.2640075756488817,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          0.14,
+          0.32
+        ],
+        "author_d": [
+          0.14,
+          0.32
+        ],
+        "author_abs": 0.3492849839314596,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          1.2572440629094368,
+          -0.43150216670282915
+        ],
+        "normalized_abs": 1.3292316403058813,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000004971032
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.41,
+          0.56
+        ],
+        "author_d": [
+          -0.41,
+          0.56
+        ],
+        "author_abs": 0.6940461079784254,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.41,
+          0.56
+        ],
+        "normalized_abs": 0.6940461079784254,
+        "normalized_status": "qp_infeasible_it0",
+        "normalized_min_margin": 0.0
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.28,
+          0.15
+        ],
+        "author_d": [
+          -0.28,
+          0.15
+        ],
+        "author_abs": 0.31764760348537185,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.28,
+          0.15
+        ],
+        "normalized_abs": 0.31764760348537185,
+        "normalized_status": "qp_infeasible_it0",
+        "normalized_min_margin": 0.0
+      }
+    ],
+    "t_starts_s": 53.11339569091797
+  },
+  "weak_sg_noisy": {
+    "preset": "weak_sg_noisy",
+    "reported": [
+      [
+        -0.4462578368478032,
+        -0.5352509022168502
+      ],
+      0.6968784580341343
+    ],
+    "grid_points_in_disk": 70681,
+    "separating_fraction_outer_polygons": 0.12103677084364964,
+    "separating_components": 2,
+    "nonseparating_components": 1,
+    "bracket_margin0": {
+      "lower": 0.6908028194449303,
+      "upper": 0.699642824907736,
+      "upper_point": [
+        -0.4504510555000081,
+        -0.5353446824652371
+      ],
+      "lower_point": [
+        -0.4421658841033338,
+        -0.5307521703094412
+      ],
+      "polished": 0.6908035088135335,
+      "polished_point": [
+        -0.4421664277765856,
+        -0.5307526146298133
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0000404854215716e-07,
+      "best_verified": 0.6908035088135335,
+      "best_point": [
+        -0.4421664277765856,
+        -0.5307526146298133
+      ]
+    },
+    "global_min": [
+      [
+        -0.4421664277765856,
+        -0.5307526146298133
+      ],
+      0.6908035088135335,
+      -129.79745243219438
+    ],
+    "lp_min_margin_at_global": 1.0000404854215716e-07,
+    "reported_over_global": 1.0087940335321033,
+    "bracket_margin_1e-3": {
+      "lower": 0.6976972915140102,
+      "upper": 0.7066835448292157,
+      "upper_point": [
+        -0.45603434892909883,
+        -0.5398465570226405
+      ],
+      "lower_point": [
+        -0.44760205497399624,
+        -0.5351952082829603
+      ],
+      "polished": 0.6976979811313361,
+      "polished_point": [
+        -0.44760259864179186,
+        -0.5351956526017912
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0000367017815037e-07,
+      "best_verified": 0.6976979811313361,
+      "best_point": [
+        -0.44760259864179186,
+        -0.5351956526017912
+      ]
+    },
+    "global_min_margin_1e-3": [
+      [
+        -0.44760259864179186,
+        -0.5351956526017912
+      ],
+      0.6976979811313361,
+      -129.9069032179455
+    ],
+    "t_polygons_grid_s": 14.865068197250366,
+    "starts": [
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.07,
+          0.56
+        ],
+        "author_d": [
+          0.7883926981277481,
+          0.046922521101420124
+        ],
+        "author_abs": 0.7897878002651496,
+        "author_status": "converged",
+        "author_min_margin": 0.0008149134207421777,
+        "normalized_d": [
+          0.7895786364357786,
+          0.047136200187706
+        ],
+        "normalized_abs": 0.79098435160496,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000001218096
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.66,
+          -1.08
+        ],
+        "author_d": [
+          -0.4462578368478008,
+          -0.5352509022169657
+        ],
+        "author_abs": 0.6968784580342214,
+        "author_status": "converged",
+        "author_min_margin": 0.0006798754871353563,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.85,
+          -1.22
+        ],
+        "author_d": [
+          -0.44625783684803527,
+          -0.5352509022174194
+        ],
+        "author_abs": 0.69687845803472,
+        "author_status": "converged",
+        "author_min_margin": 0.0006798754871619461,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.48,
+          -0.56
+        ],
+        "author_d": [
+          -0.4462578368475881,
+          -0.5352509022160311
+        ],
+        "author_abs": 0.6968784580333675,
+        "author_status": "converged",
+        "author_min_margin": 0.0006798754871442381,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.65,
+          -0.76
+        ],
+        "author_d": [
+          -0.4462578368479571,
+          -0.5352509022174012
+        ],
+        "author_abs": 0.6968784580346561,
+        "author_status": "converged",
+        "author_min_margin": 0.0006798754871447099,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.86,
+          -0.8
+        ],
+        "author_d": [
+          -0.44625783684724635,
+          -0.5352509022147628
+        ],
+        "author_abs": 0.6968784580321744,
+        "author_status": "converged",
+        "author_min_margin": 0.0006798754871438217,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.83,
+          -1.15
+        ],
+        "author_d": [
+          -0.446257836847257,
+          -0.5352509022146301
+        ],
+        "author_abs": 0.6968784580320794,
+        "author_status": "converged",
+        "author_min_margin": 0.0006798754871547019,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          1.04,
+          0.23
+        ],
+        "author_d": [
+          0.7883926981279082,
+          0.046922521101773716
+        ],
+        "author_abs": 0.7897878002653305,
+        "author_status": "converged",
+        "author_min_margin": 0.0008149134207529191,
+        "normalized_d": [
+          0.7895786364357786,
+          0.047136200187706
+        ],
+        "normalized_abs": 0.79098435160496,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000001218096
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.57,
+          0.11
+        ],
+        "author_d": [
+          -0.57,
+          0.11
+        ],
+        "author_abs": 0.5805170109479997,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.67,
+          0.34
+        ],
+        "author_d": [
+          -0.67,
+          0.34
+        ],
+        "author_abs": 0.7513321502504735,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.67,
+          0.34
+        ],
+        "normalized_abs": 0.7513321502504735,
+        "normalized_status": "qp_infeasible_it0",
+        "normalized_min_margin": 0.0
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.88,
+          0.6
+        ],
+        "author_d": [
+          -0.88,
+          0.6
+        ],
+        "author_abs": 1.0650821564555477,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.88,
+          0.6
+        ],
+        "normalized_abs": 1.0650821564555477,
+        "normalized_status": "qp_infeasible_it0",
+        "normalized_min_margin": 0.0
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -1.14,
+          0.15
+        ],
+        "author_d": [
+          -1.14,
+          0.15
+        ],
+        "author_abs": 1.1498260738042079,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          -0.4476020550247302,
+          -0.5351952082980872
+        ],
+        "normalized_abs": 0.6976972915581617,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000036903267
+      }
+    ],
+    "t_starts_s": 55.66641092300415
+  },
+  "all_ibr": {
+    "preset": "all_ibr",
+    "reported": [
+      [
+        5.099688541451933e-10,
+        -1.288403221960614e-10
+      ],
+      5.259924531984717e-10
+    ],
+    "grid_points_in_disk": 70681,
+    "separating_fraction_outer_polygons": 0.5148625514636183,
+    "separating_components": 1,
+    "nonseparating_components": 3,
+    "bracket_margin0": {
+      "lower": 0.0,
+      "upper": 0.0,
+      "upper_point": [
+        0.0,
+        0.0
+      ],
+      "lower_point": [
+        0.0,
+        0.0
+      ],
+      "best_verified": 0.0,
+      "best_point": [
+        0.0,
+        0.0
+      ]
+    },
+    "global_min": [
+      [
+        0.0,
+        0.0
+      ],
+      0.0,
+      0.0
+    ],
+    "lp_min_margin_at_global": 0.1430736709901993,
+    "reported_over_global": null,
+    "bracket_margin_1e-3": {
+      "lower": 0.0,
+      "upper": 0.0,
+      "upper_point": [
+        0.0,
+        0.0
+      ],
+      "lower_point": [
+        0.0,
+        0.0
+      ],
+      "best_verified": 0.0,
+      "best_point": [
+        0.0,
+        0.0
+      ]
+    },
+    "global_min_margin_1e-3": [
+      [
+        0.0,
+        0.0
+      ],
+      0.0,
+      0.0
+    ],
+    "t_polygons_grid_s": 10.500165224075317,
+    "starts": [
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.34,
+          0.99
+        ],
+        "author_d": [
+          5.099688541984284e-10,
+          -1.2884032220944547e-10
+        ],
+        "author_abs": 5.259924532533634e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.23,
+          -1.23
+        ],
+        "author_d": [
+          5.099688537714511e-10,
+          -1.2884032210370705e-10
+        ],
+        "author_abs": 5.25992452813493e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.06,
+          -1.41
+        ],
+        "author_d": [
+          5.099688539842663e-10,
+          -1.288403221559598e-10
+        ],
+        "author_abs": 5.259924530326242e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.02,
+          0.01
+        ],
+        "author_d": [
+          5.099688541671774e-10,
+          -1.2884032220137193e-10
+        ],
+        "author_abs": 5.259924532210868e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.45,
+          -0.58
+        ],
+        "author_d": [
+          5.099688540360512e-10,
+          -1.288403221688705e-10
+        ],
+        "author_abs": 5.259924530859941e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.26,
+          -0.69
+        ],
+        "author_d": [
+          5.099688541760113e-10,
+          -1.288403222038052e-10
+        ],
+        "author_abs": 5.259924532302476e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.31,
+          -1.33
+        ],
+        "author_d": [
+          5.099688541809304e-10,
+          -1.2884032220507277e-10
+        ],
+        "author_abs": 5.259924532353274e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.09,
+          0.38
+        ],
+        "author_d": [
+          5.099688540281825e-10,
+          -1.288403221676413e-10
+        ],
+        "author_abs": 5.25992453078064e-10,
+        "author_status": "converged",
+        "author_min_margin": 0.1430736711349386,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          0.95,
+          0.1
+        ],
+        "author_d": [
+          0.95,
+          0.1
+        ],
+        "author_abs": 0.95524865872714,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -1.08,
+          0.28
+        ],
+        "author_d": [
+          -1.08,
+          0.28
+        ],
+        "author_abs": 1.1157060544785082,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.88,
+          0.48
+        ],
+        "author_d": [
+          -0.88,
+          0.48
+        ],
+        "author_abs": 1.0023971268913334,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          1.3,
+          0.13
+        ],
+        "author_d": [
+          1.3,
+          0.13
+        ],
+        "author_abs": 1.3064838307457158,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          8.501861110324909e-11,
+          -2.2620915438801056e-11
+        ],
+        "normalized_abs": 8.797653124109235e-11,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.14307367101441057
+      }
+    ],
+    "t_starts_s": 51.1942822933197
+  },
+  "all_ibr_hard": {
+    "preset": "all_ibr_hard",
+    "reported": [
+      [
+        0.1655247195746495,
+        -0.37299455850846774
+      ],
+      0.4080727551150568
+    ],
+    "grid_points_in_disk": 70681,
+    "separating_fraction_outer_polygons": 0.02430639068490825,
+    "separating_components": 5,
+    "nonseparating_components": 1,
+    "bracket_margin0": {
+      "lower": 0.38629331607650286,
+      "upper": 0.4990404718976709,
+      "upper_point": [
+        0.13476244480509703,
+        -0.4805002352361581
+      ],
+      "lower_point": [
+        0.1757739294703405,
+        -0.3439855400506491
+      ],
+      "polished": 0.38629543373794983,
+      "polished_point": [
+        0.17577281553792892,
+        -0.34398848737226656
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0000916395110381e-07,
+      "best_verified": 0.38629543373794983,
+      "best_point": [
+        0.17577281553792892,
+        -0.34398848737226656
+      ]
+    },
+    "global_min": [
+      [
+        0.17577281553792892,
+        -0.34398848737226656
+      ],
+      0.38629543373794983,
+      -62.933667784835926
+    ],
+    "lp_min_margin_at_global": 1.0000916395110381e-07,
+    "reported_over_global": 1.0563747833267945,
+    "bracket_margin_1e-3": {
+      "lower": 0.41458233908465825,
+      "upper": 0.5391137255053458,
+      "upper_point": [
+        0.11984651478476892,
+        -0.5256238407094921
+      ],
+      "lower_point": [
+        0.16250546759382062,
+        -0.38140593713656357
+      ],
+      "polished": 0.4145856916567095,
+      "polished_point": [
+        0.1625039992927691,
+        -0.3814102069168154
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0001405866683077e-07,
+      "best_verified": 0.4145856916567095,
+      "best_point": [
+        0.1625039992927691,
+        -0.3814102069168154
+      ]
+    },
+    "global_min_margin_1e-3": [
+      [
+        0.1625039992927691,
+        -0.3814102069168154
+      ],
+      0.4145856916567095,
+      -66.92303918194803
+    ],
+    "t_polygons_grid_s": 16.04498052597046,
+    "starts": [
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.02,
+          -0.9
+        ],
+        "author_d": [
+          0.1655247195746299,
+          -0.37299455850855234
+        ],
+        "author_abs": 0.4080727551151262,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591806119,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.15,
+          -1.47
+        ],
+        "author_d": [
+          0.16552471957455409,
+          -0.372994558508771
+        ],
+        "author_abs": 0.4080727551152953,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591859806,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.1,
+          -1.49
+        ],
+        "author_d": [
+          0.16552471957466333,
+          -0.3729945585084338
+        ],
+        "author_abs": 0.4080727551150314,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591801088,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.23,
+          -1.3
+        ],
+        "author_d": [
+          0.16552471957466194,
+          -0.3729945585084448
+        ],
+        "author_abs": 0.40807275511504093,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591796146,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.08,
+          -1.4
+        ],
+        "author_d": [
+          0.16552471957463025,
+          -0.3729945585084938
+        ],
+        "author_abs": 0.40807275511507285,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591853808,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.21,
+          -1.41
+        ],
+        "author_d": [
+          0.16552471957459924,
+          -0.3729945585086086
+        ],
+        "author_abs": 0.40807275511516516,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591855024,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          0.1,
+          -1.48
+        ],
+        "author_d": [
+          0.1655247195746172,
+          -0.3729945585085663
+        ],
+        "author_abs": 0.40807275511513375,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591834608,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "separating",
+        "d0": [
+          -0.16,
+          -1.18
+        ],
+        "author_d": [
+          0.1655247195746246,
+          -0.3729945585085322
+        ],
+        "author_abs": 0.4080727551151056,
+        "author_status": "converged",
+        "author_min_margin": 0.0007638799591839195,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -1.0,
+          0.13
+        ],
+        "author_d": [
+          -1.0,
+          0.13
+        ],
+        "author_abs": 1.0084145972763385,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          0.16250542555897235,
+          -0.38140609383555474
+        ],
+        "normalized_abs": 0.41458246676746796,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.001000000014057388
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          0.88,
+          0.33
+        ],
+        "author_d": [
+          0.88,
+          0.33
+        ],
+        "author_abs": 0.9398404119849284,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          0.88,
+          0.33
+        ],
+        "normalized_abs": 0.9398404119849284,
+        "normalized_status": "qp_infeasible_it0",
+        "normalized_min_margin": 0.0
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          -0.7,
+          0.57
+        ],
+        "author_d": [
+          -0.7,
+          0.57
+        ],
+        "author_abs": 0.9027181176868003,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          0.6867060645600381,
+          0.9448669876348965
+        ],
+        "normalized_abs": 1.168049161390812,
+        "normalized_status": "converged",
+        "normalized_min_margin": 0.0010000000001999965
+      },
+      {
+        "start_kind": "non-separating",
+        "d0": [
+          1.27,
+          0.16
+        ],
+        "author_d": [
+          1.27,
+          0.16
+        ],
+        "author_abs": 1.2800390619039719,
+        "author_status": "qp_infeasible_it0",
+        "author_min_margin": 0.0,
+        "normalized_d": [
+          1.27,
+          0.16
+        ],
+        "normalized_abs": 1.2800390619039719,
+        "normalized_status": "qp_infeasible_it0",
+        "normalized_min_margin": 0.0
+      }
+    ],
+    "t_starts_s": 72.9609055519104
+  }
+}

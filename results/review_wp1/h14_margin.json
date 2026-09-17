@@ -1,0 +1,757 @@
+{
+  "weak_sg": {
+    "eps": 0.08,
+    "reported": [
+      [
+        0.4725416047022092,
+        -0.20261044826170205
+      ],
+      0.5141464401504174
+    ],
+    "margin_min_pu": 0.0010000014009417801,
+    "margin_min_over_eps": 0.012500017511772252,
+    "worst_case": [
+      "ag",
+      0.95,
+      1.0
+    ],
+    "n_cases_margin_below_0p01eps": 0,
+    "noise_tolerance_eps_max": 0.08050000070047089,
+    "global_min_margin0": {
+      "lower": 0.5040038773521136,
+      "upper": 0.5102397401405819,
+      "upper_point": [
+        0.4661271969141697,
+        -0.20753319906864892
+      ],
+      "lower_point": [
+        0.4632197813383745,
+        -0.19861355080354648
+      ],
+      "polished": 0.5040048917502611,
+      "polished_point": [
+        0.463220713661235,
+        -0.1986139505255573
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0001412747984162e-07,
+      "best_verified": 0.5040048917502611,
+      "best_point": [
+        0.463220713661235,
+        -0.1986139505255573
+      ]
+    },
+    "redesign": [
+      {
+        "rho": 0.1,
+        "mu_pu": 0.016,
+        "bracket": {
+          "lower": 0.6662846547790533,
+          "upper": 0.6747479362473106,
+          "upper_point": [
+            0.6164129122124498,
+            -0.27444471051155517
+          ],
+          "lower_point": [
+            0.612368765330438,
+            -0.26256377595113367
+          ],
+          "polished": 0.6662856691412451,
+          "polished_point": [
+            0.612369697681045,
+            -0.26256417551719097
+          ],
+          "polished_status": "converged",
+          "polished_margin": 1.0001058242670169e-07,
+          "best_verified": 0.6662856691412451,
+          "best_point": [
+            0.612369697681045,
+            -0.26256417551719097
+          ]
+        },
+        "global_min": [
+          [
+            0.612369697681045,
+            -0.26256417551719097
+          ],
+          0.6662856691412451,
+          -23.20807682864464
+        ],
+        "lp_margin_at_design": 0.016000100010582413,
+        "alternating_from_reported": [
+          [
+            0.6123687654998946,
+            -0.26256377582828533
+          ],
+          0.6662846548863863
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.016000000010582466
+      },
+      {
+        "rho": 0.25,
+        "mu_pu": 0.04,
+        "bracket": {
+          "lower": 0.9097058209194633,
+          "upper": 0.9215102304074035,
+          "upper_point": [
+            0.8418414851598701,
+            -0.37481197767591445
+          ],
+          "lower_point": [
+            0.8360922413185341,
+            -0.35848911367251424
+          ],
+          "polished": 0.9097068351802304,
+          "polished_point": [
+            0.836093173544196,
+            -0.3584895132726003
+          ],
+          "polished_status": "converged",
+          "polished_margin": 1.0000058250914101e-07,
+          "best_verified": 0.9097068351802304,
+          "best_point": [
+            0.836093173544196,
+            -0.3584895132726003
+          ]
+        },
+        "global_min": [
+          [
+            0.836093173544196,
+            -0.3584895132726003
+          ],
+          0.9097068351802304,
+          -23.208076837850133
+        ],
+        "lp_margin_at_design": 0.04000010000058252,
+        "alternating_from_reported": [
+          [
+            0.8360922413630455,
+            -0.35848911358369423
+          ],
+          0.9097058209253714
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.040000000000582514
+      },
+      {
+        "rho": 0.5,
+        "mu_pu": 0.08,
+        "bracket": {
+          "lower": 1.3185855170746397,
+          "upper": 1.3422039424779493,
+          "upper_point": [
+            1.2740010751995012,
+            -0.42241293019256015
+          ],
+          "lower_point": [
+            1.2450177811307745,
+            -0.4342792770869886
+          ],
+          "polished": 1.318586580576839,
+          "polished_point": [
+            1.2450190046997307,
+            -0.43427899835683187
+          ],
+          "polished_status": "converged",
+          "polished_margin": 1.0004565376142693e-07,
+          "best_verified": 1.318586580576839,
+          "best_point": [
+            1.2450190046997307,
+            -0.43427899835683187
+          ]
+        },
+        "global_min": [
+          [
+            1.2450190046997307,
+            -0.43427899835683187
+          ],
+          1.318586580576839,
+          -19.22944331573206
+        ],
+        "lp_margin_at_design": 0.08000010004565375,
+        "alternating_from_reported": [
+          [
+            1.2450177820571733,
+            -0.43427927606121985
+          ],
+          1.3185855176115124
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.08000000004409227
+      }
+    ]
+  },
+  "weak_sg_noisy": {
+    "eps": 0.15,
+    "reported": [
+      [
+        -0.4462578368478032,
+        -0.5352509022168502
+      ],
+      0.6968784580341343
+    ],
+    "margin_min_pu": 0.0006798754871432666,
+    "margin_min_over_eps": 0.0045325032476217775,
+    "worst_case": [
+      "ab",
+      0.95,
+      1.0
+    ],
+    "n_cases_margin_below_0p01eps": 2,
+    "noise_tolerance_eps_max": 0.15033993774357163,
+    "global_min_margin0": {
+      "lower": 0.6908028194449303,
+      "upper": 0.699642824907736,
+      "upper_point": [
+        -0.4504510555000081,
+        -0.5353446824652371
+      ],
+      "lower_point": [
+        -0.4421658841033338,
+        -0.5307521703094412
+      ],
+      "polished": 0.6908035088135335,
+      "polished_point": [
+        -0.4421664277765856,
+        -0.5307526146298133
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0000404854215716e-07,
+      "best_verified": 0.6908035088135335,
+      "best_point": [
+        -0.4421664277765856,
+        -0.5307526146298133
+      ]
+    },
+    "redesign": [
+      {
+        "rho": 0.1,
+        "mu_pu": 0.03,
+        "bracket": {
+          "lower": 0.8984888993681771,
+          "upper": 0.9117562283363209,
+          "upper_point": [
+            -0.6179498583727185,
+            -0.670400919187325
+          ],
+          "lower_point": [
+            -0.6052510102232005,
+            -0.6640433095149996
+          ],
+          "polished": 0.8984895942142889,
+          "polished_point": [
+            -0.6052515541253141,
+            -0.6640437539351224
+          ],
+          "polished_status": "converged",
+          "polished_margin": 1.0002744654791229e-07,
+          "best_verified": 0.8984895942142889,
+          "best_point": [
+            -0.6052515541253141,
+            -0.6640437539351224
+          ]
+        },
+        "global_min": [
+          [
+            -0.6052515541253141,
+            -0.6640437539351224
+          ],
+          0.8984895942142889,
+          -132.34802531659673
+        ],
+        "lp_margin_at_design": 0.03000010002744652,
+        "alternating_from_reported": [
+          [
+            -0.6052510105082288,
+            -0.6640433096313192
+          ],
+          0.8984888996461493
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.03000000002744524
+      },
+      {
+        "rho": 0.25,
+        "mu_pu": 0.075,
+        "bracket": {
+          "lower": 1.2119221409648928,
+          "upper": 1.2310494211880223,
+          "upper_point": [
+            -0.8679297533363013,
+            -0.8730295646087549
+          ],
+          "lower_point": [
+            -0.8498786994030001,
+            -0.8639800183233374
+          ],
+          "polished": 1.2119228390838592,
+          "polished_point": [
+            -0.8498792431865171,
+            -0.8639804626806065
+          ],
+          "polished_status": "converged",
+          "polished_margin": 1.0001293038186532e-07,
+          "best_verified": 1.2119228390838592,
+          "best_point": [
+            -0.8498792431865171,
+            -0.8639804626806065
+          ]
+        },
+        "global_min": [
+          [
+            -0.8498792431865171,
+            -0.8639804626806065
+          ],
+          1.2119228390838592,
+          -134.5285949430176
+        ],
+        "lp_margin_at_design": 0.07500010001293039,
+        "alternating_from_reported": [
+          [
+            -0.8498786995694303,
+            -0.8639800183768092
+          ],
+          1.2119221411197245
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.07500000001293033
+      },
+      {
+        "rho": 0.5,
+        "mu_pu": 0.15,
+        "bracket": {
+          "lower": null,
+          "upper": null,
+          "upper_point": null,
+          "lower_point": null
+        },
+        "global_min": null
+      }
+    ]
+  },
+  "all_ibr_hard": {
+    "eps": 0.15,
+    "reported": [
+      [
+        0.1655247195746495,
+        -0.37299455850846774
+      ],
+      0.4080727551150568
+    ],
+    "margin_min_pu": 0.0007638799591815949,
+    "margin_min_over_eps": 0.005092533061210633,
+    "worst_case": [
+      "ab",
+      0.55,
+      1.0
+    ],
+    "n_cases_margin_below_0p01eps": 9,
+    "noise_tolerance_eps_max": 0.1503819399795908,
+    "global_min_margin0": {
+      "lower": 0.38629331607650286,
+      "upper": 0.4990404718976709,
+      "upper_point": [
+        0.13476244480509703,
+        -0.4805002352361581
+      ],
+      "lower_point": [
+        0.1757739294703405,
+        -0.3439855400506491
+      ],
+      "polished": 0.38629543373794983,
+      "polished_point": [
+        0.17577281553792892,
+        -0.34398848737226656
+      ],
+      "polished_status": "converged",
+      "polished_margin": 1.0000916395110381e-07,
+      "best_verified": 0.38629543373794983,
+      "best_point": [
+        0.17577281553792892,
+        -0.34398848737226656
+      ]
+    },
+    "redesign": [
+      {
+        "rho": 0.1,
+        "mu_pu": 0.03,
+        "bracket": {
+          "lower": 1.3574357485253177,
+          "upper": 1.3627154890923519,
+          "upper_point": [
+            -0.13356933315219305,
+            -1.3561536555469982
+          ],
+          "lower_point": [
+            -0.1453043124320225,
+            -1.3496364207308378
+          ],
+          "polished": 1.3574361498017848,
+          "polished_point": [
+            -0.14530397707469736,
+            -1.3496368604313418
+          ],
+          "polished_status": "converged",
+          "polished_margin": 9.993490973636554e-08,
+          "best_verified": 1.3574361498017848,
+          "best_point": [
+            -0.14530397707469736,
+            -1.3496368604313418
+          ]
+        },
+        "global_min": [
+          [
+            -0.14530397707469736,
+            -1.3496368604313418
+          ],
+          1.3574361498017848,
+          -96.14488276389015
+        ],
+        "lp_margin_at_design": 0.030000099934909707,
+        "alternating_from_reported": [
+          [
+            -0.1453042865327155,
+            -1.3496364312087503
+          ],
+          1.3574357561706827
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.029999999934909906
+      },
+      {
+        "rho": 0.25,
+        "mu_pu": 0.075,
+        "bracket": {
+          "lower": null,
+          "upper": null,
+          "upper_point": null,
+          "lower_point": null
+        },
+        "global_min": null
+      },
+      {
+        "rho": 0.5,
+        "mu_pu": 0.15,
+        "bracket": {
+          "lower": null,
+          "upper": null,
+          "upper_point": null,
+          "lower_point": null
+        },
+        "global_min": null
+      }
+    ]
+  },
+  "easy": {
+    "eps": 0.03,
+    "reported": [
+      [
+        1.979226611601139e-11,
+        -7.334804006652648e-11
+      ],
+      7.597149978516803e-11
+    ],
+    "margin_min_pu": 0.4162022224377939,
+    "margin_min_over_eps": 13.873407414593132,
+    "worst_case": [
+      "ag",
+      0.95,
+      1.0
+    ],
+    "n_cases_margin_below_0p01eps": 0,
+    "noise_tolerance_eps_max": 0.23810111121889696,
+    "global_min_margin0": {
+      "lower": 0.0,
+      "upper": 0.0,
+      "upper_point": [
+        0.0,
+        0.0
+      ],
+      "lower_point": [
+        0.0,
+        0.0
+      ],
+      "best_verified": 0.0,
+      "best_point": [
+        0.0,
+        0.0
+      ]
+    },
+    "redesign": [
+      {
+        "rho": 0.1,
+        "mu_pu": 0.006,
+        "bracket": {
+          "lower": 0.0,
+          "upper": 0.0,
+          "upper_point": [
+            0.0,
+            0.0
+          ],
+          "lower_point": [
+            0.0,
+            0.0
+          ],
+          "best_verified": 0.0,
+          "best_point": [
+            0.0,
+            0.0
+          ]
+        },
+        "global_min": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0,
+          0.0
+        ],
+        "lp_margin_at_design": 0.416202222428143,
+        "alternating_from_reported": [
+          [
+            2.0344995306655575e-11,
+            -1.7108671387419563e-10
+          ],
+          1.7229214288033774e-10
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.4162022224470503
+      },
+      {
+        "rho": 0.25,
+        "mu_pu": 0.015,
+        "bracket": {
+          "lower": 0.0,
+          "upper": 0.0,
+          "upper_point": [
+            0.0,
+            0.0
+          ],
+          "lower_point": [
+            0.0,
+            0.0
+          ],
+          "best_verified": 0.0,
+          "best_point": [
+            0.0,
+            0.0
+          ]
+        },
+        "global_min": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0,
+          0.0
+        ],
+        "lp_margin_at_design": 0.416202222428143,
+        "alternating_from_reported": [
+          [
+            2.4611283571025857e-11,
+            -2.068533401531447e-10
+          ],
+          2.0831231267384562e-10
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.4162022224510047
+      },
+      {
+        "rho": 0.5,
+        "mu_pu": 0.03,
+        "bracket": {
+          "lower": 0.0,
+          "upper": 0.0,
+          "upper_point": [
+            0.0,
+            0.0
+          ],
+          "lower_point": [
+            0.0,
+            0.0
+          ],
+          "best_verified": 0.0,
+          "best_point": [
+            0.0,
+            0.0
+          ]
+        },
+        "global_min": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0,
+          0.0
+        ],
+        "lp_margin_at_design": 0.416202222428143,
+        "alternating_from_reported": [
+          [
+            3.3011373774779634e-11,
+            -2.7722078301387595e-10
+          ],
+          2.7917935692548025e-10
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.4162022224587856
+      }
+    ]
+  },
+  "all_ibr": {
+    "eps": 0.08,
+    "reported": [
+      [
+        5.099688541451933e-10,
+        -1.288403221960614e-10
+      ],
+      5.259924531984717e-10
+    ],
+    "margin_min_pu": 0.1430736711349386,
+    "margin_min_over_eps": 1.7884208891867326,
+    "worst_case": [
+      "ag",
+      0.15,
+      1.0
+    ],
+    "n_cases_margin_below_0p01eps": 0,
+    "noise_tolerance_eps_max": 0.1515368355674693,
+    "global_min_margin0": {
+      "lower": 0.0,
+      "upper": 0.0,
+      "upper_point": [
+        0.0,
+        0.0
+      ],
+      "lower_point": [
+        0.0,
+        0.0
+      ],
+      "best_verified": 0.0,
+      "best_point": [
+        0.0,
+        0.0
+      ]
+    },
+    "redesign": [
+      {
+        "rho": 0.1,
+        "mu_pu": 0.016,
+        "bracket": {
+          "lower": 0.0,
+          "upper": 0.0,
+          "upper_point": [
+            0.0,
+            0.0
+          ],
+          "lower_point": [
+            0.0,
+            0.0
+          ],
+          "best_verified": 0.0,
+          "best_point": [
+            0.0,
+            0.0
+          ]
+        },
+        "global_min": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0,
+          0.0
+        ],
+        "lp_margin_at_design": 0.1430736709901993,
+        "alternating_from_reported": [
+          [
+            1.7636879583922564e-10,
+            -4.703876031889223e-11
+          ],
+          1.8253382458633974e-10
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.14307367104043295
+      },
+      {
+        "rho": 0.25,
+        "mu_pu": 0.04,
+        "bracket": {
+          "lower": 0.0,
+          "upper": 0.0,
+          "upper_point": [
+            0.0,
+            0.0
+          ],
+          "lower_point": [
+            0.0,
+            0.0
+          ],
+          "best_verified": 0.0,
+          "best_point": [
+            0.0,
+            0.0
+          ]
+        },
+        "global_min": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0,
+          0.0
+        ],
+        "lp_margin_at_design": 0.1430736709901993,
+        "alternating_from_reported": [
+          [
+            7.007527225727757e-10,
+            -1.8666040126745153e-10
+          ],
+          7.251872058954734e-10
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.14307367118977202
+      },
+      {
+        "rho": 0.5,
+        "mu_pu": 0.08,
+        "bracket": {
+          "lower": 0.0,
+          "upper": 0.0,
+          "upper_point": [
+            0.0,
+            0.0
+          ],
+          "lower_point": [
+            0.0,
+            0.0
+          ],
+          "best_verified": 0.0,
+          "best_point": [
+            0.0,
+            0.0
+          ]
+        },
+        "global_min": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0,
+          0.0
+        ],
+        "lp_margin_at_design": 0.1430736709901993,
+        "alternating_from_reported": [
+          [
+            7.058552408222262e-09,
+            -1.876501081353428e-09
+          ],
+          7.303726337147421e-09
+        ],
+        "alternating_status": "converged",
+        "alternating_margin": 0.1430736730001949
+      }
+    ]
+  },
+  "runtime_s": 403.3140285015106
+}

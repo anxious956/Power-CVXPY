@@ -1,0 +1,367 @@
+{
+  "imax": 1.2,
+  "base": "IBR rating = 1.0 pu (i0 = 0.9 pu nominal), I_max = 1.2 pu",
+  "presets": {
+    "easy": {
+      "unconstrained": [
+        [
+          0.0,
+          0.0
+        ],
+        0.0
+      ],
+      "max_abs_iplus_linear": 1.0841586599755593,
+      "required_imax_phase_at_unconstrained_linear": 1.0841586599755593,
+      "required_imax_sum_at_unconstrained_linear": 1.0841586599755593,
+      "linear_sum": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.416202222428143
+      },
+      "linear_phase": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.416202222428143
+      },
+      "linear_paper2": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.416202222428143
+      },
+      "max_abs_iplus_true": 1.0500000000000003,
+      "required_imax_phase_at_unconstrained_true": 1.0500000000000003,
+      "required_imax_sum_at_unconstrained_true": 1.0500000000000003,
+      "true_sum": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.416202222428143
+      },
+      "true_phase": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.416202222428143
+      },
+      "true_paper2": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.416202222428143
+      }
+    },
+    "weak_sg": {
+      "unconstrained": [
+        [
+          0.463220713661235,
+          -0.1986139505255573
+        ],
+        0.5040048917502611
+      ],
+      "max_abs_iplus_linear": 1.2300000000000002,
+      "required_imax_phase_at_unconstrained_linear": 1.732915978457615,
+      "required_imax_sum_at_unconstrained_linear": 1.7340048917502613,
+      "linear_sum": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_phase": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_paper2": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "max_abs_iplus_true": 1.2000000000000002,
+      "required_imax_phase_at_unconstrained_true": 1.7040048910302787,
+      "required_imax_sum_at_unconstrained_true": 1.7040048917502613,
+      "true_sum": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_phase": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_paper2": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      }
+    },
+    "weak_sg_eps12": {
+      "unconstrained": [
+        [
+          1.2450190046997307,
+          -0.43427899835683187
+        ],
+        1.318586580576839
+      ],
+      "max_abs_iplus_linear": 1.2300000000000002,
+      "required_imax_phase_at_unconstrained_linear": 2.5416674487719293,
+      "required_imax_sum_at_unconstrained_linear": 2.5485865805768393,
+      "linear_sum": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_phase": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_paper2": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "max_abs_iplus_true": 1.2000000000000002,
+      "required_imax_phase_at_unconstrained_true": 2.518586575196995,
+      "required_imax_sum_at_unconstrained_true": 2.518586580576839,
+      "true_sum": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_phase": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_paper2": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      }
+    },
+    "weak_sg_noisy": {
+      "unconstrained": [
+        [
+          -0.4421664277765856,
+          -0.5307526146298133
+        ],
+        0.6908035088135335
+      ],
+      "max_abs_iplus_linear": 1.5000000000000002,
+      "required_imax_phase_at_unconstrained_linear": 2.1192120379569794,
+      "required_imax_sum_at_unconstrained_linear": 2.190803508813534,
+      "linear_sum": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_phase": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_paper2": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "max_abs_iplus_true": 1.2000000000000002,
+      "required_imax_phase_at_unconstrained_true": 1.8908034944123902,
+      "required_imax_sum_at_unconstrained_true": 1.8908035088135335,
+      "true_sum": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_phase": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_paper2": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      }
+    },
+    "all_ibr": {
+      "unconstrained": [
+        [
+          0.0,
+          0.0
+        ],
+        0.0
+      ],
+      "max_abs_iplus_linear": 1.5000000000000002,
+      "required_imax_phase_at_unconstrained_linear": 1.5000000000000002,
+      "required_imax_sum_at_unconstrained_linear": 1.5000000000000002,
+      "linear_sum": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_phase": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_paper2": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "max_abs_iplus_true": 1.2000000000000002,
+      "required_imax_phase_at_unconstrained_true": 1.2000000000000002,
+      "required_imax_sum_at_unconstrained_true": 1.2000000000000002,
+      "true_sum": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.1430736709901993
+      },
+      "true_phase": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.1430736709901993
+      },
+      "true_paper2": {
+        "feasible_at_delta0": true,
+        "lower_bound": 0.0,
+        "optimum": [
+          [
+            0.0,
+            0.0
+          ],
+          0.0
+        ],
+        "optimum_margin": 0.1430736709901993
+      }
+    },
+    "all_ibr_hard": {
+      "unconstrained": [
+        [
+          0.17577281553792892,
+          -0.34398848737226656
+        ],
+        0.38629543373794983
+      ],
+      "max_abs_iplus_linear": 1.2300000000000002,
+      "required_imax_phase_at_unconstrained_linear": 1.5614532928661302,
+      "required_imax_sum_at_unconstrained_linear": 1.61629543373795,
+      "linear_sum": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_phase": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "linear_paper2": {
+        "feasible_at_delta0": false,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "max_abs_iplus_true": 1.2000000000000002,
+      "required_imax_phase_at_unconstrained_true": 1.5446778065436613,
+      "required_imax_sum_at_unconstrained_true": 1.58629543373795,
+      "true_sum": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_phase": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      },
+      "true_paper2": {
+        "feasible_at_delta0": true,
+        "lower_bound": null,
+        "optimum": null,
+        "optimum_margin": null
+      }
+    }
+  },
+  "runtime_s": 751.6917550563812
+}

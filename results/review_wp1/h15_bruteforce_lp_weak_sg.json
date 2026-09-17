@@ -1,0 +1,20 @@
+{
+  "preset": "weak_sg",
+  "step": 0.01,
+  "points": 70681,
+  "lp_separating": 23970,
+  "polygon_separating": 23597,
+  "polygon_sep_but_lp_not": 0,
+  "lp_sep_but_polygon_not": 373,
+  "lp_components_sep": 1,
+  "lp_components_nonsep": 2,
+  "lp_grid_min": [
+    [
+      0.45,
+      -0.23
+    ],
+    0.505371150739731
+  ],
+  "n_lp": 50510,
+  "runtime_s": 490.91260719299316
+}
