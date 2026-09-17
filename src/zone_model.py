@@ -207,6 +207,49 @@ def phase_selected_reactance(vpost, ipre, ipost, z1, z0, ground_ratio=0.2, frac=
     return min(fwd) if fwd else default
 
 
+def released_loops(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8):
+    """The loop names phase_selected_reactance releases (same rules, factored out for review N2)."""
+    a = np.exp(2j * np.pi / 3)
+    di0, di1, di2 = ipost - ipre
+    dia, dib, dic = di0 + di1 + di2, di0 + a**2 * di1 + a * di2, di0 + a * di1 + a**2 * di2
+    if abs(di0) > ground_ratio * max(abs(di1), 1e-12):
+        mags = {"a": abs(dia), "b": abs(dib), "c": abs(dic)}
+        top = max(mags.values())
+        sel = [p for p, m in mags.items() if m >= frac * top]
+        loops = [p + "g" for p in sel]
+        if len(sel) == 2:
+            loops = [{"ab": "ab", "bc": "bc", "ac": "ca"}["".join(sorted(sel))]]
+        return loops
+    pair = {"ab": abs(dia - dib), "bc": abs(dib - dic), "ca": abs(dic - dia)}
+    top = max(pair.values())
+    return [k for k, m in pair.items() if m >= pair_frac * top]
+
+
+def directional_forward(vpre, vpost, ipre, ipost, z1, i2_ratio=0.1):
+    """Separate directional element (review N2). Inputs [s0, s+, s-].
+    Negative-sequence: forward when Re(V2 * conj(I2) * exp(-j angle Z1)) < 0.
+    If |I2| < i2_ratio * |dI1| (balanced-ish), positive-sequence memory polarised:
+    forward when Re(V1_pre * conj(I1_post) * exp(-j angle Z1)) > 0.
+    Returns (forward: bool, used_negseq: bool)."""
+    rot = np.exp(-1j * np.angle(z1))
+    di1 = ipost[1] - ipre[1]
+    if abs(ipost[2]) >= i2_ratio * abs(di1):
+        return bool(np.real(vpost[2] * np.conj(ipost[2]) * rot) < 0), True
+    return bool(np.real(vpre[1] * np.conj(ipost[1]) * rot) > 0), False
+
+
+def directional_reactance(vpre, vpost, ipre, ipost, z1, z0, default=10.0, directional=True, **sel):
+    """Review N2 variant of the distance element: smallest reactance over the released loops
+    WITHOUT the Im(Z) > 0 test (negative X accepted), gated by directional_forward when
+    directional=True (reverse -> default). directional=False: no direction test at all."""
+    y = np.array([vpost[1], vpost[2], vpost[0], ipost[1], ipost[2], ipost[0]])
+    L = loop_impedances(y, z1, z0)
+    loops = released_loops(ipre, ipost, **sel)
+    if directional and not directional_forward(vpre, vpost, ipre, ipost, z1)[0]:
+        return default
+    return min(L[k].imag for k in loops)
+
+
 def supervised_reactance(y, z1, z0, frac=0.5, default=10.0):
     """Distance estimate a real element would produce: among loops whose own current is at
     least `frac` of the largest loop current (a crude phase selector) and whose reactance is
