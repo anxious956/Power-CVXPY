@@ -15,3 +15,7 @@ email_to_taylor_draft.md
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# datasets: far too large for git, and kept out of OneDrive sync where possible
+data/
+*.tar.gz
