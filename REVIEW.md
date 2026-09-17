@@ -70,7 +70,7 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | N2 | BUG | Critical | `zone_model.py:206` | Sign of loop reactance used as the directional decision; relay-bus reverse faults trip 20–22 % (R0, 20 ms); relay B's 40 Ω in-zone faults discarded as reverse | CONFIRMED, fixed in ladder | S |
 | H24 | METHODOLOGY | Critical | `real_ml.py:270-373` | Security never tested on classes outside training; learned models trip 39–92 % of relay-bus reverse faults, up to 39 % of switching | CONFIRMED | M |
 | H8 / Q-fair | METHODOLOGY | Critical | `zone_model.py:166-207`, `real_ml.py:278-282` | Baseline lacked DC-offset filter, directional element, quadrilateral, setting study | CONFIRMED | M |
-| H1 | METHODOLOGY | Critical | `zone_detect.py:163-166,230`; `detect.py:191-195,253` | "Certified δ" designed on a different model and problem; no δ ≤ 1.5 separates the zone problem at eps ≥ 0.01 | CONFIRMED | M |
+| H1 | METHODOLOGY | Critical | `zone_detect.py:163-166,230`; `detect.py:191-195,253` | "Certified δ" designed on a different model and problem; no δ ≤ 1.5 separates the zone problem at eps ≥ 0.01 | CONFIRMED (the δ misuse); the infeasibility is **re-derived and moved**: feasible at eps ≤ 0.12, none at eps ≥ 0.16 at any I_max ([results/DESIGN.md](results/DESIGN.md) §4). Still a search result — TAC25 Theorem 1 cannot certify it (§2 there) | M |
 | H22 | METHODOLOGY | High | `real_ml.py:286` | Stratified CV: 95–96 % of test cases have a sibling in training; three-phase siblings bit-identical | CONFIRMED, fixed | S |
 | H25 | METHODOLOGY | High | `real_ml.py:376-391` | Shortcut control ends 5 ms early and skips DoubleLine; the 40 ms ending at inception gives AUC 0.96 / 0.86 / 0.95 | CONFIRMED | S |
 | H30 | BUG / MODELING | High | `evemt.py:85,131`; `real_ml.py:92-95` | Non-causal resampling leaks 1.1–1.4 ms; ADC full scale ±40× pre-fault clips 13–14 close-in faults | CONFIRMED, fixed (relay front end) | M |
@@ -78,11 +78,11 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | H28 | METHODOLOGY | High | `real_ml.py:113,340-370` | Stage-1 label counts every fault in the grid; responsible label raises AUC 0.63–0.83 → 0.90–0.99 | CONFIRMED, fixed | S |
 | H9 | METHODOLOGY | High | `real_ml.py:114-115`; `zone_detect.py:56-59` | Own-line 85–100 % band excluded and unreported; tuned reach and learned models trip 10–19 % of 99 % faults | CONFIRMED | S |
 | H19 | BUG | High | `detect.py:141-144` | Per-waveform standardisation handicaps the synthetic CNN (0.967 → 0.9996 AUC) | CONFIRMED, fixed (merged) | S |
-| H5 | MODELING | High | `aux_signal_toy.py:75-80` | No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu | CONFIRMED | M |
+| H5 | MODELING | High | `aux_signal_toy.py:75-80` | No inverter current limit; ~~every preset needing δ > 0 infeasible at 1.2 pu~~ | **PARTLY WITHDRAWN.** The limit was missing, but imposing it as an outer check on the design was the wrong correction. Inside the problem as TAC25 (1b) the presets are **feasible at 0.16–0.26 pu**, about half the unconstrained optimum ([results/DESIGN.md](results/DESIGN.md) §3) | M |
 | H6 | BUG | High | `aux_model.py:104-108` | Linearised angle uncertainty is unsound (true set up to 0.085 / 0.276 pu outside); sound δ 0.504 → 0.552, 0.691 → 1.042, 0.386 → 1.054 | CONFIRMED | M |
 | H14 | BUG | High | `aux_model.py:123-129`; `aux_signal_toy.py:67` | Zero-margin separation; margin 0.45–1.25 % of eps; 10 % headroom needs 0.666 / 0.899 / 1.357 pu | CONFIRMED | S |
 | H16 | DOC (paper) | High | Taylor 2023 Appendix | Fig. 3 reproduces only with the printed M = [[r, −x], [r, x]]; the correct form gives peak 0.485 | CONFIRMED | S |
-| H2 | METHODOLOGY | High | `aux_model.py:31`; `waveforms.py:50` | Design eps is 111–208× the synthetic phasor noise std | CONFIRMED | S |
+| H2 | METHODOLOGY | High | `aux_model.py:31`; `waveforms.py:50` | Design eps is 111–208× the synthetic phasor noise std | CONFIRMED but **against the wrong error model**: white noise averages down over a 128-sample DFT, per-installation ratio and phase errors do not. Against fault-condition instrument errors eps = 0.08–0.16 pu is defensible ([results/DESIGN.md](results/DESIGN.md) §4.1) | S |
 | H7 / N7 | MODELING | High | `aux_model.py:29`; `zone_model.py:39` | No inverter fault response in the models; EvEMTBench inverters inject 0.25–0.39 pu I₂; relay B's 40 Ω stratum is infeed physics | CONFIRMED | L |
 | N1 | BUG | High | `real_ml.py:143` | `phasor_view` rotated post-fault phasors 180° at 30 / 50 ms | CONFIRMED, fixed | S |
 | H10 / H20 | METHODOLOGY | High | `real_ml.py:122-145`; `zone_detect.py:82-85` | Windows anchored at true inception; anchoring at a causal starter (≈ 3 samples later) collapses raw-sample boosting (AUC 0.61–0.70, 77–95 % beyond-bus trips); phasor models unaffected | CONFIRMED (real), PARTIAL (synthetic) | S |
@@ -244,39 +244,88 @@ Settings come only from the grid graph:
 
 | Relay | X_set (Ω) | R_set ground / phase (Ω) | Tilt T₂ (°) | Tilt range, ±25 % / ±7.5° sources (°) | R4 reach (Ω) |
 |---|---|---|---|---|---|
-| A | 5.53 | 24.9 / 16.6 | −2.27 | −8.7 … +3.7 | 5.53 |
-| B | 8.84 | 25.4 / 25.4 | +3.73 | −2.5 … +10.5 | 8.20 |
-| DoubleLine | 4.42 | 19.9 / 13.3 | −1.87 | −8.9 … +4.4 | 4.27 |
+| A | 5.53 | ~~24.9 / 16.6~~ → **6.5 / 6.5** | −2.27 | −8.7 … +3.7 | 5.53 |
+| B | 8.84 | ~~25.4 / 25.4~~ → **8.6 / 8.6** | +3.73 | −2.5 … +10.5 | 8.20 |
+| DoubleLine | 4.42 | ~~19.9 / 13.3~~ → **5.1 / 5.1** | −1.87 | −8.9 … +4.4 | 4.27 |
 
-- **Load-encroachment basis.** Assumed thermal rating 1800 A (the conductor string reads "x2"; the graph has no ampacity), 0.9 pu voltage, 30° maximum load angle, both flow directions: Z_load,min = 31.8 Ω. Using 0.7 × the benchmark's own pre-fault load impedance instead would have given 120 / 92.7 / 134 Ω, 4–7 times the rule-based reach.
+> **Resistive reach, corrected.** The original R_set was capped only by load encroachment and an R/X
+> rule. It violated a third limit the review did not have: Kasztenny 2021 §III.I eq. (19) caps the
+> resistive reach against the reactive reach given the **polarising phase error**,
+> m₀ < 1 − 2·r_B·sin(Θ/2), i.e. **R_set ≤ |Z1L|(1 − m₀) / (2 sin(Θ/2))**. Θ is taken from this
+> review's own measured tilt band: R2/T2 have an untilted reactance line so the whole
+> non-homogeneity angle is uncompensated (**8.7–10.5°**), R3/R4 tilt by the nominal so only the
+> residual matters (6.4–7.0°). One shared setting, so the larger Θ binds. At relays **A and
+> DoubleLine the securely-settable reach is below the arc-plus-tower coverage the element is
+> supposed to provide** (6.5 vs 6.7 Ω, 5.1 vs 6.6 Ω). Keeping the old R_set instead would require
+> cutting the reach to 41–56 % of the line.
+> Generated tables: [results/review/TABLES.md](results/review/TABLES.md); JSONs `ladder_polcap*.json`
+> (corrected) beside `ladder*.json` (legacy, reproducible with `LADDER_RSET=legacy`).
+
+- **Load-encroachment basis.** Assumed thermal rating 1800 A (the conductor string reads "x2"; the graph has no ampacity), 0.9 pu voltage, 30° maximum load angle, both flow directions: Z_load,min = 31.8 Ω. Using 0.7 × the benchmark's own pre-fault load impedance instead would have given 120 / 92.7 / 134 Ω, 4–7 times the rule-based reach. **This is no longer the binding cap** — the polarising-error limit is 3–4× tighter — so the sensitivity to the ampacity assumption is retired.
 - **Load encroachment cannot be tested here** because benchmark loading is fixed.
+- **T2 was not a settable rung before.** Recording what the tuned quadrilateral actually chose shows
+  it selected **R_set = 75–102 Ω at every fold, the top of its own grid**, i.e. 3–4× beyond even the
+  load-encroachment cap of 25.4 Ω. Its 67.8 % at relay B was a grid-boundary artefact of a setting no
+  engineer could apply. The R_set grid is now absolute and identical in both modes, truncated at the
+  criterion in the corrected run, where T2 sits exactly at the cap.
 
 **Step by step at 20 ms, current front end** (dependability; beyond-bus trips k/n with one-sided 95 % upper bound; relay-bus reverse; own-99 % guard band):
 
+**Corrected settings** (`ladder_polcap.json`; the legacy row is in `ladder.json` and in TABLES.md):
+
 | Relay | R0 | R1 | R2 | R3 (worst over tilt range) | R4 | T1 (grouped) | T2 (grouped) |
 |---|---|---|---|---|---|---|---|
-| A | 78.9 %; 1/273; 9/45; 1/45 | 63.3 %; 0/273; 5/45; 0/45 | 58.3 %; 0/273 (≤1.1 %); 0/45; 0/45 | 57.8 % (≥51.1 %); 0; 0; 0 | 57.8 % | 83.9 %; 11/273 (≤6.6 %); 17.9 %; 12.8 % | 65.0 %; 0/273; 0 %; 0 % |
-| B | 60.6 %; 14/117 (≤18.1 %); 10/45; 8/45 | 65.6 %; 1/117; 0/45; 0/45 | 52.2 %; 0/117 (≤2.5 %); 0/45; 0/45 | 52.8 % (≥47.2 %); 0; 0; 0 | 46.1 % | 49.2 %; 7/117 (≤10.9 %); 20.5 %; 6.7 % | 67.8 %; 3/117 (≤6.5 %); 0 %; 2.6 % |
-| DoubleLine | 80.0 %; 0/195; 9/45; 1/45 | 60.0 %; 0/195; 1/45; 0/45 | 50.0 %; 0/195 (≤1.5 %); 0/45; 0/45 | 48.9 % (≥44.4 %); 0; 0; 0 | 43.9 % | 82.8 %; 10/195 (≤8.5 %); 17.9 %; 12.8 % | 61.7 %; 0/195; 0 %; 0 % |
+| A | 78.9 %; 1/273; 9/45; 1/45 | 63.3 %; 0/273; 5/45; 0/45 | **37.8 %**; 0/273; 0/45; 0/45 | **37.2 %** (≥35.0 %); 0; 0; 0 | **37.2 %** | 83.9 %; 11/273 (≤6.6 %); 17.9 %; 12.8 % | **37.8 %**; 0/273; 0 %; 0 % |
+| B | 60.6 %; 14/117 (≤18.1 %); 10/45; 8/45 | 65.6 %; 1/117; 0/45; 0/45 | **35.0 %**; 0/117; 0/45; 0/45 | **35.6 %** (≥32.8 %); 0; 0; 0 | **35.6 %** | 49.2 %; 7/117 (≤10.9 %); 20.5 %; 6.7 % | **31.7 %**; 0/117; 0 %; 0 % |
+| DoubleLine | 80.0 %; 0/195; 9/45; 1/45 | 60.0 %; 0/195; 1/45; 0/45 | **31.1 %**; 0/195; 0/45; 0/45 | **30.6 %** (≥28.3 %); 0; 0; 0 | **30.6 %** | 82.8 %; 10/195 (≤8.5 %); 17.9 %; 12.8 % | **31.7 %**; 0/195; 0 %; 0 % |
+
+R0, R1 and T1 do not use R_set and are unchanged — that is the correctness check on the change.
+Legacy values for the quadrilateral rungs were R2 58.3 / 52.2 / 50.0 % and T2 65.0 / 67.8 / 61.7 %.
 
 What each step contributes:
 - **R1 (mimic filter).** Removes relay B's first-cycle false trips (14/117 → 1/117) and its own-99 % trips (8/45 → 0). It costs 16–20 points at A and DoubleLine, where the unfiltered first cycle reads high-R faults closer.
-- **R2 (directional quadrilateral).** Removes every reverse-bus trip, three-phase included. It trades the remaining dependability at 40 Ω, which lies outside a load-encroachment-limited reach.
-- **R3 (tilted I₂ line).** Adds nothing measurable, and its worst case over plausible source impedances drops dependability by up to 6.7 points. At relay B the reading moves about 2.6 Ω per degree of tilt error at 40 Ω. This is where Taylor's bounded sets apply, and a candidate figure for the paper.
-- **R4 (study reach).** Costs 0–7 points.
-- **T2 (tuning).** Recovers 7–16 points at 0–3 beyond-bus trips.
+- **R2 (directional quadrilateral).** Removes every reverse-bus trip, three-phase included. It costs 20–25 points of dependability, and **dependability at 40 Ω goes to 0 % at every relay** once the resistive reach respects the polarising-error limit. Zone 1, set securely, does not reach resistive faults on this line at all.
+- **R3 (tilted I₂ line).** Adds nothing measurable, and its worst case over plausible source impedances drops dependability by a further 2–3 points. At relay B the reading moves about 2.6 Ω per degree of tilt error at 40 Ω. This is where Taylor's bounded sets apply, and a candidate figure for the paper. It is also the mechanism behind the corrected R_set: the same tilt uncertainty that costs R3 dependability is the Θ that caps the resistive reach.
+- **R4 (study reach).** Now costs nothing (the reach was already the binding limit, not R_set).
+- **T2 (tuning).** **Recovers nothing.** It sits exactly at the resistive-reach cap at every relay, so the tuned rung and the rule-based rung coincide to within a point. Tuning had value only while it was free to choose an unsettable R_set.
 
 **Verdict on "learning beats the rule".**
 - Against R0 the learned models look better at relay B, but R0 lacked standard features.
-- Against the matched rungs, at 20 ms with grouped folds and the same calibration data, engineered + LR with directional supervision reaches 95.3 % at relay B (T2: 67.8 %), both at 3/117 beyond-bus trips, with 0 % reverse and switching trips.
-- So **within one relay at one operating point, a supervised learned zone decision outperforms the best conventional rung on dependability at equal measured security**. It does not transfer (Q2) and it does not extrapolate in R_f (H22). Boosting and forest remain insecure at relay A even when supervised (H24).
-- **Classification: "the baseline lacked standard features" explains the security gap; a genuine within-distribution dependability gain remains for engineered + LR.**
+- Against the matched rungs, at 20 ms with grouped folds and the same calibration data, engineered + LR with directional supervision reaches 95.3 % at relay B; the best **securely settable** conventional rung is **31.7 %** (T2 = R2 at the cap), not the 67.8 % reported before, because that 67.8 % used R_set = 101.6 Ω.
+- So the *measured* gap is much larger than the review first reported. **But the comparison is now visibly asymmetric, and that is the more important point.** The conventional rung is held to a written security criterion that costs it every 40 Ω fault; the learned model is held to no such criterion, and Q1 shows what happens when it is probed — a realistic calibration/service instrument mismatch takes engineered + LR from 1.9 % to 39.7 % beyond-bus trips at relay A, where the rule-based rungs stay at 0 %.
+- **Classification, restated: "the baseline lacked standard features" explains the original security gap; the remaining dependability gap is real within distribution but is measured against a baseline constrained by a security rule the learned model is never asked to satisfy.** A like-for-like comparison needs a security criterion imposed on the learned decision too, which is §10 item 4's abstain gate.
 
 ### Q1 — is 0.1 % white noise + 16-bit realistic?
-- **Class limits** used as assumptions: 5P CT ±1 % / ±60 min; 3P VT ±3 % / ±120 min (IEC 61869-2/-3/-5 as commonly tabulated; not verified against the standard text).
+
+> **Regime, added after the SEL reading ([`results/review/sir.json`](results/review/sir.json)).**
+> Every zone-1 security concern in the settings literature is a **high-SIR** phenomenon, and the
+> mechanism is exact: the operating signal a remote-bus fault leaves is (1 − m₁)/(SIR + 1) per unit
+> of nominal, and any voltage error adds directly to it (Kasztenny 2021 §IV). **These relays are
+> not in that regime.** By Kasztenny's own voltage-based definition (eqs. 30a/30b) the SIR is
+> **1.04 (B), 1.37 (A), 1.28 (DoubleLine)** for ground faults — a strong system, against the SIR 4–5
+> where the weak-system discussion begins and the 10–30 of its worked examples. (The impedance-ratio
+> figure |Z_S|/|Z1L| is 0.52–0.69; `papers/notes/E_practitioner_settings.md` §0 quoted that one and
+> should read 1.0–1.7.) The margin left is 5.6–7.4 % of nominal, against 2.5 % at SIR 5 and 1.4 % at
+> SIR 10. **So the conclusions below are "at SIR ≈ 1–1.7", not general.**
+>
+> That is not the whole explanation, though, and the quantified version is better than the hand-wave.
+> Applying Kasztenny & Chowdhury 2023 eq. (6) — the CCVT residual at 20 ms scaled by the voltage
+> change at a remote-bus fault, against that margin — the **high-C CVT is secure with only 1.5–2.5×
+> headroom** (error 3.0–3.7 % against a 5.6–7.4 % margin), and the **low-C CVT fails the criterion at
+> 4 of 6 relay/loop combinations** (5.8–7.2 %). Q1's null result is explained by a modest margin, not
+> by the regime being irrelevant. Full table: [results/review/TABLES.md](results/review/TABLES.md).
+
+- **Class limits** ~~used as assumptions: 5P CT ±1 % / ±60 min; 3P VT ±3 % / ±120 min~~ **corrected.**
+  Those are accuracy-class limits near rated current, i.e. metering-range figures. For fault
+  conditions Kasztenny 2021 §III.A–B gives **VT 3–6 %** ratio error and **CT 5–10 %**, and eq. (9b)
+  says the two **add** in the impedance, |δZ| = |δV| + |δI|. The CT figure was too small by 5–10×.
+  Both bands are now swept (`fault-condition installation error` points). The effect lands where
+  that paper predicts — on dependability, because a CT reading low makes zone 1 underreach:
+  R0 78.9 → 63.9–69.4 % at A, R2 37.8 → 28.9–36.1 %, T2 38.3 → 27.2–38.9 %. Security is untouched:
+  R2 and T2 hold 0 % beyond-bus trips at all 15 points on both relays.
 - **White noise.** 0.1 % white noise on 128 samples is ≈ 0.0125 % on a full-cycle phasor (0.1 % × √(2/128)). It suppresses the fingerprint (control AUC 0.49–0.56 at 1e-3; the leak persists to 1e-5 on DoubleLine and relay A and to 1e-6 on relay B) but it is not a realistic error model: per-installation ratio and phase errors do not average out.
 - **CVT model.**
-  - The high-C model meets class T1 (residual 5.9 % at 20 ms after a terminal short circuit); the low-C model fails T1 (11.5 % at 20 ms) and is excluded.
+  - The high-C model meets class T1 (residual 5.9 % at 20 ms after a terminal short circuit); the low-C model fails T1 (11.5 % at 20 ms) and ~~is excluded~~ **is now included**. It produces **no zone-1 overreach here**: R2 and T2 stay at 0 % beyond-bus trips, and R0's beyond-bus trips actually fall (B 14.8 → 1.5 %). That does not contradict the criterion above — it is point-on-wave. The modelled residual at 20 ms is 11.5 % at voltage-zero inception but 1.6 % at voltage-peak, and **EvEMTBench has one fixed inception per case**, so the sweep samples a single angle. The criterion flags the variant, the one available inception does not exercise it, and the worst case for CVT transient overreach therefore remains uncovered — now for a stated reason rather than because the case was left out.
   - The same step-response metric applied to the sag and the terminal short circuit gives 82 % cycle-1 peak error at voltage-peak inception for both. It grows as the time step shrinks (82 → 90 → 95 %), so it is the response to an ideal voltage step, not a discretisation artefact; the phasor-level error (3.7 % at voltage zero, 19 % at voltage peak, 20 ms, 90 % sag) is the relevant quantity (`cvt_step_check.json`).
 - **Sweep** (`q1_instrument.py`, relays A and B, 20 ms, grouped 5-fold, own-99 % guard band; each cell: dependability / beyond-bus trips k/n / relay-bus reverse trips).
 
@@ -303,9 +352,19 @@ What each step contributes:
 - **Not robust:**
   - R0's beyond-bus trips at A (1 → 9 of 273 with one installation draw: a 3 % VT ratio error moves a fixed reach);
   - engineered + LR's unsupervised reverse-fault security at B (0–60 % depending on the chain point, i.e. unpredictable);
-  - R2's dependability (−4 to −8 points with CVT or the relay front end).
-- A calibration/test installation mismatch at class-limit error sizes did not degrade engineered + LR at this operating point.
-- CVT and CT effects on zone-1 overreach did not appear at these class-T1 / remanence-0.8 settings; a low-C CVT that fails T1 was excluded, so the worst case for CVT transient overreach is not covered.
+  - R2's dependability (−4 to −8 points with CVT or the relay front end, and a further −6 to −9 with fault-condition CT error).
+- ~~A calibration/test installation mismatch at class-limit error sizes did not degrade engineered + LR at this operating point.~~
+  **It does at realistic error sizes, and this is the largest single change in the re-run.** Training on
+  installation draw 1 and testing on draw 2 takes engineered + LR at relay A from **1.9 % to 39.7 %
+  beyond-bus trips**. The rule-based rungs are unaffected (0 % throughout). The learned model's
+  threshold does not survive a realistic change of instrument transformer between calibration and
+  service — the Q2 threshold-transfer failure again, arriving through the instrument chain rather
+  than through a different relay. The original conclusion held only because the CT band was 5–10×
+  too narrow.
+- CVT and CT effects on zone-1 overreach did not appear at these settings, **including with the
+  low-C CVT that fails class T1**. The worst case is still not covered, but for a different reason
+  than before: not because the variant was excluded, but because the benchmark offers one inception
+  angle and the CVT transient is strongly point-on-wave dependent (see the CVT bullet above).
 
 ### Q2 — is a per-relay threshold fair?
 - Per-relay calibration is normal practice, but here calibration and test share one operating point (H23), so it is optimistic.
@@ -380,10 +439,10 @@ Setup (`q3_inputs.py`): grouped 5-fold (first repeat), own-99 % guard band, 20 m
 |---|---|---|---|
 | 1 | Presets table 0 / 0.514 / 0.697 / 0.408 / none ≤ 0.8 (README, RESULTS.md) | HOLDS WITH CAVEAT | Reproduced exactly (quick-start); local optima (exact 0.5040 / 0.6908 / 0.3863; eps12 1.3186), zero margin, unsound angle box, current limit violated (WP1) |
 | 2 | "With a stiff SG no signal is needed" | HOLDS WITH CAVEAT | Only for the gridded two-bus toy |
-| 3 | "~0.5 pu resolves high-R LG faults" | HOLDS WITH CAVEAT | With 10 % margin 0.666 pu; with a sound angle set 0.552 pu; infeasible at I_max 1.2 pu |
-| 4 | "50 % more noise → injection exceeds inverter capability" (eps12) | HOLDS | Exact minimum 1.3186 pu |
+| 3 | "~0.5 pu resolves high-R LG faults" | HOLDS WITH CAVEAT, **"infeasible" withdrawn** | With 10 % margin 0.666 pu; with a sound angle set 0.552 pu; ~~infeasible at I_max 1.2 pu~~ — **0.28 pu and feasible** once the current limit is inside the problem rather than an outer check ([results/DESIGN.md](results/DESIGN.md) §3) |
+| 4 | "50 % more noise → injection exceeds inverter capability" (eps12) | **HOLDS, strengthened** | Exact minimum 1.3186 pu unconstrained; with the limit inside, eps = 0.12 pu is **infeasible outright** at I_max ≤ 1.2 — not merely expensive ([results/DESIGN.md](results/DESIGN.md) §4.1) |
 | 5 | "Optimum verified against brute force" (PLAN.md) | DOES NOT HOLD | Brute force finds 0.504–0.506 < 0.514 |
-| 6 | Magnitudes "in the same range as the paper's examples" | UNTESTED | No 14-bus replication; Taylor 2023 gate passes only with the printed matrix |
+| 6 | Magnitudes "in the same range as the paper's examples" | UNTESTED, **still** | No 14-bus replication — it is specified well enough to build but needs a general multi-bus sequence solver and Minkowski aggregation, which was out of scope ([results/DESIGN.md](results/DESIGN.md) §1). Taylor 2023 gate passes only with the printed matrix |
 | 7 | Fault vs load: |i⁻| useless, more signal worse (README, DETECTION.md) | HOLDS WITH CAVEAT | True at the 1 % operating point; by AUC with train-chosen sign |i⁻| improves 0.563 → 0.980 (synth) |
 | 8 | "Engineered features solve fault vs load; CNN adds nothing" | HOLDS | 98.8–100 % (quick-start) |
 | 9 | Zone table: reactance 0.952 → 0.863 | HOLDS WITH CAVEAT | 0.954 → 0.868 corrected; −0.086 [−0.096, −0.077]; mostly mixed fault types under one reach; depends on excluding the 85–100 % band |
@@ -395,15 +454,15 @@ Setup (`q3_inputs.py`): grouped 5-fold (first repeat), own-99 % guard band, 20 m
 | 15 | README Status "auxiliary signal improves multivariate detection 96.0 → 99.4 %" | WITHDRAWN (by author, still ticked) | README:214 |
 | 16 | DoubleLine: bolted faults within 1.5 % of line | HOLDS | Element reproduced to 1e-13 Ω |
 | 17 | DoubleLine zone-1 setting "perfectly secure" | DOES NOT HOLD | 12/45 reverse bus faults at 40 ms (60 % at 1 Ω) |
-| 18 | DoubleLine: 65 % at 40 Ω "from the reactance effect of remote infeed" | HOLDS WITH CAVEAT | Reproduced; R_app ≈ 38 Ω, beyond rule-based R_set 19.9 Ω |
+| 18 | DoubleLine: 65 % at 40 Ω "from the reactance effect of remote infeed" | HOLDS WITH CAVEAT | Reproduced; R_app ≈ 38 Ω, beyond rule-based R_set 19.9 Ω — and beyond the **securely settable 5.1 Ω** once the polarising-error criterion is applied (§6 Q-fair), so dependability at 40 Ω is 0 % for every quadrilateral rung |
 | 19 | DoubleLine: learned do not beat it (CNN 0.852, engineered 15.6 % at 99 %) | WITHDRAWN (by author) | Superseded; grouped LR 96.7 % with 10 % own-99 % trips |
 | 20 | TestGrid: limiter at 1.15–1.2 pu | HOLDS WITH CAVEAT | Median |I₁|+|I₂| 1.07–1.18 pu; p95 ≈ 1.5 pu, max ≈ 2.1 pu (`ibr_limiter_check.json`) |
 | 21 | Inverters ≈ 0.1 % of SC capacity, change nothing | HOLDS | 0.14 %; relay current ratios unchanged |
-| 22 | Relay B "misses every 40 Ω fault" | HOLDS WITH CAVEAT | Reproduced; partly N2 (X < 0 discarded), partly infeed physics (R_app ≈ 80 Ω); 67N/67Q detect 100 % of unbalanced ones |
-| 23 | Relay B "overreaches onto the next line 13 % at 10 Ω" | HOLDS WITH CAVEAT | Reproduced; 0 % with mimic + directional quadrilateral |
+| 22 | Relay B "misses every 40 Ω fault" | **HOLDS** (caveat withdrawn) | Reproduced; partly N2 (X < 0 discarded), partly infeed physics (R_app ≈ 80 Ω). The caveat was that a better-set quadrilateral might reach them; it cannot. The securely settable R_set is 8.6 Ω against R_app ≈ 80 Ω, and **every** rung R2–R4 and T2 now has 0 % dependability at 40 Ω on **all three** relays. 67N/67Q still detect 100 % of the unbalanced ones without zone-selecting them |
+| 23 | Relay B "overreaches onto the next line 13 % at 10 Ω" | HOLDS WITH CAVEAT | Reproduced; 0 % with mimic + directional quadrilateral, and still 0 % with the corrected resistive reach |
 | 24 | TestGrid learned detectors fail to generalise (82 % switching, 42 % at 99 %) | WITHDRAWN (by author) | Grouped re-run: LR 26 % switching at B, 0 % supervised |
 | 25 | Noise-free records leak the label; with the chain 0.48–0.55 | HOLDS WITH CAVEAT | Reproduced; control ended 5 ms early, the look-ahead leak gives 0.86–0.97 at inception |
-| 26 | Within relay, learning beats the fixed setting (B: boosting 78 %/4 % vs 61 %/15 %) | HOLDS WITH CAVEAT | Grouped: boosting 75.0 %, 4/117; rule's 15 % was DC offset (R1 0.7 %); vs T2 67.8 %; boosting trips 92 % of reverse bus faults unsupervised |
+| 26 | Within relay, learning beats the fixed setting (B: boosting 78 %/4 % vs 61 %/15 %) | HOLDS WITH CAVEAT, **caveat enlarged** | Grouped: boosting 75.0 %, 4/117; rule's 15 % was DC offset (R1 0.7 %); boosting trips 92 % of reverse bus faults unsupervised. The T2 comparator is corrected from 67.8 % to **31.7 %** — the old figure used R_set = 101.6 Ω, the top of the tuning grid and 4× the load-encroachment cap, which is not a settable protection setting. The measured gap is therefore larger, but the conventional rung is the only side held to a security criterion; under a realistic calibration/service instrument mismatch engineered + LR goes from 1.9 % to 39.7 % beyond-bus trips at relay A while the rungs stay at 0 % (§6 Q1) |
 | 27 | Cross relay: ranking partly survives, threshold does not (13–100 %) | HOLDS | Q2: also fails with a physical output (21–59 % beyond-bus) |
 | 28 | Tree ensembles transfer worst | HOLDS WITH CAVEAT | Physical regressor also fails; MLP regressor B → A trips 100 % |
 | 29 | Learned fault detector does not separate faults from switching (0.62–0.81) | DOES NOT HOLD | Label artefact: responsible label 0.90–0.99 |
@@ -458,16 +517,61 @@ Ordered by value / effort.
    - **Experiment:** the ladder and zone_cv protocol of this review on any new data.
    - **Stop when** each class has ≥ 59 deduplicated units or its bound is reported as insufficient.
    - **Risk:** none.
-2. **Design tool that deserves the word "guarantee" (M).**
-   - **Goal:** δ for the zone problem (in-zone vs out-of-zone plus normal) on the three-bus model and then IEEE 14-bus, with:
-     - a sound outer source set (H6);
-     - noise as a box tied to CT/VT class errors (H2);
-     - a margin (H14);
-     - |i⁺| + |i⁻| ≤ I_max worst case over the i⁺ set (H5);
-     - an IEEE 2800-style negative-sequence response as an uncertainty dimension (limiter types: circular, priority, instantaneous; SYNTHESIS.md §2);
-     - a global solver (H15), then continuous (m, R_f) validation by refinement or a Lipschitz bound (H13).
-   - **Gate:** Taylor 2023 with the correct complex form, stating the printed-matrix discrepancy to the author (H16).
-   - **Risk:** at realistic eps no δ ≤ I_max exists (H1 already shows this for eps ≥ 0.01); that is itself a publishable edge.
+   - **Validity domain of this ladder — a constraint on carrying it forward.** R2's directional
+     element is **memory-polarised (32P with 32Q priority)** and R3's reactance line is
+     **I₂-polarised**. Kasztenny 2022 §II.C and §X say to avoid *both* near inverter-based sources:
+     I₂ polarisation needs the negative-sequence network to be homogeneous and the source behind the
+     relay to have an inductive negative-sequence impedance, and an IBR provides neither; memory
+     polarisation needs source inertia the IBR does not have. The same paper (§IX, point 10) says the
+     converse too — near synchronous sources its IBR-suitable design "may perform worse" than these.
+     **So this ladder is correct for EvEMTBench, which is synchronous-source dominated (inverters
+     0.14 % of short-circuit capacity), and is the wrong baseline for the inverter-dominated data of
+     item 3.** Carrying it forward unchanged would repeat H8's unfair-baseline error in the opposite
+     direction. An IBR-grid ladder must instead use, from Kasztenny 2022 §§III–VII:
+     - an **offset (non-directional) quadrilateral on apparent impedance**, reactance line polarised
+       by the **loop current** with a permanent downward security tilt, reverse reach 10–30 % of the line;
+     - **voltage-based (undervoltage) faulted-loop selection**, not sequence-current selection;
+     - directional supervision from a **32G** zero-sequence element (permissive, ground loops), a
+       **32WI** weak-infeed reverse-blocking element (phase loops, overcurrent-supervised by
+       1.25·I_FWD(max) < 50WI < 0.8·I_REV(min)), and/or an **incremental-quantity TD32** element;
+     - zone 1 **enabled only for a 2–3 cycle window** after fault detection, because a low-inertia
+       source drifts in frequency and drags the apparent impedance around a circle of radius |I_Y/I_X|
+       at 360°·Δf per second — so the R3 tilt, a constant here, becomes time-varying within the fault.
+     Not implemented in this session. It should be added to `ladder.py` as a rung R5 *before* any
+     inverter-dominated data arrives, so the comparison is fair from the first run.
+2. **Design tool that deserves the word "guarantee" (M) — largely done; see
+   [results/DESIGN.md](results/DESIGN.md).**
+   - **Done in the TAC25 formulation:** sound outer source set (H6); a margin in measurement units
+     (H14, ρ = 0.1 costs 29 % more signal); the current limit **inside** the problem rather than as
+     an outer check (H5, which reverses it); noise tied to the corrected CT/VT fault-condition
+     figures (H2); a global polar solve over the δ-plane (H15, reproduces the exact optima to the
+     grid step); continuous (m, R_f) validation by dense refinement (H13, 462 points, 0 unseparated
+     at every feasible cell).
+   - **The correction that mattered.** `|i⁺| + |i⁻| ≤ I_max worst case over the i⁺ set` — the way
+     this item was written, and what H5 did — is the wrong reading. It demands headroom against a
+     realisation that cannot occur while δ is being injected. TAC25's (1b) restricts what can be
+     *observed*, which shrinks the uncertainty and **reduces** the required signal.
+   - **Still open.**
+     - The **IEEE 14-bus replication** (the gate below). Not built; it needs a general multi-bus
+       sequence solver and Minkowski aggregation, so nothing here is a replication of TAC25.
+     - An **IEEE 2800-style negative-sequence response** as an uncertainty dimension. This is now
+       load-bearing rather than a nicety: with the IBR modelled as an ideal current source with an
+       open negative-sequence path, the map says an inverter at the relay end removes the need for a
+       signal entirely, which is the opposite of the project's premise and is an artefact. Use the
+       measured virtual-impedance angles −0.5° / +36.2° / −51.6° (SYNTHESIS.md §2), **not** the
+       Baeckeland limiter angle, which parameterises the positive sequence.
+     - A **certified** lower bound. TAC25 Theorem 1 cannot supply one here (DESIGN.md §2), so every
+       "no δ exists" is exhaustion at a stated grid, not a proof.
+   - **Gate:** Taylor 2023 with the correct complex form, stating the printed-matrix discrepancy to
+     the author (H16) — **passed**; draft note in `docs/notes/taylor_matrix_note.md`. The 14-bus
+     example — **not passed**, and it bounds the scope of every design number published so far.
+   - **Risk, re-stated.** The old risk was "at realistic eps no δ ≤ I_max exists". The map puts the
+     feasibility boundary at **eps ≈ 0.12–0.16 pu**, and the corrected instrument figures put
+     realistic eps at **0.08–0.16 pu**, so the design sits *on* its own boundary — that is the
+     publishable edge, sharper than before. The new risk is different and larger: feasibility is
+     bought by assuming the inverter current limit is **hard**, and this project measured it as soft
+     (median 1.07–1.18 pu, p95 ≈ 1.5, max ≈ 2.1; claim 20). **The assumption that rescues the design
+     is the one the data contradicts.**
 3. **Inverter-dominated EMT dataset (L).**
    - **Goal:** the data this benchmark cannot provide.
    - **Grid:** the Baeckeland 14-bus Simulink model or an own PSCAD grid, label-compatible with EvEMTBench.
@@ -493,7 +597,17 @@ Ordered by value / effort.
    - **Stop when** the beyond-bus bound ≤ 5 % and reverse / switching bounds ≤ 5 % on held-out operating points.
    - **Risk:** it may never beat T2 once operating points vary; that is a valid result.
 5. **The hardest regime, as an open question (M).**
-   - **Stratum:** high-R_f faults under strong remote infeed (relay B, 40 Ω, R_app ≈ 80 Ω). Zone 1 cannot reach it within load limits; 67N/67Q detect it without selectivity.
+   - **Stratum:** high-R_f faults under strong remote infeed (relay B, 40 Ω, R_app ≈ 80 Ω). Zone 1
+     cannot reach it within load limits; 67N/67Q detect it without selectivity.
+   - **Corrected, and the stratum is further out of reach than this item first said.** The binding
+     limit is not load encroachment (25.4 Ω at relay B) but the polarising-error criterion
+     (**8.6 Ω**, §6 Q-fair). Against an apparent resistance of ≈ 80 Ω that is nearly an order of
+     magnitude, not a factor of three. And the consequence is no longer confined to 40 Ω: with the
+     corrected setting, **dependability at 40 Ω is 0 % at every relay and every rung R2–R4 and T2**.
+     At relays A and DoubleLine the securely-settable reach does not even cover an arcing ground
+     fault at the reach point (short by 0.2 and 1.6 Ω). The honest statement is therefore stronger
+     than before: **a zone-1 quadrilateral on these lines cannot cover resistive faults at all once
+     its resistive reach respects the polarising uncertainty this review measured.**
    - **Status:** whether an auxiliary signal or a learned detector adds value here is untested on inverter-dominated grids.
    - **Baseline any claim must beat:** POTT/DCB with 67N/67Q, which clear such faults at both ends.
    - This is a question for the author and advisor, not a result.
@@ -512,6 +626,7 @@ Ordered by value / effort.
 - `tests/test_review_real.py` (21 tests, no data needed): N1 phasor reference at 20–50 ms; grouped folds never split sibling groups; stratified folds do (documents H22); default chain bit-identical to `real_ml`; CT model sanity; vectorised phase selection equals `zone_model`; bolted AG reads m·X₁; Takagi exact on a circuit-solved radial network; characterisation of the Takagi error against remote infeed and remote shunt angle on the non-homogeneous three-bus model (writes `results/review/takagi_nonhomogeneity.json`); binomial interval.
 - `tests/test_wp1.py` (29): sequence solver KCL residuals, closed-form bolted faults, sequence↔phase round trip, separation LP on known pairs, source boxes, fault loops.
 - `tests/test_synth.py` (15): phasor recovery, train-chosen polarity, OOF thresholds, phase-selected reactance on bolted AG/BC/ABG.
+- `tests/test_tac25.py` (13, no data needed): the Kasztenny eq. (19) resistive-reach cap inverts the criterion and tightens with the polarising error; TAC25 Lemma 2's bracket holds against an independent solve of P⁰_S in both noise geometries; the Theorem 1 bound never exceeds the exact optimum and is vacuous on box uncertainty (documenting DESIGN.md §2); the circumscribed current-limit polygon contains the disc; the global polar solve lands on the exact optimum to the grid step; the limit inside the problem never needs more signal than no limit, relaxes monotonically towards the unconstrained answer as I_max grows, and is never cheaper than H5's outer reading; a margin never makes the design cheaper.
 
 ```bash
 python -m pytest tests/test_review_real.py -q
@@ -559,6 +674,10 @@ Data, caches, checkpoints and logs are not committed (`logs/` is git-ignored).
 | `python src/review/cvt_class_check.py`, `cvt_step_check.py` | CVT | < 1 min |
 | `python src/review/ibr_limiter_check.py` | limiter | ~1 min |
 | `python src/review/wp1_verify.py` | independent H13 / H15 checks | 6 min |
+| `python src/review/sir_check.py` | SIR and the CCVT transient margin | < 1 min |
+| `LADDER_RSET=legacy python src/review/ladder.py` | ladder with the pre-note-E R_set | ~30 s |
+| `python src/review/tac25_theorem1.py` | TAC25 Theorem 1 bound and its gate | ~5 s |
+| `python src/review/tac25_map.py` | design feasibility map (checkpointed) | ~10 min |
 | `python src/review/h19_verify.py` | independent H19 check | ~3 min |
 | `python -m pytest tests/test_review_real.py -q` | tests | 3–16 s |
 
@@ -566,11 +685,23 @@ Data, caches, checkpoints and logs are not committed (`logs/` is git-ignored).
 - MMKF and the incremental negative-sequence admittance detector (H27).
 - The sequence-trajectory CNN on the relay front end (Q3).
 - A CVT variant that fails class T1 (the worst case for transient overreach).
-- The 14-bus design replication; H1 with outer source sets.
+- The 14-bus design replication (still; it gates every design number, [results/DESIGN.md](results/DESIGN.md) §1).
+- A negative-sequence source model for the IBR, without which the design tool's "IBR share" axis is
+  an artefact (DESIGN.md §4.3).
+- A rung R5 for inverter-dominated grids (§10 item 1), needed before the ladder is carried to WP2.
+- A certified lower bound on |δ|: TAC25 Theorem 1 does not provide one for box-bounded uncertainty
+  (DESIGN.md §2), so every "no δ exists" here is exhaustion at a stated grid.
 - The AUC of zone detectors along a newly designed δ direction.
 - ~~The low-level fixes on `review-wp1` / `review-synth` are on those branches and not merged.~~ **Done:** both branches are merged into `main`, so `detect.evaluate`, `train_cnn`, the `zone_features` loop and the sin/cos angles now carry their fixes in the main line.
 
-**Not verified against primary sources.** IEC 61869 class limits; vendor directional-sector defaults; conductor ampacity; relay input range; arc and tower-footing values. All are stated as assumptions where used.
+**Not verified against primary sources.** Vendor directional-sector defaults; conductor ampacity;
+relay input range; arc and tower-footing values. All are stated as assumptions where used.
+~~IEC 61869 class limits~~ — the class limits themselves are still not read from the standard text,
+but they are no longer the figures used: the instrument errors in Q1 now come from Kasztenny 2021
+§III.A–B for **fault** conditions (VT 3–6 %, CT 5–10 %), and the CCVT transient classes are used
+only through the measured residuals in `cvt_class_check.json`. ~~conductor ampacity~~ is no longer
+load-bearing either: load encroachment has stopped being the binding cap on the resistive reach
+(§6 Q-fair).
 
 **Checked since** against six SEL practitioner papers, in
 [papers/notes/E_practitioner_settings.md](papers/notes/E_practitioner_settings.md). Nothing was

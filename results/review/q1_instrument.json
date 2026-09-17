@@ -29,7 +29,7 @@
     "dep40": 0.38333333333333336
    },
    "R2": {
-    "dependability": 0.5222222222222223,
+    "dependability": 0.35,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -42,17 +42,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6777777777777778,
-    "beyond": 0.037037037037037035,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 3,
+     "k": 0,
      "n": 117,
-     "rate": 0.02564102564102564,
-     "ucb95": 0.06493501474507489
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
-    "own99": 0.022222222222222223,
+    "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -102,7 +102,7 @@
     "dep40": 0.38333333333333336
    },
    "R2": {
-    "dependability": 0.5166666666666667,
+    "dependability": 0.34444444444444444,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -115,17 +115,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6777777777777778,
-    "beyond": 0.02962962962962963,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 2,
+     "k": 0,
      "n": 117,
-     "rate": 0.017094017094017096,
-     "ucb95": 0.052830810978736535
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -175,7 +175,7 @@
     "dep40": 0.38333333333333336
    },
    "R2": {
-    "dependability": 0.5111111111111111,
+    "dependability": 0.3388888888888889,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -188,17 +188,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6777777777777778,
-    "beyond": 0.02962962962962963,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 2,
+     "k": 0,
      "n": 117,
-     "rate": 0.017094017094017096,
-     "ucb95": 0.052830810978736535
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -251,7 +251,7 @@
     "dep40": 0.4166666666666667
    },
    "R2": {
-    "dependability": 0.5277777777777778,
+    "dependability": 0.35555555555555557,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -264,17 +264,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6777777777777778,
-    "beyond": 0.014814814814814815,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 2,
+     "k": 0,
      "n": 117,
-     "rate": 0.017094017094017096,
-     "ucb95": 0.052830810978736535
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -327,7 +327,7 @@
     "dep40": 0.31666666666666665
    },
    "R2": {
-    "dependability": 0.49444444444444446,
+    "dependability": 0.31666666666666665,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -340,17 +340,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6722222222222223,
-    "beyond": 0.05925925925925926,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 4,
+     "k": 0,
      "n": 117,
-     "rate": 0.03418803418803419,
-     "ucb95": 0.07652451229890671
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
-    "own99": 0.022222222222222223,
+    "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -398,7 +398,7 @@
     "dep40": 0.31666666666666665
    },
    "R2": {
-    "dependability": 0.49444444444444446,
+    "dependability": 0.31666666666666665,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -411,17 +411,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6833333333333333,
-    "beyond": 0.05925925925925926,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 4,
+     "k": 0,
      "n": 117,
-     "rate": 0.03418803418803419,
-     "ucb95": 0.07652451229890671
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
-    "own99": 0.08888888888888889,
+    "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -471,7 +471,7 @@
     "dep40": 0.4166666666666667
    },
    "R2": {
-    "dependability": 0.4722222222222222,
+    "dependability": 0.3055555555555556,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -484,17 +484,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6777777777777778,
-    "beyond": 0.007407407407407408,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 1,
+     "k": 0,
      "n": 117,
-     "rate": 0.008547008547008548,
-     "ucb95": 0.039902882128061055
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -546,7 +546,7 @@
     "dep40": 0.36666666666666664
    },
    "R2": {
-    "dependability": 0.5222222222222223,
+    "dependability": 0.35,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -559,17 +559,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6777777777777778,
-    "beyond": 0.037037037037037035,
+    "dependability": 0.32222222222222224,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 3,
+     "k": 0,
      "n": 117,
-     "rate": 0.02564102564102564,
-     "ucb95": 0.06493501474507489
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
-    "own99": 0.022222222222222223,
+    "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -617,7 +617,7 @@
     "dep40": 0.35
    },
    "R2": {
-    "dependability": 0.4388888888888889,
+    "dependability": 0.3055555555555556,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -630,17 +630,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.55,
-    "beyond": 0.05185185185185185,
+    "dependability": 0.26666666666666666,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 3,
+     "k": 0,
      "n": 117,
-     "rate": 0.02564102564102564,
-     "ucb95": 0.06493501474507489
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
-    "own99": 0.022222222222222223,
+    "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.23333333333333334,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -688,7 +688,7 @@
     "dep40": 0.3333333333333333
    },
    "R2": {
-    "dependability": 0.4388888888888889,
+    "dependability": 0.3055555555555556,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -701,17 +701,17 @@
     "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.5722222222222222,
-    "beyond": 0.05185185185185185,
+    "dependability": 0.26666666666666666,
+    "beyond": 0.0,
     "beyond_dedup": {
-     "k": 3,
+     "k": 0,
      "n": 117,
-     "rate": 0.02564102564102564,
-     "ucb95": 0.06493501474507489
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.26666666666666666,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -729,6 +729,373 @@
     "auc": 0.987037037037037
    },
    "shortcut control AUC (GB, pre-fault only)": 0.5174897119341564
+  },
+  "fault-condition installation error draw 1 (VT 3-6 %, CT 5-10 %)": {
+   "chain": {
+    "gain_v": -0.038181634709428876,
+    "phase_v_deg": -3.9170838439580233,
+    "gain_i": -0.08067731988934101,
+    "phase_i_deg": -1.4307545662046386
+   },
+   "R0": {
+    "dependability": 0.6722222222222223,
+    "beyond": 0.037037037037037035,
+    "beyond_dedup": {
+     "k": 5,
+     "n": 117,
+     "rate": 0.042735042735042736,
+     "ucb95": 0.08775114823666058
+    },
+    "own99": 0.06666666666666667,
+    "reverse_bus": 0.0,
+    "dep40": 0.26666666666666666
+   },
+   "R1": {
+    "dependability": 0.5611111111111111,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.31666666666666665
+   },
+   "R2": {
+    "dependability": 0.29444444444444445,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.2722222222222222,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.9555555555555556,
+    "beyond": 0.022222222222222223,
+    "beyond_dedup": {
+     "k": 3,
+     "n": 117,
+     "rate": 0.02564102564102564,
+     "ucb95": 0.06493501474507489
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.24444444444444444,
+    "dep40": 0.9333333333333333,
+    "auc": 0.987037037037037
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5596707818930041
+  },
+  "fault-condition installation error draw 2 (VT 3-6 %, CT 5-10 %)": {
+   "chain": {
+    "gain_v": -0.033976464939497276,
+    "phase_v_deg": -3.203880123137027,
+    "gain_i": -0.0756006300437248,
+    "phase_i_deg": 2.8394587986264486
+   },
+   "R0": {
+    "dependability": 0.6722222222222223,
+    "beyond": 0.06666666666666667,
+    "beyond_dedup": {
+     "k": 5,
+     "n": 117,
+     "rate": 0.042735042735042736,
+     "ucb95": 0.08775114823666058
+    },
+    "own99": 0.1111111111111111,
+    "reverse_bus": 0.0,
+    "dep40": 0.35
+   },
+   "R1": {
+    "dependability": 0.4666666666666667,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.0,
+    "dep40": 0.13333333333333333
+   },
+   "R2": {
+    "dependability": 0.28888888888888886,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.25555555555555554,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.9555555555555556,
+    "beyond": 0.014814814814814815,
+    "beyond_dedup": {
+     "k": 2,
+     "n": 117,
+     "rate": 0.017094017094017096,
+     "ucb95": 0.052830810978736535
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.06666666666666667,
+    "dep40": 0.9166666666666666,
+    "auc": 0.9853909465020576
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5224279835390947
+  },
+  "fault-condition installation mismatch (train draw 1, test draw 2)": {
+   "chain": "mismatch_fault",
+   "R0": {
+    "dependability": 0.6722222222222223,
+    "beyond": 0.06666666666666667,
+    "beyond_dedup": {
+     "k": 5,
+     "n": 117,
+     "rate": 0.042735042735042736,
+     "ucb95": 0.08775114823666058
+    },
+    "own99": 0.1111111111111111,
+    "reverse_bus": 0.0,
+    "dep40": 0.35
+   },
+   "R1": {
+    "dependability": 0.4666666666666667,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.0,
+    "dep40": 0.13333333333333333
+   },
+   "R2": {
+    "dependability": 0.28888888888888886,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.25555555555555554,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.95,
+    "beyond": 0.044444444444444446,
+    "beyond_dedup": {
+     "k": 6,
+     "n": 117,
+     "rate": 0.05128205128205128,
+     "ucb95": 0.09870290749702405
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.24444444444444444,
+    "dep40": 0.9166666666666666,
+    "auc": 0.9864197530864198
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5224279835390947
+  },
+  "CVT low-C (fails class T1)": {
+   "chain": {
+    "cvt": "lowC"
+   },
+   "R0": {
+    "dependability": 0.6111111111111112,
+    "beyond": 0.014814814814814815,
+    "beyond_dedup": {
+     "k": 2,
+     "n": 117,
+     "rate": 0.017094017094017096,
+     "ucb95": 0.052830810978736535
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.0,
+    "dep40": 0.26666666666666666
+   },
+   "R1": {
+    "dependability": 0.5777777777777777,
+    "beyond": 0.007407407407407408,
+    "beyond_dedup": {
+     "k": 1,
+     "n": 117,
+     "rate": 0.008547008547008548,
+     "ucb95": 0.039902882128061055
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.38333333333333336
+   },
+   "R2": {
+    "dependability": 0.3,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.2611111111111111,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.9388888888888889,
+    "beyond": 0.007407407407407408,
+    "beyond_dedup": {
+     "k": 1,
+     "n": 117,
+     "rate": 0.008547008547008548,
+     "ucb95": 0.039902882128061055
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.28888888888888886,
+    "dep40": 0.9,
+    "auc": 0.9878600823045268
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5619341563786009
+  },
+  "worst realistic (fault-condition draw 1 + CVT low-C + CT sat 0.8)": {
+   "chain": "worst",
+   "R0": {
+    "dependability": 0.6111111111111112,
+    "beyond": 0.022222222222222223,
+    "beyond_dedup": {
+     "k": 1,
+     "n": 117,
+     "rate": 0.008547008547008548,
+     "ucb95": 0.039902882128061055
+    },
+    "own99": 0.08888888888888889,
+    "reverse_bus": 0.0,
+    "dep40": 0.36666666666666664
+   },
+   "R1": {
+    "dependability": 0.4888888888888889,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.23333333333333334
+   },
+   "R2": {
+    "dependability": 0.28888888888888886,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.2611111111111111,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.9277777777777778,
+    "beyond": 0.022222222222222223,
+    "beyond_dedup": {
+     "k": 3,
+     "n": 117,
+     "rate": 0.02564102564102564,
+     "ucb95": 0.06493501474507489
+    },
+    "own99": 0.022222222222222223,
+    "reverse_bus": 0.022222222222222223,
+    "dep40": 0.8833333333333333,
+    "auc": 0.9837448559670783
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5837448559670783
   }
  },
  "testgrid_A": {
@@ -761,7 +1128,7 @@
     "dep40": 0.26666666666666666
    },
    "R2": {
-    "dependability": 0.5833333333333334,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -771,10 +1138,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.11666666666666667
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6611111111111111,
+    "dependability": 0.38333333333333336,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -784,7 +1151,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.3,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -834,7 +1201,7 @@
     "dep40": 0.26666666666666666
    },
    "R2": {
-    "dependability": 0.5833333333333334,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -844,10 +1211,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.11666666666666667
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6611111111111111,
+    "dependability": 0.38333333333333336,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -857,7 +1224,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.3,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -907,7 +1274,7 @@
     "dep40": 0.26666666666666666
    },
    "R2": {
-    "dependability": 0.5833333333333334,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -917,10 +1284,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.11666666666666667
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6611111111111111,
+    "dependability": 0.38333333333333336,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -930,7 +1297,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.3,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -983,7 +1350,7 @@
     "dep40": 0.38333333333333336
    },
    "R2": {
-    "dependability": 0.5944444444444444,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -993,10 +1360,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.13333333333333333
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.7055555555555556,
+    "dependability": 0.39444444444444443,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1006,7 +1373,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.38333333333333336,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -1059,7 +1426,7 @@
     "dep40": 0.3
    },
    "R2": {
-    "dependability": 0.5944444444444444,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1069,10 +1436,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.13333333333333333
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6944444444444444,
+    "dependability": 0.3888888888888889,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1082,7 +1449,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.36666666666666664,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -1130,7 +1497,7 @@
     "dep40": 0.3
    },
    "R2": {
-    "dependability": 0.5944444444444444,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1140,10 +1507,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.13333333333333333
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6944444444444444,
+    "dependability": 0.3888888888888889,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1153,7 +1520,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.36666666666666664,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -1203,7 +1570,7 @@
     "dep40": 0.26666666666666666
    },
    "R2": {
-    "dependability": 0.5444444444444444,
+    "dependability": 0.34444444444444444,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1213,10 +1580,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.11666666666666667
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6555555555555556,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1226,7 +1593,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.3,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -1278,7 +1645,7 @@
     "dep40": 0.26666666666666666
    },
    "R2": {
-    "dependability": 0.5833333333333334,
+    "dependability": 0.37777777777777777,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1288,10 +1655,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.11666666666666667
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6666666666666666,
+    "dependability": 0.3888888888888889,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1301,7 +1668,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.3,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -1349,7 +1716,7 @@
     "dep40": 0.18333333333333332
    },
    "R2": {
-    "dependability": 0.5055555555555555,
+    "dependability": 0.31666666666666665,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1359,10 +1726,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.08333333333333333
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6111111111111112,
+    "dependability": 0.3388888888888889,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1372,7 +1739,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.2833333333333333,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -1420,7 +1787,7 @@
     "dep40": 0.2833333333333333
    },
    "R2": {
-    "dependability": 0.5166666666666667,
+    "dependability": 0.31666666666666665,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1430,10 +1797,10 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.11666666666666667
+    "dep40": 0.0
    },
    "T2": {
-    "dependability": 0.6333333333333333,
+    "dependability": 0.3388888888888889,
     "beyond": 0.0,
     "beyond_dedup": {
      "k": 0,
@@ -1443,7 +1810,7 @@
     },
     "own99": 0.0,
     "reverse_bus": 0.0,
-    "dep40": 0.3333333333333333,
+    "dep40": 0.0,
     "auc": null
    },
    "engineered + LR": {
@@ -1461,6 +1828,373 @@
     "auc": 0.9992063492063492
    },
    "shortcut control AUC (GB, pre-fault only)": 0.4903880070546737
+  },
+  "fault-condition installation error draw 1 (VT 3-6 %, CT 5-10 %)": {
+   "chain": {
+    "gain_v": 0.037029080607591185,
+    "phase_v_deg": 2.429216300000833,
+    "gain_i": -0.09798028427935719,
+    "phase_i_deg": -1.3363085240161485
+   },
+   "R0": {
+    "dependability": 0.6944444444444444,
+    "beyond": 0.025396825396825397,
+    "beyond_dedup": {
+     "k": 8,
+     "n": 273,
+     "rate": 0.029304029304029304,
+     "ucb95": 0.05225182380503997
+    },
+    "own99": 0.044444444444444446,
+    "reverse_bus": 0.15555555555555556,
+    "dep40": 0.6
+   },
+   "R1": {
+    "dependability": 0.6055555555555555,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.08888888888888889,
+    "dep40": 0.38333333333333336
+   },
+   "R2": {
+    "dependability": 0.28888888888888886,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.2722222222222222,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.9944444444444445,
+    "beyond": 0.03492063492063492,
+    "beyond_dedup": {
+     "k": 11,
+     "n": 273,
+     "rate": 0.040293040293040296,
+     "ucb95": 0.0658134086002388
+    },
+    "own99": 0.17777777777777778,
+    "reverse_bus": 0.0,
+    "dep40": 0.9833333333333333,
+    "auc": 0.9994708994708994
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5114638447971782
+  },
+  "fault-condition installation error draw 2 (VT 3-6 %, CT 5-10 %)": {
+   "chain": {
+    "gain_v": 0.04297752550487451,
+    "phase_v_deg": -3.8365834457896764,
+    "gain_i": 0.07682401764546933,
+    "phase_i_deg": 2.061958472882539
+   },
+   "R0": {
+    "dependability": 0.6388888888888888,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.1111111111111111,
+    "dep40": 0.26666666666666666
+   },
+   "R1": {
+    "dependability": 0.5055555555555555,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.022222222222222223,
+    "dep40": 0.1
+   },
+   "R2": {
+    "dependability": 0.3611111111111111,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.3888888888888889,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 1.0,
+    "beyond": 0.031746031746031744,
+    "beyond_dedup": {
+     "k": 9,
+     "n": 273,
+     "rate": 0.03296703296703297,
+     "ucb95": 0.05682228145924968
+    },
+    "own99": 0.1111111111111111,
+    "reverse_bus": 0.0,
+    "dep40": 1.0,
+    "auc": 1.0
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5146384479717814
+  },
+  "fault-condition installation mismatch (train draw 1, test draw 2)": {
+   "chain": "mismatch_fault",
+   "R0": {
+    "dependability": 0.6388888888888888,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.1111111111111111,
+    "dep40": 0.26666666666666666
+   },
+   "R1": {
+    "dependability": 0.5055555555555555,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.022222222222222223,
+    "dep40": 0.1
+   },
+   "R2": {
+    "dependability": 0.3611111111111111,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.3888888888888889,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 1.0,
+    "beyond": 0.3968253968253968,
+    "beyond_dedup": {
+     "k": 111,
+     "n": 273,
+     "rate": 0.4065934065934066,
+     "ucb95": 0.4579098230281565
+    },
+    "own99": 0.6222222222222222,
+    "reverse_bus": 0.0,
+    "dep40": 1.0,
+    "auc": 0.9958553791887127
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5146384479717814
+  },
+  "CVT low-C (fails class T1)": {
+   "chain": {
+    "cvt": "lowC"
+   },
+   "R0": {
+    "dependability": 0.6611111111111111,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.022222222222222223,
+    "dep40": 0.5
+   },
+   "R1": {
+    "dependability": 0.5111111111111111,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.23333333333333334
+   },
+   "R2": {
+    "dependability": 0.31666666666666665,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.31666666666666665,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.9777777777777777,
+    "beyond": 0.0380952380952381,
+    "beyond_dedup": {
+     "k": 12,
+     "n": 273,
+     "rate": 0.04395604395604396,
+     "ucb95": 0.07024642262201972
+    },
+    "own99": 0.1111111111111111,
+    "reverse_bus": 0.0,
+    "dep40": 0.95,
+    "auc": 0.9952380952380953
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.4874779541446208
+  },
+  "worst realistic (fault-condition draw 1 + CVT low-C + CT sat 0.8)": {
+   "chain": "worst",
+   "R0": {
+    "dependability": 0.6833333333333333,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.022222222222222223,
+    "dep40": 0.6
+   },
+   "R1": {
+    "dependability": 0.5666666666666667,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.022222222222222223,
+    "dep40": 0.36666666666666664
+   },
+   "R2": {
+    "dependability": 0.2722222222222222,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0
+   },
+   "T2": {
+    "dependability": 0.2777777777777778,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99": 0.0,
+    "reverse_bus": 0.0,
+    "dep40": 0.0,
+    "auc": null
+   },
+   "engineered + LR": {
+    "dependability": 0.9777777777777777,
+    "beyond": 0.044444444444444446,
+    "beyond_dedup": {
+     "k": 14,
+     "n": 273,
+     "rate": 0.05128205128205128,
+     "ucb95": 0.07900966401040392
+    },
+    "own99": 0.13333333333333333,
+    "reverse_bus": 0.0,
+    "dep40": 0.9333333333333333,
+    "auc": 0.9977954144620812
+   },
+   "shortcut control AUC (GB, pre-fault only)": 0.5124338624338624
   }
  }
 }

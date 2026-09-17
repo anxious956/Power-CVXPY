@@ -1,0 +1,299 @@
+{
+ "commit": "0347de2816ccc920b0d8125f642fbd47e83d5dbc",
+ "exact_reference": {
+  "easy": 0.0,
+  "weak_sg": 0.504,
+  "weak_sg_noisy": 0.6908,
+  "all_ibr_hard": 0.3863,
+  "weak_sg_eps12": 1.3186
+ },
+ "presets": [
+  {
+   "preset": "easy",
+   "eps": 0.03,
+   "exact_zonotope_optimum": 0.0,
+   "inscribed": {
+    "lower_bound": 0.0,
+    "binding_pair": null,
+    "n_pairs": 30,
+    "n_no_signal_needed": 30,
+    "max_zeta": 20.11568495458159,
+    "min_zeta": 9.99933799304995,
+    "min_chi": 1.0870756387306326,
+    "n_pairs_possibly_ambiguous_at_0": 0,
+    "min_w_max_at_0": 99.98676029925223,
+    "lower_bound_frobenius": 0.0,
+    "lemma2_holds": true
+   },
+   "circumscribed": {
+    "lower_bound": 0.0,
+    "binding_pair": null,
+    "n_pairs": 30,
+    "n_no_signal_needed": 30,
+    "max_zeta": 5.028921238645397,
+    "min_zeta": 2.4998344982624876,
+    "min_chi": 0.27176890968265816,
+    "n_pairs_possibly_ambiguous_at_0": 0,
+    "min_w_max_at_0": 6.249172518703264,
+    "lower_bound_frobenius": 0.0,
+    "lemma2_holds": true
+   },
+   "gate_inscribed_le_exact": true,
+   "gate_slack": 0.0,
+   "bound_informative": false
+  },
+  {
+   "preset": "weak_sg",
+   "eps": 0.08,
+   "exact_zonotope_optimum": 0.504,
+   "inscribed": {
+    "lower_bound": 0.0,
+    "binding_pair": null,
+    "n_pairs": 30,
+    "n_no_signal_needed": 30,
+    "max_zeta": 6.744590123940055,
+    "min_zeta": 1.570174797869795,
+    "min_chi": 0.6633307741202432,
+    "n_pairs_possibly_ambiguous_at_0": 0,
+    "min_w_max_at_0": 2.465448895865452,
+    "lower_bound_frobenius": 0.0,
+    "lemma2_holds": true
+   },
+   "circumscribed": {
+    "lower_bound": 3.321977932900344,
+    "binding_pair": "N vs ag|m=0.95|mr=1",
+    "n_pairs": 30,
+    "n_no_signal_needed": 16,
+    "max_zeta": 1.6861475309850138,
+    "min_zeta": 0.39254369946744877,
+    "min_chi": 0.1658326935300608,
+    "n_pairs_possibly_ambiguous_at_0": 14,
+    "min_w_max_at_0": 0.15409055599159074,
+    "lower_bound_frobenius": 2.3567434454194998,
+    "lemma2_holds": true
+   },
+   "gate_inscribed_le_exact": true,
+   "gate_slack": 0.504,
+   "bound_informative": false
+  },
+  {
+   "preset": "weak_sg_eps12",
+   "eps": 0.12,
+   "exact_zonotope_optimum": 1.3186,
+   "inscribed": {
+    "lower_bound": 0.0,
+    "binding_pair": null,
+    "n_pairs": 30,
+    "n_no_signal_needed": 30,
+    "max_zeta": 5.576383731448651,
+    "min_zeta": 1.097683876979785,
+    "min_chi": 0.4608613979985035,
+    "n_pairs_possibly_ambiguous_at_0": 0,
+    "min_w_max_at_0": 1.2049098937813716,
+    "lower_bound_frobenius": 0.0,
+    "lemma2_holds": true
+   },
+   "circumscribed": {
+    "lower_bound": 5.772073158647549,
+    "binding_pair": "N vs ag|m=0.55|mr=1",
+    "n_pairs": 30,
+    "n_no_signal_needed": 8,
+    "max_zeta": 1.3940959328621627,
+    "min_zeta": 0.27442096924494624,
+    "min_chi": 0.11521534949962588,
+    "n_pairs_possibly_ambiguous_at_0": 22,
+    "min_w_max_at_0": 0.07530686836133572,
+    "lower_bound_frobenius": 4.091162952139967,
+    "lemma2_holds": true
+   },
+   "gate_inscribed_le_exact": true,
+   "gate_slack": 1.3186,
+   "bound_informative": false
+  },
+  {
+   "preset": "weak_sg_noisy",
+   "eps": 0.15,
+   "exact_zonotope_optimum": 0.6908,
+   "inscribed": {
+    "lower_bound": 0.0,
+    "binding_pair": null,
+    "n_pairs": 30,
+    "n_no_signal_needed": 30,
+    "max_zeta": 3.6845828654783457,
+    "min_zeta": 1.811279819489758,
+    "min_chi": 0.8283988528288978,
+    "n_pairs_possibly_ambiguous_at_0": 0,
+    "min_w_max_at_0": 3.28073458449085,
+    "lower_bound_frobenius": 0.0,
+    "lemma2_holds": true
+   },
+   "circumscribed": {
+    "lower_bound": 2.3602644974856193,
+    "binding_pair": "N vs ag|m=0.75|mr=1",
+    "n_pairs": 30,
+    "n_no_signal_needed": 0,
+    "max_zeta": 0.9211457163695864,
+    "min_zeta": 0.4528199548724395,
+    "min_chi": 0.20709971320722445,
+    "n_pairs_possibly_ambiguous_at_0": 30,
+    "min_w_max_at_0": 0.20504591153067814,
+    "lower_bound_frobenius": 1.8437494272751374,
+    "lemma2_holds": true
+   },
+   "gate_inscribed_le_exact": true,
+   "gate_slack": 0.6908,
+   "bound_informative": false
+  },
+  {
+   "preset": "all_ibr_hard",
+   "eps": 0.15,
+   "exact_zonotope_optimum": 0.3863,
+   "inscribed": {
+    "lower_bound": 0.0,
+    "binding_pair": null,
+    "n_pairs": 30,
+    "n_no_signal_needed": 30,
+    "max_zeta": 3.293165084033268,
+    "min_zeta": 1.5468879249573895,
+    "min_chi": 0.8719695146680813,
+    "n_pairs_possibly_ambiguous_at_0": 0,
+    "min_w_max_at_0": 2.392862252378978,
+    "lower_bound_frobenius": 0.0,
+    "lemma2_holds": true
+   },
+   "circumscribed": {
+    "lower_bound": 2.8133002745817293,
+    "binding_pair": "N vs ag|m=0.95|mr=1",
+    "n_pairs": 30,
+    "n_no_signal_needed": 0,
+    "max_zeta": 0.823291271008317,
+    "min_zeta": 0.38672198123934737,
+    "min_chi": 0.21799237866702031,
+    "n_pairs_possibly_ambiguous_at_0": 30,
+    "min_w_max_at_0": 0.14955389077368614,
+    "lower_bound_frobenius": 2.005619460759372,
+    "lemma2_holds": true
+   },
+   "gate_inscribed_le_exact": true,
+   "gate_slack": 0.3863,
+   "bound_informative": false
+  }
+ ],
+ "note": "The auxiliary-signal design problem in the formulation of",
+ "gate_all_pass": true,
+ "lemma2_all_hold": true,
+ "bound_informative_any": false,
+ "zone_problem": {
+  "i_max": 1.2,
+  "rows": [
+   {
+    "eps": 0.001,
+    "rf": 0.3,
+    "inscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "inscribed_exceeds_imax": false,
+    "circumscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "circumscribed_exceeds_imax": false
+   },
+   {
+    "eps": 0.005,
+    "rf": 0.3,
+    "inscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "inscribed_exceeds_imax": false,
+    "circumscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "circumscribed_exceeds_imax": false
+   },
+   {
+    "eps": 0.01,
+    "rf": 0.3,
+    "inscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "inscribed_exceeds_imax": false,
+    "circumscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "circumscribed_exceeds_imax": false
+   },
+   {
+    "eps": 0.02,
+    "rf": 0.3,
+    "inscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "inscribed_exceeds_imax": false,
+    "circumscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "circumscribed_exceeds_imax": false
+   },
+   {
+    "eps": 0.04,
+    "rf": 0.3,
+    "inscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "inscribed_exceeds_imax": false,
+    "circumscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "circumscribed_exceeds_imax": false
+   },
+   {
+    "eps": 0.08,
+    "rf": 0.3,
+    "inscribed": {
+     "lower_bound": 0.0,
+     "binding_pair": null,
+     "n_no_signal_needed": 30,
+     "n_pairs": 30
+    },
+    "inscribed_exceeds_imax": false,
+    "circumscribed": {
+     "lower_bound": 0.36695407909902233,
+     "binding_pair": "N vs ag|m=0.95|mr=1",
+     "n_no_signal_needed": 26,
+     "n_pairs": 30
+    },
+    "circumscribed_exceeds_imax": false
+   }
+  ]
+ }
+}

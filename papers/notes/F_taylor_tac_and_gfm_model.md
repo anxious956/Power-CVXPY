@@ -100,6 +100,18 @@ instead of Ω_S(θ).
 
 ## 1.3 Theorem 1 — the part with no analogue in anything we have built
 
+> **CORRECTED 17 Sep 2026, after implementing it.** The optimism below is wrong on the main point.
+> Theorem 1 **does not** turn H1 into a proof, and the bound is **vacuous** on our problem. It needs
+> Euclidean-ball uncertainty; `aux_model` bounds each component independently. Only the ball
+> *inscribed* in that box is a sound lower bound for us (a smaller uncertainty set is easier to
+> separate), and on the inscribed ball every pair is already separated at δ = 0 — ζ ≥ 1 everywhere —
+> so the bound is 0.000 at every preset. The ball/box gap is √d = 4 at d = 16 and no
+> re-parameterisation removes it. The implementation is verified (Lemma 2's bracket holds against an
+> independent solve of P⁰_S), so this is the theorem's hypothesis, not our code.
+> Full argument and numbers: [`results/DESIGN.md`](../../results/DESIGN.md) §2.
+> The rest of this section is left as written, since the *reasoning* about what such a bound would
+> buy is still correct — it simply does not apply here.
+
 For purely additive uncertainty with no constraints, TAC25 §V derives χ and ζ directly from the
 system matrices (via Λ_x = X₀ᵀX₀ + X₁ᵀX₁ and Λ_θ = X₀ᵀΘ₀ + X₁ᵀΘ₁) and proves:
 
@@ -269,5 +281,5 @@ behaviourally distinct.
 |---|---|
 | Does TAC25 change §10 item 2? | **Yes, substantially.** Four of six sub-items are solved in it; the current limit is solved in the *opposite* direction to our assumption; the global solver is a 2-D grid. Item 2 should be rewritten as "re-implement in the TAC25 formulation", and drops from M to S–M. |
 | Does BYS26 change §10 item 2? | **No.** It sharpens one dimension the plan already has (one angle, not three types) and is the wrong sequence for the design problem. It changes §10 item 3 instead, which it makes concrete. |
-| Biggest single consequence | **H1 and H5 must be re-derived before publication.** Both are "no feasible δ" results obtained with the current limit outside the design problem. TAC25 proves constraints shrink the required δ. The negative result may not survive, and it is currently one of the project's headline claims (REVIEW.md §10 item 8(c)). |
-| Cheapest immediate win | Theorem 1's closed-form lower bound. No optimisation, no solver, evaluable from the system matrices we already build, and it turns H1 from a search result into a proof. |
+| Biggest single consequence | **H1 and H5 must be re-derived before publication.** — **done 17 Sep 2026, and the negative result did not survive.** H5 reverses: the presets are feasible at 0.16–0.26 pu, about half the unconstrained optimum. H1 moves: the feasibility boundary is at eps ≈ 0.12–0.16 pu, not "no δ ≤ 1.5 at eps ≥ 0.01". [`results/DESIGN.md`](../../results/DESIGN.md) §3–4. |
+| Cheapest immediate win | ~~Theorem 1's closed-form lower bound~~ — **implemented, and it is vacuous here** ([`results/DESIGN.md`](../../results/DESIGN.md) §2). The actual win was the current limit: moving it inside the problem reversed H5 and halved the required signal. |
