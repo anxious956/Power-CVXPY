@@ -107,7 +107,66 @@ def build_cache(path, cubicles, fn=None, out=None, verbose=True):
     return out
 
 
+def build_cache_disk(path, cubicles, fn=50, out=None, verbose=True):
+    """Same as build_cache, but writes each simulation to disk as it is read, so memory stays
+    flat however large the archive is. Produces <out>.bin (raw float32, C order,
+    (n_sims, n_cubicles, 6, n_samples)) and <out>.meta.npz with everything else.
+    load_cache accepts the .meta.npz path."""
+    base = out or os.path.splitext(os.path.splitext(path)[0])[0] + "_cache"
+    bin_path, meta_path = base + ".bin", base + ".meta.npz"
+    up, down = _resample_factors(fn)
+    files, labels_raw, graph_raw, n_samples = [], None, None, None
+    t0 = time.time()
+    with open(bin_path, "wb") as fbin:
+        for name, raw in _members(path):
+            if name.endswith("labels/settings_clean.csv"):
+                labels_raw = raw
+                continue
+            if name.endswith(".pickle") and "/graphs/" in name:
+                graph_raw = raw
+                continue
+            if "/data/result" not in name or not name.endswith(".csv"):
+                continue
+            df = pd.read_csv(io.BytesIO(raw), header=[0, 1], low_memory=False)
+            block = np.stack([resample_poly(df[c][CHANNELS].to_numpy(dtype=np.float64).T, up, down, axis=1)
+                              for c in cubicles]).astype(np.float32)
+            if n_samples is None:
+                n_samples = block.shape[-1]
+            if block.shape[-1] != n_samples:
+                raise RuntimeError(f"{name}: {block.shape[-1]} samples, expected {n_samples}")
+            fbin.write(np.ascontiguousarray(block).tobytes())
+            files.append(name.rsplit("/", 1)[-1])
+            if verbose and len(files) % 200 == 0:
+                print(f"  {len(files)} simulations  [{time.time()-t0:.0f}s]", flush=True)
+    if labels_raw is not None:
+        fns = pd.read_csv(io.BytesIO(labels_raw))["general/fn"].unique()
+        if len(fns) == 1 and int(fns[0]) != fn:
+            raise RuntimeError(f"labels say {fns[0]} Hz but cache was built at {fn} Hz")
+    fs = FS_RAW * up / down
+    np.savez_compressed(meta_path, bin=os.path.basename(bin_path),
+                        shape=np.array([len(files), len(cubicles), 6, n_samples]),
+                        files=np.array(files), cubicles=np.array(cubicles), fs=fs,
+                        event_index=int(round((EVENT_T - T0) * fs)), samples_per_cycle=SAMPLES_PER_CYCLE,
+                        labels=np.frombuffer(labels_raw or b"", dtype=np.uint8),
+                        graph=np.frombuffer(graph_raw or b"", dtype=np.uint8))
+    if verbose:
+        print(f"cached ({len(files)}, {len(cubicles)}, 6, {n_samples}) at {fs:.0f} Hz -> {bin_path}  "
+              f"[{time.time()-t0:.0f}s, {os.path.getsize(bin_path)/1e9:.2f} GB]")
+    return meta_path
+
+
 def load_cache(path):
+    if path.endswith(".meta.npz"):
+        z = np.load(path, allow_pickle=False)
+        shape = tuple(int(s) for s in z["shape"])
+        x = np.memmap(os.path.join(os.path.dirname(path), str(z["bin"])), dtype=np.float32, mode="r", shape=shape)
+        labels = pd.read_csv(io.BytesIO(z["labels"].tobytes()))
+        labels["file"] = labels["general/result_file_path"].str.replace("\\", "/", regex=False).str.rsplit("/", n=1).str[-1]
+        labels = labels.set_index("file").loc[list(z["files"])].reset_index()
+        graph = pickle.loads(z["graph"].tobytes()) if z["graph"].size else None
+        return dict(x=x, files=list(z["files"]), cubicles=list(z["cubicles"]), fs=float(z["fs"]),
+                    event_index=int(z["event_index"]), samples_per_cycle=int(z["samples_per_cycle"]),
+                    labels=labels, graph=graph)
     z = np.load(path, allow_pickle=False)
     labels = pd.read_csv(io.BytesIO(z["labels"].tobytes()))
     labels["file"] = labels["general/result_file_path"].str.replace("\\", "/", regex=False).str.rsplit("/", n=1).str[-1]
@@ -142,5 +201,7 @@ if __name__ == "__main__":
             print(c)
     elif cmd == "cache":
         build_cache(arc, sys.argv[3:])
+    elif cmd == "cache-disk":
+        build_cache_disk(arc, sys.argv[3:])
     else:
         raise SystemExit(__doc__)
