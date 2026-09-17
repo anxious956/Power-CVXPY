@@ -82,17 +82,16 @@ def cvt_filter(v, kind):
     Rf = 0.2 * Rb                                   # FSC damping resistor (referred)
     Lf = 0.05 * Rb / w                              # FSC tank tuned to 50 Hz
     Cf = 1 / (w**2 * Lf)
-    # states: vCe, iLc, vout (across burden node, via small shunt cap), iLf, vCf, iRf-branch uses KCL
-    # Use the s-domain impedance form instead: H(s) = Zload/(Zload + Rc + s Lc + 1/(s Ce))
-    s = np.poly1d([1, 0])
-    # Z_tank = (s Lf)/(1 + s^2 Lf Cf) ; Z_fsc = Rf + Z_tank ; Zload = Rb*Z_fsc/(Rb + Z_fsc)
-    num_tank, den_tank = np.poly1d([Lf, 0]), np.poly1d([Lf * Cf, 0, 1])
-    num_fsc, den_fsc = Rf * den_tank + num_tank, den_tank
-    num_load, den_load = Rb * num_fsc, Rb * den_fsc + num_fsc
-    zs_num, zs_den = np.poly1d([Lc * Ce, Rc * Ce, 1]), np.poly1d([Ce, 0])       # series Rc + sLc + 1/(sCe)
-    H_num = num_load * zs_den
-    H_den = num_load * zs_den + zs_num * den_load
-    b, a, _ = cont2discrete((H_num.coeffs, H_den.coeffs), 1 / FS, method="bilinear")
+    # s-domain impedance form: H(s) = Zload / (Zload + Rc + s Lc + 1/(s Ce)), polynomials as coefficient arrays
+    # Z_tank = s Lf / (1 + s^2 Lf Cf); Z_fsc = Rf + Z_tank; Zload = Rb Z_fsc / (Rb + Z_fsc)
+    P, M = np.polyadd, np.polymul
+    num_tank, den_tank = np.array([Lf, 0.0]), np.array([Lf * Cf, 0.0, 1.0])
+    num_fsc, den_fsc = P(Rf * den_tank, num_tank), den_tank
+    num_load, den_load = Rb * num_fsc, P(Rb * den_fsc, num_fsc)
+    zs_num, zs_den = np.array([Lc * Ce, Rc * Ce, 1.0]), np.array([Ce, 0.0])     # series Rc + sLc + 1/(sCe)
+    H_num = M(num_load, zs_den)
+    H_den = P(M(num_load, zs_den), M(zs_num, den_load))
+    b, a, _ = cont2discrete((H_num, H_den), 1 / FS, method="bilinear")
     b = np.ravel(b)
     Hw = np.polyval(b, np.exp(1j * w / FS)) / np.polyval(a, np.exp(1j * w / FS))
     lead = v[..., :SPC]
@@ -198,13 +197,17 @@ def load_relay(name, chain=None, cubicle=None):
     other = shc & ~(pos | neg | own99 | parallel | reverse)
     key = np.array([f"{t}|{l}|{e}|{r}" for t, l, e, r in zip(tgt, loc, et, rf)])
     _, groups = np.unique(key, return_inverse=True)
+    # deduplication: three-phase "siblings" are bit-identical simulations (results/DATASET_FACTS.json), so
+    # they count once in any per-class rate; every other simulation is its own unit
+    dkey = np.where(np.char.find(et.astype(str), "3ph") >= 0, key, np.array([f"sim{i}" for i in range(len(key))]))
+    _, dedup = np.unique(dkey, return_inverse=True)
     phase = np.where(np.char.find(et.astype(str), "1phg") >= 0, ph1,
                      np.where(np.char.find(et.astype(str), "2ph") >= 0, ph2, "abc"))
     return dict(name=name, cfg=cfg, full=full, ev=C["event_index"], lp=lp,
                 z1L=lp["length_km"] * lp["z1"], z0L=lp["length_km"] * lp["z0"],
                 x_reach=REACH * lp["length_km"] * lp["z1"].imag,
                 z_reach=abs(REACH * lp["length_km"] * lp["z1"]),
-                et=et, tgt=tgt, loc=loc, rf=rf, phase=phase, groups=groups,
+                et=et, tgt=tgt, loc=loc, rf=rf, phase=phase, groups=groups, dedup=dedup,
                 pos=pos, neg=neg, own99=own99, parallel=parallel, switching=switching, fault_any=fault_any,
                 reverse=reverse, reverse_bus=reverse_bus, reverse_lines=reverse_lines, other=other, relay_bus=relay_bus, behind_lines=behind,
                 graph=C["graph"], labels=L)
@@ -461,6 +464,51 @@ def oof_scores(name, X, y, seed, groups=None, folds=5):
 
 def thr_at_far(s_neg, far):
     return float(np.quantile(s_neg, 1 - far))
+
+
+def dedup_rate(trip, dedup, mask):
+    """Per-class trip count on deduplicated units: a unit trips if any of its identical copies trips
+    (conservative). Returns k, n, point rate, one-sided 95 % Clopper-Pearson upper bound."""
+    from scipy.stats import beta
+    u = np.unique(dedup[mask])
+    if len(u) == 0:
+        return dict(k=0, n=0, rate=None, ucb95=None)
+    tripped = np.zeros(dedup.max() + 1, bool)
+    np.logical_or.at(tripped, dedup[mask], trip[mask])
+    k, n = int(tripped[u].sum()), int(len(u))
+    ucb = 1.0 if k == n else float(beta.ppf(0.95, k + 1, n - k))
+    return dict(k=k, n=n, rate=k / n, ucb95=ucb)
+
+
+def min_n_for_budget(budget=0.05):
+    """Smallest class size whose one-sided 95 % upper bound can be below `budget` with zero trips."""
+    n = 1
+    while 1 - 0.05 ** (1 / n) > budget:
+        n += 1
+    return n
+
+
+def git_commit():
+    import subprocess
+    return subprocess.run(["git", "-C", ROOT, "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+
+
+def code_unchanged(commit_a, commit_b, files):
+    """True if both commits exist and `files` are identical between them, and the working tree has no
+    uncommitted change to them."""
+    import subprocess
+    if not commit_a or not commit_b:
+        return False
+    if commit_a != commit_b:
+        r = subprocess.run(["git", "-C", ROOT, "diff", "--quiet", commit_a, commit_b, "--", *files])
+        if r.returncode != 0:
+            return False
+    return subprocess.run(["git", "-C", ROOT, "diff", "--quiet", "HEAD", "--", *files]).returncode == 0
+
+
+def config_hash(cfg):
+    import hashlib, json as _json
+    return hashlib.sha1(_json.dumps(cfg, sort_keys=True, default=str).encode()).hexdigest()[:12]
 
 
 def binom_ci(k, n, alpha=0.05):

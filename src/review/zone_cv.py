@@ -1,10 +1,15 @@
 """H22 / H24 / H26 / H9: the within-relay zone decision of real_ml.py under four splits, learned side.
 The conventional ladder runs on exactly the same folds in src/review/ladder.py.
 
-Task (changed from real_ml.py, H9): positives = own line at 1, 20, 50, 80 %; negatives = faults beyond the
-remote bus (as before) PLUS own-line faults at 99 %, which are outside zone 1 and were never negatives in
-real_ml.py, so any threshold could overreach into the 85-100 % band at no cost. Own-99 % faults are used
-for training, calibration and evaluation, and their trip rate is reported separately.
+Task
+  positives        own line at 1, 20, 50, 80 % (as real_ml.py)
+  negatives        faults beyond the remote bus and on the remote bus (as real_ml.py) for training and
+                   calibration; security is evaluated on every off-line class: beyond / remote bus (test
+                   folds), relay-bus reverse faults, lines behind the relay, the parallel line, other faults
+  guard band       own line at 99 %: tripping there still clears the faulted line, so it is neither a
+                   positive nor a negative; not used for training or calibration (--own99 guard, default),
+                   reported separately. --own99 negative trains and calibrates with it as a hard negative, to
+                   show the effect of that choice.
 
 Splits (sibling groups = (target, location, fault type, R_f))
   stratified  RepeatedStratifiedKFold 5x2 over simulations (the real_ml.py protocol, inner folds ungrouped)
@@ -14,11 +19,11 @@ Splits (sibling groups = (target, location, fault type, R_f))
 
 Detectors: MLP, gradient boosting, random forest (raw causal window), engineered + LR, exactly as
 real_ml.models / fit_balanced / score, hyperparameters untouched. Threshold at 5 % false trip on
-out-of-fold training scores of the negatives. Each fold's models are also scored on parallel-line,
-reverse (relay bus, and lines behind it), other-fault and switching events.
+out-of-fold training scores of the training negatives (point rate, as real_ml.py). Per-class false trips
+are then checked on deduplicated units with one-sided 95 % binomial upper bounds (aggregate.py).
 
-Checkpoints: every (decision time, split, fold) is saved under logs/ckpt/zone_cv/<relay>/ as soon as it
-finishes and skipped on restart.
+Checkpoints: logs/ckpt/zone_cv/<relay>/<config hash>/t<t>_<split>_f<fold>.pkl, each holding the git commit
+and the config; a checkpoint whose commit or config differs from the current run is refused.
 
     python src/review/zone_cv.py testgrid_B --times 20 --splits grouped stratified lorfo lolo
 """
@@ -31,13 +36,15 @@ import real_ml
 from zone_detect import zone_features
 
 FAR = 0.05
-HELD = ("parallel", "reverse_bus", "reverse_lines", "other", "switching")
+HELD = ("own99", "parallel", "reverse_bus", "reverse_lines", "other", "switching")
 MODELS = ("MLP", "gradient boosting", "random forest", "engineered + LR")
 
 
-def zone_task(R):
-    """Positions of the zone task: positives, beyond-remote-bus negatives, own-line 99 % negatives."""
-    idx = np.where(R["pos"] | R["neg"] | R["own99"])[0]
+def zone_task(R, own99="guard"):
+    """Positions of the zone task and labels. own99='guard': own-line 99 % faults excluded;
+    own99='negative': included as negatives."""
+    m = R["pos"] | R["neg"] | (R["own99"] if own99 == "negative" else False)
+    idx = np.where(m)[0]
     return idx, R["pos"][idx].astype(int), R["groups"][idx]
 
 
@@ -68,97 +75,84 @@ def splits(kind, R, idx, y, groups, seed=0):
         raise ValueError(kind)
 
 
-def summarise(R, idx, y, groups, ii, dd):
-    """Pooled test decisions -> rates with grouped-bootstrap intervals, own-99 % and the high-R_f stratum."""
-    yy, gg = y[ii], groups[ii]
-    is99 = R["own99"][idx][ii]
-    beyond = R["neg"][idx][ii]
-    rf = R["rf"][idx][ii]
-    dep = lambda s: dd[s][yy[s] == 1].mean()
-    ftr = lambda s: dd[s][beyond[s]].mean()
-    f99 = lambda s: dd[s][is99[s]].mean()
-    return dict(dependability=float(dep(slice(None))), false_trip_beyond=float(ftr(slice(None))),
-                trip_own99=float(f99(slice(None))),
-                false_trip_all_negatives=float(dd[yy == 0].mean()),
-                dependability_ci=cm.grouped_bootstrap(dep, gg, 500), false_trip_beyond_ci=cm.grouped_bootstrap(ftr, gg, 500),
-                trip_own99_ci=cm.grouped_bootstrap(f99, gg, 500),
-                dep_by_rf={f"{r:g}": float(dd[(yy == 1) & (rf == r)].mean()) for r in (1, 10, 40) if ((yy == 1) & (rf == r)).any()},
-                ft_beyond_by_rf={f"{r:g}": float(dd[beyond & (rf == r)].mean()) for r in (1, 10, 40) if (beyond & (rf == r)).any()},
-                own99_by_rf={f"{r:g}": float(dd[is99 & (rf == r)].mean()) for r in (1, 10, 40) if (is99 & (rf == r)).any()})
+def checkpoint_dir(name, cfg):
+    return os.path.join(cm.ROOT, "logs", "ckpt", "zone_cv", name, cm.config_hash(cfg))
 
 
-def run(name, times, split_kinds, far=FAR, chain=None, tag=""):
+CODE = ("src/review/zone_cv.py", "src/review/common.py", "src/real_ml.py", "src/zone_detect.py", "src/zone_model.py",
+        "src/evemt.py", "src/real_zone.py", "src/waveforms.py")
+
+
+def load_checkpoint(path, commit, cfg):
+    """Accept a checkpoint only if its config is identical and it was written by the current commit or by a
+    commit whose experiment code (CODE) is byte-identical to the current one."""
+    rec = pickle.load(open(path, "rb"))
+    if rec.get("_config") != cfg or not cm.code_unchanged(rec.get("_commit"), commit, CODE):
+        raise RuntimeError(f"checkpoint {path} was written by commit {rec.get('_commit')} / config "
+                           f"{rec.get('_config')}; current is {commit} / {cfg}. Refusing to resume.")
+    return rec
+
+
+def run(name, times, split_kinds, own99="guard", far=FAR, chain=None):
     t0 = time.time()
-    ck = os.path.join(cm.ROOT, "logs", "ckpt", "zone_cv", name + tag)
-    os.makedirs(ck, exist_ok=True)
+    commit = cm.git_commit()
+    if not cm.code_unchanged(commit, commit, CODE):
+        raise RuntimeError("experiment code has uncommitted changes; commit before running so checkpoints are keyed")
     R = cm.load_relay(name, chain)
     R["g"] = type("G", (), dict(z1=R["lp"]["z1"], z0_ratio=R["lp"]["z0"] / R["lp"]["z1"]))
-    idx, y, groups = zone_task(R)
-    held_idx = {h: np.where(R[h])[0] for h in HELD if R[h].any()}
-    out = dict(relay=name, far=far, n_pos=int(y.sum()), n_beyond=int(R["neg"].sum()), n_own99=int(R["own99"].sum()),
-               chain=chain or {}, n_held={h: int(len(v)) for h, v in held_idx.items()}, results={})
+    idx, y, groups = zone_task(R, own99)
+    held = tuple(h for h in HELD if R[h].any() and not (h == "own99" and own99 == "negative"))
+    held_idx = {h: np.where(R[h])[0] for h in held}
+    out = dict(relay=name, commit=commit, own99=own99, far=far, chain=chain or {}, n_pos=int(y.sum()),
+               n_neg=int((1 - y).sum()), n_held={h: int(len(v)) for h, v in held_idx.items()}, runs={})
     for t in times:
         feats = None
         for kind in split_kinds:
-            per_model = {n: [] for n in MODELS}
+            cfg = dict(script="zone_cv", relay=name, t=t, split=kind, own99=own99, far=far, chain=chain or {},
+                       models=list(MODELS), held=list(held))
+            ck = checkpoint_dir(name, cfg)
+            os.makedirs(ck, exist_ok=True)
             for f, tr, te, meta in splits(kind, R, idx, y, groups):
                 path = os.path.join(ck, f"t{t}_{kind}_f{f}.pkl")
                 if os.path.exists(path):
-                    rec = pickle.load(open(path, "rb"))
-                else:
-                    if feats is None:
-                        all_idx = np.concatenate([idx] + list(held_idx.values()))
-                        F_raw = real_ml.raw_window(R, all_idx, t)
-                        F_eng = zone_features(real_ml.phasor_view(R, all_idx, t), R["g"])
-                        offs, hsel = len(idx), {}
-                        for h, v in held_idx.items():
-                            hsel[h] = np.arange(offs, offs + len(v)); offs += len(v)
-                        feats = ({"MLP": F_raw, "gradient boosting": F_raw, "random forest": F_raw, "engineered + LR": F_eng}, hsel)
-                    fmap, hsel = feats
-                    ytr, yte = y[tr], y[te]
-                    g_in = groups[tr] if kind != "stratified" else None
-                    rec = {}
-                    for n, m in real_ml.models(f).items():
-                        X = fmap[n][:len(idx)]
-                        real_ml.fit_balanced(m, X[tr], ytr, f)
-                        s_oof = cm.oof_scores(n, X[tr], ytr, f, groups=g_in)
-                        thr = cm.thr_at_far(s_oof[ytr == 0], far)
-                        s_te = real_ml.score(m, X[te])
-                        rec[n] = dict(te=te, score=s_te, dec=s_te > thr, threshold=float(thr), meta=meta,
-                                      auc=float(roc_auc_score(yte, s_te)) if 0 < yte.sum() < len(yte) else None,
-                                      held={h: float((real_ml.score(m, fmap[n][hs]) > thr).mean()) for h, hs in hsel.items()})
-                    pickle.dump(rec, open(path, "wb"))
-                    print(f"  [{name}{tag}] t={t} {kind} fold {f} done [{time.time()-t0:.0f}s]", flush=True)
-                for n in MODELS:
-                    per_model[n].append(rec[n])
-            summ = {}
-            for n, folds in per_model.items():
-                ii = np.concatenate([r["te"] for r in folds]); dd = np.concatenate([r["dec"] for r in folds])
-                aucs = [r["auc"] for r in folds if r["auc"] is not None]
-                summ[n] = dict(auc=float(np.mean(aucs)) if aucs else None, auc_sd=float(np.std(aucs)) if aucs else None,
-                               **summarise(R, idx, y, groups, ii, dd),
-                               **{f"trip_{h}": float(np.mean([r["held"][h] for r in folds])) for h in held_idx},
-                               folds=[dict(auc=r["auc"], threshold=r["threshold"], **r["meta"],
-                                           **{f"trip_{h}": r["held"][h] for h in held_idx}) for r in folds])
-            out["results"].setdefault(str(t), {})[kind] = summ
-            print(f"[{name}{tag}] t={t} ms, split={kind}")
-            for n, S in summ.items():
-                a = "  n/a " if S["auc"] is None else f"{S['auc']:.3f}"
-                print(f"   {n:18s} AUC {a}  dep {S['dependability']*100:5.1f}  FT beyond {S['false_trip_beyond']*100:5.1f}  "
-                      f"own99 {S['trip_own99']*100:5.1f}  dep@40ohm {S['dep_by_rf'].get('40', float('nan'))*100:5.1f}  "
-                      + "  ".join(f"{h} {S['trip_' + h]*100:5.1f}" for h in held_idx), flush=True)
+                    load_checkpoint(path, commit, cfg)
+                    continue
+                if feats is None:
+                    all_idx = np.concatenate([idx] + list(held_idx.values()))
+                    F_raw = real_ml.raw_window(R, all_idx, t)
+                    F_eng = zone_features(real_ml.phasor_view(R, all_idx, t), R["g"])
+                    offs, hsel = len(idx), {}
+                    for h, v in held_idx.items():
+                        hsel[h] = np.arange(offs, offs + len(v)); offs += len(v)
+                    feats = ({"MLP": F_raw, "gradient boosting": F_raw, "random forest": F_raw, "engineered + LR": F_eng}, hsel)
+                fmap, hsel = feats
+                ytr, yte = y[tr], y[te]
+                g_in = groups[tr] if kind != "stratified" else None
+                rec = dict(_commit=commit, _config=cfg, test_idx=idx[te], meta=meta, models={})
+                for n, m in real_ml.models(f).items():
+                    X = fmap[n][:len(idx)]
+                    real_ml.fit_balanced(m, X[tr], ytr, f)
+                    s_oof = cm.oof_scores(n, X[tr], ytr, f, groups=g_in)
+                    thr = cm.thr_at_far(s_oof[ytr == 0], far)
+                    rec["models"][n] = dict(threshold=float(thr), test_score=real_ml.score(m, X[te]),
+                                            held_score={h: real_ml.score(m, fmap[n][hs]) for h, hs in hsel.items()})
+                pickle.dump(rec, open(path, "wb"))
+                print(f"  [{name}] t={t} {kind} fold {f} done [{time.time()-t0:.0f}s]", flush=True)
+            out["runs"][f"{t}|{kind}"] = dict(checkpoint_dir=os.path.relpath(ck, cm.ROOT), config=cfg,
+                                              held_idx={h: v.tolist() for h, v in held_idx.items()})
+            print(f"[{name}] t={t} {kind}: all folds checkpointed [{time.time()-t0:.0f}s]", flush=True)
     return out
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("relay")
-    ap.add_argument("--times", type=int, nargs="+", default=[10, 20, 50])
-    ap.add_argument("--splits", nargs="+", default=["stratified", "grouped", "lolo", "lorfo"])
+    ap.add_argument("--times", type=int, nargs="+", default=[20])
+    ap.add_argument("--splits", nargs="+", default=["grouped", "stratified", "lorfo", "lolo"])
+    ap.add_argument("--own99", choices=["guard", "negative"], default="guard")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
-    res = run(a.relay, a.times, a.splits)
-    os.makedirs(os.path.join(cm.ROOT, "results", "review"), exist_ok=True)
-    path = a.out or os.path.join(cm.ROOT, "results", "review", f"zone_cv_{a.relay}.json")
+    res = run(a.relay, a.times, a.splits, a.own99)
+    path = a.out or os.path.join(cm.ROOT, "logs", f"zone_cv_{a.relay}_{a.own99}_{'-'.join(map(str, a.times))}.manifest.json")
     json.dump(res, open(path, "w"), indent=1)
     print("saved", path)
