@@ -221,6 +221,41 @@ def quad_settings(R, name, rf_max=40.0, r_frac=0.7, margin=0.9):
                 worst_external=worst, rf_max=rf_max)
 
 
+def study_direction(R, name, net=None):
+    """Ground-truth direction for every short-circuit simulation, from the study model only: draw 1 A at the
+    fault point in the positive-sequence network and take the direction of the resulting current in the
+    protected line at the relay (forward = into the line). Faults on the protected line and at its remote
+    bus are forward by construction; for meshed paths the modelled current decides. NaN for non-faults."""
+    net = net or build(R["graph"])
+    cfg = R["cfg"]; rb = RELAY_BUS[name]
+    main, lines, grids, loads = net
+    u0, v0, zl1, _ = lines[cfg["line"]]
+    far = v0 if u0 == rb else u0
+    label = np.full(len(R["tgt"]), np.nan)
+    cache = {}
+    shc = np.char.find(R["et"].astype(str), "shc") >= 0
+    for i in np.where(shc)[0]:
+        tgt, loc = R["tgt"][i], R["loc"][i]
+        key = (tgt, None if tgt.startswith("MainBus") else float(loc))
+        if key not in cache:
+            if tgt.startswith("MainBus"):
+                nodes, ix, Y, _ = ybus(main, lines, grids, loads, 1)
+                f = ix[tgt]; fl = None
+            else:
+                m = float(np.clip(loc / 100.0, 1e-4, 1 - 1e-4))
+                nodes, ix, Y, _ = ybus(main, lines, grids, loads, 1, tgt, m)
+                f = ix["F"]; fl = tgt
+            dv = -np.linalg.inv(Y)[:, f]
+            if fl == cfg["line"]:
+                zseg = (m if u0 == rb else 1 - m) * zl1
+                i_rel = (dv[ix[rb]] - dv[ix["F"]]) / zseg
+            else:
+                i_rel = (dv[ix[rb]] - dv[ix[far]]) / zl1
+            cache[key] = 1.0 if np.real(i_rel) > 0 else 0.0
+        label[i] = cache[key]
+    return label
+
+
 def apparent_x(R, vpost, ipost, vpre, ipre, loop):
     Lp = cm.loops(R, vpost[None], ipost[None], vpre[None], ipre[None])
     j = cm.LOOPS.index(loop)

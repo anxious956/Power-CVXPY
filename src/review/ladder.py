@@ -243,7 +243,7 @@ def rates(trip, R, sel):
         m = R[h][sel]
         if m.any():
             k, n = int(trip[m].sum()), int(m.sum())
-            out[h] = dict(rate=k / n, k=k, n=n, ci=cm.binom_ci(k, n))
+            out[h] = dict(rate=k / n, k=k, n=n, ci=cm.binom_ci(k, n), dedup=cm.dedup_rate(trip, R["dedup"][sel], m))
     rf, et = R["rf"][sel], R["et"][sel]
     out["dep_by_rf"] = {f"{r:g}": float(trip[R["pos"][sel] & (rf == r)].mean()) for r in (1, 10, 40)}
     out["beyond_by_rf"] = {f"{r:g}": float(trip[R["neg"][sel] & (rf == r)].mean()) for r in (1, 10, 40)}
@@ -269,12 +269,9 @@ def run(name):
     S = settings(R, name)
     print(f"[{name}] settings: " + json.dumps({k: (round(v, 3) if isinstance(v, float) else v) for k, v in S.items()}, default=str), flush=True)
     sel = np.where(np.any([R[h] for h in SETS], axis=0))[0]
-    zidx, y, groups = zone_task(R)
-    zpos = np.searchsorted(sel, zidx)
-    assert np.array_equal(sel[zpos], zidx)
-    is99 = R["own99"][zidx]
-    beyond = R["neg"][zidx]
-    res = dict(settings=S, fixed={}, tuned={}, tilt_robustness={}, directional_reverse_bus={}, reference_67={})
+    study_dir = ss.study_direction(R, name)
+    res = dict(settings=S, fixed={}, tuned={}, tilt_robustness={}, directional_reverse_bus={}, reference_67={},
+               directional_accuracy_vs_study={}, operating_curves={})
     for t, window in TIMES:
         P0 = pack(R, sel, t, window, False)
         P1 = pack(R, sel, t, window, True)
@@ -317,54 +314,88 @@ def run(name):
                     worst[f"{h}_max"] = max(worst[f"{h}_max"], r[h]["rate"])
         res["tilt_robustness"][str(t)] = dict(tilt_range_deg=S["tilt_range_deg"], **worst)
         print(f"[{name}] {t:2d} ms R3 worst case over tilt {np.round(S['tilt_range_deg'], 2)}: {worst}", flush=True)
-        # tuned rungs on the zone_cv folds
-        Pz0 = tuple(a[zpos] for a in P0); Pz1 = tuple(a[zpos] for a in P1)
-        _, x0 = evaluate_block(R, *Pz0, S, "R0")
+        # directional element accuracy against study-model labels (never from EMT quantities)
+        lab = study_dir[sel]
+        acc = {}
+        for h in ("pos", "neg", "own99", "parallel", "reverse_bus", "reverse_lines", "other"):
+            m = R[h][sel] & np.isfinite(lab)
+            if m.any():
+                acc[h] = dict(n=int(m.sum()), study_forward_share=float(lab[m].mean()),
+                              agreement=float((fwd[m] == (lab[m] == 1)).mean()),
+                              by_type={ty: float((fwd[m & (et == ty)] == (lab[m & (et == ty)] == 1)).mean())
+                                       for ty in TYPES if (m & (et == ty)).any()})
+        res["directional_accuracy_vs_study"][str(t)] = acc
+        print(f"[{name}] {t:2d} ms directional agreement with study labels: "
+              + "  ".join(f"{h} {v['agreement']*100:5.1f}% (fwd {v['study_forward_share']*100:3.0f}%)" for h, v in acc.items()), flush=True)
+        # per-class operating curves of the scored rungs (no fitting): dependability vs per-class false trip
+        curves = {}
+        for rung, PP in (("R0", P0), ("R2", P1)):
+            _, sc = evaluate_block(R, *PP, S, rung, x_set=1e9) if rung == "R2" else evaluate_block(R, *PP, S, rung)
+            thr_grid = np.quantile(sc[np.isfinite(sc)], np.linspace(0, 1, 41))
+            curves[rung] = {h: [float((sc[R[h][sel]] < th).mean()) for th in thr_grid] for h in SETS if R[h][sel].any()}
+            curves[rung]["threshold_ohm"] = thr_grid.tolist()
+        res["operating_curves"][str(t)] = curves
+        # tuned rungs on the zone_cv folds; own-99 % as guard band (default) and as hard negative (20 ms, grouped)
         cap = X_CAP * S["x_line"]
         xgrid = np.linspace(0.3 * S["x_set"], cap, 21)
         rgrid = S["r_set_g"] * np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0])
-        grid = {(xs, rs): evaluate_block(R, *Pz1, S, "R2", x_set=xs, r_set=rs)[0] for xs in xgrid for rs in rgrid}
-        heldsets = ("parallel", "reverse_bus", "reverse_lines", "other", "switching")
-        Ph0 = {h: tuple(a[np.where(R[h][sel])[0]] for a in P0) for h in heldsets if R[h][sel].any()}
-        Ph1 = {h: tuple(a[np.where(R[h][sel])[0]] for a in P1) for h in heldsets if R[h][sel].any()}
-        kinds = ["grouped", "stratified", "lorfo", "lolo"] if t == 20 else ["grouped"]
-        for kind in kinds:
-            for rung in ("T1", "T2"):
-                if rung == "T1" and t < 20:
-                    continue
-                dec_all, idx_all, held = [], [], {h: [] for h in Ph1}
-                for f, tr, te, meta in splits(kind, R, zidx, y, groups):
-                    if rung == "T1":
-                        thr = max(cm.thr_at_far(-x0[tr][y[tr] == 0], FAR), -cap)
-                        dec = -x0[te] > thr
-                        for h, hp in Ph0.items():
-                            held[h].append(float((-evaluate_block(R, *hp, S, "R0")[1] > thr).mean()))
-                    else:
-                        best = (-1.0, None)
-                        for key, tt in grid.items():
-                            if tt[tr][y[tr] == 0].mean() <= FAR:
-                                d = tt[tr][y[tr] == 1].mean()
-                                if d > best[0]:
-                                    best = (d, key)
-                        dec = grid[best[1]][te]
-                        for h, hp in Ph1.items():
-                            held[h].append(float(evaluate_block(R, *hp, S, "R2", x_set=best[1][0], r_set=best[1][1])[0].mean()))
-                    dec_all.append(dec); idx_all.append(te)
-                ii, dd = np.concatenate(idx_all), np.concatenate(dec_all)
-                yy, gg, b, o = y[ii], groups[ii], beyond[ii], is99[ii]
-                rf = R["rf"][zidx][ii]
-                dep = lambda s: dd[s][yy[s] == 1].mean()
-                ftb = lambda s: dd[s][b[s]].mean()
-                f99 = lambda s: dd[s][o[s]].mean()
-                r = dict(dependability=float(dep(slice(None))), false_trip_beyond=float(ftb(slice(None))),
-                         trip_own99=float(f99(slice(None))), dependability_ci=cm.grouped_bootstrap(dep, gg, 500),
-                         false_trip_beyond_ci=cm.grouped_bootstrap(ftb, gg, 500), trip_own99_ci=cm.grouped_bootstrap(f99, gg, 500),
-                         dep_by_rf={f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)},
-                         **{f"trip_{h}": float(np.mean(v)) for h, v in held.items()})
-                res["tuned"][f"{t}|{kind}|{rung}"] = r
-                print(f"[{name}] {t:2d} ms {rung} {kind:10s}: dep {r['dependability']*100:5.1f}  beyond {r['false_trip_beyond']*100:5.1f}  "
-                      f"own99 {r['trip_own99']*100:5.1f}  dep@40 {r['dep_by_rf']['40']*100:5.1f}  "
-                      + "  ".join(f"{h} {r['trip_' + h]*100:5.1f}" for h in held), flush=True)
+        heldsets = ("own99", "parallel", "reverse_bus", "reverse_lines", "other", "switching")
+        for mode in (("guard", "negative") if t == 20 else ("guard",)):
+            zidx, y, groups = zone_task(R, mode)
+            zpos = np.searchsorted(sel, zidx)
+            beyond = R["neg"][zidx]
+            Pz0 = tuple(a[zpos] for a in P0); Pz1 = tuple(a[zpos] for a in P1)
+            _, x0 = evaluate_block(R, *Pz0, S, "R0")
+            grid = {(xs, rs): evaluate_block(R, *Pz1, S, "R2", x_set=xs, r_set=rs)[0] for xs in xgrid for rs in rgrid}
+            hs = tuple(h for h in heldsets if R[h][sel].any() and not (h == "own99" and mode == "negative"))
+            Ph0 = {h: tuple(a[np.where(R[h][sel])[0]] for a in P0) for h in hs}
+            Ph1 = {h: tuple(a[np.where(R[h][sel])[0]] for a in P1) for h in hs}
+            dd_h = {h: R["dedup"][sel][R[h][sel]] for h in hs}
+            kinds = (["grouped", "stratified", "lorfo", "lolo"] if t == 20 else ["grouped"]) if mode == "guard" else ["grouped"]
+            for kind in kinds:
+                for rung in ("T1", "T2"):
+                    if rung == "T1" and t < 20:
+                        continue
+                    dec_all, idx_all, held = [], [], {h: [] for h in hs}
+                    for f, tr, te, meta in splits(kind, R, zidx, y, groups):
+                        if rung == "T1":
+                            thr = max(cm.thr_at_far(-x0[tr][y[tr] == 0], FAR), -cap)
+                            dec = -x0[te] > thr
+                            for h, hp in Ph0.items():
+                                held[h].append(-evaluate_block(R, *hp, S, "R0")[1] > thr)
+                        else:
+                            best = (-1.0, None)
+                            for key, tt in grid.items():
+                                if tt[tr][y[tr] == 0].mean() <= FAR:
+                                    d = tt[tr][y[tr] == 1].mean()
+                                    if d > best[0]:
+                                        best = (d, key)
+                            dec = grid[best[1]][te]
+                            for h, hp in Ph1.items():
+                                held[h].append(evaluate_block(R, *hp, S, "R2", x_set=best[1][0], r_set=best[1][1])[0])
+                        dec_all.append(dec); idx_all.append(te)
+                    ii, dd = np.concatenate(idx_all), np.concatenate(dec_all)
+                    yy, gg, b = y[ii], groups[ii], beyond[ii]
+                    rf = R["rf"][zidx][ii]
+                    dep = lambda s: dd[s][yy[s] == 1].mean()
+                    ftb = lambda s: dd[s][b[s]].mean()
+                    # per-class held-out: mean rate over folds, and the worst fold's deduplicated k/n with 95 % UCB
+                    perclass = {}
+                    for h, v in held.items():
+                        folds = [cm.dedup_rate(d, dd_h[h], np.ones(len(d), bool)) for d in v]
+                        worst = max(folds, key=lambda z: z["ucb95"])
+                        perclass[h] = dict(mean_rate=float(np.mean([z["rate"] for z in folds])), worst_fold=worst,
+                                           supports_5pct_budget=bool(worst["n"] >= cm.min_n_for_budget(0.05)))
+                    r = dict(own99_mode=mode, dependability=float(dep(slice(None))), false_trip_beyond=float(ftb(slice(None))),
+                             dependability_ci=cm.grouped_bootstrap(dep, gg, 500), false_trip_beyond_ci=cm.grouped_bootstrap(ftb, gg, 500),
+                             beyond_dedup=cm.dedup_rate(dd, R["dedup"][zidx][ii], b),
+                             dep_by_rf={f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)},
+                             held=perclass)
+                    res["tuned"][f"{t}|{kind}|{rung}|own99-{mode}"] = r
+                    print(f"[{name}] {t:2d} ms {rung} {kind:10s} own99={mode:8s}: dep {r['dependability']*100:5.1f}  beyond "
+                          f"{r['false_trip_beyond']*100:5.1f} (dedup {r['beyond_dedup']['k']}/{r['beyond_dedup']['n']}, UCB "
+                          f"{r['beyond_dedup']['ucb95']*100:4.1f})  dep@40 {r['dep_by_rf']['40']*100:5.1f}  "
+                          + "  ".join(f"{h} {v['mean_rate']*100:5.1f}" for h, v in perclass.items()), flush=True)
     return res
 
 
