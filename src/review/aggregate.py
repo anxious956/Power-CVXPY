@@ -36,10 +36,34 @@ def curve(scores_pos, scores_neg):
     return out
 
 
+_LOADED = {}
+
+
+def load_for(name, chain):
+    """The relay record through the run's front end (relay_aa handled by review.frontend's wrapper)."""
+    key = (name, bool(chain.get("relay_aa")))
+    if key not in _LOADED:
+        from review import frontend
+        orig = cm.measurement_chain
+        if chain.get("relay_aa"):
+            cm.measurement_chain = frontend._wrapped
+        try:
+            _LOADED[key] = cm.load_relay(name, chain if chain.get("relay_aa") else None)
+        finally:
+            cm.measurement_chain = orig
+    return _LOADED[key]
+
+
+def directional_for(R, idx_all, t):
+    """Standard directional supervision (ladder.directional: 32P memory + 32Q), no fitting."""
+    from review import ladder as ld
+    P = ld.pack(R, idx_all, t, "full" if t >= 20 else "half", True)
+    return ld.directional(*P, R["z1L"])
+
+
 def main():
     head = cm.git_commit()
     base = os.path.join(cm.ROOT, "logs", "ckpt", "zone_cv")
-    relays = {}
     summary = {}
     for relay_dir in sorted(glob.glob(os.path.join(base, "*"))):
         name = os.path.basename(relay_dir)
@@ -58,12 +82,16 @@ def main():
             fe = "relay-bandwidth" if cfg["chain"].get("relay_aa") else "current"
             expected = {"grouped": 10, "stratified": 10, "lorfo": 3, "lolo": 4}[cfg["split"]]
             complete = len(recs) == expected
-            if name not in relays:
-                relays[name] = cm.load_relay(name)
-            R = relays[name]
+            R = load_for(name, cfg["chain"])
             idx, y, groups = zone_cv.zone_task(R, cfg["own99"])
             pos_of = {int(i): k for k, i in enumerate(idx)}
             held_idx = {h: np.where(R[h])[0] for h in cfg["held"]}
+            all_idx = np.concatenate([idx] + list(held_idx.values()))
+            fwd_all = directional_for(R, all_idx, cfg["t"])
+            fwd_zone = fwd_all[:len(idx)]
+            offs, fwd_held = len(idx), {}
+            for h, v in held_idx.items():
+                fwd_held[h] = fwd_all[offs:offs + len(v)]; offs += len(v)
             key = f"{name} | {fe} | own99 {cfg['own99']} | {cfg['t']} ms | {cfg['split']}"
             S = dict(commit=commit, config=cfg, folds=len(recs), complete=complete, models={})
             for n in MODELS:
@@ -101,6 +129,16 @@ def main():
                     M[h] = dict(mean_rate=float(np.mean([z["rate"] for z in per])), worst_fold=worst,
                                 supports_5pct_budget=bool(worst["n"] >= cm.min_n_for_budget(0.05)))
                 M["operating_curves"] = {h: np.mean(c, axis=0).tolist() for h, c in curves.items() if c}
+                # the same learned decision AND the standard directional element (thresholds unchanged)
+                dsup = dd & fwd_zone[ii]
+                sup = dict(dependability=float(dsup[yy == 1].mean()),
+                           dep_by_rf={f"{x:g}": float(dsup[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40) if ((yy == 1) & (rf == x)).any()},
+                           beyond=cm.dedup_rate(dsup, R["dedup"][idx][ii], beyond))
+                for h, v in held_dec.items():
+                    per = [cm.dedup_rate(d & fwd_held[h], R["dedup"][held_idx[h]], np.ones(len(d), bool)) for d in v]
+                    worst = max(per, key=lambda z: z["ucb95"])
+                    sup[h] = dict(mean_rate=float(np.mean([z["rate"] for z in per])), worst_fold=worst)
+                M["with_directional_supervision"] = sup
                 S["models"][n] = M
             summary[key] = S
             print(f"{key}  folds {len(recs)}{'' if complete else ' (INCOMPLETE)'}", flush=True)
@@ -110,6 +148,11 @@ def main():
                       f"{M['dep_by_rf'].get('40', float('nan'))*100:5.1f}  beyond {M['beyond']['k']}/{M['beyond']['n']} "
                       f"(UCB {M['beyond']['ucb95']*100:4.1f})  own99 {g('own99')}  rev-bus {g('reverse_bus')}  "
                       f"lines-behind {g('reverse_lines')}  parallel {g('parallel')}  other {g('other')}  switching {g('switching')}", flush=True)
+                s = M["with_directional_supervision"]
+                gs = lambda h: (f"{s[h]['mean_rate']*100:5.1f}" if h in s else "   - ")
+                print(f"   {'  + directional':18s}              dep {s['dependability']*100:5.1f}  dep@40 {s['dep_by_rf'].get('40', float('nan'))*100:5.1f}  "
+                      f"beyond {s['beyond']['k']}/{s['beyond']['n']} (UCB {s['beyond']['ucb95']*100:4.1f})  own99 {gs('own99')}  rev-bus "
+                      f"{gs('reverse_bus')}  lines-behind {gs('reverse_lines')}  parallel {gs('parallel')}  other {gs('other')}  switching {gs('switching')}", flush=True)
     # matched comparison against the ladder (same relay, front end, 20 ms, grouped, guard band)
     ladders = {}
     for fe, fn in (("current", "ladder.json"), ("relay-bandwidth", "ladder_relay_frontend.json")):
