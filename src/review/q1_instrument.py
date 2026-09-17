@@ -11,8 +11,9 @@ One-at-a-time sweep from real_ml's default chain, plus one combined realistic po
       src/review/cvt_class_check.py; the low-C model fails T1 (11.5 % residual at 20 ms against <= 10 %) and
       is excluded (class limits quoted from memory, to be checked against the standard)
   CT saturation, 1000/1 A, 5P20-like, remanence 0.8 (common.ct_saturation)
-  anti-aliasing: causal 2nd-order Butterworth at 1 kHz on all channels
-  realistic: installation draw 1 + CVT highC + CT saturation (remanence 0.5) + anti-aliasing + 0.1 % noise
+  relay front end: review.frontend (causal 3rd-order Butterworth 400 Hz, ADC full scale from CT rating)
+  realistic combined: installation draw 1 + CVT highC + CT saturation (remanence 0.5) + relay front end + 0.1 % noise
+  (trimmed for compute: white 0.03 % and a third installation draw were dropped before any point was run)
 
 At each point, relays A and B, decision time 20 ms, own-99 % as guard band, grouped 5-fold:
   ladder R0, R1, R2 (fixed settings from the graph study, chain-independent), T2 tuned quadrilateral,
@@ -44,15 +45,14 @@ def draw_installation(name, k):
 
 
 def points(name):
-    P = {"white 0.03 %": dict(noise_rel=3e-4), "white 0.1 % (default)": {}, "white 0.3 %": dict(noise_rel=3e-3),
-         "white 1 %": dict(noise_rel=1e-2)}
-    for k in range(3):
+    P = {"white 0.1 % (default)": {}, "white 0.3 %": dict(noise_rel=3e-3), "white 1 %": dict(noise_rel=1e-2)}
+    for k in range(2):
         P[f"installation error draw {k + 1}"] = draw_installation(name, k)
+    P["installation mismatch (train draw 1, test draw 2)"] = "mismatch"
     P["CVT high-C"] = dict(cvt="highC")
     P["CT saturation rem 0.8"] = dict(ct=dict(remanence=0.8))
-    P["anti-aliasing 1 kHz"] = dict(aa_delay=True)
-    P["realistic combined"] = dict(draw_installation(name, 0), cvt="highC", ct=dict(remanence=0.5), aa_delay=True)
-    P["installation mismatch (train draw 1, test draw 2)"] = "mismatch"
+    P["relay front end (AA 400 Hz + CT full scale)"] = "relayfe"
+    P["realistic combined (draw 1 + CVT + CT sat 0.5 + relay front end)"] = "combined"
     return P
 
 
@@ -143,6 +143,17 @@ if __name__ == "__main__":
             else:
                 if chain == "mismatch":
                     r = evaluate_point(name, draw_installation(name, 0), draw_installation(name, 1), S)
+                elif chain in ("relayfe", "combined"):
+                    from review import frontend
+                    ch = dict(frontend.RELAY_CHAIN)
+                    if chain == "combined":
+                        ch.update(draw_installation(name, 0), cvt="highC", ct=dict(remanence=0.5))
+                    orig = cm.measurement_chain
+                    cm.measurement_chain = frontend._wrapped
+                    try:
+                        r = evaluate_point(name, ch, ch, S)
+                    finally:
+                        cm.measurement_chain = orig
                 else:
                     ch = chain or None
                     r = evaluate_point(name, ch, ch, S)

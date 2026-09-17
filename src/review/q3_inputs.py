@@ -173,6 +173,10 @@ if __name__ == "__main__":
                  ("monotone GBM", "loop traj canon (last frame)", lambda Xa, ya, Xl, s: mgbm_scores(Xa[:, :, -1], ya, [x[:, :, -1] for x in Xl], s), 1.0)]
         runs += [("MLP", k, lambda Xa, ya, Xl, s, raw=k.startswith("raw"): mlp_scores(flat(Xa), ya, [flat(x) for x in Xl], s, raw), frac)
                  for k in ("raw canon", "loop traj canon") for frac in (0.25, 0.5)]
+        if fe == "relay-bandwidth":           # compute: key input/model pairs only on the second front end
+            keep = {("MLP", "raw", 1.0), ("MLP", "raw canon", 1.0), ("MLP", "loop traj canon", 1.0), ("CNN", "loop traj canon", 1.0),
+                    ("LR", "snapshot", 1.0), ("monotone GBM", "loop traj canon (last frame)", 1.0)}
+            runs = [r for r in runs if (r[0], r[1], r[3]) in keep]
         res[fe][name] = {}
         for model, inp, fn, frac in runs:
             key = f"{model} | {inp} | train {int(frac * 100)} %"
