@@ -572,4 +572,21 @@ Data, caches, checkpoints and logs are not committed (`logs/` is git-ignored).
 
 **Not verified against primary sources.** IEC 61869 class limits; vendor directional-sector defaults; conductor ampacity; relay input range; arc and tower-footing values. All are stated as assumptions where used.
 
+**Checked since** against six SEL practitioner papers, in
+[papers/notes/E_practitioner_settings.md](papers/notes/E_practitioner_settings.md). Nothing was
+re-run. In brief: the steady-state error budget and the IEC 61869-5 CCVT transient classes are
+**verified**; arc resistance, tower footing, conductor ampacity and vendor sector defaults are
+**still open**; and three items are **contradicted** —
+(a) the quadrilateral's resistive reach is 2–3× outside the security limit that Kasztenny 2021
+eq. (19) sets for the polarising phase error this review itself measured, which makes relay B's
+40 Ω stratum further out of zone-1 reach than §10 item 5 states, not closer;
+(b) the Q1 CT assumption of ±1 % is a metering-range figure, against 5–10 % expected during
+faults, so §6 Q1's instrument-error sizes are too small;
+(c) the `lowC` CVT is not a worst case — it pairs low capacitance with the benign passive
+ferroresonance-suppression circuit, where the active one is what aggravates the transient.
+The same note records that these benchmark relays sit at **SIR ≈ 0.5**, so Q1 exercised the
+instrument chain outside the weak-system regime that the zone-1 security literature is about, and
+that rungs R2/R3 use memory and negative-sequence polarisation, which Kasztenny 2022 says to avoid
+near inverter-based sources — correct for these synchronous-dominated grids, wrong for WP2's.
+
 No run is in progress.
