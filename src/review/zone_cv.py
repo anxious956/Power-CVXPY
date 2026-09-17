@@ -71,6 +71,13 @@ def splits(kind, R, idx, y, groups, seed=0):
         for f, r in enumerate((40.0, 1.0, 10.0)):
             te, tr = np.where(rf == r)[0], np.where(rf != r)[0]
             yield f, tr, te, dict(held_out_rf=r)
+    elif kind == "loqo":
+        # adaptgrid: leave one loading quartile out. Calibration and test never share a loading band,
+        # which is the transfer-across-operating-points test proper (results/ADAPTGRID.md section 3).
+        qq = R["op_quartile"][idx]
+        for f in range(4):
+            te, tr = np.where(qq == f)[0], np.where(qq != f)[0]
+            yield f, tr, te, dict(held_out_loading_quartile=f)
     else:
         raise ValueError(kind)
 

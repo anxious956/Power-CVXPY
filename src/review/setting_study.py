@@ -262,7 +262,7 @@ def apparent_x(R, vpost, ipost, vpre, ipre, loop):
     return complex(Lp["V"][0, j] / Lp["I"][0, j])
 
 
-RELAY_BUS = dict(doubleline="MainBus1", testgrid_A="MainBus1", testgrid_B="MainBus2")
+RELAY_BUS = dict(doubleline="MainBus1", testgrid_A="MainBus1", testgrid_B="MainBus2", adapt_A="MainBus1", adapt_B="MainBus2")
 LOOP = {"lg": "ag", "ll": "bc", "llg": "bc", "3ph": "bc"}
 ETYPE = {"flt_1phg_shc": "lg", "flt_1phg_shc_w_arc": "lg", "flt_2ph_shc": "ll", "flt_2phg_shc": "llg", "flt_3ph_shc": "3ph"}
 
