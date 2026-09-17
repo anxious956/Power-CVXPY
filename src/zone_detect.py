@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dataclasses import replace as _replace
 from zone_model import ZoneParams, solve_zone, loop_impedances, supervised_reactance, phase_selected_reactance
 from waveforms import _synth, SigParams, sequence_phasors, CYCLE, EVENT
-from detect import evaluate, train_cnn, FAR
+from detect import evaluate, train_cnn, fit_lr_scores, FAR
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "results")
 os.makedirs(OUT, exist_ok=True)
@@ -141,14 +141,10 @@ def zone_features(X, g):
     return np.nan_to_num(np.array(feats), nan=0.0, posinf=0.0, neginf=0.0)
 
 
-def score_engineered(Xtr, ytr, Xte, g, seed=0):
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.pipeline import make_pipeline
-    clf = make_pipeline(StandardScaler(), LogisticRegression(max_iter=4000, random_state=seed))
-    ftr, fte = zone_features(Xtr, g), zone_features(Xte, g)
-    clf.fit(ftr, ytr)
-    return clf.decision_function(ftr), clf.decision_function(fte)
+def score_engineered(Xtr, ytr, Xte, g, seed=0, oof_folds=5):
+    """oof_folds=0 reproduces the original in-sample training scores (review H18)."""
+    return fit_lr_scores(zone_features(Xtr, g), ytr, zone_features(Xte, g), seed=seed,
+                         max_iter=4000, oof_folds=oof_folds)
 
 
 KEYS = ("reactance", "negseq", "engineered", "cnn")
@@ -161,8 +157,10 @@ def score_all(Xtr, ytr, Xte, grid, seed=0, epochs=20, cfg=None):
     out = {}
     out["reactance"] = (score_reactance(Xtr, grid), score_reactance(Xte, grid))
     out["negseq"] = (score_negseq(Xtr), score_negseq(Xte))
-    out["engineered"] = score_engineered(Xtr, ytr, Xte, grid, seed=seed)
-    out["cnn"] = train_cnn(Xtr, ytr, Xte, epochs=epochs, seed=seed)
+    oof = cfg.get("oof_folds", 0)
+    out["engineered"] = score_engineered(Xtr, ytr, Xte, grid, seed=seed, oof_folds=oof)
+    out["cnn"] = train_cnn(Xtr, ytr, Xte, epochs=epochs, seed=seed, oof_folds=oof,
+                           oof_test=cfg.get("oof_test", "full"))
     return out
 
 

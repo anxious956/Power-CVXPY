@@ -70,16 +70,43 @@ def relay_features(X):
     return np.nan_to_num(np.array(feats), nan=0.0, posinf=0.0, neginf=0.0)
 
 
-def score_engineered(Xtr, ytr, Xte, seed=0):
-    """Logistic regression on relay_features: the conventional multivariate detector."""
+def oof_train_scores(fit_predict, Xtr, ytr, folds=5, seed=0):
+    """Out-of-fold scores on the training set: each training sample is scored by a model that
+    did not see it. Used ONLY to place the threshold (and choose the polarity); test scores come
+    from the model fitted on the whole training set. Same idea as real_ml.oof_scores.
+    fit_predict(X_fit, y_fit, X_score, seed) -> scores for X_score."""
+    from sklearn.model_selection import StratifiedKFold
+    s = np.zeros(len(ytr))
+    skf = StratifiedKFold(folds, shuffle=True, random_state=seed)
+    for k, (a, b) in enumerate(skf.split(np.zeros(len(ytr)), ytr)):
+        s[b] = fit_predict(Xtr[a], ytr[a], Xtr[b], seed + 1 + k)
+    return s
+
+
+def fit_lr_scores(ftr, ytr, fte, seed=0, max_iter=3000, oof_folds=0):
+    """StandardScaler + logistic regression on precomputed feature matrices.
+    Returns (train_scores, test_scores); train scores are out-of-fold when oof_folds > 0
+    (review H18: in-sample decision_function places the threshold too low)."""
     from sklearn.linear_model import LogisticRegression
     from sklearn.preprocessing import StandardScaler
     from sklearn.pipeline import make_pipeline
-    ftr, fte = relay_features(Xtr), relay_features(Xte)
-    clf = make_pipeline(StandardScaler(),
-                        LogisticRegression(max_iter=3000, C=1.0, random_state=seed))
-    clf.fit(ftr, ytr)
-    return clf.decision_function(ftr), clf.decision_function(fte)
+
+    def fp(Xa, ya, Xb, sd):
+        clf = make_pipeline(StandardScaler(),
+                            LogisticRegression(max_iter=max_iter, C=1.0, random_state=sd))
+        clf.fit(Xa, ya)
+        return clf.decision_function(Xb)
+
+    s_te = fp(ftr, ytr, fte, seed)
+    s_tr = oof_train_scores(fp, ftr, ytr, oof_folds, seed) if oof_folds else fp(ftr, ytr, ftr, seed)
+    return s_tr, s_te
+
+
+def score_engineered(Xtr, ytr, Xte, seed=0, oof_folds=5):
+    """Logistic regression on relay_features: the conventional multivariate detector.
+    oof_folds=0 reproduces the original in-sample training scores."""
+    return fit_lr_scores(relay_features(Xtr), ytr, relay_features(Xte), seed=seed,
+                         oof_folds=oof_folds)
 
 
 def _auc(scores, y):
@@ -151,21 +178,13 @@ def evaluate(scores_tr, y_tr, scores_te, y_te, far=FAR, polarity="train"):
 
 
 # ------------------------------------------------------------------------ learned detector
-def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False):
+def _cnn_fit_predict(Xa, ya, Xbs, epochs, seed, verbose=False, bs=64, infer_bs=256):
+    """Train the 1D CNN on (Xa, ya) and return its logits on each array in Xbs."""
     import torch, torch.nn as nn
     torch.manual_seed(seed)
     dev = "cuda" if torch.cuda.is_available() else "cpu"
-
-    def norm(X):
-        m = X.mean(axis=2, keepdims=True)
-        s = X.std(axis=2, keepdims=True) + 1e-6
-        return (X - m) / s
-
-    Xtr_n, Xte_n = norm(Xtr), norm(Xte)
-    xt = torch.tensor(Xtr_n, device=dev)
-    yt = torch.tensor(ytr, dtype=torch.float32, device=dev)
-    xv = torch.tensor(Xte_n, device=dev)
-
+    xt = torch.tensor(np.ascontiguousarray(Xa, dtype=np.float32), device=dev)
+    yt = torch.tensor(ya, dtype=torch.float32, device=dev)
     model = nn.Sequential(
         nn.Conv1d(6, 32, 9, stride=2, padding=4), nn.BatchNorm1d(32), nn.ReLU(),
         nn.Conv1d(32, 64, 7, stride=2, padding=3), nn.BatchNorm1d(64), nn.ReLU(),
@@ -174,7 +193,7 @@ def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False):
     ).to(dev)
     opt = torch.optim.Adam(model.parameters(), lr=2e-3, weight_decay=1e-4)
     lossf = nn.BCEWithLogitsLoss()
-    n, bs = len(xt), 64
+    n = len(xt)
     for ep in range(epochs):
         model.train()
         perm = torch.randperm(n, device=dev)
@@ -187,10 +206,42 @@ def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False):
             tot += loss.item() * len(idx)
         if verbose and (ep + 1) % 6 == 0:
             print(f"      epoch {ep+1:2d}  loss {tot/n:.4f}")
+    del xt, yt
     model.eval()
+    outs = []
     with torch.no_grad():
-        s_tr = model(xt).squeeze(1).cpu().numpy()
-        s_te = model(xv).squeeze(1).cpu().numpy()
+        for Xb in Xbs:
+            o = []
+            for b in range(0, len(Xb), infer_bs):
+                xb = torch.tensor(np.ascontiguousarray(Xb[b:b + infer_bs], dtype=np.float32), device=dev)
+                o.append(model(xb).squeeze(1).cpu().numpy())
+            outs.append(np.concatenate(o) if o else np.zeros(0))
+    return outs
+
+
+def _norm_per_waveform(X):
+    m = X.mean(axis=2, keepdims=True)
+    s = X.std(axis=2, keepdims=True) + 1e-6
+    return (X - m) / s
+
+
+def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False, oof_folds=5, oof_test="full"):
+    """Returns (train_scores, test_scores).
+    oof_folds > 0: train scores are out-of-fold (review H18); oof_folds=0 reproduces the
+    original in-sample scores. oof_test='full' scores the test set with the model trained on
+    all of train; 'folds' with the mean logit of the fold models."""
+    Xtr_n, Xte_n = _norm_per_waveform(Xtr), _norm_per_waveform(Xte)
+    s_tr_in, s_te = _cnn_fit_predict(Xtr_n, ytr, [Xtr_n, Xte_n], epochs, seed, verbose)
+    if not oof_folds:
+        return s_tr_in, s_te
+    from sklearn.model_selection import StratifiedKFold
+    s_tr = np.zeros(len(ytr)); te_folds = []
+    skf = StratifiedKFold(oof_folds, shuffle=True, random_state=seed)
+    for k, (a, b) in enumerate(skf.split(np.zeros(len(ytr)), ytr)):
+        sb, st = _cnn_fit_predict(Xtr_n[a], ytr[a], [Xtr_n[b], Xte_n], epochs, seed + 1 + k)
+        s_tr[b] = sb; te_folds.append(st)
+    if oof_test == "folds":
+        s_te = np.mean(te_folds, axis=0)
     return s_tr, s_te
 
 
