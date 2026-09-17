@@ -1,0 +1,68 @@
+{
+ "highC": {
+  "POW 0 terminal short circuit": {
+   "10": 8.70842703511275,
+   "20": 5.889995380857008,
+   "40": 2.8433646324049238,
+   "60": 1.370894692150574,
+   "90": 0.4342203942135919
+  },
+  "POW 0 90 % sag": {
+   "cycle 1 peak error % of pre-fault peak": 9.30096250869194,
+   "cycle 2 peak error % of pre-fault peak": 5.3009050780190785,
+   "cycle 3 peak error % of pre-fault peak": 2.5589374044937596,
+   "cycle 4 peak error % of pre-fault peak": 1.233714458231878
+  },
+  "POW 90 terminal short circuit": {
+   "10": 1.674548675835301,
+   "20": 1.6370049414365797,
+   "40": 0.7507819962032134,
+   "60": 0.3440361397758938,
+   "90": 0.07218737415220042
+  },
+  "POW 90 90 % sag": {
+   "cycle 1 peak error % of pre-fault peak": 73.88213119035044,
+   "cycle 2 peak error % of pre-fault peak": 1.4733044479010193,
+   "cycle 3 peak error % of pre-fault peak": 0.6757037971524882,
+   "cycle 4 peak error % of pre-fault peak": 0.309632526392456
+  },
+  "passes_class": {
+   "T1": true,
+   "T2": false,
+   "T3": false
+  }
+ },
+ "lowC": {
+  "POW 0 terminal short circuit": {
+   "10": 11.469790701330629,
+   "20": 11.469790701330629,
+   "40": 7.682040209742494,
+   "60": 2.7886136139502624,
+   "90": 0.44426861700967574
+  },
+  "POW 0 90 % sag": {
+   "cycle 1 peak error % of pre-fault peak": 49.80794250876,
+   "cycle 2 peak error % of pre-fault peak": 10.323116927931913,
+   "cycle 3 peak error % of pre-fault peak": 6.913925041765906,
+   "cycle 4 peak error % of pre-fault peak": 2.5096634761866894
+  },
+  "POW 90 terminal short circuit": {
+   "10": 18.02751405234956,
+   "20": 10.912957486609825,
+   "40": 8.748469110329182,
+   "60": 3.650255194195996,
+   "90": 0.6238727767741262
+  },
+  "POW 90 90 % sag": {
+   "cycle 1 peak error % of pre-fault peak": 88.07532351845246,
+   "cycle 2 peak error % of pre-fault peak": 9.821881942541955,
+   "cycle 3 peak error % of pre-fault peak": 7.873622237858097,
+   "cycle 4 peak error % of pre-fault peak": 3.2852297130451458
+  },
+  "passes_class": {
+   "T1": false,
+   "T2": false,
+   "T3": false
+  }
+ }
+}
