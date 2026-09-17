@@ -69,7 +69,7 @@ for t in (0.0, 0.40):
     out["defects"][f"detect_delta_{t}"] = dict(
         frac_abs_angle_gt_09pi=[float((np.abs(A[:, j]) > 0.9 * np.pi).mean()) for j in range(8)],
         frac_exact_zero_after_nan_to_num=float((F == 0).mean()))
-    print(f"detect delta={t}: wrap per angle col {out['defects'][f'detect_delta_{t}']['frac_abs_angle_gt_0.9pi']}", flush=True)
+    print(f"detect delta={t}: wrap per angle col {out['defects'][f'detect_delta_{t}']['frac_abs_angle_gt_09pi']}", flush=True)
 
 for study in ("zone", "detect"):
     deltas = (0.0, 0.10, 0.30, 0.514) if study == "zone" else (0.0, 0.05, 0.10, 0.20, 0.40)

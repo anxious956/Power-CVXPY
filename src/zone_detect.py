@@ -220,6 +220,9 @@ def score_engineered(Xtr, ytr, Xte, g, seed=0, oof_folds=5, fixed_features=True,
 
 
 KEYS = ("reactance", "negseq", "engineered", "cnn")
+# Review defaults for main(): OOF thresholds (H18), global CNN scaling (H19), fixed feature
+# encoding (H21). score_all(cfg={}) and main(--legacy) reproduce the original pipeline.
+DEFAULT_CFG = dict(oof_folds=5, oof_test="full", cnn_norm="global", fixed_features=True, mimic=False)
 
 
 def score_all(Xtr, ytr, Xte, grid, seed=0, epochs=20, cfg=None):
@@ -251,6 +254,10 @@ def main():
     ap.add_argument("--tag", default="zone_sweep", help="basename of the .json/.png/.npz outputs")
     ap.add_argument("--polarity", choices=("train", "test"), default="train",
                     help="'test' reproduces the original test-chosen sign (review H17)")
+    ap.add_argument("--legacy", action="store_true",
+                    help="original pipeline: test-chosen polarity, in-sample thresholds, "
+                         "per-waveform CNN scaling, raw angle/ratio features")
+    ap.add_argument("--mimic", action="store_true", help="mimic filter on currents (review H20)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     dump = {}                                   # raw test scores per (delta, seed, detector)
@@ -276,7 +283,12 @@ def main():
     print(f"fault resistance 0 to {grid.rF} pu in both  (line |z1| = {abs(grid.z1):.3f} pu)")
     print(f"delta swept along the designed direction ({np.degrees(np.angle(design_delta)):.1f} deg)")
     print(f"train {2*n_tr}+{2*n_tr}, test {2*n_te}+{2*n_te}, FAR budget {FAR:.0%}\n")
-    cfg = {}
+    cfg = {} if args.legacy else dict(DEFAULT_CFG)
+    if args.legacy:
+        args.polarity = "test"
+    if args.mimic:
+        cfg["mimic"] = True
+    print(f"pipeline cfg {cfg}, polarity chosen on {args.polarity}")
     for t in mags:
         d = t * direction
         t0 = time.time()
