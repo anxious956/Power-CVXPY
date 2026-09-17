@@ -104,7 +104,7 @@ def _auc(scores, y):
     return float((ranks[y == 1].sum() - n1 * (n1 + 1) / 2) / (n1 * n0))
 
 
-def evaluate(scores_tr, y_tr, scores_te, y_te, far=FAR):
+def evaluate(scores_tr, y_tr, scores_te, y_te, far=FAR, polarity="train"):
     """Threshold and polarity fixed on TRAIN, everything measured on TEST.
 
     A fault may show up as an unusually HIGH score or an unusually LOW one depending on the
@@ -112,24 +112,42 @@ def evaluate(scores_tr, y_tr, scores_te, y_te, far=FAR):
     the fair version of the comparison. Reports the operating point at the false-alarm
     budget, a looser 5 % point, and the threshold-free AUC, which is not destroyed by a thin
     tail the way a single strict operating point can be.
+
+    polarity="train" (default): sign = +1 if the TRAIN AUC >= 0.5 else -1, and the test AUC
+        and operating points are reported with that sign. A test AUC below 0.5 is possible
+        and meaningful (the train-chosen direction does not transfer).
+    polarity="test": the original behaviour, kept only to reproduce old numbers. It tried both
+        signs and kept the one with the higher TEST detection rate, so the sign (and the AUC
+        reported with it) was selected on the test set. Review finding H17.
     """
     def thr_at(s_tr, budget):
         neg = np.sort(s_tr[y_tr == 0])
         k = int(np.ceil((1 - budget) * len(neg))) - 1
         return neg[min(max(k, 0), len(neg) - 1)]
 
-    best = None
-    for sign in (+1, -1):
-        s_tr, s_te = sign * scores_tr, sign * scores_te
+    def at_sign(sign):
+        s_tr, s_te = sign * np.asarray(scores_tr), sign * np.asarray(scores_te)
         t1, t5 = thr_at(s_tr, far), thr_at(s_tr, 0.05)
-        dr = float((s_te[y_te == 1] > t1).mean())
-        if best is None or dr > best["detection_rate"]:
-            best = dict(detection_rate=dr,
-                        false_alarm=float((s_te[y_te == 0] > t1).mean()),
-                        detection_at_5pct=float((s_te[y_te == 1] > t5).mean()),
-                        false_alarm_at_5pct=float((s_te[y_te == 0] > t5).mean()),
-                        auc=_auc(s_te, y_te), threshold=float(t1), polarity=int(sign))
-    return best
+        return dict(detection_rate=float((s_te[y_te == 1] > t1).mean()),
+                    false_alarm=float((s_te[y_te == 0] > t1).mean()),
+                    detection_at_5pct=float((s_te[y_te == 1] > t5).mean()),
+                    false_alarm_at_5pct=float((s_te[y_te == 0] > t5).mean()),
+                    auc=_auc(s_te, y_te), threshold=float(t1), polarity=int(sign))
+
+    if polarity == "test":
+        best = None
+        for sign in (+1, -1):
+            r = at_sign(sign)
+            if best is None or r["detection_rate"] > best["detection_rate"]:
+                best = r
+        return best
+    if polarity != "train":
+        raise ValueError(polarity)
+    auc_tr = _auc(np.asarray(scores_tr, float), np.asarray(y_tr))
+    sign = -1 if (auc_tr == auc_tr and auc_tr < 0.5) else +1
+    r = at_sign(sign)
+    r["auc_train"] = float(sign * (auc_tr - 0.5) + 0.5)
+    return r
 
 
 # ------------------------------------------------------------------------ learned detector

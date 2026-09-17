@@ -151,6 +151,21 @@ def score_engineered(Xtr, ytr, Xte, g, seed=0):
     return clf.decision_function(ftr), clf.decision_function(fte)
 
 
+KEYS = ("reactance", "negseq", "engineered", "cnn")
+
+
+def score_all(Xtr, ytr, Xte, grid, seed=0, epochs=20, cfg=None):
+    """All four detectors on one train/test split -> {name: (train_scores, test_scores)}.
+    cfg holds the review switches; an empty cfg is the original pipeline."""
+    cfg = dict(cfg or {})
+    out = {}
+    out["reactance"] = (score_reactance(Xtr, grid), score_reactance(Xte, grid))
+    out["negseq"] = (score_negseq(Xtr), score_negseq(Xte))
+    out["engineered"] = score_engineered(Xtr, ytr, Xte, grid, seed=seed)
+    out["cnn"] = train_cnn(Xtr, ytr, Xte, epochs=epochs, seed=seed)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
@@ -160,6 +175,8 @@ def main():
     ap.add_argument("--seeds", type=int, default=3)
     ap.add_argument("--out", default=OUT, help="output directory (review: keep author results intact)")
     ap.add_argument("--tag", default="zone_sweep", help="basename of the .json/.png/.npz outputs")
+    ap.add_argument("--polarity", choices=("train", "test"), default="train",
+                    help="'test' reproduces the original test-chosen sign (review H17)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     dump = {}                                   # raw test scores per (delta, seed, detector)
@@ -185,7 +202,7 @@ def main():
     print(f"fault resistance 0 to {grid.rF} pu in both  (line |z1| = {abs(grid.z1):.3f} pu)")
     print(f"delta swept along the designed direction ({np.degrees(np.angle(design_delta)):.1f} deg)")
     print(f"train {2*n_tr}+{2*n_tr}, test {2*n_te}+{2*n_te}, FAR budget {FAR:.0%}\n")
-    KEYS = ("reactance", "negseq", "engineered", "cnn")
+    cfg = {}
     for t in mags:
         d = t * direction
         t0 = time.time()
@@ -195,17 +212,12 @@ def main():
                                             grid, not args.wide)
             Xte, yte, _k = make_zone_dataset(n_te, np.random.default_rng(999 + 31 * sd), d, p,
                                              grid, not args.wide)
-            per_seed["reactance"].append(evaluate(score_reactance(Xtr, grid), ytr,
-                                                  score_reactance(Xte, grid), yte))
-            per_seed["negseq"].append(evaluate(score_negseq(Xtr), ytr, score_negseq(Xte), yte))
-            e_tr, e_te = score_engineered(Xtr, ytr, Xte, grid, seed=sd)
-            per_seed["engineered"].append(evaluate(e_tr, ytr, e_te, yte))
-            s_tr, s_te = train_cnn(Xtr, ytr, Xte, epochs=args.epochs, seed=sd)
-            per_seed["cnn"].append(evaluate(s_tr, ytr, s_te, yte))
+            sc = score_all(Xtr, ytr, Xte, grid, seed=sd, epochs=args.epochs, cfg=cfg)
+            for k in KEYS:
+                per_seed[k].append(evaluate(sc[k][0], ytr, sc[k][1], yte, polarity=args.polarity))
             dump[f"y_{t}_{sd}"] = yte; dump[f"kind_{t}_{sd}"] = _k
-            dump[f"reactance_{t}_{sd}"] = score_reactance(Xte, grid)
-            dump[f"negseq_{t}_{sd}"] = score_negseq(Xte)
-            dump[f"engineered_{t}_{sd}"] = e_te; dump[f"cnn_{t}_{sd}"] = s_te
+            for k in KEYS:
+                dump[f"{k}_{t}_{sd}"] = sc[k][1]
         row = dict(delta=t)
         for k in KEYS:
             g_ = lambda f: np.array([r[f] for r in per_seed[k]])
@@ -214,7 +226,7 @@ def main():
                           auc=float(au.mean()), auc_std=float(au.std()),
                           detection_at_5pct=float(d5.mean()),
                           false_alarm=float(g_("false_alarm").mean()),
-                          seeds=[float(x) for x in dr])
+                          seeds=[float(x) for x in dr], per_seed=per_seed[k])
         rows.append(row)
         f = lambda k: f"{row[k]['auc']:.3f}+-{row[k]['auc_std']:.3f}"
         d = lambda k: f"{row[k]['detection_rate']*100:.0f}"
