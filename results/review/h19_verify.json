@@ -1,0 +1,10 @@
+{
+ "seed 0": {
+  "per_waveform": 0.9673639999999999,
+  "global_per_channel": 0.999552
+ },
+ "seed 1": {
+  "per_waveform": 0.968648,
+  "global_per_channel": 0.999756
+ }
+}

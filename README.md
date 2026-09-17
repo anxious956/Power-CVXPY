@@ -206,6 +206,10 @@ the competing methods against each other, and that the auxiliary signal appears 
 
 ## Status
 
+> Review (see [REVIEW.md](REVIEW.md), §7 claim table): the ticked item "Measured that the auxiliary signal improves
+> multivariate detection, 96.0 to 99.4 %" was withdrawn in results/ZONE.md; error bars over seeds exist in
+> ZONE.md; several headline results above are qualified or do not hold after the review's re-runs.
+
 - [x] Toy replication of the design method, three regimes, CVXPY optimum verified
 - [x] Literature collected, gap stated
 - [x] Waveform generator on the same circuit, with negative-sequence confusers

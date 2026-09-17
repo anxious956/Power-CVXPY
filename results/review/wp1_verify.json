@@ -1,0 +1,19 @@
+{
+ "H13 m in [0.15, 0.95]": {
+  "n_points": 1722,
+  "not_separated": 0,
+  "examples": []
+ },
+ "H13 m in [0.02, 0.98]": {
+  "n_points": 1722,
+  "not_separated": 0,
+  "examples": []
+ },
+ "H15 brute force step 0.02": {
+  "best": [
+   0.4800000000000011,
+   -0.15999999999999948
+  ],
+  "magnitude": 0.5059644256269415
+ }
+}

@@ -1,0 +1,504 @@
+{
+ "current": {
+  "testgrid_B": {
+   "delay_ms": {
+    "pos": {
+     "n": 180,
+     "started": 1.0,
+     "median": 0.15625,
+     "p95": 0.9375,
+     "min": 0.0
+    },
+    "neg": {
+     "n": 135,
+     "started": 1.0,
+     "median": 0.3125,
+     "p95": 3.4375,
+     "min": 0.15625
+    },
+    "own99": {
+     "n": 45,
+     "started": 1.0,
+     "median": 0.15625,
+     "p95": 3.125,
+     "min": 0.15625
+    },
+    "switching": {
+     "n": 50,
+     "started": 0.24,
+     "median": 4.0625,
+     "p95": 5.46875,
+     "min": 0.15625
+    },
+    "reverse_bus": {
+     "n": 45,
+     "started": 1.0,
+     "median": 0.15625,
+     "p95": 1.25,
+     "min": 0.15625
+    }
+   },
+   "gradient boosting | truth-aligned": {
+    "auc": 0.9388888888888889,
+    "dependability": 0.75,
+    "false_trip_beyond": 0.018518518518518517,
+    "own99": NaN
+   },
+   "gradient boosting | trigger-anchored": {
+    "auc": 0.7019547325102882,
+    "dependability": 0.9444444444444444,
+    "false_trip_beyond": 0.9481481481481482,
+    "own99": NaN
+   },
+   "engineered + LR | truth-aligned": {
+    "auc": 0.9891975308641976,
+    "dependability": 0.9527777777777777,
+    "false_trip_beyond": 0.018518518518518517,
+    "own99": NaN
+   },
+   "engineered + LR | trigger-anchored": {
+    "auc": 0.9864197530864198,
+    "dependability": 0.9722222222222222,
+    "false_trip_beyond": 0.044444444444444446,
+    "own99": NaN
+   },
+   "R0 | truth-aligned": {
+    "dependability": 0.6055555555555555,
+    "false_trip_beyond": 0.14814814814814814,
+    "own99": NaN
+   },
+   "R0 | trigger-anchored": {
+    "dependability": 0.5888888888888889,
+    "false_trip_beyond": 0.1037037037037037,
+    "own99": NaN
+   },
+   "R2 | truth-aligned": {
+    "dependability": 0.5222222222222223,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | trigger-anchored": {
+    "dependability": 0.5333333333333333,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   }
+  },
+  "testgrid_A": {
+   "delay_ms": {
+    "pos": {
+     "n": 180,
+     "started": 1.0,
+     "median": 0.15625,
+     "p95": 0.78125,
+     "min": 0.15625
+    },
+    "neg": {
+     "n": 315,
+     "started": 1.0,
+     "median": 0.3125,
+     "p95": 1.5625,
+     "min": 0.15625
+    },
+    "own99": {
+     "n": 45,
+     "started": 1.0,
+     "median": 0.15625,
+     "p95": 1.25,
+     "min": 0.15625
+    },
+    "switching": {
+     "n": 50,
+     "started": 0.24,
+     "median": 4.296875,
+     "p95": 6.4765625,
+     "min": 0.15625
+    },
+    "reverse_bus": {
+     "n": 45,
+     "started": 1.0,
+     "median": 0.625,
+     "p95": 3.5624999999999996,
+     "min": 0.15625
+    }
+   },
+   "gradient boosting | truth-aligned": {
+    "auc": 0.997663139329806,
+    "dependability": 0.9694444444444444,
+    "false_trip_beyond": 0.02857142857142857,
+    "own99": NaN
+   },
+   "gradient boosting | trigger-anchored": {
+    "auc": 0.6138007054673722,
+    "dependability": 0.9777777777777777,
+    "false_trip_beyond": 0.946031746031746,
+    "own99": NaN
+   },
+   "engineered + LR | truth-aligned": {
+    "auc": 0.9946208112874778,
+    "dependability": 0.9833333333333333,
+    "false_trip_beyond": 0.044444444444444446,
+    "own99": NaN
+   },
+   "engineered + LR | trigger-anchored": {
+    "auc": 0.9992063492063492,
+    "dependability": 0.9916666666666667,
+    "false_trip_beyond": 0.06507936507936508,
+    "own99": NaN
+   },
+   "R0 | truth-aligned": {
+    "dependability": 0.7888888888888889,
+    "false_trip_beyond": 0.0031746031746031746,
+    "own99": NaN
+   },
+   "R0 | trigger-anchored": {
+    "dependability": 0.8111111111111111,
+    "false_trip_beyond": 0.0031746031746031746,
+    "own99": NaN
+   },
+   "R2 | truth-aligned": {
+    "dependability": 0.5833333333333334,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | trigger-anchored": {
+    "dependability": 0.6111111111111112,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   }
+  },
+  "doubleline": {
+   "delay_ms": {
+    "pos": {
+     "n": 180,
+     "started": 1.0,
+     "median": 0.15625,
+     "p95": 0.78125,
+     "min": 0.15625
+    },
+    "neg": {
+     "n": 225,
+     "started": 1.0,
+     "median": 0.3125,
+     "p95": 1.25,
+     "min": 0.15625
+    },
+    "own99": {
+     "n": 45,
+     "started": 1.0,
+     "median": 0.15625,
+     "p95": 1.0624999999999996,
+     "min": 0.15625
+    },
+    "switching": {
+     "n": 24,
+     "started": 0.3333333333333333,
+     "median": 3.75,
+     "p95": 6.828124999999998,
+     "min": 0.15625
+    },
+    "reverse_bus": {
+     "n": 45,
+     "started": 1.0,
+     "median": 0.3125,
+     "p95": 3.125,
+     "min": 0.15625
+    }
+   },
+   "gradient boosting | truth-aligned": {
+    "auc": 0.9903703703703703,
+    "dependability": 0.9333333333333333,
+    "false_trip_beyond": 0.024444444444444446,
+    "own99": NaN
+   },
+   "gradient boosting | trigger-anchored": {
+    "auc": 0.6235185185185185,
+    "dependability": 0.8611111111111112,
+    "false_trip_beyond": 0.7733333333333333,
+    "own99": NaN
+   },
+   "engineered + LR | truth-aligned": {
+    "auc": 0.989567901234568,
+    "dependability": 0.9666666666666667,
+    "false_trip_beyond": 0.024444444444444446,
+    "own99": NaN
+   },
+   "engineered + LR | trigger-anchored": {
+    "auc": 0.9875308641975309,
+    "dependability": 0.9638888888888889,
+    "false_trip_beyond": 0.057777777777777775,
+    "own99": NaN
+   },
+   "R0 | truth-aligned": {
+    "dependability": 0.8,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R0 | trigger-anchored": {
+    "dependability": 0.8055555555555556,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | truth-aligned": {
+    "dependability": 0.5,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | trigger-anchored": {
+    "dependability": 0.5166666666666667,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   }
+  }
+ },
+ "relay-bandwidth": {
+  "testgrid_B": {
+   "delay_ms": {
+    "pos": {
+     "n": 180,
+     "started": 1.0,
+     "median": 0.78125,
+     "p95": 1.71875,
+     "min": 0.46875
+    },
+    "neg": {
+     "n": 135,
+     "started": 1.0,
+     "median": 1.09375,
+     "p95": 4.375,
+     "min": 0.78125
+    },
+    "own99": {
+     "n": 45,
+     "started": 1.0,
+     "median": 1.09375,
+     "p95": 3.90625,
+     "min": 0.78125
+    },
+    "switching": {
+     "n": 50,
+     "started": 0.24,
+     "median": 4.84375,
+     "p95": 6.3203125,
+     "min": 0.78125
+    },
+    "reverse_bus": {
+     "n": 45,
+     "started": 1.0,
+     "median": 1.09375,
+     "p95": 2.1562499999999996,
+     "min": 0.78125
+    }
+   },
+   "gradient boosting | truth-aligned": {
+    "auc": 0.8834362139917695,
+    "dependability": 0.6805555555555556,
+    "false_trip_beyond": 0.022222222222222223,
+    "own99": NaN
+   },
+   "gradient boosting | trigger-anchored": {
+    "auc": 0.6128086419753086,
+    "dependability": 0.9194444444444444,
+    "false_trip_beyond": 0.8888888888888888,
+    "own99": NaN
+   },
+   "engineered + LR | truth-aligned": {
+    "auc": 0.984156378600823,
+    "dependability": 0.9583333333333334,
+    "false_trip_beyond": 0.014814814814814815,
+    "own99": NaN
+   },
+   "engineered + LR | trigger-anchored": {
+    "auc": 0.9512345679012345,
+    "dependability": 0.9055555555555556,
+    "false_trip_beyond": 0.0962962962962963,
+    "own99": NaN
+   },
+   "R0 | truth-aligned": {
+    "dependability": 0.6333333333333333,
+    "false_trip_beyond": 0.08888888888888889,
+    "own99": NaN
+   },
+   "R0 | trigger-anchored": {
+    "dependability": 0.6111111111111112,
+    "false_trip_beyond": 0.1037037037037037,
+    "own99": NaN
+   },
+   "R2 | truth-aligned": {
+    "dependability": 0.4388888888888889,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | trigger-anchored": {
+    "dependability": 0.5333333333333333,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   }
+  },
+  "testgrid_A": {
+   "delay_ms": {
+    "pos": {
+     "n": 180,
+     "started": 1.0,
+     "median": 0.78125,
+     "p95": 1.71875,
+     "min": 0.46875
+    },
+    "neg": {
+     "n": 315,
+     "started": 1.0,
+     "median": 1.09375,
+     "p95": 2.3906250000000018,
+     "min": 0.78125
+    },
+    "own99": {
+     "n": 45,
+     "started": 1.0,
+     "median": 1.09375,
+     "p95": 2.03125,
+     "min": 0.78125
+    },
+    "switching": {
+     "n": 50,
+     "started": 0.24,
+     "median": 5.078125,
+     "p95": 7.2578125,
+     "min": 0.78125
+    },
+    "reverse_bus": {
+     "n": 45,
+     "started": 1.0,
+     "median": 1.25,
+     "p95": 4.375,
+     "min": 0.78125
+    }
+   },
+   "gradient boosting | truth-aligned": {
+    "auc": 0.9821428571428571,
+    "dependability": 0.9194444444444444,
+    "false_trip_beyond": 0.009523809523809525,
+    "own99": NaN
+   },
+   "gradient boosting | trigger-anchored": {
+    "auc": 0.7064373897707232,
+    "dependability": 0.9861111111111112,
+    "false_trip_beyond": 0.9333333333333333,
+    "own99": NaN
+   },
+   "engineered + LR | truth-aligned": {
+    "auc": 0.9971340388007055,
+    "dependability": 0.9861111111111112,
+    "false_trip_beyond": 0.03968253968253968,
+    "own99": NaN
+   },
+   "engineered + LR | trigger-anchored": {
+    "auc": 0.9843474426807761,
+    "dependability": 0.9805555555555555,
+    "false_trip_beyond": 0.07301587301587302,
+    "own99": NaN
+   },
+   "R0 | truth-aligned": {
+    "dependability": 0.7611111111111111,
+    "false_trip_beyond": 0.009523809523809525,
+    "own99": NaN
+   },
+   "R0 | trigger-anchored": {
+    "dependability": 0.8111111111111111,
+    "false_trip_beyond": 0.0031746031746031746,
+    "own99": NaN
+   },
+   "R2 | truth-aligned": {
+    "dependability": 0.5055555555555555,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | trigger-anchored": {
+    "dependability": 0.6055555555555555,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   }
+  },
+  "doubleline": {
+   "delay_ms": {
+    "pos": {
+     "n": 180,
+     "started": 1.0,
+     "median": 0.78125,
+     "p95": 1.5625,
+     "min": 0.46875
+    },
+    "neg": {
+     "n": 225,
+     "started": 1.0,
+     "median": 0.9375,
+     "p95": 2.03125,
+     "min": 0.78125
+    },
+    "own99": {
+     "n": 45,
+     "started": 1.0,
+     "median": 0.9375,
+     "p95": 1.875,
+     "min": 0.78125
+    },
+    "switching": {
+     "n": 24,
+     "started": 0.3333333333333333,
+     "median": 4.453125,
+     "p95": 7.710937499999997,
+     "min": 0.78125
+    },
+    "reverse_bus": {
+     "n": 45,
+     "started": 1.0,
+     "median": 1.09375,
+     "p95": 3.90625,
+     "min": 0.78125
+    }
+   },
+   "gradient boosting | truth-aligned": {
+    "auc": 0.9896913580246913,
+    "dependability": 0.9222222222222223,
+    "false_trip_beyond": 0.022222222222222223,
+    "own99": NaN
+   },
+   "gradient boosting | trigger-anchored": {
+    "auc": 0.6928086419753086,
+    "dependability": 0.9805555555555555,
+    "false_trip_beyond": 0.9022222222222223,
+    "own99": NaN
+   },
+   "engineered + LR | truth-aligned": {
+    "auc": 0.9911111111111112,
+    "dependability": 0.9722222222222222,
+    "false_trip_beyond": 0.03333333333333333,
+    "own99": NaN
+   },
+   "engineered + LR | trigger-anchored": {
+    "auc": 0.9793827160493827,
+    "dependability": 0.9722222222222222,
+    "false_trip_beyond": 0.07555555555555556,
+    "own99": NaN
+   },
+   "R0 | truth-aligned": {
+    "dependability": 0.7611111111111111,
+    "false_trip_beyond": 0.02666666666666667,
+    "own99": NaN
+   },
+   "R0 | trigger-anchored": {
+    "dependability": 0.8055555555555556,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | truth-aligned": {
+    "dependability": 0.4388888888888889,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   },
+   "R2 | trigger-anchored": {
+    "dependability": 0.5111111111111111,
+    "false_trip_beyond": 0.0,
+    "own99": NaN
+   }
+  }
+ }
+}

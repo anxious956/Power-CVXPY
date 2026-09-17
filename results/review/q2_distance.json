@@ -1,0 +1,514 @@
+{
+ "within": {
+  "testgrid_A": {
+   "GBM regressor (snapshot)": {
+    "dependability": 0.9055555555555556,
+    "dep40": 0.8833333333333333,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99_guard": 0.06666666666666667,
+    "reverse_bus": 0.6222222222222222,
+    "parallel": 0.16444444444444445,
+    "switching": 0.04,
+    "distance_MAE_line_units": 0.05939202538953977
+   },
+   "MLP regressor (raw)": {
+    "dependability": 0.8555555555555555,
+    "dep40": 0.8333333333333334,
+    "beyond": 0.15555555555555556,
+    "beyond_dedup": {
+     "k": 47,
+     "n": 273,
+     "rate": 0.17216117216117216,
+     "ucb95": 0.21419807471728822
+    },
+    "own99_guard": 0.2222222222222222,
+    "reverse_bus": 0.0,
+    "parallel": 0.0,
+    "switching": 0.0,
+    "distance_MAE_line_units": 0.15267314787188663
+   },
+   "gradient boosting classifier (raw)": {
+    "dependability": 0.9722222222222222,
+    "dep40": 0.95,
+    "beyond": 0.044444444444444446,
+    "beyond_dedup": {
+     "k": 12,
+     "n": 273,
+     "rate": 0.04395604395604396,
+     "ucb95": 0.07024642262201972
+    },
+    "own99_guard": 0.1111111111111111,
+    "reverse_bus": 0.3333333333333333,
+    "parallel": 0.2222222222222222,
+    "switching": 0.1
+   },
+   "engineered + LR classifier": {
+    "dependability": 0.9888888888888889,
+    "dep40": 0.9833333333333333,
+    "beyond": 0.0380952380952381,
+    "beyond_dedup": {
+     "k": 11,
+     "n": 273,
+     "rate": 0.040293040293040296,
+     "ucb95": 0.0658134086002388
+    },
+    "own99_guard": 0.17777777777777778,
+    "reverse_bus": 0.0,
+    "parallel": 0.0,
+    "switching": 0.02
+   }
+  },
+  "testgrid_B": {
+   "GBM regressor (snapshot)": {
+    "dependability": 0.9333333333333333,
+    "dep40": 0.8666666666666667,
+    "beyond": 0.05185185185185185,
+    "beyond_dedup": {
+     "k": 5,
+     "n": 117,
+     "rate": 0.042735042735042736,
+     "ucb95": 0.08775114823666058
+    },
+    "own99_guard": 0.06666666666666667,
+    "reverse_bus": 0.0,
+    "parallel": null,
+    "switching": 0.0,
+    "distance_MAE_line_units": 0.08905023804495374
+   },
+   "MLP regressor (raw)": {
+    "dependability": 0.7944444444444444,
+    "dep40": 0.7,
+    "beyond": 0.48148148148148145,
+    "beyond_dedup": {
+     "k": 53,
+     "n": 117,
+     "rate": 0.452991452991453,
+     "ucb95": 0.5331998348058893
+    },
+    "own99_guard": 0.4444444444444444,
+    "reverse_bus": 0.06666666666666667,
+    "parallel": null,
+    "switching": 0.0,
+    "distance_MAE_line_units": 0.2590323440014851
+   },
+   "gradient boosting classifier (raw)": {
+    "dependability": 0.7333333333333333,
+    "dep40": 0.6833333333333333,
+    "beyond": 0.014814814814814815,
+    "beyond_dedup": {
+     "k": 2,
+     "n": 117,
+     "rate": 0.017094017094017096,
+     "ucb95": 0.052830810978736535
+    },
+    "own99_guard": 0.0,
+    "reverse_bus": 1.0,
+    "parallel": null,
+    "switching": 0.3
+   },
+   "engineered + LR classifier": {
+    "dependability": 0.9555555555555556,
+    "dep40": 0.9166666666666666,
+    "beyond": 0.044444444444444446,
+    "beyond_dedup": {
+     "k": 6,
+     "n": 117,
+     "rate": 0.05128205128205128,
+     "ucb95": 0.09870290749702405
+    },
+    "own99_guard": 0.044444444444444446,
+    "reverse_bus": 0.5333333333333333,
+    "parallel": null,
+    "switching": 0.18
+   }
+  },
+  "doubleline": {
+   "GBM regressor (snapshot)": {
+    "dependability": 0.8944444444444445,
+    "dep40": 0.8666666666666667,
+    "beyond": 0.0044444444444444444,
+    "beyond_dedup": {
+     "k": 1,
+     "n": 195,
+     "rate": 0.005128205128205128,
+     "ucb95": 0.024095218206742052
+    },
+    "own99_guard": 0.022222222222222223,
+    "reverse_bus": 0.7111111111111111,
+    "parallel": 0.26666666666666666,
+    "switching": 0.08333333333333333,
+    "distance_MAE_line_units": 0.0667422898794698
+   },
+   "MLP regressor (raw)": {
+    "dependability": 0.7722222222222223,
+    "dep40": 0.65,
+    "beyond": 0.1688888888888889,
+    "beyond_dedup": {
+     "k": 30,
+     "n": 195,
+     "rate": 0.15384615384615385,
+     "ucb95": 0.20283646116515763
+    },
+    "own99_guard": 0.2222222222222222,
+    "reverse_bus": 0.0,
+    "parallel": 0.0,
+    "switching": 0.0,
+    "distance_MAE_line_units": 0.1859828379727059
+   },
+   "gradient boosting classifier (raw)": {
+    "dependability": 0.95,
+    "dep40": 0.9166666666666666,
+    "beyond": 0.04888888888888889,
+    "beyond_dedup": {
+     "k": 7,
+     "n": 195,
+     "rate": 0.035897435897435895,
+     "ucb95": 0.06636588326129556
+    },
+    "own99_guard": 0.0,
+    "reverse_bus": 0.4222222222222222,
+    "parallel": 0.27555555555555555,
+    "switching": 0.041666666666666664
+   },
+   "engineered + LR classifier": {
+    "dependability": 0.9555555555555556,
+    "dep40": 0.8833333333333333,
+    "beyond": 0.022222222222222223,
+    "beyond_dedup": {
+     "k": 4,
+     "n": 195,
+     "rate": 0.020512820512820513,
+     "ucb95": 0.04632351163924415
+    },
+    "own99_guard": 0.1111111111111111,
+    "reverse_bus": 0.0,
+    "parallel": 0.0044444444444444444,
+    "switching": 0.0
+   }
+  }
+ },
+ "cross": {
+  "testgrid_A->testgrid_B": {
+   "GBM regressor (snapshot)": {
+    "dependability": 0.9277777777777778,
+    "dep40": 0.8666666666666667,
+    "beyond": 0.5185185185185185,
+    "beyond_dedup": {
+     "k": 58,
+     "n": 117,
+     "rate": 0.49572649572649574,
+     "ucb95": 0.5754361340169516
+    },
+    "own99_guard": 0.6,
+    "reverse_bus": 1.0,
+    "parallel": null,
+    "switching": 0.98,
+    "distance_MAE_line_units": 0.2313277065854344
+   },
+   "MLP regressor (raw)": {
+    "dependability": 0.8444444444444444,
+    "dep40": 0.5666666666666667,
+    "beyond": 0.4962962962962963,
+    "beyond_dedup": {
+     "k": 55,
+     "n": 117,
+     "rate": 0.4700854700854701,
+     "ucb95": 0.550160126840155
+    },
+    "own99_guard": 0.5555555555555556,
+    "reverse_bus": 0.0,
+    "parallel": null,
+    "switching": 0.0,
+    "distance_MAE_line_units": 0.29750254888941147
+   },
+   "gradient boosting classifier (raw)": {
+    "dependability": 0.8777777777777778,
+    "dep40": 0.8666666666666667,
+    "beyond": 0.7037037037037037,
+    "beyond_dedup": {
+     "k": 81,
+     "n": 117,
+     "rate": 0.6923076923076923,
+     "ucb95": 0.762447145952607
+    },
+    "own99_guard": 0.7111111111111111,
+    "reverse_bus": 0.7777777777777778,
+    "parallel": null,
+    "switching": 0.18
+   },
+   "engineered + LR classifier": {
+    "dependability": 0.8333333333333334,
+    "dep40": 0.5833333333333334,
+    "beyond": 0.1259259259259259,
+    "beyond_dedup": {
+     "k": 13,
+     "n": 117,
+     "rate": 0.1111111111111111,
+     "ucb95": 0.17084040734989497
+    },
+    "own99_guard": 0.24444444444444444,
+    "reverse_bus": 0.0,
+    "parallel": null,
+    "switching": 0.12
+   },
+   "R2 setting (test relay)": {
+    "dependability": 0.5222222222222223,
+    "dep40": 0.0,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 117,
+     "rate": 0.0,
+     "ucb95": 0.025279532749551296
+    },
+    "own99_guard": 0.0,
+    "reverse_bus": 0.0,
+    "parallel": null,
+    "switching": 0.0
+   }
+  },
+  "testgrid_B->testgrid_A": {
+   "GBM regressor (snapshot)": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 0.5714285714285714,
+    "beyond_dedup": {
+     "k": 152,
+     "n": 273,
+     "rate": 0.5567765567765568,
+     "ucb95": 0.6074179151708481
+    },
+    "own99_guard": 0.6,
+    "reverse_bus": 0.06666666666666667,
+    "parallel": 0.37333333333333335,
+    "switching": 0.52,
+    "distance_MAE_line_units": 0.26476379176877984
+   },
+   "MLP regressor (raw)": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 1.0,
+    "beyond_dedup": {
+     "k": 273,
+     "n": 273,
+     "rate": 1.0,
+     "ucb95": 1.0
+    },
+    "own99_guard": 1.0,
+    "reverse_bus": 1.0,
+    "parallel": 1.0,
+    "switching": 1.0,
+    "distance_MAE_line_units": 0.49968168182105677
+   },
+   "gradient boosting classifier (raw)": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 1.0,
+    "beyond_dedup": {
+     "k": 273,
+     "n": 273,
+     "rate": 1.0,
+     "ucb95": 1.0
+    },
+    "own99_guard": 1.0,
+    "reverse_bus": 1.0,
+    "parallel": 1.0,
+    "switching": 1.0
+   },
+   "engineered + LR classifier": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 0.2571428571428571,
+    "beyond_dedup": {
+     "k": 81,
+     "n": 273,
+     "rate": 0.2967032967032967,
+     "ucb95": 0.34552345632282255
+    },
+    "own99_guard": 0.3111111111111111,
+    "reverse_bus": 0.0,
+    "parallel": 0.06222222222222222,
+    "switching": 0.12
+   },
+   "R2 setting (test relay)": {
+    "dependability": 0.5833333333333334,
+    "dep40": 0.11666666666666667,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 273,
+     "rate": 0.0,
+     "ucb95": 0.010913390399624174
+    },
+    "own99_guard": 0.0,
+    "reverse_bus": 0.0,
+    "parallel": 0.0,
+    "switching": 0.0
+   }
+  },
+  "testgrid_A->doubleline": {
+   "GBM regressor (snapshot)": {
+    "dependability": 0.9777777777777777,
+    "dep40": 1.0,
+    "beyond": 0.2088888888888889,
+    "beyond_dedup": {
+     "k": 35,
+     "n": 195,
+     "rate": 0.1794871794871795,
+     "ucb95": 0.2308335056727213
+    },
+    "own99_guard": 0.37777777777777777,
+    "reverse_bus": 0.7333333333333333,
+    "parallel": 0.3288888888888889,
+    "switching": 0.08333333333333333,
+    "distance_MAE_line_units": 0.12282909036119216
+   },
+   "MLP regressor (raw)": {
+    "dependability": 0.5444444444444444,
+    "dep40": 0.21666666666666667,
+    "beyond": 0.15555555555555556,
+    "beyond_dedup": {
+     "k": 25,
+     "n": 195,
+     "rate": 0.1282051282051282,
+     "ucb95": 0.17443948418453373
+    },
+    "own99_guard": 0.15555555555555556,
+    "reverse_bus": 0.15555555555555556,
+    "parallel": 0.11555555555555555,
+    "switching": 0.0,
+    "distance_MAE_line_units": 0.2710908490818957
+   },
+   "gradient boosting classifier (raw)": {
+    "dependability": 0.95,
+    "dep40": 0.9833333333333333,
+    "beyond": 0.3511111111111111,
+    "beyond_dedup": {
+     "k": 71,
+     "n": 195,
+     "rate": 0.3641025641025641,
+     "ucb95": 0.42462429861698514
+    },
+    "own99_guard": 0.5777777777777777,
+    "reverse_bus": 0.3333333333333333,
+    "parallel": 0.28,
+    "switching": 0.20833333333333334
+   },
+   "engineered + LR classifier": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 0.9733333333333334,
+    "beyond_dedup": {
+     "k": 189,
+     "n": 195,
+     "rate": 0.9692307692307692,
+     "ucb95": 0.9865168863222294
+    },
+    "own99_guard": 0.9777777777777777,
+    "reverse_bus": 0.0,
+    "parallel": 0.19111111111111112,
+    "switching": 0.041666666666666664
+   },
+   "R2 setting (test relay)": {
+    "dependability": 0.5,
+    "dep40": 0.016666666666666666,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 195,
+     "rate": 0.0,
+     "ucb95": 0.015245324865477817
+    },
+    "own99_guard": 0.0,
+    "reverse_bus": 0.0,
+    "parallel": 0.0,
+    "switching": 0.0
+   }
+  },
+  "testgrid_B->doubleline": {
+   "GBM regressor (snapshot)": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 0.5866666666666667,
+    "beyond_dedup": {
+     "k": 115,
+     "n": 195,
+     "rate": 0.5897435897435898,
+     "ucb95": 0.6489171629876351
+    },
+    "own99_guard": 0.6222222222222222,
+    "reverse_bus": 0.26666666666666666,
+    "parallel": 0.38222222222222224,
+    "switching": 0.5833333333333334,
+    "distance_MAE_line_units": 0.28183579451667773
+   },
+   "MLP regressor (raw)": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 1.0,
+    "beyond_dedup": {
+     "k": 195,
+     "n": 195,
+     "rate": 1.0,
+     "ucb95": 1.0
+    },
+    "own99_guard": 1.0,
+    "reverse_bus": 1.0,
+    "parallel": 1.0,
+    "switching": 1.0,
+    "distance_MAE_line_units": 0.46772920444178734
+   },
+   "gradient boosting classifier (raw)": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 1.0,
+    "beyond_dedup": {
+     "k": 195,
+     "n": 195,
+     "rate": 1.0,
+     "ucb95": 1.0
+    },
+    "own99_guard": 1.0,
+    "reverse_bus": 1.0,
+    "parallel": 1.0,
+    "switching": 1.0
+   },
+   "engineered + LR classifier": {
+    "dependability": 1.0,
+    "dep40": 1.0,
+    "beyond": 0.9733333333333334,
+    "beyond_dedup": {
+     "k": 189,
+     "n": 195,
+     "rate": 0.9692307692307692,
+     "ucb95": 0.9865168863222294
+    },
+    "own99_guard": 1.0,
+    "reverse_bus": 0.08888888888888889,
+    "parallel": 0.21777777777777776,
+    "switching": 0.375
+   },
+   "R2 setting (test relay)": {
+    "dependability": 0.5,
+    "dep40": 0.016666666666666666,
+    "beyond": 0.0,
+    "beyond_dedup": {
+     "k": 0,
+     "n": 195,
+     "rate": 0.0,
+     "ucb95": 0.015245324865477817
+    },
+    "own99_guard": 0.0,
+    "reverse_bus": 0.0,
+    "parallel": 0.0,
+    "switching": 0.0
+   }
+  }
+ }
+}

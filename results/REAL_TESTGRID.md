@@ -1,19 +1,24 @@
 # Real EMT data with inverters: EvEMTBench `benchmark-TestGrid110kV`
 
-> **Review correction (branch `review-fixes`, see [REVIEW.md](../REVIEW.md) N2).** The zone-1 setting
-> numbers below were produced by `zone_model.phase_selected_reactance`, which discards every released loop
-> with negative reactance (`zone_model.py:206`) and has no directional element. Re-run with the same
-> 20-40 ms phasor window on the same noise-free records (`src/review/real_zone_rerun.py`,
-> [review/real_zone_rerun.json](review/real_zone_rerun.json)): the table reproduces exactly, but the
-> explanation does not hold. At relay B **100 % of in-zone 40 ohm faults read negative reactance** on the
-> faulted loop (median R about 80 ohm, X about -16 ohm at 50 ms) and are thrown away as "reverse"; the claim
-> "misses every 40 ohm fault on its line" is a property of that element, not of the reactance effect alone.
-> A mimic filter, a separate negative-sequence/memory-polarised directional element and a quadrilateral set
-> from rules (rung R2) gives relay B: dependability 55.0 %, out-of-zone trips 0 % (was 4.4 %, 13.3 % at
-> 10 ohm), own line 99 % 0 % (was 6.7 %), reverse faults 0 % (was 3.1 %), switching 0 % (was 2 %). The 40 ohm
-> faults remain untripped by zone 1 because they appear at about 80 ohm, beyond the ~25 ohm resistive reach
-> that load-encroachment rules allow (assumed 1800 A thermal rating); that is a coverage limit of zone 1,
-> not an overlap problem. Relay A: the repo rule trips 4.4 % of reverse faults (10 % at 1 ohm); R2 0 %.
+> **Review correction (see [REVIEW.md](../REVIEW.md), findings N2 and N7).** The zone-1 setting numbers below
+> come from `zone_model.phase_selected_reactance`, which discards every released loop with negative reactance
+> (`zone_model.py:206`) and has no directional element. Re-run with the same 20-40 ms phasor window on the same
+> noise-free records (`src/review/real_zone_rerun.py`, [review/real_zone_rerun.json](review/real_zone_rerun.json)):
+> the table reproduces exactly, but two statements do not hold as written.
+> - "Misses every 40 ohm fault on its line" is **partly the element flaw and partly infeed physics**. At relay B
+>   100 % of in-zone 40 ohm faults read negative reactance on the faulted loop (about R 80 ohm, X -16 ohm), which
+>   the element discards as reverse. With a separate directional element they are recognised as forward, but a
+>   quadrilateral still does not trip them: remote infeed (short-circuit study model: total fault current about 3.9
+>   times the relay's contribution) magnifies 40 ohm to about 80 ohm apparent resistance in the EMT records (the
+>   phasor study model, which has no inverters and no load-flow match, overstates it), beyond the ~25 ohm resistive reach
+>   that load-encroachment rules allow (assumed 1800 A thermal rating). Directional 67N/67Q elements detect these
+>   faults (100 % of the unbalanced ones at 20 ms) but do not zone-select them.
+> - The rule was never tested on **reverse faults**. On faults at the relay's own bus it trips 17 of 45 at relay B
+>   (80 % of 1 ohm faults) and 9 of 45 at relay A (60 % of 1 ohm faults).
+>
+> With a mimic filter, a separate memory-polarised positive-sequence / negative-sequence directional element and a
+> quadrilateral set from rules (rung R2), relay B: dependability 55.0 %, out-of-zone trips 0 % (was 4.4 %,
+> 13.3 % at 10 ohm), own line 99 % 0 % (was 6.7 %), relay-bus reverse 0/45 (was 17/45), switching 0/50 (was 1/50).
 > The learned-detector numbers below are superseded by REAL_ML.md and by the grouped re-run in REVIEW.md.
 
 > **Correction, 17 Sep 2026.** The learned-detector numbers below (engineered model, CNN) were obtained on noise-free records with 80 ms windows and in-sample thresholds. The noise-free records let models read the label from pre-fault samples, so the in-distribution 1.000 scores are not valid. The zone-1 setting results are unaffected. See [REAL_ML.md](REAL_ML.md).

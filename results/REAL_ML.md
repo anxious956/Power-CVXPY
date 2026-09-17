@@ -1,5 +1,18 @@
 # Machine learning against the zone-1 rule on real EMT data, set up fairly
 
+> **Review correction (see [REVIEW.md](../REVIEW.md)).** The numbers below are affected by:
+> - **Sibling leakage (H22).** Stratified folds put a phase-rotated or identical sibling of 95–96 % of test cases in training. Grouped folds lower relay B engineered + LR from 99.7 % to 95.3 % dependability.
+> - **The rule's missing DC-offset filter and directional element (N2).** Relay B's "15 % false trips" at 20 ms fall to 0.7 % with a mimic filter. The rule trips 20–22 % of reverse faults at its own bus, which were never tested.
+> - **Security on classes outside training (H24).** Unsupervised boosting trips 92 % of relay-bus reverse faults at relay B.
+> - **Own line 85–100 % (H9)** was neither a class nor reported.
+> - **Resampling look-ahead (H25/H30).** Models given only the 40 ms ending at inception reach AUC 0.86–0.97; the §3 control ended 5 ms early.
+> - **ADC clipping.** The ±40 × pre-fault full scale clips 13 DoubleLine and 14 relay-A in-zone faults, all at 1 % and 20 % of the line, so rates at those locations are affected.
+> - **Phasor reference rotation at 30/50 ms (N1).** Rule AUC at relay B, 50 ms: 0.806 → 0.891.
+> - **Stage-1 label (H28).** With a responsibility-based label, AUC is 0.90–0.99, not 0.62–0.81.
+> - **§3 fingerprint size (N5).** It is 0.1–0.26 V, not 0.01 V.
+>
+> Corrected tables: REVIEW.md §6 and §9.
+
 17 Sep 2026. Code: `src/real_ml.py`. Run: `python src/real_ml.py` (about 65 min on a laptop CPU).
 Numbers: [real_ml.json](real_ml.json). Figure: [real_ml.png](real_ml.png).
 Data: EvEMTBench `benchmark-TestGrid110kV` (relays A and B) and `benchmark-DoubleLine`, see

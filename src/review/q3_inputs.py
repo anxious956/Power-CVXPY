@@ -145,7 +145,12 @@ if __name__ == "__main__":
     if not cm.code_unchanged(commit, commit, CODE):
         raise SystemExit("commit the experiment code first")
     res = {}
-    for name in ("testgrid_B", "testgrid_A"):
+    from review import frontend
+    for fe in ("current", "relay-bandwidth"):
+      if fe == "relay-bandwidth":
+        frontend.enable()                                  # H30: 3rd-order Butterworth 400 Hz before noise and ADC
+      res[fe] = {}
+      for name in ("testgrid_B", "testgrid_A"):
         R = cm.load_relay(name)
         R["g"] = type("G", (), dict(z1=R["lp"]["z1"], z0_ratio=R["lp"]["z0"] / R["lp"]["z1"]))
         sel = np.where(np.any([R[h] for h in ("pos", "neg") + HELD], axis=0))[0]
@@ -168,16 +173,20 @@ if __name__ == "__main__":
                  ("monotone GBM", "loop traj canon (last frame)", lambda Xa, ya, Xl, s: mgbm_scores(Xa[:, :, -1], ya, [x[:, :, -1] for x in Xl], s), 1.0)]
         runs += [("MLP", k, lambda Xa, ya, Xl, s, raw=k.startswith("raw"): mlp_scores(flat(Xa), ya, [flat(x) for x in Xl], s, raw), frac)
                  for k in ("raw canon", "loop traj canon") for frac in (0.25, 0.5)]
-        res[name] = {}
+        if fe == "relay-bandwidth":           # compute: key input/model pairs only on the second front end
+            keep = {("MLP", "raw", 1.0), ("MLP", "raw canon", 1.0), ("MLP", "loop traj canon", 1.0), ("CNN", "loop traj canon", 1.0),
+                    ("LR", "snapshot", 1.0), ("monotone GBM", "loop traj canon (last frame)", 1.0)}
+            runs = [r for r in runs if (r[0], r[1], r[3]) in keep]
+        res[fe][name] = {}
         for model, inp, fn, frac in runs:
             key = f"{model} | {inp} | train {int(frac * 100)} %"
-            cfg = dict(script="q3", relay=name, key=key)
+            cfg = dict(script="q3", frontend=fe, relay=name, key=key)
             path = os.path.join(cm.ROOT, "logs", "ckpt", "q3", cm.config_hash(cfg) + ".pkl")
             os.makedirs(os.path.dirname(path), exist_ok=True)
             if os.path.exists(path):
                 rec = pickle.load(open(path, "rb"))
                 assert rec["_config"] == cfg and cm.code_unchanged(rec["_commit"], commit, CODE), "checkpoint mismatch"
-                res[name][key] = rec["result"]; continue
+                res[fe][name][key] = rec["result"]; continue
             F = feats["loop traj canon" if inp.startswith("loop traj canon") else ("raw canon" if inp.startswith("raw canon") else inp)]
             Fz, Fh = F[zpos], F[held]
             dec = np.zeros(len(sel), bool); votes = np.zeros(len(sel)); aucs = []
@@ -197,8 +206,8 @@ if __name__ == "__main__":
                        beyond=r["neg"]["rate"], beyond_dedup=r["neg"]["dedup"], own99_guard=r["own99"]["rate"],
                        reverse_bus=r["reverse_bus"]["rate"], switching=r["switching"]["rate"])
             pickle.dump(dict(_commit=commit, _config=cfg, result=out), open(path, "wb"))
-            res[name][key] = out
-            print(f"[{name}] {key:45s} AUC {out['auc']:.3f}+-{out['auc_sd']:.3f}  dep {out['dependability']*100:5.1f}  dep@40 {out['dep40']*100:5.1f}  "
+            res[fe][name][key] = out
+            print(f"[{fe} {name}] {key:45s} AUC {out['auc']:.3f}+-{out['auc_sd']:.3f}  dep {out['dependability']*100:5.1f}  dep@40 {out['dep40']*100:5.1f}  "
                   f"beyond {out['beyond']*100:5.1f}  own99 {out['own99_guard']*100:5.1f}  rev-bus {out['reverse_bus']*100:5.1f}  "
                   f"switching {out['switching']*100:5.1f}  [{time.time()-t0:.0f}s]", flush=True)
             json.dump(res, open(os.path.join(cm.ROOT, "results", "review", "q3_inputs.json"), "w"), indent=1)

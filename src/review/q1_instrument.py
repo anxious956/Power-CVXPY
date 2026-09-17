@@ -11,12 +11,14 @@ One-at-a-time sweep from real_ml's default chain, plus one combined realistic po
       src/review/cvt_class_check.py; the low-C model fails T1 (11.5 % residual at 20 ms against <= 10 %) and
       is excluded (class limits quoted from memory, to be checked against the standard)
   CT saturation, 1000/1 A, 5P20-like, remanence 0.8 (common.ct_saturation)
-  anti-aliasing: causal 2nd-order Butterworth at 1 kHz on all channels
-  realistic: installation draw 1 + CVT highC + CT saturation (remanence 0.5) + anti-aliasing + 0.1 % noise
+  relay front end: review.frontend (causal 3rd-order Butterworth 400 Hz, ADC full scale from CT rating)
+  realistic combined: installation draw 1 + CVT highC + CT saturation (remanence 0.5) + relay front end + 0.1 % noise
+  (trimmed for compute: white 0.03 % and a third installation draw were dropped before any point was run)
 
 At each point, relays A and B, decision time 20 ms, own-99 % as guard band, grouped 5-fold:
   ladder R0, R1, R2 (fixed settings from the graph study, chain-independent), T2 tuned quadrilateral,
-  gradient boosting (raw window) and engineered + LR with grouped out-of-fold thresholds (real_ml models),
+  engineered + LR with grouped out-of-fold thresholds (real_ml model; gradient boosting on the raw window was
+  dropped from the per-point models for compute after two points had run),
   shortcut control (gradient boosting on the pre-fault window 45..5 ms before inception).
 
 Each (relay, point) is checkpointed under logs/ckpt/q1/ keyed by commit and config.
@@ -44,15 +46,14 @@ def draw_installation(name, k):
 
 
 def points(name):
-    P = {"white 0.03 %": dict(noise_rel=3e-4), "white 0.1 % (default)": {}, "white 0.3 %": dict(noise_rel=3e-3),
-         "white 1 %": dict(noise_rel=1e-2)}
-    for k in range(3):
+    P = {"white 0.1 % (default)": {}, "white 0.3 %": dict(noise_rel=3e-3), "white 1 %": dict(noise_rel=1e-2)}
+    for k in range(2):
         P[f"installation error draw {k + 1}"] = draw_installation(name, k)
+    P["installation mismatch (train draw 1, test draw 2)"] = "mismatch"
     P["CVT high-C"] = dict(cvt="highC")
     P["CT saturation rem 0.8"] = dict(ct=dict(remanence=0.8))
-    P["anti-aliasing 1 kHz"] = dict(aa_delay=True)
-    P["realistic combined"] = dict(draw_installation(name, 0), cvt="highC", ct=dict(remanence=0.5), aa_delay=True)
-    P["installation mismatch (train draw 1, test draw 2)"] = "mismatch"
+    P["relay front end (AA 400 Hz + CT full scale)"] = "relayfe"
+    P["realistic combined (draw 1 + CVT + CT sat 0.5 + relay front end)"] = "combined"
     return P
 
 
@@ -81,9 +82,9 @@ def evaluate_point(name, chain_train, chain_test, S):
     Fr_tr, Fr_te = real_ml.raw_window(Rtr, sel, 20), real_ml.raw_window(Rte, sel, 20)
     Fe_tr = zone_features(real_ml.phasor_view(Rtr, sel, 20), Rtr["g"])
     Fe_te = Fe_tr if Rte is Rtr else zone_features(real_ml.phasor_view(Rte, sel, 20), Rte["g"])
-    dec = {k: np.zeros(len(sel), bool) for k in ("T2", "gradient boosting", "engineered + LR")}
+    dec = {k: np.zeros(len(sel), bool) for k in ("T2", "engineered + LR")}          # boosting dropped for compute
     tested = np.zeros(len(sel), bool)
-    aucs = {k: [] for k in ("gradient boosting", "engineered + LR")}
+    aucs = {k: [] for k in ("engineered + LR",)}
     nz = np.array([i for i in range(len(sel)) if i not in set(zpos)])      # held-out rows (own99, reverse, switching)
     held_dec = {k: [] for k in dec}
     for f, tr, te, meta in splits("grouped", Rtr, idx, y, groups):
@@ -93,7 +94,7 @@ def evaluate_point(name, chain_train, chain_test, S):
         best = max(((gtr[k][rtr][y[tr] == 1].mean(), k) for k in gtr if gtr[k][rtr][y[tr] == 0].mean() <= 0.05), default=(0, None))
         dec["T2"][rte] = gte[best[1]][rte]
         held_dec["T2"].append(gte[best[1]][nz])
-        for n, Ftr, Fte in (("gradient boosting", Fr_tr, Fr_te), ("engineered + LR", Fe_tr, Fe_te)):
+        for n, Ftr, Fte in (("engineered + LR", Fe_tr, Fe_te),):
             m = real_ml.fit_balanced(real_ml.models(f)[n], Ftr[rtr], y[tr], f)
             thr = cm.thr_at_far(cm.oof_scores(n, Ftr[rtr], y[tr], f, groups=groups[tr])[y[tr] == 0], 0.05)
             s = real_ml.score(m, Fte[rte])
@@ -143,6 +144,17 @@ if __name__ == "__main__":
             else:
                 if chain == "mismatch":
                     r = evaluate_point(name, draw_installation(name, 0), draw_installation(name, 1), S)
+                elif chain in ("relayfe", "combined"):
+                    from review import frontend
+                    ch = dict(frontend.RELAY_CHAIN)
+                    if chain == "combined":
+                        ch.update(draw_installation(name, 0), cvt="highC", ct=dict(remanence=0.5))
+                    orig = cm.measurement_chain
+                    cm.measurement_chain = frontend._wrapped
+                    try:
+                        r = evaluate_point(name, ch, ch, S)
+                    finally:
+                        cm.measurement_chain = orig
                 else:
                     ch = chain or None
                     r = evaluate_point(name, ch, ch, S)

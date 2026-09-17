@@ -1,0 +1,248 @@
+{
+ "doubleline": {
+  "control_noise_0": {
+   "gradient boosting": {
+    "mean": 1.0,
+    "sd": 0.0
+   },
+   "random forest": {
+    "mean": 0.9791666666666667,
+    "sd": 0.011149624609992852
+   }
+  },
+  "control_noise_1e-06": {
+   "gradient boosting": {
+    "mean": 0.9950617283950617,
+    "sd": 0.0028843304051185984
+   },
+   "random forest": {
+    "mean": 0.9929012345679012,
+    "sd": 0.004744237572085949
+   }
+  },
+  "control_noise_1e-05": {
+   "gradient boosting": {
+    "mean": 0.9694444444444443,
+    "sd": 0.014573509185418483
+   },
+   "random forest": {
+    "mean": 0.9733539094650207,
+    "sd": 0.0164806658655687
+   }
+  },
+  "control_noise_0.0001": {
+   "gradient boosting": {
+    "mean": 0.5101851851851851,
+    "sd": 0.04375319789301069
+   },
+   "random forest": {
+    "mean": 0.5282407407407407,
+    "sd": 0.06299107235847315
+   }
+  },
+  "control_noise_0.001": {
+   "gradient boosting": {
+    "mean": 0.49444444444444446,
+    "sd": 0.02586870686273516
+   },
+   "random forest": {
+    "mean": 0.4925925925925926,
+    "sd": 0.04832528046620854
+   }
+  },
+  "prefault_part_of_decision_window": {
+   "gradient boosting": {
+    "mean": 0.9478395061728395,
+    "sd": 0.024654035578467157
+   },
+   "random forest": {
+    "mean": 0.9184156378600823,
+    "sd": 0.0290400591449175
+   }
+  },
+  "label_permutation_20ms": {
+   "gradient boosting": {
+    "mean": 0.46790123456790117,
+    "sd": 0.03368552196039287
+   },
+   "random forest": {
+    "mean": 0.48240740740740745,
+    "sd": 0.049159733196819995
+   }
+  },
+  "control_noise_0.003": {
+   "gradient boosting": {
+    "mean": 0.5011316872427983,
+    "sd": 0.07597818469876333
+   },
+   "random forest": {
+    "mean": 0.5236111111111111,
+    "sd": 0.04957454810085738
+   }
+  }
+ },
+ "testgrid_A": {
+  "control_noise_0": {
+   "gradient boosting": {
+    "mean": 1.0,
+    "sd": 0.0
+   },
+   "random forest": {
+    "mean": 0.984375,
+    "sd": 0.005150137838260903
+   }
+  },
+  "control_noise_1e-06": {
+   "gradient boosting": {
+    "mean": 0.9832561728395062,
+    "sd": 0.0061029999794089745
+   },
+   "random forest": {
+    "mean": 0.9871913580246915,
+    "sd": 0.007467645053252436
+   }
+  },
+  "control_noise_1e-05": {
+   "gradient boosting": {
+    "mean": 0.8527777777777779,
+    "sd": 0.01897050018595425
+   },
+   "random forest": {
+    "mean": 0.813425925925926,
+    "sd": 0.0203583104732915
+   }
+  },
+  "control_noise_0.0001": {
+   "gradient boosting": {
+    "mean": 0.5301697530864198,
+    "sd": 0.020201318730806887
+   },
+   "random forest": {
+    "mean": 0.5023533950617283,
+    "sd": 0.047757203446834436
+   }
+  },
+  "control_noise_0.001": {
+   "gradient boosting": {
+    "mean": 0.50625,
+    "sd": 0.051962537102754704
+   },
+   "random forest": {
+    "mean": 0.4752314814814815,
+    "sd": 0.09304965316641205
+   }
+  },
+  "prefault_part_of_decision_window": {
+   "gradient boosting": {
+    "mean": 0.9639660493827161,
+    "sd": 0.01009181387866831
+   },
+   "random forest": {
+    "mean": 0.9269675925925925,
+    "sd": 0.03128584478307372
+   }
+  },
+  "label_permutation_20ms": {
+   "gradient boosting": {
+    "mean": 0.48132716049382723,
+    "sd": 0.030955305344548642
+   },
+   "random forest": {
+    "mean": 0.4911265432098766,
+    "sd": 0.07722142655835469
+   }
+  },
+  "control_noise_0.003": {
+   "gradient boosting": {
+    "mean": 0.5063271604938272,
+    "sd": 0.06516869515867763
+   },
+   "random forest": {
+    "mean": 0.5352623456790123,
+    "sd": 0.040113884779409234
+   }
+  }
+ },
+ "testgrid_B": {
+  "control_noise_0": {
+   "gradient boosting": {
+    "mean": 1.0,
+    "sd": 4.965068306494546e-17
+   },
+   "random forest": {
+    "mean": 0.6819444444444442,
+    "sd": 0.051435789408725584
+   }
+  },
+  "control_noise_1e-06": {
+   "gradient boosting": {
+    "mean": 0.696604938271605,
+    "sd": 0.045581937223717395
+   },
+   "random forest": {
+    "mean": 0.674537037037037,
+    "sd": 0.05942440177222559
+   }
+  },
+  "control_noise_1e-05": {
+   "gradient boosting": {
+    "mean": 0.421141975308642,
+    "sd": 0.06551357610578566
+   },
+   "random forest": {
+    "mean": 0.44521604938271614,
+    "sd": 0.08748278348706864
+   }
+  },
+  "control_noise_0.0001": {
+   "gradient boosting": {
+    "mean": 0.4867283950617283,
+    "sd": 0.06869347033700521
+   },
+   "random forest": {
+    "mean": 0.4929783950617284,
+    "sd": 0.03820761401586402
+   }
+  },
+  "control_noise_0.001": {
+   "gradient boosting": {
+    "mean": 0.5603395061728396,
+    "sd": 0.043638744707290865
+   },
+   "random forest": {
+    "mean": 0.4929783950617284,
+    "sd": 0.052365434012497006
+   }
+  },
+  "prefault_part_of_decision_window": {
+   "gradient boosting": {
+    "mean": 0.8282407407407408,
+    "sd": 0.029590219417916213
+   },
+   "random forest": {
+    "mean": 0.8484567901234568,
+    "sd": 0.04955806541867281
+   }
+  },
+  "label_permutation_20ms": {
+   "gradient boosting": {
+    "mean": 0.4296296296296296,
+    "sd": 0.04921218627077193
+   },
+   "random forest": {
+    "mean": 0.43634259259259256,
+    "sd": 0.12948809145392412
+   }
+  },
+  "control_noise_0.003": {
+   "gradient boosting": {
+    "mean": 0.5458333333333334,
+    "sd": 0.053106603254695545
+   },
+   "random forest": {
+    "mean": 0.5180555555555555,
+    "sd": 0.025806003878032464
+   }
+  }
+ }
+}
