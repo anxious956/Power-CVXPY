@@ -85,7 +85,7 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | H2 | METHODOLOGY | High | `aux_model.py:31`; `waveforms.py:50` | Design eps is 111–208× the synthetic phasor noise std | CONFIRMED | S |
 | H7 / N7 | MODELING | High | `aux_model.py:29`; `zone_model.py:39` | No inverter fault response in the models; EvEMTBench inverters inject 0.25–0.39 pu I₂; relay B's 40 Ω stratum is infeed physics | CONFIRMED | L |
 | N1 | BUG | High | `real_ml.py:143` | `phasor_view` rotated post-fault phasors 180° at 30 / 50 ms | CONFIRMED, fixed | S |
-| H10 / H20 | METHODOLOGY | Medium | `real_ml.py:122-145`; `zone_detect.py:82-85` | Windows anchored at true inception; rule's 20 ms first-cycle DFT without mimic gives 14.8 % false trips at B | PARTIAL | S |
+| H10 / H20 | METHODOLOGY | High | `real_ml.py:122-145`; `zone_detect.py:82-85` | Windows anchored at true inception; anchoring at a causal starter (≈ 3 samples later) collapses raw-sample boosting (AUC 0.61–0.70, 77–95 % beyond-bus trips); phasor models unaffected | CONFIRMED (real), PARTIAL (synthetic) | S |
 | H26 | METHODOLOGY | Medium | REAL_ML.md §5 | Rule and models compared at different false-trip rates; rule shown with "no spread" | CONFIRMED | S |
 | H27 | METHODOLOGY | Medium | `real_ml.py:277` | No conventional baseline at 10 ms; MMKF absent | PARTIAL (half-cycle rungs added) | M |
 | H29 | METHODOLOGY | Medium | `real_ml.py:411` | A↔B share one grid and simulation set; out-of-grid transfer fails | CONFIRMED | S |
@@ -209,11 +209,10 @@ See `results/DATASET_FACTS.md`.
 - H23: no operating-point columns exist.
 - H11: the DoubleLine "parallel" circuits are separate single-circuit types (`nlcir = 1`, own geometry, 20 vs 25 km), so there is no zero-sequence mutual coupling.
 
-### H10 / H20 — timing (PARTIAL)
+### H10 / H20 — timing
 - **Synthetic** (review-synth): DC offset moves the element's median distance error 0.28 → 0.63 %; ±2 ms trigger jitter has no measurable effect.
-- **Real data.** A causal superimposed-current starter fires a median 0.16 ms (p95 0.94 ms) after inception on in-zone faults at relay B.
-  - The rule's 14.8 % beyond-bus false trips at relay B, 20 ms, are first-cycle DC offset: a mimic filter gives 0.7 %.
-  - Trigger-anchored re-evaluation: §9 (`h10_trigger.py`).
+- **Real data.** The rule's 14.8 % beyond-bus false trips at relay B, 20 ms, are first-cycle DC offset: a mimic filter gives 0.7 %.
+- **Trigger-anchored evaluation:** §6 (after Q3). It collapses raw-sample boosting and leaves phasor-based models and rules intact.
 
 ### H26, H27, H29
 - **H26.** Matched comparisons are in §6; the rule's rates carry deduplicated binomial bounds.
@@ -276,7 +275,34 @@ What each step contributes:
 - **CVT model.**
   - The high-C model meets class T1 (residual 5.9 % at 20 ms after a terminal short circuit); the low-C model fails T1 (11.5 % at 20 ms) and is excluded.
   - The same step-response metric applied to the sag and the terminal short circuit gives 82 % cycle-1 peak error at voltage-peak inception for both. It grows as the time step shrinks (82 → 90 → 95 %), so it is the response to an ideal voltage step, not a discretisation artefact; the phasor-level error (3.7 % at voltage zero, 19 % at voltage peak, 20 ms, 90 % sag) is the relevant quantity (`cvt_step_check.json`).
-- **Sweep results** (relays A and B, 20 ms, grouped): §9, `results/review/q1_instrument.json`. The robust conclusions are stated there.
+- **Sweep** (`q1_instrument.py`, relays A and B, 20 ms, grouped 5-fold, own-99 % guard band; each cell: dependability / beyond-bus trips k/n / relay-bus reverse trips).
+
+| Point | Relay | R0 | R2 | T2 | Engineered + LR | Shortcut control AUC |
+|---|---|---|---|---|---|---|
+| white 0.1 % (default) | B | 60.6 % / 14 / 22.2 % | 52.2 % / 0 / 0 % | 67.8 % / 3 / 0 % | 95.0 % / 3 / 60.0 % | 0.531 |
+| white 1 % | B | 60.6 % / 13 / 17.8 % | 51.1 % / 0 / 0 % | 67.8 % / 2 / 0 % | 95.0 % / 2 / 20.0 % | 0.561 |
+| installation error, draw 2 | B | 57.2 % / 14 / 24.4 % | 49.4 % / 0 / 0 % | 67.2 % / 4 / 0 % | 96.1 % / 4 / 46.7 % | 0.545 |
+| calibration draw 1, test draw 2 | B | 57.2 % / 14 / 24.4 % | 49.4 % / 0 / 0 % | 68.3 % / 4 / 0 % | 95.0 % / 2 / 22.2 % | 0.545 |
+| CVT high-C | B | 62.2 % / 12 / 0 % | 47.2 % / 0 / 0 % | 67.8 % / 1 / 0 % | 95.0 % / 3 / 57.8 % | 0.535 |
+| CT saturation, remanence 0.8 | B | 58.9 % / 14 / 22.2 % | 52.2 % / 0 / 0 % | 67.8 % / 3 / 0 % | 96.1 % / 5 / 24.4 % | 0.562 |
+| relay front end | B | 63.3 % / 10 / 17.8 % | 43.9 % / 0 / 0 % | 55.0 % / 3 / 0 % | 95.6 % / 1 / 0 % | 0.573 |
+| combined (draw 1 + CVT + CT 0.5 + relay front end) | B | 63.9 % / 10 / 4.4 % | 43.9 % / 0 / 0 % | 57.2 % / 3 / 0 % | 95.6 % / 2 / 0 % | 0.517 |
+| white 0.1 % (default) | A | 78.9 % / 1 / 20.0 % | 58.3 % / 0 / 0 % | 66.1 % / 0 / 0 % | 98.9 % / 13 / 0 % | 0.498 |
+| installation error, draw 1 | A | 82.2 % / 9 / 20.0 % | 59.4 % / 0 / 0 % | 70.6 % / 0 / 0 % | 100 % / 13 / 0 % | 0.507 |
+| CVT high-C | A | 77.8 % / 0 / 11.1 % | 54.4 % / 0 / 0 % | 65.6 % / 0 / 0 % | 98.9 % / 15 / 0 % | 0.499 |
+| relay front end | A | 76.1 % / 3 / 13.3 % | 50.6 % / 0 / 0 % | 61.1 % / 0 / 0 % | 98.9 % / 8 / 0 % | 0.501 |
+
+  All points: `results/review/q1_instrument.json`.
+- **Robust across every point:**
+  - the rule-set directional quadrilateral R2 has 0 beyond-bus and 0 relay-bus reverse trips;
+  - within one relay, engineered + LR is 40–52 points more dependable than R2 and 27–41 points more than T2;
+  - the fingerprint shortcut stays suppressed (0.50–0.57).
+- **Not robust:**
+  - R0's beyond-bus trips at A (1 → 9 of 273 with one installation draw: a 3 % VT ratio error moves a fixed reach);
+  - engineered + LR's unsupervised reverse-fault security at B (0–60 % depending on the chain point, i.e. unpredictable);
+  - R2's dependability (−4 to −8 points with CVT or the relay front end).
+- A calibration/test installation mismatch at class-limit error sizes did not degrade engineered + LR at this operating point.
+- CVT and CT effects on zone-1 overreach did not appear at these class-T1 / remanence-0.8 settings; a low-C CVT that fails T1 was excluded, so the worst case for CVT transient overreach is not covered.
 
 ### Q2 — is a per-relay threshold fair?
 - Per-relay calibration is normal practice, but here calibration and test share one operating point (H23), so it is optimistic.
@@ -298,7 +324,49 @@ What each step contributes:
 - **Answer.** A physical output removes the threshold-transfer excuse but not the failure. The mapping from waveforms to distance learned at one operating point does not carry to another relay or grid. The fair deployment assumption would be "calibrated on a setting-study model of the target relay across operating points", which this benchmark cannot provide.
 
 ### Q3 — what input instead of raw samples?
-Grouped 5-fold, relays A and B, 20 ms, current and relay front ends (`q3_inputs.py`): §9.
+Setup (`q3_inputs.py`): grouped 5-fold (first repeat), own-99 % guard band, 20 ms. Each cell: AUC / dependability / beyond-bus k/n / relay-bus reverse / switching.
+
+| Input | Model | Relay B | Relay A |
+|---|---|---|---|
+| raw samples (author) | MLP | 0.772 / 26.1 % / 6/117 / 0 % / 0 % | 0.944 / 61.1 % / 0/273 / 0 % / 0 % |
+| raw, canonical rotation | MLP | 0.811 / 25.0 % / 2 / 15.6 % / 0 % | 0.905 / 71.1 % / 2 / 0 % / 0 % |
+| raw, canonical rotation | CNN | 0.891 / 54.4 % / 4 / 33.3 % / 0 % | 0.927 / 78.3 % / 7 / 17.8 % / 0 % |
+| sequence-phasor trajectories | MLP | 0.947 / 57.2 % / 0 / 0 % / 0 % | 0.979 / 89.4 % / 7 / 0 % / 0 % |
+| sequence trajectories, canonical | **CNN** | **0.996 / 96.7 % / 1 / 0 % / 8.0 %** | **0.989 / 96.1 % / 0 / 0 % / 10.0 %** |
+| loop-impedance trajectories, canonical | MLP | 0.805 / 26.7 % / 2 / 13.3 % / 0 % | 0.966 / 85.6 % / 0 / 64.4 % / 92.0 % |
+| loop-impedance trajectories, canonical | CNN | 0.954 / 53.3 % / 0 / 60.0 % / 0 % | 0.974 / 91.7 % / 4 / 73.3 % / 92.0 % |
+| loop trajectories, last frame | monotone GBM | 0.988 / 63.9 % / 0 / 53.3 % / 0 % | 0.981 / 89.4 % / 4 / 73.3 % / 96.0 % |
+| engineered snapshot (author) | LR | 0.992 / 95.0 % / 3 / 60.0 % / 32.0 % | 0.997 / 98.9 % / 13 / 0 % / 2.0 % |
+
+- **Best input: sequence-phasor trajectories referenced to the 3-cycle pre-fault V₁ memory, with their increments, into a small CNN.**
+  - Highest AUC and dependability at both relays, with 0–1 beyond-bus trips.
+  - 0 % relay-bus reverse trips without supervision: the V₁-memory phase reference makes the input directional.
+  - It still starts on 4–5 of 50 switching events, so it needs a fault detector in front.
+- **Loop-impedance trajectories** carry reach but no direction or fault information: 13–73 % reverse trips across models, and 92–96 % of switching events at relay A.
+- **Canonical rotation** gives no consistent gain once quantities are referenced to V₁ memory.
+- **Raw samples are worst, and data-limited.** MLP AUC at 25 / 50 / 100 % of the training data: 0.62 / 0.70 / 0.81 at B, 0.68 / 0.80 / 0.91 at A; loop trajectories 0.67 / 0.73 / 0.81 (B).
+- **Relay front end** (key pairs only):
+  - engineered + LR at B 95.6 %, 1/117, 0 % reverse, 6 % switching;
+  - raw MLP unchanged (0.804);
+  - loop-trajectory models keep their reverse and switching insecurity.
+  - The sequence-trajectory CNN was not re-run on the relay front end (trimmed for compute). That is the most important open cell.
+
+### H10 / H20 — trigger-anchored windows (METHODOLOGY, High for raw-sample models)
+- **Starter** (`h10_trigger.py`): a causal superimposed-current starter fires a median 0.16 ms after inception on in-zone faults (p95 0.78–0.94 ms). It starts on 24 % (TestGrid) and 33 % (DoubleLine) of switching events.
+- **Test:** models trained on windows aligned to the true inception, tested on windows anchored at that starter (a shift of about 3 samples). Grouped 5×2 folds, 20 ms.
+
+| Model / rung | Relay | AUC | Beyond-bus false trips |
+|---|---|---|---|
+| Gradient boosting (raw) | B | 0.939 → 0.702 | 1.9 → 94.8 % |
+| Gradient boosting (raw) | A | 0.998 → 0.614 | 2.9 → 94.6 % |
+| Gradient boosting (raw) | DoubleLine | 0.990 → 0.624 | 2.4 → 77.3 % |
+| Engineered + LR | B | 0.989 → 0.986 | 1.9 → 4.4 % |
+| Engineered + LR | A | 0.995 → 0.999 | 4.4 → 6.5 % |
+| Engineered + LR | DoubleLine | 0.990 → 0.988 | 2.4 → 5.8 % |
+
+  - Rungs R0 and R2 change by ≤ 3 points.
+- **Verdict.** Raw-sample tree models key on sample-exact alignment with an instant a relay never observes. Every raw-window result in REAL_ML.md depends on the oracle anchor.
+- **Relay front end:** §9.
 
 ## 7. Claim-by-claim verdict
 
