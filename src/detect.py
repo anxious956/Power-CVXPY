@@ -1,7 +1,7 @@
 """
 WP3 experiment: how small can the auxiliary signal be and still be detected?
 
-Three detectors on the same data, same protocol:
+Four detectors on the same data, same protocol (the engineered-feature LR was added later):
   1. |i-|      negative-sequence magnitude in the post-event window (the obvious threshold)
   2. |di-|     incremental negative sequence: post-event minus pre-event (the strong baseline,
                the quantity Taylor's 2026 incremental-quantities paper is built on)
@@ -12,9 +12,10 @@ Every detector produces a score; its threshold is set on the TRAIN set at a fixe
 false-alarm rate, then detection rate is measured on the TEST set. Same data, same budget,
 so the comparison is fair.
 
-Negatives are half "quiet" (normal, balanced load step) and half events that themselves
-create negative sequence (unbalanced load switching, motor start). Those are what make
-the threshold detectors fail.
+Negatives: the default run uses make_dataset(hard=True), whose negatives are 3/4 unbalanced
+load switching and 1/4 balanced load steps; there are no motor starts and no "normal" samples
+(review H31; the earlier text described the --easy set). With --easy the negatives cycle through
+normal, load step, motor start and unbalanced load.
 
   python src/detect.py            # full sweep, writes results/detection_sweep.png + .json
   python src/detect.py --quick    # fewer deltas and samples
