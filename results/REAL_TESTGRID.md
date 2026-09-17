@@ -19,7 +19,9 @@
 > With a mimic filter, a separate memory-polarised positive-sequence / negative-sequence directional element and a
 > quadrilateral set from rules (rung R2), relay B: dependability 55.0 %, out-of-zone trips 0 % (was 4.4 %,
 > 13.3 % at 10 ohm), own line 99 % 0 % (was 6.7 %), relay-bus reverse 0/45 (was 17/45), switching 0/50 (was 1/50).
-> The learned-detector numbers below are superseded by REAL_ML.md and by the grouped re-run in REVIEW.md.
+> The learned-detector numbers below are superseded by [REAL_ML.md](REAL_ML.md) and, definitively, by the
+> grouped re-runs in [review/TABLES.md](review/TABLES.md). The review is merged into `main`: every script and
+> JSON named here is in this repository, not on a branch.
 
 > **Correction, 17 Sep 2026.** The learned-detector numbers below (engineered model, CNN) were obtained on noise-free records with 80 ms windows and in-sample thresholds. The noise-free records let models read the label from pre-fault samples, so the in-distribution 1.000 scores are not valid. The zone-1 setting results are unaffected. See [REAL_ML.md](REAL_ML.md).
 

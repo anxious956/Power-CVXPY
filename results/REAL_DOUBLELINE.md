@@ -9,6 +9,10 @@
 > out-of-zone 0 %, parallel line 0 % (was 2.7 %), dependability 60.0 % (was 83.3 %; 40 ohm faults at about 38 ohm
 > apparent resistance fall outside the ~20 ohm rule-based resistive reach). Only 24 switching events exist in this
 > grid, so "0 % of switching events" bounds the true rate only below 11.7 % (one-sided 95 %).
+>
+> The learned-detector numbers below are superseded by [REAL_ML.md](REAL_ML.md) and, definitively, by the
+> grouped re-runs in [review/TABLES.md](review/TABLES.md). The review is merged into `main`: every script and
+> JSON named here is in this repository, not on a branch.
 
 > **Correction, 17 Sep 2026.** The learned-detector numbers below (engineered model, CNN) were obtained on noise-free records with 80 ms windows and in-sample thresholds. The noise-free records let models read the label from pre-fault samples, so the in-distribution 1.000 scores are not valid. The zone-1 setting results are unaffected. See [REAL_ML.md](REAL_ML.md).
 

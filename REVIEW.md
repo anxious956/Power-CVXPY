@@ -2,8 +2,8 @@
 
 **Reviewed commit:** `321e12b` (origin/main at the start of the review). Work branch: `review-fixes`
 (PR #1 was merged into main by the author mid-review; later commits are on the same branch).
-Companion branches with their own reports: `review-wp1` ([review/WP1_REPORT.md](https://github.com/anxious956/Power-CVXPY/blob/review-wp1/review/WP1_REPORT.md), design tool) and
-`review-synth` ([review/SYNTH_REPORT.md](https://github.com/anxious956/Power-CVXPY/blob/review-synth/review/SYNTH_REPORT.md), synthetic detection pipeline). Their key numbers were re-derived independently before being used here (§5, "Verification").
+Companion reports, produced in separate worktrees and now merged into `main`: [review/WP1_REPORT.md](review/WP1_REPORT.md) (design tool) and
+[review/SYNTH_REPORT.md](review/SYNTH_REPORT.md) (synthetic detection pipeline). Their key numbers were re-derived independently before being used here (§5, "Verification").
 Environment: Windows 11, Python 3.12.10, numpy 2.2.6, scipy 1.16.1, scikit-learn 1.9.1, cvxpy 1.9.2, torch 2.5.1+cu121, pandas 2.3.3; i5-12500H (16 threads), 15.7 GB RAM, RTX 3050 Ti 4 GB. EvEMTBench caches read from `data/` (DoubleLine `.npz` 175 MB; TestGrid110kV `.bin` 1.31 GB + `.meta.npz`); no archive was re-streamed.
 
 ## 1. Executive summary
@@ -77,7 +77,7 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | H23 | MODELING | High | EvEMTBench labels | One operating point per grid; no loading, source, inverter or inception variation; learned mappings do not transfer (Q2) | CONFIRMED | L |
 | H28 | METHODOLOGY | High | `real_ml.py:113,340-370` | Stage-1 label counts every fault in the grid; responsible label raises AUC 0.63–0.83 → 0.90–0.99 | CONFIRMED, fixed | S |
 | H9 | METHODOLOGY | High | `real_ml.py:114-115`; `zone_detect.py:56-59` | Own-line 85–100 % band excluded and unreported; tuned reach and learned models trip 10–19 % of 99 % faults | CONFIRMED | S |
-| H19 | BUG | High | `detect.py:141-144` | Per-waveform standardisation handicaps the synthetic CNN (0.967 → 0.9996 AUC) | CONFIRMED, fixed on review-synth | S |
+| H19 | BUG | High | `detect.py:141-144` | Per-waveform standardisation handicaps the synthetic CNN (0.967 → 0.9996 AUC) | CONFIRMED, fixed (merged) | S |
 | H5 | MODELING | High | `aux_signal_toy.py:75-80` | No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu | CONFIRMED | M |
 | H6 | BUG | High | `aux_model.py:104-108` | Linearised angle uncertainty is unsound (true set up to 0.085 / 0.276 pu outside); sound δ 0.504 → 0.552, 0.691 → 1.042, 0.386 → 1.054 | CONFIRMED | M |
 | H14 | BUG | High | `aux_model.py:123-129`; `aux_signal_toy.py:67` | Zero-margin separation; margin 0.45–1.25 % of eps; 10 % headroom needs 0.666 / 0.899 / 1.357 pu | CONFIRMED | S |
@@ -97,8 +97,8 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | N5 | DOC | Medium | REAL_ML.md §3 | Fingerprint is 0.1–0.26 V, not 0.01 V; shortcut persists to 1e-5 relative noise on DoubleLine | CONFIRMED | S |
 | N6 | DATA | Medium | EvEMTBench switching events | `cap_off`, `load_off`, `ohl_off` start from a different network state (up to 2.3 kV pre-fault offset), a stage-1 shortcut | CONFIRMED (impact not isolated) | S |
 | H11 | MODELING | Medium | `zone_detect.py:70-77`; DoubleLine graph | Synthetic AG/AB only; no CT/CVT; parallel lines modelled without zero-sequence mutual coupling | CONFIRMED | L |
-| H17 | BUG | Medium | `detect.py:121-132` | Polarity chosen on the test set; zone study unaffected (0/36 flips), fault-vs-load |i⁻| flips at 4/10 δ | CONFIRMED, fixed on review-synth | S |
-| H18 | BUG | Low | `detect.py:73-82,173-175` | In-sample thresholds for LR / CNN: realised FAR 1.7–2.1 % against 1 % | PARTIAL, fixed on review-synth | S |
+| H17 | BUG | Medium | `detect.py:121-132` | Polarity chosen on the test set; zone study unaffected (0/36 flips), fault-vs-load |i⁻| flips at 4/10 δ | CONFIRMED, fixed (merged) | S |
+| H18 | BUG | Low | `detect.py:73-82,173-175` | In-sample thresholds for LR / CNN: realised FAR 1.7–2.1 % against 1 % | PARTIAL, fixed (merged) | S |
 | H21 | BUG | Low | `zone_detect.py:129-141` | Raw angles and ε-ratios; AUC changes ≤ 0.0012 | PARTIAL | S |
 | H12 | DOC | Low | `evemt.py:28-29` | Channel names say secondary, values are primary | REFUTED as a bug | S |
 | H31 | DOC | Low | README:214-215; `detect.py:15-17` | Withdrawn 96.0 → 99.4 % still ticked; seeds exist but box unticked; docstring negatives | CONFIRMED | S |
@@ -192,13 +192,13 @@ The design-tool and synthetic-pipeline findings were produced in two worktrees a
 - **Real data.** Own-line 99 % faults were neither trained on nor reported.
   - Guard-band trip rates at 20 ms (grouped): engineered + LR 19.2 % (A), 4.1 % (B), 10.0 % (DoubleLine); tuned reach T1 12.8 % (A), 6.7 % (B); R2 0 %.
   - Treating 99 % as a hard negative barely changes T1's beyond-bus trips (A 11/273 both ways).
-- **Synthetic** (review-synth): with the band as don't-care, engineered + LR trips 48.6 %; as negatives, AUC drops 0.994 → 0.959.
+- **Synthetic** ([review/SYNTH_REPORT.md](review/SYNTH_REPORT.md)): with the band as don't-care, engineered + LR trips 48.6 %; as negatives, AUC drops 0.994 → 0.959.
 
 ### H1, H2, H5, H6, H13–H16, X1 — design tool
-Details, commands and JSON keys: `review/WP1_REPORT.md` on `review-wp1`; the numbers are in §4 and were verified as above. Consequence: nothing in the synthetic sweeps is certified, and the design needs (i) the zone problem, (ii) a sound source set, (iii) a margin tied to a measurement-error model, (iv) the current limit, (v) a global solver, before "guarantee" can be written.
+Details, commands and JSON keys: [review/WP1_REPORT.md](review/WP1_REPORT.md); the numbers are in §4 and were verified as above. Consequence: nothing in the synthetic sweeps is certified, and the design needs (i) the zone problem, (ii) a sound source set, (iii) a margin tied to a measurement-error model, (iv) the current limit, (v) a global solver, before "guarantee" can be written.
 
 ### H17–H21, H4, synthetic H9/H26 — synthetic pipeline
-Details: `review/SYNTH_REPORT.md` on `review-synth`. The corrected full sweep (3 seeds) is in §9.
+Details: [review/SYNTH_REPORT.md](review/SYNTH_REPORT.md). The corrected full sweep (3 seeds) is in §9.
 
 ### N1 — phasor reference rotation (BUG, High, fixed)
 - **Code.** `real_ml.phasor_view` copied the post cycle to a fixed slot while `sequence_phasors` uses a window-relative basis; at 30 / 50 ms the post phasors were rotated 180° against pre-fault, so incremental currents were post + pre.
@@ -213,7 +213,7 @@ See `results/DATASET_FACTS.md`.
 - H11: the DoubleLine "parallel" circuits are separate single-circuit types (`nlcir = 1`, own geometry, 20 vs 25 km), so there is no zero-sequence mutual coupling.
 
 ### H10 / H20 — timing
-- **Synthetic** (review-synth): DC offset moves the element's median distance error 0.28 → 0.63 %; ±2 ms trigger jitter has no measurable effect.
+- **Synthetic** ([review/SYNTH_REPORT.md](review/SYNTH_REPORT.md)): DC offset moves the element's median distance error 0.28 → 0.63 %; ±2 ms trigger jitter has no measurable effect.
 - **Real data.** The rule's 14.8 % beyond-bus false trips at relay B, 20 ms, are first-cycle DC offset: a mimic filter gives 0.7 %.
 - **Trigger-anchored evaluation:** §6 (after Q3). It collapses raw-sample boosting and leaves phasor-based models and rules intact.
 
@@ -436,8 +436,8 @@ Other re-runs:
 
 | Re-run | Where |
 |---|---|
-| Synthetic zone sweep, corrected (3 seeds, AUC ± sd, dependability at 1 % FAR, realised FAR) | `review-synth`: `review/SYNTH_REPORT.md` and `results/review_synth/` |
-| Design presets (exact global optima, margin, sound angle box, current limit) | `review-wp1`: `review/WP1_REPORT.md` and `results/review_wp1/` |
+| Synthetic zone sweep, corrected (3 seeds, AUC ± sd, dependability at 1 % FAR, realised FAR) | [review/SYNTH_REPORT.md](review/SYNTH_REPORT.md) and `results/review_synth/` |
+| Design presets (exact global optima, margin, sound angle box, current limit) | [review/WP1_REPORT.md](review/WP1_REPORT.md) and `results/review_wp1/` |
 | Zone-1 setting tables of REAL_TESTGRID.md / REAL_DOUBLELINE.md, fixed element | `results/review/real_zone_rerun.json` |
 | Q1 sweep | `results/review/q1_instrument.json` |
 | Q2 | `results/review/q2_distance.json` |
@@ -510,8 +510,8 @@ Ordered by value / effort.
 
 ## 11. Tests added
 - `tests/test_review_real.py` (21 tests, no data needed): N1 phasor reference at 20–50 ms; grouped folds never split sibling groups; stratified folds do (documents H22); default chain bit-identical to `real_ml`; CT model sanity; vectorised phase selection equals `zone_model`; bolted AG reads m·X₁; Takagi exact on a circuit-solved radial network; characterisation of the Takagi error against remote infeed and remote shunt angle on the non-homogeneous three-bus model (writes `results/review/takagi_nonhomogeneity.json`); binomial interval.
-- `tests/test_wp1.py` (29, review-wp1): sequence solver KCL residuals, closed-form bolted faults, sequence↔phase round trip, separation LP on known pairs, source boxes, fault loops.
-- `tests/test_synth.py` (15, review-synth): phasor recovery, train-chosen polarity, OOF thresholds, phase-selected reactance on bolted AG/BC/ABG.
+- `tests/test_wp1.py` (29): sequence solver KCL residuals, closed-form bolted faults, sequence↔phase round trip, separation LP on known pairs, source boxes, fault loops.
+- `tests/test_synth.py` (15): phasor recovery, train-chosen polarity, OOF thresholds, phase-selected reactance on bolted AG/BC/ABG.
 
 ```bash
 python -m pytest tests/test_review_real.py -q
@@ -519,15 +519,19 @@ python -m pytest tests/test_review_real.py -q
 
 ## 12. Hand-off
 
-**Branches.**
+**Status: all three review branches are merged into `main`. Nothing is left on a branch.**
 
-| Branch | Content |
-|---|---|
-| `review-fixes` | Real-data review, REVIEW.md. PR #1 was merged into main by the author; the rest is in the new draft PR. |
-| `review-wp1` | Design tool, 14 commits |
-| `review-synth` | Synthetic pipeline, 19 commits |
+| Origin branch | Content | Where it is now |
+|---|---|---|
+| `review-fixes` | Real-data review, REVIEW.md, the ladder, the re-run JSONs | merged (PR #1, then PR #2) |
+| `review-wp1` | Design tool, 14 commits | merged: [review/WP1_REPORT.md](review/WP1_REPORT.md), `results/review_wp1/`, `src/review/wp1_*.py`, `tests/test_wp1.py` |
+| `review-synth` | Synthetic pipeline, 19 commits | merged: [review/SYNTH_REPORT.md](review/SYNTH_REPORT.md), `results/review_synth/`, `tests/test_synth.py`, and the `detect.py` / `zone_detect.py` / `zone_model.py` fixes themselves |
 
-All pushed. Data, caches, checkpoints and logs are not committed (`logs/` is git-ignored).
+One conflict was resolved when landing `review-synth`: `src/review/common.py` existed on both
+sides as two different modules. The real-data machinery keeps the name; the synthetic-pipeline
+helper is now `src/review/synth_common.py`. No reviewed code was dropped.
+
+Data, caches, checkpoints and logs are not committed (`logs/` is git-ignored).
 
 **Reproduce** (from the repo root, with the EvEMTBench caches in `data/`). Wall-clock times were measured on the shared laptop above, with several jobs running in parallel.
 
@@ -564,7 +568,7 @@ All pushed. Data, caches, checkpoints and logs are not committed (`logs/` is git
 - A CVT variant that fails class T1 (the worst case for transient overreach).
 - The 14-bus design replication; H1 with outer source sets.
 - The AUC of zone detectors along a newly designed δ direction.
-- The low-level fixes on `review-wp1` / `review-synth` (for example `detect.evaluate`, `train_cnn`, `zone_features` loop, sin/cos angles) are on those branches and not merged into `review-fixes`.
+- ~~The low-level fixes on `review-wp1` / `review-synth` are on those branches and not merged.~~ **Done:** both branches are merged into `main`, so `detect.evaluate`, `train_cnn`, the `zone_features` loop and the sin/cos angles now carry their fixes in the main line.
 
 **Not verified against primary sources.** IEC 61869 class limits; vendor directional-sector defaults; conductor ampacity; relay input range; arc and tower-footing values. All are stated as assumptions where used.
 
