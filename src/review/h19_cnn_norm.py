@@ -9,7 +9,7 @@ Zone study, --quick sizes (350/250 per class), deltas 0, .1, .3, .514, 3 seeds, 
 import time, argparse
 import numpy as np
 from dataclasses import replace
-from common import design_direction, save
+from synth_common import design_direction, save
 from waveforms import SigParams
 import detect as D
 import zone_detect as Z

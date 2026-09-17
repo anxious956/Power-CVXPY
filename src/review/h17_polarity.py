@@ -13,7 +13,7 @@ column's legacy-vs-train sign comparison is instead taken from the sweep score d
 """
 import time, argparse
 import numpy as np
-from common import design_direction, save, ORIGINAL
+from synth_common import design_direction, save, ORIGINAL
 from waveforms import make_dataset, SigParams
 from dataclasses import replace
 import detect as D

@@ -13,7 +13,7 @@ import time
 import numpy as np
 from dataclasses import replace
 from sklearn.model_selection import StratifiedKFold
-from common import design_direction, save
+from synth_common import design_direction, save
 from waveforms import make_dataset, SigParams
 import detect as D
 import zone_detect as Z

@@ -19,7 +19,7 @@ of 3 seeds). CPU only; no CNN. --quick sizes, deltas 0, .1, .3, .514.
 import time
 import numpy as np
 from dataclasses import replace
-from common import design_direction, save
+from synth_common import design_direction, save
 from waveforms import SigParams, sequence_phasors, CYCLE, EVENT
 import detect as D
 import zone_detect as Z

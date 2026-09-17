@@ -15,7 +15,7 @@ import time
 import numpy as np
 from dataclasses import replace
 from sklearn.ensemble import HistGradientBoostingClassifier
-from common import design_direction, save
+from synth_common import design_direction, save
 from waveforms import SigParams, sequence_phasors, CYCLE, EVENT
 import detect as D
 import zone_detect as Z

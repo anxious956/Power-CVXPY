@@ -16,7 +16,7 @@ and the least-squares slope of AUC vs delta with CI.
 import sys, json, os, argparse, time
 import numpy as np
 from scipy.stats import rankdata
-from common import OUT, save
+from synth_common import OUT, save
 
 ap = argparse.ArgumentParser()
 ap.add_argument("tags", nargs="+")

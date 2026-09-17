@@ -14,7 +14,7 @@ Two evaluations with the corrected pipeline (H17/H18/H19/H21 fixes; cfg = FIXED)
 import time, argparse
 import numpy as np
 from dataclasses import replace
-from common import design_direction, save, FIXED
+from synth_common import design_direction, save, FIXED
 from waveforms import SigParams
 import detect as D
 import zone_detect as Z

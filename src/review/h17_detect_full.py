@@ -9,7 +9,7 @@ change sign; see h17_polarity.py).
 """
 import time
 import numpy as np
-from common import design_direction, save
+from synth_common import design_direction, save
 from waveforms import make_dataset, SigParams
 import detect as D
 

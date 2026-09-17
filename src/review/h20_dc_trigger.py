@@ -14,7 +14,7 @@ Measured here, on the zone study's own generator (CPU only):
 import time
 import numpy as np
 from dataclasses import replace
-from common import design_direction, save
+from synth_common import design_direction, save
 from waveforms import SigParams, FS
 import detect as D
 import zone_detect as Z
