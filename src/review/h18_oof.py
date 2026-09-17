@@ -28,7 +28,7 @@ def lr_variants(ftr, ytr, fte, seed, max_iter):
 
 
 def cnn_variants(Xtr, ytr, Xte, seed, epochs):
-    Xtr_n, Xte_n = D._norm_per_waveform(Xtr), D._norm_per_waveform(Xte)
+    Xtr_n, Xte_n = D._norm_per_waveform(Xtr), D._norm_per_waveform(Xte)   # original CNN front end
     s_tr_in, s_te = D._cnn_fit_predict(Xtr_n, ytr, [Xtr_n, Xte_n], epochs, seed)
     s_oof = np.zeros(len(ytr)); te_f = []
     for k, (a, b) in enumerate(StratifiedKFold(FOLDS, shuffle=True, random_state=seed).split(np.zeros(len(ytr)), ytr)):

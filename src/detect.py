@@ -225,12 +225,31 @@ def _norm_per_waveform(X):
     return (X - m) / s
 
 
-def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False, oof_folds=5, oof_test="full"):
+def _global_channel_scaler(Xfit):
+    """One offset and one scale per channel (6 each), fitted on the training data only, the same
+    for every waveform (as real_ml.ChannelScaler). Keeps absolute amplitude and the V/I ratio,
+    which per-waveform standardisation destroys (review H19)."""
+    m = Xfit.mean(axis=(0, 2), keepdims=True)
+    sd = Xfit.std(axis=(0, 2), keepdims=True) + 1e-6
+    return lambda X: ((X - m) / sd).astype(np.float32)
+
+
+def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False, oof_folds=5, oof_test="full",
+              norm="global"):
     """Returns (train_scores, test_scores).
+    norm='global': per-channel scale fitted on train (review H19); 'per_waveform' reproduces the
+    original, which standardised every channel of every waveform by its own mean and std.
     oof_folds > 0: train scores are out-of-fold (review H18); oof_folds=0 reproduces the
     original in-sample scores. oof_test='full' scores the test set with the model trained on
     all of train; 'folds' with the mean logit of the fold models."""
-    Xtr_n, Xte_n = _norm_per_waveform(Xtr), _norm_per_waveform(Xte)
+    if norm == "per_waveform":
+        make = lambda Xfit: _norm_per_waveform
+    elif norm == "global":
+        make = _global_channel_scaler
+    else:
+        raise ValueError(norm)
+    f = make(Xtr)
+    Xtr_n, Xte_n = f(Xtr), f(Xte)
     s_tr_in, s_te = _cnn_fit_predict(Xtr_n, ytr, [Xtr_n, Xte_n], epochs, seed, verbose)
     if not oof_folds:
         return s_tr_in, s_te
@@ -238,7 +257,8 @@ def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False, oof_folds=5, oof_
     s_tr = np.zeros(len(ytr)); te_folds = []
     skf = StratifiedKFold(oof_folds, shuffle=True, random_state=seed)
     for k, (a, b) in enumerate(skf.split(np.zeros(len(ytr)), ytr)):
-        sb, st = _cnn_fit_predict(Xtr_n[a], ytr[a], [Xtr_n[b], Xte_n], epochs, seed + 1 + k)
+        fk = make(Xtr[a])
+        sb, st = _cnn_fit_predict(fk(Xtr[a]), ytr[a], [fk(Xtr[b]), fk(Xte)], epochs, seed + 1 + k)
         s_tr[b] = sb; te_folds.append(st)
     if oof_test == "folds":
         s_te = np.mean(te_folds, axis=0)

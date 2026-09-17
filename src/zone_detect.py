@@ -160,7 +160,8 @@ def score_all(Xtr, ytr, Xte, grid, seed=0, epochs=20, cfg=None):
     oof = cfg.get("oof_folds", 0)
     out["engineered"] = score_engineered(Xtr, ytr, Xte, grid, seed=seed, oof_folds=oof)
     out["cnn"] = train_cnn(Xtr, ytr, Xte, epochs=epochs, seed=seed, oof_folds=oof,
-                           oof_test=cfg.get("oof_test", "full"))
+                           oof_test=cfg.get("oof_test", "full"),
+                           norm=cfg.get("cnn_norm", "per_waveform"))
     return out
 
 
