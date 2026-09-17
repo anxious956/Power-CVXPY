@@ -6,7 +6,7 @@ Same 7 cubicles as the benchmark TestGrid110kV cache (2 relays, 3 line ends, 2 I
 grid's 25, so every existing script sees an identical layout. Result, 17 Sep 2026: 9,739
 simulations, 5.24 GB, 2,020 s wall on the shared laptop.
 
-    python src/build_adaptgrid_cache.py [archive]      (default D:\evemt\adapt_grid-TestGrid110kV.tar.gz)
+    python src/build_adaptgrid_cache.py [archive]      (default D:/evemt/adapt_grid-TestGrid110kV.tar.gz)
 """
 import os, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__))

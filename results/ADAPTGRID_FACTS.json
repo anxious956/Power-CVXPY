@@ -1,0 +1,581 @@
+{
+ "commit": "d81d9fc48400f17db0813b37d3bbdbe9bb1eaa01",
+ "cache": "data/adapt_grid-TestGrid110kV_cache.meta.npz",
+ "labels": {
+  "n_simulations": 9739,
+  "columns_varying": {
+   "file": 9739,
+   "Unnamed: 0": 9739,
+   "general/result_file_path": 9739,
+   "general/sim_idx": 9739,
+   "events/event_type": 16,
+   "events/event_start": 9739,
+   "events/event_target": 15,
+   "events/event_flt_target_line_location": 9739,
+   "events/event_flt_shc_resistance": 9739,
+   "events/event_flt_hif_resistance": 9739,
+   "events/event_phase_select_2ph": 3,
+   "events/event_phase_select_1ph": 3,
+   "events/event_iflt_duration": 9739,
+   "arc/arc_tau": 9739,
+   "arc/arc_u0": 9739,
+   "arc/arc_r0": 9739,
+   "grounding/grnd_type": 3,
+   "grounding/coil_tuning": 9739,
+   "grounding/solid_ground_resistance": 9739,
+   "grounding/resistive_ground_resistance": 9739,
+   "grounding/parasitic_resistance_percentage": 9739,
+   "cap_switch/cap_power": 9739,
+   "ohl_switch/ohl_length": 9739,
+   "ohl_switch/ohl_type": 1000,
+   "cable_switch/cable_length": 9739,
+   "cable_switch/cable_type": 1000,
+   "switch_trafo_to_lv_type": 1000,
+   "switch_trafo_to_hv_type": 1000,
+   "motor_start/motor_type": 10,
+   "motor_start/motor_trafo_type": 1000,
+   "loads/Ld2/load_p": 9739,
+   "loads/Ld2/load_q": 9739,
+   "loads/Ld5/load_p": 9739,
+   "loads/Ld5/load_q": 9739,
+   "loads/Ld6/load_p": 9739,
+   "loads/Ld6/load_q": 9739,
+   "loads/LoadSwitch/load_p": 9739,
+   "loads/LoadSwitch/load_q": 9739,
+   "ExtGrid/usetp": 9739,
+   "ExtGrid/phiini": 9739
+  },
+  "columns_constant": {
+   "general/vn": "110",
+   "general/fn": "50",
+   "general/grid_graph": "graph_grid0.pickle"
+  },
+  "loading": {
+   "loads/Ld2/load_p": {
+    "min": 75.00363155038703,
+    "max": 224.93843346031016,
+    "nunique": 9739
+   },
+   "loads/Ld5/load_p": {
+    "min": 75.00438257911671,
+    "max": 224.98754523480483,
+    "nunique": 9739
+   },
+   "loads/Ld6/load_p": {
+    "min": 50.009085028134805,
+    "max": 149.99373744628775,
+    "nunique": 9739
+   },
+   "total_P_MW": {
+    "min": 209.61888860409235,
+    "median": 397.99528933275906,
+    "max": 595.8832197312,
+    "max_over_min": 2.842698116087458
+   }
+  },
+  "source": {
+   "ExtGrid/usetp": {
+    "min": 0.9800027895320778,
+    "max": 1.0199990856405263
+   },
+   "ExtGrid/phiini_deg": {
+    "min": -179.97709347589011,
+    "max": 179.97097268819743
+   },
+   "source_strength_column": "NONE - no short-circuit power, impedance or scaling column; grid strength is not varied"
+  },
+  "grounding": {
+   "types": {
+    "resonant": 3277,
+    "resistive": 3241,
+    "solid": 3221
+   },
+   "continuous_parameters": [
+    "grounding/coil_tuning",
+    "grounding/solid_ground_resistance",
+    "grounding/resistive_ground_resistance",
+    "grounding/parasitic_resistance_percentage"
+   ]
+  },
+  "inception": {
+   "event_start_s": {
+    "min": 1.1000383670273362,
+    "max": 1.299993422225884,
+    "nunique": 9739
+   },
+   "note": "continuous, so the point on wave is randomised (measured below from the records)"
+  },
+  "fault_location_pct": {
+   "continuous": true,
+   "nunique": 9739,
+   "p0": 1.0192878468763755,
+   "p5": 6.141899942103411,
+   "p25": 26.5186696861942,
+   "p50": 50.17161797789956,
+   "p75": 73.59376895707635,
+   "p95": 94.9534356569639,
+   "p100": 98.96832405607648
+  },
+  "fault_resistance_ohm_shc": {
+   "continuous": true,
+   "nunique": 9739,
+   "p0": 0.0321435054394417,
+   "p5": 2.7724970678533403,
+   "p25": 12.370713358965794,
+   "p50": 24.96513281557224,
+   "p75": 37.76441525463811,
+   "p95": 47.5838459325271,
+   "p100": 49.96601264171197
+  },
+  "hif_resistance_ohm_incipient": {
+   "p0": 53.23452699937829,
+   "p50": 4711.5808770883405,
+   "p100": 149320.3332575481
+  },
+  "event_type_counts": {
+   "flt_3ph_shc": 646,
+   "switch_load_off": 635,
+   "flt_1phg_shc_w_arc": 631,
+   "flt_1phg_incipient_w_arc": 626,
+   "switch_cap_off": 622,
+   "switch_inrushLV": 615,
+   "flt_2ph_shc": 614,
+   "switch_cap_on": 606,
+   "switch_ohl_on": 603,
+   "switch_load_on": 603,
+   "flt_2phg_shc": 601,
+   "switch_inrushHV": 600,
+   "switch_ibr_trip": 600,
+   "switch_ohl_off": 590,
+   "flt_1phg_shc": 586,
+   "flt_1phg_incipient": 561
+  },
+  "event_target_counts": {
+   "MainBus3": 1415,
+   "MainBus2": 1370,
+   "MainBus6": 1122,
+   "MainBus5": 1082,
+   "MainBus4": 1072,
+   "MainBus1": 1071,
+   "MainLn2-3": 321,
+   "MainLn3-4": 306,
+   "MainLn4-5": 295,
+   "MainLn2-6": 294,
+   "MainLn5-6": 292,
+   "MainLn2-5": 281,
+   "MainLn1-2B": 280,
+   "MainLn1-5": 273,
+   "MainLn1-2A": 265
+  }
+ },
+ "adapt_A": {
+  "relay": "Cub_HV_A_A-B-1\\pex_MainBus1_MainLn1-2A",
+  "line": "MainLn1-2A",
+  "n": 9739,
+  "classes": {
+   "pos": 168,
+   "own99": 22,
+   "neg": 2888,
+   "neg_bench": 299,
+   "beyond": 645,
+   "remote_bus_faults": 184,
+   "parallel": 214,
+   "reverse_bus": 188,
+   "reverse_lines": 199,
+   "other": 1458,
+   "incipient": 1187,
+   "switching": 5474
+  },
+  "switching_by_type": {
+   "switch_cap_off": 622,
+   "switch_cap_on": 606,
+   "switch_ibr_trip": 600,
+   "switch_inrushHV": 600,
+   "switch_inrushLV": 615,
+   "switch_load_off": 635,
+   "switch_load_on": 603,
+   "switch_ohl_off": 590,
+   "switch_ohl_on": 603
+  },
+  "own_line_by_location_band": {
+   "0-20": 31,
+   "20-50": 62,
+   "50-80": 68,
+   "80-85": 7,
+   "85-90": 7,
+   "90-100": 15
+  },
+  "pos_by_rf_bin": {
+   "<=1": 3,
+   "1-10": 25,
+   "10-40": 114,
+   ">40": 26
+  },
+  "pos_by_grounding": {
+   "solid": 55,
+   "resistive": 59,
+   "resonant": 54
+  },
+  "pos_by_type": {
+   "flt_1phg_shc": 35,
+   "flt_1phg_shc_w_arc": 35,
+   "flt_2ph_shc": 30,
+   "flt_2phg_shc": 41,
+   "flt_3ph_shc": 27
+  },
+  "incipient_on_own_line": 75,
+  "min_class_for_5pct_budget": 59,
+  "op_point": {
+   "groups": "20 quantile bins of total active load Ld2+Ld5+Ld6",
+   "bin_sizes": [
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    486
+   ],
+   "total_P_MW": {
+    "p0": 209.61888860409235,
+    "p25": 351.3854684668664,
+    "p50": 397.99528933275906,
+    "p75": 444.86625180323944,
+    "p100": 595.8832197312
+   }
+  },
+  "siblings": {
+   "n_unique_label_keys": 9739,
+   "n": 9739,
+   "statement": "every simulation has a unique (target, location, type, R_f); there are no sibling groups"
+  },
+  "duplicates": {
+   "identical_prefault_cycles": 0,
+   "statement": "pre-fault cycles rounded to 0.1 V / 0.1 A: number of records identical to another"
+  },
+  "prefault_spread": {
+   "voltage_peak_V": {
+    "p0": 84261.5078125,
+    "p5": 85138.609375,
+    "p50": 86964.0625,
+    "p95": 89036.75078125,
+    "p100": 93394.2734375
+   },
+   "current_peak_A": {
+    "p0": 193.5001220703125,
+    "p5": 285.2486968994141,
+    "p50": 432.0956115722656,
+    "p95": 574.7609252929688,
+    "p100": 673.1508178710938
+   },
+   "voltage_peak_rel_std": 0.014506975188851357,
+   "current_peak_rel_std": 0.20886902511119843,
+   "benchmark_for_comparison": "results/DATASET_FACTS.json: one operating point, spread ~1e-6 of nominal"
+  },
+  "inception_pow_deg_phase_a": {
+   "p0": 0.09484822147083528,
+   "p25": 89.22042432574062,
+   "p50": 173.8149054770252,
+   "p75": 267.9258102682707,
+   "p100": 359.8897551507794
+  },
+  "h25_prefault_control_auc": {
+   "45..5 ms before inception (REAL_ML section 3)": 0.5208456997757551,
+   "40 ms ending at inception (REVIEW H25)": 0.535060925339665,
+   "n": 3056,
+   "n_pos": 168,
+   "benchmark_for_comparison": "0.48-0.56 and 0.86-0.97 respectively (REVIEW.md section 5 H25/H30)"
+  },
+  "sir_empirical": {
+   "R_f<=5": {
+    "n": 15,
+    "p0": 0.5731872221933654,
+    "p25": 0.7144885771037459,
+    "p50": 0.7861755994295496,
+    "p75": 1.2608630709426791,
+    "p100": 1.4073063161015158
+   },
+   "R_f<=10": {
+    "n": 34,
+    "p0": 0.13918236387731442,
+    "p25": 0.34984445085332194,
+    "p50": 0.5283619959182493,
+    "p75": 0.7469396506474377,
+    "p100": 1.4073063161015158
+   },
+   "all_R_f (reads low)": {
+    "n": 142,
+    "p0": 0.04275060636293282,
+    "p25": 0.08865034614005102,
+    "p50": 0.12859568001720578,
+    "p75": 0.2584374386504606,
+    "p100": 1.4073063161015158
+   },
+   "by_grounding_Rf<=10": {
+    "solid": {
+     "n": 10,
+     "median": 0.692181307020164
+    },
+    "resistive": {
+     "n": 8,
+     "median": 0.35963861332139857
+    },
+    "resonant": {
+     "n": 16,
+     "median": 0.4756855733569597
+    }
+   },
+   "by_loading_quartile_Rf<=10": {
+    "0": {
+     "n": 9,
+     "median": 0.3473779366095129
+    },
+    "1": {
+     "n": 10,
+     "median": 0.618599128488935
+    },
+    "2": {
+     "n": 7,
+     "median": 0.5374282838226219
+    },
+    "3": {
+     "n": 8,
+     "median": 0.8579587587449914
+    }
+   }
+  },
+  "sir_benchmark_voltage_based": "1.04-1.69 (results/review/sir.json, study model, metallic remote-bus fault)",
+  "adc_clipping": {
+   "default chain +-40 x prefault peak": {
+    "full_scale_A": 26926.03271484375,
+    "sims_clipped": 0,
+    "in_zone_clipped": 0,
+    "neg_clipped": 0
+   },
+   "relay front end +-141.4 kA": {
+    "full_scale_A": 141421.35623730952,
+    "sims_clipped": 0,
+    "in_zone_clipped": 0,
+    "neg_clipped": 0
+   }
+  }
+ },
+ "adapt_B": {
+  "relay": "Cub_HV_B_B-C\\pex_MainBus2_MainLn2-3",
+  "line": "MainLn2-3",
+  "n": 9739,
+  "classes": {
+   "pos": 207,
+   "own99": 26,
+   "neg": 2845,
+   "neg_bench": 246,
+   "beyond": 223,
+   "remote_bus_faults": 207,
+   "parallel": 0,
+   "reverse_bus": 184,
+   "reverse_lines": 816,
+   "other": 1415,
+   "incipient": 1187,
+   "switching": 5474
+  },
+  "switching_by_type": {
+   "switch_cap_off": 622,
+   "switch_cap_on": 606,
+   "switch_ibr_trip": 600,
+   "switch_inrushHV": 600,
+   "switch_inrushLV": 615,
+   "switch_load_off": 635,
+   "switch_load_on": 603,
+   "switch_ohl_off": 590,
+   "switch_ohl_on": 603
+  },
+  "own_line_by_location_band": {
+   "0-20": 51,
+   "20-50": 73,
+   "50-80": 74,
+   "80-85": 9,
+   "85-90": 7,
+   "90-100": 19
+  },
+  "pos_by_rf_bin": {
+   "<=1": 5,
+   "1-10": 46,
+   "10-40": 119,
+   ">40": 37
+  },
+  "pos_by_grounding": {
+   "solid": 71,
+   "resistive": 65,
+   "resonant": 71
+  },
+  "pos_by_type": {
+   "flt_1phg_shc": 41,
+   "flt_1phg_shc_w_arc": 43,
+   "flt_2ph_shc": 45,
+   "flt_2phg_shc": 33,
+   "flt_3ph_shc": 45
+  },
+  "incipient_on_own_line": 88,
+  "min_class_for_5pct_budget": 59,
+  "op_point": {
+   "groups": "20 quantile bins of total active load Ld2+Ld5+Ld6",
+   "bin_sizes": [
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    487,
+    486
+   ],
+   "total_P_MW": {
+    "p0": 209.61888860409235,
+    "p25": 351.3854684668664,
+    "p50": 397.99528933275906,
+    "p75": 444.86625180323944,
+    "p100": 595.8832197312
+   }
+  },
+  "siblings": {
+   "n_unique_label_keys": 9739,
+   "n": 9739,
+   "statement": "every simulation has a unique (target, location, type, R_f); there are no sibling groups"
+  },
+  "duplicates": {
+   "identical_prefault_cycles": 0,
+   "statement": "pre-fault cycles rounded to 0.1 V / 0.1 A: number of records identical to another"
+  },
+  "prefault_spread": {
+   "voltage_peak_V": {
+    "p0": 82309.96875,
+    "p5": 83439.234375,
+    "p50": 85483.9609375,
+    "p95": 88006.16484375,
+    "p100": 94600.28125
+   },
+   "current_peak_A": {
+    "p0": 328.1046447753906,
+    "p5": 446.3106689453125,
+    "p50": 614.2295532226562,
+    "p95": 777.7294921875,
+    "p100": 905.8781127929688
+   },
+   "voltage_peak_rel_std": 0.016989629715681076,
+   "current_peak_rel_std": 0.16563187539577484,
+   "benchmark_for_comparison": "results/DATASET_FACTS.json: one operating point, spread ~1e-6 of nominal"
+  },
+  "inception_pow_deg_phase_a": {
+   "p0": 0.05586379175399103,
+   "p25": 88.17936627357156,
+   "p50": 173.87092805722756,
+   "p75": 266.67483236245147,
+   "p100": 359.77974242080353
+  },
+  "h25_prefault_control_auc": {
+   "45..5 ms before inception (REAL_ML section 3)": 0.523807340617916,
+   "40 ms ending at inception (REVIEW H25)": 0.5267738128592412,
+   "n": 3052,
+   "n_pos": 207,
+   "benchmark_for_comparison": "0.48-0.56 and 0.86-0.97 respectively (REVIEW.md section 5 H25/H30)"
+  },
+  "sir_empirical": {
+   "R_f<=5": {
+    "n": 20,
+    "p0": 0.28834977742973433,
+    "p25": 0.4677687475341649,
+    "p50": 0.6167729889902563,
+    "p75": 0.779441753234476,
+    "p100": 1.1142912557682982
+   },
+   "R_f<=10": {
+    "n": 35,
+    "p0": 0.11239629227323267,
+    "p25": 0.27228145472349974,
+    "p50": 0.4368154263710169,
+    "p75": 0.6379405036798932,
+    "p100": 1.1142912557682982
+   },
+   "all_R_f (reads low)": {
+    "n": 157,
+    "p0": 0.038777367961813525,
+    "p25": 0.08074088434396587,
+    "p50": 0.10306707452355401,
+    "p75": 0.1559237838255989,
+    "p100": 1.1142912557682982
+   },
+   "by_grounding_Rf<=10": {
+    "solid": {
+     "n": 12,
+     "median": 0.4429011651782263
+    },
+    "resistive": {
+     "n": 12,
+     "median": 0.48430513164560096
+    },
+    "resonant": {
+     "n": 11,
+     "median": 0.28834977742973433
+    }
+   },
+   "by_loading_quartile_Rf<=10": {
+    "0": {
+     "n": 6,
+     "median": 0.5049079510047357
+    },
+    "1": {
+     "n": 10,
+     "median": 0.32013237046629206
+    },
+    "2": {
+     "n": 11,
+     "median": 0.6218672699286489
+    },
+    "3": {
+     "n": 8,
+     "median": 0.3561338635632091
+    }
+   }
+  },
+  "sir_benchmark_voltage_based": "1.04-1.69 (results/review/sir.json, study model, metallic remote-bus fault)",
+  "adc_clipping": {
+   "default chain +-40 x prefault peak": {
+    "full_scale_A": 36279.31396484375,
+    "sims_clipped": 0,
+    "in_zone_clipped": 0,
+    "neg_clipped": 0
+   },
+   "relay front end +-141.4 kA": {
+    "full_scale_A": 141421.35623730952,
+    "sims_clipped": 0,
+    "in_zone_clipped": 0,
+    "neg_clipped": 0
+   }
+  }
+ }
+}

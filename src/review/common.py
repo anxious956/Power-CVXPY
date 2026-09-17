@@ -166,9 +166,106 @@ def measurement_chain(x, seed_name, chain):
     return x.astype(np.float32)
 
 
+# ----------------------------------------------------------------------------- adaptgrid relay data
+ADAPT_HALF = 640          # samples kept each side of the inception -> event at index 640, as in the benchmark caches
+ADAPT_OP_BINS = 20        # loading bins used as CV groups: grouped 5-fold then holds out whole loading bands
+RF_BINS = ((0.0, 1.0, "<=1"), (1.0, 10.0, "1-10"), (10.0, 40.0, "10-40"), (40.0, 1e9, ">40"))
+T0_S = 1.0                # first sample time of every EvEMTBench record (evemt.T0)
+
+
+def rf_bin_of(rf):
+    out = np.full(len(rf), "", dtype=object)
+    for lo, hi, lab in RF_BINS:
+        out[(rf > lo) & (rf <= hi)] = lab
+    out[rf <= RF_BINS[0][1]] = RF_BINS[0][2]
+    return out.astype(str)
+
+
+def load_relay_adapt(name, chain=None, cubicle=None):
+    """adapt_grid variant of load_relay: continuous fault location and resistance, randomised
+    inception, per-simulation operating point. Every difference from the benchmark loader is a
+    protocol decision, written up in results/ADAPTGRID.md section 3:
+
+      - each record is re-anchored on its OWN inception (events/event_start, 1.10-1.30 s) and cut to
+        [ev-640, ev+640), so R['ev'] = 640 and every downstream window (memory, pre-fault cycle,
+        10-50 ms decision windows) is where the rest of the code expects it;
+      - pos   = own-line short circuits at <= 85 % of the line (the reach);
+      - own99 = own-line short circuits in the 85-100 % guard band (name kept so zone_task, the
+        ladder and zone_cv report it unchanged); excluded from both classes;
+      - neg   = EVERY short circuit off the protected line, regardless of direction: remote bus,
+        lines beyond, reverse bus and lines, other lines. neg_bench = remote bus + first 20 % of
+        the lines beyond, the benchmark's definition, for a like-for-like column;
+      - incipient (high-impedance, arcing) faults are a held-out class of their own; switching too;
+      - groups = quantile bins of total active load, i.e. the operating point. There are no
+        siblings: fault location, resistance and every load are continuous per simulation, so
+        every simulation is its own deduplicated unit (dedup = arange).
+    """
+    cfg = CONFIGS[name]
+    C = _cache(cfg)
+    relay = cubicle or cfg["relay"]
+    k = C["cubicles"].index(relay)
+    L = C["labels"]
+    n = len(L)
+    lp = line_params(C["graph"], cfg["line"])
+    # --- re-anchor every record on its own inception
+    ev_raw = np.rint((L["events/event_start"].to_numpy(dtype=float) - T0_S) * C["fs"]).astype(int)
+    if (ev_raw - ADAPT_HALF < 0).any() or (ev_raw + ADAPT_HALF > C["x"].shape[-1]).any():
+        raise RuntimeError("an adaptgrid record does not fit the [ev-640, ev+640) window")
+    X = C["x"]
+    full = np.empty((n, 6, 2 * ADAPT_HALF), np.float32)
+    for i in range(n):
+        full[i] = X[i, k, :, ev_raw[i] - ADAPT_HALF:ev_raw[i] + ADAPT_HALF]
+    full = measurement_chain(full, relay, chain)
+    # --- labels
+    S = lambda c: L[c].astype(str).to_numpy().astype(str)      # numpy str dtype, not object, for np.char
+    et, tgt = S("events/event_type"), S("events/event_target")
+    loc = L["events/event_flt_target_line_location"].to_numpy(dtype=float)
+    rf = L["events/event_flt_shc_resistance"].to_numpy(dtype=float)
+    ph1, ph2 = S("events/event_phase_select_1ph"), S("events/event_phase_select_2ph")
+    shc = np.char.find(et, "shc") >= 0
+    incipient = np.char.find(et, "incipient") >= 0
+    switching = np.char.startswith(et, "switch")
+    fault_any = np.char.startswith(et, "flt")
+    own = shc & (tgt == cfg["line"])
+    pos = own & (loc <= 100.0 * REACH)
+    own99 = own & (loc > 100.0 * REACH)
+    relay_bus = RELAY_BUS[name]
+    behind = [kk for u, v, kk in C["graph"].edges(keys=True) if relay_bus in (u, v) and str(kk).startswith("MainLn")
+              and kk not in (cfg["line"], cfg["parallel"])]
+    beyond = shc & np.isin(tgt, cfg["beyond"])
+    remote_bus = shc & (tgt == cfg["remote_bus"])
+    parallel = shc & (tgt == cfg["parallel"]) if cfg["parallel"] else np.zeros(n, bool)
+    reverse_bus = shc & (tgt == relay_bus)
+    reverse_lines = shc & np.isin(tgt, behind)
+    reverse = reverse_bus | reverse_lines
+    neg = shc & ~own                                             # everything off the protected line
+    neg_bench = remote_bus | (beyond & (loc <= 20.0))            # the benchmark's negative set
+    other = neg & ~(beyond | remote_bus | parallel | reverse)
+    # --- operating point: total active load, binned by quantile; grounding as a stratum
+    p_tot = L[["loads/Ld2/load_p", "loads/Ld5/load_p", "loads/Ld6/load_p"]].sum(axis=1).to_numpy(dtype=float)
+    rank = np.argsort(np.argsort(p_tot))
+    op_bin = np.minimum(rank * ADAPT_OP_BINS // n, ADAPT_OP_BINS - 1)
+    op_quartile = np.minimum(rank * 4 // n, 3)
+    grounding = S("grounding/grnd_type")
+    phase = np.where(np.char.find(et, "1phg") >= 0, ph1, np.where(np.char.find(et, "2ph") >= 0, ph2, "abc"))
+    return dict(name=name, cfg=cfg, full=full, ev=ADAPT_HALF, ev_raw=ev_raw, lp=lp,
+                z1L=lp["length_km"] * lp["z1"], z0L=lp["length_km"] * lp["z0"],
+                x_reach=REACH * lp["length_km"] * lp["z1"].imag,
+                z_reach=abs(REACH * lp["length_km"] * lp["z1"]),
+                et=et, tgt=tgt, loc=loc, rf=rf, rf_bin=rf_bin_of(rf), phase=phase,
+                groups=op_bin, op_bin=op_bin, op_quartile=op_quartile, p_total=p_tot, grounding=grounding,
+                dedup=np.arange(n),
+                pos=pos, neg=neg, neg_bench=neg_bench, own99=own99, beyond=beyond, remote_bus_faults=remote_bus,
+                parallel=parallel, switching=switching, fault_any=fault_any, incipient=incipient,
+                reverse=reverse, reverse_bus=reverse_bus, reverse_lines=reverse_lines, other=other,
+                relay_bus=relay_bus, behind_lines=behind, graph=C["graph"], labels=L, adaptgrid=True)
+
+
 # ----------------------------------------------------------------------------- relay data
 def load_relay(name, chain=None, cubicle=None):
     cfg = CONFIGS[name]
+    if cfg.get("adaptgrid"):
+        return load_relay_adapt(name, chain, cubicle)
     C = _cache(cfg)
     relay = cubicle or cfg["relay"]
     k = C["cubicles"].index(relay)
