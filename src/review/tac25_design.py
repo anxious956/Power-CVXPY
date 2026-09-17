@@ -162,8 +162,9 @@ def min_delta(ms, i_max=IMAX_DEFAULT, limit_inside=True, limit_design=True, rho=
 # --------------------------------------------------------------------------- H13 continuous check
 def validate_continuous(p, mode, dv, eps_eff, n_m=21, n_mr=11, i_max=None, limit_inside=False):
     """Re-test a design on a dense (m, R_f) grid rather than the 30 design points (H13)."""
-    ms = ModelSet(p, mode=mode, m_grid=np.linspace(min(p.m_grid), max(p.m_grid), n_m),
-                  mr_grid=np.linspace(0.0, 1.0, n_mr), eps=p.eps)
+    # tuples, not arrays: ModelSet uses `m_grid or p.m_grid`, which is ambiguous for an ndarray
+    ms = ModelSet(p, mode=mode, m_grid=tuple(np.linspace(min(p.m_grid), max(p.m_grid), n_m)),
+                  mr_grid=tuple(np.linspace(0.0, 1.0, n_mr)), eps=p.eps)
     lim = None
     if limit_inside and i_max is not None:
         lim = (p, mode, i_max - abs(dv))
