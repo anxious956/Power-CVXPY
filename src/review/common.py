@@ -14,7 +14,7 @@ OUT = os.path.join(SRC, "..", "results", "review_synth")
 os.makedirs(OUT, exist_ok=True)
 
 ORIGINAL = dict(polarity="test", oof_folds=0, cnn_norm="per_waveform", fixed_features=False)
-FIXED = dict(polarity="train", oof_folds=5, cnn_norm="global", fixed_features=True)
+FIXED = dict(polarity="train", oof_folds=5, oof_test="folds", cnn_norm="global", fixed_features=True, mimic=True)
 
 
 def design_direction():

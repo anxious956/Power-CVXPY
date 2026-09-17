@@ -221,8 +221,9 @@ def score_engineered(Xtr, ytr, Xte, g, seed=0, oof_folds=5, fixed_features=True,
 
 KEYS = ("reactance", "negseq", "engineered", "cnn")
 # Review defaults for main(): OOF thresholds (H18), global CNN scaling (H19), fixed feature
-# encoding (H21). score_all(cfg={}) and main(--legacy) reproduce the original pipeline.
-DEFAULT_CFG = dict(oof_folds=5, oof_test="full", cnn_norm="global", fixed_features=True, mimic=False)
+# encoding (H21), mimic filter on currents (H20); CNN test scores from the fold models (H18).
+# score_all(cfg={}) and main(--legacy) reproduce the original pipeline.
+DEFAULT_CFG = dict(oof_folds=5, oof_test="folds", cnn_norm="global", fixed_features=True, mimic=True)
 
 
 def score_all(Xtr, ytr, Xte, grid, seed=0, epochs=20, cfg=None):
@@ -257,7 +258,8 @@ def main():
     ap.add_argument("--legacy", action="store_true",
                     help="original pipeline: test-chosen polarity, in-sample thresholds, "
                          "per-waveform CNN scaling, raw angle/ratio features")
-    ap.add_argument("--mimic", action="store_true", help="mimic filter on currents (review H20)")
+    ap.add_argument("--no-mimic", action="store_true", help="no mimic filter on currents (review H20)")
+    ap.add_argument("--mimic", action="store_true", help="(default in the corrected pipeline; kept for old commands)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     dump = {}                                   # raw test scores per (delta, seed, detector)
@@ -286,8 +288,8 @@ def main():
     cfg = {} if args.legacy else dict(DEFAULT_CFG)
     if args.legacy:
         args.polarity = "test"
-    if args.mimic:
-        cfg["mimic"] = True
+    if args.no_mimic:
+        cfg["mimic"] = False
     print(f"pipeline cfg {cfg}, polarity chosen on {args.polarity}")
     for t in mags:
         d = t * direction

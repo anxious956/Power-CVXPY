@@ -249,25 +249,28 @@ def _global_channel_scaler(Xfit):
     return lambda X: ((X - m) / sd).astype(np.float32)
 
 
-def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False, oof_folds=5, oof_test="full",
+def train_cnn(Xtr, ytr, Xte, epochs=18, seed=0, verbose=False, oof_folds=5, oof_test="folds",
               norm="global"):
     """Returns (train_scores, test_scores).
     norm='global': per-channel scale fitted on train (review H19); 'per_waveform' reproduces the
     original, which standardised every channel of every waveform by its own mean and std.
     oof_folds > 0: train scores are out-of-fold (review H18); oof_folds=0 reproduces the
     original in-sample scores. oof_test='full' scores the test set with the model trained on
-    all of train; 'folds' with the mean logit of the fold models."""
+    all of train; 'folds' (default) with the mean logit of the fold models, so the threshold and
+    the test scores come from the same models. Measured in review H18: 'full' mis-transfers the
+    OOF threshold between separately trained nets (test FAR 0 to 6.4 % at a 1 % budget)."""
     if norm == "per_waveform":
         make = lambda Xfit: _norm_per_waveform
     elif norm == "global":
         make = _global_channel_scaler
     else:
         raise ValueError(norm)
-    f = make(Xtr)
-    Xtr_n, Xte_n = f(Xtr), f(Xte)
-    s_tr_in, s_te = _cnn_fit_predict(Xtr_n, ytr, [Xtr_n, Xte_n], epochs, seed, verbose)
-    if not oof_folds:
-        return s_tr_in, s_te
+    if not oof_folds or oof_test == "full":
+        f = make(Xtr)
+        Xtr_n, Xte_n = f(Xtr), f(Xte)
+        s_tr_in, s_te = _cnn_fit_predict(Xtr_n, ytr, [Xtr_n, Xte_n], epochs, seed, verbose)
+        if not oof_folds:
+            return s_tr_in, s_te
     from sklearn.model_selection import StratifiedKFold
     s_tr = np.zeros(len(ytr)); te_folds = []
     skf = StratifiedKFold(oof_folds, shuffle=True, random_state=seed)
