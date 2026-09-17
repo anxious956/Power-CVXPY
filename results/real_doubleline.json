@@ -1,0 +1,93 @@
+{
+  "dataset": "EvEMTBench benchmark-DoubleLine",
+  "relay": "Cub_2\\pex_MainBus1_MainLn1-2A",
+  "line": "MainLn1-2A",
+  "line_km": 20.0,
+  "z1": [
+    0.03339248299598694,
+    0.26002457141876223
+  ],
+  "z0": [
+    0.11814491748809815,
+    0.9786188125610351
+  ],
+  "zone1_reach_ohm": 4.420417714118958,
+  "counts": {
+    "in_zone": 180,
+    "out_of_zone": 225,
+    "own99": 45,
+    "parallel": 225,
+    "nonfault": 24
+  },
+  "zone1_setting": {
+    "dependability": 0.8333333333333334,
+    "false_trip_out_of_zone": 0.0,
+    "trip_own_line_99": 0.0,
+    "trip_parallel_line": 0.02666666666666667,
+    "trip_nonfault": 0.0
+  },
+  "zone1_breakdown": {
+    "in zone": {
+      "1 ohm": 1.0,
+      "10 ohm": 0.85,
+      "40 ohm": 0.65
+    },
+    "out of zone": {
+      "1 ohm": 0.0,
+      "10 ohm": 0.0,
+      "40 ohm": 0.0
+    },
+    "own line 99%": {
+      "1 ohm": 0.0,
+      "10 ohm": 0.0,
+      "40 ohm": 0.0
+    },
+    "parallel 1-2B": {
+      "1 ohm": 0.0,
+      "10 ohm": 0.08,
+      "40 ohm": 0.0
+    }
+  },
+  "cv": {
+    "reactance": {
+      "auc": 0.9332098765432099,
+      "auc_sd": 0.020465794700689804,
+      "dep_at_5pct": 0.8666666666666668,
+      "dep_at_5pct_sd": 0.036851386559504415,
+      "false_trip_at_5pct": 0.04740740740740741
+    },
+    "negseq": {
+      "auc": 0.6536213991769547,
+      "auc_sd": 0.05948809838827858,
+      "dep_at_5pct": 0.2555555555555556,
+      "dep_at_5pct_sd": 0.052899469841058144,
+      "false_trip_at_5pct": 0.05185185185185184
+    },
+    "engineered": {
+      "auc": 1.0,
+      "auc_sd": 0.0,
+      "dep_at_5pct": 1.0,
+      "dep_at_5pct_sd": 0.0,
+      "false_trip_at_5pct": 0.0651851851851852
+    },
+    "cnn": {
+      "auc": 0.851604938271605,
+      "auc_sd": 0.04688909909218536,
+      "dep_at_5pct": 0.5925925925925927,
+      "dep_at_5pct_sd": 0.1224184731928771,
+      "false_trip_at_5pct": 0.08148148148148149
+    }
+  },
+  "heldout": {
+    "engineered": {
+      "own line 99%": 0.15555555555555556,
+      "parallel line 1-2B": 0.017777777777777778,
+      "non-fault events": 0.0
+    },
+    "zone-1 setting": {
+      "own line 99%": 0.0,
+      "parallel line 1-2B": 0.02666666666666667,
+      "non-fault events": 0.0
+    }
+  }
+}

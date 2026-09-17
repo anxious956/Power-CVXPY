@@ -80,6 +80,27 @@ zero-sequence (k0) compensation, which made the conventional baseline a straw ma
 element was fixed and validated, and the sweep re-run. The direction survived; the magnitudes
 did not. See [results/ZONE.md](results/ZONE.md).
 
+## Third result: real EMT data (17 Sep 2026)
+
+First run on public electromagnetic-transient data, EvEMTBench `benchmark-DoubleLine`
+(110 kV, 50 Hz, stiff grid, **no inverters**: the control arm). Relay at bus 1, zone 1 at
+85 % of a 20 km line. The archive is read without unpacking by `src/evemt.py`.
+
+- **The distance element is validated on real data.** Bolted faults are located within 1.5 %
+  of the line for all five fault types.
+- **The zone-1 setting, with nothing learned, is perfectly secure** (0 % out-of-zone trips, 0 %
+  at 99 % of the line) and fully dependable for low-resistance faults, falling to 65 % at
+  40 Ω from the reactance effect of remote infeed.
+- **Learned detectors do not beat it.** CNN AUC 0.852 against 0.933. The engineered model
+  scores 1.000 in distribution but calls 15.6 % of never-seen 99 % faults in zone, where the
+  rule calls 0 %.
+- **Running on real data exposed a bug in our element**: no faulted-phase selection, which
+  had let healthy loops win. Fixed; the synthetic zone sweep is being re-run.
+
+Details: [results/REAL_DOUBLELINE.md](results/REAL_DOUBLELINE.md).
+
+![real doubleline](results/real_doubleline.png)
+
 ## Quick start
 
 ```bash
@@ -103,7 +124,9 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             waveforms.py      time-domain relay waveforms from the same circuit, with confusers
             detect.py         detector comparison, fault vs load
             zone_model.py     three-bus model: protected line, adjacent line, remote infeed
-            zone_detect.py    detector comparison, in-zone vs out-of-zone (the main experiment)
+            zone_detect.py    detector comparison, in-zone vs out-of-zone (synthetic)
+            evemt.py          EvEMTBench loader: reads the .tar.gz without unpacking, caches
+            real_zone.py      in-zone vs out-of-zone on real EMT data
 results/    RESULTS.md   design-tool results, figures and JSON for every preset
             DETECTION.md fault vs load study, and why that negative was too easy
             ZONE.md      in-zone vs out-of-zone, the main detection result
@@ -142,7 +165,8 @@ the competing methods against each other, and that the auxiliary signal appears 
 - [ ] Multiple-model Kalman filter detector (Pirani et al. 2022) in the comparison
 - [ ] Sequence-domain front end for the learned detector
 - [x] All 18 papers read, notes and synthesis written
-- [ ] EvEMTBench downloaded and opened
+- [x] EvEMTBench DoubleLine loaded straight from the archive; element validated on real EMT data
+- [ ] Inverter grid (TestGrid110kV) checked and run
 - [ ] Advisor confirmed
 - [ ] Team roles assigned
 - [ ] EMT simulation test grid (Simulink or PSCAD)

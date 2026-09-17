@@ -1,5 +1,11 @@
 # In-zone vs out-of-zone: does the auxiliary signal actually help?
 
+> **Being re-run, 17 Sep 2026.** The numbers below were produced with a distance element that
+> lacked faulted-phase selection. Running on real EMT data showed that flaw (see
+> [REAL_DOUBLELINE.md](REAL_DOUBLELINE.md)); the shared element has been fixed and this sweep
+> is re-running. Treat the reactance column below as provisional until this note is removed.
+
+
 Code: `src/zone_model.py`, `src/zone_detect.py`. Run: `python src/zone_detect.py --seeds 3`.
 Numbers below are from the full sweep of 16 Sep 2026, after the distance element was
 corrected (see "Correction" at the end).

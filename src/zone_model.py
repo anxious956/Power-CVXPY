@@ -163,6 +163,50 @@ def loop_impedances(y, z1, z0, with_current=False):
     return out
 
 
+def phase_selected_reactance(vpost, ipre, ipost, z1, z0, ground_ratio=0.2, frac=0.5, pair_frac=0.8, default=10.0):
+    """Distance estimate with faulted-phase selection, the way a numerical relay releases loops.
+
+    Inputs are sequence phasors in the order returned by waveforms.sequence_phasors,
+    [s0, s+, s-]. Selection uses incremental currents (post minus pre), which strip out load.
+
+      ground fault if |dI0| > ground_ratio * |dI1|
+        phases whose incremental current is at least `frac` of the largest are selected;
+        one phase (LG): release that ground loop;
+        two phases (LLG): release only their phase-to-phase loop
+      otherwise
+        release the phase-to-phase loops whose incremental loop current is at least
+        `pair_frac` of the largest (one loop for LL, all three for a symmetrical fault).
+        pair_frac must exceed 0.5: in an LL fault the two healthy pair currents are exactly
+        half the faulted one and would otherwise be released too.
+
+    Then the smallest forward reactance among released loops. Without selection a healthy
+    loop that happens to carry current can read a small reactance and win: on EvEMTBench
+    DoubleLine that produced 40 % zone-1 trips for faults at 99 % of the line.
+    """
+    a = np.exp(2j * np.pi / 3)
+    di0, di1, di2 = ipost - ipre
+    dia, dib, dic = di0 + di1 + di2, di0 + a**2 * di1 + a * di2, di0 + a * di1 + a**2 * di2
+    y = np.array([vpost[1], vpost[2], vpost[0], ipost[1], ipost[2], ipost[0]])
+    L = loop_impedances(y, z1, z0)
+    if abs(di0) > ground_ratio * max(abs(di1), 1e-12):
+        mags = {"a": abs(dia), "b": abs(dib), "c": abs(dic)}
+        top = max(mags.values())
+        sel = [p for p, m in mags.items() if m >= frac * top]
+        loops = [p + "g" for p in sel]
+        if len(sel) == 2:
+            # Double line-to-ground: one of the two ground loops sees the other phase's fault
+            # current through the shared ground path and overreaches (on EvEMTBench a bolted
+            # fault at 50 % read 39 % on the ground loop, 51 % on the phase loop). Release only
+            # the phase-to-phase loop, as relay phase selectors do.
+            loops = [{"ab": "ab", "bc": "bc", "ac": "ca"}["".join(sorted(sel))]]
+    else:
+        pair = {"ab": abs(dia - dib), "bc": abs(dib - dic), "ca": abs(dic - dia)}
+        top = max(pair.values())
+        loops = [k for k, m in pair.items() if m >= pair_frac * top]
+    fwd = [L[k].imag for k in loops if L[k].imag > 0]
+    return min(fwd) if fwd else default
+
+
 def supervised_reactance(y, z1, z0, frac=0.5, default=10.0):
     """Distance estimate a real element would produce: among loops whose own current is at
     least `frac` of the largest loop current (a crude phase selector) and whose reactance is

@@ -24,7 +24,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dataclasses import replace as _replace
-from zone_model import ZoneParams, solve_zone, loop_impedances, supervised_reactance
+from zone_model import ZoneParams, solve_zone, loop_impedances, supervised_reactance, phase_selected_reactance
 from waveforms import _synth, SigParams, sequence_phasors, CYCLE, EVENT
 from detect import evaluate, train_cnn, FAR
 
@@ -96,11 +96,19 @@ def _seq_vec(vpost, ipost):
 
 def score_reactance(X, g):
     """The textbook distance element, implemented the way a relay does it: six fault loops,
-    k0 compensation on the ground loops, each loop supervised by its own current so healthy
-    loops cannot vote, forward loops only, smallest reactance wins. Thresholding this score
-    is exactly setting a zone reach."""
+    k0 compensation on the ground loops, faulted-phase selection from incremental currents so
+    that only the faulted loops are released, forward loops only, smallest reactance wins.
+    Thresholding this score is exactly setting a zone reach.
+
+    An earlier version released every loop that passed a crude 50 % current supervision. On
+    real EMT data that let healthy phase-to-phase loops win and gave 40 % zone-1 trips for
+    faults at 99 % of the line; see zone_model.phase_selected_reactance."""
     z1, z0 = g.z1, g.z0_ratio * g.z1
-    return np.array([supervised_reactance(_seq_vec(*_phasors(x)[1::2]), z1, z0) for x in X])
+    out = []
+    for x in X:
+        _, vpost, ipre, ipost = _phasors(x)
+        out.append(phase_selected_reactance(vpost, ipre, ipost, z1, z0))
+    return np.array(out)
 
 
 def score_negseq(X):
@@ -113,7 +121,7 @@ def zone_features(X, g):
         vpre, vpost, ipre, ipost = _phasors(x)
         L = _loops(vpost, ipost, g)
         fwd = [z.imag for z in L.values() if z.imag > 0]
-        sup = supervised_reactance(_seq_vec(vpost, ipost), g.z1, g.z0_ratio * g.z1)
+        sup = phase_selected_reactance(vpost, ipre, ipost, g.z1, g.z0_ratio * g.z1)
         zg, zp = L["ag"], L["ab"]
         v0, v1, v2 = vpost; i0, i1, i2 = ipost
         dv0, dv1, dv2 = vpost - vpre; di0, di1, di2 = ipost - ipre
