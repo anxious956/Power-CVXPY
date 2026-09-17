@@ -281,13 +281,16 @@ docs/       PLAN.md   project plan, milestones, deliverables, target venues
 
 ## Reading order
 
-All 18 papers in `papers/` have been read; notes are in `papers/notes/`.
+All 26 papers in `papers/` have been read; notes are in `papers/notes/`.
 
 1. Everyone: [`papers/notes/SYNTHESIS.md`](papers/notes/SYNTHESIS.md), then Taylor &
    Domínguez-García, *Auxiliary Signal-Based Distance Protection in Inverter-Dominated Power
    Systems* (arXiv 2311.10880). It is five pages and it is the clearest statement of the idea.
 2. Then the Sandia gap analysis, the sections on what is missing.
-3. Per role: see [papers/README.md](papers/README.md).
+3. Per role: see [papers/README.md](papers/README.md). For how a distance element is
+   actually set in practice, and for the instrument-transformer limits our assumptions rest
+   on, read §H of that file (six SEL papers) and
+   [`papers/notes/E_practitioner_settings.md`](papers/notes/E_practitioner_settings.md).
 
 What the reading changed: three claims we might have made are already taken (incremental
 negative-sequence detection, protection-aware inverter control validated on hardware, and ML
@@ -308,7 +311,7 @@ in place; §7 carries the claim-by-claim verdict and §10 the roadmap. The re-ru
 
 - [x] Toy replication of the design method, three regimes — reproduces exactly, but the optima
       are local, not verified (§7 claim 5)
-- [x] Literature collected, gap stated
+- [x] Literature collected, gap stated (26 papers held, 8 known gaps)
 - [x] Waveform generator on the same circuit, with negative-sequence confusers
 - [x] First detector comparison: naive threshold vs engineered features vs CNN
 - [x] Three-bus model and the in-zone vs out-of-zone experiment
