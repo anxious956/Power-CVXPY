@@ -41,14 +41,15 @@ _LOADED = {}
 
 def load_for(name, chain):
     """The relay record through the run's front end (relay_aa handled by review.frontend's wrapper)."""
-    key = (name, bool(chain.get("relay_aa")))
+    special = bool(chain.get("relay_aa") or chain.get("i_fs_abs"))
+    key = (name, json.dumps(chain, sort_keys=True))
     if key not in _LOADED:
         from review import frontend
         orig = cm.measurement_chain
-        if chain.get("relay_aa"):
+        if special:
             cm.measurement_chain = frontend._wrapped
         try:
-            _LOADED[key] = cm.load_relay(name, chain if chain.get("relay_aa") else None)
+            _LOADED[key] = cm.load_relay(name, chain if special else None)
         finally:
             cm.measurement_chain = orig
     return _LOADED[key]
@@ -79,7 +80,7 @@ def main():
                 raise SystemExit(f"{run_dir}: directory hash does not match config; refusing to aggregate")
             if not cm.code_unchanged(commit, head, zone_cv.CODE):
                 raise SystemExit(f"{run_dir}: experiment code changed between {commit} and HEAD; refusing to aggregate")
-            fe = "relay-bandwidth" if cfg["chain"].get("relay_aa") else "current"
+            fe = ("relay front end" if cfg["chain"].get("relay_aa") else "CT full scale only") if cfg["chain"] else "current"
             expected = {"grouped": 10, "stratified": 10, "lorfo": 3, "lolo": 4}[cfg["split"]]
             complete = len(recs) == expected
             R = load_for(name, cfg["chain"])
@@ -155,7 +156,7 @@ def main():
                       f"{gs('reverse_bus')}  lines-behind {gs('reverse_lines')}  parallel {gs('parallel')}  other {gs('other')}  switching {gs('switching')}", flush=True)
     # matched comparison against the ladder (same relay, front end, 20 ms, grouped, guard band)
     ladders = {}
-    for fe, fn in (("current", "ladder.json"), ("relay-bandwidth", "ladder_relay_frontend.json")):
+    for fe, fn in (("current", "ladder.json"), ("relay front end", "ladder_relayfe.json"), ("CT full scale only", "ladder_cliponly.json")):
         p = os.path.join(cm.ROOT, "results", "review", fn)
         if os.path.exists(p):
             ladders[fe] = json.load(open(p))

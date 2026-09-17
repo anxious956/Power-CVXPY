@@ -1,0 +1,158 @@
+{
+ "highC | x1 rate | POW 0 | terminal short circuit": {
+  "cycle 1 peak error %": 10.334495960993785,
+  "cycle 2 peak error %": 5.889995380857008,
+  "cycle 3 peak error %": 2.8433646324049238,
+  "residual after 10 ms %": 8.70842703511275,
+  "residual after 20 ms %": 5.889995380857008,
+  "residual after 40 ms %": 2.8433646324049238
+ },
+ "highC | x1 rate | POW 0 | 90 % sag": {
+  "cycle 1 peak error %": 9.30096250869194,
+  "cycle 2 peak error %": 5.3009050780190785,
+  "cycle 3 peak error %": 2.5589374044937596
+ },
+ "highC | x1 rate | POW 90 | terminal short circuit": {
+  "cycle 1 peak error %": 82.0912568788036,
+  "cycle 2 peak error %": 1.6370049414365797,
+  "cycle 3 peak error %": 0.7507819962032134,
+  "residual after 10 ms %": 1.674548675835301,
+  "residual after 20 ms %": 1.6370049414365797,
+  "residual after 40 ms %": 0.7507819962032134
+ },
+ "highC | x1 rate | POW 90 | 90 % sag": {
+  "cycle 1 peak error %": 73.88213119035044,
+  "cycle 2 peak error %": 1.4733044479010193,
+  "cycle 3 peak error %": 0.6757037971524882
+ },
+ "lowC | x1 rate | POW 0 | terminal short circuit": {
+  "cycle 1 peak error %": 55.342543664363816,
+  "cycle 2 peak error %": 11.469790701330629,
+  "cycle 3 peak error %": 7.682040209742494,
+  "residual after 10 ms %": 11.469790701330629,
+  "residual after 20 ms %": 11.469790701330629,
+  "residual after 40 ms %": 7.682040209742494
+ },
+ "lowC | x1 rate | POW 0 | 90 % sag": {
+  "cycle 1 peak error %": 49.80794250876,
+  "cycle 2 peak error %": 10.323116927931913,
+  "cycle 3 peak error %": 6.913925041765906
+ },
+ "lowC | x1 rate | POW 90 | terminal short circuit": {
+  "cycle 1 peak error %": 97.86147061801015,
+  "cycle 2 peak error %": 10.912957486609825,
+  "cycle 3 peak error %": 8.748469110329182,
+  "residual after 10 ms %": 18.02751405234956,
+  "residual after 20 ms %": 10.912957486609825,
+  "residual after 40 ms %": 8.748469110329182
+ },
+ "lowC | x1 rate | POW 90 | 90 % sag": {
+  "cycle 1 peak error %": 88.07532351845246,
+  "cycle 2 peak error %": 9.821881942541955,
+  "cycle 3 peak error %": 7.873622237858097
+ },
+ "highC | x2 rate | POW 0 | terminal short circuit": {
+  "cycle 1 peak error %": 10.317888079718374,
+  "cycle 2 peak error %": 5.888576393336775,
+  "cycle 3 peak error %": 2.8423045785059693,
+  "residual after 10 ms %": 8.711101112979952,
+  "residual after 20 ms %": 5.888576393336775,
+  "residual after 40 ms %": 2.8423045785059693
+ },
+ "highC | x2 rate | POW 0 | 90 % sag": {
+  "cycle 1 peak error %": 9.286078309939896,
+  "cycle 2 peak error %": 5.299696065183747,
+  "cycle 3 peak error %": 2.5580514318936003
+ },
+ "highC | x2 rate | POW 90 | terminal short circuit": {
+  "cycle 1 peak error %": 90.1825655247364,
+  "cycle 2 peak error %": 1.7124859681380493,
+  "cycle 3 peak error %": 0.7866897294922203,
+  "residual after 10 ms %": 1.75318750284087,
+  "residual after 20 ms %": 1.7124859681380493,
+  "residual after 40 ms %": 0.7866897294922203
+ },
+ "highC | x2 rate | POW 90 | 90 % sag": {
+  "cycle 1 peak error %": 81.16430897409127,
+  "cycle 2 peak error %": 1.5412373708888274,
+  "cycle 3 peak error %": 0.7080207565249228
+ },
+ "lowC | x2 rate | POW 0 | terminal short circuit": {
+  "cycle 1 peak error %": 55.33138644514941,
+  "cycle 2 peak error %": 11.478800384556553,
+  "cycle 3 peak error %": 7.679903570364929,
+  "residual after 10 ms %": 11.478800384556553,
+  "residual after 20 ms %": 11.478800384556553,
+  "residual after 40 ms %": 7.679903570364929
+ },
+ "lowC | x2 rate | POW 0 | 90 % sag": {
+  "cycle 1 peak error %": 49.7981610946098,
+  "cycle 2 peak error %": 10.330991411983659,
+  "cycle 3 peak error %": 6.911935434256352
+ },
+ "lowC | x2 rate | POW 90 | terminal short circuit": {
+  "cycle 1 peak error %": 98.92129977973516,
+  "cycle 2 peak error %": 10.91919802531151,
+  "cycle 3 peak error %": 8.76493370245094,
+  "residual after 10 ms %": 18.364977682932793,
+  "residual after 20 ms %": 10.91919802531151,
+  "residual after 40 ms %": 8.76493370245094
+ },
+ "lowC | x2 rate | POW 90 | 90 % sag": {
+  "cycle 1 peak error %": 89.02916977562654,
+  "cycle 2 peak error %": 9.82733327923272,
+  "cycle 3 peak error %": 7.8884403568872665
+ },
+ "highC | x4 rate | POW 0 | terminal short circuit": {
+  "cycle 1 peak error %": 10.314446124079208,
+  "cycle 2 peak error %": 5.888221991236128,
+  "cycle 3 peak error %": 2.8420399234963867,
+  "residual after 10 ms %": 8.71176921529036,
+  "residual after 20 ms %": 5.888221991236128,
+  "residual after 40 ms %": 2.8420399234963867
+ },
+ "highC | x4 rate | POW 0 | 90 % sag": {
+  "cycle 1 peak error %": 9.28299629442622,
+  "cycle 2 peak error %": 5.299394116809755,
+  "cycle 3 peak error %": 2.5578302576658443
+ },
+ "highC | x4 rate | POW 90 | terminal short circuit": {
+  "cycle 1 peak error %": 94.84332331984531,
+  "cycle 2 peak error %": 1.750358124169938,
+  "cycle 3 peak error %": 0.8047350046475437,
+  "residual after 10 ms %": 1.792423070070856,
+  "residual after 20 ms %": 1.750358124169938,
+  "residual after 40 ms %": 0.8047350046475437
+ },
+ "highC | x4 rate | POW 90 | 90 % sag": {
+  "cycle 1 peak error %": 85.3589909844084,
+  "cycle 2 peak error %": 1.575322312194337,
+  "cycle 3 peak error %": 0.7242614967513619
+ },
+ "lowC | x4 rate | POW 0 | terminal short circuit": {
+  "cycle 1 peak error %": 55.3286014325237,
+  "cycle 2 peak error %": 11.481383941915734,
+  "cycle 3 peak error %": 7.679356642934956,
+  "residual after 10 ms %": 11.481383941915734,
+  "residual after 20 ms %": 11.481383941915734,
+  "residual after 40 ms %": 7.679356642934956
+ },
+ "lowC | x4 rate | POW 0 | 90 % sag": {
+  "cycle 1 peak error %": 49.79571948621053,
+  "cycle 2 peak error %": 10.333264108701835,
+  "cycle 3 peak error %": 6.9114266748649085
+ },
+ "lowC | x4 rate | POW 90 | terminal short circuit": {
+  "cycle 1 peak error %": 99.45832195278706,
+  "cycle 2 peak error %": 10.922183532672397,
+  "cycle 3 peak error %": 8.774807160078934,
+  "residual after 10 ms %": 18.539101614369645,
+  "residual after 20 ms %": 10.922183532672397,
+  "residual after 40 ms %": 8.774807160078934
+ },
+ "lowC | x4 rate | POW 90 | 90 % sag": {
+  "cycle 1 peak error %": 89.51248956303043,
+  "cycle 2 peak error %": 9.829979855474786,
+  "cycle 3 peak error %": 7.897326649260564
+ }
+}
