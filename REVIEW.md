@@ -70,7 +70,7 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | N2 | BUG | Critical | `zone_model.py:206` | Sign of loop reactance used as the directional decision; relay-bus reverse faults trip 20–22 % (R0, 20 ms); relay B's 40 Ω in-zone faults discarded as reverse | CONFIRMED, fixed in ladder | S |
 | H24 | METHODOLOGY | Critical | `real_ml.py:270-373` | Security never tested on classes outside training; learned models trip 39–92 % of relay-bus reverse faults, up to 39 % of switching | CONFIRMED | M |
 | H8 / Q-fair | METHODOLOGY | Critical | `zone_model.py:166-207`, `real_ml.py:278-282` | Baseline lacked DC-offset filter, directional element, quadrilateral, setting study | CONFIRMED | M |
-| H1 | METHODOLOGY | Critical | `zone_detect.py:163-166,230`; `detect.py:191-195,253` | "Certified δ" designed on a different model and problem; no δ ≤ 1.5 separates the zone problem at eps ≥ 0.01 | CONFIRMED | M |
+| H1 | METHODOLOGY | Critical | `zone_detect.py:163-166,230`; `detect.py:191-195,253` | "Certified δ" designed on a different model and problem; no δ ≤ 1.5 separates the zone problem at eps ≥ 0.01 | CONFIRMED (the δ misuse); the infeasibility is **re-derived and moved**: feasible at eps ≤ 0.12, none at eps ≥ 0.16 at any I_max ([results/DESIGN.md](results/DESIGN.md) §4). Still a search result — TAC25 Theorem 1 cannot certify it (§2 there) | M |
 | H22 | METHODOLOGY | High | `real_ml.py:286` | Stratified CV: 95–96 % of test cases have a sibling in training; three-phase siblings bit-identical | CONFIRMED, fixed | S |
 | H25 | METHODOLOGY | High | `real_ml.py:376-391` | Shortcut control ends 5 ms early and skips DoubleLine; the 40 ms ending at inception gives AUC 0.96 / 0.86 / 0.95 | CONFIRMED | S |
 | H30 | BUG / MODELING | High | `evemt.py:85,131`; `real_ml.py:92-95` | Non-causal resampling leaks 1.1–1.4 ms; ADC full scale ±40× pre-fault clips 13–14 close-in faults | CONFIRMED, fixed (relay front end) | M |
@@ -78,11 +78,11 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | H28 | METHODOLOGY | High | `real_ml.py:113,340-370` | Stage-1 label counts every fault in the grid; responsible label raises AUC 0.63–0.83 → 0.90–0.99 | CONFIRMED, fixed | S |
 | H9 | METHODOLOGY | High | `real_ml.py:114-115`; `zone_detect.py:56-59` | Own-line 85–100 % band excluded and unreported; tuned reach and learned models trip 10–19 % of 99 % faults | CONFIRMED | S |
 | H19 | BUG | High | `detect.py:141-144` | Per-waveform standardisation handicaps the synthetic CNN (0.967 → 0.9996 AUC) | CONFIRMED, fixed (merged) | S |
-| H5 | MODELING | High | `aux_signal_toy.py:75-80` | No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu | CONFIRMED | M |
+| H5 | MODELING | High | `aux_signal_toy.py:75-80` | No inverter current limit; ~~every preset needing δ > 0 infeasible at 1.2 pu~~ | **PARTLY WITHDRAWN.** The limit was missing, but imposing it as an outer check on the design was the wrong correction. Inside the problem as TAC25 (1b) the presets are **feasible at 0.16–0.26 pu**, about half the unconstrained optimum ([results/DESIGN.md](results/DESIGN.md) §3) | M |
 | H6 | BUG | High | `aux_model.py:104-108` | Linearised angle uncertainty is unsound (true set up to 0.085 / 0.276 pu outside); sound δ 0.504 → 0.552, 0.691 → 1.042, 0.386 → 1.054 | CONFIRMED | M |
 | H14 | BUG | High | `aux_model.py:123-129`; `aux_signal_toy.py:67` | Zero-margin separation; margin 0.45–1.25 % of eps; 10 % headroom needs 0.666 / 0.899 / 1.357 pu | CONFIRMED | S |
 | H16 | DOC (paper) | High | Taylor 2023 Appendix | Fig. 3 reproduces only with the printed M = [[r, −x], [r, x]]; the correct form gives peak 0.485 | CONFIRMED | S |
-| H2 | METHODOLOGY | High | `aux_model.py:31`; `waveforms.py:50` | Design eps is 111–208× the synthetic phasor noise std | CONFIRMED | S |
+| H2 | METHODOLOGY | High | `aux_model.py:31`; `waveforms.py:50` | Design eps is 111–208× the synthetic phasor noise std | CONFIRMED but **against the wrong error model**: white noise averages down over a 128-sample DFT, per-installation ratio and phase errors do not. Against fault-condition instrument errors eps = 0.08–0.16 pu is defensible ([results/DESIGN.md](results/DESIGN.md) §4.1) | S |
 | H7 / N7 | MODELING | High | `aux_model.py:29`; `zone_model.py:39` | No inverter fault response in the models; EvEMTBench inverters inject 0.25–0.39 pu I₂; relay B's 40 Ω stratum is infeed physics | CONFIRMED | L |
 | N1 | BUG | High | `real_ml.py:143` | `phasor_view` rotated post-fault phasors 180° at 30 / 50 ms | CONFIRMED, fixed | S |
 | H10 / H20 | METHODOLOGY | High | `real_ml.py:122-145`; `zone_detect.py:82-85` | Windows anchored at true inception; anchoring at a causal starter (≈ 3 samples later) collapses raw-sample boosting (AUC 0.61–0.70, 77–95 % beyond-bus trips); phasor models unaffected | CONFIRMED (real), PARTIAL (synthetic) | S |
@@ -439,10 +439,10 @@ Setup (`q3_inputs.py`): grouped 5-fold (first repeat), own-99 % guard band, 20 m
 |---|---|---|---|
 | 1 | Presets table 0 / 0.514 / 0.697 / 0.408 / none ≤ 0.8 (README, RESULTS.md) | HOLDS WITH CAVEAT | Reproduced exactly (quick-start); local optima (exact 0.5040 / 0.6908 / 0.3863; eps12 1.3186), zero margin, unsound angle box, current limit violated (WP1) |
 | 2 | "With a stiff SG no signal is needed" | HOLDS WITH CAVEAT | Only for the gridded two-bus toy |
-| 3 | "~0.5 pu resolves high-R LG faults" | HOLDS WITH CAVEAT | With 10 % margin 0.666 pu; with a sound angle set 0.552 pu; infeasible at I_max 1.2 pu |
-| 4 | "50 % more noise → injection exceeds inverter capability" (eps12) | HOLDS | Exact minimum 1.3186 pu |
+| 3 | "~0.5 pu resolves high-R LG faults" | HOLDS WITH CAVEAT, **"infeasible" withdrawn** | With 10 % margin 0.666 pu; with a sound angle set 0.552 pu; ~~infeasible at I_max 1.2 pu~~ — **0.28 pu and feasible** once the current limit is inside the problem rather than an outer check ([results/DESIGN.md](results/DESIGN.md) §3) |
+| 4 | "50 % more noise → injection exceeds inverter capability" (eps12) | **HOLDS, strengthened** | Exact minimum 1.3186 pu unconstrained; with the limit inside, eps = 0.12 pu is **infeasible outright** at I_max ≤ 1.2 — not merely expensive ([results/DESIGN.md](results/DESIGN.md) §4.1) |
 | 5 | "Optimum verified against brute force" (PLAN.md) | DOES NOT HOLD | Brute force finds 0.504–0.506 < 0.514 |
-| 6 | Magnitudes "in the same range as the paper's examples" | UNTESTED | No 14-bus replication; Taylor 2023 gate passes only with the printed matrix |
+| 6 | Magnitudes "in the same range as the paper's examples" | UNTESTED, **still** | No 14-bus replication — it is specified well enough to build but needs a general multi-bus sequence solver and Minkowski aggregation, which was out of scope ([results/DESIGN.md](results/DESIGN.md) §1). Taylor 2023 gate passes only with the printed matrix |
 | 7 | Fault vs load: |i⁻| useless, more signal worse (README, DETECTION.md) | HOLDS WITH CAVEAT | True at the 1 % operating point; by AUC with train-chosen sign |i⁻| improves 0.563 → 0.980 (synth) |
 | 8 | "Engineered features solve fault vs load; CNN adds nothing" | HOLDS | 98.8–100 % (quick-start) |
 | 9 | Zone table: reactance 0.952 → 0.863 | HOLDS WITH CAVEAT | 0.954 → 0.868 corrected; −0.086 [−0.096, −0.077]; mostly mixed fault types under one reach; depends on excluding the 85–100 % band |
@@ -539,16 +539,39 @@ Ordered by value / effort.
        at 360°·Δf per second — so the R3 tilt, a constant here, becomes time-varying within the fault.
      Not implemented in this session. It should be added to `ladder.py` as a rung R5 *before* any
      inverter-dominated data arrives, so the comparison is fair from the first run.
-2. **Design tool that deserves the word "guarantee" (M).**
-   - **Goal:** δ for the zone problem (in-zone vs out-of-zone plus normal) on the three-bus model and then IEEE 14-bus, with:
-     - a sound outer source set (H6);
-     - noise as a box tied to CT/VT class errors (H2);
-     - a margin (H14);
-     - |i⁺| + |i⁻| ≤ I_max worst case over the i⁺ set (H5);
-     - an IEEE 2800-style negative-sequence response as an uncertainty dimension (limiter types: circular, priority, instantaneous; SYNTHESIS.md §2);
-     - a global solver (H15), then continuous (m, R_f) validation by refinement or a Lipschitz bound (H13).
-   - **Gate:** Taylor 2023 with the correct complex form, stating the printed-matrix discrepancy to the author (H16).
-   - **Risk:** at realistic eps no δ ≤ I_max exists (H1 already shows this for eps ≥ 0.01); that is itself a publishable edge.
+2. **Design tool that deserves the word "guarantee" (M) — largely done; see
+   [results/DESIGN.md](results/DESIGN.md).**
+   - **Done in the TAC25 formulation:** sound outer source set (H6); a margin in measurement units
+     (H14, ρ = 0.1 costs 29 % more signal); the current limit **inside** the problem rather than as
+     an outer check (H5, which reverses it); noise tied to the corrected CT/VT fault-condition
+     figures (H2); a global polar solve over the δ-plane (H15, reproduces the exact optima to the
+     grid step); continuous (m, R_f) validation by dense refinement (H13, 462 points, 0 unseparated
+     at every feasible cell).
+   - **The correction that mattered.** `|i⁺| + |i⁻| ≤ I_max worst case over the i⁺ set` — the way
+     this item was written, and what H5 did — is the wrong reading. It demands headroom against a
+     realisation that cannot occur while δ is being injected. TAC25's (1b) restricts what can be
+     *observed*, which shrinks the uncertainty and **reduces** the required signal.
+   - **Still open.**
+     - The **IEEE 14-bus replication** (the gate below). Not built; it needs a general multi-bus
+       sequence solver and Minkowski aggregation, so nothing here is a replication of TAC25.
+     - An **IEEE 2800-style negative-sequence response** as an uncertainty dimension. This is now
+       load-bearing rather than a nicety: with the IBR modelled as an ideal current source with an
+       open negative-sequence path, the map says an inverter at the relay end removes the need for a
+       signal entirely, which is the opposite of the project's premise and is an artefact. Use the
+       measured virtual-impedance angles −0.5° / +36.2° / −51.6° (SYNTHESIS.md §2), **not** the
+       Baeckeland limiter angle, which parameterises the positive sequence.
+     - A **certified** lower bound. TAC25 Theorem 1 cannot supply one here (DESIGN.md §2), so every
+       "no δ exists" is exhaustion at a stated grid, not a proof.
+   - **Gate:** Taylor 2023 with the correct complex form, stating the printed-matrix discrepancy to
+     the author (H16) — **passed**; draft note in `docs/notes/taylor_matrix_note.md`. The 14-bus
+     example — **not passed**, and it bounds the scope of every design number published so far.
+   - **Risk, re-stated.** The old risk was "at realistic eps no δ ≤ I_max exists". The map puts the
+     feasibility boundary at **eps ≈ 0.12–0.16 pu**, and the corrected instrument figures put
+     realistic eps at **0.08–0.16 pu**, so the design sits *on* its own boundary — that is the
+     publishable edge, sharper than before. The new risk is different and larger: feasibility is
+     bought by assuming the inverter current limit is **hard**, and this project measured it as soft
+     (median 1.07–1.18 pu, p95 ≈ 1.5, max ≈ 2.1; claim 20). **The assumption that rescues the design
+     is the one the data contradicts.**
 3. **Inverter-dominated EMT dataset (L).**
    - **Goal:** the data this benchmark cannot provide.
    - **Grid:** the Baeckeland 14-bus Simulink model or an own PSCAD grid, label-compatible with EvEMTBench.
@@ -650,6 +673,10 @@ Data, caches, checkpoints and logs are not committed (`logs/` is git-ignored).
 | `python src/review/cvt_class_check.py`, `cvt_step_check.py` | CVT | < 1 min |
 | `python src/review/ibr_limiter_check.py` | limiter | ~1 min |
 | `python src/review/wp1_verify.py` | independent H13 / H15 checks | 6 min |
+| `python src/review/sir_check.py` | SIR and the CCVT transient margin | < 1 min |
+| `LADDER_RSET=legacy python src/review/ladder.py` | ladder with the pre-note-E R_set | ~30 s |
+| `python src/review/tac25_theorem1.py` | TAC25 Theorem 1 bound and its gate | ~5 s |
+| `python src/review/tac25_map.py` | design feasibility map (checkpointed) | ~10 min |
 | `python src/review/h19_verify.py` | independent H19 check | ~3 min |
 | `python -m pytest tests/test_review_real.py -q` | tests | 3–16 s |
 
@@ -657,11 +684,23 @@ Data, caches, checkpoints and logs are not committed (`logs/` is git-ignored).
 - MMKF and the incremental negative-sequence admittance detector (H27).
 - The sequence-trajectory CNN on the relay front end (Q3).
 - A CVT variant that fails class T1 (the worst case for transient overreach).
-- The 14-bus design replication; H1 with outer source sets.
+- The 14-bus design replication (still; it gates every design number, [results/DESIGN.md](results/DESIGN.md) §1).
+- A negative-sequence source model for the IBR, without which the design tool's "IBR share" axis is
+  an artefact (DESIGN.md §4.3).
+- A rung R5 for inverter-dominated grids (§10 item 1), needed before the ladder is carried to WP2.
+- A certified lower bound on |δ|: TAC25 Theorem 1 does not provide one for box-bounded uncertainty
+  (DESIGN.md §2), so every "no δ exists" here is exhaustion at a stated grid.
 - The AUC of zone detectors along a newly designed δ direction.
 - ~~The low-level fixes on `review-wp1` / `review-synth` are on those branches and not merged.~~ **Done:** both branches are merged into `main`, so `detect.evaluate`, `train_cnn`, the `zone_features` loop and the sin/cos angles now carry their fixes in the main line.
 
-**Not verified against primary sources.** IEC 61869 class limits; vendor directional-sector defaults; conductor ampacity; relay input range; arc and tower-footing values. All are stated as assumptions where used.
+**Not verified against primary sources.** Vendor directional-sector defaults; conductor ampacity;
+relay input range; arc and tower-footing values. All are stated as assumptions where used.
+~~IEC 61869 class limits~~ — the class limits themselves are still not read from the standard text,
+but they are no longer the figures used: the instrument errors in Q1 now come from Kasztenny 2021
+§III.A–B for **fault** conditions (VT 3–6 %, CT 5–10 %), and the CCVT transient classes are used
+only through the measured residuals in `cvt_class_check.json`. ~~conductor ampacity~~ is no longer
+load-bearing either: load encroachment has stopped being the binding cap on the resistive reach
+(§6 Q-fair).
 
 **Checked since** against six SEL practitioner papers, in
 [papers/notes/E_practitioner_settings.md](papers/notes/E_practitioner_settings.md). Nothing was
