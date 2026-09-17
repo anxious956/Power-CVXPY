@@ -60,10 +60,10 @@ the same faults just past the remote bus.
 
 | δ (pu) | apparent reactance | \|i⁻\| magnitude | engineered features + LR | 1D CNN |
 |---|---|---|---|---|
-| 0.000 | **0.834** ± 0.006 | 0.594 ± 0.020 | 0.996 ± 0.000 | **0.982** ± 0.004 |
-| 0.100 | 0.811 ± 0.007 | 0.581 ± 0.018 | 0.997 ± 0.001 | 0.994 ± 0.001 |
-| 0.300 | 0.772 ± 0.009 | 0.559 ± 0.015 | 0.999 ± 0.001 | 0.999 ± 0.001 |
-| 0.514 | **0.741** ± 0.012 | 0.543 ± 0.014 | 0.999 ± 0.001 | **1.000** ± 0.000 |
+| 0.000 | 0.952 ± 0.005 | 0.594 ± 0.020 | 0.995 ± 0.000 | 0.982 ± 0.004 |
+| 0.100 | 0.943 ± 0.005 | 0.581 ± 0.018 | 0.997 ± 0.001 | 0.994 ± 0.001 |
+| 0.300 | 0.908 ± 0.009 | 0.559 ± 0.015 | 0.998 ± 0.001 | 0.999 ± 0.001 |
+| 0.514 | 0.863 ± 0.009 | 0.543 ± 0.014 | 0.999 ± 0.001 | 1.000 ± 0.000 |
 
 ROC AUC, mean ± sd over three seeds, 3600 train and 1800 test waveforms per point.
 
@@ -71,14 +71,14 @@ ROC AUC, mean ± sd over three seeds, 3600 train and 1800 test waveforms per poi
 
 Three things came out of it.
 
-- **The auxiliary signal helps the learned detector and hurts the conventional one.** The CNN climbs from 0.982 to 1.000 AUC, its dependability at a 1 % false-trip budget from 80 % to 99 %. Over the same sweep the apparent-reactance element falls monotonically from 0.834 to 0.741, well outside the seed spread. Injected negative-sequence current distorts the quantity that element is built on.
+- **The auxiliary signal helps the learned detector and hurts the conventional one.** The CNN climbs from 0.982 to 1.000 AUC, its dependability at a 1 % false-trip budget from 80 % to 99 %. Over the same sweep the distance element falls monotonically from 0.952 to 0.863, far outside the seed spread. Injected negative-sequence current distorts the quantity that element is built on.
 - **So the scheme cannot be dropped into an existing relay's impedance element.** Cashing in the guarantee means changing the relay, not only the inverter. Anyone proposing auxiliary signals should measure what they do to the elements already in service.
-- **Engineered features are at ceiling without any injection**, at 0.996 AUC. Logistic regression on sequence magnitudes, ratios, angles and k0-compensated loop impedances beats the CNN everywhere until the signal is large. Deep learning is not the contribution here; the right quantities are.
+- **Engineered features are at ceiling without any injection**, at 0.995 AUC. Logistic regression on sequence magnitudes, ratios, angles and k0-compensated loop impedances beats the CNN everywhere until the signal is large. Deep learning is not the contribution here; the right quantities are.
 
-An earlier version of these numbers was wrong: the ground fault loops were missing
-zero-sequence (k0) compensation, which made the conventional baseline a straw man. The
-element was fixed and validated, and the sweep re-run. The direction survived; the magnitudes
-did not. See [results/ZONE.md](results/ZONE.md).
+These numbers have been corrected twice, both times by strengthening the conventional
+baseline: first k0 compensation, then faulted-phase selection, found by running on real EMT
+data. The downward trend survived both; the magnitudes did not. See
+[results/ZONE.md](results/ZONE.md).
 
 ## Third result: real EMT data (17 Sep 2026)
 
@@ -95,7 +95,7 @@ First run on public electromagnetic-transient data, EvEMTBench `benchmark-Double
   scores 1.000 in distribution but calls 15.6 % of never-seen 99 % faults in zone, where the
   rule calls 0 %.
 - **Running on real data exposed a bug in our element**: no faulted-phase selection, which
-  had let healthy loops win. Fixed; the synthetic zone sweep is being re-run.
+  had let healthy loops win. Fixed, and the synthetic zone sweep above re-run with it.
 
 Details: [results/REAL_DOUBLELINE.md](results/REAL_DOUBLELINE.md).
 
