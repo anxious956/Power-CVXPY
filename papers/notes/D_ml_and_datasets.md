@@ -702,3 +702,140 @@ episodes can be concatenated with theirs and so a reviewer can see the schema is
    reactive current during unbalanced faults as grid-code fault ride-through. Any negative-sequence
    detector we evaluate on it will partly be detecting the inverter's own FRT response, not the
    fault. Control for this explicitly or the result will be challenged.
+
+
+---
+
+# Part 3 — Two PNNL resources the first survey missed
+
+**The survey above missed both of these.** It searched for *datasets* and ranked them by what could be
+downloaded and trained on; these two are primarily *models with automation*, published on IEEE DataPort
+by the same PNNL group, and they are the first entries in this file that could plausibly replace part of
+WP2. They are added here 18 Sep 2026 after a second pass. Assessed from the public DataPort pages, the
+IRTSD README (`README_SENT_V02_Dataset.docx`) and the T&D `ReadMe.pdf`; **no event data was downloaded**.
+
+## 19. IRTSD — IBR-rich transmission system datakit
+
+**Citation.** B. Ross and K. Mahapatra, "IRTSD: Open-Source Data and Toolset for Electromagnetic
+Transient Analysis of Disturbances and IBR Control Malfunctions in Transmission Systems", IEEE DataPort,
+doi **10.21227/mp6d-j677**, created 5 Dec 2024, last updated 1 Apr 2026, CC-BY 4.0, open access.
+Funded by DOE Office of Electricity, project SENTIENT.
+
+**What it is.** Three resources: (1) 5,500 events / ~1.4M labelled recordings, 29.56 GB; (2) the PSCAD
+model that produced them, 15.57 MB; (3) the Python automation that procedurally generates the events.
+
+| | IRTSD |
+|---|---|
+| System | Archetypal transmission system "loosely representing Southern California": 6 buses at **230 kV and 500 kV**, 5 synchronous generators, **3 IBR plants**, roughly **40 % IBR penetration** |
+| Frequency | **60 Hz** (1 pu = 60 Hz throughout the README) |
+| Solver | PSCAD, **20 µs** solution step, distributed **frequency-dependent** transmission lines |
+| Published sampling | **240 µs** (4.17 kHz), 4,166 samples ≈ 1 s per case. Changeable via the model's "Channel Plot Step"; the README recommends an integer multiple of 20 µs and warns against exceeding 50 µs |
+| Signal types | **Point-on-wave** voltages and currents (any signal without a `_MAG`/`_ANG` suffix) **and** PMU phasors from **17 PMU models**, one per line terminal, which "can also act as protective relays" |
+| Generator controls | GOV1 thermal governor, HYGOV Type 1 hydro, **SCRX19 exciter** |
+| IBR controls | **WECC generic REGC_A / REEC_A**, from the PNNL Enhanced IEEE 39-Bus repository |
+| Event classes | faults, generator trips, voltage steps, load steps, forced oscillations, **fault-induced IBR tripping**, **fault-induced momentary cessation** |
+| Fault labels | faulted line, location (per unit from the leading terminal), **11 fault types**, **fault resistance in ohms**, incidence time, duration, breaker time, load preset |
+| Scenario axes | {no IBR, IBR} × {balanced imports, concentrated imports} × {light, medium, heavy load}; 180 fault events per scenario, 720 in total |
+
+**What it fixes, against §"What this means for the team".**
+
+| Our stated gap | IRTSD |
+|---|---|
+| Inverters at 0.14 % of short-circuit capacity | **Fixed in kind, not in degree.** ~40 % IBR penetration, three plants, with momentary cessation and fault-induced tripping as first-class event types. But the axis is **binary** (IBRs in or out), not swept |
+| 50 Hz only where inverters exist | **Fixed.** 60 Hz with IBRs, which no dataset in Part 2 offers |
+| No non-fault events with inverters | Already fixed by EvEMTBench; IRTSD adds IBR-specific malfunctions that EvEMTBench does not have |
+| No CT/VT models | **Not fixed.** PMU models are present; no CT saturation or CCVT model is described anywhere in the README |
+| SIR bounded at ~1.4 / grid strength fixed | **Not fixed as a parameter.** Import pattern and dispatch change the effective strength somewhat, but source impedances are fixed and strength is not an axis |
+| No injected auxiliary signal | **Not fixed.** Same as every other public source |
+
+**Modifiability — the decisive question.** The README documents the extension workflow explicitly:
+events are configured through PSCAD **Global Substitutions** whose names match the label CSV columns,
+and adding an event type is a documented nine-step recipe (write a `prep_*()` function, add a label CSV,
+add a `run_case_list` call, regenerate snapshots). Adding our auxiliary signal is therefore
+"add one component and one event type to a validated model", not "build a model".
+
+**The cost is snapshots, and it is the thing to plan around.** The model needs **30 s of simulated time
+(~15 min of compute)** to settle, so the automation runs from `.snp` snapshot files; 12 snapshots cover
+all 5,500 events. A snapshot **cannot survive any change to the network admittance matrix or the signal
+list — the README says even adding an output channel invalidates it**. Every injection point, every IBR
+share, every source impedance is a new snapshot. And snapshot setup is semi-manual: PSCAD has no
+built-in power flow, so generator angles and mechanical powers are found by trial and error until the
+startup swing is "within a few hundred MW". So a sweep over (IBR share × grid strength) is a manual
+power-flow exercise per cell, not a loop.
+
+## 20. EMT-based transmission–distribution testbed for protection under variable IBR penetration
+
+**Citation.** J. Kim, B. Ross, Y. Liu, Y. Chen and N. Samaan, "EMT-Based Transmission–Distribution System
+Model for Protection Studies Under Variable IBR Penetration and Control Modes", IEEE DataPort,
+doi **10.21227/z3r5-p932**, created 26 Feb 2026, open access, 8.9 MB. Contact jinho.kim@pnnl.gov.
+
+**What it is.** A model and three example cases — **no event dataset at all**. Co-simulated transmission
+and distribution system: `Transmission_System.pscx` (IEEE 39-bus, from `IEEE39bus_original_Modified5.dyr`)
+and `Distribution_System.pscx`, with `PROT_Library.pslx` and `PROT_Library_Dist.pslx` protection
+libraries and a `Blackbox_Library` holding the GFM inverter and a PLL module. Requires **PSCAD 5.0.0 or
+later and GFortran 4.6.2**.
+
+| | T&D testbed |
+|---|---|
+| IBR penetration | **Three discrete setups: Base (0 %), PL19 (19 %), PL39 (39 %)** — the axis the title promises |
+| Control modes | **Both GFL and GFM**, per WECC-approved standard library specifications. **The GFM models are black boxes**; the ReadMe says to consult the Appendix for their structure |
+| Standards | **IEEE 1547 and IEEE 2800 voltage ride-through implemented** |
+| Instrument transformers | **CCVT parameters are given in the Appendix** — the first source in this file with an instrument-transformer model |
+| Protection | Representative transmission and distribution schemes, including a **direct transfer trip with a settable communication delay** (`tt_delay`) |
+| Fault control | Global Substitutions: `en_flt_NN_MM`, location `m`, `typ_flt` (12 types), `t_flt`, `dur_flt`, `t_cb`, `en_cb_NN_MM` |
+| Fault resistance | **Not in the documented transmission fault parameters.** It may be in `Appendix.pdf`, which was not read; treat as unverified |
+| GFL parameter surface | `Pcmd`, `Qcmd`, `Vcmd`, `pfcmd`, `Fcmd` plus control flags, with POI and terminal measurements as inputs |
+
+**What it fixes.** Grid-forming inverters, which **no** dataset in Part 2 has (caveat 1 above said this
+gap was "ours to fill"); IEEE 2800 ride-through; a CCVT model (caveat 2); 60 Hz with IBRs (caveat 3); and
+a communication-assisted scheme to compare our single-ended claim against. **What it does not fix:** no
+auxiliary signal, no event data, fault resistance unconfirmed, and grid strength is again not an axis.
+
+**The catch for us specifically.** The GFM inverter is a **black box**. Our own design work found that
+the inverter's negative-sequence path and its current-limiter angle are what decide whether an auxiliary
+signal survives at all (results/DESIGN.md §4.4: a compliant inverter shunts the injection by 3–17×, and
+the measured limiter angles are −0.5° / +36.2° / −51.6°). A black-box GFM cannot be re-parameterised on
+that axis and its internals cannot be inspected. The GFL side is open but uses the WECC generic
+REGC_A/REEC_A controls, which are positive-sequence formulations; whether their EMT implementation
+injects negative-sequence current per IEEE 2800, and with what angle, is **not** documented in either
+README and has to be established by inspection before either resource can answer our question.
+
+## PSCAD licence and model size
+
+From the vendor's own scope-boundaries page (Free / Educational / Professional):
+
+| | Free | Educational | Professional |
+|---|---|---|---|
+| Electrical nodes | **15** | 200 | 1,048,576 |
+| Electrical subsystems | 1 | 1 | 65,536 |
+| Modules | 5 | 64 | 65,536 |
+| Output channels | 256 | 1,024 | 32,768 |
+
+The Free Edition additionally **cannot** use: frequency-dependent T-lines/cables, the Python automation
+UI/library, black-box modules, the co-simulation interface, a commercial Fortran compiler, or
+create/edit component definitions; and it watermarks graphs.
+
+**Neither resource can run on the Free Edition, each on three independent counts.** IRTSD uses
+frequency-dependent distributed lines, needs the Python automation library, and a 6-bus two-level system
+with five generators and three IBR plants is far past 15 electrical nodes. The T&D testbed needs
+black-box modules and the co-simulation interface, and IEEE 39-bus plus a distribution feeder is further
+past it still. **Fallback: the Educational edition**, which restores black-box, Python automation and
+co-simulation at a 200-node ceiling. IRTSD plausibly fits inside 200 nodes; the IEEE 39-bus plus
+distribution co-simulation probably does not, so the T&D testbed likely needs Professional.
+
+## The PNNL GitHub repository
+
+`github.com/pnnltestsystem/Enhanced-IEEE-39-Bus-System-with-Inverter-based-Resources-on-Multi-Time-Scale-Platforms`
+holds the enhanced IEEE 39-bus system with 0, 1 and 3 IBRs, in **PSSE, PSLF and PSCAD** formats, with the
+IBRs modelled using WECC-approved generic models. **It does not give us a usable model outside PSCAD.**
+PSSE and PSLF are phasor-domain positive-sequence tools and also commercial, so they can neither be run
+freely nor produce point-on-wave data. The repository is useful only as the provenance of the IBR
+controls and as a citation.
+
+## Can grid strength and IBR share be varied independently?
+
+**Neither resource exposes both.** IRTSD gives IBRs on/off crossed with import pattern and load level,
+all discrete, with source impedances fixed. The T&D testbed gives three penetration levels and no
+strength axis. Varying strength means editing source and generator impedances in the `.pscx` and
+regenerating snapshots, at roughly one manual power-flow setup per operating point. **So the axis
+EvEMTBench lacks is still not exposed by either — it becomes reachable only through model editing.**
