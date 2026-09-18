@@ -1,0 +1,374 @@
+{
+ "script": "adaptgrid_location",
+ "commit": "bce0248027e46c2f2b9a854f61202ebc4cbddf72",
+ "frontend": "relayfe",
+ "t_ms": 20,
+ "note": "Fault location is a standard relay function and is reported here only to place the project's contribution correctly: the contribution is zone selectivity under high fault resistance with strong infeed, not location accuracy.",
+ "relays": {
+  "adapt_A": {
+   "relay": "adapt_A",
+   "frontend": "relayfe",
+   "n_in_zone": 168,
+   "infeed": {
+    "median": 0.9471187396264065,
+    "p90": 1.6609743773190349,
+    "by_bin": {
+     "<1.5": 142,
+     "1.5-3": 23,
+     ">3": 0,
+     "bolted (undefined)": 3
+    }
+   },
+   "estimators": {
+    "reactance element": {
+     "overall": {
+      "n": 168,
+      "mae_pct_of_line": 79.84103528952267,
+      "p90_pct_of_line": 167.85339825960227
+     },
+     "bolted_only": {
+      "n": 3,
+      "mae_pct_of_line": 6.938259296190312
+     },
+     "by_rf_bin": {
+      "<5": {
+       "n": 10,
+       "mae_pct_of_line": 15.43487469381028,
+       "p90_pct_of_line": 22.60556972320483
+      },
+      "5-15": {
+       "n": 39,
+       "mae_pct_of_line": 34.558225687675645,
+       "p90_pct_of_line": 58.840046007156445
+      },
+      "15-40": {
+       "n": 93,
+       "mae_pct_of_line": 87.92891185571806,
+       "p90_pct_of_line": 164.60204848550123
+      },
+      ">40": {
+       "n": 26,
+       "mae_pct_of_line": 143.60713758848362,
+       "p90_pct_of_line": 219.90429295112665
+      }
+     },
+     "by_infeed": {
+      "<1.5": {
+       "n": 142,
+       "mae_pct_of_line": 76.96076350482893,
+       "p90_pct_of_line": 159.93444986400624
+      },
+      "1.5-3": {
+       "n": 23,
+       "mae_pct_of_line": 107.13264056806648,
+       "p90_pct_of_line": 208.3599223364245
+      },
+      ">3": {
+       "n": 0,
+       "mae_pct_of_line": null,
+       "p90_pct_of_line": null
+      },
+      "bolted (undefined)": {
+       "n": 3,
+       "mae_pct_of_line": 6.938259296190312,
+       "p90_pct_of_line": 11.826025487581418
+      }
+     }
+    },
+    "Takagi": {
+     "overall": {
+      "n": 168,
+      "mae_pct_of_line": 76.77352030330566,
+      "p90_pct_of_line": 168.43662873025704
+     },
+     "bolted_only": {
+      "n": 3,
+      "mae_pct_of_line": 7.306850839664534
+     },
+     "by_rf_bin": {
+      "<5": {
+       "n": 10,
+       "mae_pct_of_line": 17.158665620311183,
+       "p90_pct_of_line": 25.98475216802508
+      },
+      "5-15": {
+       "n": 39,
+       "mae_pct_of_line": 37.86901292610902,
+       "p90_pct_of_line": 66.21162265844183
+      },
+      "15-40": {
+       "n": 93,
+       "mae_pct_of_line": 85.49375421240711,
+       "p90_pct_of_line": 168.6801971861049
+      },
+      ">40": {
+       "n": 26,
+       "mae_pct_of_line": 126.86746572615873,
+       "p90_pct_of_line": 220.49946987565195
+      }
+     },
+     "by_infeed": {
+      "<1.5": {
+       "n": 142,
+       "mae_pct_of_line": 73.56820642493577,
+       "p90_pct_of_line": 164.9656204636049
+      },
+      "1.5-3": {
+       "n": 23,
+       "mae_pct_of_line": 105.62371939545577,
+       "p90_pct_of_line": 210.0609867463291
+      },
+      ">3": {
+       "n": 0,
+       "mae_pct_of_line": null,
+       "p90_pct_of_line": null
+      },
+      "bolted (undefined)": {
+       "n": 3,
+       "mae_pct_of_line": 7.306850839664534,
+       "p90_pct_of_line": 12.040209135075921
+      }
+     }
+    },
+    "GBM distance (Q2)": {
+     "overall": {
+      "n": 168,
+      "mae_pct_of_line": 11.983658219548683,
+      "p90_pct_of_line": 23.840089074660536
+     },
+     "bolted_only": {
+      "n": 3,
+      "mae_pct_of_line": 6.975086728977247
+     },
+     "by_rf_bin": {
+      "<5": {
+       "n": 10,
+       "mae_pct_of_line": 6.62845975396493,
+       "p90_pct_of_line": 14.664813728187443
+      },
+      "5-15": {
+       "n": 39,
+       "mae_pct_of_line": 9.368352259669376,
+       "p90_pct_of_line": 22.089283413091746
+      },
+      "15-40": {
+       "n": 93,
+       "mae_pct_of_line": 12.561515102646387,
+       "p90_pct_of_line": 24.406547274853548
+      },
+      ">40": {
+       "n": 26,
+       "mae_pct_of_line": 15.899359256588841,
+       "p90_pct_of_line": 25.639709605944503
+      }
+     },
+     "by_infeed": {
+      "<1.5": {
+       "n": 142,
+       "mae_pct_of_line": 12.186865959868689,
+       "p90_pct_of_line": 24.140596571436905
+      },
+      "1.5-3": {
+       "n": 23,
+       "mae_pct_of_line": 11.382363234604078,
+       "p90_pct_of_line": 21.888986510331854
+      },
+      ">3": {
+       "n": 0,
+       "mae_pct_of_line": null,
+       "p90_pct_of_line": null
+      },
+      "bolted (undefined)": {
+       "n": 3,
+       "mae_pct_of_line": 6.975086728977247,
+       "p90_pct_of_line": 12.770286703860389
+      }
+     }
+    }
+   }
+  },
+  "adapt_B": {
+   "relay": "adapt_B",
+   "frontend": "relayfe",
+   "n_in_zone": 207,
+   "infeed": {
+    "median": 1.780966004527219,
+    "p90": 6.913545716272566,
+    "by_bin": {
+     "<1.5": 79,
+     "1.5-3": 71,
+     ">3": 52,
+     "bolted (undefined)": 5
+    }
+   },
+   "estimators": {
+    "reactance element": {
+     "overall": {
+      "n": 207,
+      "mae_pct_of_line": 1018.7647426925323,
+      "p90_pct_of_line": 976.6173974518088
+     },
+     "bolted_only": {
+      "n": 5,
+      "mae_pct_of_line": 5.582003879212314
+     },
+     "by_rf_bin": {
+      "<5": {
+       "n": 26,
+       "mae_pct_of_line": 12.980914719490205,
+       "p90_pct_of_line": 22.28411709415586
+      },
+      "5-15": {
+       "n": 47,
+       "mae_pct_of_line": 32.91074673244429,
+       "p90_pct_of_line": 70.97191467256093
+      },
+      "15-40": {
+       "n": 97,
+       "mae_pct_of_line": 626.6677586720778,
+       "p90_pct_of_line": 451.3032951143514
+      },
+      ">40": {
+       "n": 37,
+       "mae_pct_of_line": 4005.7627099197575,
+       "p90_pct_of_line": 9566.059079673267
+      }
+     },
+     "by_infeed": {
+      "<1.5": {
+       "n": 79,
+       "mae_pct_of_line": 377.7726954966212,
+       "p90_pct_of_line": 130.69428730845675
+      },
+      "1.5-3": {
+       "n": 71,
+       "mae_pct_of_line": 81.86676291820076,
+       "p90_pct_of_line": 172.7855757367279
+      },
+      ">3": {
+       "n": 52,
+       "mae_pct_of_line": 3369.2270885871694,
+       "p90_pct_of_line": 9562.329449777906
+      },
+      "bolted (undefined)": {
+       "n": 5,
+       "mae_pct_of_line": 5.582003879212314,
+       "p90_pct_of_line": 6.850857855050056
+      }
+     }
+    },
+    "Takagi": {
+     "overall": {
+      "n": 207,
+      "mae_pct_of_line": 81.86389792120447,
+      "p90_pct_of_line": 158.26944076240957
+     },
+     "bolted_only": {
+      "n": 5,
+      "mae_pct_of_line": 4.56353600229578
+     },
+     "by_rf_bin": {
+      "<5": {
+       "n": 26,
+       "mae_pct_of_line": 10.331307337907328,
+       "p90_pct_of_line": 19.109930212044016
+      },
+      "5-15": {
+       "n": 47,
+       "mae_pct_of_line": 25.256187909649736,
+       "p90_pct_of_line": 56.909681756367725
+      },
+      "15-40": {
+       "n": 97,
+       "mae_pct_of_line": 69.53983608398391,
+       "p90_pct_of_line": 140.85207153050902
+      },
+      ">40": {
+       "n": 37,
+       "mae_pct_of_line": 236.3461607298312,
+       "p90_pct_of_line": 476.773860002257
+      }
+     },
+     "by_infeed": {
+      "<1.5": {
+       "n": 79,
+       "mae_pct_of_line": 48.4257667442704,
+       "p90_pct_of_line": 106.35283090141203
+      },
+      "1.5-3": {
+       "n": 71,
+       "mae_pct_of_line": 56.74216641891531,
+       "p90_pct_of_line": 137.69685575536312
+      },
+      ">3": {
+       "n": 52,
+       "mae_pct_of_line": 174.39768848341333,
+       "p90_pct_of_line": 459.46873695869834
+      },
+      "bolted (undefined)": {
+       "n": 5,
+       "mae_pct_of_line": 4.56353600229578,
+       "p90_pct_of_line": 5.857971206294299
+      }
+     }
+    },
+    "GBM distance (Q2)": {
+     "overall": {
+      "n": 207,
+      "mae_pct_of_line": 14.868366814131065,
+      "p90_pct_of_line": 31.81246854398546
+     },
+     "bolted_only": {
+      "n": 5,
+      "mae_pct_of_line": 13.957529391899538
+     },
+     "by_rf_bin": {
+      "<5": {
+       "n": 26,
+       "mae_pct_of_line": 6.473889418155128,
+       "p90_pct_of_line": 11.72725278909893
+      },
+      "5-15": {
+       "n": 47,
+       "mae_pct_of_line": 12.282825115484828,
+       "p90_pct_of_line": 30.266404097283772
+      },
+      "15-40": {
+       "n": 97,
+       "mae_pct_of_line": 14.630891355939902,
+       "p90_pct_of_line": 29.541825292953938
+      },
+      ">40": {
+       "n": 37,
+       "mae_pct_of_line": 24.67409631619296,
+       "p90_pct_of_line": 50.34045686041213
+      }
+     },
+     "by_infeed": {
+      "<1.5": {
+       "n": 79,
+       "mae_pct_of_line": 13.78068183847698,
+       "p90_pct_of_line": 32.2995823897924
+      },
+      "1.5-3": {
+       "n": 71,
+       "mae_pct_of_line": 14.642617179690411,
+       "p90_pct_of_line": 30.362077395053667
+      },
+      ">3": {
+       "n": 52,
+       "mae_pct_of_line": 16.916626895537142,
+       "p90_pct_of_line": 34.14507011351561
+      },
+      "bolted (undefined)": {
+       "n": 5,
+       "mae_pct_of_line": 13.957529391899538,
+       "p90_pct_of_line": 22.875550208308514
+      }
+     }
+    }
+   }
+  }
+ },
+ "runtime_s": 18.57739233970642
+}
