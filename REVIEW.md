@@ -74,7 +74,7 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | H22 | METHODOLOGY | High | `real_ml.py:286` | Stratified CV: 95–96 % of test cases have a sibling in training; three-phase siblings bit-identical | CONFIRMED, fixed | S |
 | H25 | METHODOLOGY | High | `real_ml.py:376-391` | Shortcut control ends 5 ms early and skips DoubleLine; the 40 ms ending at inception gives AUC 0.96 / 0.86 / 0.95 | CONFIRMED | S |
 | H30 | BUG / MODELING | High | `evemt.py:85,131`; `real_ml.py:92-95` | Non-causal resampling leaks 1.1–1.4 ms; ADC full scale ±40× pre-fault clips 13–14 close-in faults | CONFIRMED, fixed (relay front end) | M |
-| H23 | MODELING | High | EvEMTBench labels | One operating point per grid; no loading, source, inverter or inception variation; learned mappings do not transfer (Q2) | CONFIRMED | L |
+| H23 | MODELING | High | EvEMTBench labels | One operating point per grid; no loading, source, inverter or inception variation; learned mappings do not transfer (Q2) | CONFIRMED | L **Tested on adapt_grid** ([results/ADAPTGRID.md](results/ADAPTGRID.md)): across a 2.8× loading range, within one grid, learned dependability *does* transfer (99–100 % under leave-one-loading-quartile-out); what does not transfer is security on next-line faults, and cross-relay transfer still fails for all but the sequence-trajectory CNN |
 | H28 | METHODOLOGY | High | `real_ml.py:113,340-370` | Stage-1 label counts every fault in the grid; responsible label raises AUC 0.63–0.83 → 0.90–0.99 | CONFIRMED, fixed | S |
 | H9 | METHODOLOGY | High | `real_ml.py:114-115`; `zone_detect.py:56-59` | Own-line 85–100 % band excluded and unreported; tuned reach and learned models trip 10–19 % of 99 % faults | CONFIRMED | S |
 | H19 | BUG | High | `detect.py:141-144` | Per-waveform standardisation handicaps the synthetic CNN (0.967 → 0.9996 AUC) | CONFIRMED, fixed (merged) | S |
@@ -354,7 +354,7 @@ What each step contributes:
   - engineered + LR's unsupervised reverse-fault security at B (0–60 % depending on the chain point, i.e. unpredictable);
   - R2's dependability (−4 to −8 points with CVT or the relay front end, and a further −6 to −9 with fault-condition CT error).
 - ~~A calibration/test installation mismatch at class-limit error sizes did not degrade engineered + LR at this operating point.~~
-  **It does at realistic error sizes, and this is the largest single change in the re-run.** Training on
+  **It does at realistic error sizes, and this is the largest single change in the re-run.** Training on **Settled on adapt_grid** ([results/ADAPTGRID.md](results/ADAPTGRID.md) Q5): with training data spanning loading 210–596 MW the same test moves engineered + LR from 4.7 % to 4.2 % off-line trips at A and 5.0 % to 4.7 % at B — inside its own confidence band. The 39.7 % was a single-operating-point artefact: the model had learned the one pre-fault state as a feature, and a 5–10 % ratio error on it looked like a new operating point.
   installation draw 1 and testing on draw 2 takes engineered + LR at relay A from **1.9 % to 39.7 %
   beyond-bus trips**. The rule-based rungs are unaffected (0 % throughout). The learned model's
   threshold does not survive a realistic change of instrument transformer between calibration and
@@ -462,9 +462,9 @@ Setup (`q3_inputs.py`): grouped 5-fold (first repeat), own-99 % guard band, 20 m
 | 23 | Relay B "overreaches onto the next line 13 % at 10 Ω" | HOLDS WITH CAVEAT | Reproduced; 0 % with mimic + directional quadrilateral, and still 0 % with the corrected resistive reach |
 | 24 | TestGrid learned detectors fail to generalise (82 % switching, 42 % at 99 %) | WITHDRAWN (by author) | Grouped re-run: LR 26 % switching at B, 0 % supervised |
 | 25 | Noise-free records leak the label; with the chain 0.48–0.55 | HOLDS WITH CAVEAT | Reproduced; control ended 5 ms early, the look-ahead leak gives 0.86–0.97 at inception |
-| 26 | Within relay, learning beats the fixed setting (B: boosting 78 %/4 % vs 61 %/15 %) | HOLDS WITH CAVEAT, **caveat enlarged** | Grouped: boosting 75.0 %, 4/117; rule's 15 % was DC offset (R1 0.7 %); boosting trips 92 % of reverse bus faults unsupervised. The T2 comparator is corrected from 67.8 % to **31.7 %** — the old figure used R_set = 101.6 Ω, the top of the tuning grid and 4× the load-encroachment cap, which is not a settable protection setting. The measured gap is therefore larger, but the conventional rung is the only side held to a security criterion; under a realistic calibration/service instrument mismatch engineered + LR goes from 1.9 % to 39.7 % beyond-bus trips at relay A while the rungs stay at 0 % (§6 Q1) |
-| 27 | Cross relay: ranking partly survives, threshold does not (13–100 %) | HOLDS | Q2: also fails with a physical output (21–59 % beyond-bus) |
-| 28 | Tree ensembles transfer worst | HOLDS WITH CAVEAT | Physical regressor also fails; MLP regressor B → A trips 100 % |
+| 26 | Within relay, learning beats the fixed setting (B: boosting 78 %/4 % vs 61 %/15 %) | HOLDS AT A PROTECTION-GRADE SETTING, **narrowed by adaptgrid** | Benchmark: grouped boosting 75.0 %, 4/117; T2 corrected to 31.7 % (the old 67.8 % used an unsettable R_set). **adapt_grid** ([results/ADAPTGRID.md](results/ADAPTGRID.md) Q1–Q2): the settable T2 covers 5–10 % of in-zone faults with 0 false trips; engineered + LR and the CNN cover 99–100 % **and keep it under leave-one-loading-quartile-out** — but at their 5 % overall false-trip budget they trip **34–57 % of faults just beyond the remote bus** (0 for T2). At a threshold calibrated to **zero** off-line false trips the same model keeps 82.7 % (A) and 58.0 % (B) against T2's 5.4 % and 10.1 %, so the advantage survives a protection-grade setting — but it is confined to faults no settable quadrilateral encloses (6 % and 14 % of in-zone faults lie inside one), and a both-ends directional comparison covers 97–100 % with no false trip at all |
+| 27 | Cross relay: ranking partly survives, threshold does not (13–100 %) | HOLDS WITH CAVEAT | Q2: also fails with a physical output (21–59 % beyond-bus). **adapt_grid** (ADAPTGRID.md Q3): still true for LR (32 % off-line B → A with the carried threshold) and boosting (73–89 %), and the physical output is now the *worst* transferer (AUC 0.17 A → B, 96 % off-line); but the **CNN on V₁-memory-referenced sequence trajectories transfers with its threshold intact** — 0/2888 off-line and 13/5474 switching B → A at 78 % dependability, 4.2 % off-line and 0 switching A → B at 93 % |
+| 28 | Tree ensembles transfer worst | HOLDS | Physical regressor also fails; MLP regressor B → A trips 100 %. Confirmed on adapt_grid: boosting AUC 0.46–0.58 cross-relay, 73–89 % off-line trips |
 | 29 | Learned fault detector does not separate faults from switching (0.62–0.81) | DOES NOT HOLD | Label artefact: responsible label 0.90–0.99 |
 | 30 | Rule at B 50 ms AUC 0.806 (REAL_ML.md table) | DOES NOT HOLD | N1: 0.891 |
 | 31 | Pre-fault fingerprint "about 1e-7 pu (0.01 V)" | DOES NOT HOLD | 0.12–0.26 V peak-to-peak |
@@ -621,6 +621,42 @@ Ordered by value / effort.
    - (c) The design tool's limits on the zone problem (no δ ≤ 1.5 pu at eps ≥ 0.01) and the tilt sensitivity at strong infeed.
    - **Figures:** ladder step table; held-out security per class; leak-edge curve; Q2 transfer table; δ-plane with current limit and margin.
    - **It cannot claim:** that auxiliary signals help detection on inverter-dominated grids, or that learning beats protection.
+
+9. **What adapt_grid-TestGrid110kV settled, and what it did not** ([results/ADAPTGRID.md](results/ADAPTGRID.md), [results/ADAPTGRID_FACTS.md](results/ADAPTGRID_FACTS.md)).
+   - **Settled.** (a) The rule-set directional quadrilateral R2 is perfectly secure across a 2.8× loading
+     range, three grounding regimes and a random inception (0 of 2,888 / 2,845 off-line faults, 0 of
+     5,474 switching events, bounds ≤ 0.1 %), and at a settable resistive reach it covers 6–13 % of
+     in-zone faults on a set whose median R_f is 25 Ω — and that is a property of the fault population,
+     not of the settings: the **largest settable zone-1 quadrilateral encloses only 10 of 168 in-zone
+     faults at A and 28 of 207 at B**, and R2 trips every one of them and nothing else. (b) Learned dependability transfers across loading
+     bands within one grid (H23's "learned mappings do not transfer" was about a different axis). (c) The
+     instrument-mismatch fragility of §6 Q1 was a single-operating-point artefact; it is gone. (d) The
+     pre-fault fingerprint and the exploitable look-ahead (H25/H30) do not exist on this set (AUC 0.52–0.54).
+     (e) The Q3 CNN holds 100 % dependability on the relay front end at the 5 % budget and is the only
+     detector that transfers between relays with its threshold; it is not self-supervising (1,344 of
+     5,474 switching trips at B unsupervised, 44 with 32P/32Q). Its protection-grade point, and gradient
+     boosting's, are the one piece of this study not yet run (about two hours per relay).
+   - **Changed.** The 5 % false-trip budget is a research convention and had to go. Read at a
+     **protection-grade operating point** — threshold calibrated at zero false trips on the training
+     negatives — the engineered model keeps **82.7 % (A) and 58.0 % (B)** dependability with **0 and 1**
+     off-line trips in ~2,900, and every conventional rung collapses (T1 3.0 / 0.0 %, T2 5.4 / 10.1 %).
+     At 5 % the same model reads 100 % but trips **109 of 299 and 141 of 246** faults just beyond the
+     remote bus; the zero-false-trip threshold removes them at a cost of 17 and 41 points. Item 1's
+     protocol must calibrate at zero false trips and report security **per class**, with the next-line
+     class as the binding one, before "learning beats the rule" is written anywhere. **Supervision, not
+     learning, does the security work**: 32P/32Q takes relay B's engineered model from 56 switching and
+     16 incipient trips to none, and the Q2 output at A from 125 off-line trips to 27, so supervised and
+     unsupervised rows are now reported side by side everywhere.
+     A **communication-assisted reference** was added because the high-R_f stratum is where the claim
+     lives: 32P/32Q forward at **both line ends** covers 97–100 % of in-zone faults with **0** off-line
+     trips at both relays. The project's defensible niche is therefore **single-ended, instantaneous,
+     channel-free selectivity for high-resistance faults**, and item 1 should say so in those words. The physical distance output (item 4's design) is the
+     least overreaching detector within a relay and the worst across relays; item 4 should keep the
+     output and add the V₁-memory reference of the CNN input.
+   - **Not settled, because the data cannot.** Source strength is fixed (SIR ≤ 1.4), so the weak-system
+     and CVT questions of §6 Q1 stand as before; inverters are still 0.14 % of short-circuit capacity, so
+     nothing about inverter-dominated behaviour or an auxiliary signal was tested; the relay is still
+     ideal on the instrument side. ADAPTGRID.md §5 lists these plainly.
 
 ## 11. Tests added
 - `tests/test_review_real.py` (21 tests, no data needed): N1 phasor reference at 20–50 ms; grouped folds never split sibling groups; stratified folds do (documents H22); default chain bit-identical to `real_ml`; CT model sanity; vectorised phase selection equals `zone_model`; bolted AG reads m·X₁; Takagi exact on a circuit-solved radial network; characterisation of the Takagi error against remote infeed and remote shunt angle on the non-homogeneous three-bus model (writes `results/review/takagi_nonhomogeneity.json`); binomial interval.
