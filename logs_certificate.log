@@ -1,0 +1,134 @@
+affinity of the separation condition in delta: max residual 2.15e-14 -> HOLDS
+  eps 0.16, i_max None, R 1.5
+    ('ag', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.15, 0.5)            covers |delta| <= 0.735
+    ('ag', 0.15, 1.0)            covers |delta| <= 2.239
+    ('ag', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.35, 0.5)            covers |delta| <= 0.730
+    ('ag', 0.35, 1.0)            covers |delta| <= 2.242
+    ('ag', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.55, 0.5)            covers |delta| <= 0.743
+    ('ag', 0.55, 1.0)            covers |delta| <= 2.230
+    ('ag', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.75, 0.5)            covers |delta| <= 0.755
+    ('ag', 0.75, 1.0)            covers |delta| <= 2.207
+    ('ag', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.95, 0.5)            covers |delta| <= 0.765
+    ('ag', 0.95, 1.0)            covers |delta| <= 2.175
+    ('ab', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.15, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.15, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.35, 1.0)            covers |delta| <= 0.068
+    ('ab', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.55, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.55, 1.0)            covers |delta| <= 0.129
+    ('ab', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.75, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.75, 1.0)            covers |delta| <= 0.180
+    ('ab', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.95, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.95, 1.0)            covers |delta| <= 0.230
+  -> certified=True covered_radius=2.2419273578241308
+  eps 0.16, i_max 1.2, R 1.5
+  -> certified=None covered_radius=None
+  eps 0.16, i_max 2.1, R 1.5
+    ('ag', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.15, 0.5)            covers |delta| <= 0.409
+    ('ag', 0.15, 1.0)            covers |delta| <= 1.588
+    ('ag', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.35, 0.5)            covers |delta| <= 0.489
+    ('ag', 0.35, 1.0)            covers |delta| <= 1.596
+    ('ag', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.55, 0.5)            covers |delta| <= 0.536
+    ('ag', 0.55, 1.0)            covers |delta| <= 1.589
+    ('ag', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.75, 0.5)            covers |delta| <= 0.552
+    ('ag', 0.75, 1.0)            covers |delta| <= 1.570
+    ('ag', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.95, 0.5)            covers |delta| <= 0.543
+    ('ag', 0.95, 1.0)            covers |delta| <= 1.541
+    ('ab', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.15, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.15, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.35, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.55, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.55, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.75, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.75, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.95, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.95, 1.0)            covers |delta| <= 0.000
+  -> certified=True covered_radius=1.5955801101405016
+  eps 0.12, i_max None, R 1.5
+    ('ag', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.15, 0.5)            covers |delta| <= 0.113
+    ('ag', 0.15, 1.0)            covers |delta| <= 1.240
+    ('ag', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.35, 0.5)            covers |delta| <= 0.163
+    ('ag', 0.35, 1.0)            covers |delta| <= 1.299
+    ('ag', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.55, 0.5)            covers |delta| <= 0.203
+    ('ag', 0.55, 1.0)            covers |delta| <= 1.336
+    ('ag', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.75, 0.5)            covers |delta| <= 0.241
+    ('ag', 0.75, 1.0)            covers |delta| <= 1.356
+    ('ag', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.95, 0.5)            covers |delta| <= 0.275
+    ('ag', 0.95, 1.0)            covers |delta| <= 1.363
+    ('ab', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.15, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.15, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.35, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.55, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.55, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.75, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.75, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.95, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.95, 1.0)            covers |delta| <= 0.000
+  -> certified=False covered_radius=1.363144814287742
+  eps 0.12, i_max 1.2, R 1.5
+  -> certified=None covered_radius=None
+  eps 0.12, i_max 2.1, R 1.5
+    ('ag', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.15, 0.5)            covers |delta| <= 0.000
+    ('ag', 0.15, 1.0)            covers |delta| <= 0.589
+    ('ag', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.35, 0.5)            covers |delta| <= 0.000
+    ('ag', 0.35, 1.0)            covers |delta| <= 0.652
+    ('ag', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.55, 0.5)            covers |delta| <= 0.000
+    ('ag', 0.55, 1.0)            covers |delta| <= 0.695
+    ('ag', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.75, 0.5)            covers |delta| <= 0.000
+    ('ag', 0.75, 1.0)            covers |delta| <= 0.719
+    ('ag', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ag', 0.95, 0.5)            covers |delta| <= 0.000
+    ('ag', 0.95, 1.0)            covers |delta| <= 0.730
+    ('ab', 0.15, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.15, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.15, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.35, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.35, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.55, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.55, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.55, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.75, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.75, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.75, 1.0)            covers |delta| <= 0.000
+    ('ab', 0.95, 0.0)            covers |delta| <= 0.000
+    ('ab', 0.95, 0.5)            covers |delta| <= 0.000
+    ('ab', 0.95, 1.0)            covers |delta| <= 0.000
+  -> certified=False covered_radius=0.7299392746283624
+saved C:\Users\Esmer\sd-design\results\review_wp1\tac25_certificate.json [11s]

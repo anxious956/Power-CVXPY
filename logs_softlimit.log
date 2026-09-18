@@ -1,0 +1,11 @@
+  eps 0.02 rho 0.0: robust 0.0 (inject needs true limit >= 1.2513026641324758) | hard 1.2 0.0 | 2.1 0.0 | no limit 0.0
+  eps 0.04 rho 0.0: robust 0.0 (inject needs true limit >= 1.2513026641324758) | hard 1.2 0.0 | 2.1 0.0 | no limit 0.0
+  eps 0.08 rho 0.0: robust 0.56 (inject needs true limit >= 1.8113026641324759) | hard 1.2 0.28 | 2.1 0.56 | no limit 0.56
+  eps 0.12 rho 0.0: robust 1.1400000000000001 (inject needs true limit >= 2.3913026641324757) | hard 1.2 None | 2.1 1.1400000000000001 | no limit 1.42
+  eps 0.16 rho 0.0: robust None (inject needs true limit >= None) | hard 1.2 None | 2.1 None | no limit None
+  eps 0.02 rho 0.1: robust 0.0 (inject needs true limit >= 1.2513026641324758) | hard 1.2 0.0 | 2.1 0.0 | no limit 0.0
+  eps 0.04 rho 0.1: robust 0.0 (inject needs true limit >= 1.2513026641324758) | hard 1.2 0.0 | 2.1 0.0 | no limit 0.0
+  eps 0.08 rho 0.1: robust 0.72 (inject needs true limit >= 1.9713026641324758) | hard 1.2 0.36 | 2.1 0.72 | no limit 0.72
+  eps 0.12 rho 0.1: robust 1.26 (inject needs true limit >= 2.511302664132476) | hard 1.2 None | 2.1 1.26 | no limit 1.72
+  eps 0.16 rho 0.1: robust None (inject needs true limit >= None) | hard 1.2 None | 2.1 None | no limit None
+saved C:\Users\Esmer\sd-design\results\review_wp1\tac25_softlimit.json [728s]
