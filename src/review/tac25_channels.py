@@ -207,6 +207,54 @@ def min_delta_structured(p, mode="outer", spec=None, rho=0.0, i_max=None, r_step
     return dict(feasible=False, abs_delta=None, angle_deg=None, delta=None)
 
 
+def component_halfwidths(p, spec=None, rho=0.0, eps_white=EPS_WHITE, mode="outer"):
+    """Per-component half-width of the structured set, beside the scalar box it replaces. This is where
+    the two sets differ: a ratio error cannot manufacture negative-sequence voltage out of nothing, so
+    the structured set is WIDER than the scalar box on the large components and far narrower on the
+    near-zero ones, which are the ones separation turns on."""
+    names = ["Re v1", "Re v2", "Re v0", "Re i1", "Re i2", "Re i0",
+             "Im v1", "Im v2", "Im v0", "Im i1", "Im i2", "Im i0"]
+    out = {}
+    for lab, (scen, m, mr) in (("normal", ("N", 0.5, 0.0)), ("AG at 55 %, max R_f", ("ag", 0.55, 1.0))):
+        y0 = _case_y0(p, scen, m, mr, mode)
+        _, E, _ = channel_generators(y0, spec, rho)
+        hw = np.abs(E).sum(axis=1) + eps_white
+        out[lab] = {n: float(v) for n, v in zip(names, hw)}
+    out["scalar_box_eps"] = float(p.eps)
+    return out
+
+
+def imbalance_scale(spec, kappa):
+    """The same channel spec with only the PER-PHASE (imbalance) part scaled by kappa. The systematic
+    part is untouched: this isolates the error that leaks between sequence components."""
+    out = {}
+    for k, v in (spec or CHANNELS).items():
+        s0 = v["per_phase_share"]
+        f = (1 - s0) + kappa * s0                      # systematic part fixed, per-phase part x kappa
+        out[k] = dict(ratio=v["ratio"] * f, phase_deg=v["phase_deg"] * f,
+                      per_phase_share=kappa * s0 / f)
+    return out
+
+
+def imbalance_boundary(p, i_max=None, rho=0.0, kappas=(1, 2, 3, 4, 6, 8, 12, 16, 24, 32), r_step=0.04, n_ang=36):
+    """How much larger the imbalance part of the instrument error has to be before a signal is needed
+    at all, and before the problem becomes infeasible. This is the structured set's version of the
+    scalar map's eps axis."""
+    ms = ModelSet(p, mode="outer")
+    rows = []
+    for k in kappas:
+        spec = imbalance_scale(CHANNELS, k)
+        sep0 = separated_structured(p, ms, 0j, spec, rho=rho,
+                                    limit=None if i_max is None else (p, "outer", i_max))
+        r = dict(kappa=float(k), separated_at_zero=bool(sep0), abs_delta=0.0 if sep0 else None)
+        if not sep0:
+            m = min_delta_structured(p, spec=spec, rho=rho, i_max=i_max, r_step=r_step, n_ang=n_ang)
+            r["abs_delta"] = m["abs_delta"]
+            r["feasible"] = m["feasible"]
+        rows.append(r)
+    return rows
+
+
 def equivalent_eps(p_maker, target_delta, i_max, rho, eps_grid=(0.02, 0.04, 0.06, 0.08, 0.10, 0.12, 0.14, 0.16),
                    r_step=0.02, n_ang=72):
     """The scalar eps whose required |delta| first reaches `target_delta` (so the structured set can be
@@ -235,6 +283,8 @@ def main(quick=False):
     res["n_generators"] = int(E.shape[1])
     res["generator_labels"] = labels
     res["generator_norms"] = [float(np.abs(E[:, j]).max()) for j in range(E.shape[1])]
+    res["component_halfwidths"] = component_halfwidths(p_ref)
+    res["imbalance_boundary"] = {f"i_max={im}": imbalance_boundary(p_ref, im) for im in (None, 2.1)}
     for rho in (0.0, 0.1):
         for i_max, lab in ((None, "no limit"), (1.2, "hard 1.2"), (2.1, "robust: pruned at 2.1")):
             r = min_delta_structured(p_ref, rho=rho, i_max=i_max, r_step=step, n_ang=nang)

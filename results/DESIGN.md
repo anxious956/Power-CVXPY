@@ -317,6 +317,60 @@ and per-installation ratio and phase errors do not. Against the fault-condition 
 is at the *low* end of defensible and 0.16 at the high end. The presets' ε was not absurd; the
 comparison was.
 
+### 4.1.1 One box on twelve components was the wrong uncertainty set
+
+`tac25_channels.py` → [`review_wp1/tac25_channels.json`](review_wp1/tac25_channels.json).
+
+The ε axis above puts a single independent ±ε box on all 12 real components of the measurement. That
+is wrong in four ways, and every one of them makes the problem look harder than it is:
+
+1. **CT and VT errors are not the same size.** The corrected fault-condition figures are VT ratio
+   3–6 % with 2–4° of phase and CT ratio 5–10 % with 1–3°. One ε cannot be both.
+2. **They are systematic per installation, not independent per component.** One transformer has one
+   ratio error, and it scales all three sequence components of its own quantity together. The box
+   lets them err in opposite directions, which no instrument does.
+3. **They are multiplicative.** A 5 % CT error on a 0.1 pu negative-sequence current is 0.005 pu, not
+   ε. A ratio error cannot manufacture negative-sequence voltage out of nothing; only the part of the
+   error that differs between phases can, and it leaks through the sequence transform at ⅓ weight.
+4. **The same unknown error is in both hypotheses.** One observation passes through one instrument
+   set, so the error is a shared variable of the pair problem, not two independent draws.
+
+Replacing it with a structured set — two shared systematic generators per instrument, six per-phase
+generators per instrument mapped through BM·diag(ζ)·AM, a small independent white box, and explicit
+extra columns covering the (error × source uncertainty) cross term, which is **5–7 % of the
+measurement here and so is carried rather than dropped** — gives 16 generators in place of the box.
+Per-component half-widths, base case:
+
+| | Re v₁ | Re v₂ | Re v₀ | Re i₁ | Re i₂ | Re i₀ |
+|---|---|---|---|---|---|---|
+| scalar box, ε = 0.08 | 0.080 | 0.080 | 0.080 | 0.080 | 0.080 | 0.080 |
+| structured, normal | 0.065 | 0.031 | 0.031 | 0.011 | **0.007** | 0.007 |
+| structured, AG at 55 %, max R_f | 0.067 | 0.037 | 0.035 | 0.036 | **0.033** | 0.022 |
+
+The structured set is *comparable* on v₁, where the signal is ~1 pu, and four to eleven times
+narrower on the negative-sequence components, which are the ones separation actually turns on.
+
+**The result: no auxiliary signal is needed at all.** At the corrected per-channel figures, δ = 0
+separates every fault case, with or without the current limit, at ρ = 0 and ρ = 0.1. **The ε = 0.12
+boundary does not move — it dissolves**, because a scalar ε was never the physical axis.
+
+What replaces it is an *imbalance* axis: how large the per-phase (phase-to-phase) part of the
+instrument error would have to be before a signal is needed. Scaling only that part by κ, with the
+systematic part held at its class figure:
+
+| κ (× the class per-phase imbalance) | 1 | 8 | 12 | 16 | ≥ 24 |
+|---|---|---|---|---|---|
+| required \|δ\| (pu) | 0 | 0 | 0.12 | 1.20 | none |
+
+κ = 12 is a per-phase ratio spread of about 24 % between phases of the same transformer, which no
+protection-class instrument shows. So within this model the design is not on its feasibility boundary
+at realistic instrument accuracy, and §4.1's claim that it is was an artefact of the isotropic box.
+
+**Two limits on that, stated.** This makes the uncertainty set smaller in exactly the directions the
+method uses, so it should be read as "the scalar-ε axis was measuring the wrong quantity", not as "the
+problem is easy". And it is still the two-bus model with the inverter's negative-sequence path open;
+§4.3 and the follow-up below are what decide whether that matters more than the instrument model does.
+
 ### 4.2 The other axes
 
 One at a time from the base case (ε = 0.08, I_max = 1.2). Continuous (m, R_f) re-check passes at
@@ -381,7 +435,7 @@ axis is not.**
 |---|---|---|
 | **H5** | "No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu" | The limit was applied as an outer check on the design. Inside the problem as TAC25 (1b), the presets are **feasible** at **0.16–0.26 pu**, about half the unconstrained optimum. Infeasibility appears only at ε ≥ 0.12 with I_max ≤ 1.2 |
 | **H1** | "No δ ≤ 1.5 separates the zone problem at eps ≥ 0.01" | **Proved at ε = 0.16**, and more strongly than claimed: no δ below **2.24 pu** separates, certified by 28 supporting hyperplanes of one fault case's failure polygon (§2.1), in 11 s. Theorem 1 still cannot do it (§2); the convexity of the separation condition in δ can. At ε = 0.12 it stays a search result, bracketed to [1.363, 1.42] pu |
-| **H2** | "Design eps is 111–208× the synthetic phasor noise std" | True but against the wrong error model. Against fault-condition instrument errors, ε = 0.08–0.16 pu is the defensible band, and the design's feasibility boundary sits inside it |
+| **H2** | "Design eps is 111–208× the synthetic phasor noise std" | True but against the wrong error model — and the replacement (a scalar 0.08–0.16 pu box) is also wrong, because instrument error is per-channel, systematic and multiplicative. With a structured set at the same class figures no signal is needed at all (§4.1.1); the feasibility boundary is an imbalance of ~12× the class per-phase spread, not a scalar ε |
 | **H6** | Linearised angle set unsound | Carried: the map uses the sound outer source set throughout |
 | **H13** | Guarantee only on 30 grid points | Carried: every feasible cell re-checked on 462 continuous (m, R_f) points, 0 unseparated |
 | **H14** | Zero-margin separation | Carried: ρ = 0.1 costs 29 % more signal and is affordable |

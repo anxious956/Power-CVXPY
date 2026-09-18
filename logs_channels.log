@@ -1,0 +1,7 @@
+  rho 0.0 no limit              : structured |delta| = 0.0  (equivalent scalar eps 0.02)
+  rho 0.0 hard 1.2              : structured |delta| = 0.0  (equivalent scalar eps 0.02)
+  rho 0.0 robust: pruned at 2.1 : structured |delta| = 0.0  (equivalent scalar eps 0.02)
+  rho 0.1 no limit              : structured |delta| = 0.0  (equivalent scalar eps 0.02)
+  rho 0.1 hard 1.2              : structured |delta| = 0.0  (equivalent scalar eps 0.02)
+  rho 0.1 robust: pruned at 2.1 : structured |delta| = 0.0  (equivalent scalar eps 0.02)
+saved C:\Users\Esmer\sd-design\results\review_wp1\tac25_channels.json [1s]
