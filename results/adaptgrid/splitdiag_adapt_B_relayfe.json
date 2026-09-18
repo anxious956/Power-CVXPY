@@ -1,0 +1,845 @@
+{
+ "relay": "adapt_B",
+ "frontend": "relayfe",
+ "model": "CNN seq-traj",
+ "chain": "matched",
+ "prefault_flow_angle_deg": {
+  "median": -162.72148759991637,
+  "p5": -163.29570550001796,
+  "p95": -161.9733328872829
+ },
+ "splits": {
+  "grouped": {
+   "n_folds": 10,
+   "thresholds": [
+    14.699962615966797,
+    13.113632202148438,
+    23.796588897705078,
+    10.318543434143066,
+    14.250016212463379,
+    3.7190263271331787,
+    21.28866958618164,
+    8.431554794311523,
+    39.1534309387207,
+    21.985309600830078
+   ],
+   "threshold_spread": 35.434404611587524,
+   "dependability": 0.45410628019323673,
+   "false_trips": 0,
+   "n_pos": 207,
+   "n_neg": 2845,
+   "per_fold": [
+    {
+     "fold": 0,
+     "threshold": 14.699962615966797,
+     "n_pos": 0,
+     "n_neg": 0,
+     "dependability": null,
+     "false_trips": 0,
+     "median_flow_angle_deg": null
+    },
+    {
+     "fold": 1,
+     "threshold": 13.113632202148438,
+     "n_pos": 0,
+     "n_neg": 0,
+     "dependability": null,
+     "false_trips": 0,
+     "median_flow_angle_deg": null
+    },
+    {
+     "fold": 2,
+     "threshold": 23.796588897705078,
+     "n_pos": 0,
+     "n_neg": 0,
+     "dependability": null,
+     "false_trips": 0,
+     "median_flow_angle_deg": null
+    },
+    {
+     "fold": 3,
+     "threshold": 10.318543434143066,
+     "n_pos": 0,
+     "n_neg": 0,
+     "dependability": null,
+     "false_trips": 0,
+     "median_flow_angle_deg": null
+    },
+    {
+     "fold": 4,
+     "threshold": 14.250016212463379,
+     "n_pos": 0,
+     "n_neg": 0,
+     "dependability": null,
+     "false_trips": 0,
+     "median_flow_angle_deg": null
+    },
+    {
+     "fold": 5,
+     "threshold": 3.7190263271331787,
+     "n_pos": 41,
+     "n_neg": 580,
+     "dependability": 0.9512195121951219,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.64716607796055
+    },
+    {
+     "fold": 6,
+     "threshold": 21.28866958618164,
+     "n_pos": 45,
+     "n_neg": 572,
+     "dependability": 0.08888888888888889,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.7556403222778
+    },
+    {
+     "fold": 7,
+     "threshold": 8.431554794311523,
+     "n_pos": 39,
+     "n_neg": 569,
+     "dependability": 0.8717948717948718,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.71274555113732
+    },
+    {
+     "fold": 8,
+     "threshold": 39.1534309387207,
+     "n_pos": 36,
+     "n_neg": 566,
+     "dependability": 0.19444444444444445,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.61770484797765
+    },
+    {
+     "fold": 9,
+     "threshold": 21.985309600830078,
+     "n_pos": 46,
+     "n_neg": 558,
+     "dependability": 0.21739130434782608,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.7642501809691
+    }
+   ],
+   "dep_by_loading_bin": {
+    "0": {
+     "n": 8,
+     "k": 8,
+     "rate": 1.0
+    },
+    "1": {
+     "n": 14,
+     "k": 4,
+     "rate": 0.2857142857142857
+    },
+    "2": {
+     "n": 10,
+     "k": 0,
+     "rate": 0.0
+    },
+    "3": {
+     "n": 5,
+     "k": 5,
+     "rate": 1.0
+    },
+    "4": {
+     "n": 18,
+     "k": 3,
+     "rate": 0.16666666666666666
+    },
+    "5": {
+     "n": 12,
+     "k": 10,
+     "rate": 0.8333333333333334
+    },
+    "6": {
+     "n": 11,
+     "k": 11,
+     "rate": 1.0
+    },
+    "7": {
+     "n": 16,
+     "k": 2,
+     "rate": 0.125
+    },
+    "8": {
+     "n": 12,
+     "k": 11,
+     "rate": 0.9166666666666666
+    },
+    "9": {
+     "n": 10,
+     "k": 2,
+     "rate": 0.2
+    },
+    "10": {
+     "n": 7,
+     "k": 1,
+     "rate": 0.14285714285714285
+    },
+    "11": {
+     "n": 9,
+     "k": 1,
+     "rate": 0.1111111111111111
+    },
+    "12": {
+     "n": 13,
+     "k": 12,
+     "rate": 0.9230769230769231
+    },
+    "13": {
+     "n": 8,
+     "k": 0,
+     "rate": 0.0
+    },
+    "14": {
+     "n": 12,
+     "k": 11,
+     "rate": 0.9166666666666666
+    },
+    "15": {
+     "n": 13,
+     "k": 3,
+     "rate": 0.23076923076923078
+    },
+    "16": {
+     "n": 7,
+     "k": 2,
+     "rate": 0.2857142857142857
+    },
+    "17": {
+     "n": 9,
+     "k": 1,
+     "rate": 0.1111111111111111
+    },
+    "18": {
+     "n": 6,
+     "k": 2,
+     "rate": 0.3333333333333333
+    },
+    "19": {
+     "n": 7,
+     "k": 5,
+     "rate": 0.7142857142857143
+    }
+   },
+   "dep_by_quartile": {
+    "0": {
+     "n": 55,
+     "k": 20,
+     "rate": 0.36363636363636365
+    },
+    "1": {
+     "n": 61,
+     "k": 36,
+     "rate": 0.5901639344262295
+    },
+    "2": {
+     "n": 49,
+     "k": 25,
+     "rate": 0.5102040816326531
+    },
+    "3": {
+     "n": 42,
+     "k": 13,
+     "rate": 0.30952380952380953
+    }
+   },
+   "dep_by_rf_bin": {
+    "<5": {
+     "n": 26,
+     "k": 14,
+     "rate": 0.5384615384615384
+    },
+    "5-15": {
+     "n": 47,
+     "k": 29,
+     "rate": 0.6170212765957447
+    },
+    "15-40": {
+     "n": 97,
+     "k": 37,
+     "rate": 0.38144329896907214
+    },
+    ">40": {
+     "n": 37,
+     "k": 14,
+     "rate": 0.3783783783783784
+    }
+   },
+   "dep_by_type": {
+    "flt_1phg_shc": {
+     "n": 41,
+     "k": 17,
+     "rate": 0.4146341463414634
+    },
+    "flt_1phg_shc_w_arc": {
+     "n": 43,
+     "k": 22,
+     "rate": 0.5116279069767442
+    },
+    "flt_2ph_shc": {
+     "n": 45,
+     "k": 22,
+     "rate": 0.4888888888888889
+    },
+    "flt_2phg_shc": {
+     "n": 33,
+     "k": 18,
+     "rate": 0.5454545454545454
+    },
+    "flt_3ph_shc": {
+     "n": 45,
+     "k": 15,
+     "rate": 0.3333333333333333
+    }
+   },
+   "dep_by_grounding": {
+    "resistive": {
+     "n": 65,
+     "k": 33,
+     "rate": 0.5076923076923077
+    },
+    "resonant": {
+     "n": 71,
+     "k": 29,
+     "rate": 0.4084507042253521
+    },
+    "solid": {
+     "n": 71,
+     "k": 32,
+     "rate": 0.4507042253521127
+    }
+   },
+   "missed": {
+    "n": 113,
+    "rf_median": 26.96008897152269,
+    "loc_median": 51.29321312258079,
+    "flow_angle_median": -162.7574403976892,
+    "flow_angle_p5_p95": [
+     -163.23445152211988,
+     -162.16715687346203
+    ],
+    "caught_flow_angle_median": -162.66635921868357,
+    "score_margin_median": 12.938637733459473
+   },
+   "top_negatives": [
+    {
+     "row": 1552,
+     "score": 6.489763259887695,
+     "fold": 6,
+     "type": "flt_2phg_shc",
+     "rf": 0.3526926459267214,
+     "loading_bin": 13,
+     "flow_angle_deg": -162.8989019228012,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 161,
+     "score": 4.45330810546875,
+     "fold": 6,
+     "type": "flt_3ph_shc",
+     "rf": 0.9713084778804216,
+     "loading_bin": 4,
+     "flow_angle_deg": -162.7354979796786,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 5480,
+     "score": 4.0320539474487305,
+     "fold": 6,
+     "type": "flt_2phg_shc",
+     "rf": 0.171499595744679,
+     "loading_bin": 13,
+     "flow_angle_deg": -163.09628654934176,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 4662,
+     "score": 3.7515227794647217,
+     "fold": 8,
+     "type": "flt_3ph_shc",
+     "rf": 0.1644765432381761,
+     "loading_bin": 16,
+     "flow_angle_deg": -162.5281151946413,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 3493,
+     "score": 2.1554646492004395,
+     "fold": 6,
+     "type": "flt_2ph_shc",
+     "rf": 3.23212463647582,
+     "loading_bin": 13,
+     "flow_angle_deg": -162.4588060137075,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 1890,
+     "score": 0.4195210635662079,
+     "fold": 9,
+     "type": "flt_2ph_shc",
+     "rf": 0.2140807184756675,
+     "loading_bin": 17,
+     "flow_angle_deg": -162.7881620659066,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 3508,
+     "score": 0.40960997343063354,
+     "fold": 8,
+     "type": "flt_2ph_shc",
+     "rf": 0.5127645247061516,
+     "loading_bin": 10,
+     "flow_angle_deg": -163.05565346104714,
+     "classes": [
+      "neg_bench",
+      "beyond"
+     ]
+    },
+    {
+     "row": 7522,
+     "score": -1.12196946144104,
+     "fold": 5,
+     "type": "flt_2ph_shc",
+     "rf": 3.663073065592101,
+     "loading_bin": 12,
+     "flow_angle_deg": -161.9922244805257,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 942,
+     "score": -1.8119988441467285,
+     "fold": 9,
+     "type": "flt_3ph_shc",
+     "rf": 37.437758815382296,
+     "loading_bin": 9,
+     "flow_angle_deg": -162.3324968613925,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 7098,
+     "score": -2.0293142795562744,
+     "fold": 9,
+     "type": "flt_2ph_shc",
+     "rf": 48.890016005102176,
+     "loading_bin": 1,
+     "flow_angle_deg": -162.8269352467418,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    }
+   ]
+  },
+  "loqo": {
+   "n_folds": 4,
+   "thresholds": [
+    14.656975746154785,
+    5.887731075286865,
+    5.767909526824951,
+    8.445316314697266
+   ],
+   "threshold_spread": 8.889066219329834,
+   "dependability": 0.8357487922705314,
+   "false_trips": 1,
+   "n_pos": 207,
+   "n_neg": 2845,
+   "per_fold": [
+    {
+     "fold": 0,
+     "threshold": 14.656975746154785,
+     "n_pos": 55,
+     "n_neg": 707,
+     "dependability": 0.7636363636363637,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.79779388840828
+    },
+    {
+     "fold": 1,
+     "threshold": 5.887731075286865,
+     "n_pos": 61,
+     "n_neg": 689,
+     "dependability": 0.9016393442622951,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.72646464537658
+    },
+    {
+     "fold": 2,
+     "threshold": 5.767909526824951,
+     "n_pos": 49,
+     "n_neg": 729,
+     "dependability": 0.8163265306122449,
+     "false_trips": 0,
+     "median_flow_angle_deg": -162.5838316105512
+    },
+    {
+     "fold": 3,
+     "threshold": 8.445316314697266,
+     "n_pos": 42,
+     "n_neg": 720,
+     "dependability": 0.8571428571428571,
+     "false_trips": 1,
+     "median_flow_angle_deg": -162.65279419984282
+    }
+   ],
+   "dep_by_loading_bin": {
+    "0": {
+     "n": 8,
+     "k": 8,
+     "rate": 1.0
+    },
+    "1": {
+     "n": 14,
+     "k": 10,
+     "rate": 0.7142857142857143
+    },
+    "2": {
+     "n": 10,
+     "k": 6,
+     "rate": 0.6
+    },
+    "3": {
+     "n": 5,
+     "k": 5,
+     "rate": 1.0
+    },
+    "4": {
+     "n": 18,
+     "k": 13,
+     "rate": 0.7222222222222222
+    },
+    "5": {
+     "n": 12,
+     "k": 11,
+     "rate": 0.9166666666666666
+    },
+    "6": {
+     "n": 11,
+     "k": 10,
+     "rate": 0.9090909090909091
+    },
+    "7": {
+     "n": 16,
+     "k": 12,
+     "rate": 0.75
+    },
+    "8": {
+     "n": 12,
+     "k": 12,
+     "rate": 1.0
+    },
+    "9": {
+     "n": 10,
+     "k": 10,
+     "rate": 1.0
+    },
+    "10": {
+     "n": 7,
+     "k": 6,
+     "rate": 0.8571428571428571
+    },
+    "11": {
+     "n": 9,
+     "k": 7,
+     "rate": 0.7777777777777778
+    },
+    "12": {
+     "n": 13,
+     "k": 12,
+     "rate": 0.9230769230769231
+    },
+    "13": {
+     "n": 8,
+     "k": 7,
+     "rate": 0.875
+    },
+    "14": {
+     "n": 12,
+     "k": 8,
+     "rate": 0.6666666666666666
+    },
+    "15": {
+     "n": 13,
+     "k": 11,
+     "rate": 0.8461538461538461
+    },
+    "16": {
+     "n": 7,
+     "k": 7,
+     "rate": 1.0
+    },
+    "17": {
+     "n": 9,
+     "k": 8,
+     "rate": 0.8888888888888888
+    },
+    "18": {
+     "n": 6,
+     "k": 5,
+     "rate": 0.8333333333333334
+    },
+    "19": {
+     "n": 7,
+     "k": 5,
+     "rate": 0.7142857142857143
+    }
+   },
+   "dep_by_quartile": {
+    "0": {
+     "n": 55,
+     "k": 42,
+     "rate": 0.7636363636363637
+    },
+    "1": {
+     "n": 61,
+     "k": 55,
+     "rate": 0.9016393442622951
+    },
+    "2": {
+     "n": 49,
+     "k": 40,
+     "rate": 0.8163265306122449
+    },
+    "3": {
+     "n": 42,
+     "k": 36,
+     "rate": 0.8571428571428571
+    }
+   },
+   "dep_by_rf_bin": {
+    "<5": {
+     "n": 26,
+     "k": 22,
+     "rate": 0.8461538461538461
+    },
+    "5-15": {
+     "n": 47,
+     "k": 45,
+     "rate": 0.9574468085106383
+    },
+    "15-40": {
+     "n": 97,
+     "k": 84,
+     "rate": 0.865979381443299
+    },
+    ">40": {
+     "n": 37,
+     "k": 22,
+     "rate": 0.5945945945945946
+    }
+   },
+   "dep_by_type": {
+    "flt_1phg_shc": {
+     "n": 41,
+     "k": 36,
+     "rate": 0.8780487804878049
+    },
+    "flt_1phg_shc_w_arc": {
+     "n": 43,
+     "k": 39,
+     "rate": 0.9069767441860465
+    },
+    "flt_2ph_shc": {
+     "n": 45,
+     "k": 36,
+     "rate": 0.8
+    },
+    "flt_2phg_shc": {
+     "n": 33,
+     "k": 26,
+     "rate": 0.7878787878787878
+    },
+    "flt_3ph_shc": {
+     "n": 45,
+     "k": 36,
+     "rate": 0.8
+    }
+   },
+   "dep_by_grounding": {
+    "resistive": {
+     "n": 65,
+     "k": 57,
+     "rate": 0.8769230769230769
+    },
+    "resonant": {
+     "n": 71,
+     "k": 55,
+     "rate": 0.7746478873239436
+    },
+    "solid": {
+     "n": 71,
+     "k": 61,
+     "rate": 0.8591549295774648
+    }
+   },
+   "missed": {
+    "n": 34,
+    "rf_median": 34.01597716003582,
+    "loc_median": 71.38445599437159,
+    "flow_angle_median": -162.7719693685399,
+    "flow_angle_p5_p95": [
+     -163.31593571093066,
+     -162.15686873567748
+    ],
+    "caught_flow_angle_median": -162.69647852588986,
+    "score_margin_median": 2.682768940925598
+   },
+   "top_negatives": [
+    {
+     "row": 4662,
+     "score": 25.2775936126709,
+     "fold": 3,
+     "type": "flt_3ph_shc",
+     "rf": 0.1644765432381761,
+     "loading_bin": 16,
+     "flow_angle_deg": -162.5281151946413,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 3508,
+     "score": 4.941213607788086,
+     "fold": 2,
+     "type": "flt_2ph_shc",
+     "rf": 0.5127645247061516,
+     "loading_bin": 10,
+     "flow_angle_deg": -163.05565346104714,
+     "classes": [
+      "neg_bench",
+      "beyond"
+     ]
+    },
+    {
+     "row": 1890,
+     "score": 2.2324273586273193,
+     "fold": 3,
+     "type": "flt_2ph_shc",
+     "rf": 0.2140807184756675,
+     "loading_bin": 17,
+     "flow_angle_deg": -162.7881620659066,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 161,
+     "score": 1.402713656425476,
+     "fold": 0,
+     "type": "flt_3ph_shc",
+     "rf": 0.9713084778804216,
+     "loading_bin": 4,
+     "flow_angle_deg": -162.7354979796786,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 1552,
+     "score": 1.1960153579711914,
+     "fold": 2,
+     "type": "flt_2phg_shc",
+     "rf": 0.3526926459267214,
+     "loading_bin": 13,
+     "flow_angle_deg": -162.8989019228012,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 1700,
+     "score": 0.22091561555862427,
+     "fold": 0,
+     "type": "flt_3ph_shc",
+     "rf": 21.21234445660296,
+     "loading_bin": 2,
+     "flow_angle_deg": -163.0757894154766,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 7522,
+     "score": 0.026111528277397156,
+     "fold": 2,
+     "type": "flt_2ph_shc",
+     "rf": 3.663073065592101,
+     "loading_bin": 12,
+     "flow_angle_deg": -161.9922244805257,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 4695,
+     "score": -0.24838751554489136,
+     "fold": 0,
+     "type": "flt_3ph_shc",
+     "rf": 22.435761272148056,
+     "loading_bin": 2,
+     "flow_angle_deg": -162.65302738584592,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 4817,
+     "score": -0.2878306806087494,
+     "fold": 2,
+     "type": "flt_1phg_shc_w_arc",
+     "rf": 13.716043819617257,
+     "loading_bin": 12,
+     "flow_angle_deg": -162.32300998763952,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    },
+    {
+     "row": 9699,
+     "score": -0.35637789964675903,
+     "fold": 1,
+     "type": "flt_3ph_shc",
+     "rf": 9.25813267772446,
+     "loading_bin": 9,
+     "flow_angle_deg": -162.9128115883533,
+     "classes": [
+      "neg_bench",
+      "remote_bus_faults"
+     ]
+    }
+   ]
+  }
+ }
+}

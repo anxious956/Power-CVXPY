@@ -250,21 +250,113 @@ calibration step is not optional on this data.
 
 ### Q4. Does the Q3 winner survive varied operating points and the relay front end?
 
-**Yes at relay A, with a caveat at relay B, and the protection-grade point is now measured.** At the
-5 % budget the CNN on V₁-memory-referenced sequence trajectories holds **100 % dependability at both
-relays**, in every R_f band, grounding type and loading quartile, with 46/2,888 off-line trips at A and
-122/2,845 at B. Held instead to zero off-line false trips it keeps **99.4 %** at A (100.0 % on the
-current front end) with 0/2,888, 0 switching and 3 incipient trips, and **45.4 %** at B under
-loading-bin folds against **83.6 %** under leave-one-quartile-out with 0–1 off-line trips.
+**Yes at relay A, with a caveat at relay B — and the single-run figures had to be repeated before they
+could be quoted.** At the 5 % budget the CNN on V₁-memory-referenced sequence trajectories holds
+**100 % dependability at both relays**, in every R_f band, grounding type and loading quartile, with
+46/2,888 off-line trips at A and 122/2,845 at B.
 
-So the answer splits by relay. At A the CNN is the only detector in this study that is simultaneously
-protection-grade secure and nearly fully dependable, including **100 % above 40 Ω**, and it needs no
-directional supervision to get there. At B it is secure but its dependability depends on which loading
-bands are held out, which no other detector's does to that degree; the honest reading is that relay B's
-score distribution is steep at the zero-false-trip point and the split decides where the threshold
-lands. It was the open cell of REVIEW.md §6 Q3 ("not re-run on the relay front end"); the answer is
-that it holds, and that at a deployable threshold it is the best detector here, at one relay
-convincingly and at the other with a split-dependent spread that must be quoted with it.
+Held instead to zero training false trips, the one run reported above reads 99.4 % at relay A with
+0 of 2,888 off-line trips. **That is a zero count, not a zero rate, and it is one training draw.**
+Repeating it over three seeds and both splits (`adaptgrid_seeds.py`, six runs in all):
+
+| relay A, relayfe, cal0 | grouped, 3 seeds | loqo, 3 seeds | all six |
+|---|---|---|---|
+| dependability | 99.4 / 100.0 / 90.5 % | 100.0 / 97.6 / 99.4 % | **90.5 – 100 %**, median 99.4 |
+| off-line trips of 2,888 | 3 / 2 / 22 | 0 / 0 / 0 | **0 – 22** (≤1.09 % at worst) |
+| switching trips of 5,474 | 0 / 0 / 0 | 0 / 0 / 0 | **0 in every run**, ≤0.055 % |
+| incipient trips of 1,187 | 3 / 4 / 1 | 1 / 3 / 3 | 1 – 4 |
+| dependability at a threshold above every test negative (roc0) | 100 / 100 / 98.8 % | 100 / 100 / 99.4 % | 98.8 – 100 % |
+
+Three things follow, and the first two weaken the headline.
+
+1. **The off-line zero is not reproducible.** One of six runs trips 22 of 2,888 (0.76 %, upper bound
+   1.09 %) and two others trip 2 and 3. The defensible claim is 0–22 in 2,888, not zero. The variation
+   is between training draws at the same seed offsets as well as across them, so part of it is
+   thread-level non-determinism in the network, not just the seed.
+2. **Dependability moves with it**, 90.5 % to 100 %, and the worst draw is the one that also trips
+   most. Quoting 99.4 % alone is quoting the median of six as if it were the estimate.
+3. **What is robust is the ranking and the switching security.** In five of six runs *every* in-zone
+   fault outranks *every* off-line fault (roc0 = 100 %), and the worst run reaches 98.8 %; and no run
+   trips a single one of 5,474 switching events, an upper bound of 0.055 %, or 1 in 1,800. So a
+   threshold with zero off-line false trips and near-full dependability **exists** in every run; what
+   varies is whether the out-of-fold calibration finds it.
+
+The calibration was also checked rather than asserted: `threshold_provenance` compares the actual index
+sets and finds **0 calibration rows and 0 calibration loading bins inside any test fold**, for both
+splits. The threshold never saw a test case or a test operating point.
+
+At relay B the same operating point is split-dependent, 45.4 % against 83.6 %, and the next section
+takes that apart. It was the open cell of REVIEW.md §6 Q3 ("not re-run on the relay front end"); the
+answer is that it holds at relay A with the spread above, and that at relay B the zero-false-trip point
+is not a stable quantity at all.
+
+### Why relay B's answer depends on the split
+
+`adaptgrid_splitdiag.py` → [`adaptgrid/splitdiag_adapt_B_relayfe.json`](adaptgrid/splitdiag_adapt_B_relayfe.json).
+Nothing is refitted: the driver stores every fold's out-of-fold score and threshold, so the operating
+point can be taken apart after the fact.
+
+**The split does not change the model. It changes the threshold.** The calibrated threshold is the
+largest out-of-fold score among the training negatives — an extreme-value statistic over some 2,845
+off-line faults. Per fold, at relay B:
+
+| | threshold range across folds | dependability per fold |
+|---|---|---|
+| grouped (10 folds) | **3.7 – 39.2** | 95.1 % at 3.7, 87.2 % at 8.4, 21.7 % at 22.0, 19.4 % at 39.2, 8.9 % at 21.3 |
+| loqo (4 folds) | 5.8 – 14.7 | 76.4 – 90.2 % |
+
+Dependability tracks the threshold monotonically and nothing else: the fold with the lowest threshold
+returns 95 %, the fold with the highest returns 19 %. At relay A the same thresholds span −3.0 to 1.1
+and every fold returns 97.6–100 %, because there the positives sit far above the negatives and a
+threshold swing costs nothing. At relay B they sit among them.
+
+**The failures are not concentrated anywhere.** Under the grouped split, dependability by R_f band is
+54 / 62 / 38 / 38 %, by fault type 33–55 %, by loading quartile 31–59 %, by grounding 41–51 %; under
+loqo every one of those is about twenty points higher. The whole distribution shifts. No band, type or
+grounding regime is failing on its own, which is what a genuine transfer failure would look like.
+
+**The pre-fault flow direction hypothesis is refuted by measurement.** Relay B imports at a median
+**−162.7°** with a 5th-to-95th percentile range of **−163.3° to −162.0°** — a 1.3° spread over the
+entire set. Missed positives sit at −162.8° and caught ones at −162.7°. Varying the loading varies the
+*magnitude* of the pre-fault flow, not its direction, so there is no direction transfer to fail at.
+What does set the threshold is visible in the top-scoring negatives: bolted remote-bus faults at
+0.2–1.0 Ω, which are electrically the closest thing to an in-zone fault that exists in the data.
+
+**Which split is honest to quote: neither, at that operating point.** Both are estimates of an order
+statistic and both are noisy — note that the pooled-ROC read goes the other way, 85.5 % grouped against
+27.1 % loqo, because there a single high-scoring negative decides the answer instead. One permitted
+false trip removes the problem: at ≤1 off-line trip in 2,845 (upper bound 0.167 %, about 1 in 600) the
+two splits agree at **95.2 % and 92.8 %**. The honest report for relay B is therefore the ≤1-in-N
+operating point with its binomial bound, and the zero-count point quoted as the fold spread it is. That
+is a finding about how protection-grade operating points should be estimated, not only about this relay.
+
+### Fault location, and what it is not evidence for
+
+`adaptgrid_location.py` → [`adaptgrid/location_relayfe.json`](adaptgrid/location_relayfe.json).
+**Fault location is a solved, standard relay function.** It is reported here only to place this work
+correctly: the contribution is zone selectivity under high fault resistance with strong infeed, not
+locating faults more accurately than a relay already does. Mean absolute error in per cent of line
+length, in-zone faults, same folds as everything else, with the infeed factor measured per case as
+(apparent added resistance)/R_f:
+
+| relay A · relay B | bolted (R_f ≤ 1 Ω) | R_f > 40 Ω | infeed > 3 (relay B, n = 52) |
+|---|---|---|---|
+| reactance element | **6.9 · 5.6 %** | 143.6 · 4005.8 % | 3369 % |
+| Takagi (superimposed current) | 7.3 · **4.6 %** | 126.9 · 236.3 % | 174 % |
+| GBM distance (Q2), out of fold | 7.0 · 14.0 % | **15.9 · 24.7 %** | **16.9 %** |
+
+**The conventional locator wins where fault location is actually used** — bolted and low-resistance
+faults, where it is within 5–7 % of line length and the learned regressor is no better at relay A and
+2.5× worse at relay B. The learned estimator only wins in the high-resistance, strong-infeed corner,
+where the reactance element is not merely inaccurate but meaningless: a 4,006 % mean error means the
+apparent reactance no longer carries the distance at all. Takagi, which is the standard fault-resistance
+correction, recovers most of that but still reads 174 % at infeed above 3.
+
+Two things this does not say. It does not say the learned estimator is a better fault locator; on the
+faults locators are specified for, it is not. And it is not an independent result: relay A's in-zone
+faults have a measured infeed factor of 0.95 median and no case above 3, while relay B's is 1.78 with
+52 of 207 above 3 — the same strong-infeed high-R_f corner that the zone-selectivity result lives in,
+measured a second way.
 
 ### Q5. Does the instrument-mismatch fragility persist when training spans many operating points?
 
@@ -298,8 +390,9 @@ Across a 2.8× loading range, three grounding regimes and a randomised inception
 conventional zone 1 keeps perfect security and covers 6 % (A) and 13 % (B) of in-zone faults — and those
 are exactly the faults inside the largest quadrilateral anyone could set, so the number is a property of
 the fault population, not of the settings. Held to the same zero-false-trip discipline, the
-sequence-trajectory CNN covers **99.4 % at relay A** with no off-line trip in 2,888 and 100 % above
-40 Ω, and 45–84 % at relay B depending on the split; the engineered-feature model covers 83 % and 58 %;
+sequence-trajectory CNN covers **90.5–100 % at relay A across three seeds and two splits** (median
+99.4 %) with 0–22 off-line trips in 2,888 and no switching trip in 5,474 in any run, and 45–84 % at
+relay B depending on the split, where the split is choosing the threshold rather than the model; the engineered-feature model covers 83 % and 58 %;
 gradient boosting collapses to 11 % and 4 %, so its 86–88 % at the 5 % budget was the budget talking.
 Every learned model loses the 5 %-budget overreach onto the next line that the benchmark's three
 discrete R_f values had concealed. Directional supervision, not the learning, is what removes switching
@@ -330,8 +423,12 @@ Stated plainly, because §4 will be read as more than it is:
   instant. Real permissive schemes carry a channel delay, a security timer and a loss-of-channel mode;
   none of that is in these records, so those rows are an optimistic bound on communication-assisted
   practice and cannot be used to compare against it fairly.
-- **One relay, one grid, two front ends.** Relay B's split-dependent CNN result (§4 Q4) is the clearest
+- **One relay, one grid, two front ends.** Relay B's split-dependent CNN result (§4) is the clearest
   sign that two relays are not enough to settle how stable a protection-grade threshold is.
+- **The zero-false-trip threshold is an order statistic**, so with a few thousand negatives it carries
+  real variance: at relay A the same detector trips 0 to 22 of 2,888 across six runs, and at relay B
+  the fold thresholds span a factor of ten. Any protection-grade number in this document is an estimate
+  of a quantity that needs either far more negatives or a ≤k-in-N formulation to be stable.
 
 What this family *does* add, and did not have before: a genuinely varying operating point, a
 randomised inception, three grounding regimes, a continuous R_f, and enough off-line and switching
