@@ -110,7 +110,9 @@ def relay_facts(name):
     F["switching_by_type"] = {t: int((R["switching"] & (R["et"] == t)).sum()) for t in np.unique(R["et"][R["switching"]])}
     own = R["pos"] | R["own99"]
     F["own_line_by_location_band"] = {f"{lo}-{hi}": int((own & (R["loc"] > lo) & (R["loc"] <= hi)).sum()) for lo, hi in LOC_BANDS}
-    F["pos_by_rf_bin"] = {b: int((R["pos"] & (R["rf_bin"] == b)).sum()) for b in ("<=1", "1-10", "10-40", ">40")}
+    F["pos_by_rf_bin"] = {b: int((R["pos"] & (R["rf_bin"] == b)).sum()) for b in cm.RF_LABELS}
+    F["rf_distribution_pos_ohm"] = q(R["rf"][R["pos"]], (0, 10, 25, 50, 75, 90, 100))
+    F["rf_distribution_offline_ohm"] = q(R["rf"][R["neg"]], (0, 10, 25, 50, 75, 90, 100))
     F["pos_by_grounding"] = {g: int((R["pos"] & (R["grounding"] == g)).sum()) for g in ("solid", "resistive", "resonant")}
     F["pos_by_type"] = {t: int((R["pos"] & (R["et"] == t)).sum()) for t in np.unique(R["et"][R["pos"]])}
     F["incipient_on_own_line"] = int((R["incipient"] & (R["tgt"] == R["cfg"]["line"])).sum())

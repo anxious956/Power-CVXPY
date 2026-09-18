@@ -169,7 +169,8 @@ def measurement_chain(x, seed_name, chain):
 # ----------------------------------------------------------------------------- adaptgrid relay data
 ADAPT_HALF = 640          # samples kept each side of the inception -> event at index 640, as in the benchmark caches
 ADAPT_OP_BINS = 20        # loading bins used as CV groups: grouped 5-fold then holds out whole loading bands
-RF_BINS = ((0.0, 1.0, "<=1"), (1.0, 10.0, "1-10"), (10.0, 40.0, "10-40"), (40.0, 1e9, ">40"))
+RF_BINS = ((0.0, 5.0, "<5"), (5.0, 15.0, "5-15"), (15.0, 40.0, "15-40"), (40.0, 1e9, ">40"))   # protection-practice bands
+RF_LABELS = tuple(b[2] for b in RF_BINS)
 T0_S = 1.0                # first sample time of every EvEMTBench record (evemt.T0)
 
 

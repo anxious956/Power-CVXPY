@@ -69,13 +69,15 @@ CONFIGS = {
         title="EvEMTBench adapt_grid-TestGrid110kV, relay bus 1 on line 1-2A, varied operating points",
         relay="Cub_HV_A_A-B-1\\pex_MainBus1_MainLn1-2A", line="MainLn1-2A", remote_bus="MainBus2",
         beyond=["MainLn2-3", "MainLn2-5", "MainLn2-6"], parallel="MainLn1-2B",
-        ibr_cubicles=["Cubicle(1)\\pex_MainBus2_Ind2-2IBR"], adaptgrid=True),
+        ibr_cubicles=["Cubicle(1)\\pex_MainBus2_Ind2-2IBR"], adaptgrid=True,
+        remote_cubicle="Cub_HV_B_A-B-1\\pex_MainBus2_MainLn1-2A"),   # remote end of the same line (POTT-equivalent reference)
     "adapt_B": dict(
         cache_glob="adapt_grid-TestGrid110kV*_cache.meta.npz",
         title="EvEMTBench adapt_grid-TestGrid110kV, relay bus 2 on line 2-3, varied operating points",
         relay="Cub_HV_B_B-C\\pex_MainBus2_MainLn2-3", line="MainLn2-3", remote_bus="MainBus3",
         beyond=["MainLn3-4"], parallel=None,
-        ibr_cubicles=["Cubicle(1)\\pex_MainBus3_Ind3-3IBR"], adaptgrid=True),
+        ibr_cubicles=["Cubicle(1)\\pex_MainBus3_Ind3-3IBR"], adaptgrid=True,
+        remote_cubicle="Cub_HV_C_B-C\\pex_MainBus3_MainLn2-3"),
 }
 
 

@@ -296,7 +296,7 @@ def rates(trip, R, sel):
     out["dep_by_rf"] = {f"{r:g}": mean_or_nan(R["pos"][sel] & (rf == r)) for r in (1, 10, 40)}
     out["beyond_by_rf"] = {f"{r:g}": mean_or_nan(R["neg"][sel] & (rf == r)) for r in (1, 10, 40)}
     if "rf_bin" in R:                 # adaptgrid: continuous R_f, so bins; grounding and loading quartile as strata
-        for key, order in (("rf_bin", ("<=1", "1-10", "10-40", ">40")), ("grounding", ("solid", "resistive", "resonant")),
+        for key, order in (("rf_bin", cm.RF_LABELS), ("grounding", ("solid", "resistive", "resonant")),
                            ("op_quartile", (0, 1, 2, 3))):
             g = R[key][sel]
             for cls in ("pos", "neg"):
@@ -458,11 +458,11 @@ def run(name):
                     r = dict(own99_mode=mode, dependability=float(dep(slice(None))), false_trip_beyond=float(ftb(slice(None))),
                              dependability_ci=cm.grouped_bootstrap(dep, gg, 500), false_trip_beyond_ci=cm.grouped_bootstrap(ftb, gg, 500),
                              beyond_dedup=cm.dedup_rate(dd, R["dedup"][zidx][ii], b),
-                             dep_by_rf=({"1": float(dd[(yy == 1) & (rfb == "<=1")].mean()) if ((yy == 1) & (rfb == "<=1")).any() else float("nan"),
-                                         "10": float(dd[(yy == 1) & (rfb == "1-10")].mean()), "40": float(dd[(yy == 1) & (rfb == ">40")].mean())}
+                             dep_by_rf=({"1": float(dd[(yy == 1) & (rfb == cm.RF_LABELS[0])].mean()) if ((yy == 1) & (rfb == cm.RF_LABELS[0])).any() else float("nan"),
+                                         "10": float(dd[(yy == 1) & (rfb == cm.RF_LABELS[1])].mean()), "40": float(dd[(yy == 1) & (rfb == ">40")].mean())}
                                         if "rf_bin" in R else {f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)}),
                              dep_by_rf_bin=({bb: dict(rate=float(dd[(yy == 1) & (rfb == bb)].mean()) if ((yy == 1) & (rfb == bb)).any() else float("nan"),
-                                                     n=int(((yy == 1) & (rfb == bb)).sum())) for bb in ("<=1", "1-10", "10-40", ">40")}
+                                                     n=int(((yy == 1) & (rfb == bb)).sum())) for bb in cm.RF_LABELS}
                                             if "rf_bin" in R else None),
                              held=perclass)
                     if chosen:
