@@ -70,7 +70,7 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | N2 | BUG | Critical | `zone_model.py:206` | Sign of loop reactance used as the directional decision; relay-bus reverse faults trip 20–22 % (R0, 20 ms); relay B's 40 Ω in-zone faults discarded as reverse | CONFIRMED, fixed in ladder | S |
 | H24 | METHODOLOGY | Critical | `real_ml.py:270-373` | Security never tested on classes outside training; learned models trip 39–92 % of relay-bus reverse faults, up to 39 % of switching | CONFIRMED | M |
 | H8 / Q-fair | METHODOLOGY | Critical | `zone_model.py:166-207`, `real_ml.py:278-282` | Baseline lacked DC-offset filter, directional element, quadrilateral, setting study | CONFIRMED | M |
-| H1 | METHODOLOGY | Critical | `zone_detect.py:163-166,230`; `detect.py:191-195,253` | "Certified δ" designed on a different model and problem; no δ ≤ 1.5 separates the zone problem at eps ≥ 0.01 | CONFIRMED (the δ misuse); the infeasibility is **re-derived and moved**: feasible at eps ≤ 0.12, none at eps ≥ 0.16 at any I_max ([results/DESIGN.md](results/DESIGN.md) §4). Still a search result — TAC25 Theorem 1 cannot certify it (§2 there) | M |
+| H1 | METHODOLOGY | Critical | `zone_detect.py:163-166,230`; `detect.py:191-195,253` | "Certified δ" designed on a different model and problem; no δ ≤ 1.5 separates the zone problem at eps ≥ 0.01 | CONFIRMED (the δ misuse); the infeasibility is **re-derived, moved, and now PROVED at eps = 0.16**: the separation condition is affine in δ (checked against the nonlinear solver to 2.1e-14), so each fault case's failure set is a convex polygon, and one AG fault at 35 % of the line covers every \|δ\| ≤ **2.24 pu** — 28 supporting hyperplanes, 11 s, against 728 s for the grid search ([results/DESIGN.md](results/DESIGN.md) §2.1). Theorem 1 still cannot do it (§2 there). At eps = 0.12 it stays a search result, bracketed to [1.363, 1.42] pu | M |
 | H22 | METHODOLOGY | High | `real_ml.py:286` | Stratified CV: 95–96 % of test cases have a sibling in training; three-phase siblings bit-identical | CONFIRMED, fixed | S |
 | H25 | METHODOLOGY | High | `real_ml.py:376-391` | Shortcut control ends 5 ms early and skips DoubleLine; the 40 ms ending at inception gives AUC 0.96 / 0.86 / 0.95 | CONFIRMED | S |
 | H30 | BUG / MODELING | High | `evemt.py:85,131`; `real_ml.py:92-95` | Non-causal resampling leaks 1.1–1.4 ms; ADC full scale ±40× pre-fault clips 13–14 close-in faults | CONFIRMED, fixed (relay front end) | M |
@@ -78,12 +78,12 @@ Severity is the effect on a headline conclusion. Effort S < 1 day, M 1–5 days,
 | H28 | METHODOLOGY | High | `real_ml.py:113,340-370` | Stage-1 label counts every fault in the grid; responsible label raises AUC 0.63–0.83 → 0.90–0.99 | CONFIRMED, fixed | S |
 | H9 | METHODOLOGY | High | `real_ml.py:114-115`; `zone_detect.py:56-59` | Own-line 85–100 % band excluded and unreported; tuned reach and learned models trip 10–19 % of 99 % faults | CONFIRMED | S |
 | H19 | BUG | High | `detect.py:141-144` | Per-waveform standardisation handicaps the synthetic CNN (0.967 → 0.9996 AUC) | CONFIRMED, fixed (merged) | S |
-| H5 | MODELING | High | `aux_signal_toy.py:75-80` | No inverter current limit; ~~every preset needing δ > 0 infeasible at 1.2 pu~~ | **PARTLY WITHDRAWN.** The limit was missing, but imposing it as an outer check on the design was the wrong correction. Inside the problem as TAC25 (1b) the presets are **feasible at 0.16–0.26 pu**, about half the unconstrained optimum ([results/DESIGN.md](results/DESIGN.md) §3) | M |
+| H5 | MODELING | High | `aux_signal_toy.py:75-80` | No inverter current limit; ~~every preset needing δ > 0 infeasible at 1.2 pu~~ | **PARTLY WITHDRAWN.** The limit was missing, but imposing it as an outer check on the design was the wrong correction. Inside the problem as TAC25 (1b) the presets are **feasible at 0.16–0.26 pu** ([results/DESIGN.md](results/DESIGN.md) §3). And the limit no longer has to be assumed hard: treated as an uncertain parameter on [1.1, 2.1] and pruned at the loosest bound, the guarantee holds whatever the limiter does, at 0.56 pu instead of 0.28 at eps = 0.08 (§3.1 there) | M |
 | H6 | BUG | High | `aux_model.py:104-108` | Linearised angle uncertainty is unsound (true set up to 0.085 / 0.276 pu outside); sound δ 0.504 → 0.552, 0.691 → 1.042, 0.386 → 1.054 | CONFIRMED | M |
 | H14 | BUG | High | `aux_model.py:123-129`; `aux_signal_toy.py:67` | Zero-margin separation; margin 0.45–1.25 % of eps; 10 % headroom needs 0.666 / 0.899 / 1.357 pu | CONFIRMED | S |
 | H16 | DOC (paper) | High | Taylor 2023 Appendix | Fig. 3 reproduces only with the printed M = [[r, −x], [r, x]]; the correct form gives peak 0.485 | CONFIRMED | S |
-| H2 | METHODOLOGY | High | `aux_model.py:31`; `waveforms.py:50` | Design eps is 111–208× the synthetic phasor noise std | CONFIRMED but **against the wrong error model**: white noise averages down over a 128-sample DFT, per-installation ratio and phase errors do not. Against fault-condition instrument errors eps = 0.08–0.16 pu is defensible ([results/DESIGN.md](results/DESIGN.md) §4.1) | S |
-| H7 / N7 | MODELING | High | `aux_model.py:29`; `zone_model.py:39` | No inverter fault response in the models; EvEMTBench inverters inject 0.25–0.39 pu I₂; relay B's 40 Ω stratum is infeed physics | CONFIRMED | L |
+| H2 | METHODOLOGY | High | `aux_model.py:31`; `waveforms.py:50` | Design eps is 111–208× the synthetic phasor noise std; **and the scalar-eps replacement is wrong too** — instrument error is per-channel, systematic per installation, multiplicative, and shared between the two hypotheses. With a structured set at the same class figures δ = 0 separates everything, so the eps = 0.12 boundary dissolves rather than moves ([results/DESIGN.md](results/DESIGN.md) §4.1.1) | CONFIRMED but **against the wrong error model**: white noise averages down over a 128-sample DFT, per-installation ratio and phase errors do not. Against fault-condition instrument errors eps = 0.08–0.16 pu is defensible ([results/DESIGN.md](results/DESIGN.md) §4.1) | S |
+| H7 / N7 | MODELING | High | `aux_model.py:29`; `zone_model.py:39` | No inverter fault response in the models; EvEMTBench inverters inject 0.25–0.39 pu I₂; relay B's 40 Ω stratum is infeed physics | CONFIRMED, and **half closed on the design side**: the inverter now carries an IEEE 2800-style negative-sequence response at the measured limiter angles, which **shunts the injected signal by 3–17×** and reverses the IBR-share axis ([results/DESIGN.md](results/DESIGN.md) §4.4). The EMT models still carry no inverter fault response | L |
 | N1 | BUG | High | `real_ml.py:143` | `phasor_view` rotated post-fault phasors 180° at 30 / 50 ms | CONFIRMED, fixed | S |
 | H10 / H20 | METHODOLOGY | High | `real_ml.py:122-145`; `zone_detect.py:82-85` | Windows anchored at true inception; anchoring at a causal starter (≈ 3 samples later) collapses raw-sample boosting (AUC 0.61–0.70, 77–95 % beyond-bus trips); phasor models unaffected | CONFIRMED (real), PARTIAL (synthetic) | S |
 | H26 | METHODOLOGY | Medium | REAL_ML.md §5 | Rule and models compared at different false-trip rates; rule shown with "no spread" | CONFIRMED | S |
@@ -554,24 +554,32 @@ Ordered by value / effort.
    - **Still open.**
      - The **IEEE 14-bus replication** (the gate below). Not built; it needs a general multi-bus
        sequence solver and Minkowski aggregation, so nothing here is a replication of TAC25.
-     - An **IEEE 2800-style negative-sequence response** as an uncertainty dimension. This is now
-       load-bearing rather than a nicety: with the IBR modelled as an ideal current source with an
-       open negative-sequence path, the map says an inverter at the relay end removes the need for a
-       signal entirely, which is the opposite of the project's premise and is an artefact. Use the
-       measured virtual-impedance angles −0.5° / +36.2° / −51.6° (SYNTHESIS.md §2), **not** the
-       Baeckeland limiter angle, which parameterises the positive sequence.
-     - A **certified** lower bound. TAC25 Theorem 1 cannot supply one here (DESIGN.md §2), so every
-       "no δ exists" is exhaustion at a stated grid, not a proof.
+     - ~~An IEEE 2800-style negative-sequence response as an uncertainty dimension.~~ **Done**
+       (DESIGN.md §4.4): a finite shunt of magnitude K₂ at the measured virtual-impedance angles
+       −0.5° / +36.2° / −51.6°. It shunts the injected signal by 3–17× and **reverses** the IBR-share
+       axis — the old "an inverter at the relay end needs no signal" was the open circuit talking.
+     - ~~A certified lower bound.~~ **Done at eps = 0.16** (DESIGN.md §2.1): the failure set of each
+       fault case is convex in δ, so finitely many supporting hyperplanes certify "no δ ≤ R". The
+       certificate is a sufficient condition and does not apply where the current-limit pruning would
+       be vacuous; at eps = 0.12 the answer stays a search result, bracketed to a 0.06 pu window.
    - **Gate:** Taylor 2023 with the correct complex form, stating the printed-matrix discrepancy to
      the author (H16) — **passed**; draft note in `docs/notes/taylor_matrix_note.md`. The 14-bus
      example — **not passed**, and it bounds the scope of every design number published so far.
-   - **Risk, re-stated.** The old risk was "at realistic eps no δ ≤ I_max exists". The map puts the
-     feasibility boundary at **eps ≈ 0.12–0.16 pu**, and the corrected instrument figures put
-     realistic eps at **0.08–0.16 pu**, so the design sits *on* its own boundary — that is the
-     publishable edge, sharper than before. The new risk is different and larger: feasibility is
-     bought by assuming the inverter current limit is **hard**, and this project measured it as soft
-     (median 1.07–1.18 pu, p95 ≈ 1.5, max ≈ 2.1; claim 20). **The assumption that rescues the design
-     is the one the data contradicts.**
+   - **Risk, re-stated twice.** The old risk was "at realistic eps no δ ≤ I_max exists"; the map moved
+     that boundary to eps ≈ 0.12–0.16 pu and put the design on it. Both halves of that have now moved
+     again, in opposite directions, and the pair is the finding:
+     - the **soft limiter is no longer a threat to the guarantee**. Treating I_max as uncertain on
+       [1.1, 2.1] and pruning at the loosest bound keeps every feasible cell at eps ≤ 0.12, at about
+       twice the signal (DESIGN.md §3.1). What the softness does threaten is **injectability**: the
+       robust δ needs a true limit of 1.81 pu at eps = 0.08 and 2.39 pu at eps = 0.12, against a
+       measured p95 of 1.5. That is an inverter-rating question, not an analysis question.
+     - the **scalar-eps axis was the wrong axis**. A structured per-channel error set at the same
+       class figures needs no signal at all (§4.1.1), while an IEEE 2800-compliant negative-sequence
+       path destroys feasibility under the old box (§4.4). The instrument model is the stronger effect
+       here, so the honest statement is that the design's feasibility is decided by how instrument
+       error is modelled, and that modelling has to be argued before any boundary is published.
+   - **Still open.** The 14-bus gate; and the interaction above measured on something other than the
+     two-bus model.
 3. **Inverter-dominated EMT dataset (L).**
    - **Goal:** the data this benchmark cannot provide.
    - **Grid:** the Baeckeland 14-bus Simulink model or an own PSCAD grid, label-compatible with EvEMTBench.
