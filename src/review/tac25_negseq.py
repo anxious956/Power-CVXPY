@@ -120,6 +120,28 @@ def min_delta_multi(models, p0, eps, rho=0.0, i_max=None, crossed=False, r_step=
     return dict(feasible=False, abs_delta=None, angle_deg=None, delta=None)
 
 
+def min_delta_structured_multi(models, ps, p0, rho=0.0, i_max=None, r_step=0.04, n_ang=36, r_max=2.0,
+                               mode="outer"):
+    """The same sweep under the STRUCTURED per-channel error set (tac25_channels), matched angles only:
+    the two corrections interact, so the combination is what decides the axis."""
+    import tac25_channels as tch
+    radii = np.arange(0.0, r_max + 1e-9, r_step)
+    angs = np.linspace(0, 2 * np.pi, n_ang, endpoint=False)
+    for r in radii:
+        limit = None
+        if i_max is not None:
+            head = i_max - r
+            if not td.limit_feasible(p0, mode, head):
+                continue
+            limit = (p0, mode, head)
+        for a in (angs if r > 0 else [0.0]):
+            dv = r * np.exp(1j * a)
+            if all(tch.separated_structured(pp, ms, dv, rho=rho, limit=limit, mode=mode)
+                   for pp, ms in zip(ps, models)):
+                return dict(feasible=True, abs_delta=float(r), angle_deg=float(np.degrees(a)))
+    return dict(feasible=False, abs_delta=None, angle_deg=None)
+
+
 def negseq_visibility(p, mode="outer"):
     """How much negative-sequence current the injected delta actually drives into the relay, and how
     much negative-sequence voltage appears: the quantity the open circuit was zeroing."""
@@ -142,11 +164,11 @@ def main(quick=False, eps=0.08, i_max=2.1, rho=0.0):
                cells=[])
     for local in ("SG", "IBR"):
         for k2 in (None,) + K2_GRID:
-            models, p0 = [], None
+            models, ps, p0 = [], [], None
             for lab, ang in LIMITER_ANGLES_DEG.items():
                 p = params_with_negseq(eps, local, k2, ang)
                 p0 = p0 or p
-                models.append(ModelSet(p, mode="outer"))
+                models.append(ModelSet(p, mode="outer")); ps.append(p)
                 if k2 is None:
                     break                                   # the open circuit has no angle
             vis = negseq_visibility(p0)
@@ -157,10 +179,13 @@ def main(quick=False, eps=0.08, i_max=2.1, rho=0.0):
                                     r_step=step, n_ang=nang)
                 row["crossed" if crossed else "matched"] = dict(feasible=r["feasible"], abs_delta=r["abs_delta"],
                                                                 angle_deg=r["angle_deg"])
+            rs = min_delta_structured_multi(models, ps, p0, rho=rho, i_max=i_max, r_step=step, n_ang=nang)
+            row["structured"] = dict(feasible=rs["feasible"], abs_delta=rs["abs_delta"])
             res["cells"].append(row)
             print(f"  local {local:3s} K2 {str(k2):4s}: dv2/delta {vis['dv2_per_unit_delta']:.4f}  "
                   f"matched |delta| {row['matched']['abs_delta']}  "
-                  f"crossed {row.get('crossed', {}).get('abs_delta')}", flush=True)
+                  f"crossed {row.get('crossed', {}).get('abs_delta')}  "
+                  f"structured {rs['abs_delta']}", flush=True)
     res["runtime_s"] = float(time.time() - t0)
     os.makedirs(OUT, exist_ok=True)
     path = os.path.join(OUT, "tac25_negseq.json")

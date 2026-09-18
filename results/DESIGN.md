@@ -35,7 +35,15 @@ keeps the separation guarantee whatever the true limiter does, at **0.56 pu inst
 softness actually threatens is not the guarantee but the **injectability**: producing 0.56 pu needs
 an inverter with headroom to 1.81 pu, and 1.14 pu needs 2.39 pu, which is past anything measured. So
 the honest headline is that the design survives a soft limiter but asks for more current than a
-1.2 pu-rated inverter has, and ε remains the variable that decides feasibility.
+1.2 pu-rated inverter has.
+
+**Two later corrections move the answer further, and in opposite directions.** The scalar ε box is not
+an instrument model: replacing it with a structured per-channel set at the same class figures
+(§4.1.1) makes δ = 0 separate everything, so the ε = 0.12 boundary does not move, it dissolves. And
+closing the inverter's negative-sequence path as IEEE 2800 requires (§4.4) shunts the injected signal
+by a factor of 3 to 17 and, under the old scalar box, destroys feasibility outright. Under the
+structured set it does not. The instrument model is the stronger of the two effects here, and the
+durable finding is the shunting mechanism itself, which holds whichever error model is used.
 
 ---
 
@@ -425,7 +433,53 @@ dimension, and it is the one the current model replaces with an open circuit.
 
 The uncertainty this leaves is not small and should be stated plainly: **until the negative-sequence
 path is modelled, the map's ε, I_max, strength and homogeneity axes are meaningful and its IBR-share
-axis is not.**
+axis is not.** §4.4 models it.
+
+### 4.4 The negative-sequence path, closed
+
+`tac25_negseq.py` → [`review_wp1/tac25_negseq.json`](review_wp1/tac25_negseq.json).
+
+The inverter now carries an IEEE 2800-style negative-sequence current response: i₂ = −K₂·v₂ in pu, a
+finite shunt admittance of magnitude K₂ at the inverter bus, at the limiter's measured virtual-impedance
+angle (−0.5° circular, +36.2° priority-based, −51.6° instantaneous; SYNTHESIS.md §2). The angle enters
+the system matrix, not the right-hand side, so it cannot be a zonotope generator: it is handled as a
+finite set of models, with separation required for the matched reading (limiter type fixed per
+installation, physically right) and for the crossed reading (any normal angle against any fault angle,
+conservative). *The IEEE 2800 clause numbering and the K₂ range are from the reading notes and are not
+re-verified against the standard text; the sweep is wide enough that nothing here turns on the exact
+figure.*
+
+The first thing it shows is mechanical, and it is the point: **the inverter's negative-sequence
+response shunts the auxiliary signal.** Negative-sequence voltage seen at the relay per unit of
+injected δ:
+
+| | open (the old model) | K₂ = 2 | K₂ = 4 | K₂ = 6 |
+|---|---|---|---|---|
+| SG at the relay end | 0.307 | 0.188 | 0.125 | 0.092 |
+| IBR at the relay end | **1.044** | 0.192 | 0.098 | **0.062** |
+
+A standard-compliant inverter absorbs the very quantity the method injects, and the more compliant it
+is, the less signal reaches the relay. Required |δ| at ε = 0.08, I_max uncertain and pruned at 2.1,
+0.04 pu grid:
+
+| | open | K₂ = 2 | K₂ = 4 | K₂ = 6 |
+|---|---|---|---|---|
+| SG at the relay end | 0.56 | **none ≤ 2 pu** | none | none |
+| IBR at the relay end | **0** | 1.48 (crossed 1.52) | none | none |
+| **both, structured error set (§4.1.1)** | **0** | **0** | **0** | **0** |
+
+**The IBR-share axis can now be reported, and it reverses.** The old cell said an inverter at the
+relay end removes the need for a signal entirely; that was the open circuit pinning the measurement.
+With a compliant path the same cell needs 1.48 pu at K₂ = 2 and has no solution at all at K₂ ≥ 4. The
+axis was not merely meaningless before, it had the wrong sign.
+
+**And the two corrections of this session pull in opposite directions.** Closing the negative-sequence
+path destroys feasibility under the scalar ε box; replacing that box with the structured per-channel
+set (§4.1.1) restores it completely — δ = 0 separates at every K₂ and every limiter angle. In this
+model the instrument set is the stronger effect. Neither number should be quoted alone: "IEEE 2800
+compliance kills the auxiliary signal" is true only against an error model that was itself wrong, and
+"no signal is needed" is true only in a two-bus model at one operating point. What is solid is the
+mechanism, the shunting factor in the first table, which does not depend on the error model at all.
 
 ---
 
@@ -436,6 +490,7 @@ axis is not.**
 | **H5** | "No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu" | The limit was applied as an outer check on the design. Inside the problem as TAC25 (1b), the presets are **feasible** at **0.16–0.26 pu**, about half the unconstrained optimum. Infeasibility appears only at ε ≥ 0.12 with I_max ≤ 1.2 |
 | **H1** | "No δ ≤ 1.5 separates the zone problem at eps ≥ 0.01" | **Proved at ε = 0.16**, and more strongly than claimed: no δ below **2.24 pu** separates, certified by 28 supporting hyperplanes of one fault case's failure polygon (§2.1), in 11 s. Theorem 1 still cannot do it (§2); the convexity of the separation condition in δ can. At ε = 0.12 it stays a search result, bracketed to [1.363, 1.42] pu |
 | **H2** | "Design eps is 111–208× the synthetic phasor noise std" | True but against the wrong error model — and the replacement (a scalar 0.08–0.16 pu box) is also wrong, because instrument error is per-channel, systematic and multiplicative. With a structured set at the same class figures no signal is needed at all (§4.1.1); the feasibility boundary is an imbalance of ~12× the class per-phase spread, not a scalar ε |
+| **H7 / N7** | "No inverter fault response in the models" | Half closed. The inverter now has an IEEE 2800-style negative-sequence current response at the measured limiter angles (§4.4), which shunts the injected signal by 3–17× and reverses the IBR-share axis. Still absent: any inverter fault response in the EMT models themselves |
 | **H6** | Linearised angle set unsound | Carried: the map uses the sound outer source set throughout |
 | **H13** | Guarantee only on 30 grid points | Carried: every feasible cell re-checked on 462 continuous (m, R_f) points, 0 unseparated |
 | **H14** | Zero-margin separation | Carried: ρ = 0.1 costs 29 % more signal and is affordable |
@@ -449,7 +504,8 @@ axis is not.**
 
 - No EMT data anywhere in this document. It is the static sequence model only.
 - The 14-bus gate is not passed (§1), so none of this is a replication of TAC25.
-- The IBR-share axis is an artefact of the missing negative-sequence source model (§4.3).
+- The IBR-share axis was an artefact of the missing negative-sequence source model; it is now modelled
+  (§4.4), and the answer depends on which error model it is read against, which is itself a result.
 - The δ-plane search is exhaustive at a 0.02 pu radius and 5° angular grid, so a "none" away from
   ε = 0.16 is "none on that grid". At ε = 0.16 it is a proof (§2.1); the certificate is a sufficient
   condition, so a "not certified" elsewhere is not evidence that a δ exists.
