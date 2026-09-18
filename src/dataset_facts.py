@@ -54,6 +54,11 @@ def main():
     facts = {}
     caches = {}
     for name, cfg in CONFIGS.items():
+        if cfg.get("adaptgrid"):
+            # continuous location / R_f and a per-simulation operating point: the discrete factorial
+            # facts below do not apply. See src/review/adaptgrid_facts.py -> results/ADAPTGRID_FACTS.json
+            facts[name] = "see results/ADAPTGRID_FACTS.json (src/review/adaptgrid_facts.py)"
+            continue
         paths = sorted(glob.glob(os.path.join(ROOT, "data", cfg["cache_glob"])))
         if not paths:
             facts[name] = "cache not found"; print(name, "cache not found"); continue

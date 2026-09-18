@@ -292,8 +292,17 @@ def rates(trip, R, sel):
             k, n = int(trip[m].sum()), int(m.sum())
             out[h] = dict(rate=k / n, k=k, n=n, ci=cm.binom_ci(k, n), dedup=cm.dedup_rate(trip, R["dedup"][sel], m))
     rf, et = R["rf"][sel], R["et"][sel]
-    out["dep_by_rf"] = {f"{r:g}": float(trip[R["pos"][sel] & (rf == r)].mean()) for r in (1, 10, 40)}
-    out["beyond_by_rf"] = {f"{r:g}": float(trip[R["neg"][sel] & (rf == r)].mean()) for r in (1, 10, 40)}
+    mean_or_nan = lambda m: float(trip[m].mean()) if m.any() else float("nan")
+    out["dep_by_rf"] = {f"{r:g}": mean_or_nan(R["pos"][sel] & (rf == r)) for r in (1, 10, 40)}
+    out["beyond_by_rf"] = {f"{r:g}": mean_or_nan(R["neg"][sel] & (rf == r)) for r in (1, 10, 40)}
+    if "rf_bin" in R:                 # adaptgrid: continuous R_f, so bins; grounding and loading quartile as strata
+        for key, order in (("rf_bin", cm.RF_LABELS), ("grounding", ("solid", "resistive", "resonant")),
+                           ("op_quartile", (0, 1, 2, 3))):
+            g = R[key][sel]
+            for cls in ("pos", "neg"):
+                out[f"{'dep' if cls == 'pos' else 'beyond'}_by_{key}"] = {
+                    str(v): dict(rate=mean_or_nan(R[cls][sel] & (g == v)), n=int((R[cls][sel] & (g == v)).sum())) for v in order}
+        out["dep_by_rf"]["40"] = out["dep_by_rf_bin"][">40"]["rate"]        # so every caller's 'dep at 40' column reads the >40 ohm bin
     bus = R["reverse_bus"][sel]
     out["reverse_bus_by_type"] = {t: dict(k=int(trip[bus & (et == t)].sum()), n=int((bus & (et == t)).sum()))
                                   for t in TYPES if (bus & (et == t)).any()}
@@ -406,7 +415,10 @@ def run(name):
             Ph0 = {h: tuple(a[np.where(R[h][sel])[0]] for a in P0) for h in hs}
             Ph1 = {h: tuple(a[np.where(R[h][sel])[0]] for a in P1) for h in hs}
             dd_h = {h: R["dedup"][sel][R[h][sel]] for h in hs}
-            kinds = (["grouped", "stratified", "lorfo", "lolo"] if t == 20 else ["grouped"]) if mode == "guard" else ["grouped"]
+            if R.get("adaptgrid"):          # continuous R_f and location: lorfo/lolo are undefined; loading quartiles instead
+                kinds = ["grouped", "loqo"] if (t == 20 and mode == "guard") else ["grouped"]
+            else:
+                kinds = (["grouped", "stratified", "lorfo", "lolo"] if t == 20 else ["grouped"]) if mode == "guard" else ["grouped"]
             for kind in kinds:
                 for rung in ("T1", "T2"):
                     if rung == "T1" and t < 20:
@@ -433,6 +445,7 @@ def run(name):
                     ii, dd = np.concatenate(idx_all), np.concatenate(dec_all)
                     yy, gg, b = y[ii], groups[ii], beyond[ii]
                     rf = R["rf"][zidx][ii]
+                    rfb = R["rf_bin"][zidx][ii] if "rf_bin" in R else None
                     dep = lambda s: dd[s][yy[s] == 1].mean()
                     ftb = lambda s: dd[s][b[s]].mean()
                     # per-class held-out: mean rate over folds, and the worst fold's deduplicated k/n with 95 % UCB
@@ -445,7 +458,12 @@ def run(name):
                     r = dict(own99_mode=mode, dependability=float(dep(slice(None))), false_trip_beyond=float(ftb(slice(None))),
                              dependability_ci=cm.grouped_bootstrap(dep, gg, 500), false_trip_beyond_ci=cm.grouped_bootstrap(ftb, gg, 500),
                              beyond_dedup=cm.dedup_rate(dd, R["dedup"][zidx][ii], b),
-                             dep_by_rf={f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)},
+                             dep_by_rf=({"1": float(dd[(yy == 1) & (rfb == cm.RF_LABELS[0])].mean()) if ((yy == 1) & (rfb == cm.RF_LABELS[0])).any() else float("nan"),
+                                         "10": float(dd[(yy == 1) & (rfb == cm.RF_LABELS[1])].mean()), "40": float(dd[(yy == 1) & (rfb == ">40")].mean())}
+                                        if "rf_bin" in R else {f"{x:g}": float(dd[(yy == 1) & (rf == x)].mean()) for x in (1, 10, 40)}),
+                             dep_by_rf_bin=({bb: dict(rate=float(dd[(yy == 1) & (rfb == bb)].mean()) if ((yy == 1) & (rfb == bb)).any() else float("nan"),
+                                                     n=int(((yy == 1) & (rfb == bb)).sum())) for bb in cm.RF_LABELS}
+                                            if "rf_bin" in R else None),
                              held=perclass)
                     if chosen:
                         r["chosen_x_set"] = [c[0] for c in chosen]
