@@ -1,0 +1,213 @@
+{
+ "script": "tac25_negseq",
+ "commit": "28fe0516deb8fd58e398cdd3101fc6fa747fe25f",
+ "eps": 0.08,
+ "i_max": 2.1,
+ "rho": 0.0,
+ "limiter_angles_deg": {
+  "circular": -0.5,
+  "priority-based": 36.2,
+  "instantaneous": -51.6
+ },
+ "k2_grid": [
+  2.0,
+  4.0,
+  6.0
+ ],
+ "r_step": 0.04,
+ "n_ang": 36,
+ "standard_caveat": "IEEE 2800 clause numbers and the K2 range are from the reading notes, not re-verified against the standard text; the sweep is wide enough that the conclusion does not turn on the exact figure.",
+ "cells": [
+  {
+   "local": "SG",
+   "k2": null,
+   "negseq_path": "open (1e6)",
+   "visibility": {
+    "dv2_per_unit_delta": 0.3070013892161388,
+    "di2_per_unit_delta": 0.7675034730403476,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": true,
+    "abs_delta": 0.56,
+    "angle_deg": 330.0
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  },
+  {
+   "local": "SG",
+   "k2": 2.0,
+   "negseq_path": "|z2| = 0.500 pu",
+   "visibility": {
+    "dv2_per_unit_delta": 0.18819989320663588,
+    "di2_per_unit_delta": 0.47049973301658987,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "crossed": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  },
+  {
+   "local": "SG",
+   "k2": 4.0,
+   "negseq_path": "|z2| = 0.250 pu",
+   "visibility": {
+    "dv2_per_unit_delta": 0.12512082164112243,
+    "di2_per_unit_delta": 0.3128020541028062,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "crossed": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  },
+  {
+   "local": "SG",
+   "k2": 6.0,
+   "negseq_path": "|z2| = 0.167 pu",
+   "visibility": {
+    "dv2_per_unit_delta": 0.09223756308667651,
+    "di2_per_unit_delta": 0.23059390771669142,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "crossed": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  },
+  {
+   "local": "IBR",
+   "k2": null,
+   "negseq_path": "open (1e6)",
+   "visibility": {
+    "dv2_per_unit_delta": 1.0440285419531077,
+    "di2_per_unit_delta": 1.0440285413943457e-06,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": true,
+    "abs_delta": 0.0,
+    "angle_deg": 0.0
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  },
+  {
+   "local": "IBR",
+   "k2": 2.0,
+   "negseq_path": "|z2| = 0.500 pu",
+   "visibility": {
+    "dv2_per_unit_delta": 0.19199198593455838,
+    "di2_per_unit_delta": 0.3839839718691168,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": true,
+    "abs_delta": 1.48,
+    "angle_deg": 339.99999999999994
+   },
+   "crossed": {
+    "feasible": true,
+    "abs_delta": 1.52,
+    "angle_deg": 310.0
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  },
+  {
+   "local": "IBR",
+   "k2": 4.0,
+   "negseq_path": "|z2| = 0.250 pu",
+   "visibility": {
+    "dv2_per_unit_delta": 0.09831889371143968,
+    "di2_per_unit_delta": 0.3932755748457587,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "crossed": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  },
+  {
+   "local": "IBR",
+   "k2": 6.0,
+   "negseq_path": "|z2| = 0.167 pu",
+   "visibility": {
+    "dv2_per_unit_delta": 0.06199339598038946,
+    "di2_per_unit_delta": 0.37196037588233677,
+    "v2_normal": 0.0,
+    "i2_normal": 0.0
+   },
+   "matched": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "crossed": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
+   },
+   "structured": {
+    "feasible": true,
+    "abs_delta": 0.0
+   }
+  }
+ ],
+ "runtime_s": 371.22423243522644
+}

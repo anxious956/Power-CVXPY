@@ -1,0 +1,299 @@
+{
+ "script": "tac25_channels",
+ "commit": "806bbb37840641772a31f90a982f0df746cf9be8",
+ "channels": {
+  "VT": {
+   "ratio": 0.06,
+   "phase_deg": 4.0,
+   "per_phase_share": 0.3333333333333333
+  },
+  "CT": {
+   "ratio": 0.1,
+   "phase_deg": 3.0,
+   "per_phase_share": 0.3333333333333333
+  }
+ },
+ "eps_white": 0.005,
+ "r_step": 0.02,
+ "n_ang": 72,
+ "cells": [
+  {
+   "rho": 0.0,
+   "limit": "no limit",
+   "i_max": null,
+   "feasible": true,
+   "abs_delta": 0.0,
+   "angle_deg": 0.0,
+   "equivalent_scalar_eps": {
+    "eps": 0.02,
+    "scalar_delta": 0.0,
+    "relation": "first scalar eps at least as hard"
+   }
+  },
+  {
+   "rho": 0.0,
+   "limit": "hard 1.2",
+   "i_max": 1.2,
+   "feasible": true,
+   "abs_delta": 0.0,
+   "angle_deg": 0.0,
+   "equivalent_scalar_eps": {
+    "eps": 0.02,
+    "scalar_delta": 0.0,
+    "relation": "first scalar eps at least as hard"
+   }
+  },
+  {
+   "rho": 0.0,
+   "limit": "robust: pruned at 2.1",
+   "i_max": 2.1,
+   "feasible": true,
+   "abs_delta": 0.0,
+   "angle_deg": 0.0,
+   "equivalent_scalar_eps": {
+    "eps": 0.02,
+    "scalar_delta": 0.0,
+    "relation": "first scalar eps at least as hard"
+   }
+  },
+  {
+   "rho": 0.1,
+   "limit": "no limit",
+   "i_max": null,
+   "feasible": true,
+   "abs_delta": 0.0,
+   "angle_deg": 0.0,
+   "equivalent_scalar_eps": {
+    "eps": 0.02,
+    "scalar_delta": 0.0,
+    "relation": "first scalar eps at least as hard"
+   }
+  },
+  {
+   "rho": 0.1,
+   "limit": "hard 1.2",
+   "i_max": 1.2,
+   "feasible": true,
+   "abs_delta": 0.0,
+   "angle_deg": 0.0,
+   "equivalent_scalar_eps": {
+    "eps": 0.02,
+    "scalar_delta": 0.0,
+    "relation": "first scalar eps at least as hard"
+   }
+  },
+  {
+   "rho": 0.1,
+   "limit": "robust: pruned at 2.1",
+   "i_max": 2.1,
+   "feasible": true,
+   "abs_delta": 0.0,
+   "angle_deg": 0.0,
+   "equivalent_scalar_eps": {
+    "eps": 0.02,
+    "scalar_delta": 0.0,
+    "relation": "first scalar eps at least as hard"
+   }
+  }
+ ],
+ "cross_term": {
+  "N,0.5,0.0": {
+   "cross_abs": 0.06681692877704061,
+   "measurement_scale": 0.9779545210856718,
+   "cross_rel": 0.06832314523467216
+  },
+  "ag,0.55,1.0": {
+   "cross_abs": 0.06543353481017407,
+   "measurement_scale": 0.9222551200851106,
+   "cross_rel": 0.07094949476033867
+  },
+  "ab,0.95,0.0": {
+   "cross_abs": 0.04488325277140818,
+   "measurement_scale": 0.8703700910986957,
+   "cross_rel": 0.0515680090922594
+  }
+ },
+ "n_generators": 16,
+ "generator_labels": [
+  "VT ratio (systematic)",
+  "VT phase (systematic)",
+  "VT ratio (phase a)",
+  "VT phase (phase a)",
+  "VT ratio (phase b)",
+  "VT phase (phase b)",
+  "VT ratio (phase c)",
+  "VT phase (phase c)",
+  "CT ratio (systematic)",
+  "CT phase (systematic)",
+  "CT ratio (phase a)",
+  "CT phase (phase a)",
+  "CT ratio (phase b)",
+  "CT phase (phase b)",
+  "CT ratio (phase c)",
+  "CT phase (phase c)"
+ ],
+ "generator_norms": [
+  0.039626508457341635,
+  0.04731962498505705,
+  0.006519696807237812,
+  0.007586011701204128,
+  0.006519696807237811,
+  0.007586011701204125,
+  0.006519696807237809,
+  0.007586011701204124,
+  0.003389220147887095,
+  0.0018844774288742103,
+  0.0005624715274485023,
+  0.0002945094030809408,
+  0.0006364163046482362,
+  0.00033322679788461043,
+  0.0006364163046482365,
+  0.00033322679788461065
+ ],
+ "component_halfwidths": {
+  "normal": {
+   "Re v1": 0.06495589569734497,
+   "Re v2": 0.03126213709248051,
+   "Re v0": 0.03126213709248051,
+   "Re i1": 0.010463075597415186,
+   "Re i2": 0.006861851415458355,
+   "Re i0": 0.006861851415458354,
+   "Im v1": 0.07572823087609915,
+   "Im v2": 0.03153613432551548,
+   "Im v0": 0.03153613432551548,
+   "Im i1": 0.011546105991978337,
+   "Im i2": 0.006791396650666226,
+   "Im i0": 0.006791396650666226
+  },
+  "AG at 55 %, max R_f": {
+   "Re v1": 0.06675427953205643,
+   "Re v2": 0.03726767799612384,
+   "Re v0": 0.035028136232694296,
+   "Re i1": 0.0358874050946288,
+   "Re i2": 0.03322667898073844,
+   "Re i0": 0.021910606518184866,
+   "Im v1": 0.07610589438231342,
+   "Im v2": 0.03718220380002047,
+   "Im v0": 0.034583465801544644,
+   "Im i1": 0.03521171565834757,
+   "Im i2": 0.03142534902748917,
+   "Im i0": 0.020338230828744964
+  },
+  "scalar_box_eps": 0.08
+ },
+ "imbalance_boundary": {
+  "i_max=None": [
+   {
+    "kappa": 1.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 2.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 3.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 4.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 6.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 8.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 12.0,
+    "separated_at_zero": false,
+    "abs_delta": 0.12,
+    "feasible": true
+   },
+   {
+    "kappa": 16.0,
+    "separated_at_zero": false,
+    "abs_delta": 1.2,
+    "feasible": true
+   },
+   {
+    "kappa": 24.0,
+    "separated_at_zero": false,
+    "abs_delta": null,
+    "feasible": false
+   },
+   {
+    "kappa": 32.0,
+    "separated_at_zero": false,
+    "abs_delta": null,
+    "feasible": false
+   }
+  ],
+  "i_max=2.1": [
+   {
+    "kappa": 1.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 2.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 3.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 4.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 6.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 8.0,
+    "separated_at_zero": true,
+    "abs_delta": 0.0
+   },
+   {
+    "kappa": 12.0,
+    "separated_at_zero": false,
+    "abs_delta": 0.12,
+    "feasible": true
+   },
+   {
+    "kappa": 16.0,
+    "separated_at_zero": false,
+    "abs_delta": 1.2,
+    "feasible": true
+   },
+   {
+    "kappa": 24.0,
+    "separated_at_zero": false,
+    "abs_delta": null,
+    "feasible": false
+   },
+   {
+    "kappa": 32.0,
+    "separated_at_zero": false,
+    "abs_delta": null,
+    "feasible": false
+   }
+  ]
+ },
+ "runtime_s": 121.5547399520874
+}

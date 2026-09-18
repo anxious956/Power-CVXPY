@@ -25,13 +25,25 @@ the **measurement error**: at ε ≤ 0.04 pu no signal is needed at all, at ε =
 |δ| is 0.22–0.56 pu depending on the limit, at ε = 0.12 pu the problem is feasible only if the
 inverter can be trusted to I_max ≥ 1.3 pu, and **at ε = 0.16 pu no δ separates at any current limit,
 including no limit at all** — that last one is a genuine "no admissible δ exists in this regime", and
-it is a result, not a failure. The sting is in the mechanism: the design is feasible *because* the
-current limit is tight, and the required signal grows monotonically as the limit is relaxed
-(0.22 → 0.56 pu as I_max goes 1.1 → 2.1). This project's own EMT measurement says the limit is not
-tight — median |I₁|+|I₂| of 1.07–1.18 pu but p95 ≈ 1.5 and max ≈ 2.1 ([REVIEW.md](../REVIEW.md) §7
-claim 20). **The assumption that rescues feasibility is the one the data contradicts**, so the
-honest headline is that the design tool's answer is feasible but conditional on an inverter
-behaving better than the measured inverters do.
+it is a result, not a failure. The required signal grows monotonically as the limit is relaxed
+(0.22 → 0.56 pu as I_max goes 1.1 → 2.1), and this project's own EMT measurement says the limit is
+not tight — median |I₁|+|I₂| of 1.07–1.18 pu but p95 ≈ 1.5 and max ≈ 2.1 ([REVIEW.md](../REVIEW.md)
+§7 claim 20). **That does not cost the guarantee, and §3.1 measures what it does cost.** Treating
+I_max as an uncertain parameter on [1.1, 2.1] and pruning the uncertainty set at the *loosest* bound
+keeps the separation guarantee whatever the true limiter does, at **0.56 pu instead of 0.28 at
+ε = 0.08** and **1.14 pu at ε = 0.12**, where a hard 1.2 pu limit is infeasible outright. What the
+softness actually threatens is not the guarantee but the **injectability**: producing 0.56 pu needs
+an inverter with headroom to 1.81 pu, and 1.14 pu needs 2.39 pu, which is past anything measured. So
+the honest headline is that the design survives a soft limiter but asks for more current than a
+1.2 pu-rated inverter has.
+
+**Two later corrections move the answer further, and in opposite directions.** The scalar ε box is not
+an instrument model: replacing it with a structured per-channel set at the same class figures
+(§4.1.1) makes δ = 0 separate everything, so the ε = 0.12 boundary does not move, it dissolves. And
+closing the inverter's negative-sequence path as IEEE 2800 requires (§4.4) shunts the injected signal
+by a factor of 3 to 17 and, under the old scalar box, destroys feasibility outright. Under the
+structured set it does not. The instrument model is the stronger of the two effects here, and the
+durable finding is the shunting mechanism itself, which holds whichever error model is used.
 
 ---
 
@@ -106,10 +118,61 @@ This is a property of the theorem's hypothesis, not of the implementation. Two c
 for every pair and both geometries, and the gate bound(inscribed) ≤ exact optimum passes at all five
 presets (trivially, since the bound is zero).
 
-**Consequence for H1.** H1 ("no δ ≤ 1.5 pu separates the zone problem at eps ≥ 0.01") remains a
-search result. Theorem 1 cannot certify it. What *can*, and what §4 below does instead, is a global
-solve on the δ-plane plus a dense continuous (m, R_f) re-check — a bound from exhaustion at a stated
-resolution rather than a closed form. §1.3 of note F should be corrected accordingly.
+**Consequence for H1.** Theorem 1 cannot certify it. §2.1 certifies it a different way, from the
+convexity of the problem rather than from a closed form. §1.3 of note F should be corrected accordingly.
+
+### 2.1 H1 as a certificate
+
+`tac25_certificate.py` → [`review_wp1/tac25_certificate.json`](review_wp1/tac25_certificate.json).
+
+**The premise, checked before it is used.** For one fault case the separation test is: do the two
+uncertainty sets still intersect,
+
+  ∃ u ∈ [−1,1]ᵏ, n ∈ [−e, e]¹² :  Δc + ΔH δ = G u + n ?
+
+δ enters only the right-hand side — it shifts the centre and leaves the generators alone. That is a
+claim about the code, not about the mathematics, so it is verified rather than asserted:
+`affinity_check` compares the affine model against the nonlinear network solver at random (δ, u), and
+the largest residual over the normal case and 12 fault cases is **2.1 × 10⁻¹⁴**. Superposition holds
+exactly, because δ and the source perturbations enter the same linear system's right-hand side.
+
+**The consequence.** The set of δ that FAIL to separate a given case is then the preimage of a fixed
+polytope under an affine map — a convex polygon in the δ-plane, the intersection of the half-spaces
+λᵀΔH δ ≤ h_Z(λ) − λᵀΔc over the facet normals λ of the zonotope. So if the disc |δ| ≤ R lies inside
+that polygon for **any single fault case**, then no δ in the disc separates the problem, and the
+polygon's supporting hyperplanes are the proof. `failure_polygon` computes the polygon exactly by
+support LPs with edge refinement (a polygon has finitely many edges, so the refinement terminates);
+`inradius` returns the largest certified R.
+
+| ε | current limit | certified at R = 1.5? | disc actually covered | certifying case | faces |
+|---|---|---|---|---|---|
+| 0.16 | none | **yes** | **\|δ\| ≤ 2.242** | AG, 35 % of the line, R_f at its maximum | 28 |
+| 0.16 | uncertain, pruned at 2.1 | **yes** | \|δ\| ≤ 1.596 | same case | 48 |
+| 0.16 | hard 1.2 | not applicable | — | — | — |
+| 0.12 | none | no | \|δ\| ≤ 1.363 | AG, 95 %, R_f max | 28 |
+| 0.12 | uncertain, pruned at 2.1 | no | \|δ\| ≤ 0.730 | AG, 95 %, R_f max | 47 |
+
+**So H1 at ε = 0.16 is a proof, not a search result**, and a stronger statement than the one claimed:
+no δ below **2.24 pu** separates, against the 1.5 pu the claim asserts. One AG fault at 35 % of the
+line with the largest modelled fault resistance is unseparable from normal operation by any injection
+of that size, and 28 hyperplanes certify it. The whole certificate takes 11 s against 728 s for the
+grid search it replaces.
+
+Three honest limits on it.
+
+1. **It is a sufficient condition.** It certifies by finding one case that fails everywhere in the
+   disc. If no single case covered the disc but several together did, the test would return "not
+   certified" while the answer was still "none" — a union of convex sets need not be convex. At
+   ε = 0.16 one case does cover it, so the question does not arise there.
+2. **With the current limit the pruning must be conservative.** The restriction |i⁺| ≤ I_max − |δ| is
+   not affine in δ, so the certificate prunes at the disc's own radius (headroom I_max − R), which is
+   the smallest admissible set over the disc and therefore sound for all of it — and also weaker,
+   which is why the covered radius falls to 1.596 and 0.730. At a hard 1.2 pu limit with R = 1.5 the
+   headroom is negative and the certificate does not apply at all; that cell is reported as "not
+   applicable", not as a result.
+3. **At ε = 0.12 it is not a proof, but it brackets one.** The certificate covers |δ| ≤ 1.363 and the
+   global search separates at 1.42 (§4.1), so the true minimum lies in a 0.06 pu window, and two
+   methods that share no code path agree. That is the best available check that the map is right.
 
 ---
 
@@ -153,10 +216,69 @@ unconstrained value. The disc |i⁺| ≤ I_max − |δ| is imposed as a *circums
 restriction is understated and the guarantee stays sound.
 
 > **The assumption this rests on.** (b) is only legitimate if the current limit is a hard bound on
-> the physical inverter. On EvEMTBench it is not: the review measured median |I₁|+|I₂| of
-> 1.07–1.18 pu with **p95 ≈ 1.5 pu and max ≈ 2.1 pu** (claim 20). If the inverter can transiently
-> exceed I_max, the restricted uncertainty set is too small and the guarantee is void. §4 sweeps
-> I_max to 2.1 for exactly this reason.
+> the physical inverter. On EvEMTBench it is not (claim 20). If the inverter can exceed I_max, the
+> restricted uncertainty set is too small and the guarantee is void. §3.1 removes the assumption
+> instead of sweeping around it.
+
+### 3.1 The limit as an uncertain parameter, not a constant
+
+`tac25_softlimit.py` → [`review_wp1/tac25_softlimit.json`](review_wp1/tac25_softlimit.json).
+
+**What the measured figures actually are.** `ibr_limiter_check.py` reports the **fundamental phasor**
+magnitude from a full-cycle (128-sample) DFT, peak-referenced, in pu of the controller's own I_base,
+over 765 faults per inverter against a controller setting of 1.2 pu. It is not the instantaneous peak;
+the earlier 1.15–1.2 pu figure in REAL_TESTGRID.md was an instantaneous peak over 0.25–3 cycles and
+includes the DC offset. Three windows are measured, and they answer the "is this just a first-cycle
+transient?" question directly:
+
+| |I₁| + |I₂|, pu of I_base | cycle 1–2 | cycle 3–4 | cycle 9–10 |
+|---|---|---|---|
+| median | 1.07 – 1.11 | 1.08 – 1.18 | 1.07 – 1.16 |
+| p95 | 1.51 – 1.53 | 1.54 – 1.61 | **1.50 – 1.56** |
+| max | 1.84 – 1.86 | 2.08 – 2.17 | **2.07 – 2.12** |
+
+The overshoot is **still there at cycles 9–10**, so it is not an LCL or PLL transient being compared
+against a steady-state limit: it is what the limiter does in the steady state. Two caveats on the
+quantity itself. |I₁| + |I₂| is a sum of sequence magnitudes and bounds the phase current from above;
+the largest **phase**-current magnitude, which is closer to what a limiter regulates, is median
+1.02–1.10 and p95 1.44–1.51, so it overshoots too, by less. And the limiter's own setting is 1.2 pu,
+so the p95 is 25–30 % above the setting rather than above the rating.
+
+**The treatment.** If I_max is only known to lie in a band [lo, hi], every realisation that can
+physically occur while δ is injected satisfies |i⁺| ≤ hi − |δ|. Pruning the uncertainty set with **hi**
+therefore keeps a superset of the true set, separation proved on the superset holds on the true set,
+and the guarantee is valid whatever the true limiter does. The price is the monotone trend §4.1
+already shows.
+
+Required |δ| in pu, band [1.1, 2.1], 0.02 pu radius grid, continuous (m, R_f) re-check passing at
+every feasible cell:
+
+| | hard 1.1 | hard 1.2 | hard 1.3 | hard 1.5 | hard 2.1 | **uncertain [1.1, 2.1]** | (no limit) |
+|---|---|---|---|---|---|---|---|
+| **ε = 0.04** | 0 | 0 | 0 | 0 | 0 | **0** | 0 |
+| **ε = 0.08** | 0.22 | 0.28 | 0.32 | 0.42 | 0.56 | **0.56** | 0.56 |
+| **ε = 0.12** | none | none | 0.72 | 0.82 | 1.14 | **1.14** | 1.42 |
+| **ε = 0.16** | none | none | none | none | none | **none** | none |
+| ε = 0.08, ρ = 0.1 | 0.30 | 0.36 | 0.40 | 0.50 | 0.72 | **0.72** | 0.72 |
+| ε = 0.12, ρ = 0.1 | none | none | none | none | 1.26 | **1.26** | 1.72 |
+
+Three readings.
+
+1. **The guarantee does not depend on the limit being hard.** Pruning at the loosest measured bound
+   keeps every cell that was feasible at ε ≤ 0.12, and it costs a factor of two in signal at ε = 0.08
+   (0.28 → 0.56) and a factor of 1.6 at ε = 0.12 (0.72 at I_max 1.3 → 1.14). The claim that the
+   design is feasible *because* the limit is tight was too strong: it is feasible either way, more
+   expensively when the limit is not trusted.
+2. **A loose bound can rescue a cell a tight one loses.** At ε = 0.12 with ρ = 0.1 every hard limit
+   up to 1.5 is infeasible — the headroom I_max − |δ| admits no pre-fault current at all — while the
+   uncertain treatment at 2.1 returns 1.26 pu. The limit binds on the design side long before it
+   helps on the uncertainty side.
+3. **Injectability is the real casualty, and it is reported separately.** Producing the robust δ
+   needs |i⁺| + |δ| within the *true* limit. The smallest true limit that admits it is **1.81 pu at
+   ε = 0.08** and **2.39 pu at ε = 0.12**. The first is inside the measured spread but above its p95;
+   the second is outside it entirely. A soft limiter does not void the guarantee, but it does not
+   supply the headroom the robust design needs either, and no amount of analysis fixes that — it is
+   an inverter-rating question.
 
 ---
 
@@ -202,6 +324,60 @@ is true but measures against the wrong error model: white noise averages down ov
 and per-installation ratio and phase errors do not. Against the fault-condition figures, ε = 0.08
 is at the *low* end of defensible and 0.16 at the high end. The presets' ε was not absurd; the
 comparison was.
+
+### 4.1.1 One box on twelve components was the wrong uncertainty set
+
+`tac25_channels.py` → [`review_wp1/tac25_channels.json`](review_wp1/tac25_channels.json).
+
+The ε axis above puts a single independent ±ε box on all 12 real components of the measurement. That
+is wrong in four ways, and every one of them makes the problem look harder than it is:
+
+1. **CT and VT errors are not the same size.** The corrected fault-condition figures are VT ratio
+   3–6 % with 2–4° of phase and CT ratio 5–10 % with 1–3°. One ε cannot be both.
+2. **They are systematic per installation, not independent per component.** One transformer has one
+   ratio error, and it scales all three sequence components of its own quantity together. The box
+   lets them err in opposite directions, which no instrument does.
+3. **They are multiplicative.** A 5 % CT error on a 0.1 pu negative-sequence current is 0.005 pu, not
+   ε. A ratio error cannot manufacture negative-sequence voltage out of nothing; only the part of the
+   error that differs between phases can, and it leaks through the sequence transform at ⅓ weight.
+4. **The same unknown error is in both hypotheses.** One observation passes through one instrument
+   set, so the error is a shared variable of the pair problem, not two independent draws.
+
+Replacing it with a structured set — two shared systematic generators per instrument, six per-phase
+generators per instrument mapped through BM·diag(ζ)·AM, a small independent white box, and explicit
+extra columns covering the (error × source uncertainty) cross term, which is **5–7 % of the
+measurement here and so is carried rather than dropped** — gives 16 generators in place of the box.
+Per-component half-widths, base case:
+
+| | Re v₁ | Re v₂ | Re v₀ | Re i₁ | Re i₂ | Re i₀ |
+|---|---|---|---|---|---|---|
+| scalar box, ε = 0.08 | 0.080 | 0.080 | 0.080 | 0.080 | 0.080 | 0.080 |
+| structured, normal | 0.065 | 0.031 | 0.031 | 0.011 | **0.007** | 0.007 |
+| structured, AG at 55 %, max R_f | 0.067 | 0.037 | 0.035 | 0.036 | **0.033** | 0.022 |
+
+The structured set is *comparable* on v₁, where the signal is ~1 pu, and four to eleven times
+narrower on the negative-sequence components, which are the ones separation actually turns on.
+
+**The result: no auxiliary signal is needed at all.** At the corrected per-channel figures, δ = 0
+separates every fault case, with or without the current limit, at ρ = 0 and ρ = 0.1. **The ε = 0.12
+boundary does not move — it dissolves**, because a scalar ε was never the physical axis.
+
+What replaces it is an *imbalance* axis: how large the per-phase (phase-to-phase) part of the
+instrument error would have to be before a signal is needed. Scaling only that part by κ, with the
+systematic part held at its class figure:
+
+| κ (× the class per-phase imbalance) | 1 | 8 | 12 | 16 | ≥ 24 |
+|---|---|---|---|---|---|
+| required \|δ\| (pu) | 0 | 0 | 0.12 | 1.20 | none |
+
+κ = 12 is a per-phase ratio spread of about 24 % between phases of the same transformer, which no
+protection-class instrument shows. So within this model the design is not on its feasibility boundary
+at realistic instrument accuracy, and §4.1's claim that it is was an artefact of the isotropic box.
+
+**Two limits on that, stated.** This makes the uncertainty set smaller in exactly the directions the
+method uses, so it should be read as "the scalar-ε axis was measuring the wrong quantity", not as "the
+problem is easy". And it is still the two-bus model with the inverter's negative-sequence path open;
+§4.3 and the follow-up below are what decide whether that matters more than the instrument model does.
 
 ### 4.2 The other axes
 
@@ -257,7 +433,53 @@ dimension, and it is the one the current model replaces with an open circuit.
 
 The uncertainty this leaves is not small and should be stated plainly: **until the negative-sequence
 path is modelled, the map's ε, I_max, strength and homogeneity axes are meaningful and its IBR-share
-axis is not.**
+axis is not.** §4.4 models it.
+
+### 4.4 The negative-sequence path, closed
+
+`tac25_negseq.py` → [`review_wp1/tac25_negseq.json`](review_wp1/tac25_negseq.json).
+
+The inverter now carries an IEEE 2800-style negative-sequence current response: i₂ = −K₂·v₂ in pu, a
+finite shunt admittance of magnitude K₂ at the inverter bus, at the limiter's measured virtual-impedance
+angle (−0.5° circular, +36.2° priority-based, −51.6° instantaneous; SYNTHESIS.md §2). The angle enters
+the system matrix, not the right-hand side, so it cannot be a zonotope generator: it is handled as a
+finite set of models, with separation required for the matched reading (limiter type fixed per
+installation, physically right) and for the crossed reading (any normal angle against any fault angle,
+conservative). *The IEEE 2800 clause numbering and the K₂ range are from the reading notes and are not
+re-verified against the standard text; the sweep is wide enough that nothing here turns on the exact
+figure.*
+
+The first thing it shows is mechanical, and it is the point: **the inverter's negative-sequence
+response shunts the auxiliary signal.** Negative-sequence voltage seen at the relay per unit of
+injected δ:
+
+| | open (the old model) | K₂ = 2 | K₂ = 4 | K₂ = 6 |
+|---|---|---|---|---|
+| SG at the relay end | 0.307 | 0.188 | 0.125 | 0.092 |
+| IBR at the relay end | **1.044** | 0.192 | 0.098 | **0.062** |
+
+A standard-compliant inverter absorbs the very quantity the method injects, and the more compliant it
+is, the less signal reaches the relay. Required |δ| at ε = 0.08, I_max uncertain and pruned at 2.1,
+0.04 pu grid:
+
+| | open | K₂ = 2 | K₂ = 4 | K₂ = 6 |
+|---|---|---|---|---|
+| SG at the relay end | 0.56 | **none ≤ 2 pu** | none | none |
+| IBR at the relay end | **0** | 1.48 (crossed 1.52) | none | none |
+| **both, structured error set (§4.1.1)** | **0** | **0** | **0** | **0** |
+
+**The IBR-share axis can now be reported, and it reverses.** The old cell said an inverter at the
+relay end removes the need for a signal entirely; that was the open circuit pinning the measurement.
+With a compliant path the same cell needs 1.48 pu at K₂ = 2 and has no solution at all at K₂ ≥ 4. The
+axis was not merely meaningless before, it had the wrong sign.
+
+**And the two corrections of this session pull in opposite directions.** Closing the negative-sequence
+path destroys feasibility under the scalar ε box; replacing that box with the structured per-channel
+set (§4.1.1) restores it completely — δ = 0 separates at every K₂ and every limiter angle. In this
+model the instrument set is the stronger effect. Neither number should be quoted alone: "IEEE 2800
+compliance kills the auxiliary signal" is true only against an error model that was itself wrong, and
+"no signal is needed" is true only in a two-bus model at one operating point. What is solid is the
+mechanism, the shunting factor in the first table, which does not depend on the error model at all.
 
 ---
 
@@ -266,8 +488,9 @@ axis is not.**
 | Finding | Was | Now |
 |---|---|---|
 | **H5** | "No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu" | The limit was applied as an outer check on the design. Inside the problem as TAC25 (1b), the presets are **feasible** at **0.16–0.26 pu**, about half the unconstrained optimum. Infeasibility appears only at ε ≥ 0.12 with I_max ≤ 1.2 |
-| **H1** | "No δ ≤ 1.5 separates the zone problem at eps ≥ 0.01" | Still a search result, not a proof. Theorem 1 cannot certify it (§2). At ε = 0.16 pu no δ separates at any I_max including none — that part is confirmed by exhaustion at a 0.02 pu grid plus a dense (m, R_f) re-check |
-| **H2** | "Design eps is 111–208× the synthetic phasor noise std" | True but against the wrong error model. Against fault-condition instrument errors, ε = 0.08–0.16 pu is the defensible band, and the design's feasibility boundary sits inside it |
+| **H1** | "No δ ≤ 1.5 separates the zone problem at eps ≥ 0.01" | **Proved at ε = 0.16**, and more strongly than claimed: no δ below **2.24 pu** separates, certified by 28 supporting hyperplanes of one fault case's failure polygon (§2.1), in 11 s. Theorem 1 still cannot do it (§2); the convexity of the separation condition in δ can. At ε = 0.12 it stays a search result, bracketed to [1.363, 1.42] pu |
+| **H2** | "Design eps is 111–208× the synthetic phasor noise std" | True but against the wrong error model — and the replacement (a scalar 0.08–0.16 pu box) is also wrong, because instrument error is per-channel, systematic and multiplicative. With a structured set at the same class figures no signal is needed at all (§4.1.1); the feasibility boundary is an imbalance of ~12× the class per-phase spread, not a scalar ε |
+| **H7 / N7** | "No inverter fault response in the models" | Half closed. The inverter now has an IEEE 2800-style negative-sequence current response at the measured limiter angles (§4.4), which shunts the injected signal by 3–17× and reverses the IBR-share axis. Still absent: any inverter fault response in the EMT models themselves |
 | **H6** | Linearised angle set unsound | Carried: the map uses the sound outer source set throughout |
 | **H13** | Guarantee only on 30 grid points | Carried: every feasible cell re-checked on 462 continuous (m, R_f) points, 0 unseparated |
 | **H14** | Zero-margin separation | Carried: ρ = 0.1 costs 29 % more signal and is affordable |
@@ -281,9 +504,11 @@ axis is not.**
 
 - No EMT data anywhere in this document. It is the static sequence model only.
 - The 14-bus gate is not passed (§1), so none of this is a replication of TAC25.
-- The IBR-share axis is an artefact of the missing negative-sequence source model (§4.3).
-- The δ-plane search is exhaustive at a 0.02 pu radius and 5° angular grid, so every "none" is
-  "none on that grid", not a proof of non-existence. Theorem 1 would have supplied the proof and
-  cannot (§2).
-- The current-limit restriction assumes the limit is hard. The project's own measurement says it is
-  not (§3), and that is the single largest threat to the headline result.
+- The IBR-share axis was an artefact of the missing negative-sequence source model; it is now modelled
+  (§4.4), and the answer depends on which error model it is read against, which is itself a result.
+- The δ-plane search is exhaustive at a 0.02 pu radius and 5° angular grid, so a "none" away from
+  ε = 0.16 is "none on that grid". At ε = 0.16 it is a proof (§2.1); the certificate is a sufficient
+  condition, so a "not certified" elsewhere is not evidence that a δ exists.
+- The current-limit restriction no longer assumes the limit is hard (§3.1). What remains open is
+  whether the inverter can supply the robust δ at all: it needs headroom to 1.81 pu at ε = 0.08 and
+  2.39 pu at ε = 0.12, and the measured inverters reach 1.5 pu at p95.

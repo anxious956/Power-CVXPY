@@ -1,0 +1,572 @@
+{
+ "script": "tac25_softlimit",
+ "commit": "f65c71b7c3e1c5d26e94e4e1bdf6922602951600",
+ "band": [
+  1.1,
+  2.1
+ ],
+ "r_step": 0.02,
+ "n_ang": 72,
+ "evidence": {
+  "available": true,
+  "quantity": "fundamental phasor magnitude, full-cycle DFT (128 samples), peak-referenced, in pu of the controller's own I_base",
+  "not_instantaneous_peak": true,
+  "windows": [
+   "pre-fault",
+   "cycle 1-2",
+   "cycle 3-4",
+   "cycle 9-10"
+  ],
+  "inverters": {
+   "Ind2-2IBR": {
+    "imax_setting_pu": 1.2,
+    "n_faults": 765,
+    "i1_plus_i2": {
+     "pre-fault": {
+      "median": 0.8068802336674926,
+      "p95": 0.806880424610423,
+      "max": 0.806880424610423
+     },
+     "cycle 1-2": {
+      "median": 1.1117001044595167,
+      "p95": 1.5297890285797262,
+      "max": 1.8619922240982825
+     },
+     "cycle 3-4": {
+      "median": 1.1797194040483103,
+      "p95": 1.6136045336101452,
+      "max": 2.1691454225132385
+     },
+     "cycle 9-10": {
+      "median": 1.1616879536808415,
+      "p95": 1.5556484849504104,
+      "max": 2.1204556539290125
+     }
+    },
+    "max_phase": {
+     "pre-fault": {
+      "median": 0.8068801952849679,
+      "p95": 0.8068803859315944
+     },
+     "cycle 1-2": {
+      "median": 1.041366111283371,
+      "p95": 1.4349918644027897
+     },
+     "cycle 3-4": {
+      "median": 1.103738778497221,
+      "p95": 1.509852859362092
+     },
+     "cycle 9-10": {
+      "median": 1.1014562006428383,
+      "p95": 1.4462953306367234
+     }
+    }
+   },
+   "Ind3-3IBR": {
+    "imax_setting_pu": 1.2,
+    "n_faults": 765,
+    "i1_plus_i2": {
+     "pre-fault": {
+      "median": 0.7810867893186536,
+      "p95": 0.7810872245128991,
+      "max": 0.7810872245128991
+     },
+     "cycle 1-2": {
+      "median": 1.0682873620555482,
+      "p95": 1.51012405117525,
+      "max": 1.8410580097497107
+     },
+     "cycle 3-4": {
+      "median": 1.0755663286585526,
+      "p95": 1.5377698760643117,
+      "max": 2.0778603601208676
+     },
+     "cycle 9-10": {
+      "median": 1.0647879347328622,
+      "p95": 1.4980749735622934,
+      "max": 2.068881069104434
+     }
+    },
+    "max_phase": {
+     "pre-fault": {
+      "median": 0.7810867677941055,
+      "p95": 0.7810872019253876
+     },
+     "cycle 1-2": {
+      "median": 1.0158495850468365,
+      "p95": 1.4459908133669646
+     },
+     "cycle 3-4": {
+      "median": 1.0445603454319394,
+      "p95": 1.5050471104455765
+     },
+     "cycle 9-10": {
+      "median": 1.0192742172545022,
+      "p95": 1.4540744394880578
+     }
+    }
+   }
+  },
+  "overshoot_is_steady_state": true,
+  "p95_cycle_1_2": [
+   1.5297890285797262,
+   1.51012405117525
+  ],
+  "p95_cycle_9_10": [
+   1.5556484849504104,
+   1.4980749735622934
+  ],
+  "note": "|I1| + |I2| is a sum of sequence magnitudes and bounds the phase current from above; the largest phase-current magnitude is reported beside it. Both exceed the 1.2 pu setting at p95, and both still exceed it at cycles 9-10, so the overshoot is not a first-cycle LCL/PLL transient being compared against a steady-state limit."
+ },
+ "cells": [
+  {
+   "eps": 0.02,
+   "rho": 0.0,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.2": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.3": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.5": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 0.0,
+    "angle_deg": 0.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 1.2513026641324758,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.0
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.04,
+   "rho": 0.0,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.2": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.3": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.5": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 0.0,
+    "angle_deg": 0.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 1.2513026641324758,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.0
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.08,
+   "rho": 0.0,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": true,
+     "abs_delta": 0.22
+    },
+    "1.2": {
+     "feasible": true,
+     "abs_delta": 0.28
+    },
+    "1.3": {
+     "feasible": true,
+     "abs_delta": 0.32
+    },
+    "1.5": {
+     "feasible": true,
+     "abs_delta": 0.42
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 0.56
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 0.56,
+    "angle_deg": 330.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 1.8113026641324759,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.56
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.12,
+   "rho": 0.0,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.2": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.3": {
+     "feasible": true,
+     "abs_delta": 0.72
+    },
+    "1.5": {
+     "feasible": true,
+     "abs_delta": 0.8200000000000001
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 1.1400000000000001
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 1.1400000000000001,
+    "angle_deg": 345.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 2.3913026641324757,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 1.42
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.16,
+   "rho": 0.0,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.2": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.3": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.5": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "2.1": {
+     "feasible": false,
+     "abs_delta": null
+    }
+   },
+   "robust": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": null,
+    "injectable_at_band_bottom": null
+   },
+   "no_limit": {
+    "feasible": false,
+    "abs_delta": null
+   }
+  },
+  {
+   "eps": 0.02,
+   "rho": 0.1,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.2": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.3": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.5": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 0.0,
+    "angle_deg": 0.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 1.2513026641324758,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.0
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.04,
+   "rho": 0.1,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.2": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.3": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "1.5": {
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 0.0
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 0.0,
+    "angle_deg": 0.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 1.2513026641324758,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.0
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.08,
+   "rho": 0.1,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": true,
+     "abs_delta": 0.3
+    },
+    "1.2": {
+     "feasible": true,
+     "abs_delta": 0.36
+    },
+    "1.3": {
+     "feasible": true,
+     "abs_delta": 0.4
+    },
+    "1.5": {
+     "feasible": true,
+     "abs_delta": 0.5
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 0.72
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 0.72,
+    "angle_deg": 330.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 1.9713026641324758,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.72
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.12,
+   "rho": 0.1,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.2": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.3": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.5": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "2.1": {
+     "feasible": true,
+     "abs_delta": 1.26
+    }
+   },
+   "robust": {
+    "feasible": true,
+    "abs_delta": 1.26,
+    "angle_deg": 350.0,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": 2.511302664132476,
+    "injectable_at_band_bottom": false
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 1.72
+   },
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "eps": 0.16,
+   "rho": 0.1,
+   "sir": 1.9900743804199783,
+   "i_plus_max": 1.2513026641324758,
+   "hard": {
+    "1.1": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.2": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.3": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "1.5": {
+     "feasible": false,
+     "abs_delta": null
+    },
+    "2.1": {
+     "feasible": false,
+     "abs_delta": null
+    }
+   },
+   "robust": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "pruned_at": 2.1,
+    "min_true_limit_to_inject": null,
+    "injectable_at_band_bottom": null
+   },
+   "no_limit": {
+    "feasible": false,
+    "abs_delta": null
+   }
+  }
+ ],
+ "runtime_s": 728.3082528114319
+}
