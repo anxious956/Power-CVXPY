@@ -122,11 +122,6 @@ the lines beyond (299 at A, 246 at B). k/n are deduplicated counts with one-side
 Unless a row says otherwise the operating point is **cal0: the threshold calibrated at zero false trips
 on the training negatives**, and every detector is given twice, unsupervised and with 32P/32Q.
 
-**Two detectors are incomplete.** Gradient boosting and the sequence-trajectory CNN carry over their
-5 % rows from the earlier run; their protection-grade points were not re-run (about two hours per
-relay), and every table marks them *pending rerun*. Q3 and part of Q4 below therefore rest on the 5 %
-convention only, and say so where they do.
-
 ### The fault population, before any detector
 
 The in-zone faults are mostly high-resistance: median R_f **24.2 Ω (A) / 22.6 Ω (B)**, quartiles
@@ -161,8 +156,26 @@ on the training negatives:
 | T1, A / B | 3.0 % / 0.0 % | 2/2888 · 1/2845 | 0/299 · 0/246 | 0 · 0 | 0 · 0 | 0/3/4/0 · 0/0/0/0 |
 | engineered + LR, A | **82.7 %** [76, 89] | **0/2888** | **0/299** | 0/5474 | 1/1187 | 80/100/78/73 |
 | engineered + LR, B | **58.0 %** [51, 64] | 1/2845 | 1/246 | 56 → **0** with 32P/32Q | 16 → **0** | 92/83/54/**14** |
+| **CNN seq-traj, A** | **99.4 %** [98, 100] | **0/2888** | **0/299** | 0/5474 | 3/1187 | **100/100/99/100** |
+| **CNN seq-traj, B** | 45.4 % (83.6 % under loqo) | 0/2845 | 0/246 | 0 | 0 | 54/62/38/38 |
+| gradient boosting, A | 11.3 % | 0/2888 | 0/299 | 0 | 0 | 40/15/9/4 |
+| gradient boosting, B | 4.3 % | 0/2845 | 0/246 | 0 | 0 | 12/9/2/0 |
 | GBM distance (Q2), A | 91.7 % | 125/2888 → 27 with 32P/32Q | 13/299 | 201 → 153 | 1 | 100/87/95/85 |
 | GBM distance (Q2), B | 95.2 % | 40/2845 | 40/246 | 0 | 1 | 100/100/99/76 |
+
+**The sequence-trajectory CNN is the detector that survives the protection-grade setting.** At relay A
+it keeps **99.4 %** dependability with **no off-line trip in 2,888**, no switching trip in 5,474, and
+**100 % above 40 Ω** — the band where every conventional rung is at zero. On the current front end it
+reads 100.0 % with 0/2888. Under leave-one-quartile-out it gives up 3 points (96.4 %). At relay B the
+same detector is **unstable across splits**: 45.4 % under loading-bin folds against 83.6 % under
+leave-one-quartile-out, both at zero false trips. That spread is larger than either number's confidence
+interval and is the honest caveat on it: at relay B the protection-grade operating point sits where the
+CNN's score distribution is steep, so which loading bands are held out decides the answer.
+
+**Gradient boosting is the clearest casualty of the 5 % convention.** It reads 85.7 % (A) and 87.9 % (B)
+at the 5 % budget and **11.3 % and 4.3 %** at zero false trips, with 6.0 % and 0.5 % under
+leave-one-quartile-out. Nothing about it survives a protection-grade threshold; its apparent competence
+was entirely in the budget.
 
 Under leave-one-loading-quartile-out the engineered model gives up 8 points at A (74.4 %) and gains 5 at
 B (62.8 %), with 1 and 3 off-line trips: **loading transfer costs it little.** The ROC read at zero
@@ -193,6 +206,7 @@ output at A goes from 125 off-line trips to 27, and from 67 of 188 reverse-bus t
 | 32P/32Q **both ends** (POTT-equivalent) | 97.0 / 100 % | **0/2888 · 0/2845** | 0 · 0 | 5 · 18 | 3 · 7 | 85 % / 100 % |
 | 67N/67Q **both ends** | 98.8 / 100 % | 3/2888 · 0/2845 | 0 · 0 | 0 · 0 | 3 · 7 | 92 % / 100 % |
 | engineered + LR, cal0 | 82.7 / 58.0 % | 0/2888 · 1/2845 | 0 · 1 | 0 · 0 with 32P/32Q | 1 · 0 | 73 % / 14 % |
+| **CNN seq-traj, cal0** | **99.4 / 45.4 %** | **0/2888 · 0/2845** | 0 · 0 | 0 · 0 | 3 · 0 | **100 % / 38 %** |
 
 **With a channel this problem is solved.** Directional comparison between the two line ends covers
 97–100 % of the in-zone faults with no off-line trip at all, at both relays, in every R_f band. 67N/67Q
@@ -200,36 +214,57 @@ at the relay alone detects every in-zone fault and is not selective (69 % / 13 %
 which is why it is a time-delayed backup and not zone 1.
 
 The niche this project can claim on this data is therefore narrow and specific: **single-ended,
-instantaneous, channel-free zone selectivity for high-resistance faults.** A learned detector reaches
-83 % (A) and 58 % (B) of in-zone faults at zero off-line false trips with no communication, where every
-settable quadrilateral reaches 6 % and 13 %; a permissive scheme reaches 97–100 % but needs a channel at
-both ends. The claim is not that learning beats protection practice. It is that it covers part of a gap
-that single-ended zone 1 structurally cannot, and at relay B above 40 Ω it covers 14 % of faults where
-the channel-based scheme covers 100 %.
+instantaneous, channel-free zone selectivity for high-resistance faults.** At relay A the CNN reaches
+**99.4 %** of in-zone faults at zero off-line false trips with no communication, against 6 % for every
+settable quadrilateral and 97 % for the channel-based scheme that needs both line ends — so on that
+relay the single-ended learned detector is within three points of the permissive scheme without a
+channel. At relay B it reaches 45–84 % depending on the split, against 13 % for the quadrilateral and
+100 % for the channel scheme, so the gap the channel closes is real and the learned detector closes
+only part of it. The claim is not that learning beats protection practice; it is that on this data it
+covers most of a gap that single-ended zone 1 structurally cannot, at one relay, and half of it at the
+other.
 
 ### Q3. Does the per-relay threshold, or the physical distance output, transfer between relays?
 
-**With a carried zero-false-trip threshold the engineered model transfers one way and not the other; the
-physical output does not transfer at all.** B → A: engineered + LR, threshold carried, **91.1 %
-dependability with 1 off-line trip in 2,888** (AUC 0.999). A → B: the same carriage gives **43.5 % with
-3 off-line trips in 2,845** — secure, but nearly half the dependability is lost in transit. The Q2
-distance output transfers worst: A → B its ranking inverts (AUC 0.173) and it trips 2,726 of 2,845
-off-line faults, 202 even with 32P/32Q; its snapshot features are in line units, but what the regressor
-learned about them on one line does not carry to a line of different length and infeed. At the 5 %
-convention gradient boosting also fails to transfer (AUC 0.46–0.58, 73–89 % of off-line faults tripped)
-and the sequence-trajectory CNN transfers with its threshold intact (AUC 0.97–0.99, 0/2888 B → A and
-120/2845 A → B); those two rows are from the earlier run and have no protection-grade point yet.
+**Two detectors transfer with a carried zero-false-trip threshold, and two do not.** Carrying the
+threshold between relays, at cal0:
+
+| | AUC | dependability | off-line k/n |
+|---|---|---|---|
+| engineered + LR, B → A | 0.999 | **91.1 %** | 1/2888 |
+| engineered + LR, A → B | 0.988 | 43.5 % | 3/2845 |
+| CNN seq-traj, B → A | 0.970 | 56.5 % | 20/2888 |
+| CNN seq-traj, A → B | 0.991 | **89.4 %** | 58/2845 |
+| gradient boosting, B → A | 0.577 | 0.6 % | 0/2888 |
+| gradient boosting, A → B | 0.456 | 8.7 % | 238/2845 → 3 with 32P/32Q |
+| GBM distance (Q2), A → B | **0.173** | 89.9 % | **2726/2845** → 202 with 32P/32Q |
+
+The engineered model and the CNN each transfer well in one direction and poorly in the other, and the
+directions are opposite — the engineered model B → A, the CNN A → B. Gradient boosting does not
+transfer in any sense: its ranking is barely better than chance across relays (AUC 0.46–0.58), and the
+carried threshold either trips nothing or trips 238 off-line faults. The Q2 distance output is worst:
+A → B its ranking **inverts** (AUC 0.173) and it trips 2,726 of 2,845 off-line faults. Its snapshot
+features are in line units, but what the regressor learned about them on one line does not carry to a
+line of different length and infeed. **No detector here transfers in both directions**, so a per-relay
+calibration step is not optional on this data.
 
 ### Q4. Does the Q3 winner survive varied operating points and the relay front end?
 
-**On dependability yes, on security only with supervision, and its protection-grade point is not yet
-measured.** At the 5 % budget the CNN on V₁-memory-referenced sequence trajectories holds **100 %
-dependability at both relays**, in every R_f band, grounding type and loading quartile, with **46/2,888
-(1.6 %)** off-line trips at A — the best of any learned model there — and 122/2,845 at B. Unsupervised at
-B it trips 1,344 switching events; 32P/32Q cuts that to 44. Under leave-one-quartile-out its off-line
-count at A rises from 46 to 154: **loading transfer costs the CNN security, not sensitivity.** What is
-missing is what it does when the threshold is set so that it never trips off-line. That run is the one
-outstanding piece of this study.
+**Yes at relay A, with a caveat at relay B, and the protection-grade point is now measured.** At the
+5 % budget the CNN on V₁-memory-referenced sequence trajectories holds **100 % dependability at both
+relays**, in every R_f band, grounding type and loading quartile, with 46/2,888 off-line trips at A and
+122/2,845 at B. Held instead to zero off-line false trips it keeps **99.4 %** at A (100.0 % on the
+current front end) with 0/2,888, 0 switching and 3 incipient trips, and **45.4 %** at B under
+loading-bin folds against **83.6 %** under leave-one-quartile-out with 0–1 off-line trips.
+
+So the answer splits by relay. At A the CNN is the only detector in this study that is simultaneously
+protection-grade secure and nearly fully dependable, including **100 % above 40 Ω**, and it needs no
+directional supervision to get there. At B it is secure but its dependability depends on which loading
+bands are held out, which no other detector's does to that degree; the honest reading is that relay B's
+score distribution is steep at the zero-false-trip point and the split decides where the threshold
+lands. It was the open cell of REVIEW.md §6 Q3 ("not re-run on the relay front end"); the answer is
+that it holds, and that at a deployable threshold it is the best detector here, at one relay
+convincingly and at the other with a split-dependent spread that must be quoted with it.
 
 ### Q5. Does the instrument-mismatch fragility persist when training spans many operating points?
 
@@ -246,10 +281,10 @@ or method, and the answer is data.
 
 ### What the strata add
 
-- **R_f.** Every conventional rung is at 0 % above 15 Ω. The engineered model is at 78 % (A) and 54 %
-  (B) in 15–40 Ω and 73 % / 14 % above 40 Ω at zero false trips; the Q2 output is at 85 % / 76 % above
-  40 Ω but with 27–40 off-line trips. The band above 40 Ω is where single-ended zone 1 ends and where
-  the learned detectors' advantage is largest and least even between relays.
+- **R_f.** Every conventional rung is at 0 % above 15 Ω. Above 40 Ω, at zero false trips, the CNN is at
+  **100 % (A)** and 38 % (B), the engineered model at 73 % and 14 %, the Q2 output at 85 % and 76 % but
+  with 27–40 off-line trips, and gradient boosting at 4 % and 0 %. The band above 40 Ω is where
+  single-ended zone 1 ends, and it is also where the four learned detectors differ most from each other.
 - **Grounding.** T2 covers 0 % of solidly grounded in-zone faults at A (10 % resistive, 6 % resonant);
   no detector's off-line trips depend on grounding.
 - **Loading.** No detector's dependability depends on the loading quartile except gradient boosting at B
@@ -262,15 +297,18 @@ or method, and the answer is data.
 Across a 2.8× loading range, three grounding regimes and a randomised inception, the corrected
 conventional zone 1 keeps perfect security and covers 6 % (A) and 13 % (B) of in-zone faults — and those
 are exactly the faults inside the largest quadrilateral anyone could set, so the number is a property of
-the fault population, not of the settings. Held to the same zero-false-trip discipline, an
-engineered-feature model covers 83 % and 58 % with 0 and 1 off-line trips in about 2,900, keeps that
-under leave-one-loading-quartile-out, and loses the 5 %-budget overreach onto the next line that the
-benchmark's three discrete R_f values had concealed. Directional supervision, not the learning, is what
-removes switching and reverse-bus trips. A both-ends directional comparison covers 97–100 % with no
+the fault population, not of the settings. Held to the same zero-false-trip discipline, the
+sequence-trajectory CNN covers **99.4 % at relay A** with no off-line trip in 2,888 and 100 % above
+40 Ω, and 45–84 % at relay B depending on the split; the engineered-feature model covers 83 % and 58 %;
+gradient boosting collapses to 11 % and 4 %, so its 86–88 % at the 5 % budget was the budget talking.
+Every learned model loses the 5 %-budget overreach onto the next line that the benchmark's three
+discrete R_f values had concealed. Directional supervision, not the learning, is what removes switching
+and reverse-bus trips for the engineered and distance detectors; the CNN needs none. No detector
+transfers between relays in both directions. A both-ends directional comparison covers 97–100 % with no
 false trip at all, so the defensible niche is single-ended, channel-free, instantaneous selectivity for
-high-resistance faults. The instrument-mismatch fragility that looked like a property of learning is a
-property of single-operating-point data and is gone here. Gradient boosting and the CNN still need their
-protection-grade run.
+high-resistance faults — a niche the CNN fills at relay A and half fills at relay B. The
+instrument-mismatch fragility that looked like a property of learning is a property of
+single-operating-point data and is gone here.
 
 ## 5. What no EvEMTBench family can test
 
@@ -292,8 +330,8 @@ Stated plainly, because §4 will be read as more than it is:
   instant. Real permissive schemes carry a channel delay, a security timer and a loss-of-channel mode;
   none of that is in these records, so those rows are an optimistic bound on communication-assisted
   practice and cannot be used to compare against it fairly.
-- **No protection-grade point for two detectors yet** (§4), which is a gap in this study, not in the
-  data: the run exists and takes about two hours per relay.
+- **One relay, one grid, two front ends.** Relay B's split-dependent CNN result (§4 Q4) is the clearest
+  sign that two relays are not enough to settle how stable a protection-grade threshold is.
 
 What this family *does* add, and did not have before: a genuinely varying operating point, a
 randomised inception, three grounding regimes, a continuous R_f, and enough off-line and switching
