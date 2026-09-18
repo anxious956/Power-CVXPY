@@ -462,7 +462,8 @@ Setup (`q3_inputs.py`): grouped 5-fold (first repeat), own-99 % guard band, 20 m
 | 23 | Relay B "overreaches onto the next line 13 % at 10 Ω" | HOLDS WITH CAVEAT | Reproduced; 0 % with mimic + directional quadrilateral, and still 0 % with the corrected resistive reach |
 | 24 | TestGrid learned detectors fail to generalise (82 % switching, 42 % at 99 %) | WITHDRAWN (by author) | Grouped re-run: LR 26 % switching at B, 0 % supervised |
 | 25 | Noise-free records leak the label; with the chain 0.48–0.55 | HOLDS WITH CAVEAT | Reproduced; control ended 5 ms early, the look-ahead leak gives 0.86–0.97 at inception |
-| 26 | Within relay, learning beats the fixed setting (B: boosting 78 %/4 % vs 61 %/15 %) | HOLDS AT A PROTECTION-GRADE SETTING **for two of four learned models**, **narrowed by adaptgrid** | Benchmark: grouped boosting 75.0 %, 4/117; T2 corrected to 31.7 % (the old 67.8 % used an unsettable R_set). **adapt_grid** ([results/ADAPTGRID.md](results/ADAPTGRID.md) Q1–Q2): the settable T2 covers 5–10 % of in-zone faults with 0 false trips; engineered + LR and the CNN cover 99–100 % **and keep it under leave-one-loading-quartile-out** — but at their 5 % overall false-trip budget they trip **34–57 % of faults just beyond the remote bus** (0 for T2). At a threshold calibrated to **zero** off-line false trips the sequence-trajectory CNN keeps **99.4 % (A)** and 45–84 % (B, split-dependent) and the engineered model 82.7 % and 58.0 %, against T2's 5.4 % and 10.1 % — but **gradient boosting collapses to 11.3 % and 4.3 %**, so the claim holds for the detector, not for learning as such. It is also confined to faults no settable quadrilateral encloses (6 % and 14 % of in-zone faults lie inside one), and a both-ends directional comparison covers 97–100 % with no false trip at all |
+| 26 | Within relay, learning beats the fixed setting (B: boosting 78 %/4 % vs 61 %/15 %) | HOLDS AT A PROTECTION-GRADE SETTING **for two of four learned models**, **narrowed by adaptgrid** | Benchmark: grouped boosting 75.0 %, 4/117; T2 corrected to 31.7 % (the old 67.8 % used an unsettable R_set). **adapt_grid** ([results/ADAPTGRID.md](results/ADAPTGRID.md) Q1–Q2): the settable T2 covers 5–10 % of in-zone faults with 0 false trips; engineered + LR and the CNN cover 99–100 % **and keep it under leave-one-loading-quartile-out** — but at their 5 % overall false-trip budget they trip **34–57 % of faults just beyond the remote bus** (0 for T2). At a threshold calibrated to **zero** off-line false trips the sequence-trajectory CNN keeps **90.5–100 % (A)** over three seeds and two splits, median 99.4 %, with **0–22 off-line trips in 2,888** and **0 of 5,474 switching trips in every run** (≤0.055 %), and 45–84 % at B where the split is choosing the threshold and not the model; the engineered model keeps 82.7 % and 58.0 %, against T2's 5.4 % and 10.1 % — but **gradient boosting collapses to 11.3 % and 4.3 %**, so the claim holds for the detector, not for learning as such. It is also confined to faults no settable quadrilateral encloses (6 % and 14 % of in-zone faults lie inside one), and a both-ends directional comparison covers 97–100 % with no false trip at all |
+| 26b | Fault location: the learned distance output is the better locator | **WITHDRAWN as stated.** On the faults locators are specified for — bolted, R_f ≤ 1 Ω — the reactance element is within **6.9 % (A) and 5.6 % (B)** of line length and the Q2 regressor is no better at A and 2.5× worse at B. The regressor only wins above 40 Ω and at infeed above 3, where the reactance element reads a 4,006 % error and Takagi 174 % ([results/ADAPTGRID.md](results/ADAPTGRID.md) §4). Location is a solved relay function; the contribution is zone selectivity in that corner, not location accuracy |
 | 27 | Cross relay: ranking partly survives, threshold does not (13–100 %) | HOLDS, **and no detector transfers both ways** | Q2: also fails with a physical output (21–59 % beyond-bus). **adapt_grid** (ADAPTGRID.md Q3): still true for LR (32 % off-line B → A with the carried threshold) and boosting (73–89 %), and the physical output is now the *worst* transferer (AUC 0.17 A → B, 96 % off-line); and at a carried **zero-false-trip** threshold each of the two survivors transfers in one direction only, in opposite directions: engineered + LR reaches 91.1 % B → A (1/2888 off-line) but 43.5 % A → B, while the sequence-trajectory CNN reaches 89.4 % A → B (58/2845) but 56.5 % B → A. A per-relay calibration step is therefore not optional on this data |
 | 28 | Tree ensembles transfer worst | HOLDS | Physical regressor also fails; MLP regressor B → A trips 100 %. Confirmed on adapt_grid: boosting AUC 0.46–0.58 cross-relay, 73–89 % off-line trips |
 | 29 | Learned fault detector does not separate faults from switching (0.62–0.81) | DOES NOT HOLD | Label artefact: responsible label 0.90–0.99 |
@@ -632,12 +633,21 @@ Ordered by value / effort.
      bands within one grid (H23's "learned mappings do not transfer" was about a different axis). (c) The
      instrument-mismatch fragility of §6 Q1 was a single-operating-point artefact; it is gone. (d) The
      pre-fault fingerprint and the exploitable look-ahead (H25/H30) do not exist on this set (AUC 0.52–0.54).
-     (e) The Q3 CNN is **the best detector in the study at a deployable threshold**: at zero off-line
-     false trips it keeps **99.4 % dependability at relay A** (100.0 % on the current front end) with
-     0 of 2,888 off-line trips, 0 of 5,474 switching trips and **100 % above 40 Omega**, needing no
-     directional supervision to do it. At relay B the same point is split-dependent, 45.4 % under
-     loading-bin folds against 83.6 % under leave-one-quartile-out, and that spread must be quoted with
-     it. (f) Gradient boosting is the casualty of the 5 % convention: 86-88 % at the budget, **11.3 %
+     (e) The Q3 CNN is **the best detector in the study at a deployable threshold, with the spread
+     quoted**: over three seeds and two splits at relay A it keeps **90.5-100 % dependability**
+     (median 99.4 %) with **0-22 off-line trips in 2,888** and **0 of 5,474 switching trips in every
+     run** (upper bound 0.055 %, about 1 in 1,800), needing no directional supervision. In five of six
+     runs every in-zone fault outranks every off-line fault, so a threshold with zero false trips
+     always exists; what varies is whether the out-of-fold calibration finds it. The single-run "0 of
+     2,888" first reported was the favourable end of that spread and has been replaced.
+     (e2) **At relay B the zero-false-trip point is not a stable quantity.** The threshold is the
+     largest out-of-fold score among ~2,845 training negatives, and across folds it spans 3.7 to 39.2;
+     per-fold dependability tracks it monotonically, 95.1 % at the lowest threshold and 8.9 % at a high
+     one. Failures concentrate in no R_f band, fault type, loading quartile or grounding regime, and
+     the pre-fault flow direction is constant to 1.3 degrees across the whole set, so there is no
+     operating-point transfer failure to find. At **one** permitted false trip the two splits agree,
+     95.2 % and 92.8 %. Protection-grade operating points on a few thousand negatives should be
+     reported as <=k-in-N with a binomial bound, not as a zero count. (f) Gradient boosting is the casualty of the 5 % convention: 86-88 % at the budget, **11.3 %
      and 4.3 % at zero false trips**, and it does not transfer between relays at all (AUC 0.46-0.58).
    - **Changed.** The 5 % false-trip budget is a research convention and had to go. Read at a
      **protection-grade operating point** — threshold calibrated at zero false trips on the training
@@ -656,6 +666,22 @@ Ordered by value / effort.
      channel-free selectivity for high-resistance faults**, and item 1 should say so in those words. The physical distance output (item 4's design) is the
      least overreaching detector within a relay and the worst across relays; item 4 should keep the
      output and add the V₁-memory reference of the CNN input.
+   - **What Part 2's inverter result implies for this one.** The design follow-up closed the inverter's
+     negative-sequence path as IEEE 2800 requires and found that a compliant inverter **shunts a
+     negative-sequence injection by a factor of 3 to 17**, reversing the IBR-share axis of the
+     feasibility map ([results/DESIGN.md](results/DESIGN.md) §4.4). The CNN result here was measured on
+     grids where inverters are **0.14 % of short-circuit capacity**, so every fault it sees is fed by
+     synchronous machines, and its input is the V₁-memory-referenced sequence trajectory — which is
+     built on the same negative- and positive-sequence quantities that a compliant inverter reshapes.
+     The two results are therefore not independent: the mechanism that spoils the designed injection is
+     the mechanism that would move the CNN's input distribution. **Nothing here licenses the claim that
+     the CNN holds in an inverter-dominated grid.** What would have to be tested, in order: (1) the
+     same zone task on records where inverters carry a material share of the fault current, with the
+     limiter type as a declared variable, since the measured virtual-impedance angles are −0.5°,
+     +36.2° and −51.6° rather than the −90° the memory-polarised reference assumes; (2) whether the
+     V₁ memory reference itself survives, because an inverter-dominated source has no rotor to hold
+     that memory; (3) the zero-false-trip threshold re-estimated there, since this study shows that
+     threshold is the least stable part of the result even on synchronous grids.
    - **Not settled, because the data cannot.** Source strength is fixed (SIR ≤ 1.4), so the weak-system
      and CVT questions of §6 Q1 stand as before; inverters are still 0.14 % of short-circuit capacity, so
      nothing about inverter-dominated behaviour or an auxiliary signal was tested; the relay is still
