@@ -402,6 +402,63 @@ largest held-out and the largest training negative score swings by ±10 from one
 decaying learning rate, gradient clipping or averaging the last epochs' weights are the obvious remedies;
 none is applied here, because choosing one needs its own inner-fold selection.
 
+### The closest published method on this data: Hasan et al. (2026)
+
+Hasan, Chakraborty & Wang (IJEPES 181, 2026, 112007) propose the same thing this project's learned niche
+is — single-ended, channel-free zone selection for lines with inverter-based resources — with a
+hierarchical linear SVM, and report 97.2 % overall accuracy on a two-bus PSCAD system with a grid-forming
+BESS at the relay end. Their data are confidential, so their method was re-implemented and run on this
+data under this protocol: `hasan_svm.py` (protocol pre-registered in its docstring, committed before any
+result) → [`adaptgrid/hasan_svm_relayfe.json`](adaptgrid/hasan_svm_relayfe.json). Taken as published:
+their Table 2–4 features averaged over a 3-cycle buffer; stage 1 no fault / reverse / forward, stage 2
+fault type, stage 3 one zone classifier per fault class with 3rd-degree polynomial terms and the top 100
+kept; LinearSVC. Adapted, with the reason in the docstring: angles referenced to the pre-fault V₁ memory
+(the grid's initial angle is randomised over ±180°, so raw angles are noise), meshed-grid direction labels
+with pre-fault windows as the no-fault class, zone 1 = own line ≤ 85 %, and decision at 20 ms (ours) and
+50 ms (2.5 cycles, theirs).
+
+With **their own trip rule** (forward and zone-1 decision value > 0):
+
+| relay front end, their rule | dependability | off-line trips | next-line trips | switching trips |
+|---|---|---|---|---|
+| A, 20 ms (grouped / loqo) | 82.1 / 79.8 % | 22 / 28 of 2,888 | 18 / 19 of 299 | 46 / 48 of 5,474 |
+| A, 50 ms | 92.9 / 91.7 % | 7 / 12 | 6 / 6 | 1 / 1 |
+| B, 20 ms | 92.8 / 92.3 % | 10 / 9 of 2,845 | 10 / 9 of 246 | 273 / 293 (0 with 32P/32Q) |
+| B, 50 ms | 91.8 / 91.3 % | 10 / 4 | 8 / 3 | 2 / 1 |
+
+At **zero off-line false trips** (cal0, same folds and calibration as every detector here), against the
+CNN's six-draw range:
+
+| cal0, grouped / loqo | Hasan SVM, C = 1 | Hasan SVM, tuned C | CNN seq-traj (20 ms) |
+|---|---|---|---|
+| A, 20 ms | 56.0 / 42.9 % | 31.0 / 33.3 % | **94.6 – 99.4 %** |
+| A, 50 ms | 57.7 / 14.3 % | 74.4 / 66.1 % | |
+| B, 20 ms | 37.7 / 30.9 % | 30.9 / 31.9 % | **45.4 – 77.3 %** |
+| B, 50 ms | 9.2 / 11.6 % | 14.5 / 3.9 % | |
+
+(The C = 1 rows keep 0–2 off-line trips; cal0 is calibrated on training negatives, so a few test trips
+remain, as for every detector.) Four things follow.
+
+1. **With its own rule the method is dependable but not secure**: 80–93 % of in-zone faults, but 4–28
+   off-line trips per ~2,900, mostly on the next line, and at 20 ms up to 293 switching trips. That is not
+   a zone-1 operating point.
+2. **At a protection-grade threshold it falls well below the CNN** at both relays and both decision times,
+   and below the CNN's worst draw at relay B. Tuning C helps only at relay A at 50 ms (74 %).
+3. **The weak stage is direction.** Stage 1 separates forward from reverse faults with 72–82 % accuracy at
+   relay A and 87–91 % at B (their radial system: 100 %); fault type (99.5 %), no-fault on pre-fault
+   windows (≈100 %) and zone given the class (95–99 %) are fine. On a meshed grid direction is the hard
+   part, consistent with 32P/32Q's forward calls on relay A's reverse faults above.
+4. **The 3-cycle buffer makes it slow by construction**: at 20 ms two of its three cycles are pre-fault.
+   At its own 2.5 cycles it does much better with its own rule, and 2.5 cycles is slow for a transmission
+   zone 1.
+
+Also measured: the pre-fault shortcut is absent (AUC 0.51 at both relays on the buffer ending at
+inception); the threshold provenance holds (0 calibration rows or loading bins in any test fold);
+sin/cos angles raise the 20 ms AUC (0.963 against 0.901 at A) but trip up to 306 switching events; the
+installation-mismatch chain costs 12 points at A at 20 ms and nothing at 50 ms. The 'pu' variant is
+identical to the default by construction — a constant per-relay scale is absorbed by the StandardScaler —
+so it was never a different model; per-simulation normalisation, which would be, was not run.
+
 ### Fault location, and what it is not evidence for
 
 `adaptgrid_location.py` → [`adaptgrid/location_relayfe.json`](adaptgrid/location_relayfe.json).
@@ -471,7 +528,9 @@ Every learned model loses the 5 %-budget overreach onto the next line that the b
 discrete R_f values had concealed. Directional supervision, not the learning, is what removes switching
 and reverse-bus trips for the engineered and distance detectors; the CNN needs none, and trips none of
 1,387 reverse faults even when they are removed from its training. No detector
-transfers between relays in both directions. A both-ends directional comparison covers 97–100 % with no
+transfers between relays in both directions. The closest published method, Hasan et al.'s
+hierarchical linear SVM, re-implemented here, is 80–93 % dependable with its own rule but trips 4–28
+off-line faults, and at zero false trips reaches 9–58 % (74 % with tuned C at relay A, 50 ms). A both-ends directional comparison covers 97–100 % with no
 false trip at all, so the defensible niche is single-ended, channel-free, instantaneous selectivity for
 high-resistance faults — a niche the CNN fills at relay A and partly fills at relay B. The
 instrument-mismatch fragility that looked like a property of learning is a property of
