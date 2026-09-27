@@ -21,7 +21,9 @@ grid = replace(ZoneParams(), rF=0.3)
 for sd in (0, 1):
     Xtr, ytr, _ = make_zone_dataset(350, np.random.default_rng(100 + 17 * sd), 0.0, SigParams(), grid, True)
     Xte, yte, _ = make_zone_dataset(250, np.random.default_rng(999 + 31 * sd), 0.0, SigParams(), grid, True)
-    _, s_te = detect.train_cnn(Xtr, ytr, Xte, epochs=12, seed=sd)
+    # the author's original: per-waveform z-score, one net trained on all of train (detect.py's defaults changed to
+    # the H19 / H18 fixes when review-synth merged, so the original has to be asked for explicitly)
+    _, s_te = detect.train_cnn(Xtr, ytr, Xte, epochs=12, seed=sd, oof_folds=0, norm="per_waveform")
     a_orig = roc_auc_score(yte, s_te)
     mu = Xtr.mean(axis=(0, 2), keepdims=True); sdv = Xtr.std(axis=(0, 2), keepdims=True)
     # detect.train_cnn normalises per waveform internally; feed it globally scaled data AND disable that step
