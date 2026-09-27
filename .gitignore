@@ -22,3 +22,6 @@ data/
 
 # review run logs
 logs/
+
+# console output of the TAC25 runs; the results are in results/review_wp1/*.json
+/logs_*.log
