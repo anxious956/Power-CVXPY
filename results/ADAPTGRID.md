@@ -423,7 +423,7 @@ Stated plainly, because §4 will be read as more than it is:
   instant. Real permissive schemes carry a channel delay, a security timer and a loss-of-channel mode;
   none of that is in these records, so those rows are an optimistic bound on communication-assisted
   practice and cannot be used to compare against it fairly.
-- **One relay, one grid, two front ends.** Relay B's split-dependent CNN result (§4) is the clearest
+- **Two relays, one grid, two front ends.** Relay B's split-dependent CNN result (§4) is the clearest
   sign that two relays are not enough to settle how stable a protection-grade threshold is.
 - **The zero-false-trip threshold is an order statistic**, so with a few thousand negatives it carries
   real variance: at relay A the same detector trips 0 to 22 of 2,888 across six runs, and at relay B
