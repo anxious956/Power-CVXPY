@@ -1,0 +1,41 @@
+{
+ "script": "cnn_latency",
+ "commit": "6058298fbe14494bab64a58e4efea1c1c2aba354",
+ "relay": "adapt_A",
+ "frontend": "relayfe",
+ "machine": {
+  "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cores": 16,
+  "python": "3.12.10",
+  "torch": "2.5.1+cu121",
+  "gpu": "NVIDIA GeForce RTX 3050 Ti Laptop GPU"
+ },
+ "input_shape": [
+  24,
+  10
+ ],
+ "n_parameters": 5473,
+ "features_cpu": {
+  "median_us": 697.1000111661851,
+  "p95_us": 1006.2900313641876,
+  "p99_us": 1214.1380342654868,
+  "n": 300
+ },
+ "cnn_cpu_one_thread": {
+  "median_us": 87.10002293810248,
+  "p95_us": 122.10499844513834,
+  "p99_us": 183.21299809031188,
+  "n": 2000
+ },
+ "cnn_gpu": {
+  "median_us": 261.2000098451972,
+  "p95_us": 590.9349623834714,
+  "p99_us": 774.9900210183113,
+  "n": 2000
+ },
+ "total_cpu_median_us": 784.2000341042876,
+ "reference_us": {
+  "one_sample_6400Hz": 156.25,
+  "quarter_cycle_50Hz": 1250.0
+ }
+}
