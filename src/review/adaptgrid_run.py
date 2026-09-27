@@ -18,7 +18,9 @@ OPERATING POINTS. Every scored detector is read at four points, all out of fold:
          threshold is chosen on the test scores
   roc1   the same at most one off-line false trip (1/N)
 For T2 (a characteristic, no score) the same four points are taken over its setting grid. Q2's
-distance output keeps its physical threshold (d_hat < 0.85) at far5 and cal0.
+distance output keeps its physical threshold (d_hat < 0.85) at far5 and cal0. The CNN's test scores are
+the mean logit of the five inner-fold nets whose out-of-fold scores set far5 and cal0 (cnn_foldmean,
+review H18); the sklearn models score with one model fitted on all of train, as real_ml does.
 
 VARIANTS. Every operating point is reported unsupervised and with 32P/32Q directional supervision
 (ladder.directional), side by side; on the inception-anchored window ('matched') and on the window
@@ -220,12 +222,32 @@ def oof_negatives(fn, Xtr, ytr, gtr, seed):
     return s[ytr == 0]
 
 
+def cnn_foldmean(Xtr, ytr, gtr, tests, seed):
+    """The CNN's out-of-fold training-negative scores and its test scores from the SAME five inner-fold nets
+    (mean logit), as detect.train_cnn(oof_test='folds') does after review H18. The thresholds are read off
+    those nets' out-of-fold scores, and a sixth net trained on all of train has its own logit scale, so
+    carrying the threshold to it is miscalibrated: measured on adapt_grid (grouped, seeds 0 / 100), the
+    sixth net put 4 and 9 off-line faults over the zero-false-trip threshold at relay A, the fold mean 3 and 0.
+    Same folds and seeds as oof_negatives, so the thresholds are unchanged; only the test scoring is."""
+    from sklearn.model_selection import StratifiedGroupKFold
+    oof = np.zeros(len(ytr))
+    acc = [np.zeros(len(X)) for X in tests]
+    folds = list(StratifiedGroupKFold(5, shuffle=True, random_state=seed).split(Xtr, ytr, gtr))
+    for k, (a, b) in enumerate(folds):
+        out = q3.cnn_scores(Xtr[a], ytr[a], [Xtr[b]] + list(tests), seed + 100 + k)
+        oof[b] = out[0]
+        for t, sc in zip(acc, out[1:]):
+            t += np.asarray(sc, float) / len(folds)
+    return oof[ytr == 0], acc
+
+
 def fit_score(model, Ftr, ytr, gtr, tests, seed):
     """Fit on the training rows, thresholds from the out-of-fold scores of the training negatives at
-    5 % (far5) and at zero (cal0) false trips, score every test set. Returns (thr_far, thr0, [scores])."""
+    5 % (far5) and at zero (cal0) false trips, score every test set. Returns (thr_far, thr0, [scores]).
+    The CNN scores the test sets with the inner-fold nets that set the thresholds (cnn_foldmean)."""
     if model == "CNN seq-traj":
-        s_neg = oof_negatives(q3.cnn_scores, Ftr, ytr, gtr, seed)
-        return cm.thr_at_far(s_neg, FAR), float(s_neg.max()), q3.cnn_scores(Ftr, ytr, tests, seed)
+        s_neg, s_tests = cnn_foldmean(Ftr, ytr, gtr, tests, seed)
+        return cm.thr_at_far(s_neg, FAR), float(s_neg.max()), s_tests
     if model == "GBM distance (Q2)":
         from sklearn.ensemble import HistGradientBoostingRegressor
         m = HistGradientBoostingRegressor(random_state=seed).fit(Ftr, np.clip(ytr, 0, 3))

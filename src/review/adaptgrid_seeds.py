@@ -11,7 +11,8 @@ calibration folds (`oof_negatives` uses seed) and the outer split's fold assignm
 the comparison is like for like across seeds. The threshold is still the largest out-of-fold score among
 the TRAINING negatives only: the calibration never sees a test row, and because the inner folds are
 grouped by loading bin, it never sees a test operating point either. `threshold_provenance` asserts both
-of those on the actual index sets rather than claiming them.
+of those on the actual index sets rather than claiming them. The test rows are scored by the same inner-fold
+nets that set the threshold (adaptgrid_run.cnn_foldmean).
 
     python src/review/adaptgrid_seeds.py [--relay adapt_A] [--frontend relayfe] [--seeds 0 100 200]
     -> results/adaptgrid/seeds_<relay>_<frontend>_<model>.json
@@ -52,10 +53,9 @@ def run_seed(R, idx, y, groups, F, fwd, kind, seed_offset, model="CNN seq-traj")
     for f, tr, te, meta in splits(kind, R, idx, y, groups):
         s = f + seed_offset
 
-        from review.adaptgrid_run import oof_negatives
-        neg = oof_negatives(q3.cnn_scores, F[fk][idx[tr]], y[tr], groups[tr], s)
+        from review.adaptgrid_run import cnn_foldmean
+        neg, (s_te, s_h) = cnn_foldmean(F[fk][idx[tr]], y[tr], groups[tr], [F[fk][idx[te]], F[fk][hrows]], s)
         t_far, t_0 = cm.thr_at_far(neg, FAR), float(neg.max())
-        s_te, s_h = q3.cnn_scores(F[fk][idx[tr]], y[tr], [F[fk][idx[te]], F[fk][hrows]], s)
         Z[idx[te]] = s_te
         H.append(np.asarray(s_h, float))
         thr0.append(t_0); thrf.append(t_far); fold_of[idx[te]] = f
