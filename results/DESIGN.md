@@ -373,11 +373,45 @@ systematic part held at its class figure:
 κ = 12 is a per-phase ratio spread of about 24 % between phases of the same transformer, which no
 protection-class instrument shows. So within this model the design is not on its feasibility boundary
 at realistic instrument accuracy, and §4.1's claim that it is was an artefact of the isotropic box.
+(This κ scale inflates the TOTAL error band beyond the cited figure, which is a different question from
+the split sensitivity below -- it asks how much bigger the whole band would have to get, not how it is
+divided between phases, and its 24 % figure is answering a hypothetical, not describing the cited
+data.)
 
-**Two limits on that, stated.** This makes the uncertainty set smaller in exactly the directions the
-method uses, so it should be read as "the scalar-ε axis was measuring the wrong quantity", not as "the
-problem is easy". And it is still the two-bus model with the inverter's negative-sequence path open;
-§4.3 and the follow-up below are what decide whether that matters more than the instrument model does.
+**Three limits on that, stated -- the third was missing and is added now.** This makes the
+uncertainty set smaller in exactly the directions the method uses, so it should be read as "the
+scalar-ε axis was measuring the wrong quantity", not as "the problem is easy". It is still the two-bus
+model with the inverter's negative-sequence path open; §4.3 and the follow-up below are what decide
+whether that matters more than the instrument model does.
+
+**And the systematic/per-phase SPLIT (`per_phase_share = 1/3` for both VT and CT) has no citation.**
+Kasztenny 2021 §III.A-B, the only source cited for these error sizes, gives a total ratio/phase band per
+instrument under fault conditions and says nothing about how much of that total is common to an
+instrument's three phases versus differs between them. 1/3 was an assumed default, not a measured or
+published quantity -- and it is not rescued by the fact that a 1/3 weight also appears structurally in
+the symmetric-component transform used to build the per-phase generators (`seq_to_seq_phase_generators`):
+that is a fact about the transform's arithmetic, unrelated to any instrument's actual phase-to-phase
+spread, and the two 1/3s coinciding is a coincidence, not a derivation.
+
+`tac25_channels_sensitivity.py` →
+[`review_wp1/tac25_channels_sensitivity.json`](review_wp1/tac25_channels_sensitivity.json) closes the gap
+the only way available without inventing a second unsourced number: it holds the cited TOTAL band fixed
+and sweeps only the split, from share = 0 (an instrument's three phases err identically -- the most
+optimistic reading) to share = 1 (none of the error is common-mode -- the most pessimistic). Checked at
+six points across that range, at (I_max, ρ) = (2.1, 0), (2.1, 0.1) and (1.2, 0): **δ = 0 separates every
+fault case at every share, in every one of the three scenarios.** So although the split itself is not
+sourced, the headline result does not depend on it for the cited total band -- moving all the way from
+"all systematic" to "all per-phase" changes nothing.
+
+That does not settle the question the split was standing in for. There is a physical reason the true
+share could run higher than 1/3, not lower: CT saturation is driven by each phase's own flux history,
+which tracks that phase's own fault current and DC offset, and during an unbalanced fault the three
+phase currents differ substantially -- saturation-driven ratio error is inherently phase-asymmetric, not
+common-mode. The sensitivity check above already covers this (share = 1 is exactly "fully
+phase-asymmetric"), so the finding survives it. What is not covered, and is a separate open question, is
+whether the cited TOTAL band itself is right under saturation; §7 of
+[`papers/notes/E_practitioner_settings.md`](../papers/notes/E_practitioner_settings.md) already flags
+the CT phase figure as "under-modelled" for that reason, independent of anything in this section.
 
 ### 4.2 The other axes
 

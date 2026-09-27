@@ -67,8 +67,16 @@ A120 = np.exp(2j * np.pi / 3)
 _AM = np.array([[1, 1, 1], [1, A120 ** 2, A120], [1, A120, A120 ** 2]])      # [s0, s+, s-] -> [a, b, c]
 _BM = np.linalg.inv(_AM)
 
-# corrected fault-condition figures: ratio band, phase band (deg), and the share of the band that is
-# per-phase rather than common to the three phases (the rest is systematic)
+# ratio and phase_deg are the cited Kasztenny 2021 III.A-B fault-condition TOTAL bands. per_phase_share
+# is NOT cited anywhere -- it is an assumed split of that total between a common-mode (systematic) part
+# and a differential (per-phase) part, and 1/3 was picked with no derivation when this file was written.
+# It happens to equal the 1/3 weight that appears structurally in seq_to_seq_phase_generators's use of
+# the symmetric-component transform, but that is an unrelated fact about the transform's arithmetic, not
+# a measurement of any instrument's phase-to-phase spread -- the two 1/3s are a coincidence, not a
+# derivation. tac25_channels_sensitivity.py sweeps this parameter over its full range holding the cited
+# total fixed; the delta=0 result below does not depend on it (checked at share = 0, 1/3, 1/2, 2/3, 0.85,
+# 1, at i_max in {1.2, 2.1} and rho in {0, 0.1}) but a future reader changing the total bands should
+# re-run that sweep rather than assume the conclusion still holds.
 CHANNELS = dict(VT=dict(ratio=0.06, phase_deg=4.0, per_phase_share=1 / 3.0),
                 CT=dict(ratio=0.10, phase_deg=3.0, per_phase_share=1 / 3.0))
 EPS_WHITE = 0.005

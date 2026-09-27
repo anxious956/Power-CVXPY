@@ -1,0 +1,137 @@
+{
+ "script": "tac25_channels_sensitivity",
+ "commit": "16677c0a7d50dc39a5eafe269d134a471230623b",
+ "total_bands_cited": {
+  "VT": {
+   "ratio": 0.06,
+   "phase_deg": 4.0
+  },
+  "CT": {
+   "ratio": 0.1,
+   "phase_deg": 3.0
+  }
+ },
+ "shares_swept": [
+  0.0,
+  0.3333333333333333,
+  0.5,
+  0.6666666666666666,
+  0.85,
+  1.0
+ ],
+ "note": "per_phase_share has no citation anywhere in this codebase; only the TOTAL ratio/phase bands (Kasztenny 2021 section III.A-B) are cited. This sweep holds the total fixed and varies only the split.",
+ "scenarios": [
+  {
+   "i_max": 2.1,
+   "rho": 0.0,
+   "cells": [
+    {
+     "per_phase_share": 0.0,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.3333333333333333,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.5,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.6666666666666666,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.85,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 1.0,
+     "feasible": true,
+     "abs_delta": 0.0
+    }
+   ],
+   "share_at_which_delta0_first_fails": null
+  },
+  {
+   "i_max": 2.1,
+   "rho": 0.1,
+   "cells": [
+    {
+     "per_phase_share": 0.0,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.3333333333333333,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.5,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.6666666666666666,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.85,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 1.0,
+     "feasible": true,
+     "abs_delta": 0.0
+    }
+   ],
+   "share_at_which_delta0_first_fails": null
+  },
+  {
+   "i_max": 1.2,
+   "rho": 0.0,
+   "cells": [
+    {
+     "per_phase_share": 0.0,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.3333333333333333,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.5,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.6666666666666666,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 0.85,
+     "feasible": true,
+     "abs_delta": 0.0
+    },
+    {
+     "per_phase_share": 1.0,
+     "feasible": true,
+     "abs_delta": 0.0
+    }
+   ],
+   "share_at_which_delta0_first_fails": null
+  }
+ ],
+ "runtime_s": 1.1320419311523438
+}
