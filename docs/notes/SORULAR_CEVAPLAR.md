@@ -790,3 +790,50 @@ bölme kuralı değil, kararsız eğitim ile tek bir en yüksek skora bağlı e�
 
 *Kaynak: `results/ADAPTGRID.md` §4–5, `results/DESIGN.md` §4.1.1 ve §4.4, `REVIEW.md` §1 ve §10, bu
 dosyanın 6. ve 15–17. soruları.*
+
+---
+
+## 19. Kıdemli bir ML mühendisi ve bir güç/koruma mühendisi (Hasan'ın yöntemini denerken) nelere dikkat eder?
+
+### ML mühendisi
+
+| Konu | Neden önemli | Bizde durum |
+|---|---|---|
+| Sızıntı | Test bilgisi eğitime karışırsa sonuç şişer | Yük grubuna göre bölme var. Yeni risk: "arıza yok" sınıfı için arıza öncesi pencereler aynı simülasyondan; aynı simülasyonun pencereleri **aynı fold'da** kalmalı |
+| Ön işleme yalnızca eğitimde | Ölçekleyici, polinom, öznitelik seçimi | **En önemli yeni risk:** "en iyi 100 öznitelik" seçimi teste bakılarak yapılırsa sızıntı olur; her fold'da yalnızca eğitim verisiyle |
+| Hiperparametre seçimi | Teste bakarak seçilen ayar iyimserdir | C iç fold'larda seçilecek |
+| Adil karşılaştırma | Bir modele ayar yapıp diğerine yapmamak haksızlık | CNN hiç ayarlanmadı; SVM'in **varsayılan ve ayarlı** iki sürümü raporlanacak |
+| Aşamalı sistemde hata yayılması | Tip yanlışsa yanlış zone modeli çalışır | Testte **tahmin edilen** tip; uçtan uca ölçüm |
+| Eşik ve skor | SVM olasılık değil mesafe verir | Sıfır yanlış açma eşiği fold dışı skorlardan |
+| Tekrarlanabilirlik | Aynı kod aynı sonuç | `random_state` sabit; yakınsama uyarıları kontrol |
+| Önceden kayıt | Sonucu görüp ayar değiştirmek kendini kandırmak | Protokol koşmadan önce commit edilecek |
+| Belirsizlik | Tek sayı yanıltır | Güven aralığı, seed yayılımı |
+| Birim testleri | Sessiz hatalar | Açı referansı, pencere ortalaması, fold içi seçim için testler |
+
+### Güç / koruma mühendisi
+
+| Konu | Neden önemli | Bizde durum |
+|---|---|---|
+| Fazör doğruluğu | DC ofset, pencere, ilk çevrimdeki geçici rejim | Akımlarda mimic filtresi, testlerle doğrulanmış |
+| Açı referansı | Mutlak açı anlamsız; röleler polarizasyon (bellek) kullanır | Arıza öncesi V₁'e göre referans |
+| Birimler | kV/kA ile per-unit karışırsa model yükü öğrenir | Hasan mutlak büyüklük kullanıyor; yük 2.8 kat değiştiği için **per-unit sürümü** de denenecek |
+| Karar süresi | Zone 1 hızlı olmalı (iletimde tipik hedef 1–1.5 çevrim) | Hasan'ın 2–2.5 çevrimi zone 1 için yavaş; iki sürede ölçülecek, raporda yazılacak |
+| Güvenlik sınıfları | Ters yön, sonraki hat, anahtarlama, inrush, CVT | Hepsi ayrı sayılıyor |
+| Sınır davranışı | %85 sınırında fazla erişim riski | %85–100 koruma bandı ayrı raporlanıyor |
+| Arıza direnci, topraklama | Yüksek direnç en zor durum | Banda ve topraklamaya göre raporlanıyor |
+| Ölçüm trafoları | CT/VT hataları, front-end | Röle front-end'i ve cihaz uyumsuzluğu zinciri; SVM de bunlarla test edilecek |
+| Yön elemanı | Ağ şebekede yön belirsizleşir (A rölesi bulgusu) | Yön denetimli ve denetimsiz iki satır |
+| Kısayol kontrolü | Model arızayı değil işletme noktasını öğrenebilir | SVM için de arıza öncesi pencere testi (H25) |
+| Ayarlanabilirlik | İşletme bunu nasıl ayarlar ve doğrular | Doğrusal SVM'in artısı: katsayılar okunabilir |
+
+### Plana eklenenler
+1. Öznitelik seçimi ve ölçekleyici her fold'da yalnızca eğitim verisiyle.
+2. Arıza öncesi pencereler kendi simülasyonuyla aynı fold'da.
+3. Tahmin edilen tiple uçtan uca değerlendirme.
+4. SVM'in varsayılan ve ayarlı sürümleri.
+5. Büyüklükler için mutlak (Hasan) ve per-unit (uyarlama) sürümleri.
+6. Protokolün koşmadan önce commit edilmesi.
+7. SVM için kısayol testi, cihaz uyumsuzluğu testi, yön denetimli/denetimsiz satırlar.
+8. 2.5 çevrimin zone 1 için yavaş olduğunun raporda açıkça yazılması.
+
+*Kaynak: Hasan ve ark. 2026 (§4.2, §5); `results/ADAPTGRID.md` §3; `REVIEW.md` (H18, H21, H22, H25).*
