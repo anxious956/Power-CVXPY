@@ -747,3 +747,46 @@ daha fazla veriyle çözülecek bir sorun.
 *Kaynak: `src/review/q3_inputs.py` (`cnn_scores`, `pos_weight`), `src/real_ml.py` (`models`,
 `fit_balanced`), `src/review/adaptgrid_run.py` (`rates_plus`: bootstrap ve binom sınırları),
 `results/ADAPTGRID_FACTS.md`, `results/ADAPTGRID.md` §4.*
+
+---
+
+## 18. Deney istediğimiz sonuçları verdi mi? Başarılı mı, başarısız mı?
+
+**Kısa cevap:** bugünkü deney başarılı; projenin genel hedefine göre ise kısmen başarılı. Sağlam bir temel
+var, ama asıl soru henüz cevaplanmadı.
+
+### Bugünkü deney (27 Eylül 2026: deterministik yeniden koşu ve ters yön testi)
+
+| Soru | Sonuç | Değerlendirme |
+|---|---|---|
+| CNN sonuçları tekrarlanabilir mi? | Evet, aynı seed bit düzeyinde aynı sonuç | ✅ Başarılı |
+| A rölesindeki sonuç sağlam mı? | 94.6–99.4 %, en fazla 3 yanlış açma (önceden 22'ye kadar) | ✅ Başarılı, iyileşti |
+| CNN ters yön arızalarını "anlıyor" mu? | Hiç görmediği 1.387 arızanın hiçbirinde açmadı | ✅ Başarılı |
+| Overfitting var mı? | Yok | ✅ Başarılı |
+| B rölesinde güvenilir sonuç var mı? | Hayır, sıfır yanlış açmada 45–77 % arası dağınık | ❌ Başarısız, ama nedeni bulundu |
+| CNN başka röleye taşınabiliyor mu? | Hayır | ❌ Başarısız (beklenen) |
+
+Deneyin asıl amacına ulaşıldı: sayılar dürüst ve tekrarlanabilir. B'deki başarısızlık da bir bulgu: nedeni
+bölme kuralı değil, kararsız eğitim ile tek bir en yüksek skora bağlı eşik.
+
+### Projenin genel hedefleri
+
+| Hedef | Durum | Değerlendirme |
+|---|---|---|
+| Taylor'ın yöntemini doğru kurmak (CVXPY tasarım aracı) | İki baralı modelde doğru, "imkânsız" sonucu kanıtlı; 14 baralı örnek tekrarlanmadı | 🟡 Kısmen |
+| Standart invertörlerde yöntem işe yarıyor mu | IEEE 2800'e uyan invertör sinyali 3–17 kat yutuyor | 🟡 Önemli bulgu, yöntem için kötü haber |
+| ML ile klasik röle karşılaştırması (gerçek EMT verisi) | CNN, klasik rölenin göremediği yüksek dirençli arızaları sıfır yanlış açmayla yakalıyor; A'da net, B'de kararsız | 🟡 Kısmen, bir rölede net başarı |
+| Değerlendirme protokolü | Kuruldu; eski sonuçlardaki birçok hatayı yakaladı | ✅ Başarılı |
+| **Asıl soru: yardımcı sinyal invertör ağırlıklı şebekede korumayı iyileştiriyor mu?** | Uygun veri olmadığı için test edilmedi | ⬜ Henüz cevap yok |
+
+### Genel hüküm
+
+- **Başarısız değil:** yayımlanabilir, dürüst ve tekrarlanabilir sonuçlar var (değerlendirme protokolü,
+  klasik rölelerle karşılaştırma, doğru kurulmuş tasarım aracı, A rölesindeki niş, ters yön sonucu).
+- **"Başardık" demek için erken:** başlıktaki soru cevapsız; iki bulgu yöntemin aleyhine (standart
+  invertörler sinyali yutuyor; doğru hata modeliyle basit durumda sinyale gerek kalmıyor).
+- **En dürüst ifade:** "Temel sağlam, bazı yanlış iddialar erken yakalandı, bir rölede güçlü bir sonuç var.
+  Asıl soruya geçmek için doğru veri gerekiyor" (CigreMV 20 kV, Taylor'ın 14 baralı modeli).
+
+*Kaynak: `results/ADAPTGRID.md` §4–5, `results/DESIGN.md` §4.1.1 ve §4.4, `REVIEW.md` §1 ve §10, bu
+dosyanın 6. ve 15–17. soruları.*
