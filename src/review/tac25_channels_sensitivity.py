@@ -29,7 +29,16 @@ saturation-driven ratio error is not common-mode -- it is inherently phase-asymm
 is therefore not obviously conservative; if anything the physically motivated correction runs the
 opposite direction from what section 4.1.1 assumed.
 
-    python src/review/tac25_channels_sensitivity.py [--quick]
+HARD CELLS (added after review)
+-------------------------------
+The split sweep above runs on the base case only (make_params(0.08): strength x1, SIR ~2, negative-sequence
+path open). hard_cells() repeats it where section 4.2 / 4.4 of results/DESIGN.md are hardest: source
+strength x2 / x4, SG or IBR at the relay end, and the IEEE 2800 negative-sequence path closed (K2 = 2, 4, 6
+at the three measured limiter angles, matched reading, exactly as tac25_negseq.min_delta_structured_multi),
+I_max uncertain and pruned at 2.1, rho 0 / 0.1. K2 = 8 is beyond the section 4.4 range and is run only to
+show which way the boundary moves.
+
+    python src/review/tac25_channels_sensitivity.py [--quick] [--i-max X --rho Y] [--no-hard-cells]
     -> results/review_wp1/tac25_channels_sensitivity.json
 """
 import os, sys, json, time, argparse
@@ -39,6 +48,7 @@ import numpy as np
 from wp1_common import ModelSet
 import tac25_channels as tch
 from tac25_map import make_params
+from tac25_negseq import params_with_negseq, min_delta_structured_multi, LIMITER_ANGLES_DEG
 from review import common as cm
 
 OUT = os.path.join(cm.ROOT, "results", "review_wp1")
@@ -46,6 +56,11 @@ OUT = os.path.join(cm.ROOT, "results", "review_wp1")
 # the cited total bands only -- no split assumption baked in here
 TOTAL_BANDS = dict(VT=dict(ratio=0.06, phase_deg=4.0), CT=dict(ratio=0.10, phase_deg=3.0))
 SHARES = (0.0, 1 / 3, 0.5, 2 / 3, 0.85, 1.0)
+# (i_max, rho) of the base-case sweep; None = no current limit in the problem
+SCENARIOS = ((2.1, 0.0), (2.1, 0.1), (1.2, 0.0), (None, 0.0))
+HARD_STRENGTHS = (1.0, 2.0, 4.0)
+HARD_K2 = (None, 2, 4, 6, 8)          # 8 is outside the section 4.4 range
+HARD_RHO = (0.0, 0.1)
 
 
 def spec_at_share(share):
@@ -61,8 +76,7 @@ def min_delta_at_share(p, share, i_max=None, rho=0.0, r_step=0.02, n_ang=72, r_m
 def find_share_boundary(p, i_max=None, rho=0.0, r_step=0.02, n_ang=72, lo=0.0, hi=1.0, tol=0.01, max_iter=20):
     """Bisect for the smallest per_phase_share at which delta=0 no longer separates every case. Returns
     None if delta=0 separates even at share=1 (the fully differential, most pessimistic reading)."""
-    ms_at = lambda share: ModelSet(p, mode="outer")
-    ms = ms_at(1.0)
+    ms = ModelSet(p, mode="outer")
     sep_at_1 = tch.separated_structured(p, ms, 0j, spec_at_share(hi), rho=rho,
                                         limit=None if i_max is None else (p, "outer", i_max))
     if sep_at_1:
@@ -97,7 +111,50 @@ def one_scenario(quick, i_max, rho):
     return dict(i_max=i_max, rho=rho, cells=cells, share_at_which_delta0_first_fails=boundary)
 
 
-def main(quick=False, i_max=2.1, rho=0.0):
+def _models_for(local, k2, strength, eps=0.08):
+    """Matched-reading model family as tac25_negseq.main builds it: one per limiter angle, one if open."""
+    models, ps, p0 = [], [], None
+    for ang in LIMITER_ANGLES_DEG.values():
+        p = params_with_negseq(eps, local, k2, ang, strength=strength)
+        p0 = p0 or p
+        models.append(ModelSet(p, mode="outer")); ps.append(p)
+        if k2 is None:
+            break
+    return models, ps, p0
+
+
+def hard_cells(quick, i_max=2.1):
+    step, nang = (0.04, 36) if quick else (0.02, 72)
+    cells = []
+    for strength in HARD_STRENGTHS:
+        for local in ("SG", "IBR"):
+            for k2 in HARD_K2:
+                models, ps, p0 = _models_for(local, k2, strength)
+                for rho in HARD_RHO:
+                    for share in SHARES:
+                        spec = spec_at_share(share)
+                        r = min_delta_structured_multi(models, ps, p0, rho=rho, i_max=i_max, r_step=step,
+                                                       n_ang=nang, spec=spec)
+                        cell = dict(strength=strength, local=local, k2=k2, rho=rho, per_phase_share=share,
+                                    feasible=r["feasible"], abs_delta=r["abs_delta"])
+                        if r["abs_delta"] != 0.0 and k2 is not None:
+                            # which limiter angle needs the signal
+                            cell["per_angle_abs_delta"] = {
+                                lab: min_delta_structured_multi([m], [pp], pp, rho=rho, i_max=i_max,
+                                                                r_step=step, n_ang=nang, spec=spec)["abs_delta"]
+                                for lab, m, pp in zip(LIMITER_ANGLES_DEG, models, ps)}
+                            print(f"  [hard] strength x{strength:g} {local} K2={k2} rho={rho} share={share:.3f}: "
+                                  f"|delta| = {r['abs_delta']}  per angle {cell['per_angle_abs_delta']}", flush=True)
+                        cells.append(cell)
+    fails = [c for c in cells if c["abs_delta"] != 0.0]
+    in_range = [c for c in fails if c["k2"] != 8]
+    print(f"  [hard] {len(cells)} cells, delta=0 fails in {len(fails)} ({len(in_range)} with K2 <= 6)", flush=True)
+    return dict(i_max=i_max, strengths=list(HARD_STRENGTHS), k2_grid=list(HARD_K2), rho=list(HARD_RHO),
+                r_step=step, n_ang=nang, k2_outside_design_range=[8], cells=cells,
+                n_cells=len(cells), n_delta0_fails=len(fails), n_delta0_fails_k2_le_6=len(in_range))
+
+
+def main(quick=False, scenarios=SCENARIOS, with_hard=True):
     t0 = time.time()
     res = dict(script="tac25_channels_sensitivity", commit=cm.git_commit(),
                total_bands_cited=TOTAL_BANDS, shares_swept=list(SHARES),
@@ -105,8 +162,10 @@ def main(quick=False, i_max=2.1, rho=0.0):
                      "bands (Kasztenny 2021 section III.A-B) are cited. This sweep holds the total fixed and "
                      "varies only the split."),
                scenarios=[])
-    for im, rh in ((2.1, 0.0), (2.1, 0.1), (1.2, 0.0)):
+    for im, rh in scenarios:
         res["scenarios"].append(one_scenario(quick, im, rh))
+    if with_hard:
+        res["hard_cells"] = hard_cells(quick)
     res["runtime_s"] = float(time.time() - t0)
     os.makedirs(OUT, exist_ok=True)
     path = os.path.join(OUT, "tac25_channels_sensitivity.json")
@@ -118,7 +177,9 @@ def main(quick=False, i_max=2.1, rho=0.0):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
-    ap.add_argument("--i-max", type=float, default=2.1)
-    ap.add_argument("--rho", type=float, default=0.0)
+    ap.add_argument("--i-max", type=float, default=None, help="run only this base-case scenario (with --rho)")
+    ap.add_argument("--rho", type=float, default=None)
+    ap.add_argument("--no-hard-cells", action="store_true")
     a = ap.parse_args()
-    main(a.quick, a.i_max, a.rho)
+    sc = SCENARIOS if a.i_max is None and a.rho is None else ((a.i_max, a.rho or 0.0),)
+    main(a.quick, sc, not a.no_hard_cells)

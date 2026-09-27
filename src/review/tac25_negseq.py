@@ -121,9 +121,10 @@ def min_delta_multi(models, p0, eps, rho=0.0, i_max=None, crossed=False, r_step=
 
 
 def min_delta_structured_multi(models, ps, p0, rho=0.0, i_max=None, r_step=0.04, n_ang=36, r_max=2.0,
-                               mode="outer"):
+                               mode="outer", spec=None):
     """The same sweep under the STRUCTURED per-channel error set (tac25_channels), matched angles only:
-    the two corrections interact, so the combination is what decides the axis."""
+    the two corrections interact, so the combination is what decides the axis. spec=None is
+    tac25_channels.CHANNELS (per_phase_share 1/3); tac25_channels_sensitivity.py passes other splits."""
     import tac25_channels as tch
     radii = np.arange(0.0, r_max + 1e-9, r_step)
     angs = np.linspace(0, 2 * np.pi, n_ang, endpoint=False)
@@ -136,7 +137,7 @@ def min_delta_structured_multi(models, ps, p0, rho=0.0, i_max=None, r_step=0.04,
             limit = (p0, mode, head)
         for a in (angs if r > 0 else [0.0]):
             dv = r * np.exp(1j * a)
-            if all(tch.separated_structured(pp, ms, dv, rho=rho, limit=limit, mode=mode)
+            if all(tch.separated_structured(pp, ms, dv, spec, rho=rho, limit=limit, mode=mode)
                    for pp, ms in zip(ps, models)):
                 return dict(feasible=True, abs_delta=float(r), angle_deg=float(np.degrees(a)))
     return dict(feasible=False, abs_delta=None, angle_deg=None)
