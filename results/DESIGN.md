@@ -398,17 +398,30 @@ spread, and the two 1/3s coinciding is a coincidence, not a derivation.
 the only way available without inventing a second unsourced number: it holds the cited TOTAL band fixed
 and sweeps only the split, from share = 0 (an instrument's three phases err identically -- the most
 optimistic reading) to share = 1 (none of the error is common-mode -- the most pessimistic). Checked at
-six points across that range, at (I_max, ρ) = (2.1, 0), (2.1, 0.1) and (1.2, 0): **δ = 0 separates every
-fault case at every share, in every one of the three scenarios.** So although the split itself is not
-sourced, the headline result does not depend on it for the cited total band -- moving all the way from
-"all systematic" to "all per-phase" changes nothing.
+six points across that range, at (I_max, ρ) = (2.1, 0), (2.1, 0.1), (1.2, 0) and no limit: **δ = 0
+separates every fault case at every share, in every one of the four scenarios.** So in the base case
+(strength ×1, negative-sequence path open) the headline result does not depend on the split for the cited
+total band -- moving all the way from "all systematic" to "all per-phase" changes nothing.
+
+That base case is not where the method is hardest, so the same sweep was repeated at the cells of §4.2 and
+§4.4 (`hard_cells` in the same JSON): source strength ×1 / ×2 / ×4, SG or IBR at the relay end, the IEEE
+2800 negative-sequence path open or closed at K₂ = 2, 4, 6 with the three limiter angles (matched reading),
+ρ = 0 / 0.1, I_max uncertain and pruned at 2.1 -- 288 cells in the §4.4 range. **δ = 0 separates in 287 of
+them.** The exception is the corner where everything adverse meets: share = 1, ρ = 0.1, strength ×4
+(SIR ≈ 8), SG at the relay end, K₂ = 6, and only at the priority-based limiter angle (+36.2°), which needs
+**|δ| = 0.12 pu**. At ρ = 0 or at share ≤ 0.85 the same cell needs nothing. K₂ = 8, beyond the §4.4 range
+and run only to see the direction, extends the corner: 0.02–0.22 pu at share = 0.85 and 0.32–1.34 pu at
+share = 1, still only at strength ×4 with SG. So the precise statement is: **no signal is needed at any
+split in the base case and in every §4.2 / §4.4 cell but one; with a fully phase-asymmetric error, a strong
+source and a stiff compliant negative-sequence path together, a small signal is.**
 
 That does not settle the question the split was standing in for. There is a physical reason the true
 share could run higher than 1/3, not lower: CT saturation is driven by each phase's own flux history,
 which tracks that phase's own fault current and DC offset, and during an unbalanced fault the three
 phase currents differ substantially -- saturation-driven ratio error is inherently phase-asymmetric, not
-common-mode. The sensitivity check above already covers this (share = 1 is exactly "fully
-phase-asymmetric"), so the finding survives it. What is not covered, and is a separate open question, is
+common-mode. The sensitivity check above covers this (share = 1 is exactly "fully phase-asymmetric"),
+and the finding survives it everywhere except the strong-source, stiff-K₂ corner just described -- which is
+also where fault currents, and so saturation, are largest. What is not covered, and is a separate open question, is
 whether the cited TOTAL band itself is right under saturation; §7 of
 [`papers/notes/E_practitioner_settings.md`](../papers/notes/E_practitioner_settings.md) already flags
 the CT phase figure as "under-modelled" for that reason, independent of anything in this section.
@@ -509,7 +522,7 @@ axis was not merely meaningless before, it had the wrong sign.
 
 **And the two corrections of this session pull in opposite directions.** Closing the negative-sequence
 path destroys feasibility under the scalar ε box; replacing that box with the structured per-channel
-set (§4.1.1) restores it completely — δ = 0 separates at every K₂ and every limiter angle. In this
+set (§4.1.1) restores it completely — δ = 0 separates at every K₂ and every limiter angle (at the default split; at strength ×4 with a fully per-phase error, K₂ = 6 needs 0.12 pu, §4.1.1). In this
 model the instrument set is the stronger effect. Neither number should be quoted alone: "IEEE 2800
 compliance kills the auxiliary signal" is true only against an error model that was itself wrong, and
 "no signal is needed" is true only in a two-bus model at one operating point. What is solid is the
