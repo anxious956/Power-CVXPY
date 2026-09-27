@@ -62,7 +62,7 @@ from zone_detect import zone_features
 CODE = ("src/review/adaptgrid_run.py", "src/review/ladder.py", "src/review/common.py", "src/review/setting_study.py",
         "src/review/zone_cv.py", "src/review/q3_inputs.py", "src/review/q2_distance.py", "src/review/q1_instrument.py",
         "src/review/h10_trigger.py", "src/review/frontend.py", "src/real_ml.py", "src/zone_detect.py", "src/zone_model.py",
-        "src/real_zone.py")
+        "src/real_zone.py", "src/torch_det.py")
 FAR, T = 0.05, 20
 SPLITS = ("grouped", "loqo")
 MODELS = ("T1", "T2", "engineered + LR", "gradient boosting", "CNN seq-traj", "GBM distance (Q2)")
