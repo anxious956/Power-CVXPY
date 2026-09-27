@@ -1,0 +1,452 @@
+{
+ "script": "adaptgrid_directional_reverse",
+ "commit": "38803bb1f294a99223668d3575ee6ed024e063af",
+ "frontend": "relayfe",
+ "t_ms": 20,
+ "relays": {
+  "adapt_A": {
+   "by_class": {
+    "pos": {
+     "k_forward": 168,
+     "n": 168
+    },
+    "own99": {
+     "k_forward": 22,
+     "n": 22
+    },
+    "beyond": {
+     "k_forward": 645,
+     "n": 645
+    },
+    "remote_bus_faults": {
+     "k_forward": 184,
+     "n": 184
+    },
+    "parallel": {
+     "k_forward": 193,
+     "n": 214
+    },
+    "reverse_bus": {
+     "k_forward": 41,
+     "n": 188
+    },
+    "reverse_lines": {
+     "k_forward": 148,
+     "n": 199
+    },
+    "other": {
+     "k_forward": 1458,
+     "n": 1458
+    }
+   },
+   "reverse_bus": {
+    "by_rf_bin": {
+     "<5": {
+      "k_forward": 0,
+      "n": 22
+     },
+     "5-15": {
+      "k_forward": 0,
+      "n": 43
+     },
+     "15-40": {
+      "k_forward": 19,
+      "n": 92
+     },
+     ">40": {
+      "k_forward": 22,
+      "n": 31
+     }
+    },
+    "by_grounding": {
+     "solid": {
+      "k_forward": 16,
+      "n": 59
+     },
+     "resistive": {
+      "k_forward": 14,
+      "n": 68
+     },
+     "resonant": {
+      "k_forward": 11,
+      "n": 61
+     }
+    },
+    "by_rf_bin_and_grounding": {
+     "<5|solid": {
+      "k_forward": 0,
+      "n": 5
+     },
+     "<5|resistive": {
+      "k_forward": 0,
+      "n": 7
+     },
+     "<5|resonant": {
+      "k_forward": 0,
+      "n": 10
+     },
+     "5-15|solid": {
+      "k_forward": 0,
+      "n": 11
+     },
+     "5-15|resistive": {
+      "k_forward": 0,
+      "n": 20
+     },
+     "5-15|resonant": {
+      "k_forward": 0,
+      "n": 12
+     },
+     "15-40|solid": {
+      "k_forward": 5,
+      "n": 30
+     },
+     "15-40|resistive": {
+      "k_forward": 7,
+      "n": 30
+     },
+     "15-40|resonant": {
+      "k_forward": 7,
+      "n": 32
+     },
+     ">40|solid": {
+      "k_forward": 11,
+      "n": 13
+     },
+     ">40|resistive": {
+      "k_forward": 7,
+      "n": 11
+     },
+     ">40|resonant": {
+      "k_forward": 4,
+      "n": 7
+     }
+    },
+    "by_target": {
+     "MainBus1": {
+      "k_forward": 41,
+      "n": 188
+     }
+    }
+   },
+   "reverse_lines": {
+    "by_rf_bin": {
+     "<5": {
+      "k_forward": 4,
+      "n": 18
+     },
+     "5-15": {
+      "k_forward": 22,
+      "n": 39
+     },
+     "15-40": {
+      "k_forward": 76,
+      "n": 90
+     },
+     ">40": {
+      "k_forward": 46,
+      "n": 52
+     }
+    },
+    "by_grounding": {
+     "solid": {
+      "k_forward": 48,
+      "n": 63
+     },
+     "resistive": {
+      "k_forward": 43,
+      "n": 59
+     },
+     "resonant": {
+      "k_forward": 57,
+      "n": 77
+     }
+    },
+    "by_rf_bin_and_grounding": {
+     "<5|solid": {
+      "k_forward": 3,
+      "n": 7
+     },
+     "<5|resistive": {
+      "k_forward": 0,
+      "n": 5
+     },
+     "<5|resonant": {
+      "k_forward": 1,
+      "n": 6
+     },
+     "5-15|solid": {
+      "k_forward": 9,
+      "n": 14
+     },
+     "5-15|resistive": {
+      "k_forward": 5,
+      "n": 11
+     },
+     "5-15|resonant": {
+      "k_forward": 8,
+      "n": 14
+     },
+     "15-40|solid": {
+      "k_forward": 27,
+      "n": 30
+     },
+     "15-40|resistive": {
+      "k_forward": 28,
+      "n": 31
+     },
+     "15-40|resonant": {
+      "k_forward": 21,
+      "n": 29
+     },
+     ">40|solid": {
+      "k_forward": 9,
+      "n": 12
+     },
+     ">40|resistive": {
+      "k_forward": 10,
+      "n": 12
+     },
+     ">40|resonant": {
+      "k_forward": 27,
+      "n": 28
+     }
+    },
+    "by_target": {
+     "MainLn1-5": {
+      "k_forward": 148,
+      "n": 199
+     }
+    }
+   }
+  },
+  "adapt_B": {
+   "by_class": {
+    "pos": {
+     "k_forward": 207,
+     "n": 207
+    },
+    "own99": {
+     "k_forward": 25,
+     "n": 26
+    },
+    "beyond": {
+     "k_forward": 120,
+     "n": 223
+    },
+    "remote_bus_faults": {
+     "k_forward": 188,
+     "n": 207
+    },
+    "parallel": {
+     "k_forward": 0,
+     "n": 0
+    },
+    "reverse_bus": {
+     "k_forward": 0,
+     "n": 184
+    },
+    "reverse_lines": {
+     "k_forward": 0,
+     "n": 816
+    },
+    "other": {
+     "k_forward": 12,
+     "n": 1415
+    }
+   },
+   "reverse_bus": {
+    "by_rf_bin": {
+     "<5": {
+      "k_forward": 0,
+      "n": 18
+     },
+     "5-15": {
+      "k_forward": 0,
+      "n": 39
+     },
+     "15-40": {
+      "k_forward": 0,
+      "n": 85
+     },
+     ">40": {
+      "k_forward": 0,
+      "n": 42
+     }
+    },
+    "by_grounding": {
+     "solid": {
+      "k_forward": 0,
+      "n": 65
+     },
+     "resistive": {
+      "k_forward": 0,
+      "n": 56
+     },
+     "resonant": {
+      "k_forward": 0,
+      "n": 63
+     }
+    },
+    "by_rf_bin_and_grounding": {
+     "<5|solid": {
+      "k_forward": 0,
+      "n": 7
+     },
+     "<5|resistive": {
+      "k_forward": 0,
+      "n": 2
+     },
+     "<5|resonant": {
+      "k_forward": 0,
+      "n": 9
+     },
+     "5-15|solid": {
+      "k_forward": 0,
+      "n": 11
+     },
+     "5-15|resistive": {
+      "k_forward": 0,
+      "n": 13
+     },
+     "5-15|resonant": {
+      "k_forward": 0,
+      "n": 15
+     },
+     "15-40|solid": {
+      "k_forward": 0,
+      "n": 33
+     },
+     "15-40|resistive": {
+      "k_forward": 0,
+      "n": 27
+     },
+     "15-40|resonant": {
+      "k_forward": 0,
+      "n": 25
+     },
+     ">40|solid": {
+      "k_forward": 0,
+      "n": 14
+     },
+     ">40|resistive": {
+      "k_forward": 0,
+      "n": 14
+     },
+     ">40|resonant": {
+      "k_forward": 0,
+      "n": 14
+     }
+    },
+    "by_target": {
+     "MainBus2": {
+      "k_forward": 0,
+      "n": 184
+     }
+    }
+   },
+   "reverse_lines": {
+    "by_rf_bin": {
+     "<5": {
+      "k_forward": 0,
+      "n": 74
+     },
+     "5-15": {
+      "k_forward": 0,
+      "n": 168
+     },
+     "15-40": {
+      "k_forward": 0,
+      "n": 416
+     },
+     ">40": {
+      "k_forward": 0,
+      "n": 158
+     }
+    },
+    "by_grounding": {
+     "solid": {
+      "k_forward": 0,
+      "n": 289
+     },
+     "resistive": {
+      "k_forward": 0,
+      "n": 256
+     },
+     "resonant": {
+      "k_forward": 0,
+      "n": 271
+     }
+    },
+    "by_rf_bin_and_grounding": {
+     "<5|solid": {
+      "k_forward": 0,
+      "n": 23
+     },
+     "<5|resistive": {
+      "k_forward": 0,
+      "n": 27
+     },
+     "<5|resonant": {
+      "k_forward": 0,
+      "n": 24
+     },
+     "5-15|solid": {
+      "k_forward": 0,
+      "n": 59
+     },
+     "5-15|resistive": {
+      "k_forward": 0,
+      "n": 58
+     },
+     "5-15|resonant": {
+      "k_forward": 0,
+      "n": 51
+     },
+     "15-40|solid": {
+      "k_forward": 0,
+      "n": 153
+     },
+     "15-40|resistive": {
+      "k_forward": 0,
+      "n": 124
+     },
+     "15-40|resonant": {
+      "k_forward": 0,
+      "n": 139
+     },
+     ">40|solid": {
+      "k_forward": 0,
+      "n": 54
+     },
+     ">40|resistive": {
+      "k_forward": 0,
+      "n": 47
+     },
+     ">40|resonant": {
+      "k_forward": 0,
+      "n": 57
+     }
+    },
+    "by_target": {
+     "MainLn1-2A": {
+      "k_forward": 0,
+      "n": 190
+     },
+     "MainLn1-2B": {
+      "k_forward": 0,
+      "n": 214
+     },
+     "MainLn2-5": {
+      "k_forward": 0,
+      "n": 205
+     },
+     "MainLn2-6": {
+      "k_forward": 0,
+      "n": 207
+     }
+    }
+   }
+  }
+ }
+}

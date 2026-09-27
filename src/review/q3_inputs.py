@@ -26,6 +26,7 @@ from review import common as cm
 from review import ladder as ld
 from review.zone_cv import zone_task, splits
 import real_ml
+from torch_det import seed_everything, time_mean
 from zone_detect import zone_features
 
 CODE = ("src/review/q3_inputs.py", "src/review/ladder.py", "src/review/common.py", "src/review/setting_study.py",
@@ -86,14 +87,14 @@ def loop_traj(R, idx):
 
 def cnn_scores(Xtr, ytr, Xte_list, seed, epochs=40):
     import torch, torch.nn as nn
-    torch.manual_seed(seed); np.random.seed(seed)
+    seed_everything(seed); np.random.seed(seed)
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     mu = Xtr.mean(axis=(0, 2), keepdims=True); sd = Xtr.std(axis=(0, 2), keepdims=True) + 1e-9
     f = lambda X: torch.tensor((X - mu) / sd, dtype=torch.float32, device=dev)
     C = Xtr.shape[1]
     k1 = 9 if Xtr.shape[2] > 50 else 3
     model = nn.Sequential(nn.Conv1d(C, 32, k1, padding=k1 // 2), nn.ReLU(), nn.Conv1d(32, 32, k1, padding=k1 // 2), nn.ReLU(),
-                          nn.AdaptiveAvgPool1d(1), nn.Flatten(), nn.Dropout(0.2), nn.Linear(32, 1)).to(dev)
+                          time_mean(), nn.Dropout(0.2), nn.Linear(32, 1)).to(dev)
     pos = (ytr == 1).sum(); neg = (ytr == 0).sum()
     lossf = nn.BCEWithLogitsLoss(pos_weight=torch.tensor(neg / max(pos, 1), device=dev))
     opt = torch.optim.Adam(model.parameters(), lr=2e-3, weight_decay=1e-4)

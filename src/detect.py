@@ -25,6 +25,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from waveforms import (make_dataset, sequence_phasors, SigParams, CYCLE, EVENT, FAULTS)
+from torch_det import seed_everything, time_mean
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "results")
 os.makedirs(OUT, exist_ok=True)
@@ -196,7 +197,7 @@ def evaluate(scores_tr, y_tr, scores_te, y_te, far=FAR, polarity="train"):
 def _cnn_fit_predict(Xa, ya, Xbs, epochs, seed, verbose=False, bs=64, infer_bs=256):
     """Train the 1D CNN on (Xa, ya) and return its logits on each array in Xbs."""
     import torch, torch.nn as nn
-    torch.manual_seed(seed)
+    seed_everything(seed)
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     xt = torch.tensor(np.ascontiguousarray(Xa, dtype=np.float32), device=dev)
     yt = torch.tensor(ya, dtype=torch.float32, device=dev)
@@ -204,7 +205,7 @@ def _cnn_fit_predict(Xa, ya, Xbs, epochs, seed, verbose=False, bs=64, infer_bs=2
         nn.Conv1d(6, 32, 9, stride=2, padding=4), nn.BatchNorm1d(32), nn.ReLU(),
         nn.Conv1d(32, 64, 7, stride=2, padding=3), nn.BatchNorm1d(64), nn.ReLU(),
         nn.Conv1d(64, 64, 5, stride=2, padding=2), nn.BatchNorm1d(64), nn.ReLU(),
-        nn.AdaptiveAvgPool1d(1), nn.Flatten(), nn.Dropout(0.2), nn.Linear(64, 1),
+        time_mean(), nn.Dropout(0.2), nn.Linear(64, 1),
     ).to(dev)
     opt = torch.optim.Adam(model.parameters(), lr=2e-3, weight_decay=1e-4)
     lossf = nn.BCEWithLogitsLoss()

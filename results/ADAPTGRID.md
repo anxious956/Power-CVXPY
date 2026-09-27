@@ -1,6 +1,7 @@
 # adapt_grid-TestGrid110kV: does anything survive a varying operating point?
 
-17 Sep 2026. Code: `src/review/adaptgrid_run.py` (comparisons), `src/review/adaptgrid_facts.py` (fact
+17 Sep 2026; every CNN number re-run deterministically on 27 Sep 2026 (§4, "Determinism and training
+stability"). Code: `src/review/adaptgrid_run.py` (comparisons), `src/review/adaptgrid_facts.py` (fact
 sheet), `src/review/adaptgrid_tables.py` (tables). Numbers: `results/adaptgrid/<relay>_<frontend>.json`,
 [`ADAPTGRID_FACTS.json`](ADAPTGRID_FACTS.json). Tables: [`adaptgrid/TABLES.md`](adaptgrid/TABLES.md),
 generated — no number in this document is typed by hand; each is cited to a table row or a JSON key.
@@ -110,7 +111,10 @@ Fault location is continuous, so the benchmark's discrete labels do not carry ov
   `q1_instrument.draw_installation_fault`). On the benchmark this took engineered + LR from 1.9 % to
   39.7 % beyond-bus trips while the rungs stayed at 0 %.
 - **Budget, stated:** one repeat of the 5-fold split (the benchmark used two); random forest and MLP
-  dropped (the brief asked for LR, boosting and the Q3 CNN); 40 CNN epochs. Two processes, one relay
+  dropped (the brief asked for LR, boosting and the Q3 CNN); 40 CNN epochs. Since 27 Sep 2026 the CNN runs
+  with deterministic torch (`src/torch_det.py`) and its test rows are scored by the mean of the five
+  inner-fold nets that set its threshold (`adaptgrid_run.cnn_foldmean`, review H18), so one seed gives one
+  result. Two processes, one relay
   each, eight threads per process.
 
 ## 4. Results — the five questions
@@ -147,7 +151,7 @@ the same zero-false-trip discipline, are **T1 3.0 % / 0.0 %** and **T2 5.4 % / 1
 
 ### Q2. Does any learned model keep an advantage when calibration and test do not share an operating point, at a protection-grade setting?
 
-**Yes at relay A, halved at relay B, and what survives is concentrated below 40 Ω.** At zero false trips
+**Yes at relay A, partly and unstably at relay B, and what survives at B is concentrated below 40 Ω.** At zero false trips
 on the training negatives:
 
 | relay front end, 20 ms, cal0 | dependability | off-line k/n | next-line k/n | switching | incipient | dep. <5 / 5–15 / 15–40 / >40 Ω |
@@ -156,21 +160,22 @@ on the training negatives:
 | T1, A / B | 3.0 % / 0.0 % | 2/2888 · 1/2845 | 0/299 · 0/246 | 0 · 0 | 0 · 0 | 0/3/4/0 · 0/0/0/0 |
 | engineered + LR, A | **82.7 %** [76, 89] | **0/2888** | **0/299** | 0/5474 | 1/1187 | 80/100/78/73 |
 | engineered + LR, B | **58.0 %** [51, 64] | 1/2845 | 1/246 | 56 → **0** with 32P/32Q | 16 → **0** | 92/83/54/**14** |
-| **CNN seq-traj, A** | **99.4 %** [98, 100] | **0/2888** | **0/299** | 0/5474 | 3/1187 | **100/100/99/100** |
-| **CNN seq-traj, B** | 45.4 % (83.6 % under loqo) | 0/2845 | 0/246 | 0 | 0 | 54/62/38/38 |
+| **CNN seq-traj, A** | **99.4 %** [98, 100] | 3/2888 | 3/299 | 0/5474 | 3/1187 | **100/100/99/100** |
+| **CNN seq-traj, B** | 70.0 % [58, 82] (45.4 % under loqo) | 0/2845 | 0/246 | 0 | 0 | 85/81/66/57 |
 | gradient boosting, A | 11.3 % | 0/2888 | 0/299 | 0 | 0 | 40/15/9/4 |
 | gradient boosting, B | 4.3 % | 0/2845 | 0/246 | 0 | 0 | 12/9/2/0 |
 | GBM distance (Q2), A | 91.7 % | 125/2888 → 27 with 32P/32Q | 13/299 | 201 → 153 | 1 | 100/87/95/85 |
 | GBM distance (Q2), B | 95.2 % | 40/2845 | 40/246 | 0 | 1 | 100/100/99/76 |
 
 **The sequence-trajectory CNN is the detector that survives the protection-grade setting.** At relay A
-it keeps **99.4 %** dependability with **no off-line trip in 2,888**, no switching trip in 5,474, and
-**100 % above 40 Ω** — the band where every conventional rung is at zero. On the current front end it
-reads 100.0 % with 0/2888. Under leave-one-quartile-out it gives up 3 points (96.4 %). At relay B the
-same detector is **unstable across splits**: 45.4 % under loading-bin folds against 83.6 % under
-leave-one-quartile-out, both at zero false trips. That spread is larger than either number's confidence
-interval and is the honest caveat on it: at relay B the protection-grade operating point sits where the
-CNN's score distribution is steep, so which loading bands are held out decides the answer.
+it keeps **99.4 %** dependability with 3 off-line trips in 2,888 — all three on the next line, forward
+faults just beyond the remote bus — no switching trip in 5,474, and **100 % above 40 Ω**, the band where
+every conventional rung is at zero. Under leave-one-quartile-out it reads 98.2 % with 0/2888, and on the
+current front end 94.0 % (0/2888) and 100.0 % (1/2888). At relay B the same detector is **not stable at
+zero false trips**: 70.0 % under loading-bin folds and 45.4 % under leave-one-quartile-out in this run,
+and 45–77 % over three seeds and both splits (Q4). The published single run had the two splits the
+other way round (45.4 % against 83.6 %), which is the clearest evidence that the spread is the
+threshold's variance and not something the split does to the model ("Why relay B's answer moves").
 
 **Gradient boosting is the clearest casualty of the 5 % convention.** It reads 85.7 % (A) and 87.9 % (B)
 at the 5 % budget and **11.3 % and 4.3 %** at zero false trips, with 6.0 % and 0.5 % under
@@ -206,7 +211,7 @@ output at A goes from 125 off-line trips to 27, and from 67 of 188 reverse-bus t
 | 32P/32Q **both ends** (POTT-equivalent) | 97.0 / 100 % | **0/2888 · 0/2845** | 0 · 0 | 5 · 18 | 3 · 7 | 85 % / 100 % |
 | 67N/67Q **both ends** | 98.8 / 100 % | 3/2888 · 0/2845 | 0 · 0 | 0 · 0 | 3 · 7 | 92 % / 100 % |
 | engineered + LR, cal0 | 82.7 / 58.0 % | 0/2888 · 1/2845 | 0 · 1 | 0 · 0 with 32P/32Q | 1 · 0 | 73 % / 14 % |
-| **CNN seq-traj, cal0** | **99.4 / 45.4 %** | **0/2888 · 0/2845** | 0 · 0 | 0 · 0 | 3 · 0 | **100 % / 38 %** |
+| **CNN seq-traj, cal0** | **99.4 / 70.0 %** | 3/2888 · 0/2845 | 3 · 0 | 0 · 0 | 3 · 0 | **100 % / 57 %** |
 
 **With a channel this problem is solved.** Directional comparison between the two line ends covers
 97–100 % of the in-zone faults with no off-line trip at all, at both relays, in every R_f band. 67N/67Q
@@ -215,10 +220,11 @@ which is why it is a time-delayed backup and not zone 1.
 
 The niche this project can claim on this data is therefore narrow and specific: **single-ended,
 instantaneous, channel-free zone selectivity for high-resistance faults.** At relay A the CNN reaches
-**99.4 %** of in-zone faults at zero off-line false trips with no communication, against 6 % for every
-settable quadrilateral and 97 % for the channel-based scheme that needs both line ends — so on that
-relay the single-ended learned detector is within three points of the permissive scheme without a
-channel. At relay B it reaches 45–84 % depending on the split, against 13 % for the quadrilateral and
+**94.6–99.4 %** of in-zone faults over six calibrated runs, with 0–3 off-line false trips in 2,888 and
+no communication, against 6 % for every settable quadrilateral and 97 % for the channel-based scheme
+that needs both line ends — so on that relay the single-ended learned detector matches the permissive
+scheme without a channel. At relay B it reaches 45–77 % at zero false trips, depending on the training
+draw, and 90–98 % if one off-line trip in 2,845 is allowed, against 13 % for the quadrilateral and
 100 % for the channel scheme, so the gap the channel closes is real and the learned detector closes
 only part of it. The claim is not that learning beats protection practice; it is that on this data it
 covers most of a gap that single-ended zone 1 structurally cannot, at one relay, and half of it at the
@@ -226,21 +232,22 @@ other.
 
 ### Q3. Does the per-relay threshold, or the physical distance output, transfer between relays?
 
-**Two detectors transfer with a carried zero-false-trip threshold, and two do not.** Carrying the
+**No detector transfers in both directions with a carried zero-false-trip threshold.** Carrying the
 threshold between relays, at cal0:
 
 | | AUC | dependability | off-line k/n |
 |---|---|---|---|
 | engineered + LR, B → A | 0.999 | **91.1 %** | 1/2888 |
 | engineered + LR, A → B | 0.988 | 43.5 % | 3/2845 |
-| CNN seq-traj, B → A | 0.970 | 56.5 % | 20/2888 |
-| CNN seq-traj, A → B | 0.991 | **89.4 %** | 58/2845 |
+| CNN seq-traj, B → A | 0.986 | 63.7 % | **0/2888** |
+| CNN seq-traj, A → B | 0.994 | **99.0 %** | 105/2845 |
 | gradient boosting, B → A | 0.577 | 0.6 % | 0/2888 |
 | gradient boosting, A → B | 0.456 | 8.7 % | 238/2845 → 3 with 32P/32Q |
 | GBM distance (Q2), A → B | **0.173** | 89.9 % | **2726/2845** → 202 with 32P/32Q |
 
-The engineered model and the CNN each transfer well in one direction and poorly in the other, and the
-directions are opposite — the engineered model B → A, the CNN A → B. Gradient boosting does not
+The engineered model transfers B → A (91.1 % with one trip) and not A → B. The CNN ranks well across
+relays (AUC 0.986–0.994) but its threshold does not carry: B → A it stays safe (0 trips) at 63.7 %, and
+A → B it keeps 99.0 % at the price of 105 off-line trips. Gradient boosting does not
 transfer in any sense: its ranking is barely better than chance across relays (AUC 0.46–0.58), and the
 carried threshold either trips nothing or trips 238 off-line faults. The Q2 distance output is worst:
 A → B its ranking **inverts** (AUC 0.173) and it trips 2,726 of 2,845 off-line faults. Its snapshot
@@ -253,44 +260,44 @@ calibration step is not optional on this data.
 **Yes at relay A, with a caveat at relay B — and the single-run figures had to be repeated before they
 could be quoted.** At the 5 % budget the CNN on V₁-memory-referenced sequence trajectories holds
 **100 % dependability at both relays**, in every R_f band, grounding type and loading quartile, with
-46/2,888 off-line trips at A and 122/2,845 at B.
+96/2,888 off-line trips at A and 147/2,845 at B (and 1,143 of 5,474 switching events at B).
 
-Held instead to zero training false trips, the one run reported above reads 99.4 % at relay A with
-0 of 2,888 off-line trips. **That is a zero count, not a zero rate, and it is one training draw.**
-Repeating it over three seeds and both splits (`adaptgrid_seeds.py`, six runs in all):
+Held instead to zero training false trips, one run is one training draw, and a zero count on 2,888 is
+only as strong as that draw. The seed study (`adaptgrid_seeds.py`, three seeds × two splits per relay)
+was therefore re-run with deterministic torch and fold-mean test scoring on 27 Sep 2026. It replaces the
+published single-net figures (relay A 90.5–100 % with 0–22 off-line trips; relay B one run per split):
 
-| relay A, relayfe, cal0 | grouped, 3 seeds | loqo, 3 seeds | all six |
+| relay front end, cal0 | grouped, 3 seeds | loqo, 3 seeds | all six |
 |---|---|---|---|
-| dependability | 99.4 / 100.0 / 90.5 % | 100.0 / 97.6 / 99.4 % | **90.5 – 100 %**, median 99.4 |
-| off-line trips of 2,888 | 3 / 2 / 22 | 0 / 0 / 0 | **0 – 22** (≤1.09 % at worst) |
-| switching trips of 5,474 | 0 / 0 / 0 | 0 / 0 / 0 | **0 in every run**, ≤0.055 % |
-| incipient trips of 1,187 | 3 / 4 / 1 | 1 / 3 / 3 | 1 – 4 |
-| dependability at a threshold above every test negative (roc0) | 100 / 100 / 98.8 % | 100 / 100 / 99.4 % | 98.8 – 100 % |
+| **A** dependability | 99.4 / 94.6 / 98.2 % | 98.2 / 98.8 / 99.4 % | **94.6 – 99.4 %**, median 98.5 |
+| **A** off-line trips of 2,888 | 3 / 0 / 0 | 0 / 0 / 0 | **0 – 3** |
+| **A** roc0 (threshold above every test negative) | 100 / 100 / 100 % | 100 / 99.4 / 100 % | 99.4 – 100 % |
+| **B** dependability | 70.0 / 77.3 / 61.4 % | 45.4 / 64.3 / 71.0 % | **45.4 – 77.3 %**, median 67.2 |
+| **B** off-line trips of 2,845 | 0 / 0 / 0 | 0 / 0 / 0 | **0 in every run** |
+| **B** roc1 (≤1 off-line trip in 2,845) | 90.3 / 97.6 / 96.6 % | 93.7 / 94.2 / 94.7 % | **90.3 – 97.6 %** |
+| switching trips of 5,474, either relay | 0 in every run | 0 in every run | ≤0.055 % |
 
-Three things follow, and the first two weaken the headline.
-
-1. **The off-line zero is not reproducible.** One of six runs trips 22 of 2,888 (0.76 %, upper bound
-   1.09 %) and two others trip 2 and 3. The defensible claim is 0–22 in 2,888, not zero. The variation
-   is between training draws at the same seed offsets as well as across them, so part of it is
-   thread-level non-determinism in the network, not just the seed.
-2. **Dependability moves with it**, 90.5 % to 100 %, and the worst draw is the one that also trips
-   most. Quoting 99.4 % alone is quoting the median of six as if it were the estimate.
-3. **What is robust is the ranking and the switching security.** In five of six runs *every* in-zone
-   fault outranks *every* off-line fault (roc0 = 100 %), and the worst run reaches 98.8 %; and no run
-   trips a single one of 5,474 switching events, an upper bound of 0.055 %, or 1 in 1,800. So a
-   threshold with zero off-line false trips and near-full dependability **exists** in every run; what
-   varies is whether the out-of-fold calibration finds it.
+1. **At relay A the zero-false-trip point is now tight.** Scoring the test rows with the nets that set
+   the threshold removed the worst draw: the 22-trip run of the single-net protocol does not recur, the
+   largest count is 3 (all on the next line), and dependability stays within 5 points. In every run a
+   threshold with zero off-line trips and ≥ 99.4 % dependability exists (roc0).
+2. **At relay B it is not.** Six draws span 45–77 %, all with zero off-line trips, while one permitted
+   trip lifts every draw to 90–98 %. The zero-count operating point at B is a property of which single
+   off-line fault the calibration happens to score highest, not of the detector.
+3. **Why the draws differ is now known**: the network's training trajectory is unstable ("Determinism and
+   training stability" below), and the threshold, an extreme-value statistic, turns that into
+   dependability.
 
 The calibration was also checked rather than asserted: `threshold_provenance` compares the actual index
 sets and finds **0 calibration rows and 0 calibration loading bins inside any test fold**, for both
-splits. The threshold never saw a test case or a test operating point.
+splits and both relays. The threshold never saw a test case or a test operating point.
 
-At relay B the same operating point is split-dependent, 45.4 % against 83.6 %, and the next section
-takes that apart. It was the open cell of REVIEW.md §6 Q3 ("not re-run on the relay front end"); the
-answer is that it holds at relay A with the spread above, and that at relay B the zero-false-trip point
-is not a stable quantity at all.
+At relay B the published single run read 45.4 % (grouped) against 83.6 % (loqo); the deterministic
+re-run of the same seed reads 70.0 % against 45.4 %, the other way round. The next section takes that
+apart. It was the open cell of REVIEW.md §6 Q3 ("not re-run on the relay front end"); the answer is that
+it holds at relay A, and that at relay B the zero-false-trip point is not a stable quantity at all.
 
-### Why relay B's answer depends on the split
+### Why relay B's answer moves
 
 `adaptgrid_splitdiag.py` → [`adaptgrid/splitdiag_adapt_B_relayfe.json`](adaptgrid/splitdiag_adapt_B_relayfe.json).
 Nothing is refitted: the driver stores every fold's out-of-fold score and threshold, so the operating
@@ -302,18 +309,24 @@ off-line faults. Per fold, at relay B:
 
 | | threshold range across folds | dependability per fold |
 |---|---|---|
-| grouped (10 folds) | **3.7 – 39.2** | 95.1 % at 3.7, 87.2 % at 8.4, 21.7 % at 22.0, 19.4 % at 39.2, 8.9 % at 21.3 |
-| loqo (4 folds) | 5.8 – 14.7 | 76.4 – 90.2 % |
+| grouped (10 folds) | **4.1 – 17.6** | 92.7 % at 4.1, 94.9 % at 6.4, 76.1 % at 7.9, 61.1 % at 14.2, 28.9 % at 17.6 |
+| loqo (4 folds) | 13.2 – 17.2 | 26.5 – 57.4 % |
 
-Dependability tracks the threshold monotonically and nothing else: the fold with the lowest threshold
-returns 95 %, the fold with the highest returns 19 %. At relay A the same thresholds span −3.0 to 1.1
-and every fold returns 97.6–100 %, because there the positives sit far above the negatives and a
-threshold swing costs nothing. At relay B they sit among them.
+(Per-fold dependability for the grouped split is given for the five folds of the second repeat, whose
+scores the driver keeps.)
 
-**The failures are not concentrated anywhere.** Under the grouped split, dependability by R_f band is
-54 / 62 / 38 / 38 %, by fault type 33–55 %, by loading quartile 31–59 %, by grounding 41–51 %; under
-loqo every one of those is about twenty points higher. The whole distribution shifts. No band, type or
-grounding regime is failing on its own, which is what a genuine transfer failure would look like.
+Dependability tracks the threshold and little else: the folds with the lowest thresholds return 93–95 %,
+the fold with the highest returns 29 %, and under loqo, where this draw put all four thresholds between
+13 and 17, every fold is below 58 %. At relay A the thresholds span −3.2 to 23.7 and every fold still
+returns 92.5–100 %, because there the positives sit far above the negatives and a threshold swing costs
+little. At relay B they sit among them.
+
+**The failures are not concentrated in one place.** Under the grouped split (this draw), dependability
+by R_f band is 85 / 81 / 66 / 57 %, by fault type 47–80 %, by loading quartile 58–81 %, by grounding
+63–75 %; under loqo every one of those is 20–40 points lower. The whole distribution shifts. The
+high-R_f and three-phase faults sit closest to the threshold, so they are lost first when it rises
+(above 40 Ω: 57 % grouped, 16 % loqo), but no band, type or grounding regime fails on its own, which is
+what a genuine transfer failure would look like.
 
 **The pre-fault flow direction hypothesis is refuted by measurement.** Relay B imports at a median
 **−162.7°** with a 5th-to-95th percentile range of **−163.3° to −162.0°** — a 1.3° spread over the
@@ -323,12 +336,71 @@ What does set the threshold is visible in the top-scoring negatives: bolted remo
 0.2–1.0 Ω, which are electrically the closest thing to an in-zone fault that exists in the data.
 
 **Which split is honest to quote: neither, at that operating point.** Both are estimates of an order
-statistic and both are noisy — note that the pooled-ROC read goes the other way, 85.5 % grouped against
-27.1 % loqo, because there a single high-scoring negative decides the answer instead. One permitted
-false trip removes the problem: at ≤1 off-line trip in 2,845 (upper bound 0.167 %, about 1 in 600) the
-two splits agree at **95.2 % and 92.8 %**. The honest report for relay B is therefore the ≤1-in-N
+statistic and both are noisy. The deterministic re-run shows it directly: the same seed now puts grouped
+above loqo (70.0 % against 45.4 %), the reverse of the published run, and the pooled-ROC read is 75.4 %
+against 78.7 %. One permitted false trip removes the problem: at ≤1 off-line trip in 2,845 (upper bound
+0.167 %, about 1 in 600) this run's splits agree at **90.3 % and 93.7 %**, and all six seed-study draws
+lie in 90–98 %. The honest report for relay B is therefore the ≤1-in-N
 operating point with its binomial bound, and the zero-count point quoted as the fold spread it is. That
 is a finding about how protection-grade operating points should be estimated, not only about this relay.
+
+### Reverse faults held out of training
+
+On the benchmark the training negatives were the remote bus and the first 20 % of the next line, so a
+reverse fault was a class the learned models had never seen. Here the negatives are every off-line short
+circuit (`common.py`: `neg = shc & ~own`), so relay-bus and behind-the-relay faults are trained and
+calibrated on, and "the CNN needs no directional supervision" is weaker evidence than it was on the
+benchmark. `adaptgrid_reverse_heldout.py` →
+[`adaptgrid/reverse_heldout_relayfe_cnn.json`](adaptgrid/reverse_heldout_relayfe_cnn.json) runs the CNN
+twice with identical code, seed 0 and splits: as published, and with reverse faults removed from
+training and calibration and scored as a held class.
+
+| cal0, relay front end | A grouped | A loqo | B grouped | B loqo |
+|---|---|---|---|---|
+| dependability, reverse in training → held out | 99.4 → 100.0 % | 98.2 → 98.2 % | 70.0 → 52.7 % | 45.4 → 79.7 % |
+| relay-bus faults tripped, held out | 0/188 | 0/188 | 0/184 | 0/184 |
+| behind-the-relay faults tripped, held out | 0/199 | 0/199 | 0/816 | 0/816 |
+| off-line trips, held out | 0/2888 | 0/2888 | 0/2845 | 1/2845 |
+
+**Never shown a reverse fault, the CNN trips none of 1,387**, in every cell (upper bounds 1.6 % for
+either relay-bus class, 0.37 % for relay B's lines behind). The in-training rows reproduce the
+`adaptgrid_run` numbers exactly, a determinism check across two scripts; the dependability changes at B
+are the threshold variance of Q4, not an effect of the training set.
+
+It matters because the directional element is not the reverse-fault blocker the ladder results suggest
+at relay A. `adaptgrid_directional_reverse.py` →
+[`adaptgrid/directional_reverse_relayfe.json`](adaptgrid/directional_reverse_relayfe.json): 32P/32Q
+declares **41 of 188 relay-bus faults and 148 of 199 faults on the line behind (MainLn1-5) forward** at
+relay A, against 0 of 1,000 at relay B. The relay-bus misdirections are all at R_f ≥ 15 Ω (0 of 65 below
+15 Ω, 19 of 92 at 15–40 Ω, 22 of 31 above 40 Ω), and the behind-line ones rise with R_f the same way (26
+of 57 below 15 Ω, 122 of 142 above). A ring through buses 1–2–5 may carry part of the behind-line fault
+current forward through the protected line; that is not verified case by case. Supervision still removes
+every reverse trip the engineered and distance detectors make, because they do not trip the high-R_f
+reverse faults 32P/32Q misreads; it would not protect a detector that did.
+
+### Determinism and training stability
+
+Until 27 Sep 2026 the CNN numbers in this document were single GPU draws: cuDNN's default convolution
+backward and adaptive pooling's CUDA backward are non-deterministic, so a fixed seed did not fix the
+result, and the zero-false-trip threshold amplified the difference (relay A loqo seed 0: 100 % published,
+95.2 % on a repeat). Every CNN number above now comes from `src/review/rerun_cnn_deterministic.bat`, with
+`src/torch_det.py` (bit-identical repeats, checked on a smoke run and across `adaptgrid_run` and
+`adaptgrid_reverse_heldout`) and with the test rows scored by the five inner-fold nets that set the
+threshold (`cnn_foldmean`; the earlier protocol scored them with a sixth net trained on all of train,
+whose logit scale differs — review H18). Every non-CNN row reproduced exactly.
+
+`cnn_learning_curve.py` →
+[`adaptgrid/learning_curve_relayfe_cnn.json`](adaptgrid/learning_curve_relayfe_cnn.json) and
+[`.png`](adaptgrid/learning_curve_relayfe_cnn.png) trains the same network for 120 epochs on three
+grouped folds per relay and records training and held-out loss every epoch (the replica equals the
+published network bit for bit at 40 epochs in all six folds). **There is no overfitting at 40 epochs**:
+held-out loss falls with training loss and is lowest at epochs 71–120. **The optimisation is unstable**:
+both losses jump by one to three decades every few epochs (Adam at 2e-3, batch 32, pos_weight 14–17);
+at relay B held-out loss plateaus near 1e-2 while training loss reaches 1e-4, and the gap between the
+largest held-out and the largest training negative score swings by ±10 from one epoch to the next. The
+40-epoch network is a draw from that trajectory, which is where relay B's spread comes from. A lower or
+decaying learning rate, gradient clipping or averaging the last epochs' weights are the obvious remedies;
+none is applied here, because choosing one needs its own inner-fold selection.
 
 ### Fault location, and what it is not evidence for
 
@@ -364,8 +436,8 @@ measured a second way.
 engineered + LR from 1.9 % to **39.7 %** beyond-bus trips on the benchmark — changes almost nothing
 here. At cal0, engineered + LR at A goes 82.7 % → **81.5 %** dependability with 0 off-line trips either
 way; at B, 58.0 % → 59.9 % with 1 → 0. T2 moves 5.4 → 7.7 % (A) and 10.1 → 10.6 % (B) with 0 off-line
-trips throughout. At the 5 % convention the CNN moves from 46 to 68 off-line trips at A and gradient
-boosting stays inside its band. **The 39.7 % was a single-operating-point artefact**: where every
+trips throughout. The CNN at A keeps 100 % at cal0 with 1 and 0 off-line trips (grouped, loqo); at the
+5 % convention it moves from 96 to 105 off-line trips, and gradient boosting stays inside its band. **The 39.7 % was a single-operating-point artefact**: where every
 simulation shares one pre-fault state a model learns that state, and a 5–10 % ratio error on it looks
 like a different operating point. When training already spans 210–596 MW a ratio error is inside the
 distribution the model has seen. This is the sharpest available test of whether that fragility was data
@@ -374,7 +446,7 @@ or method, and the answer is data.
 ### What the strata add
 
 - **R_f.** Every conventional rung is at 0 % above 15 Ω. Above 40 Ω, at zero false trips, the CNN is at
-  **100 % (A)** and 38 % (B), the engineered model at 73 % and 14 %, the Q2 output at 85 % and 76 % but
+  **100 % (A)** and 57 % (B; 16 % under loqo), the engineered model at 73 % and 14 %, the Q2 output at 85 % and 76 % but
   with 27–40 off-line trips, and gradient boosting at 4 % and 0 %. The band above 40 Ω is where
   single-ended zone 1 ends, and it is also where the four learned detectors differ most from each other.
 - **Grounding.** T2 covers 0 % of solidly grounded in-zone faults at A (10 % resistive, 6 % resonant);
@@ -390,16 +462,18 @@ Across a 2.8× loading range, three grounding regimes and a randomised inception
 conventional zone 1 keeps perfect security and covers 6 % (A) and 13 % (B) of in-zone faults — and those
 are exactly the faults inside the largest quadrilateral anyone could set, so the number is a property of
 the fault population, not of the settings. Held to the same zero-false-trip discipline, the
-sequence-trajectory CNN covers **90.5–100 % at relay A across three seeds and two splits** (median
-99.4 %) with 0–22 off-line trips in 2,888 and no switching trip in 5,474 in any run, and 45–84 % at
-relay B depending on the split, where the split is choosing the threshold rather than the model; the engineered-feature model covers 83 % and 58 %;
+sequence-trajectory CNN covers **94.6–99.4 % at relay A across three seeds and two splits** (median
+98.5 %) with 0–3 off-line trips in 2,888 and no switching trip in 5,474 in any run, and 45–77 % at
+relay B, where the training draw decides which off-line fault sets the threshold (90–98 % if one trip in
+2,845 is allowed); the engineered-feature model covers 83 % and 58 %;
 gradient boosting collapses to 11 % and 4 %, so its 86–88 % at the 5 % budget was the budget talking.
 Every learned model loses the 5 %-budget overreach onto the next line that the benchmark's three
 discrete R_f values had concealed. Directional supervision, not the learning, is what removes switching
-and reverse-bus trips for the engineered and distance detectors; the CNN needs none. No detector
+and reverse-bus trips for the engineered and distance detectors; the CNN needs none, and trips none of
+1,387 reverse faults even when they are removed from its training. No detector
 transfers between relays in both directions. A both-ends directional comparison covers 97–100 % with no
 false trip at all, so the defensible niche is single-ended, channel-free, instantaneous selectivity for
-high-resistance faults — a niche the CNN fills at relay A and half fills at relay B. The
+high-resistance faults — a niche the CNN fills at relay A and partly fills at relay B. The
 instrument-mismatch fragility that looked like a property of learning is a property of
 single-operating-point data and is gone here.
 
@@ -423,11 +497,11 @@ Stated plainly, because §4 will be read as more than it is:
   instant. Real permissive schemes carry a channel delay, a security timer and a loss-of-channel mode;
   none of that is in these records, so those rows are an optimistic bound on communication-assisted
   practice and cannot be used to compare against it fairly.
-- **One relay, one grid, two front ends.** Relay B's split-dependent CNN result (§4) is the clearest
+- **Two relays, one grid, two front ends.** Relay B's unstable zero-false-trip CNN result (§4) is the clearest
   sign that two relays are not enough to settle how stable a protection-grade threshold is.
 - **The zero-false-trip threshold is an order statistic**, so with a few thousand negatives it carries
-  real variance: at relay A the same detector trips 0 to 22 of 2,888 across six runs, and at relay B
-  the fold thresholds span a factor of ten. Any protection-grade number in this document is an estimate
+  real variance: at relay B six draws of the same detector span 45–77 % at zero off-line trips, and
+  one draw's fold thresholds span a factor of four (4.1–17.6). Any protection-grade number in this document is an estimate
   of a quantity that needs either far more negatives or a ≤k-in-N formulation to be stable.
 
 What this family *does* add, and did not have before: a genuinely varying operating point, a
