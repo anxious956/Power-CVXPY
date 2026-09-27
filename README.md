@@ -264,19 +264,32 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             evemt.py          EvEMTBench loader: reads the .tar.gz without unpacking, caches
             real_zone.py      in-zone vs out-of-zone on real EMT data (doubleline, testgrid_A, testgrid_B)
             real_ml.py        fair ML vs zone-1 rule: causal windows, noise, cross-relay, two stages
+            dataset_facts.py  dataset fact sheet: labels, factorial structure, sibling leakage, units
+            build_adaptgrid_cache.py  one streaming pass over the adapt_grid archive into data/
+src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*_*.py), the
+            conventional ladder and settings (ladder.py, setting_study.py, elements_fixed.py),
+            grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
+            (wp1_*.py, tac25_*.py) and the adapt_grid runs (adaptgrid_*.py)
+tests/      pytest suites for the real-data pipeline, the synthetic pipeline, WP1 and TAC25
 results/    RESULTS.md   design-tool results, figures and JSON for every preset
+            DESIGN.md    the design tool in the TAC25 formulation: certificate, soft limit,
+                         structured error set, IEEE 2800 negative-sequence path
             DETECTION.md fault vs load study, and why that negative was too easy
             ZONE.md      in-zone vs out-of-zone, synthetic
             REAL_DOUBLELINE.md, REAL_TESTGRID.md  the same on real EMT data
             REAL_ML.md        the fair ML comparison, with the errors found and fixed
-            review/           re-run JSONs and TABLES.md from the technical review
-            review_wp1/, review_synth/  the same for the design tool and synthetic pipeline
+            DATASET_FACTS.md  fact sheet of the benchmark EMT data
+            ADAPTGRID.md, ADAPTGRID_FACTS.md  the zone task on adapt_grid-TestGrid110kV (varied
+                              loading and grounding, continuous R_f), at a zero-false-trip threshold
+            review/, review_wp1/, review_synth/, adaptgrid/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
 review/     WP1_REPORT.md   design-tool findings with commands and JSON keys
             SYNTH_REPORT.md synthetic-pipeline findings
-papers/     README.md reading list with links, fetch.sh to download the open-access PDFs
+papers/     README.md reading list with links, fetch.sh to download the open-access PDFs;
+            notes/ reading notes
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
             TEAM_BRIEF.md   onboarding note for the team
+            notes/    drafts (taylor_matrix_note.md: note to the author on the Fig. 3 matrix, not sent)
 ```
 
 ## Reading order
