@@ -11,6 +11,7 @@ import numpy as np
 from dataclasses import replace
 from sklearn.metrics import roc_auc_score
 import detect
+from torch_det import seed_everything, time_mean
 from zone_detect import make_zone_dataset
 from zone_model import ZoneParams
 from waveforms import SigParams
@@ -30,13 +31,13 @@ for sd in (0, 1):
     Xg_tr, Xg_te = ((Xtr - mu) / sdv).astype(np.float32), ((Xte - mu) / sdv).astype(np.float32)
     def train_global(Xa, ya, Xb, epochs, seed):
         import torch, torch.nn as nn
-        torch.manual_seed(seed)
+        seed_everything(seed)
         dev = "cuda" if torch.cuda.is_available() else "cpu"
         xt = torch.tensor(Xa, device=dev); yt = torch.tensor(ya, dtype=torch.float32, device=dev); xv = torch.tensor(Xb, device=dev)
         model = nn.Sequential(nn.Conv1d(6, 32, 9, stride=2, padding=4), nn.BatchNorm1d(32), nn.ReLU(),
                               nn.Conv1d(32, 64, 7, stride=2, padding=3), nn.BatchNorm1d(64), nn.ReLU(),
                               nn.Conv1d(64, 64, 5, stride=2, padding=2), nn.BatchNorm1d(64), nn.ReLU(),
-                              nn.AdaptiveAvgPool1d(1), nn.Flatten(), nn.Dropout(0.2), nn.Linear(64, 1)).to(dev)
+                              time_mean(), nn.Dropout(0.2), nn.Linear(64, 1)).to(dev)
         opt = torch.optim.Adam(model.parameters(), lr=2e-3, weight_decay=1e-4); lossf = nn.BCEWithLogitsLoss()
         for ep in range(epochs):
             model.train(); perm = torch.randperm(len(xt), device=dev)
