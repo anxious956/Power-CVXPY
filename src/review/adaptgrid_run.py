@@ -72,6 +72,10 @@ FEAT_OF = {"engineered + LR": "eng", "gradient boosting": "raw", "CNN seq-traj":
 OPS = ("far5", "cal0", "roc0", "roc1")
 VARIANTS = ("matched", "matched + directional", "starter", "starter + directional")
 OUT = os.path.join(cm.ROOT, "results", "adaptgrid")
+# cross-relay transfer partner: the other TestGrid relay; on CIGRE MV the other end of the same line (R1-R2)
+# or the other inverter-feeder relay pair (R3-R4)
+PARTNER = dict(adapt_A="adapt_B", adapt_B="adapt_A", cigre_R1="cigre_R2", cigre_R2="cigre_R1",
+               cigre_R3="cigre_R4", cigre_R4="cigre_R3")
 SCORES = os.path.join(cm.ROOT, "logs", "scores", "adaptgrid")
 
 
@@ -117,7 +121,7 @@ def starter_features(R, sel):
     """Features with every test window anchored at the causal starter; rows on which the starter never
     fires get no decision (score -inf). The starter fires a median 0.16 ms after inception on the
     benchmark (REVIEW.md section 6 H10)."""
-    delay = h10.trigger(R, sel)
+    delay = h10.trigger(R, sel, in_a=ld.profile(R)["ct_primary_a"])
     ok = (delay < 10**6) & (R["ev"] + delay + 2 + int(T * 6.4) + 128 <= R["full"].shape[-1])
     # rows without a starter keep the inception-anchored features so every estimator sees finite input;
     # their scores are forced to -inf by the caller (`ok` mask), so they never trip
@@ -135,7 +139,7 @@ def starter_features(R, sel):
 
 def supervision(R, sel, ev=None):
     R2 = R if ev is None else dict(R, ev=ev)
-    return ld.directional(*ld.pack(R2, sel, T, "full", True), R["z1L"])
+    return ld.directional(*ld.pack(R2, sel, T, "full", True), R["z1L"], in_a=ld.profile(R)["ct_primary_a"])
 
 
 def starter_supervision(R, sel, delay, ok):
@@ -152,7 +156,8 @@ def comm_reference(name, chain):
     Rr = cm.load_relay(name, chain, cubicle=R["cfg"]["remote_cubicle"])
     n = len(R["et"]); sel = np.arange(n)
     P, Pr = ld.pack(R, sel, T, "full", True), ld.pack(Rr, sel, T, "full", True)
-    fl, fr = ld.directional(*P, R["z1L"]), ld.directional(*Pr, Rr["z1L"])
+    fl, fr = (ld.directional(*P, R["z1L"], in_a=ld.profile(R)["ct_primary_a"]),
+              ld.directional(*Pr, Rr["z1L"], in_a=ld.profile(Rr)["ct_primary_a"]))
     l67, r67 = np.logical_or(*ld.ground_overcurrent(R, *P)), np.logical_or(*ld.ground_overcurrent(Rr, *Pr))
     idx, y, _ = zone_task(R)
     ok = np.ones(n, bool)
@@ -471,7 +476,7 @@ def cross_relay(src, dst, fe, models, commit, smoke=False):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("relay", choices=["adapt_A", "adapt_B"])
+    ap.add_argument("relay", choices=sorted(PARTNER))
     ap.add_argument("--frontend", choices=["current", "relayfe"], default="current")
     ap.add_argument("--models", nargs="+", default=list(MODELS))
     ap.add_argument("--splits", nargs="+", default=list(SPLITS))
@@ -506,7 +511,7 @@ if __name__ == "__main__":
     res["chains"]["mismatch"] = evaluate(name, fe, d1, d2, "mismatch", a.models, a.splits, commit, a.smoke)
     res["mismatch_draws"] = dict(train=d1, test=d2)
     if not a.no_cross:
-        other = "adapt_B" if name == "adapt_A" else "adapt_A"
+        other = PARTNER[name]
         print(f"=== cross relay {other} -> {name} ===", flush=True)
         res["cross"] = {f"{other}->{name}": cross_relay(other, name, fe, a.models, commit, a.smoke)}
     res["runtime_s"] = float(time.time() - t0)

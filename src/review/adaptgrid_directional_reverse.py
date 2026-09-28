@@ -40,18 +40,19 @@ def run_relay(relay):
     return out
 
 
-def main(fe="relayfe"):
+def main(fe="relayfe", relays=("adapt_A", "adapt_B")):
     if fe == "relayfe":
         frontend.enable()
     res = dict(script="adaptgrid_directional_reverse", commit=cm.git_commit(), frontend=fe, t_ms=20, relays={})
-    for relay in ("adapt_A", "adapt_B"):
+    for relay in relays:
         res["relays"][relay] = r = run_relay(relay)
         rb, rl = r["by_class"]["reverse_bus"], r["by_class"]["reverse_lines"]
         print(f"[{relay}] forward on relay-bus faults {rb['k_forward']}/{rb['n']}, on lines behind "
               f"{rl['k_forward']}/{rl['n']}; relay-bus by R_f bin "
               f"{ {b: (v['k_forward'], v['n']) for b, v in r['reverse_bus']['by_rf_bin'].items()} }", flush=True)
     os.makedirs(OUT, exist_ok=True)
-    path = os.path.join(OUT, f"directional_reverse_{fe}.json")
+    tag = "" if tuple(relays) == ("adapt_A", "adapt_B") else "_" + "-".join(relays)
+    path = os.path.join(OUT, f"directional_reverse_{fe}{tag}.json")
     json.dump(res, open(path, "w"), indent=1)
     print("saved", path)
 
@@ -59,4 +60,6 @@ def main(fe="relayfe"):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--frontend", default="relayfe")
-    main(ap.parse_args().frontend)
+    ap.add_argument("--relays", nargs="+", default=["adapt_A", "adapt_B"])
+    a = ap.parse_args()
+    main(a.frontend, tuple(a.relays))

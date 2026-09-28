@@ -228,6 +228,9 @@ def load_relay_adapt(name, chain=None, cubicle=None):
     v_nom_peak = cfg["vn_kv"] * 1e3 * np.sqrt(2 / 3) if cfg.get("vn_kv") else V_NOM_PEAK
     if cfg.get("vn_kv"):                                  # only grids that declare a nominal get the key, so the
         chain = dict(chain or {}, v_nom_peak=v_nom_peak)  # 110 kV chains (and their checkpoint hashes) are unchanged
+    ct = (cfg.get("relay_profile") or {}).get("ct_primary_a")
+    if ct and "i_fs_abs" in (chain or {}):               # relay front end: ADC full scale 100 x In, from this relay's CT
+        chain = dict(chain, i_fs_abs=100.0 * ct * np.sqrt(2))
     full = measurement_chain(full, relay, chain)
     # --- labels
     S = lambda c: L[c].astype(str).to_numpy().astype(str)      # numpy str dtype, not object, for np.char

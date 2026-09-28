@@ -216,7 +216,7 @@ def solve_fault(net, ibrs, relay_bus, relay_line, where, ftype, rf, m=0.0, retur
             Vpr[seq] = 0.0; Ipr[seq] = 0.0
     seqv = lambda dct: np.array([dct[0], dct[1], dct[2]])
     res = (seqv(Vs), seqv(Is), seqv(Vpr), seqv(Ipr))
-    return res + ((dict(iterations=it + 1, J1=J1, J2=J2),) if return_ibr else ())
+    return res + ((dict(iterations=it + 1, J1=J1, J2=J2, If=np.array([If[0], If[1], If[2]])),) if return_ibr else ())
 
 
 # ------------------------------------------------------------------ characterisation from the inverters' own records

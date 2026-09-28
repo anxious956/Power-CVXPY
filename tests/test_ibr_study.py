@@ -73,3 +73,11 @@ def test_limiter_trims_active_before_reactive():
     assert s == 1.0 and 0.0 <= ip < 0.8 and np.isclose(np.hypot(ip, 0.9), 1.2, atol=1e-6)
     ip, s = ib._limit(0.8, 1.5, 0j, 1.2)
     assert ip == 0.0 and np.isclose(1.5 * s, 1.2, atol=1e-6)
+
+
+def test_default_relay_profile_is_the_legacy_transmission_constants():
+    from review import ladder as ld
+    p = ld.profile(dict(cfg={}))
+    assert (p["ct_primary_a"], p["arc_length_m"], p["r_ground"], p["i_thermal_per_conductor"]) == \
+           (ld.IN_A, ld.ARC_LENGTH_M, ld.R_TOWER, ld.I_THERMAL_PER_CONDUCTOR)
+    assert p["min_i_peak"] == ld.MIN_I_PEAK

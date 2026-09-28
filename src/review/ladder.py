@@ -71,6 +71,15 @@ I_THERMAL_PER_CONDUCTOR = 900.0              # assumption: 435/55 Al/St about 90
 V_MIN_PU, LOAD_ANGLE_MAX = 0.9, 30.0
 X_CAP = 0.9                                  # tuned reach never beyond 0.9 X_line
 
+
+def profile(R):
+    """Relay and line assumptions for this relay: the 110 kV transmission values above unless the config
+    declares its own (relay_profile, e.g. the 20 kV CIGRE MV cable feeders)."""
+    p = dict(ct_primary_a=IN_A, arc_length_m=ARC_LENGTH_M, r_ground=R_TOWER, i_thermal_per_conductor=I_THERMAL_PER_CONDUCTOR)
+    p.update((R.get("cfg") or {}).get("relay_profile") or {})
+    p["min_i_peak"] = 0.2 * p["ct_primary_a"] * np.sqrt(2)
+    return p
+
 # Resistive-reach cap from the polarising phase error (Kasztenny 2021, "Settings considerations for
 # distance elements in line protection applications", 48th WPRC, section III.I, eqs. 18-20).
 # A quadrilateral's reactance line is only as accurate as the phase angle of its polarising current,
@@ -118,6 +127,9 @@ def tilt_from(zs, zr, zl, m=cm.REACH):
 
 
 def settings(R, name):
+    if (R.get("cfg") or {}).get("vn_kv"):          # grids that declare a nominal (CIGRE MV): inverter-aware study
+        from review import ladder_mv
+        return ladder_mv.settings_mv(R, name)
     cfg = R["cfg"]
     net = ss.net_for(R)
     rb = ss.relay_bus_of(R, name)
@@ -213,11 +225,11 @@ def pack(R, idx, t, window, mimic):
     return vpre, vpost, ipre, ipost, vmem
 
 
-def directional(vpre, vpost, ipre, ipost, vmem, z1L, parts=False):
+def directional(vpre, vpost, ipre, ipost, vmem, z1L, parts=False, in_a=IN_A):
     ang = np.exp(-1j * np.angle(z1L))
     i2 = ipost[:, 2]
     di1 = ipost[:, 1] - ipre[:, 1]
-    unbal = (np.abs(i2) >= 0.1 * np.abs(di1)) & (np.abs(i2) >= 0.05 * IN_A * np.sqrt(2))
+    unbal = (np.abs(i2) >= 0.1 * np.abs(di1)) & (np.abs(i2) >= 0.05 * in_a * np.sqrt(2))
     d32q = np.real(vpost[:, 2] * np.conj(i2) * ang) < 0
     d32p = np.real(vmem[:, 1] * np.conj(ipost[:, 1]) * ang) > 0
     fwd = np.where(unbal, d32q, d32p)
@@ -246,19 +258,21 @@ def evaluate_block(R, vpre, vpost, ipre, ipost, vmem, S, rung, tilt=None, x_set=
     ang = np.degrees(np.angle(Z))
     ph = cm._phase_q(ipost)
     iloop = np.abs(np.stack([ph[:, 0], ph[:, 1], ph[:, 2], ph[:, 0] - ph[:, 1], ph[:, 1] - ph[:, 2], ph[:, 2] - ph[:, 0]], 1))
-    region = mask & (Z.real < rset) & (Z.real > -0.25 * rset) & (ang >= SECTOR[0]) & (ang <= SECTOR[1]) & (iloop >= MIN_I_PEAK)
-    fwd = directional(vpre, vpost, ipre, ipost, vmem, R["z1L"])
+    P = profile(R)
+    region = mask & (Z.real < rset) & (Z.real > -0.25 * rset) & (ang >= SECTOR[0]) & (ang <= SECTOR[1]) & (iloop >= P["min_i_peak"])
+    fwd = directional(vpre, vpost, ipre, ipost, vmem, R["z1L"], in_a=P["ct_primary_a"])
     trip = fwd & (region & (X < xs)).any(1)
     return trip, np.where(fwd, np.where(region, X, np.inf).min(1), np.inf)
 
 
 def ground_overcurrent(R, vpre, vpost, ipre, ipost, vmem):
     """67N and 67Q reference elements (detection, no reach)."""
-    pick = 0.1 * IN_A * np.sqrt(2)
+    in_a = profile(R)["ct_primary_a"]
+    pick = 0.1 * in_a * np.sqrt(2)
     ang0 = np.exp(-1j * np.angle(R["z0L"]))
     i0, i2 = ipost[:, 0], ipost[:, 2]
     f67n = (3 * np.abs(i0) >= pick) & (np.real(vpost[:, 0] * np.conj(i0) * ang0) < 0)
-    fwd, d32p, d32q, unbal = directional(vpre, vpost, ipre, ipost, vmem, R["z1L"], parts=True)
+    fwd, d32p, d32q, unbal = directional(vpre, vpost, ipre, ipost, vmem, R["z1L"], parts=True, in_a=in_a)
     f67q = (3 * np.abs(i2) >= pick) & d32q
     return f67n, f67q
 

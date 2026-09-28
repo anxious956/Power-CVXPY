@@ -89,6 +89,10 @@ CONFIGS = {
                   remote_bus=rbus, beyond=beyond, parallel=None, relay_bus=bus, remote_cubicle=remote,
                   ibr_cubicles=["Cubicle\\pex_MainBus3_Ind3-3IBR", "Cubicle\\pex_MainBus14_Ind14-14IBR"],
                   adaptgrid=True, vn_kv=20.0, open_line_ends={"MainLn8-14": "MainBus8"},
+                  # MV relay assumptions (ladder.profile), stated not measured: CT 400/1 A (about 1.4x the cable
+                  # rating); arc length 1 m; no tower-footing term (cable faults are to the metallic screen);
+                  # NA2XS2Y 1x120 12/20 kV cable rating 285 A (typical catalogue value, not re-verified)
+                  relay_profile=dict(ct_primary_a=400.0, arc_length_m=1.0, r_ground=0.0, i_thermal_per_conductor=285.0),
                   loads=[f"loads/Ld{i}/load_p" for i in (1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14)])
        for name, title, relay, line, bus, rbus, beyond, remote in (
            ("cigre_R1", "CIGRE MV R1: line 2-3 at bus 3 (inverter bus)", "Cub_1\\pex_MainBus3_MainLn2-3", "MainLn2-3",
