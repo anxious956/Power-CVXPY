@@ -116,7 +116,8 @@ def main(relays=("adapt_A", "adapt_B"), fe="relayfe", model="CNN seq-traj", kind
         print(f"[{relay}] done [{time.time()-t0:.0f}s]", flush=True)
     res["runtime_s"] = float(time.time() - t0)
     os.makedirs(OUT, exist_ok=True)
-    path = os.path.join(OUT, f"reverse_heldout_{fe}_{model.split()[0].lower()}.json")
+    tag = "" if tuple(relays) == ("adapt_A", "adapt_B") else "_" + "-".join(relays)     # never overwrite the TestGrid run
+    path = os.path.join(OUT, f"reverse_heldout_{fe}_{model.split()[0].lower()}{tag}.json")
     json.dump(res, open(path, "w"), indent=1, default=str)
     print("saved", path, f"[{res['runtime_s']:.0f}s]")
     return res
