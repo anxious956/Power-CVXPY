@@ -165,7 +165,8 @@ def measurement_chain(x, seed_name, chain):
             from scipy.signal import butter, lfilter
             b, a = butter(2, 1000 / (FS / 2))       # 2nd-order Butterworth, fc 1 kHz: ~0.45 ms group delay at 50 Hz
             x = lfilter(b, a, x, axis=-1)
-    for ch, (nom, fs) in enumerate([(V_NOM_PEAK, c["v_fs"] * V_NOM_PEAK)] * 3 + [(i_pre, c["i_fs"] * i_pre)] * 3):
+    vnom = c.get("v_nom_peak") or V_NOM_PEAK          # per-grid nominal (CIGRE MV is 20 kV); 110 kV otherwise
+    for ch, (nom, fs) in enumerate([(vnom, c["v_fs"] * vnom)] * 3 + [(i_pre, c["i_fs"] * i_pre)] * 3):
         y = x[:, ch] + rng.normal(0.0, c["noise_rel"] * nom, x[:, ch].shape)
         if c["adc_bits"]:
             step = 2 * fs / 2 ** c["adc_bits"]
@@ -224,6 +225,9 @@ def load_relay_adapt(name, chain=None, cubicle=None):
     full = np.empty((n, 6, 2 * ADAPT_HALF), np.float32)
     for i in range(n):
         full[i] = X[i, k, :, ev_raw[i] - ADAPT_HALF:ev_raw[i] + ADAPT_HALF]
+    v_nom_peak = cfg["vn_kv"] * 1e3 * np.sqrt(2 / 3) if cfg.get("vn_kv") else V_NOM_PEAK
+    if cfg.get("vn_kv"):                                  # only grids that declare a nominal get the key, so the
+        chain = dict(chain or {}, v_nom_peak=v_nom_peak)  # 110 kV chains (and their checkpoint hashes) are unchanged
     full = measurement_chain(full, relay, chain)
     # --- labels
     S = lambda c: L[c].astype(str).to_numpy().astype(str)      # numpy str dtype, not object, for np.char
@@ -238,7 +242,7 @@ def load_relay_adapt(name, chain=None, cubicle=None):
     own = shc & (tgt == cfg["line"])
     pos = own & (loc <= 100.0 * REACH)
     own99 = own & (loc > 100.0 * REACH)
-    relay_bus = RELAY_BUS[name]
+    relay_bus = cfg.get("relay_bus") or RELAY_BUS[name]
     behind = [kk for u, v, kk in C["graph"].edges(keys=True) if relay_bus in (u, v) and str(kk).startswith("MainLn")
               and kk not in (cfg["line"], cfg["parallel"])]
     beyond = shc & np.isin(tgt, cfg["beyond"])
@@ -251,7 +255,7 @@ def load_relay_adapt(name, chain=None, cubicle=None):
     neg_bench = remote_bus | (beyond & (loc <= 20.0))            # the benchmark's negative set
     other = neg & ~(beyond | remote_bus | parallel | reverse)
     # --- operating point: total active load, binned by quantile; grounding as a stratum
-    p_tot = L[["loads/Ld2/load_p", "loads/Ld5/load_p", "loads/Ld6/load_p"]].sum(axis=1).to_numpy(dtype=float)
+    p_tot = L[cfg.get("loads", ["loads/Ld2/load_p", "loads/Ld5/load_p", "loads/Ld6/load_p"])].sum(axis=1).to_numpy(dtype=float)
     rank = np.argsort(np.argsort(p_tot))
     op_bin = np.minimum(rank * ADAPT_OP_BINS // n, ADAPT_OP_BINS - 1)
     op_quartile = np.minimum(rank * 4 // n, 3)
@@ -267,7 +271,8 @@ def load_relay_adapt(name, chain=None, cubicle=None):
                 pos=pos, neg=neg, neg_bench=neg_bench, own99=own99, beyond=beyond, remote_bus_faults=remote_bus,
                 parallel=parallel, switching=switching, fault_any=fault_any, incipient=incipient,
                 reverse=reverse, reverse_bus=reverse_bus, reverse_lines=reverse_lines, other=other,
-                relay_bus=relay_bus, behind_lines=behind, graph=C["graph"], labels=L, adaptgrid=True)
+                relay_bus=relay_bus, behind_lines=behind, graph=C["graph"], labels=L, adaptgrid=True,
+                v_nom_peak=v_nom_peak)
 
 
 # ----------------------------------------------------------------------------- relay data
