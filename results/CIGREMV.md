@@ -114,12 +114,25 @@ resolved by what one end sees. The CNN's overall AUC of 0.87–0.97 comes from t
 bands (3–12 in-zone faults below 5 Ω) are noisy one by one; the pattern across four relays and four bands
 is not.
 
-Three causes are consistent with this and **this data cannot separate them**: (i) the lines are short —
-the 15 % guard band is 0.3–0.6 Ω of cable, against 1.0–1.6 Ω on TestGrid; (ii) the inverters supply
-about half of the fault-current rise, and the study-model validation above shows that at the inverter
-buses even a bolted fault's reactance is not where a linear model puts it; (iii) there are 72–84 in-zone
-faults to learn from instead of 168–207. (iii) is testable cheaply on TestGrid by subsampling its
-positives to this size; (i) against (ii) needs a grid where one of them changes.
+Three causes are consistent with this: (i) the lines are short — the 15 % guard band is 0.3–0.6 Ω of
+cable, against 1.0–1.6 Ω on TestGrid; (ii) the inverters supply about half of the fault-current rise,
+and the study-model validation above shows that at the inverter buses even a bolted fault's reactance is
+not where a linear model puts it; (iii) there are 72–84 in-zone faults to learn from instead of 168–207.
+
+**(iii) is not sufficient.** `adaptgrid_subsample.py` trains the TestGrid CNN with 72 in-zone faults
+(three random draws, all off-line negatives kept, everything else unchanged) and reads dependability on
+the 72 kept faults out of fold and on the dropped ones, never trained or calibrated on
+([`adaptgrid/subsample_relayfe_cnn.json`](adaptgrid/subsample_relayfe_cnn.json)):
+
+| cal0, loading-bin folds | kept (72) | dropped, never seen | off-line trips | full size, three seeds (`seeds_adapt_*_relayfe_cnn.json`, grouped) |
+|---|---|---|---|---|
+| TestGrid A | 100 / 100 / 100 % | 100 / 99.0 / 99.0 % (of 96) | 1 / 1 / 0 of 2,888 | 94.6–99.4 % |
+| TestGrid B | 43.1 / 40.3 / 37.5 % | 63.7 / 52.6 / 43.0 % (of 135) | 0 / 1 / 0 of 2,845 | 61.4–77.3 % |
+
+At A the sample size does nothing. At B, where the in-zone faults already sit among the boundary faults,
+it costs 20–35 points — a contributing factor where the boundary is tight — but even there 72 faults give
+37.5–43.1 %, four to forty times the CIGRE relays' 0–10.5 %. What is left is (i) against (ii), which
+needs a grid where one of them changes.
 
 Consistent with (i), not proof of it: MV cable feeders of this length are in practice protected by line
 differential or communication-assisted schemes rather than a single-ended zone 1, and here too only the
@@ -213,7 +226,8 @@ channel, 50 Hz. In addition:
 - **Four relays on one feeder.** Two of them (R1, R2) are the two ends of one line.
 - **Settings carry the study-model error at R1/R3** (0.24–0.69 |Z1L|); T2 bounds the conventional side
   independently of it, and T2 is no better.
-- **Three causes of the boundary result are confounded** (short lines, inverter infeed, fewer positives);
-  the subsampling test on TestGrid and a settings sensitivity sweep are the next cheap checks.
+- **Two causes of the boundary result remain confounded** (short lines, inverter in-feed); the third,
+  fewer in-zone faults, was tested on TestGrid and is not sufficient (§3). A settings sensitivity sweep
+  is the next cheap check.
 - **The in-zone population is small** (72–84 faults, 3–12 below 5 Ω), so per-band numbers are indicative;
   the conclusions rest on the pattern across relays and bands and on the seed stability.

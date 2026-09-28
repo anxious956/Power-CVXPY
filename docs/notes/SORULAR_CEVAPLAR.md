@@ -909,3 +909,87 @@ Beş sınır üç türde. Bir kısmı mevcut veriyle kapanır, bir kısmı yeni 
 4. Enjeksiyon + GFM (Taylor'ın modeline bağlı).
 
 *Kaynak: `docs/PLAN.md` (WP2, danışmana sorular, riskler); `results/ADAPTGRID.md` §4–5; `src/review/common.py` (`ct_saturation`, `cvt_filter`); `src/review/ladder.py` (T2).*
+
+---
+
+## 22. CIGRE sonucunun esas fikrimize (yardımcı sinyal enjeksiyonu) katkısı ne? Şimdi ne bekliyoruz, girdi-çıktı ne?
+
+**Kısa cevap:** Deney, esas fikrin çözmeye çalıştığı sorunun EMT verisinde gerçek olduğunu gösteriyor. Enjeksiyonun kendisini test etmiyor; enjeksiyonun aşması gereken çıtayı ve nerede test edilmesi gerektiğini ölçüyor.
+
+### Esas fikir: girdi ve çıktı
+- **Girdi:** şebeke modeli ve belirsizlik kümeleri (arıza yeri, R_f, uzak uç akımı, gürültü).
+- **Ara adım:** arızanın ölçümde üretebileceği bölge hesaplanır; iç ve dış arıza bölgeleri çakışıyorsa arızalar "belirsiz"dir.
+- **Çıktı:** invertörün basacağı en küçük negatif sıra sinyali δ (CVXPY) ve ayrışma garantisi.
+
+### Katkılar
+1. **Teorinin öngördüğü belirsizlik EMT'de ölçüldü.**
+
+   | | Oyuncak model | EMT verisi |
+   |---|---|---|
+   | Güçlü kaynak | `easy`: 0/30 belirsiz, δ = 0 | TestGrid: sınır her R_f diliminde ayrılıyor (AUC 1.000) |
+   | Zayıf kaynak / invertör | 5–10/30 belirsiz, δ 0.4–1.3 pu | CIGRE MV: sınır ayrılmıyor (AUC 0.37–0.89), düşük R_f'de bile |
+
+   Bu kesin bir ispat değil, güçlü bir işaret: belirsizlik bizim detektörlerimizle ölçüldü, ama beş farklı yöntem aynı yerde başarısız.
+2. **Çıta belirlendi:** pasif tek uçlu en iyi sonuç ≤%16, iki uçlu %75–78 (sıfır yanlış açmada). Enjeksiyonun iddiası: kanal kullanmadan, tek uçtan iki uçlu seviyeye yaklaşmak.
+3. **Test yeri belirlendi:** invertör barasındaki kısa kablo röleleri (R1/R3) ve sınırdaki arızalar (uzak bara, sonraki hattın ilk %20'si).
+4. **Taylor modelinde olmayan üç şey bulundu:**
+   - akım sınırlayıcının doğrusal olmaması (çalışma modelinde |Z1L|'nin 0.24–0.69 katı kadar hata);
+   - invertörün devreden çıkmasının "ileri yönlü" bir arıza gibi görünmesi;
+   - gerçekçi invertör parametreleri (`ibr_study`: k1 1.9–2.6, y2 ≈ 2.4∠−72°, Imax 1.2 pu).
+
+### Beklentiler (enjeksiyonlu simülasyonla test edilecek)
+- **H1:** δ ile sınırdaki ayrışma AUC 1'e yaklaşır ve sıfır yanlış açmadaki kapsama ≤%16'dan yukarı çıkar.
+- **H2 (en büyük risk):** Arıza sırasında invertör zaten 1.2 pu sınırında; δ = 0.4–1.3 pu için yer kalmayabilir. Arızaların ne kadarında invertörün sınırda olduğu CIGRE verisinde şimdi ölçülebilir.
+- **H3:** Gürültü artışının belirsizliği büyütmesi gerçekçi röle ön ucuyla doğrulanacak.
+
+### Aşamaların girdi-çıktısı
+| Aşama | Girdi | Çıktı | Durum |
+|---|---|---|---|
+| WP1 Tasarım | Dizi ağı, invertör modeli, belirsizlik kümeleri | δ ve garanti, ya da "mümkün değil" | Oyuncak model var |
+| WP2 Simülasyon | δ | Enjeksiyonlu EMT dalga şekilleri | Taylor'ın modeli ya da kendi modelimiz |
+| WP3 Tespit | 20 ms'lik 3 faz V ve I | Açma kararı ve metrikler | Hazır (bugünkü boru hattı) |
+| WP4 Gömülü | Detektör | Karar süresi | CNN gecikmesi ölçüldü |
+
+### Önerilen köprü adımı
+Taylor'ın tasarım aracını CIGRE'nin gerçek dizi ağına (`setting_study` / `ibr_study`) uygulamak, belirsizlik kümelerini veriden almak (R_f 0–50 Ω, yük ×2.3, röle gürültüsü) ve şunları cevaplamak:
+1. δ = 0 iken statik model belirsizlik öngörüyor mu? EMT'deki ölçümle karşılaştırılır; teorinin EMT'ye karşı ilk kontrolü.
+2. Hangi δ gerekiyor?
+3. Bu δ invertörün payına sığıyor mu (H2)?
+
+Bunun için aracı iki baradan çok baraya genişletmek gerekiyor (PLAN WP1'deki 14-bus kilometre taşı).
+
+*Kaynak: `README.md`; `docs/PLAN.md` WP1–WP4; `results/CIGREMV.md`; `results/cigremv/ibr_characterisation.json`; `results/cigremv/diagnostics.json`.*
+
+---
+
+## 23. B rölesi neden genelde kötü sonuç veriyor?
+
+**Kısa cevap:** B genel olarak kötü değil. Kötü olan tek bir sayı: CNN'in sıfır yanlış açmadaki kapsaması oynak (%45–77). Sebep modelin kendisi değil, eşiğin nasıl belirlendiği: eşiği birkaç nadir dış arıza belirliyor.
+
+### B birçok konuda A'dan iyi
+| | A | B |
+|---|---|---|
+| Klasik zone 1 (R2) | %6 | %13 |
+| Hasan, kendi kuralıyla | %82 | %92 |
+| 32P/32Q arka arızayı "ileri" görme | 41/188 | 0/1000 |
+| CNN, 2.845'te ≤1 yanlış açma | – | %90–98 (6 çekiliş) |
+| CNN, sıfır yanlış açma | %94.6–99.4 | %45–77, oynak |
+
+### Mekanizma
+1. Sıfır yanlış açmada eşik, eğitimdeki ~2.845 dış arızanın en yüksek puanına konuyor. Bu bir uç değer istatistiği.
+2. B'de en yüksek puanlı dış arızalar, uzak baradaki (bus 3) iki neredeyse sıfır dirençli (0.2–1 Ω) arıza: puanları 9.5 ve 6.0, geri kalanların hepsi 1.2'nin altında (`cigremv_diagnostics.py`, `results/cigremv/diagnostics.json`).
+3. Bu arızalar bir fold'un eğitim kısmına düşerse eşik yükseliyor. Fold'lar arasında eşik 4.1–17.6 arasında değişti; kapsama düşük eşikte %93–95, en yüksek eşikte %29. Loqo'da dört fold'un hepsine bu arızalardan biri düştü ve sonuç %45 oldu (`splitdiag_adapt_B_relayfe.json`).
+4. A'da iç arızaların 168/168'i en yüksek dış arıza puanının üstünde; B'de 156/207. A'da eşik oynasa da kapsama %92–100 kalıyor.
+
+### Neden bu arızalar iç arızaya benziyor
+- **Fizik:** Uzak baradaki sıfır dirençli arıza ile %85'teki iç arıza arasındaki fark, hat empedansının yalnızca %15'i (~1.6 Ω). İkisi de büyük akım ve derin gerilim çöküşü üretiyor.
+- **Veri:** Bu tür arızalar nadir (R_f medyanı 25 Ω; B'de ≤1 Ω'luk iç arıza yalnızca 5 tane).
+- **Not:** CNN'in bu iki arızaya neden yüksek puan verdiği ölçülmüş değil, hipotez. Ölçülen: eşiği bunlar belirliyor ve kapsama eşiği izliyor.
+- **Çürütülen hipotez:** "Yük akışı yönü değişiyor" fikri. B'de akış yönü tüm veride yalnızca 1.3° değişiyor.
+
+### Ders
+Sıfır yanlış açmalı çalışma noktası, birkaç uç örneğe bağlı gürültülü bir tahmin. B için dürüst rapor, "2.845'te ≤1 yanlış açma" noktasının binom üst sınırıyla (~600'de 1) verilmesi; orada sonuç kararlı (%90–98).
+
+**CIGRE ile bağlantı:** CIGRE'de de eşiği uzak bara ve sonraki hattın başındaki arızalar belirliyor. B'de bu birkaç nadir arıza (küçük, kararsız çakışma); CIGRE'de sınırdaki arızaların tamamı (büyük, kararlı çakışma).
+
+*Kaynak: `results/ADAPTGRID.md` §4 ("Why relay B's answer moves", Q4, "Reverse faults held out"); `results/ADAPTGRID_FACTS.md`; `results/cigremv/diagnostics.json`.*
