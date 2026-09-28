@@ -169,9 +169,9 @@ margin it had.
 
 The both-ends references (TABLES A). 67N/67Q at both ends covers 75.0–77.8 % with **no** off-line and no
 switching trip at any relay (2–3 incipient faults of 1,007); a POTT-equivalent 32P/32Q comparison covers 82–99 %, with 0 off-line trips
-at R3 and 21 / 46 at R1-R2 / R4. The TestGrid caveat applies unchanged: both ends are read at the same
-instant, with no channel delay, security timer or loss-of-channel mode, so these rows are an upper bound
-on communication-assisted practice.
+at R3 and 21 / 46 at R1-R2 / R4. Both ends are read at the same instant, so these numbers hold for a trip
+after the channel delay, not by 20 ms, and 67N/67Q's zero needs adequately sized CTs (quick checks
+below); there is still no security timer or loss-of-channel mode.
 
 ### Room in the inverter for an auxiliary signal
 
@@ -201,6 +201,38 @@ paid for with active current during the fault, and at the relay's first-cycle de
 often still on the limiter. A lower dispatch, a limiter that reserves room for δ, and the time the
 inverter needs to start injecting are not in this data.
 
+### Quick checks: settings, channel delay, CT saturation
+
+`cigremv_checks.py` → [`cigremv/quick_checks.json`](cigremv/quick_checks.json); no training, frozen
+elements only, TestGrid A/B alongside. The unperturbed case of every check reproduces the published
+rule and both-ends rows exactly (`reproduces_rules_json` true for all six relays).
+
+**Settings are not what holds the conventional rows down.** With X_set and R_set each scaled by 0.8–1.2,
+the directional quadrilateral R2 covers 0.0 / 1.4–5.6 / 1.2–4.8 / 9.2 % at R1–R4 with 0–1 off-line trips
+(TestGrid A 4.2–10.1 %, B 9.7–18.4 %, 0 trips). The study model's error at R1/R3 does not decide the
+comparison; with T2 above, this closes that question.
+
+**The both-ends rows need their time.** They read the remote end at the same 20 ms as the local one. To
+trip by 20 ms over a channel of delay d, the remote element must decide on the window ending 20 − d ms
+after inception, and a full-cycle 32P/32Q cannot do that securely: keyed on the remote end's fault
+detector (the causal starter of `h10_trigger`), the POTT-equivalent trips 13–772 off-line faults at
+d = 5–15 ms on CIGRE (R2: 210 / 491 / 682; R4: 200 / 508 / 772), and 48–179 at TestGrid B.
+67N/67Q at both ends, which has its own pickup, degrades more gently: 0–5 off-line trips at d ≤ 15 ms, with
+dependability 75.0–77.8 % at R1 and R3 across delays but 43.4 % at R4 at 15 ms. Without the fault
+detector the POTT row keys on the load flow once the window holds little fault, and at d = 20 ms it
+equals local-only 32P/32Q (1,395 and 1,604 off-line trips at R2 and R4). The published both-ends numbers
+therefore stand **for a trip at 20 + d ms** — with a typical 5–10 ms channel, 1.25–1.5 cycles — not
+for a 20 ms trip. (At R2, 67N/67Q both ends covers more with the remote end read earlier, 95.8 % at
+d = 5 ms against 77.8 % at 0: the bus-3 end's negative-sequence reading changes during the first cycle,
+consistent with the inverter's control acting on it; not examined further.)
+
+**CT saturation matters only for an undersized CT, and then for 67N/67Q.** A 5P20-like CT (400 A or
+1000 A primary, Vsat 400 V at 5 Ω) does not saturate on these faults: the in-zone positive-sequence
+current at 20 ms is within 0.1 % of the ideal one at the 5th percentile, and every row is unchanged. An
+undersized CT (Vsat 100 V) with 80 % remanence reads up to 15–19 % low (5th percentile 0.850 at R4, 0.813 at
+TestGrid B) and costs 67N/67Q at both ends its security — **25–30 off-line trips on CIGRE**, 34 and 62 on
+TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
+
 ## 4. What this changes
 
 - **The TestGrid niche claim does not transfer.** ADAPTGRID.md's defensible niche — single-ended,
@@ -220,14 +252,15 @@ inverter needs to start injecting are not in this data.
 ## 5. Limits
 
 Everything in ADAPTGRID.md §5 holds: no injected signal, grid-following inverters only, no CT/CVT models in
-the records (at 20 kV the CVT does not apply; a CT saturation run with `common.ct_saturation` is open), no
-channel, 50 Hz. In addition:
+the records, 50 Hz. At 20 kV the CVT does not apply; CT saturation and channel delay are now modelled
+afterwards (quick checks, §3), not simulated — the channel as a delay only, with no loss-of-channel or
+security-timer logic. In addition:
 
 - **Four relays on one feeder.** Two of them (R1, R2) are the two ends of one line.
 - **Settings carry the study-model error at R1/R3** (0.24–0.69 |Z1L|); T2 bounds the conventional side
-  independently of it, and T2 is no better.
+  independently of it and is no better, and ±20 % on X_set and R_set moves R2 by at most 3 points on CIGRE.
 - **Two causes of the boundary result remain confounded** (short lines, inverter in-feed); the third,
-  fewer in-zone faults, was tested on TestGrid and is not sufficient (§3). A settings sensitivity sweep
-  is the next cheap check.
+  fewer in-zone faults, was tested on TestGrid and is not sufficient (§3), and neither are the settings
+  (quick checks, §3).
 - **The in-zone population is small** (72–84 faults, 3–12 below 5 Ω), so per-band numbers are indicative;
   the conclusions rest on the pattern across relays and bands and on the seed stability.

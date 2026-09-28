@@ -555,7 +555,10 @@ Stated plainly, because §4 will be read as more than it is:
 - **No channel, no remote-end timing.** The both-ends references in §4 read both line ends at the same
   instant. Real permissive schemes carry a channel delay, a security timer and a loss-of-channel mode;
   none of that is in these records, so those rows are an optimistic bound on communication-assisted
-  practice and cannot be used to compare against it fairly.
+  practice and cannot be used to compare against it fairly. A channel delay was since modelled
+  afterwards ([CIGREMV.md](CIGREMV.md), quick checks): the rows hold for a trip at 20 + d ms, but to trip
+  by 20 ms over a 5–15 ms channel the POTT-equivalent loses its security at relay B (48–179 off-line
+  trips) and its dependability at relay A (94.6 → 71.4 %).
 - **Two relays, one grid, two front ends.** Relay B's unstable zero-false-trip CNN result (§4) is the clearest
   sign that two relays are not enough to settle how stable a protection-grade threshold is.
 

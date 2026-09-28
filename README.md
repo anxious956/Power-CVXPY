@@ -380,8 +380,8 @@ onward) and §10 the roadmap. The re-run numbers live in
 - [x] Inverter headroom for an auxiliary signal during faults, measured on CIGRE MV
 - [x] Sample-size control for CIGRE MV: the TestGrid CNN with 72 in-zone faults keeps 100 % at
       relay A and 37.5–43.1 % at B, so fewer positives do not explain CIGRE's 0–10.5 %
-- [ ] Quick checks on CIGRE MV: settings sensitivity, CT saturation, channel delay on the
-      both-ends references
+- [x] Quick checks: settings ±20 % change nothing; both-ends schemes hold only for a trip after the
+      channel delay; 67N/67Q both ends needs adequately sized CTs (`results/cigremv/quick_checks.json`)
 - [ ] IEEE 39-bus (60 Hz) EvEMTBench grid
 - [ ] Design tool on a multi-bus network: Taylor's static model on the CIGRE MV sequence network,
       its predicted ambiguity checked against the EMT result (docs/notes/SORULAR_CEVAPLAR.md Q22)
