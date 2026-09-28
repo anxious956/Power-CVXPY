@@ -98,9 +98,10 @@ def run_relay(relay, model, kinds, seed):
                 d = decisions(Z, fold_of, Hb, thr0, hrows, idx, y, op)
                 per[label][op] = dict(unsupervised=summarise(d, R, idx, y), directional=summarise(d & fwd, R, idx, y))
             c = per[label]["cal0"]["unsupervised"]; pc = c["per_class"]
+            kn = lambda h: f"{pc[h]['k']}/{pc[h]['n']}" if pc[h] else "0/0"     # a class can be empty (cigre_R4: no line behind bus 1)
             print(f"  [{relay} {model} {kind} seed {seed}] reverse {label:11s}: cal0 dep {c['dependability']*100:5.1f}  "
-                  f"off-line {c['offline_all']['k']}/{c['offline_all']['n']}  reverse bus {pc['reverse_bus']['k']}/{pc['reverse_bus']['n']}  "
-                  f"lines behind {pc['reverse_lines']['k']}/{pc['reverse_lines']['n']}  switching {pc['switching']['k']}/{pc['switching']['n']}", flush=True)
+                  f"off-line {c['offline_all']['k']}/{c['offline_all']['n']}  reverse bus {kn('reverse_bus')}  "
+                  f"lines behind {kn('reverse_lines')}  switching {kn('switching')}", flush=True)
         out["splits"][kind] = per
     return out
 
