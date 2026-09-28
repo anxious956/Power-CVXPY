@@ -837,3 +837,75 @@ dosyanın 6. ve 15–17. soruları.*
 8. 2.5 çevrimin zone 1 için yavaş olduğunun raporda açıkça yazılması.
 
 *Kaynak: Hasan ve ark. 2026 (§4.2, §5); `results/ADAPTGRID.md` §3; `REVIEW.md` (H18, H21, H22, H25).*
+
+---
+
+## 20. CIGRE MV deneyinin sonucu bizim için ne kadar önemli?
+
+**Kısa cevap:** Önemli. TestGrid raporunun "bu veri neyi test edemez" bölümünde (`results/ADAPTGRID.md` §5) eksik diye yazdığımız iki şeyi, yani invertör ağırlıklı rejimi ve ikinci bir şebekeyi, ilk kez test eden deney bu. Projenin asıl sorusunu (enjekte edilen sinyal) ise yine cevaplamıyor.
+
+### Neden önemli
+1. **İnvertör ağırlıklı rejime ilk kez giriyoruz.**
+   - TestGrid'de invertörler kısa devre gücünün yalnızca %0.14'ü.
+   - CIGRE MV'de arızadan 20 ms sonra akım artışının medyan %52'si invertörlerden geliyor (`results/CIGREMV_FACTS.md`).
+   - Klasik mesafe koruması tam burada zorlanıyor: invertör akımı 1.2 pu ile sınırlı ve negatif sıra davranışı farklı. Ayar çalışmasında R3 için güvenli bir pozitif erişim bulunamadı.
+2. **İkinci bir şebeke, yani genelleme testi.**
+   - TestGrid bulgusu 1 şebeke ve 2 röleye dayanıyor (B rölesi kararsızdı).
+   - CIGRE MV 20 kV, kablolu, 0.24–4.9 km'lik kısa hatlardan oluşuyor ve 4 yeni röle ekliyor.
+   - Jürinin ilk sorusu muhtemelen "başka bir şebekede, invertörlü bir şebekede de böyle mi?" olacak.
+3. **Yayınlanmış yöntemle karşılaştırmanın tekrarı.** Hasan'ın SVM'i TestGrid'de sıfır yanlış açma eşiğinde %9–58'e düşmüştü. CIGRE'de bunun tekrarlanıp tekrarlanmadığı test ediliyor.
+
+### Sonucun her hali işe yarar
+| Sonuç | Anlamı |
+|---|---|
+| CNN burada da yüksek kapsama, sıfır yanlış açma | Ana bulgu genelleşiyor |
+| CNN burada düşük kalır | TestGrid sonucu şebekeye özgü; "invertörlü ortamda öğrenme de zorlanıyor" dürüst bir sınırlama olur |
+| Karışık | Invertör baralarındaki R1/R3 ile diğerlerinin farkı, invertörün etkisini doğrudan gösterir |
+
+### Neyi cevaplamıyor
+- Enjekte edilen yardımcı sinyal yok; projenin merkez sorusu bu veride de test edilemiyor.
+- Yalnızca şebeke-takipli (grid-following) invertörler var.
+- CT/CVT modeli yok, frekans 50 Hz, kanal gecikmesi yok.
+- Klasik koruma ayarları kendi çalışma modelimizden geliyor. Bu model R1/R3'te EMT'den |Z1L|'nin 0.24–0.69 katı kadar sapıyor (`results/cigremv/study_validation_ibr.json`), bu yüzden klasik koruma satırı bir belirsizlik taşıyor.
+- Hâlâ simülasyon ve aynı üretici ailesi (EvEMTBench); gerçek saha verisi değil.
+
+**Önem sıralaması:** TestGrid ana sonucu > CIGRE MV deneyi > karar süresi / zaman taraması. CIGRE deneyi, ana bulgunun inanılırlığını belirleyen ve raporun sınırlar listesini kısaltan deney.
+
+*Kaynak: `results/ADAPTGRID.md` §4–5; `results/CIGREMV_FACTS.md`; `src/review/ladder_mv.py`; `results/cigremv/study_validation_ibr.json`.*
+
+---
+
+## 21. CIGRE deneyinin cevaplamadığı sınırları nasıl kapatırız?
+
+Beş sınır üç türde. Bir kısmı mevcut veriyle kapanır, bir kısmı yeni veri ya da kendi simülasyonumuzu gerektirir, biri de tamamen kapanmaz ve raporda açıkça yazılır.
+
+### 1. Mevcut veriyle (CIGRE koşusundan sonra, ~1 gün)
+| Sınır | Nasıl kapanır |
+|---|---|
+| Klasik ayarlar kendi çalışma modelimizden geliyor (R1/R3'te 0.24–0.69 pu hata) | **T2 basamağı** çalışma modelinden bağımsız: verinin kendisi üzerinde, fiziksel olarak ayarlanabilir sınır içinde ayarlanan en iyi dörtgen, yani "klasik koruma en iyi ihtimalle bu kadar" sınırı. Ek olarak x_set/R_set ±%20 duyarlılık testi yapılır. Karşılaştırma en temiz R2/R4'te (0.04/0.07 pu). |
+| CT modeli yok | `common.ct_saturation` ile 400/1 CT'li ikinci bir koşu. Model simülasyonun içinde değil, sonradan uygulanıyor; raporda böyle yazılır. |
+| CVT modeli yok | 20 kV'ta geçersiz: orta gerilimde endüktif VT kullanılır, CVT'nin geçici rejim sorunu yüksek gerilime özgü. TestGrid (110 kV) için `cvt_filter` zaten var. |
+| Kanal gecikmesi yok | Sonradan uygulanır: uzak ucun kararı 5/10/20 ms geciktirilir, "kanal koptu" durumu eklenir. İki uçlu satır iyimser üst sınır olmaktan çıkar. |
+
+### 2. Yeni veriyle
+- **50 Hz → 60 Hz:** EvEMTBench IEEE 39-bus 345 kV şebekesi, setteki tek 60 Hz sistem (`docs/PLAN.md` WP2). Aynı boru hattı değişmeden çalışır. 60 Hz'de bir çevrim 16.7 ms, 50 Hz'de 20 ms. İş ~1–2 gün, çoğu bilgisayar süresi.
+
+### 3. Kendi EMT simülasyonumuzla (projenin asıl işi)
+- **Enjekte edilen sinyal** ve **şebeke-kurucu (GFM) invertör** aynı yoldan çözülür; hiçbir açık veri setinde yoklar.
+  - Yol A: Taylor'ın 2026 reachability makalesindeki Simulink IEEE 14-bus modeli (akım sınırlayıcılı 5 GFM invertör; Baeckeland ve ark.). PLAN'da hocaya sorulacak 1 numaralı soru.
+  - Yol B: Modeli kendimiz kurmak (Simulink/Simscape ya da PSCAD); önce iki baralı örneği EMT'ye taşımak. Birkaç haftalık iş.
+  - Her iki yolda da çıktı EvEMTBench etiket şemasıyla uyumlu üretilirse mevcut boru hattının tamamı (ön uç, ayar merdiveni, CNN, Hasan, protokol) değişmeden kullanılır.
+- Şimdiye kadarki iş, enjeksiyonsuz durumun sağlam ölçümü. Proje sorusu bu adım olmadan cevaplanmaz.
+
+### 4. Tamamen kapanmayan
+- **Simülasyon ve aynı üretici ailesi.**
+  - Kısmen azaltılabilir: PROTECT-90 (farklı ekip, farklı üretici), ya da Taylor'ın laboratuvarı üzerinden HIL testi veya gerçek röle kayıtları (COMTRADE).
+  - Gerisi lisans projesi için normal bir sınır ve raporda açıkça yazılır. Gürbüzlük testleri (gürültü, ölçü trafosu hatası, cihaz uyumsuzluğu, CT) bu sınırı daraltır.
+
+### Önerilen sıra
+1. CIGRE raporu.
+2. Hızlı kazanımlar: ayar duyarlılığı, CT'li koşu, kanal gecikmesi.
+3. 39-bus 60 Hz.
+4. Enjeksiyon + GFM (Taylor'ın modeline bağlı).
+
+*Kaynak: `docs/PLAN.md` (WP2, danışmana sorular, riskler); `results/ADAPTGRID.md` §4–5; `src/review/common.py` (`ct_saturation`, `cvt_filter`); `src/review/ladder.py` (T2).*
