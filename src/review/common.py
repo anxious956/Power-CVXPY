@@ -243,9 +243,22 @@ def load_relay_adapt(name, chain=None, cubicle=None):
     switching = np.char.startswith(et, "switch")
     fault_any = np.char.startswith(et, "flt")
     own = shc & (tgt == cfg["line"])
-    pos = own & (loc <= 100.0 * REACH)
-    own99 = own & (loc > 100.0 * REACH)
     relay_bus = cfg.get("relay_bus") or RELAY_BUS[name]
+    # EvEMTBench measures a line fault's location from the line's FIRST graph node. The reach is measured from
+    # the relay and "the first 20 % beyond" from the remote bus, so loc_rel orients it: percent from the relay
+    # on the protected line, from the remote bus on the lines beyond, NaN elsewhere. loc stays as recorded
+    # (the sequence-network studies place faults from the first node, as the records do). Relays at a line's
+    # second node (cigre_R1, cigre_R3) were labelled with loc itself before 28 Sep 2026: mirrored.
+    ends = {kk: (u, v) for u, v, kk in C["graph"].edges(keys=True)}
+    loc_rel = np.full(n, np.nan)
+    for line, near in [(cfg["line"], relay_bus)] + [(b, cfg["remote_bus"]) for b in cfg["beyond"]]:
+        u, v = ends[line]
+        if near not in (u, v):
+            raise ValueError(f"{name}: {near} is not an end of {line} {ends[line]}")
+        m = tgt == line
+        loc_rel[m] = loc[m] if near == u else 100.0 - loc[m]
+    pos = own & (loc_rel <= 100.0 * REACH)
+    own99 = own & (loc_rel > 100.0 * REACH)
     behind = [kk for u, v, kk in C["graph"].edges(keys=True) if relay_bus in (u, v) and str(kk).startswith("MainLn")
               and kk not in (cfg["line"], cfg["parallel"])]
     beyond = shc & np.isin(tgt, cfg["beyond"])
@@ -255,7 +268,7 @@ def load_relay_adapt(name, chain=None, cubicle=None):
     reverse_lines = shc & np.isin(tgt, behind)
     reverse = reverse_bus | reverse_lines
     neg = shc & ~own                                             # everything off the protected line
-    neg_bench = remote_bus | (beyond & (loc <= 20.0))            # the benchmark's negative set
+    neg_bench = remote_bus | (beyond & (loc_rel <= 20.0))        # the benchmark's negative set
     other = neg & ~(beyond | remote_bus | parallel | reverse)
     # --- operating point: total active load, binned by quantile; grounding as a stratum
     p_tot = L[cfg.get("loads", ["loads/Ld2/load_p", "loads/Ld5/load_p", "loads/Ld6/load_p"])].sum(axis=1).to_numpy(dtype=float)
@@ -268,7 +281,7 @@ def load_relay_adapt(name, chain=None, cubicle=None):
                 z1L=lp["length_km"] * lp["z1"], z0L=lp["length_km"] * lp["z0"],
                 x_reach=REACH * lp["length_km"] * lp["z1"].imag,
                 z_reach=abs(REACH * lp["length_km"] * lp["z1"]),
-                et=et, tgt=tgt, loc=loc, rf=rf, rf_bin=rf_bin_of(rf), phase=phase,
+                et=et, tgt=tgt, loc=loc, loc_rel=loc_rel, rf=rf, rf_bin=rf_bin_of(rf), phase=phase,
                 groups=op_bin, op_bin=op_bin, op_quartile=op_quartile, p_total=p_tot, grounding=grounding,
                 dedup=np.arange(n),
                 pos=pos, neg=neg, neg_bench=neg_bench, own99=own99, beyond=beyond, remote_bus_faults=remote_bus,

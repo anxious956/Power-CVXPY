@@ -1,5 +1,12 @@
 # adapt_grid-CigreMVGrid: does the TestGrid answer survive an inverter-rich MV feeder?
 
+> **R1 and R3 numbers below are being re-run (28 Sep 2026).** Their zone labels were mirrored: EvEMTBench
+> measures a line fault's location from the line's first graph node, and R1 (bus 3) and R3 (bus 14) sit at
+> the second, so 11 of R1's and 7–8 of R3's "in-zone" faults were really 85–100 % from the relay and as
+> many close-in faults were excluded. Fixed in `common.load_relay_adapt` (`loc_rel`), guarded by
+> `tests/test_location_orientation.py`; R2, R4 and TestGrid labels are unchanged (checked mask by mask).
+> Every R1/R3 row, and every statement that pools them, is provisional until `run_cigremv_fix.bat` has run.
+
 28 Sep 2026. Code: `src/review/adaptgrid_run.py` and the rest of the TestGrid pipeline, unchanged, plus
 `src/review/ibr_study.py` / `ladder_mv.py` (settings) and `src/review/cigremv_diagnostics.py`. Run:
 `src/review/run_cigremv.bat` (log `logs/run_cigremv.log`). Numbers: `results/adaptgrid/*cigre*.json`,
