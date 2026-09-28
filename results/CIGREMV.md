@@ -160,6 +160,34 @@ at R3 and 21 / 46 at R1-R2 / R4. The TestGrid caveat applies unchanged: both end
 instant, with no channel delay, security timer or loss-of-channel mode, so these rows are an upper bound
 on communication-assisted practice.
 
+### Room in the inverter for an auxiliary signal
+
+The project's idea needs the inverter to inject a negative-sequence δ during the fault, and the toy design
+asks for 0.39–1.32 pu in its ambiguous presets (README.md). `ibr_headroom.py` measures what is left under
+the 1.2 pu limit, from the inverters' own cubicles, for the faults a signal would have to separate at the
+two inverter-bus relays ([`cigremv/ibr_headroom.json`](cigremv/ibr_headroom.json)). Both inverters
+dispatch 12.0 MW (0.8 of 15 MVA) in every simulation, so this is the heavily loaded inverter.
+
+| in pu of the inverter rating | R1 in-zone (bus 3) | R3 in-zone (bus 14) | R1 / R3 near boundary |
+|---|---|---|---|
+| on the limiter at 20 ms | 45.8 % | 54.8 % | 23.2 % / 26.7 % |
+| on the limiter at 40 ms | 9.7 % | 15.5 % | 5.6 % / 8.7 % |
+| room with present output kept, median at 20 ms / 40 ms | 0.10 / 0.28 | 0.04 / 0.27 | 0.23 / 0.18 at 20 ms |
+| share with ≥ 0.4 pu room, output kept, 20 ms / 40 ms | **0 %** / 20.8 % | **0 %** / 17.9 % | 0 % / 0 % at 20 ms |
+| share with ≥ 0.4 / 0.7 / 1.0 pu room if active current is given up, 20 ms | 100 / 90.3 / 27.8 % | 97.6 / 83.3 / 22.6 % | 99.4 / 92.7 / 45.8 %; 100 / 88.8 / 35.4 % |
+
+"Output kept" is a lower bound (a δ of that size fits at any angle); "active current given up" keeps the
+inverter's reactive support and negative-sequence response and drops its active current, which is the
+limiter's own priority. With output kept, **no** relevant fault leaves 0.4 pu at the 20 ms decision time,
+and 0.7 pu fits in none at any time, because the 0.8 pu dispatch alone uses two thirds of the limit. If
+the inverter gives up active current for the fault's duration, 0.4 pu fits in 97.6–100 % and 0.7 pu in
+83–93 % at 20 ms; 1 pu, below the largest toy δ, fits in only 23–46 %.
+
+So the headroom question (Q22 H2) does not kill the idea, but it fixes its terms: the signal has to be
+paid for with active current during the fault, and at the relay's first-cycle decision the inverter is
+often still on the limiter. A lower dispatch, a limiter that reserves room for δ, and the time the
+inverter needs to start injecting are not in this data.
+
 ## 4. What this changes
 
 - **The TestGrid niche claim does not transfer.** ADAPTGRID.md's defensible niche — single-ended,
