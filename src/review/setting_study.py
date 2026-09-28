@@ -41,19 +41,26 @@ def neutral_impedance(grounding):
     return Z_OPEN if kind == "resonant" else float(r)
 
 
-def build(graph, ub=UB, grounding=None):
+def build(graph, ub=UB, grounding=None, open_ends=None):
     """Sequence network of the main buses at base voltage `ub` (line-to-line rms). A transformer is referred
     to the main-bus side; its zero-sequence branch depends on the vector group seen from that side:
     grounded star there and delta on the source side (Dyn, e.g. CIGRE MV 110/20 kV) -> transformer
     zero-sequence impedance plus three times the neutral impedance, the source grid excluded; any other
-    group (YN-YN, the TestGrid 380/110 kV units) -> grid + transformer, as before."""
+    group (YN-YN, the TestGrid 380/110 kV units) -> grid + transformer, as before.
+    open_ends {line: bus}: that line is disconnected at that bus (a normally-open point); the graph carries
+    no switch state, so the config states it from the records. The open end becomes a dead-end node."""
     main = sorted(n for n in graph.nodes if str(n).startswith("MainBus"))
     lines, grids, loads = {}, [], {}
     zn = neutral_impedance(grounding)
+    open_ends = open_ends or {}
     for u, v, k, d in graph.edges(keys=True, data=True):
         p = d.get(f"{k}_param_dict", {})
         if "xline" in p and u in main and v in main:
             L = p["length"]
+            if k in open_ends:
+                stub = f"{k}@open"
+                u, v = (stub, v) if u == open_ends[k] else (u, stub)
+                main = main + [stub]
             lines[k] = (u, v, L * complex(p["rline"], p["xline"]), L * complex(p["rline0"], p["xline0"]))
         tp = d.get(f"{k}_typ_param_dict", {})
         if "uktr" in tp:
@@ -80,6 +87,8 @@ def build(graph, ub=UB, grounding=None):
                 z0 = zg0 + zt0
             grids.append((bus, zg1 + zt1, z0, ub / np.sqrt(3)))
     for n in main:
+        if n not in graph.nodes:                          # dead-end node of an open line end
+            continue
         for key, val in graph.nodes[n].items():
             if key.startswith("Ld") and isinstance(val, dict) and "p" in val and "q" in val:
                 s = complex(val["p"], val["q"]) * 1e6
@@ -94,9 +103,10 @@ def relay_bus_of(R, name):
 
 def net_for(R, grounding=None):
     """build() at the relay's own nominal voltage."""
-    vn_kv = (R.get("cfg") or {}).get("vn_kv")
+    cfg = R.get("cfg") or {}
+    vn_kv = cfg.get("vn_kv")
     ub = vn_kv * 1e3 if vn_kv else UB                   # exactly UB for every config that declares no nominal
-    return build(R["graph"], ub=ub, grounding=grounding)
+    return build(R["graph"], ub=ub, grounding=grounding, open_ends=cfg.get("open_line_ends"))
 
 
 def ybus(main, lines, grids, loads, seq, fault_line=None, m=None):

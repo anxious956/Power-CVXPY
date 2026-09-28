@@ -82,11 +82,13 @@ CONFIGS = {
     # generators, two 25 MVA 110/20 kV Dyn transformers from a 10 GVA grid, XLPE cable lines. Cache on D: (set
     # EVEMT_CACHE_DIRS), every cubicle. Relays chosen from results/CIGREMV_FACTS.md: the longest lines, with the
     # inverter at the relay end (R1, R3), at the remote end (R2) and far away (R4, substation feeder head).
-    # MainLn8-14 (behind R3) is the open tie, so R3's 'lines behind' faults reach it only through the inverter.
+    # MainLn8-14 is the normally-open tie, open at bus 8: its bus-14 end carries 0.1 A pre-fault and ~550 A for
+    # faults on the line, none for faults at bus 14 (checked on the records), so it is a stub fed from bus 14 and
+    # its faults are genuine reverse faults for R3. The graph has no switch state, hence open_line_ends.
     **{name: dict(cache_glob="adapt_grid-CigreMVGrid*_cache.meta.npz", title=title, relay=relay, line=line,
                   remote_bus=rbus, beyond=beyond, parallel=None, relay_bus=bus, remote_cubicle=remote,
                   ibr_cubicles=["Cubicle\\pex_MainBus3_Ind3-3IBR", "Cubicle\\pex_MainBus14_Ind14-14IBR"],
-                  adaptgrid=True, vn_kv=20.0,
+                  adaptgrid=True, vn_kv=20.0, open_line_ends={"MainLn8-14": "MainBus8"},
                   loads=[f"loads/Ld{i}/load_p" for i in (1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14)])
        for name, title, relay, line, bus, rbus, beyond, remote in (
            ("cigre_R1", "CIGRE MV R1: line 2-3 at bus 3 (inverter bus)", "Cub_1\\pex_MainBus3_MainLn2-3", "MainLn2-3",
