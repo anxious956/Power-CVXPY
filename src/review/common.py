@@ -37,8 +37,16 @@ RELAY_BUS = dict(doubleline="MainBus1", testgrid_A="MainBus1", testgrid_B="MainB
 _CACHE = {}
 
 
+# Cache directories searched in order: data/ in the repository, then EVEMT_CACHE_DIRS (os.pathsep-separated),
+# for caches too large for the system drive (the CIGRE MV cache is 34 GB on D:).
+CACHE_DIRS = [os.path.join(ROOT, "data")] + [p for p in os.environ.get("EVEMT_CACHE_DIRS", "").split(os.pathsep) if p]
+
+
 def _cache(cfg):
-    path = sorted(glob.glob(os.path.join(ROOT, "data", cfg["cache_glob"])))[0]
+    hits = [h for d in CACHE_DIRS for h in sorted(glob.glob(os.path.join(d, cfg["cache_glob"])))]
+    if not hits:
+        raise FileNotFoundError(f"no cache matching {cfg['cache_glob']} in {CACHE_DIRS}; set EVEMT_CACHE_DIRS")
+    path = hits[0]
     if path not in _CACHE:
         _CACHE[path] = load_cache(path)
     return _CACHE[path]

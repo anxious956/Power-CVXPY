@@ -1,0 +1,1278 @@
+{
+ "script": "cigremv_facts",
+ "commit": "4370f7650c8465847b71a7daf5f0f4c13366cc00",
+ "cache": "adapt_grid-CigreMVGrid_cache.meta.npz",
+ "n_simulations": 9906,
+ "n_cubicles": 45,
+ "cubicles": [
+  "Cub_1(1)\\pex_MainBus9_MainLn8-9",
+  "Cub_1\\pex_MainBus10_MainLn9-10",
+  "Cub_1\\pex_MainBus11_MainLn4-11",
+  "Cub_1\\pex_MainBus12_MainLn12-13",
+  "Cub_1\\pex_MainBus13_MainLn13-14",
+  "Cub_1\\pex_MainBus14_MainLn13-14",
+  "Cub_1\\pex_MainBus1_Trf0-1",
+  "Cub_1\\pex_MainBus2_MainLn1-2",
+  "Cub_1\\pex_MainBus3_MainLn2-3",
+  "Cub_1\\pex_MainBus4_MainLn3-4",
+  "Cub_1\\pex_MainBus5_MainLn4-5",
+  "Cub_1\\pex_MainBus6_MainLn5-6",
+  "Cub_1\\pex_MainBus7_MainLn7-8",
+  "Cub_1\\pex_MainBus8_MainLn8-9",
+  "Cub_1\\pex_MainBus9_Ld9",
+  "Cub_2\\pex_MainBus10_MainLn10-11",
+  "Cub_2\\pex_MainBus11_MainLn10-11",
+  "Cub_2\\pex_MainBus12_Trf0-12",
+  "Cub_2\\pex_MainBus13_MainLn12-13",
+  "Cub_2\\pex_MainBus14_MainLn8-14",
+  "Cub_2\\pex_MainBus1_MainLn1-2",
+  "Cub_2\\pex_MainBus2_MainLn2-3",
+  "Cub_2\\pex_MainBus3_MainLn3-4",
+  "Cub_2\\pex_MainBus4_MainLn4-5",
+  "Cub_2\\pex_MainBus5_MainLn5-6",
+  "Cub_2\\pex_MainBus6_MainLn6-7",
+  "Cub_2\\pex_MainBus7_MainLn6-7",
+  "Cub_2\\pex_MainBus8_MainLn3-8",
+  "Cub_2\\pex_MainBus9_MainLn9-10",
+  "Cub_3\\pex_MainBus11_Ld11",
+  "Cub_3\\pex_MainBus12_Ld12",
+  "Cub_3\\pex_MainBus13_Ld13",
+  "Cub_3\\pex_MainBus14_Ld14",
+  "Cub_3\\pex_MainBus1_Ld1",
+  "Cub_3\\pex_MainBus3_MainLn3-8",
+  "Cub_3\\pex_MainBus4_MainLn4-11",
+  "Cub_3\\pex_MainBus5_Ld5",
+  "Cub_3\\pex_MainBus6_Ld6",
+  "Cub_3\\pex_MainBus7_Ld7",
+  "Cub_3\\pex_MainBus8_MainLn7-8",
+  "Cub_4\\pex_MainBus3_Ld3",
+  "Cub_4\\pex_MainBus4_Ld4",
+  "Cub_5\\pex_MainBus8_Ld8",
+  "Cubicle\\pex_MainBus14_Ind14-14IBR",
+  "Cubicle\\pex_MainBus3_Ind3-3IBR"
+ ],
+ "fs": 6400.0,
+ "labels": {
+  "varying": [
+   "file",
+   "Unnamed: 0",
+   "general/result_file_path",
+   "general/sim_idx",
+   "events/event_type",
+   "events/event_start",
+   "events/event_target",
+   "events/event_flt_target_line_location",
+   "events/event_flt_shc_resistance",
+   "events/event_flt_hif_resistance",
+   "events/event_phase_select_2ph",
+   "events/event_phase_select_1ph",
+   "events/event_iflt_duration",
+   "arc/arc_tau",
+   "arc/arc_u0",
+   "arc/arc_r0",
+   "grounding/grnd_type",
+   "grounding/coil_tuning",
+   "grounding/solid_ground_resistance",
+   "grounding/resistive_ground_resistance",
+   "grounding/parasitic_resistance_percentage",
+   "cap_switch/cap_power",
+   "ohl_switch/ohl_length",
+   "ohl_switch/ohl_type",
+   "cable_switch/cable_length",
+   "cable_switch/cable_type",
+   "switch_trafo_to_lv_type",
+   "switch_trafo_to_hv_type",
+   "motor_start/motor_type",
+   "motor_start/motor_trafo_type",
+   "loads/Ld1/load_p",
+   "loads/Ld1/load_q",
+   "loads/Ld11/load_p",
+   "loads/Ld11/load_q",
+   "loads/Ld12/load_p",
+   "loads/Ld12/load_q",
+   "loads/Ld13/load_p",
+   "loads/Ld13/load_q",
+   "loads/Ld14/load_p",
+   "loads/Ld14/load_q",
+   "loads/Ld3/load_p",
+   "loads/Ld3/load_q",
+   "loads/Ld4/load_p",
+   "loads/Ld4/load_q",
+   "loads/Ld5/load_p",
+   "loads/Ld5/load_q",
+   "loads/Ld6/load_p",
+   "loads/Ld6/load_q",
+   "loads/Ld7/load_p",
+   "loads/Ld7/load_q",
+   "loads/Ld8/load_p",
+   "loads/Ld8/load_q",
+   "loads/Ld9/load_p",
+   "loads/Ld9/load_q",
+   "loads/LdSwitch/load_p",
+   "loads/LdSwitch/load_q",
+   "ExtGrid/usetp",
+   "ExtGrid/phiini"
+  ],
+  "event_counts": {
+   "flt_1phg_incipient_w_arc": 528,
+   "flt_3ph_shc": 510,
+   "switch_ohl_off": 509,
+   "switch_cable_on": 493,
+   "switch_ibr_trip": 493,
+   "flt_2ph_shc": 490,
+   "flt_1phg_incipient": 479,
+   "flt_1phg_hif": 477,
+   "flt_1phg_shc": 476,
+   "switch_ohl_on": 473,
+   "switch_cap_on": 471,
+   "switch_inrushHV": 468,
+   "flt_1phg_shc_w_arc": 464,
+   "switch_inrushLV": 460,
+   "switch_motor_start": 457,
+   "flt_1phg_hif_w_arc": 456,
+   "switch_load_on": 455,
+   "flt_2phg_shc": 453,
+   "switch_load_off": 451,
+   "switch_cap_off": 423,
+   "switch_cable_off": 420
+  },
+  "fault_location_pct": [
+   1.0108718693223075,
+   98.99572209643374
+  ],
+  "shc_resistance_ohm": [
+   0.001445091824023,
+   49.9919960002762
+  ],
+  "grounding": {
+   "resistive": 3325,
+   "solid": 3317,
+   "resonant": 3264
+  },
+  "ext_grid_usetp": [
+   0.9800029479773242,
+   1.0199941531218009
+  ],
+  "shc_targets": {
+   "MainBus1": 81,
+   "MainBus10": 91,
+   "MainBus11": 73,
+   "MainBus12": 82,
+   "MainBus13": 88,
+   "MainBus14": 75,
+   "MainBus2": 85,
+   "MainBus3": 76,
+   "MainBus4": 87,
+   "MainBus5": 89,
+   "MainBus6": 73,
+   "MainBus7": 82,
+   "MainBus8": 77,
+   "MainBus9": 81,
+   "MainLn1-2": 92,
+   "MainLn10-11": 85,
+   "MainLn12-13": 73,
+   "MainLn13-14": 92,
+   "MainLn2-3": 83,
+   "MainLn3-4": 80,
+   "MainLn3-8": 76,
+   "MainLn4-11": 103,
+   "MainLn4-5": 75,
+   "MainLn5-6": 80,
+   "MainLn6-7": 85,
+   "MainLn7-8": 75,
+   "MainLn8-14": 93,
+   "MainLn8-9": 77,
+   "MainLn9-10": 84
+  }
+ },
+ "grid": {
+  "n_nodes": 31,
+  "n_edges": 24,
+  "inverters": {
+   "Bus14IBR": {
+    "Sn_MVA": 15.0,
+    "Imax_pu": 1.2,
+    "P_FLAG": 2.0,
+    "Q_FLAG": 2.0,
+    "IqV_FLAG": 1.0
+   },
+   "Bus3IBR": {
+    "Sn_MVA": 15.0,
+    "Imax_pu": 1.2,
+    "P_FLAG": 2.0,
+    "Q_FLAG": 2.0,
+    "IqV_FLAG": 1.0
+   }
+  },
+  "edges": [
+   {
+    "u": "Bus0",
+    "v": "MainBus1",
+    "key": "Trf0-1",
+    "params": {
+     "Trf0-1_param_dict": {
+      "name": "Trf0-1",
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "trafo_type": "Transformer Type 25MVA 50Hz 110/20kV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "Trf0-1_typ_param_dict": {
+      "strn": 25.0,
+      "frnom": 50.0,
+      "utrn_h": 110.0,
+      "utrn_l": 20.0,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 1.0,
+      "uktr": 12.00041675567627,
+      "pcutr": 25.0,
+      "curmg": 0.0,
+      "pfe": 0.0,
+      "x0pu": 0.10000000149011612,
+      "r0pu": 0.0,
+      "iLimb": 3,
+      "itapch": 1,
+      "itrmt": 0,
+      "iInterPol": 0,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "Transformer Type 25MVA 50Hz 110/20kV"
+     }
+    }
+   },
+   {
+    "u": "Bus0",
+    "v": "MainBus12",
+    "key": "Trf0-12",
+    "params": {
+     "Trf0-12_param_dict": {
+      "name": "Trf0-12",
+      "cubicle_1": "Cub_3",
+      "cubicle_2": "Cub_2",
+      "trafo_type": "Transformer Type 25MVA 50Hz 110/20kV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "Trf0-12_typ_param_dict": {
+      "strn": 25.0,
+      "frnom": 50.0,
+      "utrn_h": 110.0,
+      "utrn_l": 20.0,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 1.0,
+      "uktr": 12.00041675567627,
+      "pcutr": 25.0,
+      "curmg": 0.0,
+      "pfe": 0.0,
+      "x0pu": 0.10000000149011612,
+      "r0pu": 0.0,
+      "iLimb": 3,
+      "itapch": 1,
+      "itrmt": 0,
+      "iInterPol": 0,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "Transformer Type 25MVA 50Hz 110/20kV"
+     }
+    }
+   },
+   {
+    "u": "Bus14IBR",
+    "v": "MainBus14",
+    "key": "Ind14-14IBR",
+    "params": {
+     "Ind14-14IBR_param_dict": {
+      "xrea": 1.599679946899414,
+      "rrea": 0.03200000151991844,
+      "R0toR1": 1000000000.0,
+      "X0toX1": 1000000000.0,
+      "ucn": 20.0,
+      "Sn": 15.0
+     }
+    }
+   },
+   {
+    "u": "Bus3IBR",
+    "v": "MainBus3",
+    "key": "Ind3-3IBR",
+    "params": {
+     "Ind3-3IBR_param_dict": {
+      "xrea": 1.599679946899414,
+      "rrea": 0.03200000151991844,
+      "R0toR1": 1000000000.0,
+      "X0toX1": 1000000000.0,
+      "ucn": 20.0,
+      "Sn": 15.0
+     }
+    }
+   },
+   {
+    "u": "BusCableSwitchA",
+    "v": "BusCableSwitchB",
+    "key": "LnCableSwitch",
+    "params": {
+     "LnCableSwitch_param_dict": {
+      "length": 1.5,
+      "xline": 0.2650993863741557,
+      "rline": 0.2962864438692729,
+      "xline0": 0.49820180733998615,
+      "rline0": 1.027523676554362,
+      "cubicle_1": "Feld_1",
+      "cubicle_2": "Feld_1",
+      "line_type": "CableSwitch",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.5,
+      "fmax": 100000.0
+     },
+     "LnCableSwitch_typ_param_dict": {
+      "line_type_name": "CableSwitch",
+      "line_type_category": "Cable",
+      "line_type_specific": "TypCabsys",
+      "is_cable": true,
+      "line_category": "Cable"
+     }
+    }
+   },
+   {
+    "u": "BusInrushHVA",
+    "v": "BusInrushHVB",
+    "key": "TrfInrushHV",
+    "params": {
+     "TrfInrushHV_param_dict": {
+      "name": "TrfInrushHV",
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Feld_1",
+      "trafo_type": "25 MVA 110/20 50 Hz TrafoInrushHV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "TrfInrushHV_typ_param_dict": {
+      "strn": 25.0,
+      "frnom": 50.0,
+      "utrn_h": 110.0,
+      "utrn_l": 20.0,
+      "tr2cn_h": "YN",
+      "tr2cn_l": "D",
+      "nt2ag": 5.0,
+      "uktr": 10.656485557556152,
+      "pcutr": 110.25594329833984,
+      "curmg": 0.423245370388031,
+      "pfe": 18.20345687866211,
+      "x0pu": 0.10880245268344879,
+      "r0pu": 0.004811687860637903,
+      "iLimb": 5,
+      "itapch": 0,
+      "itrmt": 3,
+      "iInterPol": 1,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "25 MVA 110/20 50 Hz TrafoInrushHV"
+     }
+    }
+   },
+   {
+    "u": "BusInrushLVA",
+    "v": "BusInrushLVB",
+    "key": "TrfInrushLV",
+    "params": {
+     "TrfInrushLV_param_dict": {
+      "name": "TrfInrushLV",
+      "cubicle_1": "Cub_3",
+      "cubicle_2": "Cub_1",
+      "trafo_type": "1.0 MVA 20/0.4 50 Hz TrafoInrushLV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "TrfInrushLV_typ_param_dict": {
+      "strn": 1.0,
+      "frnom": 50.0,
+      "utrn_h": 20.0,
+      "utrn_l": 0.4000000059604645,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 5.0,
+      "uktr": 6.0,
+      "pcutr": 12.454930305480957,
+      "curmg": 1.1431782245635986,
+      "pfe": 1.6083509922027588,
+      "x0pu": 0.05758834630250931,
+      "r0pu": 0.017818385735154152,
+      "iLimb": 3,
+      "itapch": 0,
+      "itrmt": 3,
+      "iInterPol": 1,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "1.0 MVA 20/0.4 50 Hz TrafoInrushLV"
+     }
+    }
+   },
+   {
+    "u": "BusMotorStartA",
+    "v": "BusMotorStartB",
+    "key": "TrfMotorStart",
+    "params": {
+     "TrfMotorStart_param_dict": {
+      "name": "TrfMotorStart",
+      "cubicle_1": "Feld_1",
+      "cubicle_2": "Feld_2",
+      "trafo_type": "1.0 MVA 20/0.4 50 Hz Trafo0",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "TrfMotorStart_typ_param_dict": {
+      "strn": 1.0,
+      "frnom": 50.0,
+      "utrn_h": 20.0,
+      "utrn_l": 0.4000000059604645,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 5.0,
+      "uktr": 6.0,
+      "pcutr": 12.454930305480957,
+      "curmg": 1.1431782245635986,
+      "pfe": 1.6083509922027588,
+      "x0pu": 0.05758834630250931,
+      "r0pu": 0.017818385735154152,
+      "iLimb": 3,
+      "itapch": 0,
+      "itrmt": 2,
+      "iInterPol": 0,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "1.0 MVA 20/0.4 50 Hz Trafo0"
+     }
+    }
+   },
+   {
+    "u": "BusOHLSwitchA",
+    "v": "BusOHLSwitchB",
+    "key": "LnOHLSwitch",
+    "params": {
+     "LnOHLSwitch_param_dict": {
+      "length": 1.5,
+      "xline": 0.5075333913167318,
+      "rline": 0.4737552801767985,
+      "xline0": 1.756073792775472,
+      "rline0": 0.6186004479726156,
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Cub_1",
+      "line_type": "TowerTypeCigre",
+      "i_dist": 1,
+      "i_model": 2,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.01,
+      "fmax": 1000000.0
+     },
+     "LnOHLSwitch_typ_param_dict": {
+      "line_type_name": "TowerTypeCigre",
+      "line_type_category": "Overhead",
+      "line_type_specific": "TypTow",
+      "nlcir": 1,
+      "nlear": 0,
+      "iTransMode": 0,
+      "gshunt": 0.0,
+      "rearth": 100.0,
+      "is_cable": false,
+      "is_ohl": true,
+      "line_category": "Overhead",
+      "tower_arrangement": "unknown"
+     }
+    }
+   },
+   {
+    "u": "MainBus1",
+    "v": "MainBus2",
+    "key": "MainLn1-2",
+    "params": {
+     "MainLn1-2_param_dict": {
+      "length": 2.819999933242798,
+      "xline": 0.7160000091309245,
+      "rline": 0.5010000053263727,
+      "xline0": 1.5980000569837327,
+      "rline0": 0.8169999552753789,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn1-2_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus10",
+    "v": "MainBus11",
+    "key": "MainLn10-11",
+    "params": {
+     "MainLn10-11_param_dict": {
+      "length": 0.33000001311302185,
+      "xline": 0.7159999992775194,
+      "rline": 0.5010000033414723,
+      "xline0": 1.5980001016891323,
+      "rline0": 0.8169999303709404,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_2",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn10-11_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus10",
+    "v": "MainBus9",
+    "key": "MainLn9-10",
+    "params": {
+     "MainLn9-10_param_dict": {
+      "length": 0.7699999809265137,
+      "xline": 0.7160000390139503,
+      "rline": 0.5010000034059798,
+      "xline0": 1.5980001015601246,
+      "rline0": 0.8169999572704354,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn9-10_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus11",
+    "v": "MainBus4",
+    "key": "MainLn4-11",
+    "params": {
+     "MainLn4-11_param_dict": {
+      "length": 0.49000000953674316,
+      "xline": 0.7159999907551982,
+      "rline": 0.5009999895387768,
+      "xline0": 1.5980000087582333,
+      "rline0": 0.8169999985402945,
+      "cubicle_1": "Cub_3",
+      "cubicle_2": "Cub_1",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn4-11_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus12",
+    "v": "MainBus13",
+    "key": "MainLn12-13",
+    "params": {
+     "MainLn12-13_param_dict": {
+      "length": 4.889999866485596,
+      "xline": 0.5075333934726745,
+      "rline": 0.47375528189804206,
+      "xline0": 1.756073701279357,
+      "rline0": 0.6186004721760635,
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Cub_2",
+      "line_type": "TowerTypeCigre",
+      "i_dist": 1,
+      "i_model": 2,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.01,
+      "fmax": 1000000.0
+     },
+     "MainLn12-13_typ_param_dict": {
+      "line_type_name": "TowerTypeCigre",
+      "line_type_category": "Overhead",
+      "line_type_specific": "TypTow",
+      "nlcir": 1,
+      "nlear": 0,
+      "iTransMode": 0,
+      "gshunt": 0.0,
+      "rearth": 100.0,
+      "is_cable": false,
+      "is_ohl": true,
+      "line_category": "Overhead",
+      "tower_arrangement": "unknown"
+     }
+    }
+   },
+   {
+    "u": "MainBus13",
+    "v": "MainBus14",
+    "key": "MainLn13-14",
+    "params": {
+     "MainLn13-14_param_dict": {
+      "length": 2.990000009536743,
+      "xline": 0.5075333891663395,
+      "rline": 0.47375525766788834,
+      "xline0": 1.75607371328324,
+      "rline0": 0.6186004845399108,
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Cub_1",
+      "line_type": "TowerTypeCigre",
+      "i_dist": 1,
+      "i_model": 2,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.01,
+      "fmax": 1000000.0
+     },
+     "MainLn13-14_typ_param_dict": {
+      "line_type_name": "TowerTypeCigre",
+      "line_type_category": "Overhead",
+      "line_type_specific": "TypTow",
+      "nlcir": 1,
+      "nlear": 0,
+      "iTransMode": 0,
+      "gshunt": 0.0,
+      "rearth": 100.0,
+      "is_cable": false,
+      "is_ohl": true,
+      "line_category": "Overhead",
+      "tower_arrangement": "unknown"
+     }
+    }
+   },
+   {
+    "u": "MainBus14",
+    "v": "MainBus8",
+    "key": "MainLn8-14",
+    "params": {
+     "MainLn8-14_param_dict": {
+      "length": 2.0,
+      "xline": 0.5075333714485168,
+      "rline": 0.47375527024269104,
+      "xline0": 1.7560737133026123,
+      "rline0": 0.6186004877090454,
+      "cubicle_1": "Cub_4",
+      "cubicle_2": "Cub_2",
+      "line_type": "TowerTypeCigre",
+      "i_dist": 1,
+      "i_model": 2,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.01,
+      "fmax": 1000000.0
+     },
+     "MainLn8-14_typ_param_dict": {
+      "line_type_name": "TowerTypeCigre",
+      "line_type_category": "Overhead",
+      "line_type_specific": "TypTow",
+      "nlcir": 1,
+      "nlear": 0,
+      "iTransMode": 0,
+      "gshunt": 0.0,
+      "rearth": 100.0,
+      "is_cable": false,
+      "is_ohl": true,
+      "line_category": "Overhead",
+      "tower_arrangement": "unknown"
+     }
+    }
+   },
+   {
+    "u": "MainBus2",
+    "v": "MainBus3",
+    "key": "MainLn2-3",
+    "params": {
+     "MainLn2-3_param_dict": {
+      "length": 4.420000076293945,
+      "xline": 0.7160000008630537,
+      "rline": 0.5010000094935904,
+      "xline0": 1.5980000673181858,
+      "rline0": 0.8169999887803023,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn2-3_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus3",
+    "v": "MainBus4",
+    "key": "MainLn3-4",
+    "params": {
+     "MainLn3-4_param_dict": {
+      "length": 0.6100000143051147,
+      "xline": 0.715999996873199,
+      "rline": 0.500999990033322,
+      "xline0": 1.5980000981033802,
+      "rline0": 0.8169999673640149,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn3-4_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus3",
+    "v": "MainBus8",
+    "key": "MainLn3-8",
+    "params": {
+     "MainLn3-8_param_dict": {
+      "length": 1.2999999523162842,
+      "xline": 0.7160000421817502,
+      "rline": 0.5009999825771032,
+      "xline0": 1.5980000348457937,
+      "rline0": 0.8169999789091249,
+      "cubicle_1": "Cub_3",
+      "cubicle_2": "Cub_2",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn3-8_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus4",
+    "v": "MainBus5",
+    "key": "MainLn4-5",
+    "params": {
+     "MainLn4-5_param_dict": {
+      "length": 0.5600000023841858,
+      "xline": 0.7159999940395355,
+      "rline": 0.5009999743487155,
+      "xline0": 1.5980000938773151,
+      "rline0": 0.8169999577445645,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn4-5_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus5",
+    "v": "MainBus6",
+    "key": "MainLn5-6",
+    "params": {
+     "MainLn5-6_param_dict": {
+      "length": 1.5399999618530273,
+      "xline": 0.7160000390139503,
+      "rline": 0.5010000034059798,
+      "xline0": 1.5980001015601246,
+      "rline0": 0.8169999572704354,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn5-6_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus6",
+    "v": "MainBus7",
+    "key": "MainLn6-7",
+    "params": {
+     "MainLn6-7_param_dict": {
+      "length": 0.23999999463558197,
+      "xline": 0.7160000042219957,
+      "rline": 0.5009999921148021,
+      "xline0": 1.5980000654409343,
+      "rline0": 0.8169999528750767,
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_2",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn6-7_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus7",
+    "v": "MainBus8",
+    "key": "MainLn7-8",
+    "params": {
+     "MainLn7-8_param_dict": {
+      "length": 1.6699999570846558,
+      "xline": 0.715999992861719,
+      "rline": 0.5010000017845703,
+      "xline0": 1.5979999964308595,
+      "rline0": 0.8169999589548843,
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Cub_3",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn7-8_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   },
+   {
+    "u": "MainBus8",
+    "v": "MainBus9",
+    "key": "MainLn8-9",
+    "params": {
+     "MainLn8-9_param_dict": {
+      "length": 0.3199999928474426,
+      "xline": 0.716000019744039,
+      "rline": 0.5010000076368453,
+      "xline0": 1.5980000033527613,
+      "rline0": 0.8169999528750767,
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Cub_1(1)",
+      "line_type": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.001,
+      "fmax": 1000000.0
+     },
+     "MainLn8-9_typ_param_dict": {
+      "line_type_name": "Cable Type NA2XS2Y 120 (XLPE Al/Cu)",
+      "line_type_category": "General",
+      "line_type_specific": "TypLne",
+      "is_cable": true,
+      "line_category": "Cable",
+      "rline": 0.5009999871253967,
+      "xline": 0.7160000205039978,
+      "cline": 0.15117491781711578,
+      "rline0": 0.8169999718666077,
+      "xline0": 1.5980000495910645,
+      "cline0": 0.15117491781711578
+     }
+    }
+   }
+  ],
+  "ext_grid": {
+   "Bus0": {
+    "bustp": "PV",
+    "snss": 10000.0,
+    "rntxn": 0.10000000149011612,
+    "x0tx1": 1.0,
+    "r0tx0": 0.10000000149011612
+   }
+  }
+ },
+ "inverter_share_of_fault_current_rise": {
+  "20ms": {
+   "median": 0.5233836357600963,
+   "p10": 0.20013342592371927,
+   "p90": 0.8078728637582469,
+   "max": 0.9973673992925575,
+   "by_type": {
+    "flt_1phg_shc": {
+     "n": 476,
+     "median": 0.5693330185136924,
+     "p90": 0.7537093189678541
+    },
+    "flt_1phg_shc_w_arc": {
+     "n": 464,
+     "median": 0.6067800431538448,
+     "p90": 0.7470997543629443
+    },
+    "flt_2ph_shc": {
+     "n": 490,
+     "median": 0.3769840100124061,
+     "p90": 0.6723283910447049
+    },
+    "flt_2phg_shc": {
+     "n": 453,
+     "median": 0.4986674595175911,
+     "p90": 0.8448932187127344
+    },
+    "flt_3ph_shc": {
+     "n": 510,
+     "median": 0.5178774411053647,
+     "p90": 0.9945450658049693
+    }
+   },
+   "by_target_median": {
+    "MainBus1": 0.1271029500041198,
+    "MainBus10": 0.5583092114638927,
+    "MainBus11": 0.5474334384918746,
+    "MainBus12": 0.20313748331276757,
+    "MainBus13": 0.47234368628969414,
+    "MainBus14": 0.713606403684309,
+    "MainBus2": 0.30759070684622264,
+    "MainBus3": 0.5613254651438507,
+    "MainBus4": 0.5627275899043107,
+    "MainBus5": 0.5766192639795277,
+    "MainBus6": 0.5034675037799009,
+    "MainBus7": 0.5497801485836334,
+    "MainBus8": 0.5527809297174058,
+    "MainBus9": 0.5659434274566998,
+    "MainLn1-2": 0.22764539234553632,
+    "MainLn10-11": 0.5819916485661794,
+    "MainLn12-13": 0.4807519213773968,
+    "MainLn13-14": 0.5796431659354305,
+    "MainLn2-3": 0.4352956960219914,
+    "MainLn3-4": 0.5445552589763281,
+    "MainLn3-8": 0.52143055455413,
+    "MainLn4-11": 0.5444654884506086,
+    "MainLn4-5": 0.5508976615445704,
+    "MainLn5-6": 0.596298425677283,
+    "MainLn6-7": 0.5391996840902383,
+    "MainLn7-8": 0.4945748315074619,
+    "MainLn8-14": 0.7307271850223396,
+    "MainLn8-9": 0.5586580403679525,
+    "MainLn9-10": 0.547303998753769
+   }
+  },
+  "40ms": {
+   "median": 0.22739494905866056,
+   "p10": 0.0014448869805218005,
+   "p90": 0.6729629417548416,
+   "max": 0.9983807055122653,
+   "by_type": {
+    "flt_1phg_shc": {
+     "n": 476,
+     "median": 0.4091723946949902,
+     "p90": 0.8067389773790753
+    },
+    "flt_1phg_shc_w_arc": {
+     "n": 464,
+     "median": 0.45370679273678477,
+     "p90": 0.8197259239310517
+    },
+    "flt_2ph_shc": {
+     "n": 490,
+     "median": 0.21533405013369242,
+     "p90": 0.47985566527263457
+    },
+    "flt_2phg_shc": {
+     "n": 453,
+     "median": 0.23558448564592036,
+     "p90": 0.5299077498083834
+    },
+    "flt_3ph_shc": {
+     "n": 510,
+     "median": 0.001971440434349979,
+     "p90": 0.16703672358343005
+    }
+   },
+   "by_target_median": {
+    "MainBus1": 0.0721783478596721,
+    "MainBus10": 0.24289520819780475,
+    "MainBus11": 0.2438676563767747,
+    "MainBus12": 0.11654622885734583,
+    "MainBus13": 0.17629234527861548,
+    "MainBus14": 0.4218343232074197,
+    "MainBus2": 0.16915308152997519,
+    "MainBus3": 0.2925977497029249,
+    "MainBus4": 0.22876302709732368,
+    "MainBus5": 0.3377355445624559,
+    "MainBus6": 0.23343977011001346,
+    "MainBus7": 0.23994334735445882,
+    "MainBus8": 0.2977941351811487,
+    "MainBus9": 0.29571336235954643,
+    "MainLn1-2": 0.10377815084670644,
+    "MainLn10-11": 0.29773033044002806,
+    "MainLn12-13": 0.2406645859684425,
+    "MainLn13-14": 0.24923713402621017,
+    "MainLn2-3": 0.21994251852467658,
+    "MainLn3-4": 0.2442874288720402,
+    "MainLn3-8": 0.2981228358087964,
+    "MainLn4-11": 0.21926962487739343,
+    "MainLn4-5": 0.2774520537206986,
+    "MainLn5-6": 0.2628918433181987,
+    "MainLn6-7": 0.2398241179827253,
+    "MainLn7-8": 0.24651775007416682,
+    "MainLn8-14": 0.37611695933028355,
+    "MainLn8-9": 0.2601564789426678,
+    "MainLn9-10": 0.24560302254246513
+   }
+  }
+ },
+ "line_end_prefault_current_A_peak": {
+  "Cub_1(1)\\pex_MainBus9_MainLn8-9": 20.082621497511155,
+  "Cub_1\\pex_MainBus10_MainLn9-10": 13.26635637635501,
+  "Cub_1\\pex_MainBus11_MainLn4-11": 27.150297273558863,
+  "Cub_1\\pex_MainBus12_MainLn12-13": 440.1432641387621,
+  "Cub_1\\pex_MainBus13_MainLn13-14": 441.7905745180566,
+  "Cub_1\\pex_MainBus14_MainLn13-14": 441.82260611041943,
+  "Cub_1\\pex_MainBus2_MainLn1-2": 327.6719923331078,
+  "Cub_1\\pex_MainBus3_MainLn2-3": 328.83793677815294,
+  "Cub_1\\pex_MainBus4_MainLn3-4": 90.2579255223564,
+  "Cub_1\\pex_MainBus5_MainLn4-5": 45.19575859260523,
+  "Cub_1\\pex_MainBus6_MainLn5-6": 13.993416614554151,
+  "Cub_1\\pex_MainBus7_MainLn7-8": 14.172741502079766,
+  "Cub_1\\pex_MainBus8_MainLn8-9": 19.945469672709216,
+  "Cub_2\\pex_MainBus10_MainLn10-11": 13.266356866518993,
+  "Cub_2\\pex_MainBus11_MainLn10-11": 13.153122532811473,
+  "Cub_2\\pex_MainBus13_MainLn12-13": 440.207583026228,
+  "Cub_2\\pex_MainBus14_MainLn8-14": 0.11772255161880185,
+  "Cub_2\\pex_MainBus1_MainLn1-2": 326.8381349921019,
+  "Cub_2\\pex_MainBus2_MainLn2-3": 327.6719926721948,
+  "Cub_2\\pex_MainBus3_MainLn3-4": 90.13489420481426,
+  "Cub_2\\pex_MainBus4_MainLn4-5": 45.08577690141476,
+  "Cub_2\\pex_MainBus5_MainLn5-6": 13.632654258324415,
+  "Cub_2\\pex_MainBus6_MainLn6-7": 10.148731534894013,
+  "Cub_2\\pex_MainBus7_MainLn6-7": 10.13442696734052,
+  "Cub_2\\pex_MainBus8_MainLn3-8": 58.95717082005874,
+  "Cub_2\\pex_MainBus9_MainLn9-10": 13.6203130599585,
+  "Cub_3\\pex_MainBus3_MainLn3-8": 58.63589579538762,
+  "Cub_3\\pex_MainBus4_MainLn4-11": 27.029524908818253,
+  "Cub_3\\pex_MainBus8_MainLn7-8": 13.97085935948057
+ },
+ "lines_with_both_ends_cached": {
+  "MainLn8-9": [
+   "Cub_1(1)\\pex_MainBus9_MainLn8-9",
+   "Cub_1\\pex_MainBus8_MainLn8-9"
+  ],
+  "MainLn9-10": [
+   "Cub_1\\pex_MainBus10_MainLn9-10",
+   "Cub_2\\pex_MainBus9_MainLn9-10"
+  ],
+  "MainLn4-11": [
+   "Cub_1\\pex_MainBus11_MainLn4-11",
+   "Cub_3\\pex_MainBus4_MainLn4-11"
+  ],
+  "MainLn12-13": [
+   "Cub_1\\pex_MainBus12_MainLn12-13",
+   "Cub_2\\pex_MainBus13_MainLn12-13"
+  ],
+  "MainLn13-14": [
+   "Cub_1\\pex_MainBus13_MainLn13-14",
+   "Cub_1\\pex_MainBus14_MainLn13-14"
+  ],
+  "MainLn1-2": [
+   "Cub_1\\pex_MainBus2_MainLn1-2",
+   "Cub_2\\pex_MainBus1_MainLn1-2"
+  ],
+  "MainLn2-3": [
+   "Cub_1\\pex_MainBus3_MainLn2-3",
+   "Cub_2\\pex_MainBus2_MainLn2-3"
+  ],
+  "MainLn3-4": [
+   "Cub_1\\pex_MainBus4_MainLn3-4",
+   "Cub_2\\pex_MainBus3_MainLn3-4"
+  ],
+  "MainLn4-5": [
+   "Cub_1\\pex_MainBus5_MainLn4-5",
+   "Cub_2\\pex_MainBus4_MainLn4-5"
+  ],
+  "MainLn5-6": [
+   "Cub_1\\pex_MainBus6_MainLn5-6",
+   "Cub_2\\pex_MainBus5_MainLn5-6"
+  ],
+  "MainLn7-8": [
+   "Cub_1\\pex_MainBus7_MainLn7-8",
+   "Cub_3\\pex_MainBus8_MainLn7-8"
+  ],
+  "MainLn10-11": [
+   "Cub_2\\pex_MainBus10_MainLn10-11",
+   "Cub_2\\pex_MainBus11_MainLn10-11"
+  ],
+  "MainLn6-7": [
+   "Cub_2\\pex_MainBus6_MainLn6-7",
+   "Cub_2\\pex_MainBus7_MainLn6-7"
+  ],
+  "MainLn3-8": [
+   "Cub_2\\pex_MainBus8_MainLn3-8",
+   "Cub_3\\pex_MainBus3_MainLn3-8"
+  ]
+ }
+}
