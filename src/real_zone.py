@@ -78,6 +78,25 @@ CONFIGS = {
         beyond=["MainLn3-4"], parallel=None,
         ibr_cubicles=["Cubicle(1)\\pex_MainBus3_Ind3-3IBR"], adaptgrid=True,
         remote_cubicle="Cub_HV_C_B-C\\pex_MainBus3_MainLn2-3"),
+    # EvEMTBench adapt_grid-CigreMVGrid: 20 kV CIGRE MV grid, two 15 MVA inverters (buses 3 and 14) as the only
+    # generators, two 25 MVA 110/20 kV Dyn transformers from a 10 GVA grid, XLPE cable lines. Cache on D: (set
+    # EVEMT_CACHE_DIRS), every cubicle. Relays chosen from results/CIGREMV_FACTS.md: the longest lines, with the
+    # inverter at the relay end (R1, R3), at the remote end (R2) and far away (R4, substation feeder head).
+    # MainLn8-14 (behind R3) is the open tie, so R3's 'lines behind' faults reach it only through the inverter.
+    **{name: dict(cache_glob="adapt_grid-CigreMVGrid*_cache.meta.npz", title=title, relay=relay, line=line,
+                  remote_bus=rbus, beyond=beyond, parallel=None, relay_bus=bus, remote_cubicle=remote,
+                  ibr_cubicles=["Cubicle\\pex_MainBus3_Ind3-3IBR", "Cubicle\\pex_MainBus14_Ind14-14IBR"],
+                  adaptgrid=True, vn_kv=20.0,
+                  loads=[f"loads/Ld{i}/load_p" for i in (1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14)])
+       for name, title, relay, line, bus, rbus, beyond, remote in (
+           ("cigre_R1", "CIGRE MV R1: line 2-3 at bus 3 (inverter bus)", "Cub_1\\pex_MainBus3_MainLn2-3", "MainLn2-3",
+            "MainBus3", "MainBus2", ["MainLn1-2"], "Cub_2\\pex_MainBus2_MainLn2-3"),
+           ("cigre_R2", "CIGRE MV R2: line 2-3 at bus 2 (inverter at the remote end)", "Cub_2\\pex_MainBus2_MainLn2-3",
+            "MainLn2-3", "MainBus2", "MainBus3", ["MainLn3-4", "MainLn3-8"], "Cub_1\\pex_MainBus3_MainLn2-3"),
+           ("cigre_R3", "CIGRE MV R3: line 13-14 at bus 14 (inverter bus, feeder 2)", "Cub_1\\pex_MainBus14_MainLn13-14",
+            "MainLn13-14", "MainBus14", "MainBus13", ["MainLn12-13"], "Cub_1\\pex_MainBus13_MainLn13-14"),
+           ("cigre_R4", "CIGRE MV R4: line 1-2 at bus 1 (feeder head)", "Cub_2\\pex_MainBus1_MainLn1-2", "MainLn1-2",
+            "MainBus1", "MainBus2", ["MainLn2-3"], "Cub_1\\pex_MainBus2_MainLn1-2"))},
 }
 
 

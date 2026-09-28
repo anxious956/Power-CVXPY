@@ -26,11 +26,30 @@ from review import common as cm
 
 A = np.exp(2j * np.pi / 3)
 UB = 110e3
+Z_OPEN = 1e9                                     # ohm: an ungrounded (or resonant-grounded, see build) neutral
 
 
-def build(graph):
+def neutral_impedance(grounding):
+    """Neutral-to-earth impedance of the main-bus star point, from EvEMTBench's per-simulation grounding.
+    None or ('solid', r) / ('resistive', r): r ohm. ('resonant', _): an arc-suppression coil tuned to the
+    network's zero-sequence capacitance, which this model does not contain; the tuned parallel resonance is
+    modelled as an open neutral, so a ground fault draws only what the (absent) capacitances would leave:
+    ground elements have nothing to measure, which is the physical point of resonant grounding."""
+    if grounding is None:
+        return 0.0
+    kind, r = grounding
+    return Z_OPEN if kind == "resonant" else float(r)
+
+
+def build(graph, ub=UB, grounding=None):
+    """Sequence network of the main buses at base voltage `ub` (line-to-line rms). A transformer is referred
+    to the main-bus side; its zero-sequence branch depends on the vector group seen from that side:
+    grounded star there and delta on the source side (Dyn, e.g. CIGRE MV 110/20 kV) -> transformer
+    zero-sequence impedance plus three times the neutral impedance, the source grid excluded; any other
+    group (YN-YN, the TestGrid 380/110 kV units) -> grid + transformer, as before."""
     main = sorted(n for n in graph.nodes if str(n).startswith("MainBus"))
     lines, grids, loads = {}, [], {}
+    zn = neutral_impedance(grounding)
     for u, v, k, d in graph.edges(keys=True, data=True):
         p = d.get(f"{k}_param_dict", {})
         if "xline" in p and u in main and v in main:
@@ -44,22 +63,40 @@ def build(graph):
             if gp is None or bus not in main:
                 continue
             S = tp["strn"] * 1e6
-            zt = tp["uktr"] / 100 * UB**2 / S
-            rt = tp["pcutr"] * 1e3 * UB**2 / S**2
+            zt = tp["uktr"] / 100 * ub**2 / S
+            rt = tp["pcutr"] * 1e3 * ub**2 / S**2
             zt1 = complex(rt, np.sqrt(zt**2 - rt**2))
-            zt0 = complex(tp["r0pu"], tp["x0pu"]) * UB**2 / S
-            zg = UB**2 / (gp["snss"] * 1e6)
+            zt0 = complex(tp["r0pu"], tp["x0pu"]) * ub**2 / S
+            zg = ub**2 / (gp["snss"] * 1e6)
             xg = zg / np.sqrt(1 + gp["rntxn"]**2)
             zg1 = complex(gp["rntxn"] * xg, xg)
             xg0 = gp["x0tx1"] * xg
             zg0 = complex(gp["r0tx0"] * xg0, xg0)
-            grids.append((bus, zg1 + zt1, zg0 + zt0))
+            lv_is_main = abs(tp.get("utrn_l", 0) * 1e3 - ub) < abs(tp.get("utrn_h", 0) * 1e3 - ub)
+            here, there = (tp.get("tr2cn_l"), tp.get("tr2cn_h")) if lv_is_main else (tp.get("tr2cn_h"), tp.get("tr2cn_l"))
+            if str(here).upper() == "YN" and str(there).upper() == "D":
+                z0 = zt0 + 3 * zn
+            else:
+                z0 = zg0 + zt0
+            grids.append((bus, zg1 + zt1, z0, ub / np.sqrt(3)))
     for n in main:
         for key, val in graph.nodes[n].items():
-            if key.startswith("Ld") and isinstance(val, dict):
+            if key.startswith("Ld") and isinstance(val, dict) and "p" in val and "q" in val:
                 s = complex(val["p"], val["q"]) * 1e6
-                loads[n] = np.conj(s) / UB**2 / 1.0          # Y = S*/V^2 (per phase, line-to-line base)
+                loads[n] = np.conj(s) / ub**2 / 1.0          # Y = S*/V^2 (per phase, line-to-line base)
     return main, lines, grids, loads
+
+
+def relay_bus_of(R, name):
+    """The relay's bus: from the loaded relay (configs that declare it), else the legacy table."""
+    return R.get("relay_bus") or RELAY_BUS[name]
+
+
+def net_for(R, grounding=None):
+    """build() at the relay's own nominal voltage."""
+    vn_kv = (R.get("cfg") or {}).get("vn_kv")
+    ub = vn_kv * 1e3 if vn_kv else UB                   # exactly UB for every config that declares no nominal
+    return build(R["graph"], ub=ub, grounding=grounding)
 
 
 def ybus(main, lines, grids, loads, seq, fault_line=None, m=None):
@@ -78,11 +115,13 @@ def ybus(main, lines, grids, loads, seq, fault_line=None, m=None):
             branch(u, "F", m * z); branch("F", v, (1 - m) * z)
         else:
             branch(u, v, z)
-    for bus, z1, z0 in grids:
+    for g in grids:
+        bus, z1, z0 = g[:3]
+        e = g[3] if len(g) > 3 else UB / np.sqrt(3)
         z = z1 if seq in (1, 2) else z0
         Y[ix[bus], ix[bus]] += 1 / z
         if seq == 1:
-            I[ix[bus]] += (UB / np.sqrt(3)) / z
+            I[ix[bus]] += e / z
     if seq in (1, 2):
         for bus, y in loads.items():
             Y[ix[bus], ix[bus]] += y
@@ -197,8 +236,8 @@ def quad_settings(R, name, rf_max=40.0, r_frac=0.7, margin=0.9):
     study fault (R_f <= rf_max) whose loop impedance falls between the blinders. Directional supervision
     handles reverse faults; the external set is forward faults beyond the remote bus."""
     cfg = R["cfg"]
-    net = build(R["graph"])
-    rb = RELAY_BUS[name]
+    net = net_for(R)
+    rb = relay_bus_of(R, name)
     zload = prefault_load_impedance(net, rb, cfg["line"])
     r_right = r_frac * abs(zload)
     xl = R["z1L"].imag
@@ -226,8 +265,8 @@ def study_direction(R, name, net=None):
     fault point in the positive-sequence network and take the direction of the resulting current in the
     protected line at the relay (forward = into the line). Faults on the protected line and at its remote
     bus are forward by construction; for meshed paths the modelled current decides. NaN for non-faults."""
-    net = net or build(R["graph"])
-    cfg = R["cfg"]; rb = RELAY_BUS[name]
+    net = net or net_for(R)
+    cfg = R["cfg"]; rb = relay_bus_of(R, name)
     main, lines, grids, loads = net
     u0, v0, zl1, _ = lines[cfg["line"]]
     far = v0 if u0 == rb else u0
@@ -270,8 +309,8 @@ ETYPE = {"flt_1phg_shc": "lg", "flt_1phg_shc_w_arc": "lg", "flt_2ph_shc": "ll", 
 def study(name):
     R = cm.load_relay(name)
     cfg = R["cfg"]
-    net = build(R["graph"])
-    rb = RELAY_BUS[name]
+    net = net_for(R)
+    rb = relay_bus_of(R, name)
     xl = R["z1L"].imag
     # external study set: remote bus + first 20 % of each line leaving it (oriented from the remote bus)
     ext = [("bus", cfg["remote_bus"], 0.0)]
@@ -313,7 +352,7 @@ def study(name):
         else:
             u, v, _, _ = net[1][R["tgt"][i]]
             where, m = ("line", R["tgt"][i]), R["loc"][i] / 100.0
-        vpo, ipo, vpr, ipr = solve_fault(net, RELAY_BUS[name], cfg["line"], where, ft, R["rf"][i], m)
+        vpo, ipo, vpr, ipr = solve_fault(net, rb, cfg["line"], where, ft, R["rf"][i], m)
         zm = apparent_x(R, vpo, ipo, vpr, ipr, LOOP[ft])
         ze = Lp["V"][n, cm.LOOPS.index(loop)] / Lp["I"][n, cm.LOOPS.index(loop)]
         errs.append((R["rf"][i], R["pos"][i], zm.imag, ze.imag, zm.real, ze.real))

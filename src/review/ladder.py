@@ -119,8 +119,8 @@ def tilt_from(zs, zr, zl, m=cm.REACH):
 
 def settings(R, name):
     cfg = R["cfg"]
-    net = ss.build(R["graph"])
-    rb = cm.RELAY_BUS[name]
+    net = ss.net_for(R)
+    rb = ss.relay_bus_of(R, name)
     xl = R["z1L"].imag
     x_set = cm.REACH * xl
     pcond = None
@@ -187,7 +187,7 @@ def settings(R, name):
 def infeed_factor(R, name, net, m=0.8, rf=40.0):
     """Study model, LG fault at 80 % of the protected line with R_f = 40 ohm: total fault current over the
     relay's superimposed zero-sequence contribution, and the apparent loop impedance the relay reads."""
-    cfg = R["cfg"]; rb = cm.RELAY_BUS[name]
+    cfg = R["cfg"]; rb = ss.relay_bus_of(R, name)
     u, v, _, _ = net[1][cfg["line"]]
     mm = m if u == rb else 1 - m
     vpo, ipo, vpr, ipr = ss.solve_fault(net, rb, cfg["line"], ("line", cfg["line"]), "lg", rf, mm)
@@ -264,7 +264,7 @@ def ground_overcurrent(R, vpre, vpost, ipre, ipost, vmem):
 
 
 def study_reach(R, name, net, S):
-    cfg = R["cfg"]; rb = cm.RELAY_BUS[name]
+    cfg = R["cfg"]; rb = ss.relay_bus_of(R, name)
     ext = [("bus", cfg["remote_bus"], 0.0)]
     for ln in cfg["beyond"]:
         u, v, _, _ = net[1][ln]
