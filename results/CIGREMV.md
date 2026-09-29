@@ -230,6 +230,43 @@ its limiter) is not modelled — and the 20 ms window is the inception transient
 for a triggered injection. A lower dispatch, a limiter that reserves room for δ, and the time the inverter
 needs to start injecting are not in this data.
 
+### How large δ would have to be: the B1 screening
+
+`b1_delta_screen.py` (run by `run_b1.bat`, log `logs/run_b1.log`) asks the study model how large a
+negative-sequence δ at one inverter (bus 3 for R1, R2 and R4, bus 14 for R3) must be before the relay's own
+measurement — post-fault sequence voltages and currents with the pre-fault V1 and I1, 16 reals per unit,
+infinity norm — separates an in-zone fault from the out-of-zone faults that look like it, with an instrument
+error of ε = 0.01 pu per channel on each measurement (a pair is separated beyond 2ε). In-zone faults at 70
+and 85 % of the line, four types, R_f across the four bands; out-of-zone faults at the remote bus and 5–20 %
+into the lines beyond; three recorded operating points, solid and resistive grounding, two inverter
+negative-sequence admittances (the characterised secant and the low-u2 value). The model's response is not
+linear in δ — limiter and reactive-current regimes switch, and separation is not even monotone in |δ| — so it
+is solved directly on a grid of |δ| = 0.2–3 pu and twelve angles ([`cigremv/b1_delta_screen.json`](cigremv/b1_delta_screen.json)).
+Weighted by where the EMT in-zone faults sit (type × R_f band):
+
+| in-zone faults separable in the study model | R1 | R2 | R3 | R4 |
+|---|---|---|---|---|
+| without δ | 9.2 % | 50.2 % | 8.4 % | 33.0 % |
+| with δ ≤ 0.4 pu (fits the inverter at a design angle, above) | 13.5 % | 54.1 % | 10.4 % | 37.3 % |
+| with δ ≤ 1.2 pu (the inverter's whole current) | 21.3 % | 60.6 % | 16.7 % | 46.4 % |
+| cells with ≥ 5 EMT faults whose hardest fault needs > 1.2 pu | 5 of 5 | 6 of 6 | 10 of 10 | 7 of 9 |
+
+**The injection the inverter can afford adds 2–4 points; its whole current adds 8–13.** Every cell holding
+at least five EMT in-zone faults either separates without δ in the model (R4's two low-R_f LL cells) or needs
+more than 1.2 pu for its hardest fault, so the bridge's stop rule (review/bridge/LEAD_REVIEW.md D) is met at
+R1–R3 as written and at R4 in substance. The binding pairs are the ones the sections above name: an in-zone
+fault at 70–85 % against a remote-bus fault of the same type and nearly the same R_f, mostly at light load
+and solid grounding. With the two fault points 0.3–0.6 Ω of line apart, δ moves both measurements almost
+equally (0.0008–0.024 pu of difference per pu of δ, bridge review).
+
+The screening is optimistic for δ in four ways: every fault gets its own injection angle; ε is the
+instrument's alone (the model's own error, bridge step B2, is not in it); pairs that δ = 0 separates are
+assumed to stay separated; and the model is static. Where it disagrees with the EMT it does so in δ's
+favour: the model calls half of R2's in-zone faults separable without δ, where no single-ended EMT detector
+covers more than 8.3 % at zero false trips. The real requirement is therefore larger than these numbers, not smaller. For the
+bridge this means no δ design (M3) on this grid; the negative result is reported with its mechanism, and the
+design is run on TestGrid (LEAD_REVIEW.md D).
+
 ### Quick checks: settings, channel delay, CT saturation
 
 `cigremv_checks.py` → [`cigremv/quick_checks.json`](cigremv/quick_checks.json); no training, frozen
@@ -279,7 +316,9 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
   designed auxiliary injection would have to close. In the study model a designed δ barely moves that
   boundary (review/bridge/LEAD_REVIEW.md: 0.0008–0.024 pu per pu of δ for the nearest confusable pairs),
   so on this grid the injection question is whether any δ the inverter can supply closes it — the bridge's
-  first screening. No record here carries an injection (ADAPTGRID.md §5).
+  first screening. It does not (B1, §3): in the study model, δ within the inverter's whole current adds 8–13
+  points of separable in-zone faults, and the share it can afford at a design angle, 0.4 pu, adds 2–4. No
+  record here carries an injection (ADAPTGRID.md §5).
 
 ## 5. Limits
 

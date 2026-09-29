@@ -91,6 +91,11 @@ After the re-run: every R1/R3 number and every range pooled over relays (CIGREMV
 | B4 | wideband, once and frozen: in-zone vs remote bus and 50–85 % vs near; relay vs wide front end; window keyed on the causal starter; grouped 5×2, 3 seeds, shuffled control | ~30 min CPU | CIGREMV.md wording only |
 | B5 | sound per-phase limit rows in `tac25_design`; re-run DESIGN §3, §3.1, §4.1 | 0.5–1 day | A5 |
 
+**B1 done (29 Sep 2026)**, `src/review/b1_delta_screen.py`: direct solves on a |δ| × angle grid (the model is
+not linear in δ), all four relays. δ ≤ 1.2 pu adds 8–13 points of separable in-zone faults, 0.4 pu adds 2–4;
+every cell with ≥ 5 EMT faults needs no δ or more than 1.2 pu. Stop rule (section D) met at R1–R3, at R4 in
+substance: no M3 on CIGRE (results/CIGREMV.md §3, REVIEW.md §7 row 42).
+
 ## C. The bridge
 
 Relays R2, adapt_A, then R1 and R3. IN: own line 0–85 % from the relay, four fault types. OUT: remote bus +
