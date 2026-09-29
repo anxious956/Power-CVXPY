@@ -1,7 +1,7 @@
 {
  "relay": "cigre_R4",
  "frontend": "relayfe",
- "commit": "df634b638cd2b9f64eec021917f884d8e196ccdb",
+ "commit": "df1e601873854b693bcc8b0d1cc5de5d14aa5d0a",
  "t_ms": 20,
  "rf_bins": [
   "<5",
@@ -3065,5 +3065,5 @@
   },
   "_note": "remote end read at the same 20 ms after inception; no channel delay, no zone-2 element; remote cubicle Cub_1\\pex_MainBus2_MainLn1-2"
  },
- "runtime_s": 18.85982394218445
+ "runtime_s": 27.68599247932434
 }

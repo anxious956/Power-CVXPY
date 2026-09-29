@@ -255,9 +255,9 @@ rather than a 5 % budget.
   zero false trips (the CNN 0–10.5 %, seed-stable), because from one end, with a
   fundamental-frequency front end, the in-zone faults are not separable from the faults just
   beyond the remote bus for the high-resistance faults this set contains (it has almost none
-  below 1 Ω). *R1/R3 numbers are provisional: their zone labels were mirrored and are being
-  re-run (REVIEW.md §7 row 41).* Only both-ends schemes
-  work (67N/67Q at both ends 75–78 %, no off-line trip). Three inverter-specific failures appear:
+  below 1 Ω). R1/R3 were re-run after a zone-label fix with the same conclusions (REVIEW.md §7
+  row 41). Only both-ends schemes
+  work (67N/67Q at both ends 75–82 %, no off-line trip). Three inverter-specific failures appear:
   an inverter disconnecting at the remote bus trips the CNN in the forward direction, 32P/32Q is
   wrong both ways at the inverter buses, and one relay's CNN trips held-out reverse faults.
 - **Room for the auxiliary signal:** with the inverters' output kept (0.8 pu dispatch), 0.4 pu of

@@ -927,10 +927,10 @@ Beş sınır üç türde. Bir kısmı mevcut veriyle kapanır, bir kısmı yeni 
    | | Oyuncak model | EMT verisi |
    |---|---|---|
    | Güçlü kaynak | `easy`: 0/30 belirsiz, δ = 0 | TestGrid: sınır her R_f diliminde ayrılıyor (AUC 1.000) |
-   | Zayıf kaynak / invertör | 5–10/30 belirsiz, δ 0.4–1.3 pu | CIGRE MV: sınır ayrılmıyor (AUC 0.37–0.89), düşük R_f'de bile |
+   | Zayıf kaynak / invertör | 5–10/30 belirsiz, δ 0.4–1.3 pu | CIGRE MV: sınır ayrılmıyor (AUC 0.37–0.90), verideki her R_f diliminde (1 Ω altı arıza neredeyse yok, sıfır dirençli arıza test edilemedi) |
 
    Bu kesin bir ispat değil, güçlü bir işaret: belirsizlik bizim detektörlerimizle ölçüldü, ama beş farklı yöntem aynı yerde başarısız.
-2. **Çıta belirlendi:** pasif tek uçlu en iyi sonuç ≤%16, iki uçlu %75–78 (sıfır yanlış açmada). Enjeksiyonun iddiası: kanal kullanmadan, tek uçtan iki uçlu seviyeye yaklaşmak.
+2. **Çıta belirlendi:** pasif tek uçlu en iyi sonuç ≤%16, iki uçlu %75–82 (sıfır yanlış açmada; R1/R3 düzeltilmiş etiketlerle). Enjeksiyonun iddiası: kanal kullanmadan, tek uçtan iki uçlu seviyeye yaklaşmak.
 3. **Test yeri belirlendi:** invertör barasındaki kısa kablo röleleri (R1/R3) ve sınırdaki arızalar (uzak bara, sonraki hattın ilk %20'si).
 4. **Taylor modelinde olmayan üç şey bulundu:**
    - akım sınırlayıcının doğrusal olmaması (çalışma modelinde |Z1L|'nin 0.24–0.69 katı kadar hata);
@@ -993,3 +993,44 @@ Sıfır yanlış açmalı çalışma noktası, birkaç uç örneğe bağlı gür
 **CIGRE ile bağlantı:** CIGRE'de de eşiği uzak bara ve sonraki hattın başındaki arızalar belirliyor. B'de bu birkaç nadir arıza (küçük, kararsız çakışma); CIGRE'de sınırdaki arızaların tamamı (büyük, kararlı çakışma).
 
 *Kaynak: `results/ADAPTGRID.md` §4 ("Why relay B's answer moves", Q4, "Reverse faults held out"); `results/ADAPTGRID_FACTS.md`; `results/cigremv/diagnostics.json`.*
+
+---
+
+## 24. İki uçlu korumayı (two-ended) bizden başka deneyen var mı?
+
+**Kısa cevap:** Evet. İki uçlu korumayı biz icat etmedik; onlarca yıldır iletim hatlarında standart. Bizim yaptığımız farklı şey, onu tek uçlu yöntemlerle aynı açık veride, aynı sıfır yanlış açma kuralıyla yan yana ölçmek.
+
+### Tek uçlu ve iki uçlu farkı
+A–B hattı, iki ucunda birer röle:
+- **Tek uçlu:** A'daki röle yalnız kendi gerilim ve akımına bakar ve "arıza hattın %85'inin içinde mi?" sorusunu tek başına cevaplar. CIGRE'de çöken bu.
+- **İki uçlu:** A ve B bir kanal (ör. fiber) üzerinden haberleşir. Her röle yalnızca "arıza önümde mi, arkamda mı?" diye bakar; bu mesafe ölçmekten çok daha kolay. İkisi de "önümde" derse arıza aralarındadır ve hat açılır. Arıza B'nin ötesindeyse B "arkamda" der, açma olmaz.
+
+### Başkaları ne yaptı
+- **Sahada:** POTT, DCB ve hat diferansiyeli (87L) gibi şemalar iletimde yaygın. Kısa orta gerilim hatları da pratikte çoğunlukla diferansiyel veya haberleşmeli şemalarla korunuyor (`results/CIGREMV.md` §3).
+- **İnvertörlü şebekeler:** Literatürde yaygın kanı, iki uçlu şemaların invertörden daha az etkilendiği; tek uçlu mesafe rölesi ve bazı yön elemanları sorun çıkarıyor. Bildiğimiz kadarıyla IEEE 2800 de yön elemanları çalışabilsin diye invertörlerden dengesiz arızada negatif bileşen akımı istiyor (kaynak metinden doğrulanmadı).
+
+### Bizim sonucumuz
+CIGRE'de 67N/67Q iki uçta %75–82, hiç yanlış açma yok; POTT eşdeğeri %81–99. Ama iki koşulla: kanal gecikmesi kadar geç açıyor (20 + d ms), ve 67N/67Q'nun sıfırı yeterli boyutta akım trafosu istiyor (hızlı kontroller, `results/cigremv/quick_checks.json`).
+
+### Neden yine de tek uçlu önemli
+İki uçlu şema kanal ister: maliyet, birkaç ms gecikme, kanal koparsa çalışmaz. Dağıtım fiderlerinin çoğunda kanal yok ve kanal düştüğünde yedek yine tek uçlu zone 1. Taylor'ın yardımcı sinyali, kanal olmadan tek uçtan bu seviyeye yaklaşmayı hedefliyor.
+
+*Kaynak: `results/CIGREMV.md` §3 ("What still works", "Quick checks"); `results/cigremv/TABLES.md` A; REVIEW.md §7 satır 39–40.*
+
+---
+
+## 25. Pozitif bir sonucumuz var mı?
+
+**Kısa cevap:** Var, ama hepsi güçlü şebekeden ya da iki uçlu şemalardan. İnvertörlü şebekede tek uçlu tarafta pozitif sonuç yok.
+
+| Sonuç | Sayı | Nerede |
+|---|---|---|
+| Güçlü 110 kV şebekede tek uçlu CNN, sıfır yanlış açma | %94.6–99.4 (röle A, üç tohum, iki bölme), klasik zone 1 %5–13 | `results/ADAPTGRID.md` |
+| CIGRE'de iki uçlu 67N/67Q, sıfır yanlış açma | %75–82 (R1'de düzeltilmiş etiketlerle %81.9) | `results/CIGREMV.md` §3 |
+| İnvertörde sinyal için yer | 0.4 pu, tek bir tasarım açısında, iç arızaların %77–78'inde 40 ms'de sığıyor | `results/cigremv/ibr_headroom.json` |
+
+**Değişmeyen negatif:** CIGRE'de tek uçlu hiçbir yöntem %15.8'i geçmiyor. R1/R3 etiket düzeltmesinden sonra da bu iki rölede tek uçlu yöntemler en fazla %3.5.
+
+**Dikkat:** Birinci satır "öğrenme işe yarar" demek değil: aynı kuralla gradient boosting %11'e düşüyor ve sonuç TestGrid'e özgü (REVIEW.md §7 satır 26). Üçüncü satır statik bir hesap; invertörün sinyale kendi tepkisi modellenmedi.
+
+*Kaynak: `results/ADAPTGRID.md`; `results/CIGREMV.md`; REVIEW.md §7 satır 26, 37, 41.*

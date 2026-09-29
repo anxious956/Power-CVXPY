@@ -1,6 +1,6 @@
 {
  "script": "cigremv_diagnostics",
- "commit": "b11da15126e212c86c1b66876cc77088f001ac29",
+ "commit": "df1e601873854b693bcc8b0d1cc5de5d14aa5d0a",
  "model": "CNN seq-traj",
  "split": "grouped",
  "chain": "matched",
@@ -101,41 +101,41 @@
    }
   },
   "cigre_R1": {
-   "scores_commit": "df634b638cd2b9f64eec021917f884d8e196ccdb",
+   "scores_commit": "df1e601873854b693bcc8b0d1cc5de5d14aa5d0a",
    "z1L_abs_ohm": 3.8625262898556554,
    "x_line_ohm": 3.164720058441162,
-   "rf_median_in_zone": 23.55796429748084,
+   "rf_median_in_zone": 24.273226923125794,
    "n_pos": 72,
    "n_near": 177,
-   "auc_all_offline": 0.9652417027417026,
-   "auc_near": 0.644774011299435,
+   "auc_all_offline": 0.950330687830688,
+   "auc_near": 0.6440677966101696,
    "above_highest_offline": {
-    "k": 1,
+    "k": 0,
     "n": 72
    },
    "by_rf_band": {
     "<5": {
      "n_pos": 3,
      "n_near": 17,
-     "auc": 0.5294117647058824,
-     "above_highest_near": 1
+     "auc": 0.7450980392156863,
+     "above_highest_near": 0
     },
     "5-15": {
-     "n_pos": 22,
+     "n_pos": 21,
      "n_near": 35,
-     "auc": 0.5688311688311689,
-     "above_highest_near": 1
+     "auc": 0.5061224489795919,
+     "above_highest_near": 0
     },
     "15-40": {
-     "n_pos": 37,
+     "n_pos": 36,
      "n_near": 94,
-     "auc": 0.6647498562392179,
-     "above_highest_near": 2
+     "auc": 0.6341607565011821,
+     "above_highest_near": 0
     },
     ">40": {
-     "n_pos": 10,
+     "n_pos": 12,
      "n_near": 31,
-     "auc": 0.8903225806451613,
+     "auc": 0.8978494623655914,
      "above_highest_near": 5
     }
    },
@@ -199,42 +199,42 @@
    }
   },
   "cigre_R3": {
-   "scores_commit": "df634b638cd2b9f64eec021917f884d8e196ccdb",
+   "scores_commit": "df1e601873854b693bcc8b0d1cc5de5d14aa5d0a",
    "z1L_abs_ohm": 2.075917591661902,
    "x_line_ohm": 1.5175248384475706,
-   "rf_median_in_zone": 24.39399686726086,
-   "n_pos": 84,
+   "rf_median_in_zone": 23.82629896488801,
+   "n_pos": 85,
    "n_near": 161,
-   "auc_all_offline": 0.9699457792678132,
-   "auc_near": 0.6447057083703046,
+   "auc_all_offline": 0.9607229593271467,
+   "auc_near": 0.626890756302521,
    "above_highest_offline": {
-    "k": 1,
-    "n": 84
+    "k": 4,
+    "n": 85
    },
    "by_rf_band": {
     "<5": {
-     "n_pos": 12,
+     "n_pos": 13,
      "n_near": 13,
      "auc": 0.7692307692307693,
-     "above_highest_near": 1
+     "above_highest_near": 2
     },
     "5-15": {
-     "n_pos": 19,
+     "n_pos": 21,
      "n_near": 33,
-     "auc": 0.5598086124401913,
+     "auc": 0.5656565656565656,
      "above_highest_near": 2
     },
     "15-40": {
-     "n_pos": 36,
+     "n_pos": 35,
      "n_near": 89,
-     "auc": 0.6360799001248439,
+     "auc": 0.5861958266452648,
      "above_highest_near": 1
     },
     ">40": {
-     "n_pos": 17,
+     "n_pos": 16,
      "n_near": 26,
-     "auc": 0.7352941176470589,
-     "above_highest_near": 2
+     "auc": 0.6875,
+     "above_highest_near": 3
     }
    },
    "switching_trips_cal0": {
