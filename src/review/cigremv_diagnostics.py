@@ -1,11 +1,13 @@
 """Two diagnostics of the CNN seq-traj result on the CIGRE MV relays, from the scores adaptgrid_run.py saved.
 
 1. Can the zone boundary be seen from one end? In-zone faults against the off-line faults nearest the boundary
-   (remote bus and the first stretch of the lines beyond), within each fault-resistance band.
+   (remote bus and the WHOLE of the lines beyond; neg_bench would be the first 20 %), within each
+   fault-resistance band.
 
 A detector's overall AUC mixes the boundary with every easy far fault. Within one R_f band both classes carry
-the same resistance, so a poor AUC there is not resistance hiding the location: the location itself is not in
-the relay's measurement at the resolution zone 1 needs.
+the same resistance (not the same R_f/|Z1L|: on the short CIGRE lines 5 ohm is 1.3-2.4 |Z1L|), so a poor AUC
+there is not that resistance hiding the location: the boundary is not resolved by this detector's
+(fundamental-frequency, 400 Hz front end) input at the resolution zone 1 needs.
 
 2. Which switching events trip it at the protection-grade threshold (cal0, held-out rows by fold majority, as in
    adaptgrid_run.py), by event type and target, and how many of them 32P/32Q calls forward.

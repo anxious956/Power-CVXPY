@@ -15,7 +15,19 @@ inception, the same DFT as ibr_study.characterise), in pu of the inverter's rati
                        kept (|I_k + a^k delta| <= |I_k| + |delta|), a lower bound on what is available
   headroom_reactive    Imax - the largest phase current with the active part of the positive sequence removed:
                        what fits if the inverter gives up active current (the limiter's own priority) and keeps
-                       its reactive support and negative-sequence response
+                       its reactive support and negative-sequence response; an extreme, not a design case
+  fits_by_angle        with the output kept, whether delta = d e^{j phi} (negative sequence, in the frame of the
+                       inverter's positive-sequence voltage) keeps every phase within Imax, on a 5-degree phi grid:
+                         any_angle   fits at every phi (the exact form of headroom_strict >= d)
+                         fixed_angle the one phi that fits the most faults of the set, and that share (the phi is
+                                     chosen on the set it is read on: a design angle, mildly optimistic)
+                         best_angle  fits at some phi, chosen per fault (an upper bound)
+                       The design chooses delta's angle, so any_angle alone understates what a designed delta can
+                       use (bridge review, review/bridge/LEAD_REVIEW.md).
+
+All of it is static: the recorded currents plus delta, with the inverter's own response to delta (its
+negative-sequence control, its limiter) ignored. And a one-cycle window ending 20 ms after inception is the
+inception transient, not a steady state; 40 and 60 ms are the fairer reads for a triggered injection.
 
 Read against the toy design's delta, 0.39-1.32 pu for the ambiguous presets (README.md table; the toy's
 current base puts the inverter's nominal current at 0.9 pu, so the comparison is indicative, not exact).
@@ -55,6 +67,25 @@ def summary(v, imax):
                 **{f"share_ge_{d:g}": float(np.mean(v >= d)) for d in DELTA_REF})
 
 
+PHI = np.deg2rad(np.arange(0, 360, 5))
+
+
+def fits_by_angle(i1, i2, imax):
+    """Output kept, delta = d e^{j phi} added to the negative sequence: share of faults that fit at every phi,
+    at the best single phi for the set (and that phi), and at the best phi per fault."""
+    if not len(i1):
+        return None
+    out = {}
+    for d in DELTA_REF:
+        dl = d * np.exp(1j * PHI)[None, :]                                           # (1, n_phi)
+        peak = np.abs(phases(i1[:, None], i2[:, None] + dl)).max(-1)                 # (n, n_phi)
+        fit = peak <= imax
+        share = fit.mean(0)
+        out[f"{d:g}"] = dict(any_angle=float(fit.all(1).mean()), fixed_angle=float(share.max()),
+                             fixed_angle_deg=float(np.degrees(PHI[share.argmax()])), best_angle=float(fit.any(1).mean()))
+    return out
+
+
 def main():
     from evemt import load_cache
     from review.adaptgrid_run import bundle
@@ -78,7 +109,7 @@ def main():
         assert np.array_equal(R["et"], et), "bundle rows are not the cache rows"
         sets = {"all short circuits": np.ones(len(shc), bool),
                 f"{RELAY_AT[name]} in-zone": R["pos"][shc],
-                f"{RELAY_AT[name]} near boundary (remote bus + beyond)": (R["remote_bus_faults"] | R["beyond"])[shc]}
+                f"{RELAY_AT[name]} near boundary (remote bus + first 20 % beyond)": R["neg_bench"][shc]}
         X = np.stack([x[r, k, :, ev[r] - cm.ADAPT_HALF:ev[r] + cm.ADAPT_HALF] for r in shc])
         out = res["inverters"][name] = dict(relay_at_bus=RELAY_AT[name], i_max_pu=imax, n_short_circuits=int(len(shc)), by_time={})
         for t in TIMES_MS:
@@ -94,15 +125,16 @@ def main():
                 per[lab] = dict(n=int(m.sum()), at_limit=float(np.mean(iph[m] >= 0.95 * imax)) if m.any() else None,
                                 i_phase_max=summary(iph[m], imax),
                                 headroom_strict=summary(np.maximum(imax - iph[m], 0), imax),
-                                headroom_reactive=summary(np.maximum(imax - react[m], 0), imax))
+                                headroom_reactive=summary(np.maximum(imax - react[m], 0), imax),
+                                fits_by_angle=fits_by_angle(i1[m], i2[m], imax))
             out["by_time"][str(t)] = per
             for lab, p in per.items():
                 if p["n"]:
-                    hs, hr = p["headroom_strict"], p["headroom_reactive"]
-                    print(f"[{name} {t} ms] {lab:48s} n {p['n']:4d}  at limit {100 * p['at_limit']:5.1f} %  "
-                          f"strict headroom median {hs['median']:.2f} (>=0.4: {100 * hs['share_ge_0.4']:4.1f} %, >=0.7: {100 * hs['share_ge_0.7']:4.1f} %)  "
-                          f"reactive-kept median {hr['median']:.2f} (>=0.4: {100 * hr['share_ge_0.4']:4.1f} %, >=0.7: {100 * hr['share_ge_0.7']:4.1f} %)",
-                          flush=True)
+                    hs, fa = p["headroom_strict"], p["fits_by_angle"]
+                    ang = "  ".join(f"{d} pu any/fixed/best {100 * v['any_angle']:4.1f}/{100 * v['fixed_angle']:4.1f}/{100 * v['best_angle']:4.1f} %"
+                                    for d, v in fa.items())
+                    print(f"[{name} {t} ms] {lab:50s} n {p['n']:4d}  at limit {100 * p['at_limit']:5.1f} %  "
+                          f"strict median {hs['median']:.2f}  | output kept: {ang}", flush=True)
         del R, X
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump(res, open(OUT, "w"), indent=1)

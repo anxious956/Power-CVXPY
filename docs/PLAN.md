@@ -30,10 +30,15 @@ guarantee holds, where it breaks, and what the decision costs in milliseconds.
   IBR, one load, z⁻ = z⁺ = 30 + j35, z_f = 26 + j·x_f, sweep x_f over [12, 58], Q = I. The
   expected result is known: |θ̄| peaks near x_f ≈ 35, where the fault reactance matches the
   normal one. If we reproduce that curve, the tool is correct.
-- **Second milestone:** the 2025 14-bus example, which is specified completely (SGs at buses
-  1, 3, 5, 14; IBRs at 2, 4, 7, 8, 12 with angles spread over [0, 2π/3]; loads at 6, 10, 11,
-  13 at 0.1 + j0.01; 20-gon noise scaled by Σ = 0.1I; relay at bus 2 on line 2-3; k = 2;
-  r_F = 1; m̲_z = 0.15).
+- **Second milestone:** the 14-bus example (SGs at buses 1, 3, 5, 14; IBRs at 2, 4, 7, 8, 12
+  with angles spread over [0, 2π/3]; loads at 6, 10, 11, 13 at 0.1 + j0.01; 20-gon noise scaled
+  by Σ = 0.1I; relay at bus 2 on line 2-3; k = 2; r_F = 1; m̲_z = 0.15). *Correction, 28 Sep
+  2026:* it is in Taylor's Geometry paper (arXiv 2510.04379 §IV-C, §VI-D), not the 2025 TAC
+  paper; there δ separates fault types on the relay's own line, reach is left to the relay
+  characteristic, and the line data come from the Baeckeland thesis (Table 3.1, not in the
+  repo). Re-check the scenario list above against the paper before building it (the bridge
+  review notes a synchronous-generator angle spread this list omits). It is optional and gates
+  nothing on real data (review/bridge/LEAD_REVIEW.md).
 - **Then extend:** add the **current-limiter type** as a dimension of the uncertainty set.
   Measured negative-sequence virtual impedance angles are −0.5°, +36.2° and −51.6° for
   circular, priority-based and instantaneous limiters. Taylor's model does not carry this and

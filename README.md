@@ -250,16 +250,23 @@ rather than a 5 % budget.
   36–57 % trips just beyond the remote bus. Hasan et al.'s (2026) SVM, re-implemented, reaches
   9–58 % at zero false trips (74 % with tuned C at relay A, 50 ms).
 - **CIGRE MV 20 kV** ([results/CIGREMV.md](results/CIGREMV.md)), two inverters supplying about
-  half the fault-current rise, 2–4 Ω cables. **The TestGrid result does not transfer:** no
-  single-ended detector covers more than 15.8 % at zero false trips (the CNN 0–10.5 %,
-  seed-stable), because from one end the in-zone faults are not separable from the faults just
-  beyond the remote bus in any fault-resistance band, bolted included. Only both-ends schemes
+  half the fault-current rise, 2–4 Ω lines (three relays on cables, one on an overhead line).
+  **The TestGrid result does not transfer:** no single-ended detector covers more than 15.8 % at
+  zero false trips (the CNN 0–10.5 %, seed-stable), because from one end, with a
+  fundamental-frequency front end, the in-zone faults are not separable from the faults just
+  beyond the remote bus for the high-resistance faults this set contains (it has almost none
+  below 1 Ω). *R1/R3 numbers are provisional: their zone labels were mirrored and are being
+  re-run (REVIEW.md §7 row 41).* Only both-ends schemes
   work (67N/67Q at both ends 75–78 %, no off-line trip). Three inverter-specific failures appear:
   an inverter disconnecting at the remote bus trips the CNN in the forward direction, 32P/32Q is
   wrong both ways at the inverter buses, and one relay's CNN trips held-out reverse faults.
-- **Room for the auxiliary signal:** during those faults the inverters, dispatched at 0.8 pu,
-  leave no 0.4 pu of room with their output kept; giving up active current for the fault frees
-  0.4 pu in 97.6–100 % of the relevant faults and 0.7 pu in 83–93 %.
+- **Room for the auxiliary signal:** with the inverters' output kept (0.8 pu dispatch), 0.4 pu of
+  negative-sequence δ at one design angle fits in 38–39 % of the relevant in-zone faults in the
+  first cycle and 77–78 % by 40 ms; 0.7 pu fits in 8–33 %, 1 pu in at most 8 %.
+- **Bridge review** ([review/bridge/LEAD_REVIEW.md](review/bridge/LEAD_REVIEW.md)): five specialist
+  reviews and a lead review of running Taylor's design method on this grid. In the study model a δ
+  barely moves the zone boundary (0.0008–0.024 pu per pu of δ for the nearest confusable pairs),
+  so a one-day screening comes before any design engine.
 
 Every refuted or narrowed claim is in the register, [REVIEW.md](REVIEW.md) §7 (rows 26, 32 onward).
 

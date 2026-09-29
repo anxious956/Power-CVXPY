@@ -23,8 +23,9 @@ the grid, not of the method.
 zero false trips — the rule-set quadrilateral, the tuned rungs, the engineered model, the
 sequence-trajectory CNN, or Hasan et al.'s SVM — covers more than 15.8 % of in-zone faults (T1 at R4; the
 CNN reaches 10.5 %), and the reason is measurable:
-the zone boundary is not in the one-ended measurement on these short cables. Only the both-ends
-references work. Three inverter-specific failure modes appear that TestGrid could not show.
+the zone boundary is not resolved by the one-ended, fundamental-frequency measurement behind a 400 Hz relay
+front end on these electrically short lines, for the high-resistance faults this set contains. Only the
+both-ends references work. Three inverter-specific failure modes appear that TestGrid could not show.
 
 ---
 
@@ -35,7 +36,7 @@ references work. Three inverter-specific failure modes appear that TestGrid coul
 | Voltage, frequency | 110 kV, 50 Hz | **20 kV**, 50 Hz |
 | Sources | two 30 GVA grids | one 10 GVA grid behind two 25 MVA 110/20 kV Dyn transformers, **two 15 MVA grid-following inverters** (buses 3 and 14, 1.2 pu limiter) |
 | Inverter weight | ≈ 0.14 % of short-circuit capacity | **median 52.3 %** of the fault-current rise at 20 ms (22.7 % at 40 ms; `CIGREMV_FACTS.md`) |
-| Lines | overhead, 110 kV | XLPE cables, **0.24–4.89 km**; |Z1L| of the protected lines **2.1–3.9 Ω** against 6.6–10.5 Ω (TABLES I) |
+| Lines | overhead, 110 kV | XLPE cables 0.24–4.42 km (lumped PI in the EMT model) and three overhead lines, 12-13, 13-14 and 8-14 (2.0–4.89 km, distributed parameters); R1, R2 and R4 protect cables, **R3 the 2.99 km overhead line 13-14**; |Z1L| of the protected lines **2.1–3.9 Ω** against 6.6–10.5 Ω (TABLES I) |
 | Simulations | 9,739 | 9,906; loading ×2.30; grounding solid / resistive / resonant in thirds; R_f median 25.3 Ω |
 | In-zone faults per relay | 168 / 207 | **72–84** (TABLES I) |
 
@@ -100,11 +101,12 @@ The 5 % research convention hides it less than on TestGrid but still hides it: t
 72.2 / 55.6 / 85.7 / 86.8 % there with 79–110 off-line trips and 12–70 of ~100 next-line faults
 (TABLES B), against 100 % on TestGrid.
 
-### Why: the boundary is not in a one-ended measurement here
+### Why: the fundamental-frequency measurement does not resolve the boundary here
 
 A detector's overall AUC mixes the zone boundary with every easy far fault. `cigremv_diagnostics.py`
-compares in-zone faults only with the off-line faults nearest the boundary (remote bus and lines beyond),
-**within one R_f band**, so both classes carry the same resistance (TABLES I):
+compares in-zone faults only with the off-line faults nearest the boundary (remote bus and the whole of the
+lines beyond), **within one R_f band**, so both classes carry the same resistance — though not the same
+resistance relative to the line: 5 Ω is 1.3–2.4 |Z1L| here (TABLES I):
 
 | near-boundary AUC, CNN | <5 Ω | 5–15 Ω | 15–40 Ω | >40 Ω | in-zone above every off-line score |
 |---|---|---|---|---|---|
@@ -115,14 +117,25 @@ compares in-zone faults only with the off-line faults nearest the boundary (remo
 | CIGRE R3 | 0.769 | 0.560 | 0.636 | 0.735 | 1/84 |
 | CIGRE R4 | 0.531 | 0.888 | 0.819 | 0.800 | 7/76 |
 
-On TestGrid every in-zone fault is separated from the boundary faults in every band. Here the separation
-is near chance **even below 5 Ω**, so this is not resistance hiding the location: the location is not
-resolved by what one end sees. The CNN's overall AUC of 0.87–0.97 comes from the far faults. The small
-bands (3–12 in-zone faults below 5 Ω) are noisy one by one; the pattern across four relays and four bands
-is not.
+On TestGrid every in-zone fault is separated from the boundary faults in every band. Here the separation is
+weak in every band, and the CNN's overall AUC of 0.87–0.97 comes from the far faults. That the low bands are
+no better is suggestive, not decisive: with corrected labels there are only 3 / 3 / 13 / 8 in-zone faults
+below 5 Ω at R1–R4 and 0 / 0 / 5 / 2 below 1 Ω, while the median in-zone R_f is 6–11.5 |Z1L|. What the data
+show is that the fundamental-frequency measurement does not resolve the boundary for the faults this set
+contains — high resistance relative to these short lines — not that bolted faults are unresolvable; this
+set cannot test those.
 
-Three causes are consistent with this: (i) the lines are short — the 15 % guard band is 0.3–0.6 Ω of
-cable, against 1.0–1.6 Ω on TestGrid; (ii) the inverters supply about half of the fault-current rise,
+Nor is it shown that nothing in the record resolves it. A scratch check in the bridge review
+([`review/bridge/`](../review/bridge/LEAD_REVIEW.md)) found boundary information in the 0.4–3.2 kHz content
+that the 400 Hz relay front end removes: in-zone against remote-bus faults, wideband spectra give AUC
+0.81–0.87 (R1), 0.92–0.94 (R2), 0.75–0.78 (R4) with no front-end filter, and 0.55–0.59 at R3 — the one
+relay on a distributed-parameter line, which suggests lumped-network resonances of the simulation rather
+than physics a relay could use. It is optimistic (windows aligned on the true inception, about twenty
+variants tried) and not a protocol result; it narrows this section's claim to the fundamental-frequency
+front end and does not show that a wideband relay would work.
+
+Three causes are consistent with this: (i) the lines are electrically short — the 15 % guard band is
+0.3–0.6 Ω of line, against 1.0–1.6 Ω on TestGrid; (ii) the inverters supply about half of the fault-current rise,
 and the study-model validation above shows that at the inverter buses even a bolted fault's reactance is
 not where a linear model puts it; (iii) there are 72–84 in-zone faults to learn from instead of 168–207.
 
@@ -141,8 +154,8 @@ it costs 20–35 points — a contributing factor where the boundary is tight �
 37.5–43.1 %, four to forty times the CIGRE relays' 0–10.5 %. What is left is (i) against (ii), which
 needs a grid where one of them changes.
 
-Consistent with (i), not proof of it: MV cable feeders of this length are in practice protected by line
-differential or communication-assisted schemes rather than a single-ended zone 1, and here too only the
+Consistent with (i), not proof of it: MV lines of this length (three of the four relays here protect
+cables) are in practice protected by line differential or communication-assisted schemes rather than a single-ended zone 1, and here too only the
 both-ends references work.
 
 ### Three inverter-specific failure modes
@@ -185,28 +198,33 @@ below); there is still no security timer or loss-of-channel mode.
 The project's idea needs the inverter to inject a negative-sequence δ during the fault, and the toy design
 asks for 0.39–1.32 pu in its ambiguous presets (README.md). `ibr_headroom.py` measures what is left under
 the 1.2 pu limit, from the inverters' own cubicles, for the faults a signal would have to separate at the
-two inverter-bus relays ([`cigremv/ibr_headroom.json`](cigremv/ibr_headroom.json)). Both inverters
-dispatch 12.0 MW (0.8 of 15 MVA) in every simulation, so this is the heavily loaded inverter.
+two inverter-bus relays: their in-zone faults (corrected labels) and the faults nearest their boundary,
+remote bus and first 20 % of the lines beyond ([`cigremv/ibr_headroom.json`](cigremv/ibr_headroom.json)).
+Both inverters dispatch 12.0 MW (0.8 of 15 MVA) in every simulation, so this is the heavily loaded inverter.
+δ is added to the recorded currents with the output kept, in the frame of the inverter's positive-sequence
+voltage, and tested against the per-phase limit at every angle, at the one angle that fits most faults
+(a design angle), and at the best angle per fault (an upper bound).
 
-| in pu of the inverter rating | R1 in-zone (bus 3) | R3 in-zone (bus 14) | R1 / R3 near boundary |
+| share of faults where δ fits, output kept | R1 in-zone (bus 3), 20 / 40 ms | R3 in-zone (bus 14), 20 / 40 ms | R1 / R3 near boundary, 40 ms |
 |---|---|---|---|
-| on the limiter at 20 ms | 45.8 % | 54.8 % | 23.2 % / 26.7 % |
-| on the limiter at 40 ms | 9.7 % | 15.5 % | 5.6 % / 8.7 % |
-| room with present output kept, median at 20 ms / 40 ms | 0.10 / 0.28 | 0.04 / 0.27 | 0.23 / 0.18 at 20 ms |
-| share with ≥ 0.4 pu room, output kept, 20 ms / 40 ms | **0 %** / 20.8 % | **0 %** / 17.9 % | 0 % / 0 % at 20 ms |
-| share with ≥ 0.4 / 0.7 / 1.0 pu room if active current is given up, 20 ms | 100 / 90.3 / 27.8 % | 97.6 / 83.3 / 22.6 % | 99.4 / 92.7 / 45.8 %; 100 / 88.8 / 35.4 % |
+| inverter on the limiter | 44.4 / 11.1 % | 58.8 / 17.6 % | 6.7 / 9.0 % |
+| δ = 0.4 pu at every angle | 0 / 15.3 % | 0 / 16.5 % | 22.1 / 25.2 % |
+| δ = 0.4 pu at one design angle | 38.9 / 77.8 % | 37.6 / 76.5 % | 83.7 / 80.2 % |
+| δ = 0.4 pu at the best angle per fault | 83.3 / 100 % | 82.4 / 89.4 % | 97.1 / 98.2 % |
+| δ = 0.7 pu at one design angle | 8.3 / 20.8 % | 10.6 / 32.9 % | 15.4 / 25.2 % |
+| δ = 1.0 pu at one design angle | 1.4 / 4.2 % | 1.2 / 8.2 % | 1.9 / 6.3 % |
+| δ = 0.4 / 0.7 / 1.0 pu if active current is given up (an extreme), 20 ms | 100 / 90.3 / 22.2 % | 97.6 / 82.4 / 21.2 % | — |
 
-"Output kept" is a lower bound (a δ of that size fits at any angle); "active current given up" keeps the
-inverter's reactive support and negative-sequence response and drops its active current, which is the
-limiter's own priority. With output kept, **no** relevant fault leaves 0.4 pu at the 20 ms decision time,
-and 0.7 pu fits in none at any time, because the 0.8 pu dispatch alone uses two thirds of the limit. If
-the inverter gives up active current for the fault's duration, 0.4 pu fits in 97.6–100 % and 0.7 pu in
-83–93 % at 20 ms; 1 pu, below the largest toy δ, fits in only 23–46 %.
-
-So the headroom question (Q22 H2) does not kill the idea, but it fixes its terms: the signal has to be
-paid for with active current during the fault, and at the relay's first-cycle decision the inverter is
-often still on the limiter. A lower dispatch, a limiter that reserves room for δ, and the time the
-inverter needs to start injecting are not in this data.
+**0.4 pu fits at a design angle; 0.7 pu mostly does not; 1 pu does not.** The first version of this section
+read only the any-angle column ("no relevant fault leaves 0.4 pu at 20 ms, 0.7 pu fits in none") and
+concluded that the signal must be paid for with active current; the design chooses δ's angle, so that was
+the most pessimistic reading possible (bridge review, `review/bridge/LEAD_REVIEW.md`). At one fixed angle
+0.4 pu fits in 38–39 % of in-zone faults in the first cycle and 77–78 % by 40 ms, when fewer inverters
+are on the limiter; 0.7 pu fits in 8–33 % and 1 pu in at most 8 %. These are static numbers — the
+inverter's own response to δ (its negative-sequence control, which also shunts part of the injection, and
+its limiter) is not modelled — and the 20 ms window is the inception transient; 40 ms is the fairer read
+for a triggered injection. A lower dispatch, a limiter that reserves room for δ, and the time the inverter
+needs to start injecting are not in this data.
 
 ### Quick checks: settings, channel delay, CT saturation
 
@@ -253,8 +271,11 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
   kind of misoperation the project's IBR motivation (Sandia 2024 gap analysis) is about, and they survive
   directional supervision.
 - **For the project's central question** this is motivation, not evidence: a passive single-ended
-  measurement does not locate the boundary here, which is the gap a designed auxiliary injection would
-  have to close. No record here carries one (ADAPTGRID.md §5).
+  fundamental-frequency measurement does not locate the boundary here for these faults, which is the gap a
+  designed auxiliary injection would have to close. In the study model a designed δ barely moves that
+  boundary (review/bridge/LEAD_REVIEW.md: 0.0008–0.024 pu per pu of δ for the nearest confusable pairs),
+  so on this grid the injection question is whether any δ the inverter can supply closes it — the bridge's
+  first screening. No record here carries an injection (ADAPTGRID.md §5).
 
 ## 5. Limits
 
@@ -263,11 +284,16 @@ the records, 50 Hz. At 20 kV the CVT does not apply; CT saturation and channel d
 afterwards (quick checks, §3), not simulated — the channel as a delay only, with no loss-of-channel or
 security-timer logic. In addition:
 
-- **Four relays on one feeder.** Two of them (R1, R2) are the two ends of one line.
+- **Four relays on two feeders of one grid.** R1, R2 and R4 are on feeder 1 (cables), R3 on feeder 2 (an
+  overhead line); R1 and R2 are the two ends of one line.
+- **R3 is given cable assumptions.** Its relay profile (`real_zone.py`: 285 A cable rating, faults to the
+  screen so no tower-footing term) is the cable one, and the study model (`setting_study.py`) has no line
+  shunt capacitance; its settings and study quantities are the least representative of the four.
 - **Settings carry the study-model error at R1/R3** (0.24–0.69 |Z1L|); T2 bounds the conventional side
   independently of it and is no better, and ±20 % on X_set and R_set moves R2 by at most 3 points on CIGRE.
 - **Two causes of the boundary result remain confounded** (short lines, inverter in-feed); the third,
   fewer in-zone faults, was tested on TestGrid and is not sufficient (§3), and neither are the settings
   (quick checks, §3).
-- **The in-zone population is small** (72–84 faults, 3–12 below 5 Ω), so per-band numbers are indicative;
+- **The in-zone population is small** (72–85 faults with corrected labels; 3–13 below 5 Ω, 0–5 below 1 Ω),
+  so per-band numbers are indicative and low-R_f behaviour is not testable here;
   the conclusions rest on the pattern across relays and bands and on the seed stability.
