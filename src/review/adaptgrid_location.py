@@ -53,7 +53,8 @@ def estimators(R):
     xl, rl = R["z1L"].imag, R["z1L"].real
     m_react = x_loop / xl
     m_takagi = cm.polarised_reactance(R, Lp, mask, "takagi") / xl
-    m_true = R["loc"] / 100.0
+    lr = R.get("loc_rel", R["loc"])                      # from the relay on the own line (common.load_relay_adapt)
+    m_true = np.where(np.isnan(lr), R["loc"], lr) / 100.0
     with np.errstate(divide="ignore", invalid="ignore"):
         infeed = (r_loop - m_true * rl) / np.where(R["rf"] > RF_FLOOR, R["rf"], np.nan)
     return dict(m_react=m_react, m_takagi=m_takagi, m_true=m_true, infeed=infeed,

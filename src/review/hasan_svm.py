@@ -476,7 +476,8 @@ def main(relays=("adapt_A", "adapt_B"), times=(20, 50), variants=tuple(VARIANTS)
         del R
     res["runtime_s"] = float(time.time() - t0)
     os.makedirs(OUT, exist_ok=True)
-    path = os.path.join(OUT, f"hasan_svm_relayfe{'_smoke' if smoke else ''}.json")
+    tag = "" if tuple(relays) == ("adapt_A", "adapt_B") else "_" + "-".join(relays)     # never overwrite the TestGrid run
+    path = os.path.join(OUT, f"hasan_svm_relayfe{tag}{'_smoke' if smoke else ''}.json")
     json.dump(res, open(path, "w"), indent=1, default=str)
     print("saved", path, f"[{res['runtime_s']:.0f}s]", flush=True)
     return res

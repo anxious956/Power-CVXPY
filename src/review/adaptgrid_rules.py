@@ -22,7 +22,7 @@ OUT = os.path.join(cm.ROOT, "results", "adaptgrid")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("relays", nargs="+", choices=["adapt_A", "adapt_B"])
+    ap.add_argument("relays", nargs="+", choices=["adapt_A", "adapt_B", "cigre_R1", "cigre_R2", "cigre_R3", "cigre_R4"])
     ap.add_argument("--frontend", choices=["current", "relayfe"], default="relayfe")
     a = ap.parse_args()
     if a.frontend == "relayfe":

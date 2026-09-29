@@ -1,0 +1,300 @@
+{
+ "script": "cigremv_diagnostics",
+ "commit": "b11da15126e212c86c1b66876cc77088f001ac29",
+ "model": "CNN seq-traj",
+ "split": "grouped",
+ "chain": "matched",
+ "near": "remote_bus_faults | beyond",
+ "relays": {
+  "adapt_A": {
+   "scores_commit": "e0c7c901e755abc594ced5bf2226b451aff0f976",
+   "z1L_abs_ohm": 6.5539989310498905,
+   "x_line_ohm": 6.500614643096923,
+   "rf_median_in_zone": 24.213006984640618,
+   "n_pos": 168,
+   "n_near": 829,
+   "auc_all_offline": 1.0,
+   "auc_near": 1.0,
+   "above_highest_offline": {
+    "k": 168,
+    "n": 168
+   },
+   "by_rf_band": {
+    "<5": {
+     "n_pos": 10,
+     "n_near": 82,
+     "auc": 1.0,
+     "above_highest_near": 10
+    },
+    "5-15": {
+     "n_pos": 39,
+     "n_near": 176,
+     "auc": 1.0,
+     "above_highest_near": 39
+    },
+    "15-40": {
+     "n_pos": 93,
+     "n_near": 399,
+     "auc": 1.0,
+     "above_highest_near": 93
+    },
+    ">40": {
+     "n_pos": 26,
+     "n_near": 172,
+     "auc": 1.0,
+     "above_highest_near": 26
+    }
+   },
+   "switching_trips_cal0": {
+    "k": 0,
+    "n": 5474,
+    "forward_32": 0,
+    "by_event_target": {},
+    "events_of_that_kind": {}
+   }
+  },
+  "adapt_B": {
+   "scores_commit": "e0c7c901e755abc594ced5bf2226b451aff0f976",
+   "z1L_abs_ohm": 10.486397716062328,
+   "x_line_ohm": 10.400982856750488,
+   "rf_median_in_zone": 22.63232879025856,
+   "n_pos": 207,
+   "n_near": 430,
+   "auc_all_offline": 0.999872647156211,
+   "auc_near": 0.9991573980451635,
+   "above_highest_offline": {
+    "k": 156,
+    "n": 207
+   },
+   "by_rf_band": {
+    "<5": {
+     "n_pos": 26,
+     "n_near": 40,
+     "auc": 0.9971153846153846,
+     "above_highest_near": 24
+    },
+    "5-15": {
+     "n_pos": 47,
+     "n_near": 90,
+     "auc": 1.0,
+     "above_highest_near": 47
+    },
+    "15-40": {
+     "n_pos": 97,
+     "n_near": 203,
+     "auc": 0.9999492153775836,
+     "above_highest_near": 96
+    },
+    ">40": {
+     "n_pos": 37,
+     "n_near": 97,
+     "auc": 1.0,
+     "above_highest_near": 37
+    }
+   },
+   "switching_trips_cal0": {
+    "k": 0,
+    "n": 5474,
+    "forward_32": 0,
+    "by_event_target": {},
+    "events_of_that_kind": {}
+   }
+  },
+  "cigre_R1": {
+   "scores_commit": "df634b638cd2b9f64eec021917f884d8e196ccdb",
+   "z1L_abs_ohm": 3.8625262898556554,
+   "x_line_ohm": 3.164720058441162,
+   "rf_median_in_zone": 23.55796429748084,
+   "n_pos": 72,
+   "n_near": 177,
+   "auc_all_offline": 0.9652417027417026,
+   "auc_near": 0.644774011299435,
+   "above_highest_offline": {
+    "k": 1,
+    "n": 72
+   },
+   "by_rf_band": {
+    "<5": {
+     "n_pos": 3,
+     "n_near": 17,
+     "auc": 0.5294117647058824,
+     "above_highest_near": 1
+    },
+    "5-15": {
+     "n_pos": 22,
+     "n_near": 35,
+     "auc": 0.5688311688311689,
+     "above_highest_near": 1
+    },
+    "15-40": {
+     "n_pos": 37,
+     "n_near": 94,
+     "auc": 0.6647498562392179,
+     "above_highest_near": 2
+    },
+    ">40": {
+     "n_pos": 10,
+     "n_near": 31,
+     "auc": 0.8903225806451613,
+     "above_highest_near": 5
+    }
+   },
+   "switching_trips_cal0": {
+    "k": 0,
+    "n": 5573,
+    "forward_32": 0,
+    "by_event_target": {},
+    "events_of_that_kind": {}
+   }
+  },
+  "cigre_R2": {
+   "scores_commit": "df634b638cd2b9f64eec021917f884d8e196ccdb",
+   "z1L_abs_ohm": 3.8625262898556554,
+   "x_line_ohm": 3.164720058441162,
+   "rf_median_in_zone": 23.55796429748084,
+   "n_pos": 72,
+   "n_near": 232,
+   "auc_all_offline": 0.8736050986050986,
+   "auc_near": 0.7929837164750958,
+   "above_highest_offline": {
+    "k": 5,
+    "n": 72
+   },
+   "by_rf_band": {
+    "<5": {
+     "n_pos": 3,
+     "n_near": 19,
+     "auc": 0.3684210526315789,
+     "above_highest_near": 0
+    },
+    "5-15": {
+     "n_pos": 22,
+     "n_near": 45,
+     "auc": 0.6878787878787878,
+     "above_highest_near": 3
+    },
+    "15-40": {
+     "n_pos": 37,
+     "n_near": 115,
+     "auc": 0.8580493537015277,
+     "above_highest_near": 17
+    },
+    ">40": {
+     "n_pos": 10,
+     "n_near": 53,
+     "auc": 0.769811320754717,
+     "above_highest_near": 7
+    }
+   },
+   "switching_trips_cal0": {
+    "k": 85,
+    "n": 5573,
+    "forward_32": 85,
+    "by_event_target": {
+     "switch_ibr_trip|MainBus3": 85
+    },
+    "events_of_that_kind": {
+     "switch_ibr_trip|MainBus3": 227
+    }
+   }
+  },
+  "cigre_R3": {
+   "scores_commit": "df634b638cd2b9f64eec021917f884d8e196ccdb",
+   "z1L_abs_ohm": 2.075917591661902,
+   "x_line_ohm": 1.5175248384475706,
+   "rf_median_in_zone": 24.39399686726086,
+   "n_pos": 84,
+   "n_near": 161,
+   "auc_all_offline": 0.9699457792678132,
+   "auc_near": 0.6447057083703046,
+   "above_highest_offline": {
+    "k": 1,
+    "n": 84
+   },
+   "by_rf_band": {
+    "<5": {
+     "n_pos": 12,
+     "n_near": 13,
+     "auc": 0.7692307692307693,
+     "above_highest_near": 1
+    },
+    "5-15": {
+     "n_pos": 19,
+     "n_near": 33,
+     "auc": 0.5598086124401913,
+     "above_highest_near": 2
+    },
+    "15-40": {
+     "n_pos": 36,
+     "n_near": 89,
+     "auc": 0.6360799001248439,
+     "above_highest_near": 1
+    },
+    ">40": {
+     "n_pos": 17,
+     "n_near": 26,
+     "auc": 0.7352941176470589,
+     "above_highest_near": 2
+    }
+   },
+   "switching_trips_cal0": {
+    "k": 0,
+    "n": 5573,
+    "forward_32": 0,
+    "by_event_target": {},
+    "events_of_that_kind": {}
+   }
+  },
+  "cigre_R4": {
+   "scores_commit": "df634b638cd2b9f64eec021917f884d8e196ccdb",
+   "z1L_abs_ohm": 2.4643266394085557,
+   "x_line_ohm": 2.01911997795105,
+   "rf_median_in_zone": 24.098223613515486,
+   "n_pos": 76,
+   "n_near": 168,
+   "auc_all_offline": 0.9498959262563189,
+   "auc_near": 0.7938596491228069,
+   "above_highest_offline": {
+    "k": 7,
+    "n": 76
+   },
+   "by_rf_band": {
+    "<5": {
+     "n_pos": 8,
+     "n_near": 12,
+     "auc": 0.53125,
+     "above_highest_near": 3
+    },
+    "5-15": {
+     "n_pos": 15,
+     "n_near": 41,
+     "auc": 0.8878048780487806,
+     "above_highest_near": 6
+    },
+    "15-40": {
+     "n_pos": 38,
+     "n_near": 90,
+     "auc": 0.8187134502923976,
+     "above_highest_near": 3
+    },
+    ">40": {
+     "n_pos": 15,
+     "n_near": 25,
+     "auc": 0.8,
+     "above_highest_near": 3
+    }
+   },
+   "switching_trips_cal0": {
+    "k": 9,
+    "n": 5573,
+    "forward_32": 9,
+    "by_event_target": {
+     "switch_ibr_trip|MainBus3": 9
+    },
+    "events_of_that_kind": {
+     "switch_ibr_trip|MainBus3": 227
+    }
+   }
+  }
+ }
+}

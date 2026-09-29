@@ -49,8 +49,8 @@ def phase_voltages(vseq):
 
 def sir_for(name):
     R = cm.load_relay(name, chain=dict(noise_rel=0.0, adc_bits=0))   # study model only; no EMT records used here
-    net = ss.build(R["graph"])
-    rb = cm.RELAY_BUS[name]
+    net = ss.net_for(R)
+    rb = ss.relay_bus_of(R, name)
     cfg = R["cfg"]
     z1L = R["z1L"]
 

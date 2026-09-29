@@ -78,6 +78,35 @@ CONFIGS = {
         beyond=["MainLn3-4"], parallel=None,
         ibr_cubicles=["Cubicle(1)\\pex_MainBus3_Ind3-3IBR"], adaptgrid=True,
         remote_cubicle="Cub_HV_C_B-C\\pex_MainBus3_MainLn2-3"),
+    # EvEMTBench adapt_grid-CigreMVGrid: 20 kV CIGRE MV grid, two 15 MVA inverters (buses 3 and 14) as the only
+    # generators, two 25 MVA 110/20 kV Dyn transformers from a 10 GVA grid. Lines: XLPE cables 0.24-4.42 km (lumped PI
+    # in the EMT model) on feeder 1 (R1, R2, R4), overhead lines 12-13, 13-14, 8-14 (distributed) on feeder 2 (R3,
+    # on the 2.99 km overhead line 13-14). Cache on D: (set
+    # EVEMT_CACHE_DIRS), every cubicle. Relays chosen from results/CIGREMV_FACTS.md: the longest lines, with the
+    # inverter at the relay end (R1, R3), at the remote end (R2) and far away (R4, substation feeder head).
+    # MainLn8-14 is the normally-open tie, open at bus 8: its bus-14 end carries 0.1 A pre-fault and ~550 A for
+    # faults on the line, none for faults at bus 14 (checked on the records), so it is a stub fed from bus 14 and
+    # its faults are genuine reverse faults for R3. The graph has no switch state, hence open_line_ends.
+    **{name: dict(cache_glob="adapt_grid-CigreMVGrid*_cache.meta.npz", title=title, relay=relay, line=line,
+                  remote_bus=rbus, beyond=beyond, parallel=None, relay_bus=bus, remote_cubicle=remote,
+                  ibr_cubicles=["Cubicle\\pex_MainBus3_Ind3-3IBR", "Cubicle\\pex_MainBus14_Ind14-14IBR"],
+                  adaptgrid=True, vn_kv=20.0, open_line_ends={"MainLn8-14": "MainBus8"},
+                  # MV relay assumptions (ladder.profile), stated not measured: CT 400/1 A (about 1.4x the cable
+                  # rating); arc length 1 m; no tower-footing term (cable faults are to the metallic screen);
+                  # NA2XS2Y 1x120 12/20 kV cable rating 285 A (typical catalogue value, not re-verified). R3 protects an
+                  # overhead line but keeps this cable profile, so its settings stay comparable with the committed
+                  # results; a stated limitation (results/CIGREMV.md section 5), not a verified overhead-line setting
+                  relay_profile=dict(ct_primary_a=400.0, arc_length_m=1.0, r_ground=0.0, i_thermal_per_conductor=285.0),
+                  loads=[f"loads/Ld{i}/load_p" for i in (1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14)])
+       for name, title, relay, line, bus, rbus, beyond, remote in (
+           ("cigre_R1", "CIGRE MV R1: line 2-3 at bus 3 (inverter bus)", "Cub_1\\pex_MainBus3_MainLn2-3", "MainLn2-3",
+            "MainBus3", "MainBus2", ["MainLn1-2"], "Cub_2\\pex_MainBus2_MainLn2-3"),
+           ("cigre_R2", "CIGRE MV R2: line 2-3 at bus 2 (inverter at the remote end)", "Cub_2\\pex_MainBus2_MainLn2-3",
+            "MainLn2-3", "MainBus2", "MainBus3", ["MainLn3-4", "MainLn3-8"], "Cub_1\\pex_MainBus3_MainLn2-3"),
+           ("cigre_R3", "CIGRE MV R3: line 13-14 at bus 14 (inverter bus, feeder 2)", "Cub_1\\pex_MainBus14_MainLn13-14",
+            "MainLn13-14", "MainBus14", "MainBus13", ["MainLn12-13"], "Cub_1\\pex_MainBus13_MainLn13-14"),
+           ("cigre_R4", "CIGRE MV R4: line 1-2 at bus 1 (feeder head)", "Cub_2\\pex_MainBus1_MainLn1-2", "MainLn1-2",
+            "MainBus1", "MainBus2", ["MainLn2-3"], "Cub_1\\pex_MainBus2_MainLn1-2"))},
 }
 
 

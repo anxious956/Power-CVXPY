@@ -1,0 +1,60 @@
+{
+ "script": "ibr_study.characterise",
+ "commit": "ae3f12a3e4eb05cd3de91b658e10fa3c008e4af1",
+ "decision_ms": 50,
+ "convention": "currents injected into the grid; per unit of the inverter's own rating",
+ "inverters": {
+  "Bus14IBR": {
+   "cubicle": "Cubicle\\pex_MainBus14_Ind14-14IBR",
+   "n_short_circuits": 2393,
+   "p_out_W": 12002070.843761327,
+   "q_out_var": -779047.2469397779,
+   "p_out_range_W": [
+    12001773.924302688,
+    12002422.797911778
+   ],
+   "k1": 2.591784371361376,
+   "k1_n": 42,
+   "k1_nameplate_Kp_IqV": 2.0,
+   "y2_pu": [
+    0.7954318152359585,
+    -2.347034437808457
+   ],
+   "y2_abs": 2.4781610974568284,
+   "y2_angle_deg": -71.27800196532291,
+   "y2_n": 63,
+   "i_max_pu": 1.2,
+   "max_phase_current_deep_dips_pu": {
+    "n": 12,
+    "median": 1.2401702137666812,
+    "p99": 1.2985448724065434
+   }
+  },
+  "Bus3IBR": {
+   "cubicle": "Cubicle\\pex_MainBus3_Ind3-3IBR",
+   "n_short_circuits": 2393,
+   "p_out_W": 12001836.401161682,
+   "q_out_var": -1200475.2146621249,
+   "p_out_range_W": [
+    12001824.928332122,
+    12001886.823732495
+   ],
+   "k1": 1.9254353022343622,
+   "k1_n": 680,
+   "k1_nameplate_Kp_IqV": 2.0,
+   "y2_pu": [
+    0.6902655388595669,
+    -2.2033798262739985
+   ],
+   "y2_abs": 2.308971453476271,
+   "y2_angle_deg": -72.60548980071617,
+   "y2_n": 373,
+   "i_max_pu": 1.2,
+   "max_phase_current_deep_dips_pu": {
+    "n": 45,
+    "median": 1.224501724864085,
+    "p99": 1.2772037214831404
+   }
+  }
+ }
+}

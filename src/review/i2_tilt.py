@@ -13,15 +13,15 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 from sklearn.metrics import roc_auc_score
 from review import common as cm
-from review.setting_study import build, tilt_angles, RELAY_BUS
+from review.setting_study import build, tilt_angles, RELAY_BUS, net_for, relay_bus_of
 from review.zone_cv import splits
 
 FAR = 0.05
 out = {}
 for name in ("testgrid_B", "testgrid_A", "doubleline"):
     R = cm.load_relay(name)
-    net = build(R["graph"])
-    T = tilt_angles(net, RELAY_BUS[name], R["cfg"]["line"])
+    net = net_for(R)
+    T = tilt_angles(net, relay_bus_of(R, name), R["cfg"]["line"])
     tilts = {"two-source tilt": (T[2]["tilt_two_source_deg"], T[1]["tilt_two_source_deg"]),
              "network tilt": (T[2]["tilt_network_deg"], T[1]["tilt_network_deg"]),
              "no tilt": (0.0, 0.0)}

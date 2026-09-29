@@ -1,0 +1,2293 @@
+{
+ "script": "cigremv_facts",
+ "commit": "7dc8f46ec9c13e5903ee46cc989432f1945c0364",
+ "cache": "adapt_grid-CigreMVGrid_cache.meta.npz",
+ "n_cubicles": 45,
+ "cubicles": [
+  "Cub_1(1)\\pex_MainBus9_MainLn8-9",
+  "Cub_1\\pex_MainBus10_MainLn9-10",
+  "Cub_1\\pex_MainBus11_MainLn4-11",
+  "Cub_1\\pex_MainBus12_MainLn12-13",
+  "Cub_1\\pex_MainBus13_MainLn13-14",
+  "Cub_1\\pex_MainBus14_MainLn13-14",
+  "Cub_1\\pex_MainBus1_Trf0-1",
+  "Cub_1\\pex_MainBus2_MainLn1-2",
+  "Cub_1\\pex_MainBus3_MainLn2-3",
+  "Cub_1\\pex_MainBus4_MainLn3-4",
+  "Cub_1\\pex_MainBus5_MainLn4-5",
+  "Cub_1\\pex_MainBus6_MainLn5-6",
+  "Cub_1\\pex_MainBus7_MainLn7-8",
+  "Cub_1\\pex_MainBus8_MainLn8-9",
+  "Cub_1\\pex_MainBus9_Ld9",
+  "Cub_2\\pex_MainBus10_MainLn10-11",
+  "Cub_2\\pex_MainBus11_MainLn10-11",
+  "Cub_2\\pex_MainBus12_Trf0-12",
+  "Cub_2\\pex_MainBus13_MainLn12-13",
+  "Cub_2\\pex_MainBus14_MainLn8-14",
+  "Cub_2\\pex_MainBus1_MainLn1-2",
+  "Cub_2\\pex_MainBus2_MainLn2-3",
+  "Cub_2\\pex_MainBus3_MainLn3-4",
+  "Cub_2\\pex_MainBus4_MainLn4-5",
+  "Cub_2\\pex_MainBus5_MainLn5-6",
+  "Cub_2\\pex_MainBus6_MainLn6-7",
+  "Cub_2\\pex_MainBus7_MainLn6-7",
+  "Cub_2\\pex_MainBus8_MainLn3-8",
+  "Cub_2\\pex_MainBus9_MainLn9-10",
+  "Cub_3\\pex_MainBus11_Ld11",
+  "Cub_3\\pex_MainBus12_Ld12",
+  "Cub_3\\pex_MainBus13_Ld13",
+  "Cub_3\\pex_MainBus14_Ld14",
+  "Cub_3\\pex_MainBus1_Ld1",
+  "Cub_3\\pex_MainBus3_MainLn3-8",
+  "Cub_3\\pex_MainBus4_MainLn4-11",
+  "Cub_3\\pex_MainBus5_Ld5",
+  "Cub_3\\pex_MainBus6_Ld6",
+  "Cub_3\\pex_MainBus7_Ld7",
+  "Cub_3\\pex_MainBus8_MainLn7-8",
+  "Cub_4\\pex_MainBus3_Ld3",
+  "Cub_4\\pex_MainBus4_Ld4",
+  "Cub_5\\pex_MainBus8_Ld8",
+  "Cubicle\\pex_MainBus14_Ind14-14IBR",
+  "Cubicle\\pex_MainBus3_Ind3-3IBR"
+ ],
+ "fs": 6400.0,
+ "nominal_kV": 20.0,
+ "grid": {
+  "n_nodes": 31,
+  "n_edges": 24,
+  "inverters": {
+   "Bus14IBR": {
+    "Sn_MVA": 15.0,
+    "Imax_pu": 1.2,
+    "P_FLAG": 2.0,
+    "Q_FLAG": 2.0,
+    "IqV_FLAG": 1.0
+   },
+   "Bus3IBR": {
+    "Sn_MVA": 15.0,
+    "Imax_pu": 1.2,
+    "P_FLAG": 2.0,
+    "Q_FLAG": 2.0,
+    "IqV_FLAG": 1.0
+   }
+  },
+  "lines": {
+   "MainLn1-2": {
+    "buses": [
+     "MainBus1",
+     "MainBus2"
+    ],
+    "length_km": 2.819999933242798,
+    "z1_ohm_per_km": [
+     0.5010000053263727,
+     0.7160000091309245
+    ],
+    "z0_ohm_per_km": [
+     0.8169999552753789,
+     1.5980000569837327
+    ],
+    "z1_ohm": [
+     1.4128199815750122,
+     2.01911997795105
+    ]
+   },
+   "MainLn10-11": {
+    "buses": [
+     "MainBus10",
+     "MainBus11"
+    ],
+    "length_km": 0.33000001311302185,
+    "z1_ohm_per_km": [
+     0.5010000033414723,
+     0.7159999992775194
+    ],
+    "z0_ohm_per_km": [
+     0.8169999303709404,
+     1.5980001016891323
+    ],
+    "z1_ohm": [
+     0.16533000767230985,
+     0.23628000915050507
+    ]
+   },
+   "MainLn9-10": {
+    "buses": [
+     "MainBus10",
+     "MainBus9"
+    ],
+    "length_km": 0.7699999809265137,
+    "z1_ohm_per_km": [
+     0.5010000034059798,
+     0.7160000390139503
+    ],
+    "z0_ohm_per_km": [
+     0.8169999572704354,
+     1.5980001015601246
+    ],
+    "z1_ohm": [
+     0.3857699930667878,
+     0.5513200163841248
+    ]
+   },
+   "MainLn4-11": {
+    "buses": [
+     "MainBus11",
+     "MainBus4"
+    ],
+    "length_km": 0.49000000953674316,
+    "z1_ohm_per_km": [
+     0.5009999895387768,
+     0.7159999907551982
+    ],
+    "z0_ohm_per_km": [
+     0.8169999985402945,
+     1.5980000087582333
+    ],
+    "z1_ohm": [
+     0.24548999965190885,
+     0.3508400022983551
+    ]
+   },
+   "MainLn12-13": {
+    "buses": [
+     "MainBus12",
+     "MainBus13"
+    ],
+    "length_km": 4.889999866485596,
+    "z1_ohm_per_km": [
+     0.47375528189804206,
+     0.5075333934726745
+    ],
+    "z0_ohm_per_km": [
+     0.6186004721760635,
+     1.756073701279357
+    ],
+    "z1_ohm": [
+     2.3166632652282715,
+     2.4818382263183594
+    ]
+   },
+   "MainLn13-14": {
+    "buses": [
+     "MainBus13",
+     "MainBus14"
+    ],
+    "length_km": 2.990000009536743,
+    "z1_ohm_per_km": [
+     0.47375525766788834,
+     0.5075333891663395
+    ],
+    "z0_ohm_per_km": [
+     0.6186004845399108,
+     1.75607371328324
+    ],
+    "z1_ohm": [
+     1.4165282249450684,
+     1.5175248384475706
+    ]
+   },
+   "MainLn8-14": {
+    "buses": [
+     "MainBus14",
+     "MainBus8"
+    ],
+    "length_km": 2.0,
+    "z1_ohm_per_km": [
+     0.47375527024269104,
+     0.5075333714485168
+    ],
+    "z0_ohm_per_km": [
+     0.6186004877090454,
+     1.7560737133026123
+    ],
+    "z1_ohm": [
+     0.9475105404853821,
+     1.0150667428970337
+    ]
+   },
+   "MainLn2-3": {
+    "buses": [
+     "MainBus2",
+     "MainBus3"
+    ],
+    "length_km": 4.420000076293945,
+    "z1_ohm_per_km": [
+     0.5010000094935904,
+     0.7160000008630537
+    ],
+    "z0_ohm_per_km": [
+     0.8169999887803023,
+     1.5980000673181858
+    ],
+    "z1_ohm": [
+     2.2144200801849365,
+     3.164720058441162
+    ]
+   },
+   "MainLn3-4": {
+    "buses": [
+     "MainBus3",
+     "MainBus4"
+    ],
+    "length_km": 0.6100000143051147,
+    "z1_ohm_per_km": [
+     0.500999990033322,
+     0.715999996873199
+    ],
+    "z0_ohm_per_km": [
+     0.8169999673640149,
+     1.5980000981033802
+    ],
+    "z1_ohm": [
+     0.3056100010871887,
+     0.4367600083351135
+    ]
+   },
+   "MainLn3-8": {
+    "buses": [
+     "MainBus3",
+     "MainBus8"
+    ],
+    "length_km": 1.2999999523162842,
+    "z1_ohm_per_km": [
+     0.5009999825771032,
+     0.7160000421817502
+    ],
+    "z0_ohm_per_km": [
+     0.8169999789091249,
+     1.5980000348457937
+    ],
+    "z1_ohm": [
+     0.6512999534606934,
+     0.9308000206947327
+    ]
+   },
+   "MainLn4-5": {
+    "buses": [
+     "MainBus4",
+     "MainBus5"
+    ],
+    "length_km": 0.5600000023841858,
+    "z1_ohm_per_km": [
+     0.5009999743487155,
+     0.7159999940395355
+    ],
+    "z0_ohm_per_km": [
+     0.8169999577445645,
+     1.5980000938773151
+    ],
+    "z1_ohm": [
+     0.2805599868297577,
+     0.4009599983692169
+    ]
+   },
+   "MainLn5-6": {
+    "buses": [
+     "MainBus5",
+     "MainBus6"
+    ],
+    "length_km": 1.5399999618530273,
+    "z1_ohm_per_km": [
+     0.5010000034059798,
+     0.7160000390139503
+    ],
+    "z0_ohm_per_km": [
+     0.8169999572704354,
+     1.5980001015601246
+    ],
+    "z1_ohm": [
+     0.7715399861335756,
+     1.1026400327682495
+    ]
+   },
+   "MainLn6-7": {
+    "buses": [
+     "MainBus6",
+     "MainBus7"
+    ],
+    "length_km": 0.23999999463558197,
+    "z1_ohm_per_km": [
+     0.5009999921148021,
+     0.7160000042219957
+    ],
+    "z0_ohm_per_km": [
+     0.8169999528750767,
+     1.5980000654409343
+    ],
+    "z1_ohm": [
+     0.12023999541997911,
+     0.17183999717235565
+    ]
+   },
+   "MainLn7-8": {
+    "buses": [
+     "MainBus7",
+     "MainBus8"
+    ],
+    "length_km": 1.6699999570846558,
+    "z1_ohm_per_km": [
+     0.5010000017845703,
+     0.715999992861719
+    ],
+    "z0_ohm_per_km": [
+     0.8169999589548843,
+     1.5979999964308595
+    ],
+    "z1_ohm": [
+     0.8366699814796448,
+     1.1957199573516846
+    ]
+   },
+   "MainLn8-9": {
+    "buses": [
+     "MainBus8",
+     "MainBus9"
+    ],
+    "length_km": 0.3199999928474426,
+    "z1_ohm_per_km": [
+     0.5010000076368453,
+     0.716000019744039
+    ],
+    "z0_ohm_per_km": [
+     0.8169999528750767,
+     1.5980000033527613
+    ],
+    "z1_ohm": [
+     0.1603199988603592,
+     0.22912000119686127
+    ]
+   }
+  },
+  "other_edges": [
+   {
+    "u": "Bus0",
+    "v": "MainBus1",
+    "key": "Trf0-1",
+    "params": {
+     "Trf0-1_param_dict": {
+      "name": "Trf0-1",
+      "cubicle_1": "Cub_2",
+      "cubicle_2": "Cub_1",
+      "trafo_type": "Transformer Type 25MVA 50Hz 110/20kV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "Trf0-1_typ_param_dict": {
+      "strn": 25.0,
+      "frnom": 50.0,
+      "utrn_h": 110.0,
+      "utrn_l": 20.0,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 1.0,
+      "uktr": 12.00041675567627,
+      "pcutr": 25.0,
+      "curmg": 0.0,
+      "pfe": 0.0,
+      "x0pu": 0.10000000149011612,
+      "r0pu": 0.0,
+      "iLimb": 3,
+      "itapch": 1,
+      "itrmt": 0,
+      "iInterPol": 0,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "Transformer Type 25MVA 50Hz 110/20kV"
+     }
+    }
+   },
+   {
+    "u": "Bus0",
+    "v": "MainBus12",
+    "key": "Trf0-12",
+    "params": {
+     "Trf0-12_param_dict": {
+      "name": "Trf0-12",
+      "cubicle_1": "Cub_3",
+      "cubicle_2": "Cub_2",
+      "trafo_type": "Transformer Type 25MVA 50Hz 110/20kV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "Trf0-12_typ_param_dict": {
+      "strn": 25.0,
+      "frnom": 50.0,
+      "utrn_h": 110.0,
+      "utrn_l": 20.0,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 1.0,
+      "uktr": 12.00041675567627,
+      "pcutr": 25.0,
+      "curmg": 0.0,
+      "pfe": 0.0,
+      "x0pu": 0.10000000149011612,
+      "r0pu": 0.0,
+      "iLimb": 3,
+      "itapch": 1,
+      "itrmt": 0,
+      "iInterPol": 0,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "Transformer Type 25MVA 50Hz 110/20kV"
+     }
+    }
+   },
+   {
+    "u": "Bus14IBR",
+    "v": "MainBus14",
+    "key": "Ind14-14IBR",
+    "params": {
+     "Ind14-14IBR_param_dict": {
+      "xrea": 1.599679946899414,
+      "rrea": 0.03200000151991844,
+      "R0toR1": 1000000000.0,
+      "X0toX1": 1000000000.0,
+      "ucn": 20.0,
+      "Sn": 15.0
+     }
+    }
+   },
+   {
+    "u": "Bus3IBR",
+    "v": "MainBus3",
+    "key": "Ind3-3IBR",
+    "params": {
+     "Ind3-3IBR_param_dict": {
+      "xrea": 1.599679946899414,
+      "rrea": 0.03200000151991844,
+      "R0toR1": 1000000000.0,
+      "X0toX1": 1000000000.0,
+      "ucn": 20.0,
+      "Sn": 15.0
+     }
+    }
+   },
+   {
+    "u": "BusCableSwitchA",
+    "v": "BusCableSwitchB",
+    "key": "LnCableSwitch",
+    "params": {
+     "LnCableSwitch_param_dict": {
+      "length": 1.5,
+      "xline": 0.2650993863741557,
+      "rline": 0.2962864438692729,
+      "xline0": 0.49820180733998615,
+      "rline0": 1.027523676554362,
+      "cubicle_1": "Feld_1",
+      "cubicle_2": "Feld_1",
+      "line_type": "CableSwitch",
+      "i_dist": 0,
+      "i_model": 0,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.5,
+      "fmax": 100000.0
+     },
+     "LnCableSwitch_typ_param_dict": {
+      "line_type_name": "CableSwitch",
+      "line_type_category": "Cable",
+      "line_type_specific": "TypCabsys",
+      "is_cable": true,
+      "line_category": "Cable"
+     }
+    }
+   },
+   {
+    "u": "BusInrushHVA",
+    "v": "BusInrushHVB",
+    "key": "TrfInrushHV",
+    "params": {
+     "TrfInrushHV_param_dict": {
+      "name": "TrfInrushHV",
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Feld_1",
+      "trafo_type": "25 MVA 110/20 50 Hz TrafoInrushHV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "TrfInrushHV_typ_param_dict": {
+      "strn": 25.0,
+      "frnom": 50.0,
+      "utrn_h": 110.0,
+      "utrn_l": 20.0,
+      "tr2cn_h": "YN",
+      "tr2cn_l": "D",
+      "nt2ag": 5.0,
+      "uktr": 10.656485557556152,
+      "pcutr": 110.25594329833984,
+      "curmg": 0.423245370388031,
+      "pfe": 18.20345687866211,
+      "x0pu": 0.10880245268344879,
+      "r0pu": 0.004811687860637903,
+      "iLimb": 5,
+      "itapch": 0,
+      "itrmt": 3,
+      "iInterPol": 1,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "25 MVA 110/20 50 Hz TrafoInrushHV"
+     }
+    }
+   },
+   {
+    "u": "BusInrushLVA",
+    "v": "BusInrushLVB",
+    "key": "TrfInrushLV",
+    "params": {
+     "TrfInrushLV_param_dict": {
+      "name": "TrfInrushLV",
+      "cubicle_1": "Cub_3",
+      "cubicle_2": "Cub_1",
+      "trafo_type": "1.0 MVA 20/0.4 50 Hz TrafoInrushLV",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "TrfInrushLV_typ_param_dict": {
+      "strn": 1.0,
+      "frnom": 50.0,
+      "utrn_h": 20.0,
+      "utrn_l": 0.4000000059604645,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 5.0,
+      "uktr": 6.0,
+      "pcutr": 12.454930305480957,
+      "curmg": 1.1431782245635986,
+      "pfe": 1.6083509922027588,
+      "x0pu": 0.05758834630250931,
+      "r0pu": 0.017818385735154152,
+      "iLimb": 3,
+      "itapch": 0,
+      "itrmt": 3,
+      "iInterPol": 1,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "1.0 MVA 20/0.4 50 Hz TrafoInrushLV"
+     }
+    }
+   },
+   {
+    "u": "BusMotorStartA",
+    "v": "BusMotorStartB",
+    "key": "TrfMotorStart",
+    "params": {
+     "TrfMotorStart_param_dict": {
+      "name": "TrfMotorStart",
+      "cubicle_1": "Feld_1",
+      "cubicle_2": "Feld_2",
+      "trafo_type": "1.0 MVA 20/0.4 50 Hz Trafo0",
+      "cgnd_h": 0,
+      "cgnd_l": 0,
+      "re0tr_h": 0.0,
+      "re0tr_l": 0.0
+     },
+     "TrfMotorStart_typ_param_dict": {
+      "strn": 1.0,
+      "frnom": 50.0,
+      "utrn_h": 20.0,
+      "utrn_l": 0.4000000059604645,
+      "tr2cn_h": "D",
+      "tr2cn_l": "YN",
+      "nt2ag": 5.0,
+      "uktr": 6.0,
+      "pcutr": 12.454930305480957,
+      "curmg": 1.1431782245635986,
+      "pfe": 1.6083509922027588,
+      "x0pu": 0.05758834630250931,
+      "r0pu": 0.017818385735154152,
+      "iLimb": 3,
+      "itapch": 0,
+      "itrmt": 2,
+      "iInterPol": 0,
+      "smoothfac": 10.0,
+      "zx0hl_n": 100.0,
+      "rtox0_n": 0.0,
+      "trafo_type_name": "1.0 MVA 20/0.4 50 Hz Trafo0"
+     }
+    }
+   },
+   {
+    "u": "BusOHLSwitchA",
+    "v": "BusOHLSwitchB",
+    "key": "LnOHLSwitch",
+    "params": {
+     "LnOHLSwitch_param_dict": {
+      "length": 1.5,
+      "xline": 0.5075333913167318,
+      "rline": 0.4737552801767985,
+      "xline0": 1.756073792775472,
+      "rline0": 0.6186004479726156,
+      "cubicle_1": "Cub_1",
+      "cubicle_2": "Cub_1",
+      "line_type": "TowerTypeCigre",
+      "i_dist": 1,
+      "i_model": 2,
+      "fd_model": 0,
+      "ftau": 100000.0,
+      "fmin": 0.01,
+      "fmax": 1000000.0
+     },
+     "LnOHLSwitch_typ_param_dict": {
+      "line_type_name": "TowerTypeCigre",
+      "line_type_category": "Overhead",
+      "line_type_specific": "TypTow",
+      "nlcir": 1,
+      "nlear": 0,
+      "iTransMode": 0,
+      "gshunt": 0.0,
+      "rearth": 100.0,
+      "is_cable": false,
+      "is_ohl": true,
+      "line_category": "Overhead",
+      "tower_arrangement": "unknown"
+     }
+    }
+   }
+  ],
+  "ext_grid": {
+   "Bus0": {
+    "bustp": "PV",
+    "snss": 10000.0,
+    "rntxn": 0.10000000149011612,
+    "x0tx1": 1.0,
+    "r0tx0": 0.10000000149011612
+   }
+  }
+ },
+ "labels": {
+  "n_simulations": 9906,
+  "columns_varying": {
+   "file": 9906,
+   "Unnamed: 0": 9906,
+   "general/result_file_path": 9906,
+   "general/sim_idx": 9906,
+   "events/event_type": 21,
+   "events/event_start": 9906,
+   "events/event_target": 29,
+   "events/event_flt_target_line_location": 9906,
+   "events/event_flt_shc_resistance": 9906,
+   "events/event_flt_hif_resistance": 9906,
+   "events/event_phase_select_2ph": 3,
+   "events/event_phase_select_1ph": 3,
+   "events/event_iflt_duration": 9906,
+   "arc/arc_tau": 9906,
+   "arc/arc_u0": 9906,
+   "arc/arc_r0": 9906,
+   "grounding/grnd_type": 3,
+   "grounding/coil_tuning": 9906,
+   "grounding/solid_ground_resistance": 9906,
+   "grounding/resistive_ground_resistance": 9906,
+   "grounding/parasitic_resistance_percentage": 9906,
+   "cap_switch/cap_power": 9906,
+   "ohl_switch/ohl_length": 9906,
+   "ohl_switch/ohl_type": 1000,
+   "cable_switch/cable_length": 9906,
+   "cable_switch/cable_type": 1000,
+   "switch_trafo_to_lv_type": 1000,
+   "switch_trafo_to_hv_type": 1000,
+   "motor_start/motor_type": 147,
+   "motor_start/motor_trafo_type": 1000,
+   "loads/Ld1/load_p": 9906,
+   "loads/Ld1/load_q": 9906,
+   "loads/Ld11/load_p": 9906,
+   "loads/Ld11/load_q": 9906,
+   "loads/Ld12/load_p": 9906,
+   "loads/Ld12/load_q": 9906,
+   "loads/Ld13/load_p": 9906,
+   "loads/Ld13/load_q": 9906,
+   "loads/Ld14/load_p": 9906,
+   "loads/Ld14/load_q": 9906,
+   "loads/Ld3/load_p": 9906,
+   "loads/Ld3/load_q": 9906,
+   "loads/Ld4/load_p": 9906,
+   "loads/Ld4/load_q": 9906,
+   "loads/Ld5/load_p": 9906,
+   "loads/Ld5/load_q": 9906,
+   "loads/Ld6/load_p": 9906,
+   "loads/Ld6/load_q": 9906,
+   "loads/Ld7/load_p": 9906,
+   "loads/Ld7/load_q": 9906,
+   "loads/Ld8/load_p": 9906,
+   "loads/Ld8/load_q": 9906,
+   "loads/Ld9/load_p": 9906,
+   "loads/Ld9/load_q": 9906,
+   "loads/LdSwitch/load_p": 9906,
+   "loads/LdSwitch/load_q": 9906,
+   "ExtGrid/usetp": 9906,
+   "ExtGrid/phiini": 9906
+  },
+  "columns_constant": {
+   "general/vn": "20",
+   "general/fn": "50",
+   "general/grid_graph": "graph_grid0.pickle"
+  },
+  "event_type_counts": {
+   "flt_1phg_incipient_w_arc": 528,
+   "flt_3ph_shc": 510,
+   "switch_ohl_off": 509,
+   "switch_cable_on": 493,
+   "switch_ibr_trip": 493,
+   "flt_2ph_shc": 490,
+   "flt_1phg_incipient": 479,
+   "flt_1phg_hif": 477,
+   "flt_1phg_shc": 476,
+   "switch_ohl_on": 473,
+   "switch_cap_on": 471,
+   "switch_inrushHV": 468,
+   "flt_1phg_shc_w_arc": 464,
+   "switch_inrushLV": 460,
+   "switch_motor_start": 457,
+   "flt_1phg_hif_w_arc": 456,
+   "switch_load_on": 455,
+   "flt_2phg_shc": 453,
+   "switch_load_off": 451,
+   "switch_cap_off": 423,
+   "switch_cable_off": 420
+  },
+  "fault_targets": {
+   "MainLn4-11": 196,
+   "MainLn1-2": 168,
+   "MainLn10-11": 163,
+   "MainLn5-6": 160,
+   "MainBus7": 158,
+   "MainLn13-14": 156,
+   "MainLn9-10": 155,
+   "MainBus14": 155,
+   "MainBus8": 154,
+   "MainLn8-9": 153,
+   "MainBus5": 153,
+   "MainLn8-14": 153,
+   "MainBus1": 153,
+   "MainBus9": 150,
+   "MainLn3-8": 148,
+   "MainBus10": 147,
+   "MainLn12-13": 146,
+   "MainLn3-4": 145,
+   "MainBus2": 145,
+   "MainLn2-3": 144,
+   "MainBus13": 143,
+   "MainLn6-7": 143,
+   "MainLn4-5": 140,
+   "MainLn7-8": 140,
+   "MainBus6": 138,
+   "MainBus12": 135,
+   "MainBus4": 134,
+   "MainBus3": 130,
+   "MainBus11": 128
+  },
+  "fault_targets_missing_from_graph": [],
+  "fault_targets_on_lines": 2310,
+  "fault_targets_on_buses": 2023,
+  "fault_location_pct_on_lines": {
+   "nunique": 2310,
+   "p0": 1.0108718693223075,
+   "p5": 5.59088472959568,
+   "p25": 24.982441300850684,
+   "p50": 50.472698514448965,
+   "p75": 74.25681740823022,
+   "p95": 93.91158048931823,
+   "p100": 98.8781734656171
+  },
+  "fault_resistance_ohm_shc": {
+   "nunique": 2393,
+   "p0": 0.0026287401718202,
+   "p5": 2.71593216064833,
+   "p25": 13.12873094240226,
+   "p50": 25.2962210723576,
+   "p75": 37.316706547856434,
+   "p95": 47.34058383937082,
+   "p100": 49.98606792127404
+  },
+  "hif_resistance_ohm": {
+   "p0": 50.62256363791702,
+   "p50": 8626.084870312807,
+   "p100": 149116.5665476059
+  },
+  "grounding": {
+   "resistive": 3325,
+   "solid": 3317,
+   "resonant": 3264
+  },
+  "loading": {
+   "loads": [
+    "loads/Ld1/load_p",
+    "loads/Ld11/load_p",
+    "loads/Ld12/load_p",
+    "loads/Ld13/load_p",
+    "loads/Ld14/load_p",
+    "loads/Ld3/load_p",
+    "loads/Ld4/load_p",
+    "loads/Ld5/load_p",
+    "loads/Ld6/load_p",
+    "loads/Ld7/load_p",
+    "loads/Ld8/load_p",
+    "loads/Ld9/load_p"
+   ],
+   "total_P_MW": {
+    "min": 9.08009629194869,
+    "median": 15.024648853131762,
+    "max": 20.916252630204934,
+    "max_over_min": 2.303527623242426
+   }
+  },
+  "source": {
+   "usetp": [
+    0.9800029479773242,
+    1.0199941531218009
+   ],
+   "phiini_deg": [
+    -179.99235557767685,
+    179.8972471790683
+   ]
+  },
+  "inception_s": {
+   "min": 1.1000085456214457,
+   "max": 1.2999983807233702,
+   "nunique": 9906
+  }
+ },
+ "integrity": {
+  "records_with_nonfinite_samples": 0,
+  "all_zero_cubicle_records": 0,
+  "inception_window_fits": 9906,
+  "n": 9906,
+  "max_current_A_any_cubicle": {
+   "p0": 465.691162109375,
+   "p50": 505.9444274902344,
+   "p99": 2152.797070312502,
+   "p100": 14843.611328125
+  }
+ },
+ "siblings_and_inception": {
+  "shc_n": 2393,
+  "shc_unique_label_keys": 2393,
+  "identical_prefault_cycles_at_substation": 0,
+  "inception_pow_deg_phase_a": {
+   "p0": 0.014841927609989597,
+   "p25": 90.32494192203016,
+   "p50": 181.23972405307725,
+   "p75": 271.1816260300343,
+   "p100": 359.98057009314005
+  }
+ },
+ "inverter_share_of_fault_current_rise": {
+  "20ms": {
+   "median": 0.5233836357600963,
+   "p10": 0.20013342592371927,
+   "p90": 0.8078728637582469,
+   "by_type": {
+    "flt_1phg_shc": {
+     "n": 476,
+     "median": 0.5693330185136924
+    },
+    "flt_1phg_shc_w_arc": {
+     "n": 464,
+     "median": 0.6067800431538448
+    },
+    "flt_2ph_shc": {
+     "n": 490,
+     "median": 0.3769840100124061
+    },
+    "flt_2phg_shc": {
+     "n": 453,
+     "median": 0.4986674595175911
+    },
+    "flt_3ph_shc": {
+     "n": 510,
+     "median": 0.5178774411053647
+    }
+   },
+   "by_target_median": {
+    "MainBus1": 0.1271029500041198,
+    "MainBus10": 0.5583092114638927,
+    "MainBus11": 0.5474334384918746,
+    "MainBus12": 0.20313748331276757,
+    "MainBus13": 0.47234368628969414,
+    "MainBus14": 0.713606403684309,
+    "MainBus2": 0.30759070684622264,
+    "MainBus3": 0.5613254651438507,
+    "MainBus4": 0.5627275899043107,
+    "MainBus5": 0.5766192639795277,
+    "MainBus6": 0.5034675037799009,
+    "MainBus7": 0.5497801485836334,
+    "MainBus8": 0.5527809297174058,
+    "MainBus9": 0.5659434274566998,
+    "MainLn1-2": 0.22764539234553632,
+    "MainLn10-11": 0.5819916485661794,
+    "MainLn12-13": 0.4807519213773968,
+    "MainLn13-14": 0.5796431659354305,
+    "MainLn2-3": 0.4352956960219914,
+    "MainLn3-4": 0.5445552589763281,
+    "MainLn3-8": 0.52143055455413,
+    "MainLn4-11": 0.5444654884506086,
+    "MainLn4-5": 0.5508976615445704,
+    "MainLn5-6": 0.596298425677283,
+    "MainLn6-7": 0.5391996840902383,
+    "MainLn7-8": 0.4945748315074619,
+    "MainLn8-14": 0.7307271850223396,
+    "MainLn8-9": 0.5586580403679525,
+    "MainLn9-10": 0.547303998753769
+   }
+  },
+  "40ms": {
+   "median": 0.22739494905866056,
+   "p10": 0.0014448869805218005,
+   "p90": 0.6729629417548416,
+   "by_type": {
+    "flt_1phg_shc": {
+     "n": 476,
+     "median": 0.4091723946949902
+    },
+    "flt_1phg_shc_w_arc": {
+     "n": 464,
+     "median": 0.45370679273678477
+    },
+    "flt_2ph_shc": {
+     "n": 490,
+     "median": 0.21533405013369242
+    },
+    "flt_2phg_shc": {
+     "n": 453,
+     "median": 0.23558448564592036
+    },
+    "flt_3ph_shc": {
+     "n": 510,
+     "median": 0.001971440434349979
+    }
+   },
+   "by_target_median": {
+    "MainBus1": 0.0721783478596721,
+    "MainBus10": 0.24289520819780475,
+    "MainBus11": 0.2438676563767747,
+    "MainBus12": 0.11654622885734583,
+    "MainBus13": 0.17629234527861548,
+    "MainBus14": 0.4218343232074197,
+    "MainBus2": 0.16915308152997519,
+    "MainBus3": 0.2925977497029249,
+    "MainBus4": 0.22876302709732368,
+    "MainBus5": 0.3377355445624559,
+    "MainBus6": 0.23343977011001346,
+    "MainBus7": 0.23994334735445882,
+    "MainBus8": 0.2977941351811487,
+    "MainBus9": 0.29571336235954643,
+    "MainLn1-2": 0.10377815084670644,
+    "MainLn10-11": 0.29773033044002806,
+    "MainLn12-13": 0.2406645859684425,
+    "MainLn13-14": 0.24923713402621017,
+    "MainLn2-3": 0.21994251852467658,
+    "MainLn3-4": 0.2442874288720402,
+    "MainLn3-8": 0.2981228358087964,
+    "MainLn4-11": 0.21926962487739343,
+    "MainLn4-5": 0.2774520537206986,
+    "MainLn5-6": 0.2628918433181987,
+    "MainLn6-7": 0.2398241179827253,
+    "MainLn7-8": 0.24651775007416682,
+    "MainLn8-14": 0.37611695933028355,
+    "MainLn8-9": 0.2601564789426678,
+    "MainLn9-10": 0.24560302254246513
+   }
+  },
+  "definition": "largest-phase rise of the fundamental current (post window ending t ms after inception against the cycle ending 20 ms before it), inverters / (inverters + 110/20 kV transformers)"
+ },
+ "line_end_prefault_current_A_peak": {
+  "Cub_1(1)\\pex_MainBus9_MainLn8-9": 20.082621497511155,
+  "Cub_1\\pex_MainBus10_MainLn9-10": 13.26635637635501,
+  "Cub_1\\pex_MainBus11_MainLn4-11": 27.150297273558863,
+  "Cub_1\\pex_MainBus12_MainLn12-13": 440.1432641387621,
+  "Cub_1\\pex_MainBus13_MainLn13-14": 441.7905745180566,
+  "Cub_1\\pex_MainBus14_MainLn13-14": 441.82260611041943,
+  "Cub_1\\pex_MainBus2_MainLn1-2": 327.6719923331078,
+  "Cub_1\\pex_MainBus3_MainLn2-3": 328.83793677815294,
+  "Cub_1\\pex_MainBus4_MainLn3-4": 90.2579255223564,
+  "Cub_1\\pex_MainBus5_MainLn4-5": 45.19575859260523,
+  "Cub_1\\pex_MainBus6_MainLn5-6": 13.993416614554151,
+  "Cub_1\\pex_MainBus7_MainLn7-8": 14.172741502079766,
+  "Cub_1\\pex_MainBus8_MainLn8-9": 19.945469672709216,
+  "Cub_2\\pex_MainBus10_MainLn10-11": 13.266356866518993,
+  "Cub_2\\pex_MainBus11_MainLn10-11": 13.153122532811473,
+  "Cub_2\\pex_MainBus13_MainLn12-13": 440.207583026228,
+  "Cub_2\\pex_MainBus14_MainLn8-14": 0.11772255161880185,
+  "Cub_2\\pex_MainBus1_MainLn1-2": 326.8381349921019,
+  "Cub_2\\pex_MainBus2_MainLn2-3": 327.6719926721948,
+  "Cub_2\\pex_MainBus3_MainLn3-4": 90.13489420481426,
+  "Cub_2\\pex_MainBus4_MainLn4-5": 45.08577690141476,
+  "Cub_2\\pex_MainBus5_MainLn5-6": 13.632654258324415,
+  "Cub_2\\pex_MainBus6_MainLn6-7": 10.148731534894013,
+  "Cub_2\\pex_MainBus7_MainLn6-7": 10.13442696734052,
+  "Cub_2\\pex_MainBus8_MainLn3-8": 58.95717082005874,
+  "Cub_2\\pex_MainBus9_MainLn9-10": 13.6203130599585,
+  "Cub_3\\pex_MainBus3_MainLn3-8": 58.63589579538762,
+  "Cub_3\\pex_MainBus4_MainLn4-11": 27.029524908818253,
+  "Cub_3\\pex_MainBus8_MainLn7-8": 13.97085935948057
+ },
+ "lines_with_both_ends_cached": {
+  "MainLn8-9": [
+   "Cub_1(1)\\pex_MainBus9_MainLn8-9",
+   "Cub_1\\pex_MainBus8_MainLn8-9"
+  ],
+  "MainLn9-10": [
+   "Cub_1\\pex_MainBus10_MainLn9-10",
+   "Cub_2\\pex_MainBus9_MainLn9-10"
+  ],
+  "MainLn4-11": [
+   "Cub_1\\pex_MainBus11_MainLn4-11",
+   "Cub_3\\pex_MainBus4_MainLn4-11"
+  ],
+  "MainLn12-13": [
+   "Cub_1\\pex_MainBus12_MainLn12-13",
+   "Cub_2\\pex_MainBus13_MainLn12-13"
+  ],
+  "MainLn13-14": [
+   "Cub_1\\pex_MainBus13_MainLn13-14",
+   "Cub_1\\pex_MainBus14_MainLn13-14"
+  ],
+  "MainLn1-2": [
+   "Cub_1\\pex_MainBus2_MainLn1-2",
+   "Cub_2\\pex_MainBus1_MainLn1-2"
+  ],
+  "MainLn2-3": [
+   "Cub_1\\pex_MainBus3_MainLn2-3",
+   "Cub_2\\pex_MainBus2_MainLn2-3"
+  ],
+  "MainLn3-4": [
+   "Cub_1\\pex_MainBus4_MainLn3-4",
+   "Cub_2\\pex_MainBus3_MainLn3-4"
+  ],
+  "MainLn4-5": [
+   "Cub_1\\pex_MainBus5_MainLn4-5",
+   "Cub_2\\pex_MainBus4_MainLn4-5"
+  ],
+  "MainLn5-6": [
+   "Cub_1\\pex_MainBus6_MainLn5-6",
+   "Cub_2\\pex_MainBus5_MainLn5-6"
+  ],
+  "MainLn7-8": [
+   "Cub_1\\pex_MainBus7_MainLn7-8",
+   "Cub_3\\pex_MainBus8_MainLn7-8"
+  ],
+  "MainLn10-11": [
+   "Cub_2\\pex_MainBus10_MainLn10-11",
+   "Cub_2\\pex_MainBus11_MainLn10-11"
+  ],
+  "MainLn6-7": [
+   "Cub_2\\pex_MainBus6_MainLn6-7",
+   "Cub_2\\pex_MainBus7_MainLn6-7"
+  ],
+  "MainLn3-8": [
+   "Cub_2\\pex_MainBus8_MainLn3-8",
+   "Cub_3\\pex_MainBus3_MainLn3-8"
+  ]
+ },
+ "candidates": {
+  "cigre_1-2_b1": {
+   "relay": "Cub_2\\pex_MainBus1_MainLn1-2",
+   "line": "MainLn1-2",
+   "remote_bus": "MainBus2",
+   "beyond": [
+    "MainLn2-3"
+   ],
+   "behind": [],
+   "line_z1_ohm": [
+    1.4128199815750122,
+    2.01911997795105
+   ],
+   "length_km": 2.819999933242798,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 76,
+    "own99": 16,
+    "neg": 2301,
+    "neg_bench": 98,
+    "beyond": 83,
+    "remote_bus_faults": 85,
+    "reverse_bus": 81,
+    "reverse_lines": 0,
+    "other": 2052,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 15,
+    "20-50": 32,
+    "50-80": 26,
+    "80-85": 3,
+    "85-100": 16
+   },
+   "pos_by_rf_bin": {
+    "<5": 8,
+    "5-15": 15,
+    "15-40": 38,
+    ">40": 15
+   },
+   "pos_by_grounding": {
+    "solid": 31,
+    "resistive": 25,
+    "resonant": 20
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 13,
+    "flt_1phg_shc_w_arc": 13,
+    "flt_2ph_shc": 17,
+    "flt_2phg_shc": 10,
+    "flt_3ph_shc": 23
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.417441501406711,
+    "40 ms ending at inception": 0.40010636107870723
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 1,
+     "p0": 0.5242582638483095,
+     "p25": 0.5242582638483095,
+     "p50": 0.5242582638483095,
+     "p75": 0.5242582638483095,
+     "p100": 0.5242582638483095
+    },
+    "R_f<=5": {
+     "n": 5,
+     "p0": 0.13241306383713192,
+     "p25": 0.1537899079810976,
+     "p50": 0.24284676350608758,
+     "p75": 0.25296568981395495,
+     "p100": 0.5242582638483095
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": 0.5242582638483095,
+     "resonant": null
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 15936.650390625,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.22764539234553632,
+    "40ms": 0.10377815084670644
+   }
+  },
+  "cigre_2-3_b2": {
+   "relay": "Cub_2\\pex_MainBus2_MainLn2-3",
+   "line": "MainLn2-3",
+   "remote_bus": "MainBus3",
+   "beyond": [
+    "MainLn3-4",
+    "MainLn3-8"
+   ],
+   "behind": [
+    "MainLn1-2"
+   ],
+   "line_z1_ohm": [
+    2.2144200801849365,
+    3.164720058441162
+   ],
+   "length_km": 4.420000076293945,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 72,
+    "own99": 11,
+    "neg": 2310,
+    "neg_bench": 109,
+    "beyond": 156,
+    "remote_bus_faults": 76,
+    "reverse_bus": 85,
+    "reverse_lines": 92,
+    "other": 1901,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 13,
+    "20-50": 28,
+    "50-80": 25,
+    "80-85": 6,
+    "85-100": 11
+   },
+   "pos_by_rf_bin": {
+    "<5": 3,
+    "5-15": 22,
+    "15-40": 37,
+    ">40": 10
+   },
+   "pos_by_grounding": {
+    "solid": 20,
+    "resistive": 26,
+    "resonant": 26
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 23,
+    "flt_1phg_shc_w_arc": 12,
+    "flt_2ph_shc": 11,
+    "flt_2phg_shc": 7,
+    "flt_3ph_shc": 19
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.47436267436267443,
+    "40 ms ending at inception": 0.4738365800865801
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 5,
+     "p0": 0.8040476472381375,
+     "p25": 0.8256241793393881,
+     "p50": 0.8918712408898135,
+     "p75": 0.895164065350907,
+     "p100": 0.959476854848097
+    },
+    "R_f<=5": {
+     "n": 7,
+     "p0": 0.48707288287748485,
+     "p25": 0.6972285997583759,
+     "p50": 0.8256241793393881,
+     "p75": 0.8935176531203602,
+     "p100": 0.959476854848097
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": 0.8256241793393881,
+     "resonant": 0.8935176531203602
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 15942.928466796875,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.4352956960219914,
+    "40ms": 0.21994251852467658
+   }
+  },
+  "cigre_2-3_b3": {
+   "relay": "Cub_1\\pex_MainBus3_MainLn2-3",
+   "line": "MainLn2-3",
+   "remote_bus": "MainBus2",
+   "beyond": [
+    "MainLn1-2"
+   ],
+   "behind": [
+    "MainLn3-4",
+    "MainLn3-8"
+   ],
+   "line_z1_ohm": [
+    2.2144200801849365,
+    3.164720058441162
+   ],
+   "length_km": 4.420000076293945,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 72,
+    "own99": 11,
+    "neg": 2310,
+    "neg_bench": 100,
+    "beyond": 92,
+    "remote_bus_faults": 85,
+    "reverse_bus": 76,
+    "reverse_lines": 156,
+    "other": 1901,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 13,
+    "20-50": 28,
+    "50-80": 25,
+    "80-85": 6,
+    "85-100": 11
+   },
+   "pos_by_rf_bin": {
+    "<5": 3,
+    "5-15": 22,
+    "15-40": 37,
+    ">40": 10
+   },
+   "pos_by_grounding": {
+    "solid": 20,
+    "resistive": 26,
+    "resonant": 26
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 23,
+    "flt_1phg_shc_w_arc": 12,
+    "flt_2ph_shc": 11,
+    "flt_2phg_shc": 7,
+    "flt_3ph_shc": 19
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.47520141895141893,
+    "40 ms ending at inception": 0.4828884078884079
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 1,
+     "p0": 2.7548172273201894,
+     "p25": 2.7548172273201894,
+     "p50": 2.7548172273201894,
+     "p75": 2.7548172273201894,
+     "p100": 2.7548172273201894
+    },
+    "R_f<=5": {
+     "n": 5,
+     "p0": 0.46560365892051303,
+     "p25": 0.5835478222618342,
+     "p50": 0.9031587451332441,
+     "p75": 1.1461501224428616,
+     "p100": 2.7548172273201894
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": 2.7548172273201894,
+     "resonant": null
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 16138.77685546875,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.4352956960219914,
+    "40ms": 0.21994251852467658
+   }
+  },
+  "cigre_3-4_b3": {
+   "relay": "Cub_2\\pex_MainBus3_MainLn3-4",
+   "line": "MainLn3-4",
+   "remote_bus": "MainBus4",
+   "beyond": [
+    "MainLn4-11",
+    "MainLn4-5"
+   ],
+   "behind": [
+    "MainLn2-3",
+    "MainLn3-8"
+   ],
+   "line_z1_ohm": [
+    0.3056100010871887,
+    0.4367600083351135
+   ],
+   "length_km": 0.6100000143051147,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 70,
+    "own99": 10,
+    "neg": 2313,
+    "neg_bench": 129,
+    "beyond": 178,
+    "remote_bus_faults": 87,
+    "reverse_bus": 76,
+    "reverse_lines": 159,
+    "other": 1813,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 15,
+    "20-50": 22,
+    "50-80": 30,
+    "80-85": 3,
+    "85-100": 10
+   },
+   "pos_by_rf_bin": {
+    "<5": 4,
+    "5-15": 12,
+    "15-40": 34,
+    ">40": 20
+   },
+   "pos_by_grounding": {
+    "solid": 27,
+    "resistive": 23,
+    "resonant": 20
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 15,
+    "flt_1phg_shc_w_arc": 14,
+    "flt_2ph_shc": 18,
+    "flt_2phg_shc": 12,
+    "flt_3ph_shc": 11
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.4284355506145389,
+    "40 ms ending at inception": 0.4519300846149095
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 0
+    },
+    "R_f<=5": {
+     "n": 6,
+     "p0": 1.2053454298678887,
+     "p25": 1.3315572376658675,
+     "p50": 1.6883668431363885,
+     "p75": 2.9602239568334205,
+     "p100": 4.007510220655474
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": null,
+     "resonant": null
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 5755.6781005859375,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.5445552589763281,
+    "40ms": 0.2442874288720402
+   }
+  },
+  "cigre_3-4_b4": {
+   "relay": "Cub_1\\pex_MainBus4_MainLn3-4",
+   "line": "MainLn3-4",
+   "remote_bus": "MainBus3",
+   "beyond": [
+    "MainLn2-3",
+    "MainLn3-8"
+   ],
+   "behind": [
+    "MainLn4-11",
+    "MainLn4-5"
+   ],
+   "line_z1_ohm": [
+    0.3056100010871887,
+    0.4367600083351135
+   ],
+   "length_km": 0.6100000143051147,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 70,
+    "own99": 10,
+    "neg": 2313,
+    "neg_bench": 107,
+    "beyond": 159,
+    "remote_bus_faults": 76,
+    "reverse_bus": 87,
+    "reverse_lines": 178,
+    "other": 1813,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 15,
+    "20-50": 22,
+    "50-80": 30,
+    "80-85": 3,
+    "85-100": 10
+   },
+   "pos_by_rf_bin": {
+    "<5": 4,
+    "5-15": 12,
+    "15-40": 34,
+    ">40": 20
+   },
+   "pos_by_grounding": {
+    "solid": 27,
+    "resistive": 23,
+    "resonant": 20
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 15,
+    "flt_1phg_shc_w_arc": 14,
+    "flt_2ph_shc": 18,
+    "flt_2phg_shc": 12,
+    "flt_3ph_shc": 11
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.43513989253288865,
+    "40 ms ending at inception": 0.4439132851584214
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 5,
+     "p0": 6.075260239496025,
+     "p25": 10.875639426845046,
+     "p50": 12.567230966789678,
+     "p75": 20.271745971403124,
+     "p100": 22.97732175651768
+    },
+    "R_f<=5": {
+     "n": 7,
+     "p0": 1.873953752683072,
+     "p25": 4.383012672045335,
+     "p50": 10.875639426845046,
+     "p75": 16.4194884690964,
+     "p100": 22.97732175651768
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": 12.567230966789678,
+     "resonant": 16.92648059168136
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 5756.8115234375,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.5445552589763281,
+    "40ms": 0.2442874288720402
+   }
+  },
+  "cigre_3-8_b3": {
+   "relay": "Cub_3\\pex_MainBus3_MainLn3-8",
+   "line": "MainLn3-8",
+   "remote_bus": "MainBus8",
+   "beyond": [
+    "MainLn8-14",
+    "MainLn7-8",
+    "MainLn8-9"
+   ],
+   "behind": [
+    "MainLn2-3",
+    "MainLn3-4"
+   ],
+   "line_z1_ohm": [
+    0.6512999534606934,
+    0.9308000206947327
+   ],
+   "length_km": 1.2999999523162842,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 64,
+    "own99": 12,
+    "neg": 2317,
+    "neg_bench": 130,
+    "beyond": 245,
+    "remote_bus_faults": 77,
+    "reverse_bus": 76,
+    "reverse_lines": 163,
+    "other": 1756,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 18,
+    "20-50": 17,
+    "50-80": 27,
+    "80-85": 2,
+    "85-100": 12
+   },
+   "pos_by_rf_bin": {
+    "<5": 6,
+    "5-15": 14,
+    "15-40": 34,
+    ">40": 10
+   },
+   "pos_by_grounding": {
+    "solid": 25,
+    "resistive": 20,
+    "resonant": 19
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 10,
+    "flt_1phg_shc_w_arc": 15,
+    "flt_2ph_shc": 17,
+    "flt_2phg_shc": 14,
+    "flt_3ph_shc": 8
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.4830431322831248,
+    "40 ms ending at inception": 0.4847829898575745
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 2,
+     "p0": 3.201688076959125,
+     "p25": 3.4090539396240365,
+     "p50": 3.616419802288948,
+     "p75": 3.82378566495386,
+     "p100": 4.031151527618771
+    },
+    "R_f<=5": {
+     "n": 6,
+     "p0": 0.9028845034687494,
+     "p25": 1.3275318990432359,
+     "p50": 1.9989702845953217,
+     "p75": 2.9782313937837,
+     "p100": 4.031151527618771
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": 4.031151527618771,
+     "resonant": 3.201688076959125
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 3652.4258422851562,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.52143055455413,
+    "40ms": 0.2981228358087964
+   }
+  },
+  "cigre_4-5_b4": {
+   "relay": "Cub_2\\pex_MainBus4_MainLn4-5",
+   "line": "MainLn4-5",
+   "remote_bus": "MainBus5",
+   "beyond": [
+    "MainLn5-6"
+   ],
+   "behind": [
+    "MainLn4-11",
+    "MainLn3-4"
+   ],
+   "line_z1_ohm": [
+    0.2805599868297577,
+    0.4009599983692169
+   ],
+   "length_km": 0.5600000023841858,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 66,
+    "own99": 9,
+    "neg": 2318,
+    "neg_bench": 104,
+    "beyond": 80,
+    "remote_bus_faults": 89,
+    "reverse_bus": 87,
+    "reverse_lines": 183,
+    "other": 1879,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 22,
+    "20-50": 15,
+    "50-80": 27,
+    "80-85": 2,
+    "85-100": 9
+   },
+   "pos_by_rf_bin": {
+    "<5": 8,
+    "5-15": 13,
+    "15-40": 35,
+    ">40": 10
+   },
+   "pos_by_grounding": {
+    "solid": 28,
+    "resistive": 25,
+    "resonant": 13
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 23,
+    "flt_1phg_shc_w_arc": 9,
+    "flt_2ph_shc": 12,
+    "flt_2phg_shc": 11,
+    "flt_3ph_shc": 11
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.5102034146469003,
+    "40 ms ending at inception": 0.5223383533349022
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 1,
+     "p0": 4.638554505402379,
+     "p25": 4.638554505402379,
+     "p50": 4.638554505402379,
+     "p75": 4.638554505402379,
+     "p100": 4.638554505402379
+    },
+    "R_f<=5": {
+     "n": 9,
+     "p0": 1.1264657447355,
+     "p25": 1.2083301477482986,
+     "p50": 1.6280104314830965,
+     "p75": 2.1033670995195357,
+     "p100": 4.638554505402379
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": 4.638554505402379,
+     "resonant": null
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 3846.5972900390625,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.5508976615445704,
+    "40ms": 0.2774520537206986
+   }
+  },
+  "cigre_12-13_b12": {
+   "relay": "Cub_1\\pex_MainBus12_MainLn12-13",
+   "line": "MainLn12-13",
+   "remote_bus": "MainBus13",
+   "beyond": [
+    "MainLn13-14"
+   ],
+   "behind": [],
+   "line_z1_ohm": [
+    2.3166632652282715,
+    2.4818382263183594
+   ],
+   "length_km": 4.889999866485596,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 57,
+    "own99": 16,
+    "neg": 2320,
+    "neg_bench": 103,
+    "beyond": 92,
+    "remote_bus_faults": 88,
+    "reverse_bus": 82,
+    "reverse_lines": 0,
+    "other": 2058,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 14,
+    "20-50": 18,
+    "50-80": 18,
+    "80-85": 7,
+    "85-100": 16
+   },
+   "pos_by_rf_bin": {
+    "<5": 6,
+    "5-15": 9,
+    "15-40": 32,
+    ">40": 10
+   },
+   "pos_by_grounding": {
+    "solid": 17,
+    "resistive": 23,
+    "resonant": 17
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 16,
+    "flt_1phg_shc_w_arc": 12,
+    "flt_2ph_shc": 11,
+    "flt_2phg_shc": 14,
+    "flt_3ph_shc": 4
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.5232531760435573,
+    "40 ms ending at inception": 0.5291099516031458
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 1,
+     "p0": 0.27173822469580533,
+     "p25": 0.27173822469580533,
+     "p50": 0.27173822469580533,
+     "p75": 0.27173822469580533,
+     "p100": 0.27173822469580533
+    },
+    "R_f<=5": {
+     "n": 4,
+     "p0": 0.19591991589321722,
+     "p25": 0.22511398353141387,
+     "p50": 0.25329178205330904,
+     "p75": 0.29489044283335225,
+     "p100": 0.364347097245993
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": 0.27173822469580533,
+     "resistive": null,
+     "resonant": null
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 19863.29345703125,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.4807519213773968,
+    "40ms": 0.2406645859684425
+   }
+  },
+  "cigre_13-14_b13": {
+   "relay": "Cub_1\\pex_MainBus13_MainLn13-14",
+   "line": "MainLn13-14",
+   "remote_bus": "MainBus14",
+   "beyond": [
+    "MainLn8-14"
+   ],
+   "behind": [
+    "MainLn12-13"
+   ],
+   "line_z1_ohm": [
+    1.4165282249450684,
+    1.5175248384475706
+   ],
+   "length_km": 2.990000009536743,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 84,
+    "own99": 8,
+    "neg": 2301,
+    "neg_bench": 96,
+    "beyond": 93,
+    "remote_bus_faults": 75,
+    "reverse_bus": 88,
+    "reverse_lines": 73,
+    "other": 1972,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 15,
+    "20-50": 35,
+    "50-80": 28,
+    "80-85": 6,
+    "85-100": 8
+   },
+   "pos_by_rf_bin": {
+    "<5": 12,
+    "5-15": 19,
+    "15-40": 36,
+    ">40": 17
+   },
+   "pos_by_grounding": {
+    "solid": 26,
+    "resistive": 30,
+    "resonant": 28
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 16,
+    "flt_1phg_shc_w_arc": 11,
+    "flt_2ph_shc": 18,
+    "flt_2phg_shc": 15,
+    "flt_3ph_shc": 24
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.3902185385236233,
+    "40 ms ending at inception": 0.3954388361168022
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 0
+    },
+    "R_f<=5": {
+     "n": 4,
+     "p0": 0.5562732894303202,
+     "p25": 0.6004080713214444,
+     "p50": 0.8392592396102511,
+     "p75": 1.0649318294367023,
+     "p100": 1.0695308759407602
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": null,
+     "resistive": null,
+     "resonant": null
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 20022.445068359375,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.5796431659354305,
+    "40ms": 0.24923713402621017
+   }
+  },
+  "cigre_13-14_b14": {
+   "relay": "Cub_1\\pex_MainBus14_MainLn13-14",
+   "line": "MainLn13-14",
+   "remote_bus": "MainBus13",
+   "beyond": [
+    "MainLn12-13"
+   ],
+   "behind": [
+    "MainLn8-14"
+   ],
+   "line_z1_ohm": [
+    1.4165282249450684,
+    1.5175248384475706
+   ],
+   "length_km": 2.990000009536743,
+   "remote_end_cached": true,
+   "classes": {
+    "pos": 84,
+    "own99": 8,
+    "neg": 2301,
+    "neg_bench": 102,
+    "beyond": 73,
+    "remote_bus_faults": 88,
+    "reverse_bus": 75,
+    "reverse_lines": 93,
+    "other": 1972,
+    "incipient": 1007,
+    "switching": 5573
+   },
+   "own_line_by_location_band": {
+    "0-20": 15,
+    "20-50": 35,
+    "50-80": 28,
+    "80-85": 6,
+    "85-100": 8
+   },
+   "pos_by_rf_bin": {
+    "<5": 12,
+    "5-15": 19,
+    "15-40": 36,
+    ">40": 17
+   },
+   "pos_by_grounding": {
+    "solid": 26,
+    "resistive": 30,
+    "resonant": 28
+   },
+   "pos_by_type": {
+    "flt_1phg_shc": 16,
+    "flt_1phg_shc_w_arc": 11,
+    "flt_2ph_shc": 18,
+    "flt_2phg_shc": 15,
+    "flt_3ph_shc": 24
+   },
+   "op_bins": [
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    496,
+    495,
+    495,
+    495
+   ],
+   "h25_prefault_auc": {
+    "45..5 ms before inception": 0.4342159723515656,
+    "40 ms ending at inception": 0.43242327352496845
+   },
+   "sir_measured": {
+    "R_f<=1": {
+     "n": 1,
+     "p0": 2.9776171885364415,
+     "p25": 2.9776171885364415,
+     "p50": 2.9776171885364415,
+     "p75": 2.9776171885364415,
+     "p100": 2.9776171885364415
+    },
+    "R_f<=5": {
+     "n": 4,
+     "p0": 1.8050631421153795,
+     "p25": 2.2826710541325723,
+     "p50": 2.5519765245573707,
+     "p75": 2.740963815366439,
+     "p100": 2.9776171885364415
+    },
+    "R_f<=1_by_grounding_median": {
+     "solid": 2.9776171885364415,
+     "resistive": null,
+     "resonant": null
+    }
+   },
+   "adc_clipping": {
+    "default chain +-40 x prefault peak": {
+     "full_scale_A": 20024.241943359375,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    },
+    "relay front end +-141.4 kA": {
+     "full_scale_A": 141421.35623730952,
+     "sims_clipped": 0,
+     "in_zone_clipped": 0
+    }
+   },
+   "inverter_share_own_line_faults": {
+    "20ms": 0.5796431659354305,
+    "40ms": 0.24923713402621017
+   }
+  }
+ },
+ "runtime_s": 651.8456521034241
+}

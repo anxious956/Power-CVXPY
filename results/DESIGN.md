@@ -1,5 +1,19 @@
 # The auxiliary-signal design tool, re-derived in the TAC25 formulation
 
+> **Correction, 28 Sep 2026 (bridge review, [review/bridge/LEAD_REVIEW.md](../review/bridge/LEAD_REVIEW.md)).**
+> (1) The current limit inside the problem, |i⁺| ≤ I_max − |δ| (§3, "TAC25's reading (b)"), is **not TAC25's
+> (1b)** — TAC25 constrains ‖i⁺‖ ≤ I_max only — and it is **unsound for a per-phase limiter**: with δ at the best
+> relative angle the largest phase current is √(|i⁺|² + |i⁺||δ| + |δ|²), so e.g. |i⁺| = 0.80 with |δ| = 0.56 peaks
+> at 1.184 < 1.2 yet is pruned. It is sound only for an inverter that enforces |I₁| + |I₂| ≤ I_max. With the sound
+> per-phase disc |i⁺| ≤ (−|δ| + √(4I_max² − 3|δ|²))/2 the §3 minima become about **0.32 / 0.32 / 0.20 pu** instead
+> of 0.26 / 0.26 / 0.16 (weak_sg / noisy / all_ibr_hard; TAC25 as written 0.50 / 0.52 / 0.36), and ε = 0.12 at
+> I_max 1.2 is **feasible at about 0.76 pu**, not infeasible (§4.1, Claim 4). These are scratch re-checks (linear
+> mode, 0.02 grid) reproduced by the main session; the tables below, the injectability figures 1.81 / 2.39 pu
+> (upper bounds under the sum rule) and the verdicts that rest on them await a proper re-run with sound rows.
+> (2) The "2025 14-bus example" is in Taylor's Geometry paper (arXiv 2510.04379 §IV-C, §VI-D), not TAC25, whose
+> only example is single-IBR, single-load; it separates fault types on the relay's own line, and it needs the
+> line data of the Baeckeland thesis (Table 3.1), which is not in the repo.
+
 17 Sep 2026. Code: `src/review/tac25.py`, `tac25_theorem1.py`, `tac25_design.py`, `tac25_map.py`.
 Numbers: [`review_wp1/tac25_theorem1.json`](review_wp1/tac25_theorem1.json),
 [`review_wp1/tac25_map.json`](review_wp1/tac25_map.json). Nothing here is typed by hand.
@@ -61,7 +75,7 @@ printed form is not a real representation of multiplication by r + jx (singular 
 rotation–scaling), so this is a typesetting slip carried into the figures. The draft note to the
 author is [`docs/notes/taylor_matrix_note.md`](../docs/notes/taylor_matrix_note.md).
 
-**The 2025 14-bus example — NOT reproduced, and this gates the scope of every number below.**
+**The 14-bus example (Geometry paper, arXiv 2510.04379 — not TAC25; see the correction at the top) — NOT reproduced, and this gates the scope of every number below.**
 It is specified completely enough to build (`docs/PLAN.md`: SGs at buses 1, 3, 5, 14; IBRs at 2, 4,
 7, 8, 12 with angles spread over [0, 2π/3]; loads at 6, 10, 11, 13 at 0.1 + j0.01; 20-gon noise
 with Σ = 0.1 I; relay at bus 2 on line 2-3; k = 2; r_F = 1; m̲_z = 0.15), but building it is a
@@ -193,7 +207,8 @@ infeasible at 1.2 pu".
 
 **(b) A restriction on what can be observed.** An inverter injecting δ physically cannot also be
 carrying i⁺ above I_max − |δ|, so those realisations do not occur and must leave the uncertainty
-set before separation is tested. A smaller set is easier to separate. This is TAC25's (1b).
+set before separation is tested. A smaller set is easier to separate. ~~This is TAC25's (1b).~~ It is the
+review's own extension of (1b), and in this sum form unsound for a per-phase limiter (correction at the top).
 
 **(a) is not a separate physical requirement — it is (b) misread as a constraint on the design
 variable.** It demands headroom against a realisation that cannot occur while δ is being injected.

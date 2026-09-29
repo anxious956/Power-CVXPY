@@ -36,12 +36,13 @@ def target(R):
     xline = {k: d[f"{k}_param_dict"]["length"] * d[f"{k}_param_dict"]["xline"] for u, v, k, d in g.edges(keys=True, data=True)
              if f"{k}_param_dict" in d and "xline" in d[f"{k}_param_dict"]}
     d = np.full(len(R["tgt"]), np.nan)
+    loc = R.get("loc_rel", R["loc"])               # adapt_grid: from the relay / the remote bus (common.load_relay_adapt)
     own = R["tgt"] == R["cfg"]["line"]
-    d[own] = R["loc"][own] / 100.0
+    d[own] = loc[own] / 100.0
     d[R["tgt"] == R["cfg"]["remote_bus"]] = 1.0
     for ln in R["cfg"]["beyond"]:
         m = R["tgt"] == ln
-        d[m] = 1.0 + R["loc"][m] / 100.0 * xline[ln] / xl
+        d[m] = 1.0 + loc[m] / 100.0 * xline[ln] / xl
     return d
 
 

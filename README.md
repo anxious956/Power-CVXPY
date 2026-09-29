@@ -237,6 +237,39 @@ Details: [results/REAL_ML.md](results/REAL_ML.md), and the grouped re-runs in
 
 ![real ml](results/real_ml.png)
 
+## Sixth result: a varying operating point, then an inverter-rich grid (17–28 Sep 2026)
+
+The same zone task on two EvEMTBench `adapt_grid` sets with randomised loading, grounding and
+continuous fault resistance, with the trip threshold calibrated to **zero** off-line false trips
+rather than a 5 % budget.
+
+- **TestGrid 110 kV** ([results/ADAPTGRID.md](results/ADAPTGRID.md)), synchronous-source
+  dominated. The sequence-trajectory CNN covers **94.6–99.4 %** of in-zone faults at relay A with
+  0–3 of 2,888 off-line trips; relay B's zero-false-trip point is unstable (45–77 %, 90–98 % at
+  one permitted trip). The settable quadrilateral covers 5–10 %, and the 5 % budget had hidden
+  36–57 % trips just beyond the remote bus. Hasan et al.'s (2026) SVM, re-implemented, reaches
+  9–58 % at zero false trips (74 % with tuned C at relay A, 50 ms).
+- **CIGRE MV 20 kV** ([results/CIGREMV.md](results/CIGREMV.md)), two inverters supplying about
+  half the fault-current rise, 2–4 Ω lines (three relays on cables, one on an overhead line).
+  **The TestGrid result does not transfer:** no single-ended detector covers more than 15.8 % at
+  zero false trips (the CNN 0–10.5 %, seed-stable), because from one end, with a
+  fundamental-frequency front end, the in-zone faults are not separable from the faults just
+  beyond the remote bus for the high-resistance faults this set contains (it has almost none
+  below 1 Ω). *R1/R3 numbers are provisional: their zone labels were mirrored and are being
+  re-run (REVIEW.md §7 row 41).* Only both-ends schemes
+  work (67N/67Q at both ends 75–78 %, no off-line trip). Three inverter-specific failures appear:
+  an inverter disconnecting at the remote bus trips the CNN in the forward direction, 32P/32Q is
+  wrong both ways at the inverter buses, and one relay's CNN trips held-out reverse faults.
+- **Room for the auxiliary signal:** with the inverters' output kept (0.8 pu dispatch), 0.4 pu of
+  negative-sequence δ at one design angle fits in 38–39 % of the relevant in-zone faults in the
+  first cycle and 77–78 % by 40 ms; 0.7 pu fits in 8–33 %, 1 pu in at most 8 %.
+- **Bridge review** ([review/bridge/LEAD_REVIEW.md](review/bridge/LEAD_REVIEW.md)): five specialist
+  reviews and a lead review of running Taylor's design method on this grid. In the study model a δ
+  barely moves the zone boundary (0.0008–0.024 pu per pu of δ for the nearest confusable pairs),
+  so a one-day screening comes before any design engine.
+
+Every refuted or narrowed claim is in the register, [REVIEW.md](REVIEW.md) §7 (rows 26, 32 onward).
+
 ## Quick start
 
 ```bash
@@ -281,7 +314,9 @@ results/    RESULTS.md   design-tool results, figures and JSON for every preset
             DATASET_FACTS.md  fact sheet of the benchmark EMT data
             ADAPTGRID.md, ADAPTGRID_FACTS.md  the zone task on adapt_grid-TestGrid110kV (varied
                               loading and grounding, continuous R_f), at a zero-false-trip threshold
-            review/, review_wp1/, review_synth/, adaptgrid/  re-run JSONs and generated tables
+            CIGREMV.md, CIGREMV_FACTS.md      the same on the inverter-rich CIGRE MV 20 kV feeder, with
+                              inverter-aware settings, boundary diagnostics and inverter headroom
+            review/, review_wp1/, review_synth/, adaptgrid/, cigremv/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
 review/     WP1_REPORT.md   design-tool findings with commands and JSON keys
             SYNTH_REPORT.md synthetic-pipeline findings
@@ -315,9 +350,10 @@ the competing methods against each other, and that the auxiliary signal appears 
 
 ## Status
 
-An independent technical review of this repository is complete and merged:
+Last updated 28 Sep 2026. An independent technical review of this repository is complete and merged:
 [REVIEW.md](REVIEW.md). Every headline claim above has been re-checked against it and corrected
-in place; §7 carries the claim-by-claim verdict and §10 the roadmap. The re-run numbers live in
+in place; §7 carries the claim-by-claim verdict (including this project's own claims, rows 32
+onward) and §10 the roadmap. The re-run numbers live in
 [results/review/TABLES.md](results/review/TABLES.md),
 [review/WP1_REPORT.md](review/WP1_REPORT.md) and
 [review/SYNTH_REPORT.md](review/SYNTH_REPORT.md).
@@ -339,16 +375,33 @@ in place; §7 carries the claim-by-claim verdict and §10 the roadmap. The re-ru
 - [x] Reproduce the Taylor 2023 example (|θ| vs fault location) with Clarabel — reproduces only
       with the appendix's printed matrix form; see `docs/notes/taylor_matrix_note.md` (§4 H16)
 - [x] Independent technical review, landed on main
+- [x] Sequence-domain front end for the learned detector (the sequence-trajectory CNN, on the
+      relay front end)
+- [x] Varying operating point: adapt_grid TestGrid at a zero-false-trip threshold, deterministic
+      CNN, three seeds, reverse faults held out ([results/ADAPTGRID.md](results/ADAPTGRID.md))
+- [x] Closest published method (Hasan et al. 2026) re-implemented and compared
+- [x] CNN decision latency on the laptop: 87 µs the network on one CPU thread, 784 µs with its
+      features (`results/adaptgrid/cnn_latency.json`); an embedded board is still open
+- [x] Inverter-rich grid: CIGRE MV 20 kV, inverter-aware setting study validated against EMT,
+      full analysis on four relays ([results/CIGREMV.md](results/CIGREMV.md))
+- [x] Inverter headroom for an auxiliary signal during faults, measured on CIGRE MV
+- [x] Sample-size control for CIGRE MV: the TestGrid CNN with 72 in-zone faults keeps 100 % at
+      relay A and 37.5–43.1 % at B, so fewer positives do not explain CIGRE's 0–10.5 %
+- [x] Quick checks: settings ±20 % change nothing; both-ends schemes hold only for a trip after the
+      channel delay; 67N/67Q both ends needs adequately sized CTs (`results/cigremv/quick_checks.json`)
+- [ ] IEEE 39-bus (60 Hz) EvEMTBench grid
+- [ ] Design tool on a multi-bus network: Taylor's static model on the CIGRE MV sequence network,
+      its predicted ambiguity checked against the EMT result (docs/notes/SORULAR_CEVAPLAR.md Q22)
 - [ ] Multiple-model Kalman filter detector (Pirani et al. 2022) in the comparison
-- [ ] Sequence-domain front end for the learned detector
 - [ ] Design tool that earns the word "guarantee": zone problem, sound source set, margin,
       current limit, global solver (§10 item 2)
 - [ ] Report the pre-fault label leak and the resampling look-ahead to the EvEMTBench authors
-- [ ] Inverter-dominated EMT grid (Baeckeland Simulink model, or our own)
+- [ ] Grid-forming inverters and an injected auxiliary signal in EMT (Baeckeland Simulink model,
+      or our own); CIGRE MV has grid-following inverters only and no injection
 - [ ] Advisor confirmed
 - [ ] Team roles assigned
 - [ ] EMT simulation test grid (Simulink or PSCAD)
-- [ ] Embedded latency measurement
+- [ ] Embedded latency measurement on a board
 - [ ] Conference paper (target: NAPS 2027)
 
 ## License

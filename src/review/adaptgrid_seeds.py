@@ -44,7 +44,8 @@ def threshold_provenance(Rtr, idx, y, groups, kind, seed=0):
                 out_of_fold=bool(worst_rows == 0), operating_points_disjoint=bool(worst_bins == 0))
 
 
-def run_seed(R, idx, y, groups, F, fwd, kind, seed_offset, model="CNN seq-traj"):
+def run_seed(R, idx, y, groups, F, fwd, kind, seed_offset, model="CNN seq-traj", decisions=False):
+    """decisions=True also returns the per-row decisions under '_decisions' (adaptgrid_subsample.py)."""
     n = len(R["et"]); sel = np.arange(n)
     fk = FEAT_OF[model]
     hrows = np.setdiff1d(sel, idx)
@@ -80,6 +81,8 @@ def run_seed(R, idx, y, groups, F, fwd, kind, seed_offset, model="CNN seq-traj")
                        incipient=dict(k=r["incipient"]["k"], n=r["incipient"]["n"], ucb95=r["incipient"]["ucb95"]),
                        guard=dict(k=r["own99"]["k"], n=r["own99"]["n"]),
                        dep_by_rf_bin={b: (r["dep_by_rf_bin"][b]["rate"]) for b in cm.RF_LABELS})
+        if decisions:
+            out.setdefault("_decisions", {})[op] = d
     out["thresholds_cal0"] = [float(t) for t in thr0]
     return out
 
