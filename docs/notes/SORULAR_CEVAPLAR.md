@@ -1034,3 +1034,34 @@ CIGRE'de 67N/67Q iki uçta %75–82, hiç yanlış açma yok; POTT eşdeğeri %8
 **Dikkat:** Birinci satır "öğrenme işe yarar" demek değil: aynı kuralla gradient boosting %11'e düşüyor ve sonuç TestGrid'e özgü (REVIEW.md §7 satır 26). Üçüncü satır statik bir hesap; invertörün sinyale kendi tepkisi modellenmedi.
 
 *Kaynak: `results/ADAPTGRID.md`; `results/CIGREMV.md`; REVIEW.md §7 satır 26, 37, 41.*
+
+---
+
+## 26. B1 taraması neyi ölçtü ve ne çıktı?
+
+**Kısa cevap:** B1, modelde bir iç arızayı ona en çok benzeyen dış arızadan ayırmak için invertörün ne kadar büyük bir sinyal (δ) basması gerektiğini ölçtü. Cevap: invertörün karşılayabildiği 0,4 pu, ayrılabilen iç arıza oranını sadece 2–4 puan artırıyor; invertörün tam akımı (1,2 pu) bile 8–13 puan. Bu yüzden bu şebekede δ tasarımına geçmiyoruz.
+
+### Nasıl ölçüldü
+- **Model:** CIGRE 20 kV şebekesinin statik modeli (`ibr_study`), karakterize edilmiş invertörlerle.
+- **Senaryolar:** İç arızalar hattın %70 ve %85'inde; dış arızalar uzak barada ve sonraki hatların ilk %20'sinde. Dört arıza türü, dört R_f aralığı, üç yük seviyesi, iki topraklama, invertörün iki farklı negatif bileşen davranışı.
+- **Ölçüt:** Rölenin 16 ölçüm kanalı (arıza sonrası ve öncesi dizi bileşenleri). Ölçüm hatası kanal başına 0,01 pu. İki arıza, bir kanalda 0,02 pu'dan fazla farklıysa ayrılmış sayılıyor.
+- **Sinyal:** δ, 0,2–3 pu büyüklük × 12 açıdan oluşan bir ızgarada doğrudan denendi. Model δ'ya göre doğrusal değil, bu yüzden tahmin yerine her noktada tam çözüm yapıldı.
+
+### Ne çıktı (EMT iç arızalarının bulunduğu hücrelere göre ağırlıklı)
+
+| Modelde ayrılabilen iç arıza | R1 | R2 | R3 | R4 |
+|---|---|---|---|---|
+| Sinyalsiz | %9,2 | %50,2 | %8,4 | %33,0 |
+| δ ≤ 0,4 pu | %13,5 | %54,1 | %10,4 | %37,3 |
+| δ ≤ 1,2 pu | %21,3 | %60,6 | %16,7 | %46,4 |
+
+- En az 5 EMT arızası olan her hücre ya sinyalsiz ayrılıyor ya da en zor arızası için 1,2 pu'dan fazlası gerekiyor. Durdurma kuralı R1–R3'te aynen, R4'te özünde sağlandı.
+- **Neden:** İç arıza (%85) ile uzak bara arızası arasında hattın sadece 0,3–0,6 Ω'u var. Sinyal iki arızanın ölçümünü neredeyse aynı miktarda değiştiriyor.
+
+### Dikkat
+Tarama sinyal lehine iyimser: her arızaya kendi en iyi açısı veriliyor, ölçüm hatası sadece cihaz hatası (modelin kendi hatası, B2, eklenmedi) ve model statik. Model R2'de iç arızaların yarısını sinyalsiz bile ayrılabilir sayıyor, oysa EMT'de tek uçlu hiçbir yöntem sıfır yanlış açmada %8,3'ü geçmiyor. Yani gerçek ihtiyaç bu sayılardan büyük, küçük değil.
+
+### Sonraki adım
+Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı (M3) yapılmıyor. Olumsuz sonuç mekanizmasıyla raporlanıyor, tasarım 110 kV TestGrid'de çalıştırılıyor. Bu, Taylor'a soracağımız 4. sorunun ("olumsuz sonuç ilginizi çeker mi?") somut dayanağı.
+
+*Kaynak: `results/CIGREMV.md` §3 ("How large δ would have to be"); `results/cigremv/b1_delta_screen.json`; REVIEW.md §7 satır 42.*

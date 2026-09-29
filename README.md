@@ -267,6 +267,11 @@ rather than a 5 % budget.
   reviews and a lead review of running Taylor's design method on this grid. In the study model a δ
   barely moves the zone boundary (0.0008–0.024 pu per pu of δ for the nearest confusable pairs),
   so a one-day screening comes before any design engine.
+- **The screening (B1)** ([results/CIGREMV.md](results/CIGREMV.md) §3): in the study model, at an
+  instrument error of 0.01 pu, a δ of 0.4 pu raises the share of separable in-zone faults by 2–4
+  points and the inverter's whole current (1.2 pu) by 8–13; every cell with five or more EMT faults
+  either needs no δ in the model or more than 1.2 pu. The δ design is therefore not pursued on this
+  grid; it moves to TestGrid, and the CIGRE result is reported as a negative one with its mechanism.
 
 Every refuted or narrowed claim is in the register, [REVIEW.md](REVIEW.md) §7 (rows 26, 32 onward).
 
