@@ -1,17 +1,17 @@
 {
  "script": "adaptgrid_directional_reverse",
- "commit": "b11da15126e212c86c1b66876cc77088f001ac29",
+ "commit": "df1e601873854b693bcc8b0d1cc5de5d14aa5d0a",
  "frontend": "relayfe",
  "t_ms": 20,
  "relays": {
   "cigre_R1": {
    "by_class": {
     "pos": {
-     "k_forward": 66,
+     "k_forward": 67,
      "n": 72
     },
     "own99": {
-     "k_forward": 11,
+     "k_forward": 10,
      "n": 11
     },
     "beyond": {
@@ -444,11 +444,11 @@
    "by_class": {
     "pos": {
      "k_forward": 73,
-     "n": 84
+     "n": 85
     },
     "own99": {
      "k_forward": 6,
-     "n": 8
+     "n": 7
     },
     "beyond": {
      "k_forward": 69,
