@@ -402,6 +402,29 @@ largest held-out and the largest training negative score swings by ±10 from one
 decaying learning rate, gradient clipping or averaging the last epochs' weights are the obvious remedies;
 none is applied here, because choosing one needs its own inner-fold selection.
 
+### Decision time: what waiting buys
+
+`adaptgrid_time_sweep.py` →
+[`adaptgrid/time_sweep_relayfe_cnn.json`](adaptgrid/time_sweep_relayfe_cnn.json) runs the same CNN at
+decision times of 10, 15, 20, 30 and 40 ms with everything else unchanged: ten sequence-phasor frames
+evenly spaced from t/10 to t, the canonical phase rotation chosen by the phase selector at t, and training,
+calibration and scoring by `adaptgrid_seeds.run_seed` (three seeds, both splits). At 20 ms it reproduces
+the seed study exactly, which is the built-in check.
+
+| zero false trips (cal0), range over 3 seeds × 2 splits | 10 ms | 15 ms | 20 ms | 30 ms | 40 ms |
+|---|---|---|---|---|---|
+| relay A, dependability | 88.1–100 % | 72.6–100 % | 94.6–99.4 % | 96.4–100 % | 92.3–100 % |
+| relay A, off-line trips of 2,888 | 0 | 0 | 0–3 | 0–2 | 0–2 |
+| relay B, dependability | 53.1–78.7 % | 66.7–87.4 % | 45.4–77.3 % | 58.9–79.2 % | 22.7–70.0 % |
+| relay B, dependability at ≤ 1 off-line trip in 2,845 | 87.9–98.1 % | 98.1–100 % | 90.3–97.6 % | 91.3–97.6 % | 78.3–94.7 % |
+
+No run trips a switching event at any decision time. **Waiting buys nothing for this detector.** At relay A
+half a cycle already gives 88–100 % with no off-line trip, and one cycle is as good as two. At relay B the
+zero-false-trip point does not improve with time and is worst at 40 ms: its spread is the threshold
+variance described above ("Why relay B's answer moves"; the unstable optimisation of "Determinism and
+training stability"), not a shortage of post-fault data. The 2–2.5-cycle decision of Hasan et al. (below)
+is therefore not what this detector needs; a zone-1 element can decide at one cycle or less here.
+
 ### The closest published method on this data: Hasan et al. (2026)
 
 Hasan, Chakraborty & Wang (IJEPES 181, 2026, 112007) propose the same thing this project's learned niche
