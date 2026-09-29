@@ -1065,3 +1065,20 @@ Tarama sinyal lehine iyimser: her arızaya kendi en iyi açısı veriliyor, öl�
 Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı (M3) yapılmıyor. Olumsuz sonuç mekanizmasıyla raporlanıyor, tasarım 110 kV TestGrid'de çalıştırılıyor. Bu, Taylor'a soracağımız 4. sorunun ("olumsuz sonuç ilginizi çeker mi?") somut dayanağı.
 
 *Kaynak: `results/CIGREMV.md` §3 ("How large δ would have to be"); `results/cigremv/b1_delta_screen.json`; REVIEW.md §7 satır 42.*
+
+---
+
+## 27. B1'den sonra tasarımı 110 kV'a taşımak araştırmamızdan sapmaz mı?
+
+**Kısa cevap:** Ana şebeke yaparsak sapar. 110 kV'ta invertör payı kısa devre kapasitesinin %0,14'ü ve sınır zaten sinyalsiz ayrılıyor (CNN %95–99). Orada ne sinyale ihtiyaç var ne de sinyali basacak anlamlı bir invertör. 110 kV ancak bir kontrol olabilir: tasarım aracı, EMT'nin de sinyal gerekmez dediği yerde "gerekmez" diyor mu?
+
+### Araştırmada kalan yol
+- **Soruyu değiştirmek, şebekeyi değil.** B1 sadece erişim sorusunu test etti: iç arıza mı, hattın hemen ötesi mi? Bu, sinyalin en zor kullanımı. Taylor'ın Geometry makalesi bile erişimi rölenin karakteristiğine bırakıyor.
+- **Yön (ileri / geri):** İnvertör baralarında 32P/32Q iki yönde de yanılıyor. R1'de arkadaki 156 hattın 17 arızasını ileri, 72 iç arızanın 5'ini geri görüyor; R3'te 93'te 9 ve 85'te 12 (`results/cigremv/TABLES.md` H). İleri ve geri arızalar rölenin iki farklı tarafında, elektriksel olarak uzak. Sinyalin fark yaratma şansı erişimdekinden çok daha yüksek. IEEE 2800'ün invertörlerden negatif bileşen akımı istemesinin nedeni de yön elemanları (bildiğimiz kadarıyla; kaynaktan doğrulanmadı).
+- **Arıza türü:** Taylor'ın Geometry makalesindeki asıl kullanım.
+- **Taylor'ın 14 baralı modeli:** İnvertörlü bir şebeke. Gelirse erişim sorusunu daha uzun hatlarda deneyebiliriz.
+
+### Olumsuz sonucun yeri
+"Kısa MV hatlarda erişim için invertörün basabileceği sinyal yetmiyor" bir araştırma sonucu. Hemen ardından "ama yön için yetiyor mu?" sorusu gelirse sonuç tek başına kalmaz.
+
+*Kaynak: `results/CIGREMV.md` §1, §3; `results/cigremv/TABLES.md` H; `review/bridge/LEAD_REVIEW.md` D; REVIEW.md §7 satır 42.*
