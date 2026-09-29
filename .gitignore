@@ -25,3 +25,6 @@ logs/
 
 # console output of the TAC25 runs; the results are in results/review_wp1/*.json
 /logs_*.log
+# large open-access papers fetched by papers/fetch.sh (over the 5 MB limit)
+papers/2023_Yang_Control_Method_Directional_Protection_Elements.pdf
+papers/Sandia_2020_IBR_Negative_Sequence_Injection_SAND2020-0265.pdf

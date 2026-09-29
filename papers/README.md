@@ -1,6 +1,6 @@
 # Reading list: auxiliary-signal fault detection in inverter-dominated grids
 
-> The 26 PDFs are committed here so the team has one place to read from. Most are
+> The 34 PDFs are committed here so the team has one place to read from. Most are
 > open-access author copies: arXiv preprints, a US Department of Energy national
 > laboratory report, and six conference papers and technical reports that Schweitzer
 > Engineering Laboratories posts free on selinc.com. **Two are not open access** — the
@@ -11,7 +11,7 @@
 
 Senior design, advisor (proposed) Prof. Joshua A. Taylor, NJIT ECE.
 Built by walking the reference lists of Taylor's own papers, so the set covers what he
-builds on, not only what cites him. Last updated 17 Sep 2026: 26 papers held, 8 known gaps.
+builds on, not only what cites him. Last updated 29 Sep 2026: 34 papers held, 8 known gaps (section F) and the papers to fetch in section K.
 
 ## A. Taylor's own line — read these first, in this order
 
@@ -135,3 +135,40 @@ in [`notes/E_practitioner_settings.md`](notes/E_practitioner_settings.md).
 - Latency of auxiliary-signal detectors on embedded hardware: not found.
 - Measured drift of the incremental characteristic under inverter control modes: named as an open assumption in #5, not measured.
 - Whether the auxiliary signal *harms* the conventional distance element: not found, and our own preliminary result suggests it does.
+
+## K. Added 29 Sep 2026: direction and fault type at inverter buses, and guaranteed active diagnosis
+
+The CIGRE MV results moved the question. A δ the inverter can supply barely resolves zone-1 reach
+(bridge step B1, [`REVIEW.md`](../REVIEW.md) §7 row 42), while at the inverter buses the negative-sequence
+directional element is wrong in both directions ([`results/CIGREMV.md`](../results/CIGREMV.md) §3). This
+section covers that second problem and the theory behind the first. Every entry was checked against its
+Crossref record and abstract; the ★ entries were also read at the passages quoted.
+
+| # | File | What it is | Why it matters to us |
+|---|------|------------|----------------------|
+| 27 ★ | `2020_PES_TR81_Protection_Challenges_IBR_Transmission.pdf` | IEEE PES PSRC WG C32, *Protection Challenges and Practices for Interconnecting Inverter Based Resources to Utility Transmission Systems*, PES-TR81, 2020. | Industry evidence for our finding. 67Q calls a reverse phase-to-phase fault forward next to a 300 MW Type IV wind plant with coupled sequence control, and is correct once the plant injects I2 (decoupled control, slope K = 2). In a field case, unreliable IBR I2 made a relay miss a reverse fault and the echo logic was then disabled. Some relays need about 10 % I2/I1; the report recommends I2 proportional to V2 with a slope of 2–6. [pes-psrc.org/kb/report/109.pdf](https://www.pes-psrc.org/kb/report/109.pdf) |
+| 28 ★ | `2014_Scott_Input_Design_Guaranteed_Fault_Diagnosis_Zonotopes.pdf` | Scott, Findeisen, Braatz & Raimondo, *Input design for guaranteed fault diagnosis using zonotopes*, Automatica 50(6):1580–1589, 2014. | Theorem 3: an input u separates hypotheses i and j if and only if N(i,j)·u lies outside a zonotope Z(i,j), with N(i,j) = C(j)B(j) − C(i)B(i). The input only shifts the output sets. If N = 0, no input separates a pair whose sets overlap; if N is small, the separating input must be large. This is the mechanism behind B1. [DOI 10.1016/j.automatica.2014.03.016](https://doi.org/10.1016/j.automatica.2014.03.016) |
+| 29 | `2016_Raimondo_Closed_Loop_Input_Design_Guaranteed_Fault_Diagnosis.pdf` | Raimondo, Marseglia, Braatz & Scott, *Closed-loop input design for guaranteed fault diagnosis using set-valued observers*, Automatica 74:107–117, 2016. | The closed-loop version, on a moving horizon. It is the check on whether redesigning δ online helps when an open-loop design cannot separate. [DOI 10.1016/j.automatica.2016.07.033](https://doi.org/10.1016/j.automatica.2016.07.033) |
+| 30 | `2021_SEL_Line_Protection_IBR_Solutions_WPRC.pdf` | Chowdhury & Fischer, *Transmission line protection for systems with inverter-based resources*, WPRC 2021. This is the conference version of Part II, IEEE TPWRD 36(4):2426–2433, 2021. | Relay-side fixes (settings and logic only) from the Sandia "real-code" study: raise the fault-detector checks, have fault-type selection rely on its undervoltage method, and use 32P logic for three-phase faults. It is the baseline an injection has to beat. |
+| 31 | `2022_SEL_Line_Current_Differential_IBR.pdf` | Chowdhury, McDaniel & Fischer, *Line current differential protection in systems with inverter-based resources — challenges and solutions*, WPRC 2022. | The two-ended reference: what 87L loses with IBRs, and how to set it. [selinc.com/api/download/137350](https://selinc.com/api/download/137350/) |
+| 32 | `2023_IEEE2800_Benefits_Transmission_Line_Protection_IPST.pdf` | Davi, Oleskovicz & Lopes, IPST 2023. The journal version is EPSR 220:109304, 2023. | EMT study of legacy balanced-current control against IEEE 2800-compliant I2 control, for seven functions including 32Q, 32G and two phase selectors, checked against commercial-relay routines. What standard I2 injection already buys is the bar a designed δ has to clear. |
+| 33 | `2024_PNNL_IBR_Negative_Sequence_Current_Review.pdf` | Lyu, Xie & McDermott, *Impact of IBRs on grid protection: a review of negative-sequence current generation*, PNNL-36069, 2024. | Review of how IBRs generate I2. [DOI 10.2172/2377006](https://doi.org/10.2172/2377006) |
+| 34 | `2021_Directionality_SVM_Synthetic_Harmonic_Injection.pdf` | Mohammadhassani, Mehrizi-Sani & Saleh, *Fault current directionality in islanded microgrids using SVM and synthetic harmonic injection*, IEEE ISIE 2021 (accepted manuscript). | The one item that combines injection with learning. It gives forward/reverse direction on the CIGRE 12.47 kV benchmark, for balanced faults. [DOI 10.1109/ISIE45552.2021.9576210](https://doi.org/10.1109/ISIE45552.2021.9576210) |
+
+**To fetch (open access, but too large for the repo or refused to scripts).** `fetch.sh` fetches the first two; open the others in a browser:
+- ★ Yang, Liu, Zhang, Chen, Chavez & Popov, *A control method for converter-interfaced sources to improve operation of directional protection elements*, IEEE TPWRD 38(1):642–654, 2023, [DOI 10.1109/TPWRD.2022.3202988](https://doi.org/10.1109/TPWRD.2022.3202988). Green open access via TU Delft (5.9 MB). The IBR shapes its currents so the sequence impedances behind the relay look like a synchronous machine's, and existing directional elements work unchanged. It is the closest precedent and the comparison for a designed δ.
+- Sandia SAND2020-0265, *Impact of inverter based resource negative sequence current injection on transmission system protection*, 2020, [DOI 10.2172/1595917](https://doi.org/10.2172/1595917) (100 MB).
+- ★ Haddadi, Zhao, Kocar, Karaagac, Chan & Farantatos, *Impact of inverter-based resources on negative sequence quantities-based protection elements*, IEEE TPWRD 36(1):289–298, 2021, [DOI 10.1109/TPWRD.2020.2978075](https://doi.org/10.1109/TPWRD.2020.2978075). Green open access at ira.lib.polyu.edu.hk (record 10397/93387). It gives the mechanism: IBR I2 is small (so 50Q/51Q fail) and its angle to V2 is not inductive (so 67Q fails).
+- Yang, Dyśko & Egea-Àlvarez, *A negative sequence current injection (NSCI)-based active protection scheme for islanded microgrids*, IJEPES 158:109965, 2024, [DOI 10.1016/j.ijepes.2024.109965](https://doi.org/10.1016/j.ijepes.2024.109965). Gold open access. The closest negative-sequence injection scheme; it finds the faulted section rather than the reach.
+- Opoku, Dimitrovski & Ferrari, *Performance evaluation of a novel sequence-based directional detection strategy for protection of active distribution networks*, IEEE Access 13:7094–7109, 2025, [DOI 10.1109/ACCESS.2024.3525057](https://doi.org/10.1109/ACCESS.2024.3525057). Open access. Directional elements on distribution feeders with IBRs, tested in hardware-in-the-loop.
+
+**To get through the library (paywalled).**
+- Azzouz & Hooshyar, *Dual current control of inverter-interfaced renewable energy sources for precise phase selection*, IEEE TSG 10(5):5092–5102, 2019, DOI 10.1109/TSG.2018.2875422. The inverter sets its I2 angle so the relay's phase selector chooses correctly.
+- Medhat & Azzouz, *Triple current control of four-wire inverter-interfaced DGs for correct fault type identification*, IEEE TSG 13(5):3607–3618, 2022, DOI 10.1109/TSG.2022.3170241. The distribution-level version.
+- Banaiemoqadam, Hooshyar & Azzouz, *A control-based solution for distance protection of lines connected to converter-interfaced sources during asymmetrical faults*, IEEE TPWRD 35(3):1455–1466, 2020, DOI 10.1109/TPWRD.2019.2946757. Not the dual-current paper in section F.
+- Chowdhury & Fischer, Part I: Problems, IEEE TPWRD 36(4):2416–2425, 2021, DOI 10.1109/TPWRD.2020.3019990.
+- Xu, *Minimal detectable and isolable faults of active fault diagnosis*, IEEE TAC 68(2):1138–1145, 2023, DOI 10.1109/TAC.2022.3148305. Lets the B1 result be phrased as a minimal isolable fault under an input budget.
+- Nikoukhah, *Guaranteed active failure detection and isolation for linear dynamical systems*, Automatica 34(11):1345–1358, 1998, DOI 10.1016/S0005-1098(98)00079-X. The root of the guaranteed formulation.
+- Saleh, Allam & Mehrizi-Sani, *Protection of inverter-based islanded microgrids via synthetic harmonic current pattern injection*, IEEE TPWRD 36(4):2434–2445, 2021, DOI 10.1109/TPWRD.2020.2994558. A direction element built on injection.
+
+**What this set says about our position.** The published fixes are all control-based: Yang/Popov, Azzouz/Hooshyar and Medhat/Azzouz reshape the inverter's I2 so it looks like a synchronous machine's for the whole fault, and most of them study a single plant on a transmission line. None of them designs a budget-limited δ with a separation guarantee. None studies a feeder with several inverters where 32Q errs in both directions. And none treats an inverter disconnecting at the remote bus that looks like a forward fault. Those three are not in this search; that is not proof that they are absent from the literature.
