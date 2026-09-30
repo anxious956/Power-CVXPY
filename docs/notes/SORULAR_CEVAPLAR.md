@@ -1082,3 +1082,29 @@ Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı
 "Kısa MV hatlarda erişim için invertörün basabileceği sinyal yetmiyor" bir araştırma sonucu. Hemen ardından "ama yön için yetiyor mu?" sorusu gelirse sonuç tek başına kalmaz.
 
 *Kaynak: `results/CIGREMV.md` §1, §3; `results/cigremv/TABLES.md` H; `review/bridge/LEAD_REVIEW.md` D; REVIEW.md §7 satır 42.*
+
+---
+
+## 28. Yeni makaleler (okuma listesi K) yön fikrimiz hakkında ne diyor?
+
+**Kısa cevap:** Bulgumuz (invertör barasında 32Q iki yönde yanılıyor) iletim seviyesinde zaten belgelenmiş. "İnvertör negatif bileşen akımı bassın, röleler düzgün çalışsın" fikri de yeni değil; IEEE 2800 bunu zaten istiyor. Bizim savunabileceğimiz katkı daha dar: akım bütçesi içinde kalan ve belirsizlik kümeleri üzerinden ayırma garantisi olan, tasarlanmış bir δ. Bu δ, iki invertörlü bir dağıtım fiderinde, yüksek arıza direncinde, yön ve faz seçimi için birlikte kullanılacak.
+
+### Ne okuduk (20 makale, tamamı; notlar `papers/notes/G1`–`G4`)
+- **Mekanizma (G1):** PES-TR81, Haddadi 2021 ve Chowdhury & Fischer Part I aynı sonuca varıyor. İnvertörün negatif bileşen "kaynak empedansı" bir kontrolcü ürünü: I2 küçük ve V2'ye göre açısı endüktif değil. Bu yüzden 67Q/32Q ters arızayı ileri, iç arızayı geri görebiliyor. Akım sınırlayıcı I2'yi kısıyor; TR81'e göre 0,8 pu yükte yaklaşık 0,45 pu kalıyor, bu da bizim 0,4 pu'luk bütçemizle uyumlu.
+- **Çözümler (G1, G2):**
+  - IEEE 2800 kuralı (I2, V2 ile orantılı ve 90–100° önde): iletimde 32Q'yu düzeltiyor. Davi 2023'te faz-faz arızasında %100, faz-toprakta %90; hatalar yüksek toprak direncinde.
+  - Kontrolcüler (Yang/Popov 2023, Azzouz/Hooshyar 2019, Medhat/Azzouz 2022, Banaiemoqadam 2020): invertörü senkron makine gibi gösteriyorlar. Hiçbirinde belirsizliğe karşı garanti yok; hepsi güçlü şebeke ve düşük arıza direnciyle test edilmiş.
+  - Röle tarafı (SEL): 32Q'nun devreye girme eşiğini 1,25·IMAX'e çıkarıyor. **Uyarı:** bu ayarla bizim 0,4 pu'luk sinyalimiz röleye hiç görünmez. Sinyal tasarımı ile röle ayarı birlikte düşünülmeli.
+- **En yakın rakipler (G3):**
+  - Saleh 2021: ileri/geri ayrımı için harmonik deseni optimizasyonla seçiyor; nominal model, ada modu.
+  - Yang, Dyśko 2024: sabit 0,3 pu I2'yi 80 ms basıyor; ada modu, tek faz-toprak arızasını ancak ~4–7 Ω'a kadar görüyor.
+  - Opoku 2025: pasif bir yön elemanı; enjeksiyonun gerekli olduğunu söylemeden önce bizim veride denemeliyiz.
+- **Teori (G4):** Scott 2014, Xu 2023, Nikoukhah 1998 ve Taylor'ın TAC 2025 Teorem 1'i aynı şeyi söylüyor. Gereken sinyal ≥ (2ε − ölçüm farkı) / N; N, iki hipotezin sinyale verdiği tepkinin farkı. Erişimde (iç arıza ile hemen ötesi) N ≈ 0, yani sinyal çok büyük olmalı; B1 bunu gösterdi. Yönde iki hipotez işaret değiştirdiği için N büyük; umut verici. Kapalı çevrim (Raimondo 2016) garantisini açık çevrimden alıyor; açık çevrim ayıramıyorsa o da kurtarmıyor.
+
+### Sonraki adımlar
+1. Opoku'nun pasif yön elemanını EMT verimizde denemek (enjeksiyon gerekli mi?).
+2. SEL'in PSV50 blok mantığını invertör devreden çıkma olaylarında denemek.
+3. B1'i teorideki formülle yeniden hesaplamak; ızgara yerine doğrudan en küçük sinyal.
+4. Yön için B1 taraması: ileri ve geri arıza kümeleri.
+
+*Kaynak: `papers/README.md` K; `papers/notes/G1_mechanism_industry.md`, `G2_control_remedies.md`, `G3_injection_distribution.md`, `G4_theory.md`; REVIEW.md §7 satır 42–43.*
