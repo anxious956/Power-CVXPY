@@ -102,6 +102,17 @@ All 26 papers have been read in full. Notes live in `papers/notes/`:
   version for a corrected design-tool formulation, and what the Baeckeland current-limiting
   model (#20) gives for an inverter fault-response uncertainty dimension and for WP2.
 
+Section K (20 papers, read in full on 30 Sep 2026; the key numbers were checked against the PDFs):
+
+- `G1_mechanism_industry.md` — why negative-sequence directional and phase-selection elements fail next
+  to IBRs (PES-TR81, Haddadi, Chowdhury & Fischer Parts I and II, PNNL review), and the relay-side fixes.
+- `G2_control_remedies.md` — the five controllers that make an inverter look like a synchronous machine
+  to the relay (Yang/Popov, Azzouz/Hooshyar, Medhat/Azzouz, Banaiemoqadam), and what IEEE 2800 already buys (Davi).
+- `G3_injection_distribution.md` — injection-based protection (Saleh, Mohammadhassani, Yang/Dysko), a
+  distribution directional element (Opoku), and the 87L reference (SEL).
+- `G4_theory.md` — guaranteed active fault diagnosis (Scott, Raimondo, Nikoukhah, Xu) and why a bounded
+  signal cannot separate hypotheses whose sensitivity to it is nearly equal; the Sandia 2020 study.
+
 ## H. Practitioner references for settings and instrument transformers
 
 Six Schweitzer Engineering Laboratories papers, all free from selinc.com. They exist in this
@@ -132,8 +143,12 @@ in [`notes/E_practitioner_settings.md`](notes/E_practitioner_settings.md).
 ## J. What is and is not in the literature, as of 16 Sep 2026
 
 - ML fault detection on inverter grids: many papers (#13, #18, #15).
-- Auxiliary-signal fault detection: only Taylor's line (#1, #2, #3, #4), all model-based, no learning.
-- Learned detection of the auxiliary signal itself, and a measured "how small can the signal be in practice" curve: not found.
+- Auxiliary-signal fault detection: only Taylor's line (#1, #2, #3, #4), all model-based, no learning. **Narrowed 30 Sep 2026 (section K):**
+  in protection, injections designed or fixed for the purpose exist outside Taylor's line. Saleh et al. 2021 choose a harmonic pattern by
+  optimisation so relays tell forward from reverse. Yang, Dysko et al. 2024 inject a fixed 0.3 pu of I2 to find the faulted section. IEEE 2800
+  itself requires I2 injection. What remains specific to Taylor's line is the set-based design with a separation guarantee.
+- Learned detection of the auxiliary signal itself, and a measured "how small can the signal be in practice" curve: not found. **Narrowed 30 Sep
+  2026:** Mohammadhassani et al. 2021 (#34) learn direction from an injected harmonic signal with an SVM, trained on two bolted faults.
 - Latency of auxiliary-signal detectors on embedded hardware: not found.
 - Measured drift of the incremental characteristic under inverter control modes: named as an open assumption in #5, not measured.
 - Whether the auxiliary signal *harms* the conventional distance element: not found, and our own preliminary result suggests it does.
