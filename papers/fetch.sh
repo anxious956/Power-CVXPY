@@ -56,12 +56,25 @@ echo "Not publicly downloadable - these two are held in papers/ but this script 
 echo "Both are IEEE, paywalled; get them through the NJIT library (or ask Prof. Taylor):"
 echo "  - Taylor & Dominguez-Garcia, 'Active Fault Detection in Static Systems',"
 echo "      IEEE Trans. Automatic Control 70(8):5523-5529, 2025."
-echo "      DOI 10.1109/TAC.2024.3510612  ->  Taylor_2025_Active_Fault_Detection_Static_Systems.pdf"
+echo "      DOI 10.1109/TAC.2024.3510612  ->  library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf"
 echo "  - Baeckeland, Yang & Seo, 'A unified model of current-limiting grid-forming inverters"
 echo "      for large-signal analysis', IEEE Trans. Power Systems 41(1):198-213, 2026."
-echo "      DOI 10.1109/TPWRS.2025.3587224  ->  Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf"
+echo "      DOI 10.1109/TPWRS.2025.3587224  ->  library/Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf"
 
 echo
+# K. Direction and fault type at inverter buses (added 29 Sep 2026). The first two are over the repo's
+# 5 MB limit and are listed in .gitignore; the rest of section K's held files are committed.
+dl https://pure.tudelft.nl/ws/portalfiles/portal/146470145/A_Control_Method_for_Converter_Interfaced_Sources_to_Improve_Operation_of_Directional_Protection_Elements.pdf "2023_Yang_Control_Method_Directional_Protection_Elements.pdf"
+dl https://www.osti.gov/servlets/purl/1595917 "Sandia_2020_IBR_Negative_Sequence_Injection_SAND2020-0265.pdf"
+dl https://www.pes-psrc.org/kb/report/109.pdf "2020_PES_TR81_Protection_Challenges_IBR_Transmission.pdf"
+sel 137350 "2022_SEL_Line_Current_Differential_IBR.pdf"
+dl https://www.ipstconf.org/papers/Proc_IPST2023/23IPST020.pdf "2023_IEEE2800_Benefits_Transmission_Line_Protection_IPST.pdf"
+dl https://www.osti.gov/servlets/purl/2377006 "2024_PNNL_IBR_Negative_Sequence_Current_Review.pdf"
+dl https://web.mit.edu/braatzgroup/input_design_for_guaranteed_fault_diagnosis_using_zonotopes.pdf "2014_Scott_Input_Design_Guaranteed_Fault_Diagnosis_Zonotopes.pdf"
+dl https://web.mit.edu/braatzgroup/Raimondo_Automatica_2016.pdf "2016_Raimondo_Closed_Loop_Input_Design_Guaranteed_Fault_Diagnosis.pdf"
+dl https://par.nsf.gov/servlets/purl/10283128 "2021_Directionality_SVM_Synthetic_Harmonic_Injection.pdf"
+dl "https://esic.wsu.edu/documents/2023/10/western-protective-relay-conference-2021-transmission-line-protection-for-systems-with-inverter-based-resources.pdf/" "2021_SEL_Line_Protection_IBR_Solutions_WPRC.pdf"
+
 echo "Still missing, see papers/README.md section F:"
 echo "  - Campbell & Nikoukhah, 'Auxiliary Signal Design for Failure Detection', Princeton UP 2004"
 echo "  - Baeckeland et al. 2022, distance protection of grids dominated by grid-forming inverters"

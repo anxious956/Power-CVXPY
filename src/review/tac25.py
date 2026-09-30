@@ -2,7 +2,7 @@
 
     J. A. Taylor and A. D. Dominguez-Garcia, "Active fault detection in static systems",
     IEEE Trans. Automatic Control 70(8):5523-5529, 2025.  DOI 10.1109/TAC.2024.3510612
-    (papers/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf)
+    (papers/library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf, a library copy kept out of git; DOI 10.1109/TAC.2024.3510612)
 
 referred to below as TAC25. This supersedes the 2023 conference formulation that
 src/aux_model.py and src/aux_signal_toy.py implement. The differences that matter to this project
