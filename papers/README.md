@@ -1,23 +1,25 @@
 # Reading list: auxiliary-signal fault detection in inverter-dominated grids
 
-> The 36 PDFs are committed here so the team has one place to read from. Most are
-> open-access author copies: arXiv preprints, a US Department of Energy national
-> laboratory report, and six conference papers and technical reports that Schweitzer
-> Engineering Laboratories posts free on selinc.com. **Two are not open access** — the
-> Taylor & Domínguez-García TAC paper (#1) and the Baeckeland TPWRS paper (#20) are
-> paywalled IEEE journal articles, held here as personal copies obtained through the
-> library; do not redistribute them. Every entry below carries its original link, and
-> `bash papers/fetch.sh` re-downloads everything it legally can from source.
+> 34 PDFs are committed here so the team has one place to read from. All of them are
+> open access: arXiv preprints, US Department of Energy national laboratory reports,
+> conference papers and technical reports that Schweitzer Engineering Laboratories posts
+> free on selinc.com, and journal articles under Creative Commons licences. **Paywalled
+> papers are not in git**, because the repository is public. That covers the Taylor &
+> Domínguez-García TAC paper (#1), the Baeckeland TPWRS paper (#20) and eight in section K.
+> Personal library copies (NJIT) sit in `papers/library/`, which git ignores; do not
+> redistribute them. #1 and #20 were committed until 30 Sep 2026 and remain in the history.
+> Every entry below carries its original link, and `bash papers/fetch.sh` re-downloads
+> everything it legally can from source.
 
 Senior design, advisor (proposed) Prof. Joshua A. Taylor, NJIT ECE.
 Built by walking the reference lists of Taylor's own papers, so the set covers what he
-builds on, not only what cites him. Last updated 30 Sep 2026: 36 papers held, 8 known gaps (section F) and the papers to fetch in section K.
+builds on, not only what cites him. Last updated 30 Sep 2026: 46 papers held (34 in git, 10 paywalled in `papers/library/`, 2 large open-access ones fetched by `fetch.sh`), 8 known gaps (section F) and the papers to fetch in section K.
 
 ## A. Taylor's own line — read these first, in this order
 
 | # | File | What it is | Why it matters to us |
 |---|------|------------|----------------------|
-| 1 | `Taylor_2025_Active_Fault_Detection_Static_Systems.pdf` | **The theoretical parent of the whole line.** Auxiliary-signal fault detection in static linear systems with quadratic constraints: a general design problem with operational constraints and both additive and multiplicative noise, relaxed and dualised into a semidefinite bilinear program. In the special case of additive uncertainty and no constraints it gives an *analytical lower bound* on the magnitude an auxiliary signal must have to guarantee detection. Worked example is distance protection with negative-sequence current. | Cited as [12] in the Geometry paper; the 2023 conference paper (#3) is its short version. This is the reference for a corrected design-tool formulation — see [`notes/F_taylor_tac_and_gfm_model.md`](notes/F_taylor_tac_and_gfm_model.md). IEEE TAC 70(8):5523–5529, 2025, DOI [10.1109/TAC.2024.3510612](https://doi.org/10.1109/TAC.2024.3510612). **Paywalled.** |
+| 1 | `library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf` (not in git) | **The theoretical parent of the whole line.** Auxiliary-signal fault detection in static linear systems with quadratic constraints: a general design problem with operational constraints and both additive and multiplicative noise, relaxed and dualised into a semidefinite bilinear program. In the special case of additive uncertainty and no constraints it gives an *analytical lower bound* on the magnitude an auxiliary signal must have to guarantee detection. Worked example is distance protection with negative-sequence current. | Cited as [12] in the Geometry paper; the 2023 conference paper (#3) is its short version. This is the reference for a corrected design-tool formulation — see [`notes/F_taylor_tac_and_gfm_model.md`](notes/F_taylor_tac_and_gfm_model.md). IEEE TAC 70(8):5523–5529, 2025, DOI [10.1109/TAC.2024.3510612](https://doi.org/10.1109/TAC.2024.3510612). **Paywalled.** |
 | 2 | `Pirani_Taylor_2022_Optimal_Active_Fault_Detection_Inverter_Grids.pdf` | Single inverter in the dq frame, balanced three-phase faults. Optimal perturbation sequence plus a Multiple Model Kalman Filter to detect the fault. | The relay-side detector we benchmark against. Its own future work: unbalanced faults, multiple converters and SGs. [arXiv 2209.06760](https://arxiv.org/abs/2209.06760) |
 | 3 | `Taylor_2023_Auxiliary_Signal_Based_Distance_Protection_IBR.pdf` | 5-page conference version: the auxiliary-signal design problem for distance relays, reformulated by duality as a bilinear program and solved with the convex-concave procedure. Negative-sequence current as the signal. | The shortest, clearest statement of the whole idea. **Read this before the long papers.** [arXiv 2311.10880](https://arxiv.org/abs/2311.10880) |
 | 4 | `Taylor_2025_Geometry_of_Distance_Protection.pdf` | Uncertainty aggregated by Minkowski sum, sets as zonotopes, signal designed via Farkas' lemma, bilinear program solved by ADMM. Worked example on a 14-bus system in CVXPY + Clarabel. | The design we reimplemented. Sections V and VI are the core. [arXiv 2510.04379](https://arxiv.org/abs/2510.04379) |
@@ -56,7 +58,7 @@ builds on, not only what cites him. Last updated 30 Sep 2026: 36 papers held, 8 
 | 17 | `2026_Simulation_Dataset_Faults_Events_ML_Power_Systems.pdf` | Simulated faults **and non-fault events** for ML. [arXiv 2608.19777](https://arxiv.org/abs/2608.19777) |
 | 18 | `2025_Benchmarking_ML_Fault_Classification_Localization_Protection.pdf` | Benchmark of ML models for fault classification and localization. [arXiv 2510.00831](https://arxiv.org/abs/2510.00831) |
 | 19 | `2026_Latency_Aware_DL_Benchmark_Inverter_Dominated_Grids.pdf` | Latency-aware deep-learning benchmark in inverter-dominated grids. | Directly relevant to the embedded-latency work package. [arXiv 2605.17256](https://arxiv.org/abs/2605.17256) |
-| 20 | `Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf` | Baeckeland, Yang & Seo. A unified model of grid-forming current limiters that captures several well-known limiter designs and shows their large-signal equivalence through a single *limiter angle*. Validated numerically, analytically, in EMT and on hardware. | **This is the source of the IEEE 14-bus grid-forming model that WP2 needs** — the Simulink system with five grid-forming inverters and current limiters that Taylor's 2026 reachability paper (#6) runs on. Getting the model itself is question 1 for the advisor in [`docs/PLAN.md`](../docs/PLAN.md). The limiter angle is also the natural parameter for the "limiter type as an uncertainty dimension" extension in WP1. See [`notes/F_taylor_tac_and_gfm_model.md`](notes/F_taylor_tac_and_gfm_model.md). IEEE TPWRS 41(1):198–213, 2026, DOI [10.1109/TPWRS.2025.3587224](https://doi.org/10.1109/TPWRS.2025.3587224). **Paywalled.** |
+| 20 | `library/Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf` (not in git) | Baeckeland, Yang & Seo. A unified model of grid-forming current limiters that captures several well-known limiter designs and shows their large-signal equivalence through a single *limiter angle*. Validated numerically, analytically, in EMT and on hardware. | **This is the source of the IEEE 14-bus grid-forming model that WP2 needs** — the Simulink system with five grid-forming inverters and current limiters that Taylor's 2026 reachability paper (#6) runs on. Getting the model itself is question 1 for the advisor in [`docs/PLAN.md`](../docs/PLAN.md). The limiter angle is also the natural parameter for the "limiter type as an uncertainty dimension" extension in WP1. See [`notes/F_taylor_tac_and_gfm_model.md`](notes/F_taylor_tac_and_gfm_model.md). IEEE TPWRS 41(1):198–213, 2026, DOI [10.1109/TPWRS.2025.3587224](https://doi.org/10.1109/TPWRS.2025.3587224). **Paywalled.** |
 
 Also referenced, not papers: NREL PyPSCAD open grid-forming and grid-following models
 (github.com/NREL/PyPSCAD), IRTSD IBR-rich transmission datakit (TechRxiv).

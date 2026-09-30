@@ -56,10 +56,10 @@ echo "Not publicly downloadable - these two are held in papers/ but this script 
 echo "Both are IEEE, paywalled; get them through the NJIT library (or ask Prof. Taylor):"
 echo "  - Taylor & Dominguez-Garcia, 'Active Fault Detection in Static Systems',"
 echo "      IEEE Trans. Automatic Control 70(8):5523-5529, 2025."
-echo "      DOI 10.1109/TAC.2024.3510612  ->  Taylor_2025_Active_Fault_Detection_Static_Systems.pdf"
+echo "      DOI 10.1109/TAC.2024.3510612  ->  library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf"
 echo "  - Baeckeland, Yang & Seo, 'A unified model of current-limiting grid-forming inverters"
 echo "      for large-signal analysis', IEEE Trans. Power Systems 41(1):198-213, 2026."
-echo "      DOI 10.1109/TPWRS.2025.3587224  ->  Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf"
+echo "      DOI 10.1109/TPWRS.2025.3587224  ->  library/Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf"
 
 echo
 # K. Direction and fault type at inverter buses (added 29 Sep 2026). The first two are over the repo's
