@@ -22,7 +22,13 @@ without delta, with |delta| <= 0.4 pu (what fits the inverter at a design angle)
 current). SCALE = 1 is b1_delta_screen.json itself (the wrapper is then the identity). The hypothesis is supported
 if the gain from delta (the 0.4 and 1.2 shares minus the share without delta) grows with SCALE.
 
+COARSE  --coarse runs a quick version for a first look: one R_f per in-zone band, out-of-zone R_f every 2 ohm,
+|delta| 0.4 and 1.2 pu at 4 angles, and SCALE 1 recomputed on the same grid (it is not b1_delta_screen.json's).
+The coarse R_f grid makes everything look more separable, and 4 angles make delta look weaker, at every SCALE
+alike, so only the trend with SCALE is read from it.
+
     python src/review/b1_long_lines.py [2 3] [cigre_R1 ...]   -> results/cigremv/b1_long_lines.json
+    python src/review/b1_long_lines.py --coarse               -> results/cigremv/b1_long_lines_coarse.json
 """
 import os, sys, json, time
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -93,15 +99,23 @@ def headline(r):
                 delta_le_0p4=f(lambda c: c["share_le_0p4"]), delta_le_1p2=f(lambda c: c["share_le_1p2"]))
 
 
+COARSE = "--coarse" in sys.argv
+if COARSE:                                       # module level, so the worker processes see the same grid
+    b1.RF_IN = {"<5": (2.0,), "5-15": (8.5,), "15-40": (27.5,), ">40": (42.5,)}
+    b1.RF_OUT = np.arange(0.0, 60.001, 2.0)
+    b1.MAGS = (0.4, 1.2)
+    b1.ANGS = np.radians(np.arange(0, 360, 90))
+    OUT = OUT.replace(".json", "_coarse.json")
+
 if __name__ == "__main__":
     import warnings
     warnings.filterwarnings("ignore", category=RuntimeWarning)
-    scales = [float(a) for a in sys.argv[1:] if a.replace(".", "", 1).isdigit()] or list(SCALES)
+    scales = [float(a) for a in sys.argv[1:] if a.replace(".", "", 1).isdigit()] or ([1.0] if COARSE else []) + list(SCALES)
     names = [a for a in sys.argv[1:] if a in b1.RELAYS] or list(RELAY_ORDER)
     L, G = b1.grid_data()
     base = json.load(open(b1.OUT, encoding="utf-8"))["relays"]
     out = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
-    out.update(script="b1_long_lines.py", commit=cm.git_commit(), eps_headline=b1.EPS_HEAD,
+    out.update(script="b1_long_lines.py" + (" --coarse" if COARSE else ""), commit=cm.git_commit(), eps_headline=b1.EPS_HEAD,
                delta_magnitudes_pu=list(b1.MAGS),
                note="scale multiplies Z1 and Z0 of the protected line and the lines beyond its remote bus; scale 1 is "
                     "b1_delta_screen.json. The |delta| grid stops at 1.2 pu, so a need above it reads as none")
@@ -110,7 +124,9 @@ if __name__ == "__main__":
         cfg = real_zone.CONFIGS[n]
         _SCALE["lines"] = (cfg["line"],) + tuple(cfg["beyond"])
         z1 = abs(_build(G, ub=b1.UB, grounding=b1.groundings(L)[0], open_ends=cfg.get("open_line_ends"))[1][cfg["line"]][2])
-        res.setdefault(n, {})["1"] = dict(z1_line_ohm=z1, gap_85_to_remote_ohm=0.15 * z1, **headline(base[n]))
+        if not COARSE:
+            res.setdefault(n, {})["1"] = dict(z1_line_ohm=z1, gap_85_to_remote_ohm=0.15 * z1, **headline(base[n]))
+        res.setdefault(n, {})
         for k in scales:
             t0 = time.time()
             _SCALE["k"] = k
@@ -130,8 +146,8 @@ if __name__ == "__main__":
             h = res[n][f"{k:g}"]
             print(f"[{n}] scale {k:g}: |Z1L| {k * z1:.1f} ohm, pre-fault |V| {min(q['v_min_pu'] for q in pre):.3f}-"
                   f"{max(q['v_max_pu'] for q in pre):.3f} pu; separable {h['without_delta']:.1f} % without delta, "
-                  f"{h['delta_le_0p4']:.1f} % with <= 0.4 pu, {h['delta_le_1p2']:.1f} % with <= 1.2 pu "
-                  f"(scale 1: {res[n]['1']['without_delta']:.1f} / {res[n]['1']['delta_le_0p4']:.1f} / {res[n]['1']['delta_le_1p2']:.1f}); "
+                  f"{h['delta_le_0p4']:.1f} % with <= 0.4 pu (+{h['delta_le_0p4'] - h['without_delta']:.1f}), "
+                  f"{h['delta_le_1p2']:.1f} % with <= 1.2 pu (+{h['delta_le_1p2'] - h['without_delta']:.1f}); "
                   f"unconverged {r['unconverged_in']}/{r['n_in']} in, {r['unconverged_out']}/{r['n_out']} out", flush=True)
             json.dump(out, open(OUT, "w", encoding="utf-8"), indent=1)
     print("saved", OUT)
