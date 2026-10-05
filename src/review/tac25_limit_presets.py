@@ -12,7 +12,8 @@ COLUMNS  (tac25_design.min_delta, global polar solve, linear source set as in se
   phase         every phase current <= I_max, the exact set for a per-phase limiter
   tac25         TAC25's (1b) as written, ||i+|| <= I_max
 and for every feasible answer the smallest per-phase limit at which it can be injected on top of every
-modelled i+ (tac25_design.injectable_limit).
+modelled i+ (tac25_design.injectable_limit), and the dense continuous (m, R_f) re-check (H13): an answer
+that fails it separates the design points but not the faults between them, so it is no design.
 
     python src/review/tac25_limit_presets.py [--quick]   -> results/review_wp1/tac25_limit_presets.json
 """
@@ -43,9 +44,15 @@ def solve(job):
         r = td.min_delta(ms, limit_inside=False, limit_design=True, **kw)
     else:
         r = td.min_delta(ms, limit_inside=True, limit_design=False, r_max=2.0, limit_rule=col, **kw)
+    cont = None
+    if r["feasible"] and col != "h5_outer":
+        lim = col not in ("none",)
+        cont = td.validate_continuous(ms.p, "linear", r["delta"], ms.eps, i_max=I_MAX if lim else None,
+                                      limit_inside=lim, limit_rule=col if lim else "sum")
+        cont = dict(holds=cont["holds"], n_unseparated=cont["n_unseparated"], n_checked=cont["n_checked"])
     return preset, col, dict(feasible=r["feasible"], abs_delta=r["abs_delta"], angle_deg=r["angle_deg"],
                              injectable_limit=r.get("injectable_limit"), i_plus_max=r["i_plus_max"],
-                             lps=r["lps"], runtime_s=time.time() - t0)
+                             continuous_check=cont, lps=r["lps"], runtime_s=time.time() - t0)
 
 
 if __name__ == "__main__":
@@ -62,7 +69,9 @@ if __name__ == "__main__":
             res[pr][col] = r
             d = f"{r['abs_delta']:.2f} pu" if r["feasible"] else "none"
             inj = f"{r['injectable_limit']:.3f}" if r["feasible"] else "-"
-            print(f"{pr:14s} {col:10s} {d:>8}  inject needs {inj}  [{r['runtime_s']:.0f}s]", flush=True)
+            c = r["continuous_check"]
+            cs = "" if c is None else ("  cont: ok" if c["holds"] else f"  cont: {c['n_unseparated']}/{c['n_checked']} FAIL")
+            print(f"{pr:14s} {col:10s} {d:>8}  inject needs {inj}{cs}  [{r['runtime_s']:.0f}s]", flush=True)
     out = dict(script="tac25_limit_presets.py", commit=cm.git_commit(), mode="linear", i_max=I_MAX, r_step=r_step,
                n_ang=n_ang, columns=list(COLUMNS), presets=res, runtime_s=time.time() - t0)
     json.dump(out, open(OUT, "w", encoding="utf-8"), indent=1)
