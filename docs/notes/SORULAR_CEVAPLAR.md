@@ -1211,6 +1211,53 @@ Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
 ### Araştırmaya etkisi
 - Bu olay sinyal tasarımıyla çözülemez: devreden çıkan invertör sinyal de basamaz. Sürekli basılan bir "pilot" sinyal, kaybolunca invertörün çıktığını gösterebilirdi. Ama bu bir tür haberleşme olur ve sürekli negatif bileşen basmak güç kalitesi açısından uygun bulunmadı.
 - Pratik çözüm: invertör durum sinyaliyle röleyi bloke etmek ya da ayarını değiştirmek. Bu bir kanal ister. Erişim sonucu (B1) da aynı yere çıkmıştı: invertörlü dağıtım fiderinde güvenilir koruma haberleşme istiyor.
-- Böylece bu veride sinyal enjeksiyonunun ne erişimde, ne yönde, ne de arıza/olay ayrımında açık bir değeri kalmadı. Açık kalan tek durum I2'yi bastıran invertörler; o da bu veride yok (REVIEW.md §7 satır 42, 44, 45).
+- Böylece bu veride sinyal enjeksiyonunun ne erişimde, ne yönde, ne de arıza/olay ayrımında açık bir değeri kalmadı. Açık kalan tek durum I2'yi bastıran invertörler; o da bu veride yok (REVIEW.md §7 satır 42, 44, 45). Modelde test ettik: Soru 32.
 
 *Kaynak: `results/CIGREMV.md` §3 ("Telling a fault from an inverter disconnecting"); `results/cigremv/inverter_trip_supervision.json`; `src/review/inverter_trip_supervision.py`; REVIEW.md §7 satır 45.*
+
+---
+
+## 32. Negatif bileşen akımını bastıran invertörlerde yön bozuluyor mu, bir sinyal düzeltiyor mu?
+
+**Kısa cevap:** Bozuluyor. Küçük bir sinyal de düzeltiyor, ama yalnızca arızadan sonra ölçülen V2'ye göre ayarlanan türü. Önceden tasarlanıp invertörün kendi çerçevesinde sabitlenen bir sinyal düzeltmiyor. Düzelten davranış, IEEE 2800'ün invertörlerden zaten istediği şey: I2'yi V2'nin 90° önünde basmak. Ek olarak küçük V2'de yeterli kazanç gerekiyor; bu standardın açık bıraktığı bir ayar.
+
+### Neden bu test
+- Yön sonucumuz (Soru 29–30) bir şeye dayanıyordu: veri setindeki invertörler arızada negatif bileşen akımı basıyor, ΔY2 elemanı da bunu ölçüyor.
+- Eski tip ("coupled control") invertörler I2 basmaz, yani I2 = 0. Veride böyle invertör yok. Bu yüzden testi B1'in statik modelinde yaptık: aynı şebeke, yük durumları, topraklama ve arıza dirençleri.
+- Taylor'ın sinyali için bu veride kalan tek boşluk buydu (Soru 31'in sonu).
+
+### Ne çıktı (`i2_suppressed_direction.py`, dengesiz arızalar, "ΔY2 devredeyse ΔY2, değilse ΔY1" kuralı)
+
+| İnvertör davranışı | R1 iç arıza "ileri" | R3 iç arıza "ileri" | R4 arkadaki arıza "ileri" (hata) |
+|---|---|---|---|
+| Kayıttaki gibi (kontrol) | %95,5 | %91,4 | %2,4 |
+| I2 bastırılmış | **%74,2** | **%51,9** | **%32,1** |
+| Bastırılmış + V1'e göre sabit sinyal (en iyi genlik ve açı) | %90,1 | %68,0 | %9,9 |
+| Bastırılmış + V2'nin önünde 0,1 pu (küçük V2'de k = 5) | %99,6 | %99,7 | %0,8 |
+| IEEE 2800, k = 6 | %99,7 | %100 | %0 |
+| IEEE 2800, k = 2 | %94,2 | %87,4 | %3,2 |
+
+- **Bastırınca yön bozuluyor.**
+  - R1 ve R3'te iç arızaların bir kısmı kaçıyor, çünkü ΔY2 devreye giremiyor (R3'te hiç).
+  - R4'te arkadaki arızaların üçte biri "ileri" sanılıyor; bu bir güvenlik hatası.
+  - R2 etkilenmiyor.
+- **V1'e göre sabit sinyal düzeltmiyor.**
+  - Her röle için 48 genlik/açı denemesinin en iyisini sonradan seçtik; hiçbiri yetmiyor.
+  - Sinyal büyüdükçe kötüleşiyor. R2 ve R4'te 0,1 pu ve üstü, arkadaki arızaların %30–46'sını "ileri" yapıyor.
+  - Sebep: arızada V2'nin V1'e göre açısı arıza tipine ve dirence göre değişiyor. V1'e göre sabitlenmiş bir akım, ΔV2'ye karşı her arızada başka bir açıda kalıyor.
+- **V2'ye göre ayarlanan sinyal düzeltiyor.**
+  - Sinyalin büyüklüğü 0,1 pu yetiyor.
+  - Belirleyici olan, V2'nin en küçük olduğu yüksek dirençli arızalardaki kazanç. Kazanç 2'de kalırsa sonuç IEEE k = 2 satırıyla aynı oluyor, yani yarım çözüm.
+  - Kazançsız, her V2'de sabit 0,1 pu basan sürüm V2 sıfıra yaklaşınca tanımsız. Model R4'teki arızaların beşte birinde çözülemedi, o yüzden o satırı kullanmadık.
+
+### Araştırmaya etkisi
+- **Olumlu taraf:** sinyal fikrinin bu veride işe yaradığı ilk yer burası. Sinyal gerekiyor ve küçük bir sinyal yetiyor.
+- **Ama gereken sinyal kapalı çevrim.** Arızadan sonra ölçülen V2'ye göre ayarlanıyor. Bu, IEEE 2800'ün zaten istediği davranış; gereken kazanç (küçük V2'de yaklaşık 5) ise bir ayar. Taylor'ın tasarımının açık çevrim biçimi, yani önceden seçilip invertörün çerçevesinde sabitlenen δ, işe yaramıyor.
+- **Pratik çözüm:** bir şebeke kodu gereksinimi ("I2'yi V2'nin önünde, yeterli kazançla bas"), tasarlanmış bir δ değil.
+- **Taylor'a sorulacak soru:** Tasarım çerçevesi V2'ye göre ayarlanan, yani geri beslemeli bir sinyal üretebilir mi? Yoksa bu durumda doğru araç şebeke kodu mu?
+- **Sınırlar:**
+  - Statik model; EMT'de denenmedi.
+  - Sinyal akım sınırlayıcıdan sonra eklendi; 0,1 pu sığıyor.
+  - Sadece ilk çevrimdeki fazör elemanları test edildi.
+
+*Kaynak: `results/CIGREMV.md` §3 ("Inverters that suppress negative-sequence current"); `results/cigremv/i2_suppressed_direction.json`; `src/review/i2_suppressed_direction.py`; REVIEW.md §7 satır 46.*

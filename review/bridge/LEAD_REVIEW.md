@@ -135,6 +135,14 @@ direction instead. A passive element (Opoku et al. 2025) already covers unbalanc
 buses, which leaves three-phase faults, I2-suppressing inverters and the inverter trip
 (results/CIGREMV.md §3; REVIEW.md §7 row 44; docs/notes/SORULAR_CEVAPLAR.md Q27, Q29).
 
+**Note (5 Oct 2026).** All three were then tested.
+- Three-phase direction needs no δ (row 44).
+- The inverter trip cannot be helped by δ, because the tripping inverter is the only source (row 45).
+- With I2-suppressing inverters, direction does need a negative-sequence current. In the study model a δ
+  fixed in advance in the inverter's frame does not repair it. A 0.1 pu current referenced to the measured
+  V2 does, with enough gain at small V2, which is IEEE 2800's behaviour (row 46; Q32).
+- So on this grid there is no task left for an open-loop designed δ.
+
 Standing constraint: no claim about δ in EMT is possible; no record contains an injection.
 
 ## E. What to ask Prof. Taylor

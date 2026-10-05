@@ -251,18 +251,97 @@ What is left:
   inverter-trip failure mode above is not fixed by any direction element.
 - **Transformer energisation.** HV inrush events are called forward at many buses. Relays block these with a
   second-harmonic restraint, which is not modelled here.
-- **Inverters that suppress I2.** See the caveat below.
+- **Inverters that suppress I2.** See the caveat below; tested in the model in the next section.
 
 **One caveat decides how far this carries.** The ΔY2 element works because the recorded inverters do respond in
 negative sequence. For forward faults at the inverter-bus relays |ΔY2| is about 9–10 pu. That is consistent with
 the inverters' low-u2 negative-sequence admittance (about 11 pu) rather than with the load alone. With an inverter
 that suppresses I2, the coupled-control case of PES-TR81 and Haddadi et al., there would be little to measure.
+The next section tests that case in the model.
 
 **For the project:**
 - On this data, direction at the inverter buses does not need an injected signal.
 - What an injection could still be argued for is narrow: inverters that suppress I2, and telling a fault from an
   event such as an inverter tripping.
 - The second is a fault-versus-event question, not a direction question.
+- Both are tested in the next two sections.
+
+### Inverters that suppress negative-sequence current (model study)
+
+The passive direction result rests on the recorded inverters' negative-sequence response. Inverters with
+coupled sequence control output balanced current, I2 = 0, and no public EMT record has them, so
+`i2_suppressed_direction.py` (run by `run_i2_suppressed.bat`) tests the case in B1's study model. This is the
+one place on this feeder where the sections above leave room for an injection.
+- **Model:** B1's network, operating points, groundings and R_f grid.
+- **Faults:** LG, LL and LLG.
+  - Forward: on the protected line at 10, 50 and 85 % from the relay.
+  - Reverse: at the relay bus, and 5, 20 and 50 % into each line behind it.
+  - 756 forward and 252–1764 reverse faults per relay.
+- **Elements:** ΔY2 with the ΔY1 fallback as above, on model phasors. The rule scored is the safer one, "ΔY2
+  when enabled, else ΔY1".
+- **Inverter laws:**
+  - The characterised secant y2 (the control).
+  - I2 = 0 at both inverters.
+  - IEEE 2800's "I2 leads V2 by 90°", proportional: I2 = jkV2.
+  - On top of I2 = 0, an injection δ from the relay's own feeder inverter, added after the limiter, in one
+    of two forms:
+    - fixed in the inverter's V1 (PLL) frame: the open-loop form of a δ designed in advance, 0.05–0.4 pu at
+      12 angles;
+    - leading the inverter's V2 by 90°, capped: δ = r·j·V2 / max(|V2|, v_min), so proportional with
+      k = r / v_min below the knee.
+
+Results are in [`cigremv/i2_suppressed_direction.json`](cigremv/i2_suppressed_direction.json). Faults called
+forward:
+
+| inverter law | R1 fwd / rev | R2 fwd / rev | R3 fwd / rev | R4 fwd / rev |
+|---|---|---|---|---|
+| recorded (control) | 95.5 / 0 % | 100 / 0.2 % | 91.4 / 0 % | 100 / 2.4 % |
+| I2 suppressed | **74.2** / 0 % | 100 / 0.8 % | **51.9** / 0 % | 100 / **32.1** % |
+| suppressed + δ fixed in the V1 frame, best of 48 per relay | 90.1 / 0 % | 100 / 0.2 % | 68.0 / 0 % | 100 / 9.9 % |
+| suppressed + 0.1 pu leading V2, k = 5 below 0.02 pu | 99.6 / 0 % | 100 / 0 % | 99.7 / 0 % | 100 / 0.8 % |
+| suppressed + 0.1 pu leading V2, k = 2 below 0.05 pu | 94.2 / 0 % | 100 / 0.2 % | 87.4 / 0 % | 100 / 3.2 % |
+| IEEE 2800, k = 2 | 94.2 / 0 % | 100 / 0.2 % | 87.4 / 0 % | 100 / 3.2 % |
+| IEEE 2800, k = 6 | 99.7 / 0 % | 100 / 0 % | 100 / 0 % | 100 / 0 % |
+
+**Suppressing I2 breaks direction where ΔY2 carried it.**
+- The control is close to the EMT result. It has no reverse errors at R1 and R3 and finds all forward faults
+  at R2 and R4. At R1 and R3 it is somewhat pessimistic: 95.5 and 91.4 % forward, where the EMT element
+  found every unbalanced in-zone fault.
+- With I2 = 0, ΔY2 is enabled for 29 % of R1's forward faults and for none of R3's. The ΔY1 fallback then
+  calls 74 % and 52 % forward.
+- At R4, ΔY2 is enabled for only 15 % of reverse faults, and the fallback calls 32 % of them forward. That is
+  a security failure.
+- R2 is unaffected.
+
+**A δ fixed in advance in the inverter's frame does not repair it.**
+- At R1, R3 and R4 no magnitude and angle reaches 99 % forward with at most 1 % reverse. This holds even with
+  the best of 48 chosen per relay after the fact.
+- Larger δ is worse. R1's best forward share is 90.1 % at 0.05 pu and 48.5 % at 0.4 pu.
+- At R2 and R4, δ ≥ 0.1 pu calls 30–46 % of reverse faults forward at its best angle.
+- Why: V2's angle against V1 changes with fault type and R_f, so a current fixed in the V1 frame lands at a
+  different angle against ΔV2 in each fault.
+
+**A negative-sequence current referenced to V2 repairs it, if its gain at small V2 is high enough.**
+- IEEE 2800 with k = 6 gives ≥ 99.7 % forward and no reverse errors at all four relays.
+- The current can be small. Capped at 0.1 pu with k = 5 below 0.02 pu, it gives ≥ 99.6 % forward and ≤ 0.8 %
+  reverse.
+- What decides is the gain where V2 is smallest, the high-R_f faults. With the knee at 0.05 pu (k = 2), the
+  capped law gives exactly the IEEE k = 2 row: R1 94 %, R3 87 %, R4 3.2 % reverse.
+- A fixed magnitude with no knee is not defined as V2 → 0. At R4 the model fails to converge for 22 % of
+  faults at 0.1 pu and 67 % at 0.4 pu. These are the faults with the smallest |V2| at the relay: median
+  0.001–0.02 pu, against 0.05–0.16 pu for the converged ones. Those rows are in the JSON but not used.
+
+**For the project:**
+- This is the case left open above, and the model answers it. With inverters that suppress I2, direction at
+  the inverter buses does need a negative-sequence current, and a small one (0.1 pu) is enough.
+- The current that works is closed-loop: referenced to the V2 measured after the fault, as IEEE 2800 asks
+  (I2 leading V2). The gain it needs at small V2, about 5, is a setting the standard leaves open.
+- A δ designed in advance and fixed in the inverter's frame, the open-loop form of the auxiliary-signal
+  design, does not work, and making it larger makes it worse.
+- The practical remedy is therefore a grid-code requirement on the inverter, not a designed δ.
+
+Limits: static model, no EMT check; first-cycle phasor elements only; δ added after the limiter (0.1 pu fits
+at a design angle, above); one injecting inverter for the δ laws.
 
 ### Telling a fault from an inverter disconnecting
 
@@ -453,8 +532,11 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
   first screening. It does not (B1, §3): in the study model, δ within the inverter's whole current adds 8–13
   points of separable in-zone faults, and the share it can afford at a design angle, 0.4 pu, adds 2–4. No
   record here carries an injection (ADAPTGRID.md §5). For direction, passive superimposed-quantity
-  elements already settle the inverter buses in the first cycle (§3). An injection could add value only for
-  inverters that suppress I2, and for telling a fault from an event such as an inverter tripping.
+  elements already settle the inverter buses in the first cycle (§3). With inverters that suppress I2 the
+  model says direction does need a negative-sequence current. The one that works is referenced to the
+  measured V2, as IEEE 2800 asks, with enough gain at small V2; a δ fixed in advance in the inverter's frame does not
+  (§3). An injection cannot tell a fault from the inverter tripping, because the tripping inverter is the
+  only source on its feeder (§3).
 
 ## 5. Limits
 
