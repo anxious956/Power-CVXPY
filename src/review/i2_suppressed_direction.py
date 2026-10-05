@@ -18,7 +18,11 @@ LAWS for the inverters' negative-sequence current:
   IEEE 2800 k     I2 = j k V2 (leads V2 by 90 deg), k = 2, 6: the proportional rule of the standard
   fixed delta     suppressed, plus a fixed-magnitude delta from the relay's own feeder inverter, in its V1 frame
                   (what a PLL-referenced controller can do), |delta| = 0.05-0.4 pu, 12 angles
-  delta lead V2   suppressed, plus a fixed-magnitude delta leading the inverter's V2 by 90 deg (Yang/Popov style)
+  delta lead V2   suppressed, plus a fixed-magnitude delta leading the inverter's V2 by 90 deg (Yang/Popov style).
+                  Not defined as V2 -> 0: the fault solution does not converge in up to a fifth of the faults, those
+                  with the smallest V2, so its rates (over converged faults) are optimistic
+  capped V2       the same, continuous: delta = r j V2 / max(|V2|, vmin), proportional (k = r / vmin) below vmin and
+                  r above it; converges everywhere
 The injection is added after the limiter (headroom is not checked here; 0.4 pu fits at a design angle in most
 faults, results/CIGREMV.md §3).
 ELEMENTS at the relay (model phasors, pre-fault reference):
@@ -46,6 +50,7 @@ M_FWD = (0.10, 0.50, 0.85)
 BEHIND_AT = (0.05, 0.20, 0.50)
 RF = tuple(r for rs in b1.RF_IN.values() for r in rs)
 R_DELTA = (0.05, 0.1, 0.2, 0.4)
+V2_MIN = (0.02, 0.05)                                 # pu, the capped law's knee
 ANGS = tuple(range(0, 360, 30))
 PHI, I2_I1_MIN, DV1_MIN = 45.0, 0.1, 0.05
 WORKERS = 10
@@ -67,6 +72,8 @@ def _currents_with_law(ibrs, V1, V2, J1, pre=None):
         o2[k] += _LAW["r"] * np.exp(1j * np.radians(_LAW["ang"])) * (vt1 / abs(vt1)) * g["i_base"]
     elif _LAW["kind"] == "v2lead" and abs(V2[k]) > 1e-6 * g["v_base"]:
         o2[k] += _LAW["r"] * 1j * (V2[k] / abs(V2[k])) * g["i_base"]
+    elif _LAW["kind"] == "v2cap":                     # ang carries vmin (pu)
+        o2[k] += _LAW["r"] * 1j * V2[k] / max(abs(V2[k]), _LAW["ang"] * g["v_base"]) * g["i_base"]
     return o1, o2
 
 
@@ -78,6 +85,7 @@ def laws():
            ("IEEE 2800 k=2", -2j, None, 0, 0), ("IEEE 2800 k=6", -6j, None, 0, 0)]
     out += [(f"fixed delta {r} pu @ {a} deg (V1 frame)", 0, "v1", r, a) for r in R_DELTA for a in ANGS]
     out += [(f"delta {r} pu leading V2 by 90 deg", 0, "v2lead", r, 0) for r in R_DELTA]
+    out += [(f"capped {r} pu leading V2, k={r / vm:g} below {vm} pu", 0, "v2cap", r, vm) for r in R_DELTA for vm in V2_MIN]
     return out
 
 
@@ -161,7 +169,9 @@ def screen(name, L, G, workers=WORKERS):
             out = pool.map(_eval, [(s, law) for s in scn], chunksize=max(1, len(scn) // (8 * workers)))
             P = np.array([o[0] for o in out]); ok = np.array([o[1] for o in out])
             dec, en2, margin = decide(P)
-            r = dict(converged=float(ok.mean()), dY2_enabled_forward=float(en2[fwd & ok].mean()), dY2_enabled_reverse=float(en2[~fwd & ok].mean()))
+            v2 = np.abs(P[:, 1]) / (b1.UB / np.sqrt(3))
+            r = dict(converged=float(ok.mean()), dY2_enabled_forward=float(en2[fwd & ok].mean()), dY2_enabled_reverse=float(en2[~fwd & ok].mean()),
+                     relay_v2_pu_median=dict(converged=float(np.median(v2[ok])), not_converged=float(np.median(v2[~ok])) if (~ok).any() else None))
             for el, d in dec.items():
                 r[el] = dict(forward_called_forward=float(d[fwd & ok].mean()), reverse_called_forward=float(d[~fwd & ok].mean()),
                              by_type={ft: dict(fwd=float(d[fwd & ok & (np.array([s["ft"] for s in scn]) == ft)].mean()),
@@ -179,7 +189,11 @@ def screen(name, L, G, workers=WORKERS):
                                                         1 - res[f"fixed delta {rr} pu @ {a} deg (V1 frame)"]["dY2"]["reverse_called_forward"]))
         c = res[f"fixed delta {rr} pu @ {best} deg (V1 frame)"]; v = res[f"delta {rr} pu leading V2 by 90 deg"]
         print(f"   delta {rr:4} pu: best V1-frame angle {best:3d} -> dY2 fwd {c['dY2']['forward_called_forward']:.3f} rev {c['dY2']['reverse_called_forward']:.3f}"
-              f" | lead V2: dY2 fwd {v['dY2']['forward_called_forward']:.3f} rev {v['dY2']['reverse_called_forward']:.3f}", flush=True)
+              f" | lead V2: dY2 fwd {v['dY2']['forward_called_forward']:.3f} rev {v['dY2']['reverse_called_forward']:.3f} (converged {v['converged']:.3f})", flush=True)
+        for vm in V2_MIN:
+            q = res[f"capped {rr} pu leading V2, k={rr / vm:g} below {vm} pu"]
+            print(f"      capped, k={rr / vm:g} below {vm} pu: combined fwd {q['combined']['forward_called_forward']:.3f} rev {q['combined']['reverse_called_forward']:.3f}"
+                  f" (converged {q['converged']:.3f})", flush=True)
     return dict(relay=name, injector=b1.INJECTOR[name], n_faults=len(scn), n_forward=int(fwd.sum()), places_reverse=[p[2] for p in places], laws=res,
                 runtime_s=time.time() - t0)
 
