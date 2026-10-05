@@ -1261,3 +1261,37 @@ Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
   - Sadece ilk çevrimdeki fazör elemanları test edildi.
 
 *Kaynak: `results/CIGREMV.md` §3 ("Inverters that suppress negative-sequence current"); `results/cigremv/i2_suppressed_direction.json`; `src/review/i2_suppressed_direction.py`; REVIEW.md §7 satır 46.*
+
+---
+
+## 33. Sinyal hiçbir yerde işe yaramadı; sorun veride mi?
+
+**Kısa cevap:** Veride bir hata yok. Sonucu belirleyen şey, verinin temsil ettiği şebeke türü. Kısa hatlı, 20 kV'luk, şebekeyi izleyen (grid-following) invertörlü bir dağıtım fiderinde Taylor'ın yöntemine iş kalmıyor. Bu, yöntemin başka bir şebekede de çalışmayacağı anlamına gelmiyor.
+
+### Verinin hatası değil
+- Bulduğumuz veri sorunlarını düzelttik ya da kontrol ettik:
+  - R1/R3'teki konum etiketi hatası (REVIEW.md §7 satır 41);
+  - arıza öncesi etiket sızıntısı (satır 25).
+- Düzeltmelerden sonra sonuçlar değişmedi.
+
+### Sonucu şebekenin kendisi belirliyor
+- **Erişim:** Hatlar çok kısa. Hattın %85'indeki arıza ile uzak baradaki arıza arasında sadece 0,3–0,6 Ω var. Sinyal ikisini de aynı miktarda kaydırıyor. Bunu Taylor'ın kendi Teorem 1'i de öngörüyor; hangi veriyi kullansak, kısa hatlı bir fiderde aynısı olur.
+- **Yön:** Bu invertörler arızada zaten I2 basıyor (IEEE 2800'ün istediği gibi). O yüzden yön sinyalsiz çözülüyor.
+- **İnvertörün devreden çıkması:** Çıkan invertör sinyal de basamaz. Bu mantıksal bir sonuç, veriye bağlı değil.
+- **I2 bastıran invertörler:** Önceden sabitlenmiş sinyalin işe yaramamasının sebebi de genel: V2'nin açısı arıza tipine göre değişiyor.
+
+### İki şebeke, iki uç
+- TestGrid (110 kV, güçlü şebeke): sınır sinyalsiz zaten ayrılıyor, δ'ya gerek yok.
+- CIGRE MV (20 kV, kısa hatlar, invertörlü): δ gerekiyor ama yetmiyor.
+- Yöntemin yeri büyük ihtimalle ikisinin arası: daha uzun hatlar ve zayıf, invertör ağırlıklı kaynaklar. Şebeke kurucu (grid-forming) invertörlü sistemler de aday.
+
+### Verinin gerçek sınırları
+- Hiçbir kayıtta enjekte edilmiş sinyal yok. Sinyalli sonuçlarımızın hepsi statik modelden; EMT'de doğrulanmadı.
+- Sadece şebekeyi izleyen invertörler var; şebeke kurucu yok.
+- Sadece iki şebeke var; uzun hatlı, invertörlü bir şebeke yok.
+
+### Ne yapmalı
+- Uzun hatlı ya da şebeke kurucu invertörlü bir şebekede, sinyali gerçekten basan EMT simülasyonları.
+- En iyi aday Taylor'ın 14 baralı modeli. Bu yüzden görüşmede hat verisini ya da Simulink modelini istiyoruz.
+
+*Kaynak: `results/CIGREMV.md` §3–§5; `results/ADAPTGRID.md`; REVIEW.md §7 satır 25, 41, 42, 44–46; Soru 26, 31, 32.*
