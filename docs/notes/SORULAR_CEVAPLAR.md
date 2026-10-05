@@ -1180,3 +1180,37 @@ Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı
 - Bir sonraki mantıklı adım, invertörün devreden çıkması için SEL'in PSV50 blok mantığını ya da benzerini verimizde denemek.
 
 *Kaynak: `results/CIGREMV.md` §3 ("A passive directional element at the inverter buses"); `results/cigremv/opoku_direction.json`; `results/cigremv/b1_direction_3ph.json`; `src/review/b1_direction_screen.py`; REVIEW.md §7 satır 44.*
+
+---
+
+## 31. İnvertörün devreden çıkmasını gerçek arızadan ayırabiliyor muyuz?
+
+**Kısa cevap:** Sadece güvenlik payı olmadan. Ayırt eden tek özellik olaydan sonraki akım; aradaki pencere çok dar. Burada sinyal enjeksiyonu da işe yaramaz, çünkü devreden çıkan invertör o fiderdeki tek kaynak. Pratik çözüm, invertörün durumunu rölelere bildiren bir sinyal, yani yine bir haberleşme kanalı.
+
+### Sorun
+- Bara 3'teki invertör devreden çıkınca R2 ve R4'te bütün yön elemanları "ileri arıza" diyor. Bu bir hata değil; olay gerçekten ileri yönde bir değişim:
+  - 12 MW'lık besleme kayboluyor, hattın akış yönü dönüyor.
+  - R2'de gerilim %9–11 düşüyor, akım değişimi iç arızalarla aynı seviyede.
+- R1 ve R3'te kendi baralarındaki invertörün devreden çıkması "geri" görünüyor; orada sorun yok.
+
+### Ne denedik (`inverter_trip_supervision.py`, 20 ms)
+Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
+
+| Ek koşul | R2 iç arıza | R2 invertör açma "ileri" | R4 iç arıza | R4 invertör açma "ileri" |
+|---|---|---|---|---|
+| Yok | 71/72 | 227/227 | 76/76 | 123/227 |
+| Akım ≥ yük akımı (paysız) | 69/72 | **0** | 75/76 | **0** |
+| Akım ≥ 1,2 × yük akımı (standart pay) | 60/72 | 0 | 58/76 | 0 |
+| Sıfır bileşen var | 41/72 | 0 | 36/76 | 0 |
+| SEL PSV50 | 57/72 | 156 | 55/76 | 123 |
+
+- "Yük akımı", invertör devre dışıyken ve yük en yüksekteyken röleden geçen akım. Modelden hesaplandı: 0,229 Imax.
+- İnvertör açmada olaydan sonraki akım en fazla 0,20 Imax, iç arızalarda en az 0,23 Imax. Paysız eşik bu dar pencereye düşüyor. Normalde konan %20 pay yüksek dirençli arızaları kaybettiriyor.
+- Sıfır bileşen kontrolü faz-faz ve üç fazlı arızaları göremiyor. PSV50 bu olay için tasarlanmamış, işe yaramıyor.
+
+### Araştırmaya etkisi
+- Bu olay sinyal tasarımıyla çözülemez: devreden çıkan invertör sinyal de basamaz. Sürekli basılan bir "pilot" sinyal, kaybolunca invertörün çıktığını gösterebilirdi. Ama bu bir tür haberleşme olur ve sürekli negatif bileşen basmak güç kalitesi açısından uygun bulunmadı.
+- Pratik çözüm: invertör durum sinyaliyle röleyi bloke etmek ya da ayarını değiştirmek. Bu bir kanal ister. Erişim sonucu (B1) da aynı yere çıkmıştı: invertörlü dağıtım fiderinde güvenilir koruma haberleşme istiyor.
+- Böylece bu veride sinyal enjeksiyonunun ne erişimde, ne yönde, ne de arıza/olay ayrımında açık bir değeri kalmadı. Açık kalan tek durum I2'yi bastıran invertörler; o da bu veride yok (REVIEW.md §7 satır 42, 44, 45).
+
+*Kaynak: `results/CIGREMV.md` §3 ("Telling a fault from an inverter disconnecting"); `results/cigremv/inverter_trip_supervision.json`; `src/review/inverter_trip_supervision.py`; REVIEW.md §7 satır 45.*

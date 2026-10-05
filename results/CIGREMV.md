@@ -171,7 +171,8 @@ both-ends references work.
    of the engineered model and 273–293 of Hasan's SVM. Losing an inverter's in-feed at the far end of a
    3.9 Ω cable is a real step change at bus 2; nothing in a fault/no-fault label tells the network that it
    is not a fault. A passive negative-sequence directional element calls all 227 such events forward at
-   R2 as well (next section).
+   R2 as well (next section). Only a load-current threshold separates the trip from a fault, and only with no
+   margin ("Telling a fault from an inverter disconnecting" below).
 2. **The directional element is wrong in both directions at the inverter buses.** 32P/32Q calls forward
    6/76 relay-bus and 17/156 lines-behind faults at R1, 7/75 and 9/93 at R3, and calls reverse 5/72 and
    12/85 in-zone faults; at R2 and R4 the same counts are ≤ 1/85, 1/92, 1/72 and 0/76 (TABLES H). The
@@ -262,6 +263,53 @@ that suppresses I2, the coupled-control case of PES-TR81 and Haddadi et al., the
 - What an injection could still be argued for is narrow: inverters that suppress I2, and telling a fault from an
   event such as an inverter tripping.
 - The second is a fault-versus-event question, not a direction question.
+
+### Telling a fault from an inverter disconnecting
+
+**The problem.** The one failure the direction elements leave is the bus-3 inverter tripping. It is a real
+forward step at R2 and R4:
+
+| at the relay, 20 ms | R2 inverter trip | R2 in-zone faults (5th–95th percentile) | R4 inverter trip |
+|---|---|---|---|
+| \|ΔV1\| / nominal | 9–11 % | 2–27 % | 3.5–4.6 % |
+| \|ΔI1\| / In | 0.57–0.74 | 0.15–1.8 | 0.57–0.74 |
+| \|ΔI2\| / In | 0.03–0.16 | 0.04–0.82 | 0.03–0.15 |
+| \|I1\| / IMAX | 0.09–0.20 | lowest 0.227 | 0.09–0.20 (in-zone lowest 0.226) |
+
+**What was tried.** `inverter_trip_supervision.py` adds a supervising condition to the "ΔY2 or ΔY1" direction
+decision. Each condition is set from engineering rules, not from the trip events:
+- **I1 above load:** I_load is the largest relay current with that feeder's inverter offline. It comes from the
+  ibr_study load flow at the simulation with the largest total load, 0.229 IMAX.
+- **SEL's PSV50 block,** adapted to the remote inverter.
+- **A zero-sequence detector:** the inverter has no zero-sequence path.
+- **Combined:** zero sequence, or I1 above 1.2 I_load.
+
+Results are in [`cigremv/inverter_trip_supervision.json`](cigremv/inverter_trip_supervision.json), at 20 ms:
+
+| condition | R2 in-zone | R2 inverter trips forward | R4 in-zone | R4 inverter trips forward |
+|---|---|---|---|---|
+| none | 71/72 | 227/227 | 76/76 | 123/227 |
+| \|I1\| ≥ I_load, no margin | 69/72 | **0** | 75/76 | **0** |
+| \|I1\| ≥ 1.2 I_load, the usual margin | 60/72 | 0 | 58/76 | 0 |
+| zero sequence | 41/72 (no LL, no 3ph) | 0 | 36/76 | 0 |
+| zero sequence or \|I1\| ≥ 1.2 I_load | 63/72 | 0 | 64/76 | 0 |
+| not PSV50 | 57/72 | 156 | 55/76 | 123 |
+
+**Only the post-event current separates the trip from a fault.**
+- In this data the window is narrow: 0.20 IMAX for the trips against 0.23 IMAX for the weakest in-zone fault.
+- A threshold at the computed maximum load current falls inside it, but it has no margin.
+- The usual 20 % margin costs 12 of 72 in-zone faults at R2 and 18 of 76 at R4, all at high R_f.
+- Neither PSV50 nor zero sequence works. The relays at the inverter's own bus (R1, R3) see their inverter's trip
+  as reverse and need no supervision.
+
+**What this means for an injection.**
+- On feeder 1 the inverter that trips is the only one that could inject, and once tripped it injects nothing.
+- A designed δ therefore cannot discriminate this event. A standing pilot whose loss marks the trip is a form
+  of signalling, and a standing negative-sequence injection was judged not viable for power quality (bridge
+  review).
+- The practical remedy is an inverter-status signal to the relays: block, or switch to a setting for the
+  inverter-offline case. That is a channel, so this failure leads back to communication, as the reach result
+  did.
 
 ### Hasan et al. (2026) on this grid
 

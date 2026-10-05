@@ -279,8 +279,13 @@ rather than a 5 % budget.
   element of Opoku et al. (2025) covers unbalanced faults, and our positive-sequence version covers
   three-phase faults: all in-zone faults forward and no reverse fault forward at R1 and R3, where 32P/32Q
   made 39 reverse errors. The static model agrees that three-phase direction needs no injected signal.
-  What remains is telling a fault from an inverter disconnecting (still called forward at R2 and R4), and
-  inverters that suppress negative-sequence current. The second is not in this data.
+  What remains is telling a fault from an inverter disconnecting, which is still called forward at R2 and R4.
+  The other open case, inverters that suppress negative-sequence current, is not in this data.
+- **Inverter trip versus fault** ([results/CIGREMV.md](results/CIGREMV.md) §3): only the post-event current
+  separates them, and only with no margin. A threshold at the maximum load current with the inverter
+  offline blocks every trip and loses 1–3 faults; the usual 20 % margin loses 12–18 high-R_f faults. An
+  injection cannot help, because the tripping inverter is the only source on its feeder. The remedy is an
+  inverter-status signal, that is, a channel.
 
 Every refuted or narrowed claim is in the register, [REVIEW.md](REVIEW.md) §7 (rows 26, 32 onward).
 
