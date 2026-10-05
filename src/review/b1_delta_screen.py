@@ -176,7 +176,10 @@ def _num(x):
     return None if x is None or not np.isfinite(x) else float(x)
 
 
-def screen(name, L, G, workers=WORKERS, verbose=True):
+def screen(name, L, G, workers=WORKERS, verbose=True, scenarios=None, ftypes=FTYPES):
+    """scenarios: optional callable (cfg, nets, ibr_sets, lines) -> (ins, outs) replacing the reach hypotheses below
+    (b1_direction_screen.py); each out scenario carries 'fam' (its R_f family) and 'ri' (its index in RF_OUT).
+    ftypes: the fault types the cells are reported for."""
     t0 = time.time()
     cfg = real_zone.CONFIGS[name]
     rb, line, remote = cfg["relay_bus"], cfg["line"], cfg["remote_bus"]
@@ -200,7 +203,7 @@ def screen(name, L, G, workers=WORKERS, verbose=True):
         places += [(("line", bl), x if ub_ == remote else 1 - x, f"{bl} {int(round(x * 100))} %") for x in BEYOND_AT]
 
     ins, outs = [], []
-    for (g, lab) in nets:
+    for (g, lab) in (nets if scenarios is None else ()):
         for y2 in ibr_sets:
             for ft in FTYPES:
                 for mrel in M_IN:
@@ -210,6 +213,8 @@ def screen(name, L, G, workers=WORKERS, verbose=True):
                 for pi, (where, m, place) in enumerate(places):
                     outs += [dict(g=g, op=lab, y2=y2, ft=ft, where=where, m=m, place=place, rf=float(rf), ri=j,
                                   fam=f"{g}|{lab}|{y2}|{ft}|{pi}") for j, rf in enumerate(RF_OUT)]
+    if scenarios is not None:
+        ins, outs = scenarios(cfg, nets, ibr_sets, lines)
     from multiprocessing import Pool
     pool = Pool(workers, initializer=_init, initargs=(dict(nets=nets, ibr_sets=ibr_sets, rb=rb, line=line, k=k),))
     solve = lambda scns, deltas: pool.map(_eval, [(s, deltas) for s in scns], chunksize=max(1, len(scns) // (8 * workers)))
@@ -271,7 +276,7 @@ def screen(name, L, G, workers=WORKERS, verbose=True):
         jb = int(np.argmax(n_p))
         bind[i] = (float(n_p[jb]), int(partners[i][jb]))
     cells, counts = {}, emt_counts(L, G, cfg)
-    for ft in FTYPES:
+    for ft in ftypes:
         for band in RF_IN:
             idx = [i for i in range(len(ins)) if ci[i] and ins[i]["ft"] == ft and ins[i]["band"] == band]
             amb = {f"eps={e}": float(np.mean([d0_all[i] < 2 * e for i in idx])) for e in EPS} if idx else None

@@ -1132,7 +1132,7 @@ Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı
 
 - 110 kV'taki A rölesinde de 32P/32Q'nun ters yön hatalarını büyük ölçüde siliyor (21 ve 113 → 0 ve 14).
 - **Kalan sorunlar:**
-  - Üç fazlı arızalar: negatif bileşen olmadığı için eleman kör.
+  - Üç fazlı arızalar: negatif bileşen olmadığı için eleman kör. (Güncelleme, Q30: Aynı fikrin pozitif bileşen versiyonu bunu da ilk çevrimde çözüyor.)
   - Bara 3'teki invertörün devreden çıkması: R2'de 227/227, R4'te 123/227 olayı "ileri arıza" sanıyor.
   - Transformatör inrush akımı: rölelerde 2. harmonik kilidiyle çözülür, bunu modellemedik.
 - **Önemli şart:** Eleman, verideki invertörler negatif bileşende tepki verdiği için çalışıyor. İleri arızalarda |ΔY2| ≈ 9–10 pu; bu, invertörlerin düşük gerilimdeki ~11 pu'luk negatif bileşen davranışıyla uyumlu. I2'yi bastıran bir invertörde (PES-TR81 ve Haddadi'deki "coupled control" durumu) ölçecek bir şey kalmazdı.
@@ -1144,3 +1144,73 @@ Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı
 3. İnvertör açma gibi arıza olmayan olayları ayırmak. Bunun için ayrıca bir blok mantığı da gerekebilir; SEL'in PSV50'si bir örnek.
 
 *Kaynak: `results/CIGREMV.md` §3 ("A passive directional element at the inverter buses"); `results/cigremv/opoku_direction.json`; `src/review/opoku_direction.py`; REVIEW.md §7 satır 44.*
+
+---
+
+## 30. Üç fazlı arızada yön için sinyal gerekiyor mu?
+
+**Kısa cevap:** Hayır, iki ayrı kanıtla. Modelde üç fazlı ileri ve geri arızalar sinyal olmadan da birbirinden çok uzak. EMT verisinde de Opoku fikrinin pozitif bileşen versiyonu (ΔY1) üç fazlı arızalarda yönü ilk çevrimde doğru buluyor. Yani bu veride invertör baralarındaki yön sorunu sinyalsiz çözülüyor. Geriye kalan asıl açık sorun, invertörün devreden çıkmasının arıza gibi görünmesi.
+
+### 1. Model taraması (`b1_direction_screen.py`)
+- B1'in modeli ve yöntemi aynen kullanıldı; sadece kümeler değişti:
+  - İleri: kendi hattında %10, %50 ve %85'te üç fazlı arızalar.
+  - Geri: röle barasında ve arkadaki hatlarda üç fazlı arızalar.
+- Sonuç: dört rölede, her arıza direnci aralığında, sinyalsiz bile karışan çift yok (ölçüm hatası 0,02 pu'ya çıkarılsa bile).
+- Ayrım pozitif bileşen akımından (I1) geliyor. En yakın çiftler bile 0,40–0,53 pu uzakta, yani hata eşiğinin 20 katı.
+
+### 2. EMT verisi (`opoku_direction.py`)
+- ΔY1 = ΔI1 / ΔV1, Opoku'yla aynı açı sektörü.
+  - Algılama gerilimle yapılıyor (pozitif bileşen geriliminde %5 değişim). Akımla algılama, invertör beslemeli rölede yüksek dirençli arızaları kaçırıyor.
+- R1 ve R3'teki bütün üç fazlı iç arızalarda açı doğru sektörde (84°–149°).
+- "ΔY2 veya ΔY1 ileri diyorsa ileri" kuralıyla, 20 ms:
+
+| | R1 | R3 | R2 | R4 |
+|---|---|---|---|---|
+| İç arıza "ileri" | 72/72 | 85/85 | 71/72 | 76/76 |
+| Arka arıza yanlış "ileri" (32P/32Q'da) | 0 (23) | 0 (16) | 3 (2) | 0 (0) |
+
+- **Dürüstlük notu:** Bu kuralı R3'ü gördükten sonra seçtim. R3'te üç fazlı arızanın ilk çevrimindeki geçici dengesizlik ΔY2'yi yanlış açıyla devreye sokuyordu. Kuralın bedeli R2'de 2, TestGrid A'da 21 ek ters hata. Daha güvenli kural ("ΔY2 devredeyse o, değilse ΔY1") R3'te 6 üç fazlı arızayı kaçırıyor.
+- Bu elemanlar ilk çevrim elemanı. 40 ms'de bozuluyorlar; R2'de üç fazlı ters arızaların 21/23'ünü ileri sanıyor. Karar ilk çevrimde kilitlenmeli, Opoku da öyle yapıyor.
+
+### Araştırmaya etkisi
+- Bu veride, invertör baralarında yön için sinyal enjeksiyonu gerekmiyor. Hem dengesiz hem üç fazlı arızalar pasif elemanlarla ilk çevrimde çözülüyor (REVIEW.md §7 satır 44).
+- Sinyalin hâlâ değer katabileceği yerler:
+  1. **Arızayı olaydan ayırmak:** İnvertörün devreden çıkması R2'de 227/227, R4'te 123/227 "ileri arıza" görünüyor. Bu bir yön sorunu değil, "arıza mı, olay mı" sorunu.
+  2. **I2'yi bastıran invertörler:** Bu veride yok, ayrı simülasyon gerekir.
+- Bir sonraki mantıklı adım, invertörün devreden çıkması için SEL'in PSV50 blok mantığını ya da benzerini verimizde denemek.
+
+*Kaynak: `results/CIGREMV.md` §3 ("A passive directional element at the inverter buses"); `results/cigremv/opoku_direction.json`; `results/cigremv/b1_direction_3ph.json`; `src/review/b1_direction_screen.py`; REVIEW.md §7 satır 44.*
+
+---
+
+## 31. İnvertörün devreden çıkmasını gerçek arızadan ayırabiliyor muyuz?
+
+**Kısa cevap:** Sadece güvenlik payı olmadan. Ayırt eden tek özellik olaydan sonraki akım; aradaki pencere çok dar. Burada sinyal enjeksiyonu da işe yaramaz, çünkü devreden çıkan invertör o fiderdeki tek kaynak. Pratik çözüm, invertörün durumunu rölelere bildiren bir sinyal, yani yine bir haberleşme kanalı.
+
+### Sorun
+- Bara 3'teki invertör devreden çıkınca R2 ve R4'te bütün yön elemanları "ileri arıza" diyor. Bu bir hata değil; olay gerçekten ileri yönde bir değişim:
+  - 12 MW'lık besleme kayboluyor, hattın akış yönü dönüyor.
+  - R2'de gerilim %9–11 düşüyor, akım değişimi iç arızalarla aynı seviyede.
+- R1 ve R3'te kendi baralarındaki invertörün devreden çıkması "geri" görünüyor; orada sorun yok.
+
+### Ne denedik (`inverter_trip_supervision.py`, 20 ms)
+Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
+
+| Ek koşul | R2 iç arıza | R2 invertör açma "ileri" | R4 iç arıza | R4 invertör açma "ileri" |
+|---|---|---|---|---|
+| Yok | 71/72 | 227/227 | 76/76 | 123/227 |
+| Akım ≥ yük akımı (paysız) | 69/72 | **0** | 75/76 | **0** |
+| Akım ≥ 1,2 × yük akımı (standart pay) | 60/72 | 0 | 58/76 | 0 |
+| Sıfır bileşen var | 41/72 | 0 | 36/76 | 0 |
+| SEL PSV50 | 57/72 | 156 | 55/76 | 123 |
+
+- "Yük akımı", invertör devre dışıyken ve yük en yüksekteyken röleden geçen akım. Modelden hesaplandı: 0,229 Imax.
+- İnvertör açmada olaydan sonraki akım en fazla 0,20 Imax, iç arızalarda en az 0,23 Imax. Paysız eşik bu dar pencereye düşüyor. Normalde konan %20 pay yüksek dirençli arızaları kaybettiriyor.
+- Sıfır bileşen kontrolü faz-faz ve üç fazlı arızaları göremiyor. PSV50 bu olay için tasarlanmamış, işe yaramıyor.
+
+### Araştırmaya etkisi
+- Bu olay sinyal tasarımıyla çözülemez: devreden çıkan invertör sinyal de basamaz. Sürekli basılan bir "pilot" sinyal, kaybolunca invertörün çıktığını gösterebilirdi. Ama bu bir tür haberleşme olur ve sürekli negatif bileşen basmak güç kalitesi açısından uygun bulunmadı.
+- Pratik çözüm: invertör durum sinyaliyle röleyi bloke etmek ya da ayarını değiştirmek. Bu bir kanal ister. Erişim sonucu (B1) da aynı yere çıkmıştı: invertörlü dağıtım fiderinde güvenilir koruma haberleşme istiyor.
+- Böylece bu veride sinyal enjeksiyonunun ne erişimde, ne yönde, ne de arıza/olay ayrımında açık bir değeri kalmadı. Açık kalan tek durum I2'yi bastıran invertörler; o da bu veride yok (REVIEW.md §7 satır 42, 44, 45).
+
+*Kaynak: `results/CIGREMV.md` §3 ("Telling a fault from an inverter disconnecting"); `results/cigremv/inverter_trip_supervision.json`; `src/review/inverter_trip_supervision.py`; REVIEW.md §7 satır 45.*

@@ -23,7 +23,7 @@ This supersedes the design results in [RESULTS.md](RESULTS.md) and the H1 / H5 r
 
 > J. A. Taylor and A. D. Domínguez-García, *Active fault detection in static systems*,
 > IEEE Trans. Automatic Control **70**(8):5523–5529, 2025 — "TAC25" below,
-> [`papers/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf`](../papers/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf).
+> [DOI 10.1109/TAC.2024.3510612](https://doi.org/10.1109/TAC.2024.3510612) (library copy kept out of git: `papers/library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf`).
 
 ---
 
