@@ -272,6 +272,11 @@ rather than a 5 % budget.
   points and the inverter's whole current (1.2 pu) by 8–13; every cell with five or more EMT faults
   either needs no δ in the model or more than 1.2 pu. The δ design is therefore not pursued on this
   grid; it moves to TestGrid, and the CIGRE result is reported as a negative one with its mechanism.
+- **A passive directional baseline** ([results/CIGREMV.md](results/CIGREMV.md) §3): the superimposed
+  negative-sequence admittance element of Opoku et al. (2025) makes no unbalanced-fault direction error
+  at the inverter buses, where 32P/32Q made 30. Three-phase faults and an inverter disconnecting remain
+  unsolved, so an injected signal for direction is needed only there, or with inverters that suppress
+  negative-sequence current.
 
 Every refuted or narrowed claim is in the register, [REVIEW.md](REVIEW.md) §7 (rows 26, 32 onward).
 

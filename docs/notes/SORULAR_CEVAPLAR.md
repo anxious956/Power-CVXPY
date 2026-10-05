@@ -1108,3 +1108,37 @@ Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı
 4. Yön için B1 taraması: ileri ve geri arıza kümeleri.
 
 *Kaynak: `papers/README.md` K; `papers/notes/G1_mechanism_industry.md`, `G2_control_remedies.md`, `G3_injection_distribution.md`, `G4_theory.md`; REVIEW.md §7 satır 42–43.*
+
+---
+
+## 29. Pasif bir yön elemanı (Opoku 2025) invertör baralarındaki yön hatasını çözüyor mu?
+
+**Kısa cevap:** Dengesiz arızalarda evet, tamamen çözüyor. Üç fazlı arızalarda ve invertörün devreden çıkmasında çözmüyor. Yani yön için sinyal enjeksiyonu ancak bu kalan durumlarda ya da negatif bileşen akımını bastıran invertörlerde gerekli.
+
+### Ne denedik
+- Opoku vd. 2025'in elemanı: ΔY2 = ΔI2 / ΔV2, yani arıza öncesine göre negatif bileşen akımı ve gerilimindeki değişimin oranı.
+  - Açısı 45° ile 225° arasındaysa "ileri", değilse "geri".
+  - Sadece dengesiz arızalarda devreye giriyor (|I2| ≥ 0,1 |I1|).
+- Bizim 32P/32Q ile aynı fazörler, aynı arıza kümeleri, 20 ms. 32P/32Q satırları `TABLES.md` H'yi birebir verdi; karşılaştırma tutarlı.
+
+### Sonuç (20 ms)
+| | R1: 32P/32Q → ΔY2 | R3: 32P/32Q → ΔY2 |
+|---|---|---|
+| Dengesiz iç arıza "ileri" | 58/58 → 58/58 | 60/60 → 60/60 |
+| Dengesiz arka arıza yanlışlıkla "ileri" (bara + arka hatlar) | 6 + 17 → **0 + 0** | 4 + 3 → **0 + 0** |
+| Üç fazlı iç arıza "ileri" | 9/14 → 0/14 | 13/25 → 4/25 |
+
+- 110 kV'taki A rölesinde de 32P/32Q'nun ters yön hatalarını büyük ölçüde siliyor (21 ve 113 → 0 ve 14).
+- **Kalan sorunlar:**
+  - Üç fazlı arızalar: negatif bileşen olmadığı için eleman kör.
+  - Bara 3'teki invertörün devreden çıkması: R2'de 227/227, R4'te 123/227 olayı "ileri arıza" sanıyor.
+  - Transformatör inrush akımı: rölelerde 2. harmonik kilidiyle çözülür, bunu modellemedik.
+- **Önemli şart:** Eleman, verideki invertörler negatif bileşende tepki verdiği için çalışıyor. İleri arızalarda |ΔY2| ≈ 9–10 pu; bu, invertörlerin düşük gerilimdeki ~11 pu'luk negatif bileşen davranışıyla uyumlu. I2'yi bastıran bir invertörde (PES-TR81 ve Haddadi'deki "coupled control" durumu) ölçecek bir şey kalmazdı.
+
+### Araştırmaya etkisi
+"İnvertör barasında yön için tasarlanmış sinyal gerekir" fikri daraldı (REVIEW.md §7 satır 44). Sinyalin değer katabileceği yerler:
+1. Üç fazlı arızalar: röleye negatif bileşen sinyali sağlar.
+2. I2'yi bastıran invertörler.
+3. İnvertör açma gibi arıza olmayan olayları ayırmak. Bunun için ayrıca bir blok mantığı da gerekebilir; SEL'in PSV50'si bir örnek.
+
+*Kaynak: `results/CIGREMV.md` §3 ("A passive directional element at the inverter buses"); `results/cigremv/opoku_direction.json`; `src/review/opoku_direction.py`; REVIEW.md §7 satır 44.*

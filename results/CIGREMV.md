@@ -176,10 +176,56 @@ both-ends references work.
    12/85 in-zone faults; at R2 and R4 the same counts are ≤ 1/85, 1/92, 1/72 and 0/76 (TABLES H). The
    relay-bus errors at R1 and R3 are all at R_f > 15 Ω. Direction was already imperfect on TestGrid relay A (41/188
    relay-bus faults forward, from meshing), so this is a pattern that coincides with the inverter buses,
-   not a proof that the inverter causes it.
+   not a proof that the inverter causes it. **This failure belongs to 32P/32Q, not to the measurement:** a
+   passive element built for IBR feeders makes none of the unbalanced-fault errors (next section).
 3. **The CNN needs reverse faults in training at R4.** With reverse faults removed from training it trips
    20–21 of 81 relay-bus faults (0 when they are in training); on TestGrid it tripped none of 1,387 in the
    same test (TABLES F). At R1 and R3 holding them out changes nothing; at R2 it adds 1 relay-bus trip.
+
+### A passive directional element at the inverter buses (Opoku et al. 2025)
+
+Before an injected signal is argued for direction, a passive element designed for IBR feeders was run on the
+same records. `opoku_direction.py` implements Opoku, Dimitrovski and Ferrari's superimposed negative-sequence
+admittance element (IEEE Access 13, 2025; `papers/notes/G3_injection_distribution.md`).
+- The element computes ΔY2 = ΔI2 / ΔV2 against the pre-fault cycle and calls a fault forward when arg ΔY2 lies
+  between 45° and 225°.
+- It is enabled only for unbalanced faults (|I2| ≥ 0.1 |I1|).
+- It uses the same phasors as the 32P/32Q supervision.
+
+Results are in [`cigremv/opoku_direction.json`](cigremv/opoku_direction.json). The 32P/32Q rows reproduce TABLES H
+exactly. The magnitude setting is not binding: forward faults read a median |ΔY2| of 6–14 pu on a 20 kV,
+15 MVA base, reverse faults 2.9–4.2 pu, so Y_set from 0 to 1 pu gives the same decisions. At 20 ms:
+
+| faults called forward | R1 32P/32Q | R1 ΔY2 | R3 32P/32Q | R3 ΔY2 | R2 / R4 ΔY2 |
+|---|---|---|---|---|---|
+| in-zone, unbalanced (should be forward) | 58/58 | 58/58 | 60/60 | 60/60 | 52/53 · 53/53 |
+| in-zone, three-phase (should be forward) | 9/14 | 0/14 (not enabled) | 13/25 | 4/25 | 16/19 · 16/23 |
+| relay bus, unbalanced (should be reverse) | 6/58 | **0/58** | 4/62 | **0/62** | 0/62 · 0/67 |
+| lines behind, unbalanced (should be reverse) | 17/131 | **0/131** | 3/72 | **0/72** | 0/67 · – |
+| relay bus and lines behind, three-phase | 0/43 | 0/43 | 9/34 | 0/34 | 1/48 · 0/14 |
+| bus-3 inverter disconnecting (should not be forward) | – | 0/227 | – | – | **227/227 · 123/227** |
+
+**The both-ways error at the inverter buses goes away for unbalanced faults with a passive element.** Every
+unbalanced in-zone fault is called forward and no unbalanced reverse fault is; at 40 ms R3 has 2 relay-bus and
+1 lines-behind error. The same element also removes 32P/32Q's reverse errors on TestGrid relay A (21/149 and
+113/159 unbalanced, now 0 and 14).
+
+What is left:
+- **Three-phase faults.** The element has no negative-sequence quantity to use there. 32P misses 5 of 14 and
+  12 of 25 in-zone three-phase faults at R1 and R3, and calls 9 of 34 reverse ones forward at R3.
+- **An inverter disconnecting.** It reads as an unbalanced forward disturbance at R2 and R4, so the inverter-trip
+  failure mode above is not fixed by direction alone.
+- **Transformer energisation.** HV inrush events are called forward at many buses. Relays block these with a
+  second-harmonic restraint, which is not modelled here.
+
+**One caveat decides how far this carries.** The element works because the recorded inverters do respond in
+negative sequence. For forward faults at the inverter-bus relays |ΔY2| is about 9–10 pu, which is consistent
+with the inverters' low-u2 negative-sequence admittance (about 11 pu) rather than with the load alone. With an inverter that suppresses I2, the coupled-control case of PES-TR81 and Haddadi et al.,
+there would be little to measure.
+
+For the project this narrows where an injected signal could add value on direction to three cases:
+three-phase faults, inverters that suppress I2, and events such as an inverter tripping. It is not needed
+for unbalanced faults at these relays.
 
 ### Hasan et al. (2026) on this grid
 
