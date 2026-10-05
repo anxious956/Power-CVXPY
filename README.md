@@ -259,7 +259,8 @@ rather than a 5 % budget.
   row 41). Only both-ends schemes
   work (67N/67Q at both ends 75–82 %, no off-line trip). Three inverter-specific failures appear:
   an inverter disconnecting at the remote bus trips the CNN in the forward direction, 32P/32Q is
-  wrong both ways at the inverter buses, and one relay's CNN trips held-out reverse faults.
+  wrong both ways at the inverter buses (a passive element removes the unbalanced-fault cases; see
+  below), and one relay's CNN trips held-out reverse faults.
 - **Room for the auxiliary signal:** with the inverters' output kept (0.8 pu dispatch), 0.4 pu of
   negative-sequence δ at one design angle fits in 38–39 % of the relevant in-zone faults in the
   first cycle and 77–78 % by 40 ms; 0.7 pu fits in 8–33 %, 1 pu in at most 8 %.
@@ -270,8 +271,9 @@ rather than a 5 % budget.
 - **The screening (B1)** ([results/CIGREMV.md](results/CIGREMV.md) §3): in the study model, at an
   instrument error of 0.01 pu, a δ of 0.4 pu raises the share of separable in-zone faults by 2–4
   points and the inverter's whole current (1.2 pu) by 8–13; every cell with five or more EMT faults
-  either needs no δ in the model or more than 1.2 pu. The δ design is therefore not pursued on this
-  grid; it moves to TestGrid, and the CIGRE result is reported as a negative one with its mechanism.
+  either needs no δ in the model or more than 1.2 pu. The δ design for reach is therefore not pursued on
+  this grid, and the result is reported as a negative one with its mechanism. TestGrid needs no δ (its
+  boundary separates at δ = 0), so a design there would only be a positive control of the tool.
 - **A passive directional baseline** ([results/CIGREMV.md](results/CIGREMV.md) §3): the superimposed
   negative-sequence admittance element of Opoku et al. (2025) makes no unbalanced-fault direction error
   at the inverter buses, where 32P/32Q made 30. Three-phase faults and an inverter disconnecting remain
@@ -353,9 +355,11 @@ All 26 papers in `papers/` have been read; notes are in `papers/notes/`.
 What the reading changed: three claims we might have made are already taken (incremental
 negative-sequence detection, protection-aware inverter control validated on hardware, and ML
 fault detection on inverter grids). What survives is that Taylor's method is the only one
-offering a separation **guarantee** rather than a parameter sweep, that nobody has compared
-the competing methods against each other, and that the auxiliary signal appears zero times in
-~600 references of ML literature. The project is repositioned accordingly in
+offering a separation **guarantee** rather than a parameter sweep (injections designed for protection
+exist, e.g. Saleh et al. 2021, but on a nominal model), that nobody has compared the competing
+methods against each other, and that the auxiliary signal appears zero times in the ~600 references
+of the seven ML papers first read. A later find does combine injection with learning: Mohammadhassani
+et al. 2021, an SVM on injected harmonics trained on two bolted faults ([papers/README.md](papers/README.md) K). The project is repositioned accordingly in
 [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Status

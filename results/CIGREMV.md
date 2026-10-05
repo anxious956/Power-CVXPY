@@ -170,7 +170,8 @@ both-ends references work.
    J; the same 9 events at R4). On TestGrid relay B, the same supervision removed all 56 switching trips
    of the engineered model and 273–293 of Hasan's SVM. Losing an inverter's in-feed at the far end of a
    3.9 Ω cable is a real step change at bus 2; nothing in a fault/no-fault label tells the network that it
-   is not a fault.
+   is not a fault. A passive negative-sequence directional element calls all 227 such events forward at
+   R2 as well (next section).
 2. **The directional element is wrong in both directions at the inverter buses.** 32P/32Q calls forward
    6/76 relay-bus and 17/156 lines-behind faults at R1, 7/75 and 9/93 at R3, and calls reverse 5/72 and
    12/85 in-zone faults; at R2 and R4 the same counts are ≤ 1/85, 1/92, 1/72 and 0/76 (TABLES H). The
@@ -310,8 +311,11 @@ instrument's alone (the model's own error, bridge step B2, is not in it); pairs 
 assumed to stay separated; and the model is static. Where it disagrees with the EMT it does so in δ's
 favour: the model calls half of R2's in-zone faults separable without δ, where no single-ended EMT detector
 covers more than 8.3 % at zero false trips. The real requirement is therefore larger than these numbers, not smaller. For the
-bridge this means no δ design (M3) on this grid; the negative result is reported with its mechanism, and the
-design is run on TestGrid (LEAD_REVIEW.md D).
+bridge this means no δ design for reach (M3) on this grid; the negative result is reported with its mechanism.
+The bridge plan's fallback, running the design on TestGrid (LEAD_REVIEW.md D), would only be a positive
+control of the tool, because TestGrid's boundary separates without δ. The inverter question continues on
+direction, where the passive baseline above leaves three-phase faults, I2-suppressing inverters and the
+inverter trip open, and on Taylor's 14-bus model if it becomes available.
 
 ### Quick checks: settings, channel delay, CT saturation
 
@@ -354,9 +358,10 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
 - **The conventional element is not the benchmark to beat here; the channel is.** Its low coverage is
   shared by every single-ended detector, including the tuned T2, which does not depend on the study model.
 - **The inverter failure modes are security problems, not coverage problems.** An inverter trip read as a
-  forward in-zone fault, and a directional element that is wrong both ways at an inverter bus, are the
-  kind of misoperation the project's IBR motivation (Sandia 2024 gap analysis) is about, and they survive
-  directional supervision.
+  forward in-zone fault, and 32P/32Q wrong both ways at an inverter bus, are the kind of misoperation the
+  project's IBR motivation (Sandia 2024 gap analysis) is about. The first survives directional supervision,
+  including a passive negative-sequence admittance element. That element removes the second for
+  unbalanced faults but not for three-phase faults (§3).
 - **For the project's central question** this is motivation, not evidence: a passive single-ended
   fundamental-frequency measurement does not locate the boundary here for these faults, which is the gap a
   designed auxiliary injection would have to close. In the study model a designed δ barely moves that
@@ -364,7 +369,9 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
   so on this grid the injection question is whether any δ the inverter can supply closes it — the bridge's
   first screening. It does not (B1, §3): in the study model, δ within the inverter's whole current adds 8–13
   points of separable in-zone faults, and the share it can afford at a design angle, 0.4 pu, adds 2–4. No
-  record here carries an injection (ADAPTGRID.md §5).
+  record here carries an injection (ADAPTGRID.md §5). For direction, the passive element of §3 already
+  handles unbalanced faults at the inverter buses. An injection could add value there only for three-phase
+  faults, for inverters that suppress I2, and for non-fault events such as an inverter tripping.
 
 ## 5. Limits
 

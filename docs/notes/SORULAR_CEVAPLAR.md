@@ -1064,6 +1064,8 @@ Tarama sinyal lehine iyimser: her arızaya kendi en iyi açısı veriliyor, öl�
 ### Sonraki adım
 Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı (M3) yapılmıyor. Olumsuz sonuç mekanizmasıyla raporlanıyor, tasarım 110 kV TestGrid'de çalıştırılıyor. Bu, Taylor'a soracağımız 4. sorunun ("olumsuz sonuç ilginizi çeker mi?") somut dayanağı.
 
+**Güncelleme (4 Eki 2026):** TestGrid'e taşımak araştırmanın sorusunu cevaplamaz. Orada sinyal zaten gerekmiyor, yani tasarım ancak aracın bir kontrolü olur (Q27). Yön sorusunda da pasif bir eleman dengesiz arızaları sinyalsiz çözüyor (Q29). Sinyal için kalan alan üç fazlı arızalar, I2'yi bastıran invertörler ve invertörün devreden çıkması.
+
 *Kaynak: `results/CIGREMV.md` §3 ("How large δ would have to be"); `results/cigremv/b1_delta_screen.json`; REVIEW.md §7 satır 42.*
 
 ---
@@ -1074,7 +1076,7 @@ Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı
 
 ### Araştırmada kalan yol
 - **Soruyu değiştirmek, şebekeyi değil.** B1 sadece erişim sorusunu test etti: iç arıza mı, hattın hemen ötesi mi? Bu, sinyalin en zor kullanımı. Taylor'ın Geometry makalesi bile erişimi rölenin karakteristiğine bırakıyor.
-- **Yön (ileri / geri):** İnvertör baralarında 32P/32Q iki yönde de yanılıyor. R1'de arkadaki 156 hattın 17 arızasını ileri, 72 iç arızanın 5'ini geri görüyor; R3'te 93'te 9 ve 85'te 12 (`results/cigremv/TABLES.md` H). İleri ve geri arızalar rölenin iki farklı tarafında, elektriksel olarak uzak. Sinyalin fark yaratma şansı erişimdekinden çok daha yüksek. IEEE 2800'ün invertörlerden negatif bileşen akımı istemesinin nedeni de yön elemanları (bildiğimiz kadarıyla; kaynaktan doğrulanmadı).
+- **Yön (ileri / geri):** İnvertör baralarında 32P/32Q iki yönde de yanılıyor. R1'de arkadaki 156 hattın 17 arızasını ileri, 72 iç arızanın 5'ini geri görüyor; R3'te 93'te 9 ve 85'te 12 (`results/cigremv/TABLES.md` H). İleri ve geri arızalar rölenin iki farklı tarafında, elektriksel olarak uzak. Sinyalin fark yaratma şansı erişimdekinden çok daha yüksek. IEEE 2800'ün invertörlerden negatif bileşen akımı istemesinin nedeni de yön elemanları (bildiğimiz kadarıyla; kaynaktan doğrulanmadı). **Güncelleme (Q29):** Pasif bir eleman (Opoku 2025) bu hatayı dengesiz arızalarda sinyalsiz çözüyor. Sinyal ancak üç fazlı arızalarda, I2'yi bastıran invertörlerde ve invertörün devreden çıktığı olaylarda değer katabilir.
 - **Arıza türü:** Taylor'ın Geometry makalesindeki asıl kullanım.
 - **Taylor'ın 14 baralı modeli:** İnvertörlü bir şebeke. Gelirse erişim sorusunu daha uzun hatlarda deneyebiliriz.
 
@@ -1099,7 +1101,7 @@ Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı
   - Saleh 2021: ileri/geri ayrımı için harmonik deseni optimizasyonla seçiyor; nominal model, ada modu.
   - Yang, Dyśko 2024: sabit 0,3 pu I2'yi 80 ms basıyor; ada modu, tek faz-toprak arızasını ancak ~4–7 Ω'a kadar görüyor.
   - Opoku 2025: pasif bir yön elemanı; enjeksiyonun gerekli olduğunu söylemeden önce bizim veride denemeliyiz.
-- **Teori (G4):** Scott 2014, Xu 2023, Nikoukhah 1998 ve Taylor'ın TAC 2025 Teorem 1'i aynı şeyi söylüyor. Gereken sinyal ≥ (2ε − ölçüm farkı) / N; N, iki hipotezin sinyale verdiği tepkinin farkı. Erişimde (iç arıza ile hemen ötesi) N ≈ 0, yani sinyal çok büyük olmalı; B1 bunu gösterdi. Yönde iki hipotez işaret değiştirdiği için N büyük; umut verici. Kapalı çevrim (Raimondo 2016) garantisini açık çevrimden alıyor; açık çevrim ayıramıyorsa o da kurtarmıyor.
+- **Teori (G4):** Scott 2014, Xu 2023, Nikoukhah 1998 ve Taylor'ın TAC 2025 Teorem 1'i aynı şeyi söylüyor. Gereken sinyal ≥ (2ε − ölçüm farkı) / N; N, iki hipotezin sinyale verdiği tepkinin farkı. Erişimde (iç arıza ile hemen ötesi) N ≈ 0, yani sinyal çok büyük olmalı; B1 bunu gösterdi. Yönde iki hipotez işaret değiştirdiği için N büyük; umut verici. (Güncelleme, Q29: Yönde pasif bir eleman dengesiz arızaları zaten çözüyor; sinyalin işi üç fazlı arızalarla sınırlı.) Kapalı çevrim (Raimondo 2016) garantisini açık çevrimden alıyor; açık çevrim ayıramıyorsa o da kurtarmıyor.
 
 ### Sonraki adımlar
 1. Opoku'nun pasif yön elemanını EMT verimizde denemek (enjeksiyon gerekli mi?).

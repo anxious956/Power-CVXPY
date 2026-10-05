@@ -86,7 +86,9 @@ project is shaped to do.
 **c. The auxiliary signal is absent from the entire machine-learning literature.** Across
 roughly 600 references in the seven ML and dataset papers, there are **zero** mentions of
 auxiliary signals, active fault detection or signal injection. Our detection axis is clean and
-now documented.
+now documented. *(Narrowed 30 Sep 2026: outside these seven papers, Mohammadhassani et al. 2021 learn
+fault direction with an SVM from injected harmonics. Saleh et al. 2021 and Yang, Dyśko et al. 2024 inject
+signals for protection without learning. See papers/README.md K and REVIEW.md §7 row 43.)*
 
 **d. Two openings Taylor names himself.** The 2025 paper: evaluate the characteristics and
 optimised signals in electromagnetic transient simulation. The 2026 reachability paper: build
