@@ -71,7 +71,8 @@ Now (independent of the re-run):
   wrong; row 37 revised (numbers after the re-run; `ibr_headroom.py` to compute the angle-aware columns).
 - **A5** DESIGN.md §3 "This is TAC25's (1b)", "feasible at 0.16–0.26 pu", "infeasible outright" → the rule
   is the review's own and unsound for a per-phase limiter; re-run with sound rows (B5): ≈ 0.20–0.32 pu,
-  ε = 0.12 feasible at ≈ 0.76 pu; REVIEW rows 3–4.
+  ε = 0.12 feasible at ≈ 0.76 pu; REVIEW rows 3–4. **Done (B5, 5 Oct 2026):** those were bounding-disc figures;
+  the exact per-phase rows give 0.16–0.26 pu and no certified design at ε = 0.12, I_max ≤ 1.2.
 - **A6** "TAC25's 14-bus example" → Geometry paper 14-bus example, separates fault types, needs Baeckeland
   thesis Table 3.1 (not in the repo); not a TAC25 gate (DESIGN.md, REVIEW.md, PLAN.md; PLAN also omits the
   SG angle spread [0, 2π/10]).
@@ -95,6 +96,15 @@ After the re-run: every R1/R3 number and every range pooled over relays (CIGREMV
 not linear in δ), all four relays. δ ≤ 1.2 pu adds 8–13 points of separable in-zone faults, 0.4 pu adds 2–4;
 every cell with ≥ 5 EMT faults needs no δ or more than 1.2 pu. Stop rule (section D) met at R1–R3, at R4 in
 substance: no M3 on CIGRE (results/CIGREMV.md §3, REVIEW.md §7 row 42).
+
+**B5 done (5 Oct 2026)**, `src/review/tac25_design.py` limit_rule "phase" (every phase current ≤ I_max),
+`tac25_limit_presets.py`, `tac25_map.py`, `tac25_softlimit.py` re-run.
+- The §3 minima stay 0.26 / 0.26 / 0.16 pu.
+- ε = 0.12 at I_max ≤ 1.2 has no certified design: 0.64–0.72 pu on the design points, failing the continuous
+  re-check.
+- Robust injectability is 1.81 / 2.37 pu.
+- Still on the sum rule, not re-run: tac25_certificate, tac25_channels, tac25_negseq (DESIGN.md §2.1, §4.1.1,
+  §4.4).
 
 ## C. The bridge
 

@@ -1401,13 +1401,13 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 |---|---|---|
 | Tasarımı CVXPY ile iki baralı örnekte yeniden kurduk | Yapıldı | `src/aux_signal_toy.py` (CVXPY + Clarabel). Aracın bulduğu sinyaller tam en küçük değil: 0,51 pu yerine kesin minimum 0,50 pu (REVIEW.md §7 satır 1, 5) |
 | Güçlü senkron kaynakta sinyal gerekmiyor | Tutuyor | Bu iki baralı modelde kanıtlı (satır 2). 110 kV gerçek EMT verisinde de aynısı çıktı |
-| Zayıf kaynak/invertörde yüksek dirençli toprak arızaları ayrılamıyor, ~0,4–0,7 pu gerekiyor | Kısmen | Ayrılamama doğru (30 arızanın 5–7'si). Sayı modele bağlı: %10 güvenlik payıyla 0,67–1,36 pu; açı belirsizliği doğru modellenince 0,55–1,05 pu; invertörün faz başına akım sınırı probleme eklenince 0,20–0,32 pu (satır 1, 3) |
-| Gürültü %50 artınca iki kat daha çok belirsiz durum, sinyal 1 pu'yu geçiyor, invertörün verebileceğinden fazla | Kısmen | İki kat doğru (30'da 5 → 10). Akım sınırı olmayan modelde 1,32 pu. Sınır doğru eklenince ~0,76 pu ile çözülüyor; "invertör veremez" kesin değil. Pratikte ise CIGRE ölçümüne göre 0,7 pu arızaların sadece %8–33'ünde invertöre sığıyor (satır 4) |
+| Zayıf kaynak/invertörde yüksek dirençli toprak arızaları ayrılamıyor, ~0,4–0,7 pu gerekiyor | Kısmen | Ayrılamama doğru (30 arızanın 5–7'si). Akım sınırı olmayan modelde 0,50–0,69 pu: mailde dediğimiz. Ama sayı modele bağlı: %10 güvenlik payıyla 0,67–1,36 pu; açı belirsizliği doğru modellenince 0,55–1,05 pu; invertörün faz başına akım sınırı probleme eklenince 0,16–0,26 pu (B5). O küçük sinyalleri her durumda basmak için de invertörün faz başına 1,4–1,8 pu verebilmesi gerekiyor (satır 1, 3) |
+| Gürültü %50 artınca iki kat daha çok belirsiz durum, sinyal 1 pu'yu geçiyor, invertörün verebileceğinden fazla | Tutuyor | İki kat doğru (30'da 5 → 10). Akım sınırı olmayan modelde 1,32 pu. Sınır faz başına doğru eklenince (B5) 1,2 pu'da güvenceli bir tasarım yok: en küçük aday 0,72 pu, arıza noktalarının arasında tutmuyor; onu basmak için de faz başına ~1,9 pu gerekir. Ara kontroldeki "0,76 pu ile çözülür" yanlıştı (satır 4) |
 | İkimizin ISAIA'da kabul edilmiş makalesi var | Repoda yok | Kontrol edilemedi |
 
-**Not:** Akım sınırlı sayılar (0,20–0,32 pu ve ~0,76 pu) ara kontrol. Düzgün yeniden koşusu bekliyor (review/bridge/LEAD_REVIEW.md B5).
+**Not (B5, 5 Oct 2026):** Akım sınırlı sayılar düzgün yeniden koşuldu. Ara kontrol (0,20–0,32 pu ve ~0,76 pu), gerçekte invertörün taşıyamayacağı akımları da kabul eden gevşek bir kural kullanmıştı. Doğru per-faz kuralıyla 0,16–0,26 pu ve %50 fazla gürültüde güvenceli tasarım yok (`results/DESIGN.md` §3, §4.1; REVIEW.md §7 satır 3–4).
 
 ### Görüşmede sorulursa
-> "In the email I quoted 0.4–0.7 pu, and past 1 pu with more noise. Since then we found those were the tool's first answers with no margin; how the inverter's current limit is modelled changes them a lot, from about 0.2–0.3 pu to over 1 pu. The trend holds: a weak source needs a signal, and more noise needs much more."
+> "In the email I quoted 0.4–0.7 pu; that holds without the current limit. With the inverter's per-phase limit inside the problem it drops to about 0.16–0.26 pu, but injecting it on top of the inverter's own current needs 1.4–1.8 pu per phase. With 50 % more noise we find no certified design at a 1.2 pu limit."
 
 *Kaynak: README.md ("What is already here"); REVIEW.md §7 satır 1–6; `results/DESIGN.md` §3, §4.1; `review/WP1_REPORT.md`; `results/CIGREMV.md` §3 ("Room in the inverter").*

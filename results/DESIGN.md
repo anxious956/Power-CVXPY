@@ -4,12 +4,19 @@
 > (1) The current limit inside the problem, |i⁺| ≤ I_max − |δ| (§3, "TAC25's reading (b)"), is **not TAC25's
 > (1b)** — TAC25 constrains ‖i⁺‖ ≤ I_max only — and it is **unsound for a per-phase limiter**: with δ at the best
 > relative angle the largest phase current is √(|i⁺|² + |i⁺||δ| + |δ|²), so e.g. |i⁺| = 0.80 with |δ| = 0.56 peaks
-> at 1.184 < 1.2 yet is pruned. It is sound only for an inverter that enforces |I₁| + |I₂| ≤ I_max. With the sound
-> per-phase disc |i⁺| ≤ (−|δ| + √(4I_max² − 3|δ|²))/2 the §3 minima become about **0.32 / 0.32 / 0.20 pu** instead
-> of 0.26 / 0.26 / 0.16 (weak_sg / noisy / all_ibr_hard; TAC25 as written 0.50 / 0.52 / 0.36), and ε = 0.12 at
-> I_max 1.2 is **feasible at about 0.76 pu**, not infeasible (§4.1, Claim 4). These are scratch re-checks (linear
-> mode, 0.02 grid) reproduced by the main session; the tables below, the injectability figures 1.81 / 2.39 pu
-> (upper bounds under the sum rule) and the verdicts that rest on them await a proper re-run with sound rows.
+> at 1.184 < 1.2 yet is pruned. It is sound only for an inverter that enforces |I₁| + |I₂| ≤ I_max.
+> **Re-run with sound rows (B5, 5 Oct 2026).** `tac25_design.py` now takes the exact set for a per-phase limiter,
+> every phase current |i⁺ + aᵏδ| ≤ I_max, which is not a disc; §3, §3.1 and §4.1 below are the re-run.
+> - The §3 minima stay **0.26 / 0.26 / 0.16 pu** (weak_sg / noisy / all_ibr_hard; TAC25 as written 0.50 / 0.52 /
+>   0.36). The sum rule removed realisations a per-phase limiter allows, but not the ones that decide separation here.
+> - The scratch figures (0.32 / 0.32 / 0.20, and ε = 0.12 feasible at about 0.76 pu) came from the bounding disc
+>   |i⁺| ≤ (−|δ| + √(4I_max² − 3|δ|²))/2, which also admits currents the inverter cannot carry beside δ. The disc's
+>   0.74 pu answer at ε = 0.12 is not realisable per phase.
+> - With the exact rows, ε = 0.12 at I_max ≤ 1.2 gives 0.64–0.72 pu on the 30 design points but fails the dense
+>   continuous re-check (17 and 43 of 462 faults): **still no certified design** there. ε = 0.16 at I_max 2.1 is the
+>   same (1.64 pu, 63 of 462).
+> - Injecting a design on top of every modelled i⁺ needs 1.38–1.76 pu per phase on the presets, and 1.81 / 2.37 pu
+>   for the robust designs at ε = 0.08 / 0.12 (the sum-rule bounds were 1.81 / 2.39).
 > (2) The "2025 14-bus example" is in Taylor's Geometry paper (arXiv 2510.04379 §IV-C, §VI-D), not TAC25, whose
 > only example is single-IBR, single-load; it separates fault types on the relay's own line, and it needs the
 > line data of the Baeckeland thesis (Table 3.1), which is not in the repo.
@@ -45,9 +52,9 @@ not tight — median |I₁|+|I₂| of 1.07–1.18 pu but p95 ≈ 1.5 and max ≈
 §7 claim 20). **That does not cost the guarantee, and §3.1 measures what it does cost.** Treating
 I_max as an uncertain parameter on [1.1, 2.1] and pruning the uncertainty set at the *loosest* bound
 keeps the separation guarantee whatever the true limiter does, at **0.56 pu instead of 0.28 at
-ε = 0.08** and **1.14 pu at ε = 0.12**, where a hard 1.2 pu limit is infeasible outright. What the
+ε = 0.08** and **1.14 pu at ε = 0.12**, where a hard 1.2 pu limit has no certified design. What the
 softness actually threatens is not the guarantee but the **injectability**: producing 0.56 pu needs
-an inverter with headroom to 1.81 pu, and 1.14 pu needs 2.39 pu, which is past anything measured. So
+an inverter with headroom to 1.81 pu, and 1.14 pu needs 2.37 pu, which is past anything measured. So
 the honest headline is that the design survives a soft limiter but asks for more current than a
 1.2 pu-rated inverter has.
 
@@ -215,20 +222,31 @@ variable.** It demands headroom against a realisation that cannot occur while δ
 The correct treatment is (b) alone, with the side condition that the restricted set must be
 non-empty (the inverter must still be able to carry *some* admissible pre-fault current).
 
-Measured on the presets, same global polar solve, 0.02 radius grid:
+Measured on the presets (`tac25_limit_presets.py` →
+[`review_wp1/tac25_limit_presets.json`](review_wp1/tac25_limit_presets.json); B5 re-run). Same global polar
+solve, linear source set, 0.02 radius grid, I_max = 1.2 pu; every answer re-checked on 462 continuous (m, R_f)
+points:
 
-| Preset | exact (no limit) | solver, no limit | **H5's reading (a)** | **TAC25's reading (b)** |
-|---|---|---|---|---|
-| weak_sg | 0.5040 | 0.520 | **infeasible** | **0.260** |
-| weak_sg_noisy | 0.6908 | 0.700 | **infeasible** | **0.260** |
-| all_ibr_hard | 0.3863 | 0.400 | **infeasible** | **0.160** |
+| Preset | exact (no limit) | solver, no limit | **H5's reading (a)** | sum rule (first published) | **per phase (sound)** | bounding disc | TAC25 (1b) as written | per-phase limit to inject |
+|---|---|---|---|---|---|---|---|---|
+| weak_sg | 0.5040 | 0.52 | infeasible | 0.26 | **0.26** | 0.32 | 0.50 | 1.49 |
+| weak_sg_noisy | 0.6908 | 0.70 | infeasible | 0.26 | **0.26** | 0.32 | 0.52 | 1.76 |
+| all_ibr_hard | 0.3863 | 0.40 | infeasible | 0.16 | **0.16** | 0.20 | 0.36 | 1.38 |
+| weak_sg_eps12 | 1.3186 | 1.34 | infeasible | none | **0.72, fails the continuous re-check (5 / 462)** | 0.74, not realisable per phase | 1.32 | 1.92 |
 
+The last column is the largest phase current when the per-phase answer is added to every modelled i⁺.
 The "no limit" column reproduces the known exact optima to the grid step, which is the solver's own
 check.
 
 So **H5 reverses twice over**: the presets are feasible, and the required signal is about half the
-unconstrained value. The disc |i⁺| ≤ I_max − |δ| is imposed as a *circumscribed* 24-gon, so the
-restriction is understated and the guarantee stays sound.
+unconstrained value.
+- The sound per-phase rows give the same minima as the first-published sum rule on these presets; the
+  bounding disc is looser and asks for more.
+- Each limit is imposed as *circumscribed* 24-gons, so the restriction is understated and the guarantee
+  stays sound.
+- Two things temper it. At 50 % more noise (ε = 0.12) there is no certified design at a 1.2 pu limit. And
+  every design here needs 1.4–1.9 pu per phase to be injected on top of the inverter's own current (§3.1,
+  point 3).
 
 > **The assumption this rests on.** (b) is only legitimate if the current limit is a hard bound on
 > the physical inverter. On EvEMTBench it is not (claim 20). If the inverter can exceed I_max, the
@@ -260,22 +278,25 @@ the largest **phase**-current magnitude, which is closer to what a limiter regul
 so the p95 is 25–30 % above the setting rather than above the rating.
 
 **The treatment.** If I_max is only known to lie in a band [lo, hi], every realisation that can
-physically occur while δ is injected satisfies |i⁺| ≤ hi − |δ|. Pruning the uncertainty set with **hi**
+physically occur while δ is injected keeps every phase current within hi, max_k |i⁺ + aᵏδ| ≤ hi (B5; the
+first run used |i⁺| ≤ hi − |δ|, unsound for a per-phase limiter). Pruning the uncertainty set with **hi**
 therefore keeps a superset of the true set, separation proved on the superset holds on the true set,
 and the guarantee is valid whatever the true limiter does. The price is the monotone trend §4.1
 already shows.
 
-Required |δ| in pu, band [1.1, 2.1], 0.02 pu radius grid, continuous (m, R_f) re-check passing at
-every feasible cell:
+Required |δ| in pu, band [1.1, 2.1], 0.02 pu radius grid, per-phase rows
+([`review_wp1/tac25_softlimit.json`](review_wp1/tac25_softlimit.json)). The continuous (m, R_f) re-check
+passes for the robust column except at ε = 0.16. \* = separates the 30 design points but fails the continuous
+re-check (§4.1), so no certified design; † = not re-checked.
 
 | | hard 1.1 | hard 1.2 | hard 1.3 | hard 1.5 | hard 2.1 | **uncertain [1.1, 2.1]** | (no limit) |
 |---|---|---|---|---|---|---|---|
 | **ε = 0.04** | 0 | 0 | 0 | 0 | 0 | **0** | 0 |
 | **ε = 0.08** | 0.22 | 0.28 | 0.32 | 0.42 | 0.56 | **0.56** | 0.56 |
-| **ε = 0.12** | none | none | 0.72 | 0.82 | 1.14 | **1.14** | 1.42 |
-| **ε = 0.16** | none | none | none | none | none | **none** | none |
+| **ε = 0.12** | 0.64\* | 0.72\* | 0.72 | 0.84 | 1.14 | **1.14** | 1.42 |
+| **ε = 0.16** | none | none | none | none | 1.64\* | **1.64\*** | none |
 | ε = 0.08, ρ = 0.1 | 0.30 | 0.36 | 0.40 | 0.50 | 0.72 | **0.72** | 0.72 |
-| ε = 0.12, ρ = 0.1 | none | none | none | none | 1.26 | **1.26** | 1.72 |
+| ε = 0.12, ρ = 0.1 | none | none | 0.88† | 0.98† | 1.30 | **1.30** | 1.72 |
 
 Three readings.
 
@@ -284,13 +305,14 @@ Three readings.
    (0.28 → 0.56) and a factor of 1.6 at ε = 0.12 (0.72 at I_max 1.3 → 1.14). The claim that the
    design is feasible *because* the limit is tight was too strong: it is feasible either way, more
    expensively when the limit is not trusted.
-2. **A loose bound can rescue a cell a tight one loses.** At ε = 0.12 with ρ = 0.1 every hard limit
-   up to 1.5 is infeasible — the headroom I_max − |δ| admits no pre-fault current at all — while the
-   uncertain treatment at 2.1 returns 1.26 pu. The limit binds on the design side long before it
-   helps on the uncertainty side.
+2. **A loose bound can rescue a cell a tight one loses.** At ε = 0.12 with ρ = 0.1 the hard limits 1.1
+   and 1.2 are infeasible: no modelled pre-fault current fits beside the δ that separation requires.
+   1.3 and 1.5 give 0.88 and 0.98 pu, and the uncertain treatment at 2.1 returns 1.30 pu. The limit binds
+   on the design side long before it helps on the uncertainty side.
 3. **Injectability is the real casualty, and it is reported separately.** Producing the robust δ
-   needs |i⁺| + |δ| within the *true* limit. The smallest true limit that admits it is **1.81 pu at
-   ε = 0.08** and **2.39 pu at ε = 0.12**. The first is inside the measured spread but above its p95;
+   needs every phase current within the *true* limit. The smallest true limit that admits it is **1.81 pu
+   at ε = 0.08** and **2.37 pu at ε = 0.12** (per phase; the sum-rule bound was 2.39). The first is inside
+   the measured spread but above its p95;
    the second is outside it entirely. A soft limiter does not void the guarantee, but it does not
    supply the headroom the robust design needs either, and no amount of analysis fixes that — it is
    an inverter-rating question.
@@ -305,15 +327,17 @@ instrument figures (H2), and every returned δ re-checked on a dense continuous 
 
 ### 4.1 Measurement error against current limit
 
-Required |δ| in pu; "none" = no admissible signal exists. Base network, margin ρ = 0.
+Required |δ| in pu; "none" = no admissible signal exists. Base network, margin ρ = 0, per-phase limit rows
+(B5). \* = separates the 30 design points but not the dense continuous set (unseparated of 462 in brackets),
+so no certified design.
 
 | | I_max 1.1 | 1.2 | 1.3 | 1.5 | 2.1 | (no limit) |
 |---|---|---|---|---|---|---|
 | **ε = 0.02** | 0 | 0 | 0 | 0 | 0 | 0 |
 | **ε = 0.04** | 0 | 0 | 0 | 0 | 0 | 0 |
 | **ε = 0.08** | 0.22 | **0.28** | 0.32 | 0.42 | 0.56 | 0.56 |
-| **ε = 0.12** | none | none | 0.72 | 0.82 | 1.14 | 1.42 |
-| **ε = 0.16** | none | none | none | none | none | **none** |
+| **ε = 0.12** | 0.64\* (17) | 0.72\* (43) | 0.72 | 0.84 | 1.14 | 1.42 |
+| **ε = 0.16** | none | none | none | none | 1.64\* (63) | **none** |
 
 Four things to read off it.
 
@@ -327,10 +351,11 @@ Four things to read off it.
    unconstrained answer to the grid step. That is TAC25's mechanism made visible: a tighter limit
    removes more realisations, so a smaller signal suffices. It also means the tool's answer is only
    as good as the trust one places in the limit.
-3. **But a tighter limit can also make the problem infeasible**, and at ε = 0.12 it does: at
-   I_max 1.1 and 1.2 the headroom I_max − |δ| no longer admits any realisable pre-fault current, so
-   the inverter cannot carry its own load *and* inject what separation requires. The constraint
-   helps on one side and binds on the other; the balance moves with ε.
+3. **But a tighter limit can also leave no certified design**, and at ε = 0.12 it does. At I_max 1.1
+   and 1.2 the per-phase rows still give an answer on the 30 design points (0.64 and 0.72 pu), but it
+   fails the dense continuous re-check (17 and 43 of 462 faults). Under the first-published sum rule
+   these cells read "none". The constraint helps on one side and binds on the other; the balance moves
+   with ε.
 4. **H5's reading (a)** returns "none" in 19 of the 25 cells, including cells where an admissible δ
    demonstrably exists.
 
@@ -549,16 +574,16 @@ mechanism, the shunting factor in the first table, which does not depend on the 
 
 | Finding | Was | Now |
 |---|---|---|
-| **H5** | "No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu" | The limit was applied as an outer check on the design. Inside the problem as TAC25 (1b), the presets are **feasible** at **0.16–0.26 pu**, about half the unconstrained optimum. Infeasibility appears only at ε ≥ 0.12 with I_max ≤ 1.2 |
+| **H5** | "No inverter current limit; every preset needing δ > 0 infeasible at 1.2 pu" | The limit was applied as an outer check on the design. Inside the problem (per-phase rows, B5), the presets are **feasible** at **0.16–0.26 pu**, about half the unconstrained optimum. No certified design appears only at ε ≥ 0.12 with I_max ≤ 1.2 |
 | **H1** | "No δ ≤ 1.5 separates the zone problem at eps ≥ 0.01" | **Proved at ε = 0.16**, and more strongly than claimed: no δ below **2.24 pu** separates, certified by 28 supporting hyperplanes of one fault case's failure polygon (§2.1), in 11 s. Theorem 1 still cannot do it (§2); the convexity of the separation condition in δ can. At ε = 0.12 it stays a search result, bracketed to [1.363, 1.42] pu |
 | **H2** | "Design eps is 111–208× the synthetic phasor noise std" | True but against the wrong error model — and the replacement (a scalar 0.08–0.16 pu box) is also wrong, because instrument error is per-channel, systematic and multiplicative. With a structured set at the same class figures no signal is needed at all (§4.1.1); the feasibility boundary is an imbalance of ~12× the class per-phase spread, not a scalar ε |
 | **H7 / N7** | "No inverter fault response in the models" | Half closed. The inverter now has an IEEE 2800-style negative-sequence current response at the measured limiter angles (§4.4), which shunts the injected signal by 3–17× and reverses the IBR-share axis. Still absent: any inverter fault response in the EMT models themselves |
 | **H6** | Linearised angle set unsound | Carried: the map uses the sound outer source set throughout |
-| **H13** | Guarantee only on 30 grid points | Carried: every feasible cell re-checked on 462 continuous (m, R_f) points, 0 unseparated |
+| **H13** | Guarantee only on 30 grid points | Carried: every feasible cell re-checked on 462 continuous (m, R_f) points. With per-phase rows (B5) three cells separate the 30 design points but not the continuous set (ε 0.12 at I_max 1.1 and 1.2, ε 0.16 at 2.1) and count as no design |
 | **H14** | Zero-margin separation | Carried: ρ = 0.1 costs 29 % more signal and is affordable |
 | **H15** | Alternating scheme stops at local optima | Carried: global polar solve; reproduces the exact optima to the grid step |
 | **Claim 3** | "~0.5 pu resolves high-R LG faults — infeasible at I_max 1.2 pu" | **0.28 pu** at ε = 0.08, I_max 1.2, and feasible. The "infeasible" half is withdrawn |
-| **Claim 4** | "50 % more noise → injection exceeds inverter capability" (eps12, 1.3186 pu) | **Holds and strengthens.** At ε = 0.12 the problem is infeasible outright at I_max ≤ 1.2 — not merely expensive |
+| **Claim 4** | "50 % more noise → injection exceeds inverter capability" (eps12, 1.3186 pu) | **Holds.** At ε = 0.12 and I_max ≤ 1.2 there is no certified design: the per-phase rows give 0.64–0.72 pu on the design points, which fails the continuous re-check, and injecting it would need about 1.9 pu per phase |
 
 ---
 
@@ -573,4 +598,4 @@ mechanism, the shunting factor in the first table, which does not depend on the 
   condition, so a "not certified" elsewhere is not evidence that a δ exists.
 - The current-limit restriction no longer assumes the limit is hard (§3.1). What remains open is
   whether the inverter can supply the robust δ at all: it needs headroom to 1.81 pu at ε = 0.08 and
-  2.39 pu at ε = 0.12, and the measured inverters reach 1.5 pu at p95.
+  2.37 pu at ε = 0.12, and the measured inverters reach 1.5 pu at p95.
