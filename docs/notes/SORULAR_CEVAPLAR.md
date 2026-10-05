@@ -1329,3 +1329,28 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 2. **EMT'de:** Taylor'ın 14 baralı modelinde ya da kendi simülasyonumuzda sinyali gerçekten basmak.
 
 *Kaynak: Soru 26, 31–33; `results/CIGREMV.md` §3–§4; `results/ADAPTGRID.md`; REVIEW.md §7 satır 42, 44–46.*
+
+---
+
+## 35. Soru 34'teki koşulları (uzun hat, invertör ağırlıklı kaynak) sağlayan veri setleri hangileri?
+
+**Kısa cevap:** Hazır veri olarak hiçbiri ikisini birden tam sağlamıyor, ve hiçbirinde sinyal basılmamış. "Haberleşme kanalı yok" koşulu verinin değil, bizim değerlendirmemizin özelliği: her veri setinde röleyi tek uçlu çalıştırabiliriz. Sinyali gerçekten test etmek için model gerekiyor; veri seti yetmiyor.
+
+| Kaynak | Uzun hat | İnvertör ağırlıklı | Sinyal eklenebilir mi | Not |
+|---|---|---|---|---|
+| EvEMTBench multigrid 110 kV | Kısmen: hatlar 1–32 km | Kısmen: kaynakların yarısı invertör olabilir, ama dış şebeke 800–8.000 MVA, invertörler 20–50 MVA | Hayır | Bizim formatımız, kodumuz çalışır; 105 rastgele topoloji; henüz indirilmedi |
+| EvEMTBench multigrid 345 kV | Evet: 1–111 km | Hayır: invertör yok | Hayır | Sadece senkron makineler |
+| IRTSD (PNNL) | Muhtemelen (230/500 kV); hat uzunluğu sayfada yazmıyor | Kısmen: yaklaşık %40 invertör | Evet: PSCAD modeli açık ve değiştirilebilir | 5.500 olay, 29,6 GB, CC BY 4.0; PSCAD lisansı gerekir; 60 Hz |
+| PNNL T&D test sistemi | Belirtilmemiş | GFL + GFM invertör modelleri | Evet (model) | Sadece model ve 3 örnek, olay verisi yok; PSCAD |
+| PV santrali hatları (IEEE 9 bara, DataPort) | Belirtilmemiş | PV santrali | Hayır | Sadece akım var, gerilim yok: mesafe rölesi için kullanılamaz; ücretli |
+| PROTECT-90 | 90 kV çift hat | Hayır: invertör yok | Hayır | Ölçüm zincirini doğrulamak için |
+| Taylor'ın 14 baralı modeli (Baeckeland) | Belirtilmemiş | Evet: şebeke kurucu | Evet | Yazarlardan istenmesi gerekiyor |
+
+### Ne anlama geliyor
+- **Pasif yöntemleri uzun hatta denemek için:** EvEMTBench multigrid 110 kV. Uzun hattı ve invertöre yakın olan topolojileri seçebiliriz. Ama invertörler yine GFL ve zaten I2 basıyor; sinyal testi yapılamaz.
+- **Sinyali test etmek için:** sinyali basabileceğimiz bir model gerekiyor. Seçenekler:
+  1. Kendi statik modelimizde hatları uzatıp B1'i tekrar koşmak. En ucuzu, hemen yapılabilir; ama EMT değil.
+  2. Taylor'ın 14 baralı modeli. En uygun, şebeke kurucu; ama istememiz gerekiyor.
+  3. IRTSD'nin PSCAD modeli. Açık, iletim seviyesi; ama PSCAD lisansı gerekiyor.
+
+*Kaynak: `papers/notes/D_ml_and_datasets.md` §15–16; Soru 13–14; EvEMTBench makalesi (arXiv:2608.19777, multigrid parametreleri); IEEE DataPort sayfaları: IRTSD (DOI 10.21227/mp6d-j677), PNNL T&D modeli (DOI 10.21227/z3r5-p932), "Transients in transmission lines connected to Photovoltaic Farms".*
