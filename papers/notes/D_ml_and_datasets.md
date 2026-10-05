@@ -210,8 +210,9 @@ tabulated anywhere in the survey.** If we need numbers from this literature we h
 primary sources.
 
 **Results with numbers.** None. This is worth stating plainly: the survey is a map, not a
-measurement. Its value to us is the negative result (nobody is injecting) and the meta-observations
-below.
+measurement. Its value to us is the negative result (nobody in this survey is injecting) and the meta-observations
+below. *(Outside the survey, injection for protection does exist: Saleh et al. 2021, Mohammadhassani et al.
+2021 and Yang, Dyśko et al. 2024; papers/README.md K.)*
 
 **Stated limitations — of the field, which is what we care about.** From §4.2, §4.3 and §V:
 - "A high percentage of the selected works is based on either a two-terminal transmission line

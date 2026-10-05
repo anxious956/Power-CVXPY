@@ -128,6 +128,13 @@ EMT ambiguity's lower 95 % bound > 0; fail if on ≥ 2 relays), the δ-fits crit
 | M0 not done in 1.5 weeks | extend ibr_study by finite differences instead of a new engine |
 | re-run reverses the R1/R3 picture | reorder relays, scope unchanged |
 
+**Note (4 Oct 2026).** B1 met the first trigger, but the action "run the δ design on TestGrid" is weaker than
+this table makes it look. TestGrid's boundary separates at δ = 0, so a design there only checks that the tool
+returns δ ≈ 0 (a positive control); it says nothing about inverter grids. The inverter question continues on
+direction instead. A passive element (Opoku et al. 2025) already covers unbalanced faults at the CIGRE inverter
+buses, which leaves three-phase faults, I2-suppressing inverters and the inverter trip
+(results/CIGREMV.md §3; REVIEW.md §7 row 44; docs/notes/SORULAR_CEVAPLAR.md Q27, Q29).
+
 Standing constraint: no claim about δ in EMT is possible; no record contains an injection.
 
 ## E. What to ask Prof. Taylor

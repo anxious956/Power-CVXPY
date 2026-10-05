@@ -1064,4 +1064,83 @@ Tarama sinyal lehine iyimser: her arızaya kendi en iyi açısı veriliyor, öl�
 ### Sonraki adım
 Bridge planına göre (`review/bridge/LEAD_REVIEW.md` D): CIGRE'de δ tasarımı (M3) yapılmıyor. Olumsuz sonuç mekanizmasıyla raporlanıyor, tasarım 110 kV TestGrid'de çalıştırılıyor. Bu, Taylor'a soracağımız 4. sorunun ("olumsuz sonuç ilginizi çeker mi?") somut dayanağı.
 
+**Güncelleme (4 Eki 2026):** TestGrid'e taşımak araştırmanın sorusunu cevaplamaz. Orada sinyal zaten gerekmiyor, yani tasarım ancak aracın bir kontrolü olur (Q27). Yön sorusunda da pasif bir eleman dengesiz arızaları sinyalsiz çözüyor (Q29). Sinyal için kalan alan üç fazlı arızalar, I2'yi bastıran invertörler ve invertörün devreden çıkması.
+
 *Kaynak: `results/CIGREMV.md` §3 ("How large δ would have to be"); `results/cigremv/b1_delta_screen.json`; REVIEW.md §7 satır 42.*
+
+---
+
+## 27. B1'den sonra tasarımı 110 kV'a taşımak araştırmamızdan sapmaz mı?
+
+**Kısa cevap:** Ana şebeke yaparsak sapar. 110 kV'ta invertör payı kısa devre kapasitesinin %0,14'ü ve sınır zaten sinyalsiz ayrılıyor (CNN %95–99). Orada ne sinyale ihtiyaç var ne de sinyali basacak anlamlı bir invertör. 110 kV ancak bir kontrol olabilir: tasarım aracı, EMT'nin de sinyal gerekmez dediği yerde "gerekmez" diyor mu?
+
+### Araştırmada kalan yol
+- **Soruyu değiştirmek, şebekeyi değil.** B1 sadece erişim sorusunu test etti: iç arıza mı, hattın hemen ötesi mi? Bu, sinyalin en zor kullanımı. Taylor'ın Geometry makalesi bile erişimi rölenin karakteristiğine bırakıyor.
+- **Yön (ileri / geri):** İnvertör baralarında 32P/32Q iki yönde de yanılıyor. R1'de arkadaki 156 hattın 17 arızasını ileri, 72 iç arızanın 5'ini geri görüyor; R3'te 93'te 9 ve 85'te 12 (`results/cigremv/TABLES.md` H). İleri ve geri arızalar rölenin iki farklı tarafında, elektriksel olarak uzak. Sinyalin fark yaratma şansı erişimdekinden çok daha yüksek. IEEE 2800'ün invertörlerden negatif bileşen akımı istemesinin nedeni de yön elemanları (bildiğimiz kadarıyla; kaynaktan doğrulanmadı). **Güncelleme (Q29):** Pasif bir eleman (Opoku 2025) bu hatayı dengesiz arızalarda sinyalsiz çözüyor. Sinyal ancak üç fazlı arızalarda, I2'yi bastıran invertörlerde ve invertörün devreden çıktığı olaylarda değer katabilir.
+- **Arıza türü:** Taylor'ın Geometry makalesindeki asıl kullanım.
+- **Taylor'ın 14 baralı modeli:** İnvertörlü bir şebeke. Gelirse erişim sorusunu daha uzun hatlarda deneyebiliriz.
+
+### Olumsuz sonucun yeri
+"Kısa MV hatlarda erişim için invertörün basabileceği sinyal yetmiyor" bir araştırma sonucu. Hemen ardından "ama yön için yetiyor mu?" sorusu gelirse sonuç tek başına kalmaz.
+
+*Kaynak: `results/CIGREMV.md` §1, §3; `results/cigremv/TABLES.md` H; `review/bridge/LEAD_REVIEW.md` D; REVIEW.md §7 satır 42.*
+
+---
+
+## 28. Yeni makaleler (okuma listesi K) yön fikrimiz hakkında ne diyor?
+
+**Kısa cevap:** Bulgumuz (invertör barasında 32Q iki yönde yanılıyor) iletim seviyesinde zaten belgelenmiş. "İnvertör negatif bileşen akımı bassın, röleler düzgün çalışsın" fikri de yeni değil; IEEE 2800 bunu zaten istiyor. Bizim savunabileceğimiz katkı daha dar: akım bütçesi içinde kalan ve belirsizlik kümeleri üzerinden ayırma garantisi olan, tasarlanmış bir δ. Bu δ, iki invertörlü bir dağıtım fiderinde, yüksek arıza direncinde, yön ve faz seçimi için birlikte kullanılacak.
+
+### Ne okuduk (20 makale, tamamı; notlar `papers/notes/G1`–`G4`)
+- **Mekanizma (G1):** PES-TR81, Haddadi 2021 ve Chowdhury & Fischer Part I aynı sonuca varıyor. İnvertörün negatif bileşen "kaynak empedansı" bir kontrolcü ürünü: I2 küçük ve V2'ye göre açısı endüktif değil. Bu yüzden 67Q/32Q ters arızayı ileri, iç arızayı geri görebiliyor. Akım sınırlayıcı I2'yi kısıyor; TR81'e göre 0,8 pu yükte yaklaşık 0,45 pu kalıyor, bu da bizim 0,4 pu'luk bütçemizle uyumlu.
+- **Çözümler (G1, G2):**
+  - IEEE 2800 kuralı (I2, V2 ile orantılı ve 90–100° önde): iletimde 32Q'yu düzeltiyor. Davi 2023'te faz-faz arızasında %100, faz-toprakta %90; hatalar yüksek toprak direncinde.
+  - Kontrolcüler (Yang/Popov 2023, Azzouz/Hooshyar 2019, Medhat/Azzouz 2022, Banaiemoqadam 2020): invertörü senkron makine gibi gösteriyorlar. Hiçbirinde belirsizliğe karşı garanti yok; hepsi güçlü şebeke ve düşük arıza direnciyle test edilmiş.
+  - Röle tarafı (SEL): 32Q'nun devreye girme eşiğini 1,25·IMAX'e çıkarıyor. **Uyarı:** bu ayarla bizim 0,4 pu'luk sinyalimiz röleye hiç görünmez. Sinyal tasarımı ile röle ayarı birlikte düşünülmeli.
+- **En yakın rakipler (G3):**
+  - Saleh 2021: ileri/geri ayrımı için harmonik deseni optimizasyonla seçiyor; nominal model, ada modu.
+  - Yang, Dyśko 2024: sabit 0,3 pu I2'yi 80 ms basıyor; ada modu, tek faz-toprak arızasını ancak ~4–7 Ω'a kadar görüyor.
+  - Opoku 2025: pasif bir yön elemanı; enjeksiyonun gerekli olduğunu söylemeden önce bizim veride denemeliyiz.
+- **Teori (G4):** Scott 2014, Xu 2023, Nikoukhah 1998 ve Taylor'ın TAC 2025 Teorem 1'i aynı şeyi söylüyor. Gereken sinyal ≥ (2ε − ölçüm farkı) / N; N, iki hipotezin sinyale verdiği tepkinin farkı. Erişimde (iç arıza ile hemen ötesi) N ≈ 0, yani sinyal çok büyük olmalı; B1 bunu gösterdi. Yönde iki hipotez işaret değiştirdiği için N büyük; umut verici. (Güncelleme, Q29: Yönde pasif bir eleman dengesiz arızaları zaten çözüyor; sinyalin işi üç fazlı arızalarla sınırlı.) Kapalı çevrim (Raimondo 2016) garantisini açık çevrimden alıyor; açık çevrim ayıramıyorsa o da kurtarmıyor.
+
+### Sonraki adımlar
+1. Opoku'nun pasif yön elemanını EMT verimizde denemek (enjeksiyon gerekli mi?).
+2. SEL'in PSV50 blok mantığını invertör devreden çıkma olaylarında denemek.
+3. B1'i teorideki formülle yeniden hesaplamak; ızgara yerine doğrudan en küçük sinyal.
+4. Yön için B1 taraması: ileri ve geri arıza kümeleri.
+
+*Kaynak: `papers/README.md` K; `papers/notes/G1_mechanism_industry.md`, `G2_control_remedies.md`, `G3_injection_distribution.md`, `G4_theory.md`; REVIEW.md §7 satır 42–43.*
+
+---
+
+## 29. Pasif bir yön elemanı (Opoku 2025) invertör baralarındaki yön hatasını çözüyor mu?
+
+**Kısa cevap:** Dengesiz arızalarda evet, tamamen çözüyor. Üç fazlı arızalarda ve invertörün devreden çıkmasında çözmüyor. Yani yön için sinyal enjeksiyonu ancak bu kalan durumlarda ya da negatif bileşen akımını bastıran invertörlerde gerekli.
+
+### Ne denedik
+- Opoku vd. 2025'in elemanı: ΔY2 = ΔI2 / ΔV2, yani arıza öncesine göre negatif bileşen akımı ve gerilimindeki değişimin oranı.
+  - Açısı 45° ile 225° arasındaysa "ileri", değilse "geri".
+  - Sadece dengesiz arızalarda devreye giriyor (|I2| ≥ 0,1 |I1|).
+- Bizim 32P/32Q ile aynı fazörler, aynı arıza kümeleri, 20 ms. 32P/32Q satırları `TABLES.md` H'yi birebir verdi; karşılaştırma tutarlı.
+
+### Sonuç (20 ms)
+| | R1: 32P/32Q → ΔY2 | R3: 32P/32Q → ΔY2 |
+|---|---|---|
+| Dengesiz iç arıza "ileri" | 58/58 → 58/58 | 60/60 → 60/60 |
+| Dengesiz arka arıza yanlışlıkla "ileri" (bara + arka hatlar) | 6 + 17 → **0 + 0** | 4 + 3 → **0 + 0** |
+| Üç fazlı iç arıza "ileri" | 9/14 → 0/14 | 13/25 → 4/25 |
+
+- 110 kV'taki A rölesinde de 32P/32Q'nun ters yön hatalarını büyük ölçüde siliyor (21 ve 113 → 0 ve 14).
+- **Kalan sorunlar:**
+  - Üç fazlı arızalar: negatif bileşen olmadığı için eleman kör.
+  - Bara 3'teki invertörün devreden çıkması: R2'de 227/227, R4'te 123/227 olayı "ileri arıza" sanıyor.
+  - Transformatör inrush akımı: rölelerde 2. harmonik kilidiyle çözülür, bunu modellemedik.
+- **Önemli şart:** Eleman, verideki invertörler negatif bileşende tepki verdiği için çalışıyor. İleri arızalarda |ΔY2| ≈ 9–10 pu; bu, invertörlerin düşük gerilimdeki ~11 pu'luk negatif bileşen davranışıyla uyumlu. I2'yi bastıran bir invertörde (PES-TR81 ve Haddadi'deki "coupled control" durumu) ölçecek bir şey kalmazdı.
+
+### Araştırmaya etkisi
+"İnvertör barasında yön için tasarlanmış sinyal gerekir" fikri daraldı (REVIEW.md §7 satır 44). Sinyalin değer katabileceği yerler:
+1. Üç fazlı arızalar: röleye negatif bileşen sinyali sağlar.
+2. I2'yi bastıran invertörler.
+3. İnvertör açma gibi arıza olmayan olayları ayırmak. Bunun için ayrıca bir blok mantığı da gerekebilir; SEL'in PSV50'si bir örnek.
+
+*Kaynak: `results/CIGREMV.md` §3 ("A passive directional element at the inverter buses"); `results/cigremv/opoku_direction.json`; `src/review/opoku_direction.py`; REVIEW.md §7 satır 44.*
