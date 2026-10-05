@@ -1295,3 +1295,37 @@ Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
 - En iyi aday Taylor'ın 14 baralı modeli. Bu yüzden görüşmede hat verisini ya da Simulink modelini istiyoruz.
 
 *Kaynak: `results/CIGREMV.md` §3–§5; `results/ADAPTGRID.md`; REVIEW.md §7 satır 25, 41, 42, 44–46; Soru 26, 31, 32.*
+
+---
+
+## 34. Taylor'ın yönteminin (tasarlanmış sinyal δ) nerede çalışmasını umuyoruz?
+
+**Kısa cevap:** Üç koşulun bir arada olduğu yerde: uzun hat, invertör ağırlıklı (zayıf) kaynak ve haberleşme kanalı olmaması. Sinyalin biçimi de önemli: ölçülen gerilime göre ayarlanan, kapalı çevrim bir sinyal olmalı. Bu henüz bir hipotez; açık veride bu koşulları birlikte taşıyan şebeke yok.
+
+### Neden bu üç koşul
+Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çıkıyor:
+
+| Koşul | Neden gerekli | Dayanak |
+|---|---|---|
+| Uzun hat | İç arıza ile hemen ötesindeki arızanın sinyale farklı tepki vermesi için aralarında yeterli hat empedansı olmalı. CIGRE MV'de bu fark sadece 0,3–0,6 Ω. | B1 (Soru 26), Taylor'ın Teorem 1'i |
+| İnvertör ağırlıklı kaynak | Güçlü şebekede sınır sinyalsiz zaten ayrılıyor, sinyale gerek kalmıyor. | TestGrid 110 kV (δ = 0'da ayrılıyor) |
+| Haberleşme kanalı yok | Kanal varsa iki uçlu şemalar zaten çalışıyor (%75–82). Sinyalin değeri, tek uçlu bir çözüm olması. | CIGRE MV iki uçlu sonuçları |
+
+### Sinyalin biçimi
+- I2 bastıran invertör testinde önceden sabitlenen sinyal işe yaramadı. Arızadan sonra ölçülen V2'ye göre ayarlanan sinyal işe yaradı (Soru 32).
+- Yani yöntemin şansı, sinyali ölçüme göre ayarlayan, geri beslemeli bir tasarımda.
+- IEEE 2800 bu davranışı iletime bağlı invertörlerden istiyor. Dağıtıma bağlı invertörler için bildiğimiz kadarıyla böyle bir zorunluluk yok. Tasarlanmış bir sinyalin anlam kazanabileceği yer orası.
+
+### Somut aday
+- Kırsal 34,5–69 kV hatlar: uzun (onlarca km), ucunda büyük bir güneş ya da rüzgâr santrali, fiber kanalı yok.
+- Şebeke kurucu (grid-forming) invertörlü sistemler. Taylor'ın 14 baralı modeli bu türden ve yöntem orada geliştirildi.
+
+### Nerede çalışmasını beklemiyoruz
+- Kısa kablolu, 20 kV'luk kent içi dağıtım fiderleri (CIGRE MV).
+- Güçlü, senkron kaynaklı iletim şebekeleri (TestGrid). Orada zaten bizim öğrenen detektörümüz (CNN) %95–99 yakalıyor.
+
+### Nasıl kontrol ederiz
+1. **Modelde, hemen:** B1 taramasını hatları uzatılmış CIGRE MV modelinde tekrar koşmak. Sinyalin erişime katkısı hat boyuyla artıyor mu?
+2. **EMT'de:** Taylor'ın 14 baralı modelinde ya da kendi simülasyonumuzda sinyali gerçekten basmak.
+
+*Kaynak: Soru 26, 31–33; `results/CIGREMV.md` §3–§4; `results/ADAPTGRID.md`; REVIEW.md §7 satır 42, 44–46.*
