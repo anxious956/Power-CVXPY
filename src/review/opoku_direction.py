@@ -16,6 +16,14 @@ inductive source. The paper does not state the per-unit base of Y_set: the angle
 (Y_set = 0) and with Y_set = 0.1 / 0.4 / 1 pu on a per-grid base (20 kV, 15 MVA on CIGRE as in B1;
 110 kV, 100 MVA on TestGrid).
 
+BALANCED FAULTS (our extension, not in the paper)  The same test on positive-sequence superimposed quantities,
+dY1 = dI1 / dV1 with the same sector, for events the dY2 element does not enable (|I2| < 0.1 |I1|). Two fault
+detectors are compared: |dI1| >= 0.2 In (the relay's CT primary), which misses the high-R_f faults an inverter-fed
+relay sees, and a positive-sequence voltage change |dV1| >= 5 % of nominal. "dY2 + dY1" uses dY2 when it is enabled
+and dY1 with the voltage detector otherwise. "dY2 or dY1" calls forward when either does; it was chosen AFTER seeing
+that a three-phase fault's first-cycle transient can enable dY2 with a wrong angle (6 of 25 at R3), so read it as a
+post-hoc rule.
+
 CLASSES  in-zone faults and the faults beyond the remote bus are forward; relay-bus faults and faults on the
 lines behind are reverse; switching events (an inverter disconnecting, load and capacitor switching) must not
 be called forward. Dependability is reported over all faults and over unbalanced faults only, because the
@@ -60,8 +68,17 @@ def evaluate(R, t):
     enabled = np.abs(ipost[:, 2]) >= I2_I1_MIN * np.abs(ipost[:, 1])
     fwd_ang = enabled & (ang > PHI) & (ang < 180 + PHI)
     dy = {f"Y_set={y}": fwd_ang & (y_pu > y) for y in Y_SETS}
+    dI1, dV1 = ipost[:, 1] - ipre[:, 1], vpost[:, 1] - vpre[:, 1]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ang1 = np.degrees(np.angle(np.where(np.abs(dV1) > 0, dI1 / dV1, np.nan))) % 360
+    sector1 = (ang1 > PHI) & (ang1 < 180 + PHI)
+    dy1_i = ~enabled & (np.abs(dI1) >= 0.2 * ld.profile(R)["ct_primary_a"] * np.sqrt(2)) & sector1
+    dy1 = ~enabled & (np.abs(dV1) >= 0.05 * R["v_nom_peak"]) & sector1
     unbal = np.isin(R["et"], [e for e in np.unique(R["et"]) if ("1phg" in e or "2ph" in e)])
-    elements = {"32P/32Q": d32, **{f"dY2 {k}": v for k, v in dy.items()}}
+    elements = {"32P/32Q": d32, **{f"dY2 {k}": v for k, v in dy.items()}, "dY1, current detector (balanced only)": dy1_i,
+                "dY1, voltage detector (balanced only)": dy1,
+                "dY2 + dY1": dy["Y_set=0.0"] | dy1,
+                "dY2 or dY1": dy["Y_set=0.0"] | ((np.abs(dV1) >= 0.05 * R["v_nom_peak"]) & sector1)}
     out = dict(t_ms=t, elements={})
     for name, dec in elements.items():
         e = dict()
@@ -69,6 +86,7 @@ def evaluate(R, t):
             e[c] = kn(dec, R[c])
             if c in ("pos",) + REVERSE:
                 e[c + "_unbalanced"] = kn(dec, R[c] & unbal)
+                e[c + "_balanced"] = kn(dec, R[c] & ~unbal)
                 e[c + "_by_rf_bin"] = {b: kn(dec, R[c] & (R["rf_bin"] == b)) for b in cm.RF_LABELS}
         sw = R["switching"]
         e["switching"] = kn(dec, sw)
@@ -93,7 +111,7 @@ def main(relays):
         R = cm.load_relay(name)
         r = res["relays"][name] = {f"t={t}": evaluate(R, t) for t in T_MS}
         e20 = r["t=20"]["elements"]
-        for el in ("32P/32Q", "dY2 Y_set=0.0", "dY2 Y_set=0.4"):
+        for el in ("32P/32Q", "dY2 Y_set=0.0", "dY2 + dY1", "dY2 or dY1"):
             e = e20[el]
             print(f"[{name}] 20 ms {el:16s} in-zone fwd {e['pos']['k']}/{e['pos']['n']} (unbal {e['pos_unbalanced']['k']}/{e['pos_unbalanced']['n']})"
                   f"  relay-bus fwd {e['reverse_bus']['k']}/{e['reverse_bus']['n']}  behind fwd {e['reverse_lines']['k']}/{e['reverse_lines']['n']}"

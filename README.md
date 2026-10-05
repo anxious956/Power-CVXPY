@@ -274,11 +274,13 @@ rather than a 5 % budget.
   either needs no δ in the model or more than 1.2 pu. The δ design for reach is therefore not pursued on
   this grid, and the result is reported as a negative one with its mechanism. TestGrid needs no δ (its
   boundary separates at δ = 0), so a design there would only be a positive control of the tool.
-- **A passive directional baseline** ([results/CIGREMV.md](results/CIGREMV.md) §3): the superimposed
-  negative-sequence admittance element of Opoku et al. (2025) makes no unbalanced-fault direction error
-  at the inverter buses, where 32P/32Q made 30. Three-phase faults and an inverter disconnecting remain
-  unsolved, so an injected signal for direction is needed only there, or with inverters that suppress
-  negative-sequence current.
+- **A passive directional baseline** ([results/CIGREMV.md](results/CIGREMV.md) §3): superimposed-quantity
+  elements settle direction at the inverter buses in the first cycle. The negative-sequence admittance
+  element of Opoku et al. (2025) covers unbalanced faults, and our positive-sequence version covers
+  three-phase faults: all in-zone faults forward and no reverse fault forward at R1 and R3, where 32P/32Q
+  made 39 reverse errors. The static model agrees that three-phase direction needs no injected signal.
+  What remains is telling a fault from an inverter disconnecting (still called forward at R2 and R4), and
+  inverters that suppress negative-sequence current. The second is not in this data.
 
 Every refuted or narrowed claim is in the register, [REVIEW.md](REVIEW.md) §7 (rows 26, 32 onward).
 

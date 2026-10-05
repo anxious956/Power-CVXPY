@@ -177,8 +177,8 @@ both-ends references work.
    12/85 in-zone faults; at R2 and R4 the same counts are ≤ 1/85, 1/92, 1/72 and 0/76 (TABLES H). The
    relay-bus errors at R1 and R3 are all at R_f > 15 Ω. Direction was already imperfect on TestGrid relay A (41/188
    relay-bus faults forward, from meshing), so this is a pattern that coincides with the inverter buses,
-   not a proof that the inverter causes it. **This failure belongs to 32P/32Q, not to the measurement:** a
-   passive element built for IBR feeders makes none of the unbalanced-fault errors (next section).
+   not a proof that the inverter causes it. **This failure belongs to 32P/32Q, not to the measurement:** passive
+   superimposed-quantity elements make none of these errors in the first cycle (next section).
 3. **The CNN needs reverse faults in training at R4.** With reverse faults removed from training it trips
    20–21 of 81 relay-bus faults (0 when they are in training); on TestGrid it tripped none of 1,387 in the
    same test (TABLES F). At R1 and R3 holding them out changes nothing; at R2 it adds 1 relay-bus trip.
@@ -211,22 +211,57 @@ unbalanced in-zone fault is called forward and no unbalanced reverse fault is; a
 1 lines-behind error. The same element also removes 32P/32Q's reverse errors on TestGrid relay A (21/149 and
 113/159 unbalanced, now 0 and 14).
 
+**Three-phase faults: the same idea in positive sequence.**
+- The extension below is ours, not the paper's.
+  - It applies the same sector test to ΔY1 = ΔI1 / ΔV1.
+  - It is used where the ΔY2 element is not enabled.
+  - Its fault detector is a 5 % change in positive-sequence voltage. A current detector (0.2 In) misses the
+    high-R_f faults that an inverter-fed relay sees.
+- At R1 and R3 every in-zone three-phase fault has ΔY1 inside the forward sector (84–149°).
+  - 32P has the opposite pattern: it calls the high-R_f faults right and misses the low- and medium-R_f ones.
+- How the two elements are combined matters at R3:
+  - "ΔY2 when enabled, else ΔY1" misses 6 of 25 in-zone three-phase faults there. In all 6, the first-cycle
+    transient enables ΔY2 with a wrong angle.
+  - "Forward if either says so" catches all of them.
+  - That second rule was chosen after seeing R3, so it is post-hoc, and it costs security elsewhere.
+
+At 20 ms, "ΔY2 or ΔY1":
+
+| faults called forward | R1 | R3 | R2 | R4 | TestGrid A | TestGrid B |
+|---|---|---|---|---|---|---|
+| in-zone, all types (should be forward) | 72/72 | 85/85 | 71/72 | 76/76 | 168/168 | 207/207 |
+| relay bus and lines behind (should be reverse) | 0/232 | 0/168 | 3/177 | 0/81 | 35/387 | 0/1000 |
+| 32P/32Q on the same reverse faults | 23/232 | 16/168 | 2/177 | 0/81 | 189/387 | 0/1000 |
+
+- **Direction at the inverter buses is settled by passive elements, for every fault type, in the first cycle.**
+- The safer rule ("ΔY2 when enabled, else ΔY1") keeps reverse errors at 0 on every CIGRE relay but 1 at R2 and
+  misses the 6 three-phase faults at R3.
+- **The superimposed elements are first-cycle elements.** By 40 ms the pre-fault reference no longer isolates
+  the fault from the inverters' control response. ΔY1 then calls 21 of 23 reverse three-phase relay-bus faults
+  forward at R2, so the decision has to be latched at the first cycle, as the paper does.
+- **The model agrees.** `b1_direction_screen.py` reuses B1's model with forward and reverse three-phase faults
+  ([`cigremv/b1_direction_3ph.json`](cigremv/b1_direction_3ph.json)). No pair is closer than 2ε at δ = 0 for any
+  ε up to 0.02 pu, at any relay or R_f band. In a spot check at the median operating point the nearest pairs
+  are 0.40–0.53 pu apart, in I1. A three-phase
+  fault's direction needs no injected signal.
+
 What is left:
-- **Three-phase faults.** The element has no negative-sequence quantity to use there. 32P misses 5 of 14 and
-  12 of 25 in-zone three-phase faults at R1 and R3, and calls 9 of 34 reverse ones forward at R3.
-- **An inverter disconnecting.** It reads as an unbalanced forward disturbance at R2 and R4, so the inverter-trip
-  failure mode above is not fixed by direction alone.
+- **An inverter disconnecting.** It reads as a forward disturbance at R2 and R4 (227/227 and 123/227), so the
+  inverter-trip failure mode above is not fixed by any direction element.
 - **Transformer energisation.** HV inrush events are called forward at many buses. Relays block these with a
   second-harmonic restraint, which is not modelled here.
+- **Inverters that suppress I2.** See the caveat below.
 
-**One caveat decides how far this carries.** The element works because the recorded inverters do respond in
-negative sequence. For forward faults at the inverter-bus relays |ΔY2| is about 9–10 pu, which is consistent
-with the inverters' low-u2 negative-sequence admittance (about 11 pu) rather than with the load alone. With an inverter that suppresses I2, the coupled-control case of PES-TR81 and Haddadi et al.,
-there would be little to measure.
+**One caveat decides how far this carries.** The ΔY2 element works because the recorded inverters do respond in
+negative sequence. For forward faults at the inverter-bus relays |ΔY2| is about 9–10 pu. That is consistent with
+the inverters' low-u2 negative-sequence admittance (about 11 pu) rather than with the load alone. With an inverter
+that suppresses I2, the coupled-control case of PES-TR81 and Haddadi et al., there would be little to measure.
 
-For the project this narrows where an injected signal could add value on direction to three cases:
-three-phase faults, inverters that suppress I2, and events such as an inverter tripping. It is not needed
-for unbalanced faults at these relays.
+**For the project:**
+- On this data, direction at the inverter buses does not need an injected signal.
+- What an injection could still be argued for is narrow: inverters that suppress I2, and telling a fault from an
+  event such as an inverter tripping.
+- The second is a fault-versus-event question, not a direction question.
 
 ### Hasan et al. (2026) on this grid
 
@@ -313,9 +348,9 @@ favour: the model calls half of R2's in-zone faults separable without δ, where 
 covers more than 8.3 % at zero false trips. The real requirement is therefore larger than these numbers, not smaller. For the
 bridge this means no δ design for reach (M3) on this grid; the negative result is reported with its mechanism.
 The bridge plan's fallback, running the design on TestGrid (LEAD_REVIEW.md D), would only be a positive
-control of the tool, because TestGrid's boundary separates without δ. The inverter question continues on
-direction, where the passive baseline above leaves three-phase faults, I2-suppressing inverters and the
-inverter trip open, and on Taylor's 14-bus model if it becomes available.
+control of the tool, because TestGrid's boundary separates without δ. The inverter question continues on what
+the passive baseline above leaves open: I2-suppressing inverters and the inverter trip. It also continues on
+Taylor's 14-bus model if that becomes available.
 
 ### Quick checks: settings, channel delay, CT saturation
 
@@ -360,8 +395,8 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
 - **The inverter failure modes are security problems, not coverage problems.** An inverter trip read as a
   forward in-zone fault, and 32P/32Q wrong both ways at an inverter bus, are the kind of misoperation the
   project's IBR motivation (Sandia 2024 gap analysis) is about. The first survives directional supervision,
-  including a passive negative-sequence admittance element. That element removes the second for
-  unbalanced faults but not for three-phase faults (§3).
+  including a passive negative-sequence admittance element. Superimposed-quantity elements remove the
+  second in the first cycle, for unbalanced and three-phase faults (§3).
 - **For the project's central question** this is motivation, not evidence: a passive single-ended
   fundamental-frequency measurement does not locate the boundary here for these faults, which is the gap a
   designed auxiliary injection would have to close. In the study model a designed δ barely moves that
@@ -369,9 +404,9 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
   so on this grid the injection question is whether any δ the inverter can supply closes it — the bridge's
   first screening. It does not (B1, §3): in the study model, δ within the inverter's whole current adds 8–13
   points of separable in-zone faults, and the share it can afford at a design angle, 0.4 pu, adds 2–4. No
-  record here carries an injection (ADAPTGRID.md §5). For direction, the passive element of §3 already
-  handles unbalanced faults at the inverter buses. An injection could add value there only for three-phase
-  faults, for inverters that suppress I2, and for non-fault events such as an inverter tripping.
+  record here carries an injection (ADAPTGRID.md §5). For direction, passive superimposed-quantity
+  elements already settle the inverter buses in the first cycle (§3). An injection could add value only for
+  inverters that suppress I2, and for telling a fault from an event such as an inverter tripping.
 
 ## 5. Limits
 

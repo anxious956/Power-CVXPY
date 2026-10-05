@@ -1,0 +1,628 @@
+{
+ "script": "b1_direction_screen.py",
+ "commit": "817aaf019d618695918e912234bbf835564cbd01",
+ "eps": [
+  0.005,
+  0.01,
+  0.02
+ ],
+ "eps_headline": 0.01,
+ "note": "need fields are the smallest |delta| on the grid that separates; null = none up to the largest magnitude",
+ "m_forward": [
+  0.1,
+  0.5,
+  0.85
+ ],
+ "behind_at": [
+  0.05,
+  0.2,
+  0.5
+ ],
+ "rf_in": {
+  "<5": [
+   0.5,
+   2.0,
+   4.5
+  ],
+  "5-15": [
+   6.0,
+   8.5,
+   11.0,
+   14.0
+  ],
+  "15-40": [
+   17.5,
+   22.5,
+   27.5,
+   32.5,
+   37.5
+  ],
+  ">40": [
+   42.5,
+   47.5
+  ]
+ },
+ "rf_out": [
+  0.0,
+  60.0,
+  141
+ ],
+ "delta_magnitudes_pu": [
+  0.2,
+  0.4,
+  0.7,
+  1.2,
+  2.0,
+  3.0
+ ],
+ "delta_angles_deg": [
+  0.0,
+  29.999999999999996,
+  59.99999999999999,
+  90.0,
+  119.99999999999999,
+  150.0,
+  180.0,
+  210.00000000000003,
+  239.99999999999997,
+  270.0,
+  300.0,
+  330.0
+ ],
+ "rf_window": 4,
+ "min_emt_per_cell": 5,
+ "relays": {
+  "cigre_R1": {
+   "relay": "cigre_R1",
+   "relay_bus": "MainBus3",
+   "line": "MainLn2-3",
+   "remote_bus": "MainBus2",
+   "injector": "MainBus3",
+   "operating_points": [
+    {
+     "label": "p10",
+     "total_load_mw": 12.130796658217717,
+     "usetp": 0.9826211041178068
+    },
+    {
+     "label": "p50",
+     "total_load_mw": 15.024570295108093,
+     "usetp": 1.008654398300766
+    },
+    {
+     "label": "p90",
+     "total_load_mw": 17.93213468726219,
+     "usetp": 1.005089093620117
+    }
+   ],
+   "groundings": [
+    {
+     "kind": "solid",
+     "r_ohm": 1.0591681640727992
+    },
+    {
+     "kind": "resistive",
+     "r_ohm": 7.69305986173544
+    }
+   ],
+   "y2": {
+    "secant": [
+     [
+      0.7954318152359585,
+      -2.347034437808457
+     ],
+     [
+      0.6902655388595669,
+      -2.2033798262739985
+     ]
+    ],
+    "low_u2": [
+     [
+      11.0,
+      0.0
+     ],
+     [
+      11.0,
+      0.0
+     ]
+    ]
+   },
+   "n_in": 504,
+   "n_out": 11844,
+   "unconverged_in": 12,
+   "unconverged_out": 24,
+   "delta_grid_in": 0,
+   "delta_grid_out": 0,
+   "cells": {
+    "3ph|<5": {
+     "emt_in_zone": 0,
+     "n_model": 96,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|5-15": {
+     "emt_in_zone": 4,
+     "n_model": 144,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|15-40": {
+     "emt_in_zone": 9,
+     "n_model": 180,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|>40": {
+     "emt_in_zone": 1,
+     "n_model": 72,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    }
+   },
+   "verdict_eps_0p01": {
+    "cells_with_min_emt": 1,
+    "cells_need_above_1p2": 0,
+    "emt_in_zone_in_those_cells": 9,
+    "emt_in_zone_in_cells_need_above_1p2": 0,
+    "stop_rule_met": false,
+    "emt_weighted_share_le_0p4": 1.0,
+    "emt_weighted_share_le_1p2": 1.0
+   },
+   "runtime_s": 13.560374736785889,
+   "hypotheses": {
+    "forward": "three-phase faults on MainLn2-3 at [0.1, 0.5, 0.85] from the relay",
+    "reverse": "three-phase faults at MainBus3 and [0.05, 0.2, 0.5] into each line behind it"
+   }
+  },
+  "cigre_R2": {
+   "relay": "cigre_R2",
+   "relay_bus": "MainBus2",
+   "line": "MainLn2-3",
+   "remote_bus": "MainBus3",
+   "injector": "MainBus3",
+   "operating_points": [
+    {
+     "label": "p10",
+     "total_load_mw": 12.130796658217717,
+     "usetp": 0.9826211041178068
+    },
+    {
+     "label": "p50",
+     "total_load_mw": 15.024570295108093,
+     "usetp": 1.008654398300766
+    },
+    {
+     "label": "p90",
+     "total_load_mw": 17.93213468726219,
+     "usetp": 1.005089093620117
+    }
+   ],
+   "groundings": [
+    {
+     "kind": "solid",
+     "r_ohm": 1.0591681640727992
+    },
+    {
+     "kind": "resistive",
+     "r_ohm": 7.69305986173544
+    }
+   ],
+   "y2": {
+    "secant": [
+     [
+      0.7954318152359585,
+      -2.347034437808457
+     ],
+     [
+      0.6902655388595669,
+      -2.2033798262739985
+     ]
+    ],
+    "low_u2": [
+     [
+      11.0,
+      0.0
+     ],
+     [
+      11.0,
+      0.0
+     ]
+    ]
+   },
+   "n_in": 504,
+   "n_out": 6768,
+   "unconverged_in": 12,
+   "unconverged_out": 84,
+   "delta_grid_in": 0,
+   "delta_grid_out": 0,
+   "cells": {
+    "3ph|<5": {
+     "emt_in_zone": 1,
+     "n_model": 96,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|5-15": {
+     "emt_in_zone": 5,
+     "n_model": 144,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|15-40": {
+     "emt_in_zone": 12,
+     "n_model": 180,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|>40": {
+     "emt_in_zone": 1,
+     "n_model": 72,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    }
+   },
+   "verdict_eps_0p01": {
+    "cells_with_min_emt": 2,
+    "cells_need_above_1p2": 0,
+    "emt_in_zone_in_those_cells": 17,
+    "emt_in_zone_in_cells_need_above_1p2": 0,
+    "stop_rule_met": false,
+    "emt_weighted_share_le_0p4": 1.0,
+    "emt_weighted_share_le_1p2": 1.0
+   },
+   "runtime_s": 16.23440909385681,
+   "hypotheses": {
+    "forward": "three-phase faults on MainLn2-3 at [0.1, 0.5, 0.85] from the relay",
+    "reverse": "three-phase faults at MainBus2 and [0.05, 0.2, 0.5] into each line behind it"
+   }
+  },
+  "cigre_R3": {
+   "relay": "cigre_R3",
+   "relay_bus": "MainBus14",
+   "line": "MainLn13-14",
+   "remote_bus": "MainBus13",
+   "injector": "MainBus14",
+   "operating_points": [
+    {
+     "label": "p10",
+     "total_load_mw": 12.130796658217717,
+     "usetp": 0.9826211041178068
+    },
+    {
+     "label": "p50",
+     "total_load_mw": 15.024570295108093,
+     "usetp": 1.008654398300766
+    },
+    {
+     "label": "p90",
+     "total_load_mw": 17.93213468726219,
+     "usetp": 1.005089093620117
+    }
+   ],
+   "groundings": [
+    {
+     "kind": "solid",
+     "r_ohm": 1.0591681640727992
+    },
+    {
+     "kind": "resistive",
+     "r_ohm": 7.69305986173544
+    }
+   ],
+   "y2": {
+    "secant": [
+     [
+      0.7954318152359585,
+      -2.347034437808457
+     ],
+     [
+      0.6902655388595669,
+      -2.2033798262739985
+     ]
+    ],
+    "low_u2": [
+     [
+      11.0,
+      0.0
+     ],
+     [
+      11.0,
+      0.0
+     ]
+    ]
+   },
+   "n_in": 504,
+   "n_out": 6768,
+   "unconverged_in": 0,
+   "unconverged_out": 12,
+   "delta_grid_in": 0,
+   "delta_grid_out": 0,
+   "cells": {
+    "3ph|<5": {
+     "emt_in_zone": 8,
+     "n_model": 108,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|5-15": {
+     "emt_in_zone": 6,
+     "n_model": 144,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|15-40": {
+     "emt_in_zone": 7,
+     "n_model": 180,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|>40": {
+     "emt_in_zone": 4,
+     "n_model": 72,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    }
+   },
+   "verdict_eps_0p01": {
+    "cells_with_min_emt": 3,
+    "cells_need_above_1p2": 0,
+    "emt_in_zone_in_those_cells": 21,
+    "emt_in_zone_in_cells_need_above_1p2": 0,
+    "stop_rule_met": false,
+    "emt_weighted_share_le_0p4": 1.0,
+    "emt_weighted_share_le_1p2": 1.0
+   },
+   "runtime_s": 8.08878779411316,
+   "hypotheses": {
+    "forward": "three-phase faults on MainLn13-14 at [0.1, 0.5, 0.85] from the relay",
+    "reverse": "three-phase faults at MainBus14 and [0.05, 0.2, 0.5] into each line behind it"
+   }
+  },
+  "cigre_R4": {
+   "relay": "cigre_R4",
+   "relay_bus": "MainBus1",
+   "line": "MainLn1-2",
+   "remote_bus": "MainBus2",
+   "injector": "MainBus3",
+   "operating_points": [
+    {
+     "label": "p10",
+     "total_load_mw": 12.130796658217717,
+     "usetp": 0.9826211041178068
+    },
+    {
+     "label": "p50",
+     "total_load_mw": 15.024570295108093,
+     "usetp": 1.008654398300766
+    },
+    {
+     "label": "p90",
+     "total_load_mw": 17.93213468726219,
+     "usetp": 1.005089093620117
+    }
+   ],
+   "groundings": [
+    {
+     "kind": "solid",
+     "r_ohm": 1.0591681640727992
+    },
+    {
+     "kind": "resistive",
+     "r_ohm": 7.69305986173544
+    }
+   ],
+   "y2": {
+    "secant": [
+     [
+      0.7954318152359585,
+      -2.347034437808457
+     ],
+     [
+      0.6902655388595669,
+      -2.2033798262739985
+     ]
+    ],
+    "low_u2": [
+     [
+      11.0,
+      0.0
+     ],
+     [
+      11.0,
+      0.0
+     ]
+    ]
+   },
+   "n_in": 504,
+   "n_out": 1692,
+   "unconverged_in": 0,
+   "unconverged_out": 12,
+   "delta_grid_in": 0,
+   "delta_grid_out": 0,
+   "cells": {
+    "3ph|<5": {
+     "emt_in_zone": 1,
+     "n_model": 108,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|5-15": {
+     "emt_in_zone": 3,
+     "n_model": 144,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|15-40": {
+     "emt_in_zone": 11,
+     "n_model": 180,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    },
+    "3ph|>40": {
+     "emt_in_zone": 8,
+     "n_model": 72,
+     "ambiguous_at_delta0": {
+      "eps=0.005": 0.0,
+      "eps=0.01": 0.0,
+      "eps=0.02": 0.0
+     },
+     "need_lower_bound_pu": 0.0,
+     "need_exceeds_grid": false,
+     "median_one_angle_per_fault_pu": 0.0,
+     "share_le_0p4": 1.0,
+     "share_le_1p2": 1.0,
+     "one_angle_for_cell_pu": 0.0
+    }
+   },
+   "verdict_eps_0p01": {
+    "cells_with_min_emt": 2,
+    "cells_need_above_1p2": 0,
+    "emt_in_zone_in_those_cells": 19,
+    "emt_in_zone_in_cells_need_above_1p2": 0,
+    "stop_rule_met": false,
+    "emt_weighted_share_le_0p4": 1.0,
+    "emt_weighted_share_le_1p2": 1.0
+   },
+   "runtime_s": 4.811834335327148,
+   "hypotheses": {
+    "forward": "three-phase faults on MainLn1-2 at [0.1, 0.5, 0.85] from the relay",
+    "reverse": "three-phase faults at MainBus1 and [0.05, 0.2, 0.5] into each line behind it"
+   }
+  }
+ }
+}
