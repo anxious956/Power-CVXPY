@@ -1390,3 +1390,24 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 - Gerçekten uzun hatlar (yüksek gerilimde onlarca km) bu modelle test edilemiyor. Onun için Taylor'ın modeli ya da IRTSD gerekiyor (Soru 35).
 
 *Kaynak: `results/CIGREMV.md` §3 (B1, "Longer lines"); `results/cigremv/b1_long_lines_coarse.json`; `src/review/b1_long_lines.py`; REVIEW.md §7 satır 47.*
+
+---
+
+## 37. Taylor'a mailde söylediğimiz iddialar doğrulandı mı?
+
+**Kısa cevap:** Eğilimler doğrulandı, kesin sayılar tam doğrulanmadı. Güçlü kaynakta sinyal gerekmiyor, zayıf kaynakta gerekiyor, gürültü artınca çok daha fazlası gerekiyor: bunlar tutuyor. "0,4–0,7 pu" ve "1 pu'yu geçiyor, invertör veremez" ise modellemeye çok bağlı.
+
+| Mailde dediğimiz | Durum | Ayrıntı |
+|---|---|---|
+| Tasarımı CVXPY ile iki baralı örnekte yeniden kurduk | Yapıldı | `src/aux_signal_toy.py` (CVXPY + Clarabel). Aracın bulduğu sinyaller tam en küçük değil: 0,51 pu yerine kesin minimum 0,50 pu (REVIEW.md §7 satır 1, 5) |
+| Güçlü senkron kaynakta sinyal gerekmiyor | Tutuyor | Bu iki baralı modelde kanıtlı (satır 2). 110 kV gerçek EMT verisinde de aynısı çıktı |
+| Zayıf kaynak/invertörde yüksek dirençli toprak arızaları ayrılamıyor, ~0,4–0,7 pu gerekiyor | Kısmen | Ayrılamama doğru (30 arızanın 5–7'si). Sayı modele bağlı: %10 güvenlik payıyla 0,67–1,36 pu; açı belirsizliği doğru modellenince 0,55–1,05 pu; invertörün faz başına akım sınırı probleme eklenince 0,20–0,32 pu (satır 1, 3) |
+| Gürültü %50 artınca iki kat daha çok belirsiz durum, sinyal 1 pu'yu geçiyor, invertörün verebileceğinden fazla | Kısmen | İki kat doğru (30'da 5 → 10). Akım sınırı olmayan modelde 1,32 pu. Sınır doğru eklenince ~0,76 pu ile çözülüyor; "invertör veremez" kesin değil. Pratikte ise CIGRE ölçümüne göre 0,7 pu arızaların sadece %8–33'ünde invertöre sığıyor (satır 4) |
+| İkimizin ISAIA'da kabul edilmiş makalesi var | Repoda yok | Kontrol edilemedi |
+
+**Not:** Akım sınırlı sayılar (0,20–0,32 pu ve ~0,76 pu) ara kontrol. Düzgün yeniden koşusu bekliyor (review/bridge/LEAD_REVIEW.md B5).
+
+### Görüşmede sorulursa
+> "In the email I quoted 0.4–0.7 pu, and past 1 pu with more noise. Since then we found those were the tool's first answers with no margin; how the inverter's current limit is modelled changes them a lot, from about 0.2–0.3 pu to over 1 pu. The trend holds: a weak source needs a signal, and more noise needs much more."
+
+*Kaynak: README.md ("What is already here"); REVIEW.md §7 satır 1–6; `results/DESIGN.md` §3, §4.1; `review/WP1_REPORT.md`; `results/CIGREMV.md` §3 ("Room in the inverter").*
