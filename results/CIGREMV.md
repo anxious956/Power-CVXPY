@@ -479,6 +479,36 @@ control of the tool, because TestGrid's boundary separates without δ. The inver
 the passive baseline above leaves open: I2-suppressing inverters and the inverter trip. It also continues on
 Taylor's 14-bus model if that becomes available.
 
+**Longer lines (coarse first look).** `b1_long_lines.py --coarse` re-runs the screening with the protected line
+and the lines beyond it 2× and 3× longer, everything else unchanged
+([`cigremv/b1_long_lines_coarse.json`](cigremv/b1_long_lines_coarse.json)). It tests the hypothesis left for the
+method, that δ needs longer lines (docs/notes/SORULAR_CEVAPLAR.md Q34).
+- 3× is the limit. At 10× the 20 kV pre-fault load flow does not converge at any relay, which `ibr_study.prefault`
+  does not report; the script now checks it.
+- The grid is coarse: one R_f per band, out-of-zone R_f every 2 Ω, |δ| 0.4 and 1.2 pu at 4 angles, and ×1
+  recomputed on it. It overstates separability without δ and understates δ, alike at every scale, so only the
+  trend is read.
+
+EMT-weighted in-zone faults separable without δ, and the points δ adds:
+
+| relay | ×1: none · +0.4 pu · +1.2 pu | ×2 | ×3 (gap 85 % → remote bus) |
+|---|---|---|---|
+| R1 | 19.3 · +3.1 · +12.6 | 34.4 · +3.1 · +13.7 | 54.5 · +7.8 · +10.2 (1.74 Ω) |
+| R2 | 53.5 · +3.3 · +17.2 | 75.6 · +0.8 · +5.6 | 81.0 · +5.2 · +8.2 (1.74 Ω) |
+| R3 | 19.5 · +2.5 · +6.9 | 29.5 · +1.5 · +11.8 | 31.6 · +3.1 · +15.2 (0.93 Ω) |
+| R4 | 47.2 · +5.8 · +11.3 | 58.8 · +3.7 · +10.3 | 64.0 · +11.2 · +19.1 (1.11 Ω) |
+
+- **Longer lines help mainly the passive measurement.** Without δ, separability rises by 12–35 points from ×1
+  to ×3.
+- **What δ adds does not grow in step.**
+  - The affordable 0.4 pu adds 1–11 points at every length. It rises only at ×3, at R1 and R4.
+  - The full current, 1.2 pu, grows at R3 and R4 and falls at R2, where the passive share approaches its
+    ceiling.
+- **The hypothesis is not supported up to 3×.** As the line lengthens, the boundary becomes passively
+  separable faster than δ becomes useful.
+- Pre-fault voltages stay within 0.92–1.14 pu; R3 at 3× reaches 1.14 pu at its inverter bus.
+- Unconverged solves stay at the 1× level, except 24 of R3's 384 in-zone faults at 3×.
+
 ### Quick checks: settings, channel delay, CT saturation
 
 `cigremv_checks.py` → [`cigremv/quick_checks.json`](cigremv/quick_checks.json); no training, frozen

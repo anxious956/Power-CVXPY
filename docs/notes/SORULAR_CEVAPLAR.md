@@ -1324,6 +1324,8 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 - Kısa kablolu, 20 kV'luk kent içi dağıtım fiderleri (CIGRE MV).
 - Güçlü, senkron kaynaklı iletim şebekeleri (TestGrid). Orada zaten bizim öğrenen detektörümüz (CNN) %95–99 yakalıyor.
 
+> **Güncelleme:** Uzun hat hipotezini modelde kaba bir taramayla test ettik; 3 kata kadar desteklenmedi. Bkz. Soru 36.
+
 ### Nasıl kontrol ederiz
 1. **Modelde, hemen:** B1 taramasını hatları uzatılmış CIGRE MV modelinde tekrar koşmak. Sinyalin erişime katkısı hat boyuyla artıyor mu?
 2. **EMT'de:** Taylor'ın 14 baralı modelinde ya da kendi simülasyonumuzda sinyali gerçekten basmak.
@@ -1354,3 +1356,37 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
   3. IRTSD'nin PSCAD modeli. Açık, iletim seviyesi; ama PSCAD lisansı gerekiyor.
 
 *Kaynak: `papers/notes/D_ml_and_datasets.md` §15–16; Soru 13–14; EvEMTBench makalesi (arXiv:2608.19777, multigrid parametreleri); IEEE DataPort sayfaları: IRTSD (DOI 10.21227/mp6d-j677), PNNL T&D modeli (DOI 10.21227/z3r5-p932), "Transients in transmission lines connected to Photovoltaic Farms".*
+
+---
+
+## 36. Hatları uzatınca sinyal erişime daha çok yardım ediyor mu?
+
+**Kısa cevap:** Modelde 3 kata kadar hayır. Hat uzayınca asıl sinyalsiz (pasif) ölçüm iyileşiyor. İnvertöre sığan 0,4 pu'luk sinyalin katkısı her uzunlukta küçük kalıyor (1–11 puan). Soru 34'teki "uzun hat" hipotezi bu modelde desteklenmedi.
+
+### Ne yaptık (`b1_long_lines.py --coarse`)
+- B1 taramasını, korunan hat ve ötesindeki hatlar 2 ve 3 kat uzun olacak şekilde tekrarladık. Başka hiçbir şeyi değiştirmedik.
+- 10 kat denedik ama olmadı: 20 kV'luk fider o uzunlukta invertörün gücünü taşıyamıyor ve arıza öncesi yük akışı çözülmüyor. Model bunu sessizce geçiyordu; artık betik kontrol ediyor.
+- Izgara kaba. Sinyalsiz ayrılabilirliği olduğundan yüksek, sinyalin katkısını olduğundan düşük gösteriyor. Ama bu sapma her uzunlukta aynı, o yüzden sadece eğilime bakıyoruz.
+
+### Ne çıktı (sinyalsiz ayrılabilen iç arıza oranı · 0,4 pu'nun eklediği · 1,2 pu'nun eklediği)
+
+| Röle | ×1 | ×2 | ×3 |
+|---|---|---|---|
+| R1 | %19 · +3 · +13 | %34 · +3 · +14 | %55 · +8 · +10 |
+| R2 | %54 · +3 · +17 | %76 · +1 · +6 | %81 · +5 · +8 |
+| R3 | %20 · +2 · +7 | %30 · +2 · +12 | %32 · +3 · +15 |
+| R4 | %47 · +6 · +11 | %59 · +4 · +10 | %64 · +11 · +19 |
+
+- **Pasif ölçüm hızla iyileşiyor:** ×1'den ×3'e 12–35 puan.
+- **Sinyalin katkısı aynı hızda büyümüyor:**
+  - 0,4 pu sadece R1 ve R4'te, ×3'te biraz artıyor.
+  - 1,2 pu'nun katkısı rölelere göre artıyor ya da azalıyor; ortak bir eğilim yok.
+- **Anlamı:** hat uzadıkça sınır, sinyal işe yaramaya başlamadan önce pasif olarak ayrılabilir hale geliyor. Bu da önceki tabloyla uyumlu: güçlü ve uzun hatlı şebekede (TestGrid) sinyale gerek yoktu.
+
+### Sınırlar
+- Kaba ızgara.
+- Sadece 3 kata kadar: hatlar 6–12 Ω, iç arızanın ucu ile uzak bara arası en fazla 1,74 Ω.
+- Statik model, EMT değil; 20 kV.
+- Gerçekten uzun hatlar (yüksek gerilimde onlarca km) bu modelle test edilemiyor. Onun için Taylor'ın modeli ya da IRTSD gerekiyor (Soru 35).
+
+*Kaynak: `results/CIGREMV.md` §3 (B1, "Longer lines"); `results/cigremv/b1_long_lines_coarse.json`; `src/review/b1_long_lines.py`; REVIEW.md §7 satır 47.*
