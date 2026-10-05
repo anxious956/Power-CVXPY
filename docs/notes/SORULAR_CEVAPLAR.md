@@ -1411,3 +1411,27 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 > "In the email I quoted 0.4–0.7 pu; that holds without the current limit. With the inverter's per-phase limit inside the problem it drops to about 0.16–0.26 pu, but injecting it on top of the inverter's own current needs 1.4–1.8 pu per phase. With 50 % more noise we find no certified design at a 1.2 pu limit."
 
 *Kaynak: README.md ("What is already here"); REVIEW.md §7 satır 1–6; `results/DESIGN.md` §3, §4.1; `review/WP1_REPORT.md`; `results/CIGREMV.md` §3 ("Room in the inverter").*
+
+---
+
+## 38. Taylor'ın hangi makaleleri NSF'yi ve NREL'i anıyor?
+
+**Kısa cevap:** Taylor'ın 2025–2026 makalelerinin hepsi aynı NSF projesinden fonlanıyor (Grant 2411925). NREL ise Nathan Baeckeland üzerinden geliyor: Baeckeland NREL'de ve şebeke kurucu (GFM) invertör modelini yapan kişi. Yani maildeki iki seçenek, "NSF projenizin simülasyon altyapısı" ve "NREL modelleri", büyük ihtimalle birbirine yakın.
+
+### NSF (Grant 2411925)
+| Makale | NSF teşekkürü |
+|---|---|
+| Active Fault Detection in Static Systems (IEEE TAC, 2025) | Var |
+| Geometry of Distance Protection (2025) | Var |
+| Distance Characteristics with Incremental Quantities (2026) | Var |
+| Reachability-based Time-domain Distance Protection (2026) | Var |
+| Auxiliary Signal Based Distance Protection (2023) | Metinde bulunamadı |
+
+### NREL
+- **Reachability-based Time-domain Distance Protection (2026):** ortak yazar Nathan Baeckeland. Makalede NREL'in yeni adıyla, "National Laboratory of the Rockies" olarak geçiyor; DOE sözleşme numarası (DE-AC36-08GO28308) NREL'inki.
+- **Baeckeland, Yang & Seo (2026, IEEE TPWRS), "Unified Model for Current-Limiting GFM Inverters":** tamamen NREL çalışması. Şebeke kurucu invertör modeli ve 14 baralı Simulink test sistemi buradan.
+
+### Görüşme için
+Taylor "Nathan'ın modeli" ya da "Baeckeland'ın modeli" derse, NREL'in şebeke kurucu invertör modelini kastediyor. Onun simülasyonları büyük ihtimalle bu modele dayanıyor.
+
+*Kaynak: makalelerin teşekkür ve yazar satırları (`papers/Taylor_2025_Geometry_of_Distance_Protection.pdf`, `papers/Taylor_2026_*.pdf`, `papers/library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf`, `papers/library/Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf`); `papers/notes/A_taylor_line.md` §5.*
