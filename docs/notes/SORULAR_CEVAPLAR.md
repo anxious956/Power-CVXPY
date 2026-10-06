@@ -1462,3 +1462,39 @@ Gerçek bir invertör kullanmıyoruz, modelliyoruz:
 *Görüşmede:* "The inverter is both the cause and the cure: it limits fault current, which confuses distance relays, but because it is software-controlled it can also inject the designed signal that helps them decide."
 
 *Kaynak: Soru 1, 34; `results/CIGREMV.md` §1 (invertörlerin arıza akımı payı); `papers/notes/A_taylor_line.md`.*
+
+---
+
+## 40. Tasarımı yazılımda tam olarak nasıl yapıyoruz (optimizasyon, CVXPY)?
+
+**Kısa cevap:** Her durumun röle ölçümünü bir "bulut" (zonotop) olarak yazıyoruz. Bulutların örtüşüp örtüşmediğini doğrusal programla (LP) kontrol ediyoruz. Hepsini ayıran en küçük δ'yı da CVXPY ile, iki adımı dönüşümlü tekrarlayarak buluyoruz. İnceleme sırasında bu adımı bütün δ düzlemini tarayan kesin bir aramayla değiştirdik.
+
+1. **Model** (`src/aux_model.py`): iki baralı dizi bileşen ağı. Normal çalışma ve 30 arıza durumu (tip, konum, direnç) için rölenin ölçeceği gerilim ve akımlar.
+2. **Bulut:** ölçüm = merkez + H·δ + G·u + n. Burada u ∈ [−1, 1] kaynak belirsizlikleri, |n| ≤ ε ölçüm hatası. Her durum bir zonotop.
+3. **Örtüşme kontrolü** (`separated_lp`): "iki bulutta aynı ölçümü veren nokta var mı?" sorusu bir LP. Çözüm yoksa ayrık.
+4. **En küçük δ** (`src/aux_signal_toy.py`, CVXPY + Clarabel), dönüşümlü iki adım:
+   - (i) δ sabitken her arıza için en iyi ayırma yönü λ (Farkas sertifikası: izdüşümde iki bulut arasındaki boşluğu en büyük yapan yön);
+   - (ii) λ'lar sabitken "her arızada boşluk ≥ 0" koşuluyla en küçük |δ|² (karesel program).
+
+   weak_sg için 0,514 pu.
+5. **Düzeltme** (`src/review/tac25_design.py`): dönüşümlü yöntem yerel optimumda kalıyordu (gerçek minimum 0,504 pu). δ düzlemi 0,02 pu × 72 açılık ızgarada tarandı, her aday LP ile kontrol edildi. İnvertör akım sınırı doğrusal kısıtlar olarak eklendi (B5, Soru 37).
+
+*Kaynak: `src/aux_model.py`, `src/aux_signal_toy.py`, `src/review/tac25_design.py`; README "What is already here"; REVIEW.md §7 satır 1, 5.*
+
+---
+
+## 41. I2 ve V2 ne demek?
+
+**Kısa cevap:** Negatif bileşen akımı ve gerilimi. Üç fazlı büyüklükler üç parçaya ayrılır: pozitif (normal, dengeli), negatif (ters dönen, dengesizliği gösteren) ve sıfır (üç faz aynı, toprak arızasında). I2 ve V2 normalde neredeyse sıfırdır, dengesiz bir arızada ortaya çıkar.
+
+| Bileşen | Ne demek | Ne zaman görünür |
+|---|---|---|
+| Pozitif (1): I1, V1 | Normal dönüş yönünde, dengeli üç faz | Her zaman; normal güç akışı |
+| Negatif (2): I2, V2 | Dengeli ama ters dönen üç faz | Dengesizlikte, örneğin tek faz toprak arızası |
+| Sıfır (0): I0, V0 | Üç faz aynı anda, aynı yönde | Toprak arızalarında |
+
+- δ negatif bileşen akımı olarak basılır: normalde negatif bileşen olmadığı için küçük bir I2 bile kolay görülür ve güç aktarımını bozmaz.
+- Yön elemanları (ΔY2 gibi) ΔI2 ile ΔV2 arasındaki açıya bakar.
+- "V2'ye kilitli sinyal" (Soru 32): basılan I2'nin ölçülen V2'nin 90° önünde olması; IEEE 2800'ün istediği davranış.
+
+*Kaynak: Soru 29, 32; `results/CIGREMV.md` §3.*
