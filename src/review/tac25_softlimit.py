@@ -15,8 +15,10 @@ WHAT TO DO ABOUT IT
 -------------------
 Treat I_max as an uncertain parameter with a known band [lo, hi] and PRUNE AT THE LOOSEST BOUND. If the
 true limit is anywhere in [lo, hi], every realisation that can physically occur while delta is injected
-satisfies |i+| <= hi - |delta|, so restricting the uncertainty set with `hi` keeps a superset of what can
-occur. Separation proved against a superset holds for the true set:
+satisfies max_k |i+ + a^k delta| <= hi (each phase current within the loosest limit; rule "phase" in
+tac25_design, bridge review B5 -- the first run used |i+| <= hi - |delta|, unsound for a per-phase limiter),
+so restricting the uncertainty set with `hi` keeps a superset of what can occur. Separation proved against
+a superset holds for the true set:
 
     U_true(I_max_true) subset U(hi)   for every I_max_true <= hi
     => separation on U(hi) implies separation on U_true
@@ -26,10 +28,11 @@ so the guarantee holds regardless of how soft the limiter is, at the cost of a l
 looser the bound used for pruning, the larger the required signal.
 
 INJECTABILITY is the other half and is reported separately. Producing delta needs headroom in the
-inverter's own current: |i+| + |delta| <= I_max_true. A delta that is proved separating under the loosest
-pruning may still be unproducible if the true limit is at the bottom of the band. We report, for each
-cell, the smallest true limit at which the robust delta is injectable, i.e. |i+|_max + |delta|. Nothing is
-assumed about which end of the band the true limit sits at.
+inverter's own current: every phase current max_k |i+ + a^k delta| <= I_max_true for every modelled i+.
+A delta that is proved separating under the loosest pruning may still be unproducible if the true limit
+is at the bottom of the band. We report, for each cell, the smallest true limit at which the robust delta
+is injectable (tac25_design.injectable_limit), and beside it the sum-rule figure |i+|_max + |delta|, an
+upper bound on it. Nothing is assumed about which end of the band the true limit sits at.
 
     python src/review/tac25_softlimit.py [--quick]   -> results/review_wp1/tac25_softlimit.json
 """
@@ -47,6 +50,7 @@ EPS_GRID = (0.02, 0.04, 0.08, 0.12, 0.16)
 IMAX_GRID = (1.1, 1.2, 1.3, 1.5, 2.1)
 BAND = (1.1, 2.1)                      # the measured spread: controller Imax 1.2, p95 1.5, max 2.1
 RHO_GRID = (0.0, 0.1)
+LIMIT_RULE = "phase"
 
 
 def i_plus_max(p, mode="outer"):
@@ -58,15 +62,16 @@ def robust_min_delta(ms, band=BAND, rho=0.0, r_step=0.02, n_ang=72, r_max=2.0):
     """Smallest separating |delta| when the current limit is only known to lie in `band`.
 
     Pruning uses the LOOSEST bound, so the uncertainty set is a superset of the true one whatever the
-    true limit is, and separation transfers. `min_true_limit_to_inject` is |i+|_max + |delta|: the
-    smallest true limit at which the returned delta can actually be produced."""
+    true limit is, and separation transfers. `min_true_limit_to_inject` is the smallest per-phase limit at
+    which the returned delta can actually be produced on top of every modelled i+."""
     lo, hi = band
     r = td.min_delta(ms, i_max=hi, limit_inside=True, limit_design=False, rho=rho,
-                     r_step=r_step, n_ang=n_ang, r_max=r_max)
+                     r_step=r_step, n_ang=n_ang, r_max=r_max, limit_rule=LIMIT_RULE)
     r["band"] = [float(lo), float(hi)]
     r["pruned_at"] = float(hi)
     if r["feasible"]:
-        r["min_true_limit_to_inject"] = float(r["i_plus_max"] + r["abs_delta"])
+        r["min_true_limit_to_inject"] = float(r["injectable_limit"])
+        r["min_true_limit_to_inject_sum_bound"] = float(r["i_plus_max"] + r["abs_delta"])
         r["injectable_at_band_bottom"] = bool(r["min_true_limit_to_inject"] <= lo + 1e-12)
     return r
 
@@ -104,7 +109,7 @@ def soft_limit_evidence():
 def main(quick=False):
     t0 = time.time()
     step, nang = (0.04, 36) if quick else (0.02, 72)
-    res = dict(script="tac25_softlimit", commit=cm.git_commit(), band=list(BAND), r_step=step, n_ang=nang,
+    res = dict(script="tac25_softlimit", commit=cm.git_commit(), limit_rule=LIMIT_RULE, band=list(BAND), r_step=step, n_ang=nang,
                evidence=soft_limit_evidence(), cells=[])
     for rho in RHO_GRID:
         for eps in EPS_GRID:
@@ -114,19 +119,20 @@ def main(quick=False):
             row = dict(eps=eps, rho=rho, sir=sir_of(p), i_plus_max=ipm, hard=dict())
             for im in IMAX_GRID:                       # the known-limit treatment, for comparison
                 r = td.min_delta(ms, i_max=im, limit_inside=True, limit_design=False, rho=rho,
-                                 r_step=step, n_ang=nang, r_max=2.0)
+                                 r_step=step, n_ang=nang, r_max=2.0, limit_rule=LIMIT_RULE)
                 row["hard"][f"{im:g}"] = dict(feasible=r["feasible"], abs_delta=r["abs_delta"])
             rb = robust_min_delta(ms, BAND, rho=rho, r_step=step, n_ang=nang)
             row["robust"] = dict(feasible=rb["feasible"], abs_delta=rb["abs_delta"], angle_deg=rb["angle_deg"],
                                  pruned_at=rb["pruned_at"],
                                  min_true_limit_to_inject=rb.get("min_true_limit_to_inject"),
+                                 min_true_limit_to_inject_sum_bound=rb.get("min_true_limit_to_inject_sum_bound"),
                                  injectable_at_band_bottom=rb.get("injectable_at_band_bottom"))
             rf = td.min_delta(ms, i_max=99.0, limit_inside=False, limit_design=False, rho=rho,
                               r_step=step, n_ang=nang, r_max=2.0)
             row["no_limit"] = dict(feasible=rf["feasible"], abs_delta=rf["abs_delta"])
             if rb["feasible"]:
                 row["continuous_check"] = td.validate_continuous(p, "outer", rb["delta"], eps * (1 + rho),
-                                                                 i_max=BAND[1], limit_inside=True)
+                                                                 i_max=BAND[1], limit_inside=True, limit_rule=LIMIT_RULE)
             res["cells"].append(row)
             print(f"  eps {eps:.2f} rho {rho:.1f}: robust {row['robust']['abs_delta']} "
                   f"(inject needs true limit >= {row['robust']['min_true_limit_to_inject']}) | "
