@@ -1435,3 +1435,30 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 Taylor "Nathan'ın modeli" ya da "Baeckeland'ın modeli" derse, NREL'in şebeke kurucu invertör modelini kastediyor. Onun simülasyonları büyük ihtimalle bu modele dayanıyor.
 
 *Kaynak: makalelerin teşekkür ve yazar satırları (`papers/Taylor_2025_Geometry_of_Distance_Protection.pdf`, `papers/Taylor_2026_*.pdf`, `papers/library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf`, `papers/library/Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf`); `papers/notes/A_taylor_line.md` §5.*
+
+---
+
+## 39. Projede invertörün amacı ne?
+
+**Kısa cevap:** İki rolü var. Arıza akımını sınırladığı için mesafe rölesini yanıltıyor, yani sorunun kaynağı. Ama çıkışı yazılımla kontrol edildiği için Taylor'ın tasarlanmış sinyalini (δ) basıp röleye yardım edebiliyor, yani çözümün aracı.
+
+### 1. Şebekedeki normal işi
+Güneş paneli, rüzgâr türbini ve batarya DC ya da düzensiz bir akım üretir. İnvertör bunu şebekenin 50/60 Hz AC'sine çeviren güç elektroniği cihazı; yenilenebilir santrallerin şebekeye bağlandığı kapı.
+
+### 2. Neden sorun yaratıyor
+- Dönen jeneratörler arızada normal akımlarının 5–10 katını verir; mesafe rölesi arızayı bu büyük akımdan ve gerilim düşümünden anlar.
+- İnvertör kendini korumak için akımını en fazla ~1,2 pu'da tutar (normalin %20 fazlası).
+- Röle arızayı göremeyebilir ya da yerini yanlış hesaplayabilir. İnvertör arttıkça sorun büyüyor.
+
+### 3. Taylor'ın fikrinde çözümün parçası
+İnvertöre arızada küçük, tasarlanmış bir negatif bileşen akımı (δ) bastırılıyor. Bu sinyal arızaları röle için ayırt edilebilir yapıyor.
+
+### 4. Projede invertörle ne yapıyoruz
+Gerçek bir invertör kullanmıyoruz, modelliyoruz:
+- açık veride (EvEMTBench) invertörlerin arızadaki davranışını inceledik;
+- kendi modellerimizde δ basmayı hesapladık;
+- önerdiğimiz EMT simülasyonunda invertör modeli δ'yı gerçekten basacak ve röle/detektörlerin bunu yakalayıp yakalamadığını test edeceğiz.
+
+*Görüşmede:* "The inverter is both the cause and the cure: it limits fault current, which confuses distance relays, but because it is software-controlled it can also inject the designed signal that helps them decide."
+
+*Kaynak: Soru 1, 34; `results/CIGREMV.md` §1 (invertörlerin arıza akımı payı); `papers/notes/A_taylor_line.md`.*
