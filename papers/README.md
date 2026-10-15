@@ -82,7 +82,7 @@ Domínguez-García 2025 (now #1), Kasztenny 2022 (now #22), Kasztenny, Fischer &
 
 ## G. Notes
 
-All 26 papers have been read in full. Notes live in `papers/notes/`:
+All 46 papers have been read in full. Notes live in `papers/notes/`:
 
 - **`SYNTHESIS.md`** — start here. What the whole set says, what we can and cannot claim,
   which dataset to use, and the project restated in one paragraph.

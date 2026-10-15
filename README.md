@@ -2,8 +2,10 @@
 
 **Auxiliary-signal fault detection in inverter-dominated grids: design, simulation, detection, hardware.**
 
-Senior design, NJIT Electrical and Computer Engineering, 2026–27.
-Advisor (proposed): Prof. Joshua A. Taylor. Builds on his NSF project *Auxiliary Signal-Based Fault Detection in Inverter-Dominated Power Systems* (NSF 2411925, with A. Domínguez-García, UIUC).
+NJIT Electrical and Computer Engineering, 2026–27. Supervised by **Prof. Joshua A. Taylor as
+independent research** (agreed at the meeting of 6 Oct 2026). It is not the ECE 414 senior design
+project, which is separate. Builds on Taylor's NSF project *Auxiliary Signal-Based Fault Detection in
+Inverter-Dominated Power Systems* (NSF 2411925, with A. Domínguez-García, UIUC).
 
 ## The problem in one paragraph
 
@@ -13,14 +15,71 @@ A protective relay decides "there is a fault, open the breaker." For a century i
 
 Taylor and Domínguez-García (2025, 2026) model every unknown the relay faces (fault location, fault resistance, remote-end current, measurement noise) as a bounded set, compute the full region of measurements a fault can produce, and, when that region overlaps normal operation, have the inverter inject a small **auxiliary signal** (negative-sequence current) chosen by convex optimization to be as small as possible while guaranteeing separation. Their papers are analytical. Their conclusions name EMT-simulation evaluation as the next step.
 
-This repository is that next step, split into four parts:
+This repository is that next step. **What it set out to do in September and what it is doing now
+differ**, because the measurements moved it; the shift is recorded in [docs/PLAN.md](docs/PLAN.md) §1
+and in the claim register, [REVIEW.md](REVIEW.md) §7.
 
-| # | Part | What it delivers | Owner |
-|---|------|------------------|-------|
-| 1 | **Design tool** | A CVXPY tool: input a grid model, output the smallest separating auxiliary signal | TBD |
-| 2 | **Simulation** | A Simulink / PSCAD test grid with SGs and inverters injecting the optimized signal; labeled fault waveforms | TBD |
-| 3 | **Detection** | Relay-side detection of the signal: conventional elements and Taylor's multiple-model Kalman filter vs a learned detector; shrink the signal until each fails | Asmar Hasanova |
-| 4 | **Embedded** | The detector on an edge board, decision latency measured against a one-cycle (16 ms) budget | TBD |
+**The question now:** where does a designed auxiliary signal earn its cost, and where does a passive
+element, a channel or a grid-code requirement do the job instead? Four candidate uses have been
+screened on an inverter-rich grid. Three look closed **in the screening**, with the limit stated
+under the table:
+
+| Candidate use for an injected signal | What the screening found (no injected data, see below) | Register row |
+|---|---|---|
+| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Not supported in the static model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more | 42, 47 |
+| **Direction** at inverter buses | **Not needed.** Passive superimposed-quantity elements settle it in the first cycle, forward and reverse, for unbalanced and three-phase faults | 44 |
+| Direction when inverters **suppress negative sequence** | **A current is needed, but a V2-referenced one** (IEEE 2800), not a δ fixed in advance — which failed at all 48 magnitudes and angles tried | 46 |
+| Telling a remote **inverter trip** from a fault | **No injection can help**; the tripping inverter is the only source on its feeder. The remedy is an inverter-status channel | 45 |
+
+> **What none of this is.** No result in this repository comes from data with an injected signal.
+> No public EMT dataset contains one, and we have not simulated one yet. The reach and longer-line
+> verdicts come from a **static sequence model** of the feeder (optimistic for δ: each fault gets its
+> best δ angle); the direction and inverter-trip verdicts come from EMT data **without** injection,
+> plus the same static model. They say where a δ is unlikely to be needed. They do **not** say a δ
+> fails, because that has not been tested. The EMT study with δ injected is what tests it.
+
+## What we told Prof. Taylor, what he asked for, and what we owe him
+
+Presented 6 Oct 2026 (`Taylor_meeting_v4.pptx`, kept out of the repository). Prof. Taylor supervises
+the work; **both halves of it are ours: the convex design in CVXPY and the EMT evaluation.**
+
+What the deck told him:
+
+1. On a strong 110 kV grid a learned single-ended detector catches 95–99 % of in-zone faults at zero
+   false trips; on the inverter-rich 20 kV feeder **nothing single-ended finds the zone boundary**
+   (≤ 16 %), and only two-ended schemes, which need a channel, hold. *(EMT data, no injection.)*
+2. In a **static model** of that feeder, a δ the inverter can afford barely separates in-zone from
+   just-beyond faults (they are 0.3–0.6 Ω apart, so δ moves both almost equally, as his Theorem 1
+   predicts); in the EMT data, direction was settled without a signal, and an inverter trip needs a
+   channel. **None of this was measured with δ injected**; the deck's slide carries the same caveat.
+3. **The room left for his method:** inverters that suppress negative sequence, longer lines, and
+   grid-forming systems, and we asked to test it there.
+
+**What he asked for after the deck:** he arranged the PSCAD licence, and asked us to **learn PSCAD**
+(he does not use it himself) and to **study how inverters work**: their control, current limiting,
+grid-following versus grid-forming behaviour. That is the immediate work; see [docs/PLAN.md](docs/PLAN.md) §5.
+
+What we committed to, and where it stands:
+
+| Promised | Status |
+|---|---|
+| A model test with **I₂-suppressing inverters** | **Done in the static model** ([PR #27](https://github.com/anxious956/Power-CVXPY/pull/27)). Direction fails there; a **V2-referenced** current with gain at small V2 (IEEE 2800) repairs it, a δ fixed in advance in the inverter's frame did not at any of 48 magnitudes and angles. Not yet checked in EMT |
+| **Longer lines**, where we expected δ to separate more strongly | **Done in the static model (coarse), and it narrowed our own claim**: up to 3× line length, separability without δ rises 12–35 points while an affordable δ adds 1–11. He should hear this, because the deck offered it as a reason for optimism. Not yet checked in EMT |
+| **An EMT study with δ injected**, ideally on his 14-bus grid-forming model | **Open, and the one that can actually test the method.** It is the critical path, after the PSCAD and inverter groundwork above ([docs/PSCAD.md](docs/PSCAD.md)) |
+
+The four questions put to him in the deck are restated, with what we have learned since, in
+[docs/PLAN.md](docs/PLAN.md) §7.
+
+**What remains open is the condition none of this data has:** a grid where inverters carry a material
+share of the fault current *and* the signal can actually be injected. That is now the critical path,
+and PSCAD makes it reachable ([docs/PSCAD.md](docs/PSCAD.md)).
+
+| # | Part | Status | Owner |
+|---|------|--------|-------|
+| 1 | **Design tool** | Largely done in the TAC25 formulation: current limit inside the problem, margin, sound source set, global solve ([results/DESIGN.md](results/DESIGN.md)). Open: multi-bus aggregation, limiter type in the uncertainty set | Asmar Hasanova |
+| 2 | **Simulation** | **Critical path.** PSCAD 5.0.1 licensed and installed 7 Oct 2026; plan in [docs/PSCAD.md](docs/PSCAD.md) | Asmar Hasanova |
+| 3 | **Detection** | Done on four grids with one protocol: conventional ladder, sequence-trajectory CNN, engineered features, re-implemented Hasan et al. (2026) SVM. Open: an IBR-appropriate ladder rung, MMKF | Asmar Hasanova |
+| 4 | **Embedded** | Open: 87 µs on the laptop, no board, no causal end-to-end protocol | TBD |
 
 ## What is already here (first result, 13 Sep 2026; corrected after review)
 
@@ -272,7 +331,8 @@ rather than a 5 % budget.
   instrument error of 0.01 pu, a δ of 0.4 pu raises the share of separable in-zone faults by 2–4
   points and the inverter's whole current (1.2 pu) by 8–13; every cell with five or more EMT faults
   either needs no δ in the model or more than 1.2 pu. The δ design for reach is therefore not pursued on
-  this grid, and the result is reported as a negative one with its mechanism. TestGrid needs no δ (its
+  this grid for now, and the result is reported as a static-model negative with its mechanism, not
+  as a test of δ: no EMT run with δ injected exists yet. TestGrid needs no δ (its
   boundary separates at δ = 0), so a design there would only be a positive control of the tool.
 - **A passive directional baseline** ([results/CIGREMV.md](results/CIGREMV.md) §3): superimposed-quantity
   elements settle direction at the inverter buses in the first cycle. The negative-sequence admittance
@@ -317,7 +377,8 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             real_zone.py      in-zone vs out-of-zone on real EMT data (doubleline, testgrid_A, testgrid_B)
             real_ml.py        fair ML vs zone-1 rule: causal windows, noise, cross-relay, two stages
             dataset_facts.py  dataset fact sheet: labels, factorial structure, sibling leakage, units
-            build_adaptgrid_cache.py  one streaming pass over the adapt_grid archive into data/
+            build_adaptgrid_cache.py, build_cigremv_cache.py  one streaming pass over an archive into data/
+            torch_det.py      the sequence-trajectory CNN used by the real-data runs
 src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*_*.py), the
             conventional ladder and settings (ladder.py, setting_study.py, elements_fixed.py),
             grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
@@ -339,16 +400,21 @@ results/    RESULTS.md   design-tool results, figures and JSON for every preset
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
 review/     WP1_REPORT.md   design-tool findings with commands and JSON keys
             SYNTH_REPORT.md synthetic-pipeline findings
+            bridge/         five specialist reviews and the lead review of running the design
+                            method on CIGRE MV
+logs/       run logs and checkpoints of the long experiments (ckpt/, fig/)
+data/       EMT archives and caches, git-ignored: nothing in this repository ships data
 papers/     README.md reading list with links, fetch.sh to download the open-access PDFs;
             notes/ reading notes
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
+            PSCAD.md  the simulation plan: license check, which model, what a run must produce
             TEAM_BRIEF.md   onboarding note for the team
             notes/    drafts (taylor_matrix_note.md: note to the author on the Fig. 3 matrix, not sent)
 ```
 
 ## Reading order
 
-All 26 papers in `papers/` have been read; notes are in `papers/notes/`.
+All 46 papers in `papers/` have been read; notes are in `papers/notes/` (36 PDFs in git, 10 paywalled ones held locally in the git-ignored `papers/library/`).
 
 1. Everyone: [`papers/notes/SYNTHESIS.md`](papers/notes/SYNTHESIS.md), then Taylor &
    Domínguez-García, *Auxiliary Signal-Based Distance Protection in Inverter-Dominated Power
@@ -371,7 +437,9 @@ et al. 2021, an SVM on injected harmonics trained on two bolted faults ([papers/
 
 ## Status
 
-Last updated 28 Sep 2026. An independent technical review of this repository is complete and merged:
+Last updated 15 Oct 2026. Open: [PR #27](https://github.com/anxious956/Power-CVXPY/pull/27), where an
+injection could still help on CIGRE MV (I2-suppressing inverters, longer lines). An independent technical
+review of this repository is complete and merged:
 [REVIEW.md](REVIEW.md). Every headline claim above has been re-checked against it and corrected
 in place; §7 carries the claim-by-claim verdict (including this project's own claims, rows 32
 onward) and §10 the roadmap. The re-run numbers live in
@@ -381,7 +449,7 @@ onward) and §10 the roadmap. The re-run numbers live in
 
 - [x] Toy replication of the design method, three regimes — reproduces exactly, but the optima
       are local, not verified (§7 claim 5)
-- [x] Literature collected, gap stated (26 papers held, 8 known gaps)
+- [x] Literature collected, gap stated (46 papers held and read, 8 known gaps)
 - [x] Waveform generator on the same circuit, with negative-sequence confusers
 - [x] First detector comparison: naive threshold vs engineered features vs CNN
 - [x] Three-bus model and the in-zone vs out-of-zone experiment
@@ -419,9 +487,12 @@ onward) and §10 the roadmap. The re-run numbers live in
 - [ ] Report the pre-fault label leak and the resampling look-ahead to the EvEMTBench authors
 - [ ] Grid-forming inverters and an injected auxiliary signal in EMT (Baeckeland Simulink model,
       or our own); CIGRE MV has grid-following inverters only and no injection
-- [ ] Advisor confirmed
+- [x] Supervision agreed: Prof. Taylor, as independent research (6 Oct 2026)
+- [x] PSCAD licensed and installed (5.0.1, 7 Oct 2026) — the simulation path is open at last
+- [ ] Confirm which PSCAD edition the licence gives: IRTSD needs Educational (200 nodes) or
+      Professional; the Free edition cannot run it ([docs/PSCAD.md](docs/PSCAD.md))
+- [ ] Reproduce one documented IRTSD fault event, then add the auxiliary signal as an event type
 - [ ] Team roles assigned
-- [ ] EMT simulation test grid (Simulink or PSCAD)
 - [ ] Embedded latency measurement on a board
 - [ ] Conference paper (target: NAPS 2027)
 
