@@ -103,10 +103,31 @@ Cannot claim:
 | Mar–Apr 2027 | Embedded latency on a board. Paper written. |
 | Jun 2027 | Submit to NAPS 2027. |
 
-## 6. Questions for Prof. Taylor
+## 6. The division of labour, and what we owe him
 
-1. **The Baeckeland 14-bus Simulink model** with five grid-forming inverters. Still the highest-value
-   ask: neither IRTSD nor CIGRE MV has grid-forming inverters, and PSCAD does not change that.
+His side is the convex design — the signal, the uncertainty sets, the certificate, in CVXPY. Ours is
+the EMT evaluation, which his papers name as the next step. The 6 Oct deck told him where his method
+still has room (I₂-suppressing inverters, longer lines, grid-forming systems) and asked to test it
+there with him. Two of those three have since been screened in the study model: the I₂ case needs a
+**V2-referenced** current rather than a designed δ, and the longer-line case did **not** behave as the
+deck suggested it would. That correction is ours to deliver, not to bury. What is left of the promise
+is the third: an EMT study with δ injected on a grid-forming system.
+
+## 7. Questions for Prof. Taylor
+
+These are the deck's four questions, in the deck's order, with what we have learned since.
+
+1. **Reach on short lines.** Our screen finds a δ the inverter can afford barely separates in-zone
+   from just-beyond faults on 2–4 Ω lines, as Theorem 1 predicts. Does that match his expectation,
+   and **is there an observable — time domain, wideband — where the difference is larger?**
+2. **Where to test δ next.** We offered I₂-suppressing inverters, longer lines, grid-forming systems.
+   Since the deck, the first turned into a grid-code question and the second did not hold in the
+   model, which leaves grid-forming. Does he agree that is now the only one worth EMT time?
+3. **The current limit.** During a fault the inverter already runs near 1.2 pu, so δ has to fit in
+   what is left. Should the limit in the design include δ, **checked phase by phase or as one
+   total?** (Our own correction: the limit belongs inside the problem, not as an outer check.)
+4. **The Baeckeland 14-bus Simulink model** with five grid-forming inverters. Neither IRTSD nor
+   CIGRE MV has grid-forming inverters, and PSCAD does not change that.
 2. Our B1 result says a suppliable δ barely moves the reach boundary on a distribution feeder, and
    that direction is settled passively. **Is the reach problem the one the method should target, or
    is the intended target fault-type separation on the relay's own line**, as in the Geometry paper?
@@ -116,7 +137,7 @@ Cannot claim:
    mechanism, in which case the design question becomes gain selection rather than δ selection?
 5. Co-authorship and target venue, if this becomes a paper.
 
-## 7. Risks
+## 8. Risks
 
 | Risk | Effect | Mitigation |
 |---|---|---|

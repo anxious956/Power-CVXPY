@@ -30,6 +30,36 @@ screened on an inverter-rich grid, and three of them closed:
 | Direction when inverters **suppress negative sequence** | **A current is needed, but a V2-referenced one** (IEEE 2800), not a δ fixed in advance — which failed at all 48 magnitudes and angles tried | 46 |
 | Telling a remote **inverter trip** from a fault | **No injection can help**; the tripping inverter is the only source on its feeder. The remedy is an inverter-status channel | 45 |
 
+## What we told Prof. Taylor, and what we owe him next
+
+Presented 6 Oct 2026 (`Taylor_meeting_v4.pptx`, kept out of the repository). The division of labour
+is the natural one: **his side is the convex design — the signal, the sets, the certificate, in
+CVXPY. Our side is the EMT evaluation of it**, which is what his papers name as the next step and
+what no one has done.
+
+What the deck told him:
+
+1. On a strong 110 kV grid a learned single-ended detector catches 95–99 % of in-zone faults at zero
+   false trips; on the inverter-rich 20 kV feeder **nothing single-ended finds the zone boundary**
+   (≤ 16 %), and only two-ended schemes, which need a channel, hold.
+2. There, a δ the inverter can afford **barely helps reach** (Theorem 1 predicts it: the in-zone and
+   just-beyond faults are 0.3–0.6 Ω apart, so δ moves both almost equally), **direction is already
+   solved without a signal**, and an **inverter trip needs a channel**, not an injection.
+3. **The room left for his method:** inverters that suppress negative sequence, longer lines, and
+   grid-forming systems — and we asked to test it there with him.
+
+What we committed to, in that order, and where it stands:
+
+| Promised | Status |
+|---|---|
+| A model test with **I₂-suppressing inverters** | **Done** ([PR #27](https://github.com/anxious956/Power-CVXPY/pull/27)). Direction does fail there, and the fix is a **V2-referenced** current with gain at small V2 (IEEE 2800), not a δ fixed in advance in the inverter's frame, which failed at all 48 magnitudes and angles tried |
+| **Longer lines**, where we expected δ to separate more strongly | **Done, and it narrowed our own claim**: up to 3× line length in the study model, separability without δ rises 12–35 points while an affordable δ adds 1–11. Longer lines help the passive measurement more. He should hear this, because the deck offered it as a reason for optimism |
+| **An EMT study with δ injected**, ideally on his 14-bus grid-forming model | **The open one, and now the critical path.** PSCAD 5.0.1 is licensed and installed ([docs/PSCAD.md](docs/PSCAD.md)). It gives us a modifiable inverter-rich grid, but a grid-**following** one; his model is still the only route to grid-forming, so question 4 of the deck stands |
+
+The four questions put to him in the deck — reach on short lines, where to test δ next, whether the
+inverter current limit includes δ phase by phase or in total, and access to the 14-bus model — are
+open until he answers. They are restated in [docs/PLAN.md](docs/PLAN.md) §6.
+
 **What remains open is the condition none of this data has:** a grid where inverters carry a material
 share of the fault current *and* the signal can actually be injected. That is now the critical path,
 and PSCAD makes it reachable ([docs/PSCAD.md](docs/PSCAD.md)).
