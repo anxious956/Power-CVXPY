@@ -348,15 +348,18 @@ rather than a 5 % budget.
   injection cannot help, because the tripping inverter is the only source on its feeder. The remedy is an
   inverter-status signal, that is, a channel.
 - **Inverters that suppress negative-sequence current** ([results/CIGREMV.md](results/CIGREMV.md) §3,
-  study model): with I2 = 0 the passive direction element finds only 74 % and 52 % of forward faults at
+  **static study model only; no EMT check, no injected data**): with I2 = 0 the passive direction element finds only 74 % and 52 % of forward faults at
   R1 and R3, and calls 32 % of R4's reverse faults forward. A small negative-sequence current repairs it:
   0.1 pu gives ≥ 99.6 % forward and ≤ 0.8 % reverse. That holds only if the current is referenced to the
   measured V2, as IEEE 2800 asks, and has enough gain at small V2. A δ fixed in advance in the inverter's frame
   reaches 99 % forward with ≤ 1 % reverse at none of 48 magnitudes and angles, and grows worse with size.
-  Here, too, the remedy is a grid-code requirement, not a designed δ.
-- **Longer lines** ([results/CIGREMV.md](results/CIGREMV.md) §3, study model, coarse screen): with the protected
+  In this model, then, the remedy looks like a grid-code requirement rather than a designed δ. **It has
+  not been tested with δ injected in EMT**, which is what the PSCAD study is for.
+- **Longer lines** ([results/CIGREMV.md](results/CIGREMV.md) §3, **static study model, coarse screen; no
+  EMT check, no injected data**): with the protected
   line 2× and 3× longer, separability without δ rises by 12–35 points, while the affordable 0.4 pu δ still adds
-  only 1–11. Longer lines help the passive measurement more than δ (REVIEW.md §7 row 47).
+  only 1–11. In this model longer lines help the passive measurement more than δ (REVIEW.md §7 row 47).
+  **Not tested with δ injected in EMT.**
 
 Every refuted or narrowed claim is in the register, [REVIEW.md](REVIEW.md) §7 (rows 26, 32 onward).
 
@@ -489,13 +492,15 @@ onward) and §10 the roadmap. The re-run numbers live in
       relay A and 37.5–43.1 % at B, so fewer positives do not explain CIGRE's 0–10.5 %
 - [x] Quick checks: settings ±20 % change nothing; both-ends schemes hold only for a trip after the
       channel delay; 67N/67Q both ends needs adequately sized CTs (`results/cigremv/quick_checks.json`)
-- [x] Where an injection could help on CIGRE MV:
-      - reach: B1, barely;
-      - direction: passive elements settle it;
-      - inverter trip: δ cannot help;
-      - I2-suppressing inverters: a V2-referenced current is needed, not a δ fixed in advance;
-      - longer lines (model, up to 3×): help the passive measurement more than δ.
+- [x] Where an injection could help on CIGRE MV, **screened without injected data** (static model, or
+      EMT data with no injection; see the note under the table at the top):
+      - reach (static model): B1, barely;
+      - direction (EMT, no injection): passive elements settle it;
+      - inverter trip (EMT, no injection): δ cannot help, the tripping inverter is the only source;
+      - I2-suppressing inverters (static model): a V2-referenced current, not a δ fixed in advance;
+      - longer lines (static model, up to 3×): help the passive measurement more than δ.
       See REVIEW.md §7 rows 42–47.
+- [ ] **Test the above with δ injected in EMT** (PSCAD; [docs/PSCAD.md](docs/PSCAD.md))
 - [ ] IEEE 39-bus (60 Hz) EvEMTBench grid
 - [ ] Design tool on a multi-bus network: Taylor's static model on the CIGRE MV sequence network,
       its predicted ambiguity checked against the EMT result (docs/notes/SORULAR_CEVAPLAR.md Q22)
