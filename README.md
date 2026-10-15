@@ -2,8 +2,10 @@
 
 **Auxiliary-signal fault detection in inverter-dominated grids: design, simulation, detection, hardware.**
 
-Senior design, NJIT Electrical and Computer Engineering, 2026–27.
-Advisor (proposed): Prof. Joshua A. Taylor. Builds on his NSF project *Auxiliary Signal-Based Fault Detection in Inverter-Dominated Power Systems* (NSF 2411925, with A. Domínguez-García, UIUC).
+NJIT Electrical and Computer Engineering, 2026–27. Supervised by **Prof. Joshua A. Taylor as
+independent research** (agreed at the meeting of 6 Oct 2026). It is not the ECE 414 senior design
+project, which is separate. Builds on Taylor's NSF project *Auxiliary Signal-Based Fault Detection in
+Inverter-Dominated Power Systems* (NSF 2411925, with A. Domínguez-García, UIUC).
 
 ## The problem in one paragraph
 
@@ -18,7 +20,7 @@ This repository is that next step, split into four parts:
 | # | Part | What it delivers | Owner |
 |---|------|------------------|-------|
 | 1 | **Design tool** | A CVXPY tool: input a grid model, output the smallest separating auxiliary signal | TBD |
-| 2 | **Simulation** | A Simulink / PSCAD test grid with SGs and inverters injecting the optimized signal; labeled fault waveforms | TBD |
+| 2 | **Simulation** | An inverter-rich PSCAD grid whose inverters inject the designed signal; labelled fault waveforms. PSCAD 5.0.1 installed 7 Oct 2026, licensed through the university; plan in [docs/PSCAD.md](docs/PSCAD.md) | Asmar Hasanova |
 | 3 | **Detection** | Relay-side detection of the signal: conventional elements and Taylor's multiple-model Kalman filter vs a learned detector; shrink the signal until each fails | Asmar Hasanova |
 | 4 | **Embedded** | The detector on an edge board, decision latency measured against a one-cycle (16 ms) budget | TBD |
 
@@ -317,7 +319,8 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             real_zone.py      in-zone vs out-of-zone on real EMT data (doubleline, testgrid_A, testgrid_B)
             real_ml.py        fair ML vs zone-1 rule: causal windows, noise, cross-relay, two stages
             dataset_facts.py  dataset fact sheet: labels, factorial structure, sibling leakage, units
-            build_adaptgrid_cache.py  one streaming pass over the adapt_grid archive into data/
+            build_adaptgrid_cache.py, build_cigremv_cache.py  one streaming pass over an archive into data/
+            torch_det.py      the sequence-trajectory CNN used by the real-data runs
 src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*_*.py), the
             conventional ladder and settings (ladder.py, setting_study.py, elements_fixed.py),
             grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
@@ -339,16 +342,21 @@ results/    RESULTS.md   design-tool results, figures and JSON for every preset
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
 review/     WP1_REPORT.md   design-tool findings with commands and JSON keys
             SYNTH_REPORT.md synthetic-pipeline findings
+            bridge/         five specialist reviews and the lead review of running the design
+                            method on CIGRE MV
+logs/       run logs and checkpoints of the long experiments (ckpt/, fig/)
+data/       EMT archives and caches, git-ignored: nothing in this repository ships data
 papers/     README.md reading list with links, fetch.sh to download the open-access PDFs;
             notes/ reading notes
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
+            PSCAD.md  the simulation plan: license check, which model, what a run must produce
             TEAM_BRIEF.md   onboarding note for the team
             notes/    drafts (taylor_matrix_note.md: note to the author on the Fig. 3 matrix, not sent)
 ```
 
 ## Reading order
 
-All 26 papers in `papers/` have been read; notes are in `papers/notes/`.
+All 46 papers in `papers/` have been read; notes are in `papers/notes/` (36 PDFs in git, 10 paywalled ones held locally in the git-ignored `papers/library/`).
 
 1. Everyone: [`papers/notes/SYNTHESIS.md`](papers/notes/SYNTHESIS.md), then Taylor &
    Domínguez-García, *Auxiliary Signal-Based Distance Protection in Inverter-Dominated Power
@@ -371,7 +379,9 @@ et al. 2021, an SVM on injected harmonics trained on two bolted faults ([papers/
 
 ## Status
 
-Last updated 28 Sep 2026. An independent technical review of this repository is complete and merged:
+Last updated 15 Oct 2026. Open: [PR #27](https://github.com/anxious956/Power-CVXPY/pull/27), where an
+injection could still help on CIGRE MV (I2-suppressing inverters, longer lines). An independent technical
+review of this repository is complete and merged:
 [REVIEW.md](REVIEW.md). Every headline claim above has been re-checked against it and corrected
 in place; §7 carries the claim-by-claim verdict (including this project's own claims, rows 32
 onward) and §10 the roadmap. The re-run numbers live in
@@ -381,7 +391,7 @@ onward) and §10 the roadmap. The re-run numbers live in
 
 - [x] Toy replication of the design method, three regimes — reproduces exactly, but the optima
       are local, not verified (§7 claim 5)
-- [x] Literature collected, gap stated (26 papers held, 8 known gaps)
+- [x] Literature collected, gap stated (46 papers held and read, 8 known gaps)
 - [x] Waveform generator on the same circuit, with negative-sequence confusers
 - [x] First detector comparison: naive threshold vs engineered features vs CNN
 - [x] Three-bus model and the in-zone vs out-of-zone experiment
@@ -419,9 +429,12 @@ onward) and §10 the roadmap. The re-run numbers live in
 - [ ] Report the pre-fault label leak and the resampling look-ahead to the EvEMTBench authors
 - [ ] Grid-forming inverters and an injected auxiliary signal in EMT (Baeckeland Simulink model,
       or our own); CIGRE MV has grid-following inverters only and no injection
-- [ ] Advisor confirmed
+- [x] Supervision agreed: Prof. Taylor, as independent research (6 Oct 2026)
+- [x] PSCAD licensed and installed (5.0.1, 7 Oct 2026) — the simulation path is open at last
+- [ ] Confirm which PSCAD edition the licence gives: IRTSD needs Educational (200 nodes) or
+      Professional; the Free edition cannot run it ([docs/PSCAD.md](docs/PSCAD.md))
+- [ ] Reproduce one documented IRTSD fault event, then add the auxiliary signal as an event type
 - [ ] Team roles assigned
-- [ ] EMT simulation test grid (Simulink or PSCAD)
 - [ ] Embedded latency measurement on a board
 - [ ] Conference paper (target: NAPS 2027)
 
