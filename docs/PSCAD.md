@@ -5,6 +5,13 @@ either has no inverters worth the name (EvEMTBench TestGrid: 0.14 % of short-cir
 has inverters but no way to inject anything (CIGRE MV). Taylor's method needs an inverter that
 injects a designed signal, so it needs a model we can modify.
 
+**What this is for, stated honestly.** On CIGRE MV the screening already refuted the reach use of a
+suppliable δ, and passive elements settled direction ([PLAN.md](PLAN.md) §1). The purpose here is
+*not* to produce a positive result for δ. It is to test whether that negative result generalises or
+is bounded to a 20 kV distribution feeder, on a grid where inverters carry a material share of the
+fault current — and, either way, to run the detector comparison there against a baseline that suits
+inverter-based sources (rung R5, PLAN.md WP3).
+
 ## 1. What we have
 
 | | |
@@ -44,6 +51,10 @@ Why it fits:
   60 Hz (`evemt.py:_resample_factors` resamples 7680 Hz to 128 samples per cycle).
 - Event types already include **fault-induced IBR tripping and momentary cessation**, which is the
   behaviour that breaks conventional elements.
+- **What it is not:** the IBR controls are WECC generic REGC_A / REEC_A, i.e. **grid-following**, and
+  penetration is a binary axis (IBRs in or out) at ~40 %, not a sweep. The grid-forming,
+  inverter-dominated case stays open and stays a reason to ask Taylor for the Baeckeland model
+  (Plan C). Any claim from IRTSD must say this.
 - Events are configured through PSCAD **Global Substitutions** whose names match the label CSV
   columns, and the README documents a nine-step recipe for adding a new event type. So adding our
   injection is "one component and one event type in a validated model", not "build a model".
@@ -59,8 +70,9 @@ Order of work:
    few per cent of the line, as it does on EvEMTBench; that is our end-to-end check.
 4. Add the auxiliary signal: a negative-sequence current reference at one IBR plant, with
    magnitude and angle as Global Substitutions, so a sweep over δ becomes a label column.
-5. Sweep δ and measure what the detectors do, in zone and out, with and without injection. This is
-   the experiment the whole project has been unable to run.
+5. Re-run the B1 screen on this grid, then sweep δ and measure what the detectors do, in zone and
+   out, with and without injection. Either outcome is a result: a δ that earns its cost here bounds
+   the CIGRE negative to distribution feeders; a δ that does not generalises it.
 
 **Plan around the snapshots.** The model needs about 30 s of simulated time (~15 min of compute) to
 settle, so the automation runs from `.snp` snapshot files. Build the snapshots once, keep them, and

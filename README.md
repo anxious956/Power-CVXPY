@@ -15,14 +15,31 @@ A protective relay decides "there is a fault, open the breaker." For a century i
 
 Taylor and Domínguez-García (2025, 2026) model every unknown the relay faces (fault location, fault resistance, remote-end current, measurement noise) as a bounded set, compute the full region of measurements a fault can produce, and, when that region overlaps normal operation, have the inverter inject a small **auxiliary signal** (negative-sequence current) chosen by convex optimization to be as small as possible while guaranteeing separation. Their papers are analytical. Their conclusions name EMT-simulation evaluation as the next step.
 
-This repository is that next step, split into four parts:
+This repository is that next step. **What it set out to do in September and what it is doing now
+differ**, because the measurements moved it; the shift is recorded in [docs/PLAN.md](docs/PLAN.md) §1
+and in the claim register, [REVIEW.md](REVIEW.md) §7.
 
-| # | Part | What it delivers | Owner |
-|---|------|------------------|-------|
-| 1 | **Design tool** | A CVXPY tool: input a grid model, output the smallest separating auxiliary signal | TBD |
-| 2 | **Simulation** | An inverter-rich PSCAD grid whose inverters inject the designed signal; labelled fault waveforms. PSCAD 5.0.1 installed 7 Oct 2026, licensed through the university; plan in [docs/PSCAD.md](docs/PSCAD.md) | Asmar Hasanova |
-| 3 | **Detection** | Relay-side detection of the signal: conventional elements and Taylor's multiple-model Kalman filter vs a learned detector; shrink the signal until each fails | Asmar Hasanova |
-| 4 | **Embedded** | The detector on an edge board, decision latency measured against a one-cycle (16 ms) budget | TBD |
+**The question now:** where does a designed auxiliary signal earn its cost, and where does a passive
+element, a channel or a grid-code requirement do the job instead? Four candidate uses have been
+screened on an inverter-rich grid, and three of them closed:
+
+| Candidate use for an injected signal | Verdict | Register row |
+|---|---|---|
+| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Refuted in the study model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more | 42, 47 |
+| **Direction** at inverter buses | **Not needed.** Passive superimposed-quantity elements settle it in the first cycle, forward and reverse, for unbalanced and three-phase faults | 44 |
+| Direction when inverters **suppress negative sequence** | **A current is needed, but a V2-referenced one** (IEEE 2800), not a δ fixed in advance — which failed at all 48 magnitudes and angles tried | 46 |
+| Telling a remote **inverter trip** from a fault | **No injection can help**; the tripping inverter is the only source on its feeder. The remedy is an inverter-status channel | 45 |
+
+**What remains open is the condition none of this data has:** a grid where inverters carry a material
+share of the fault current *and* the signal can actually be injected. That is now the critical path,
+and PSCAD makes it reachable ([docs/PSCAD.md](docs/PSCAD.md)).
+
+| # | Part | Status | Owner |
+|---|------|--------|-------|
+| 1 | **Design tool** | Largely done in the TAC25 formulation: current limit inside the problem, margin, sound source set, global solve ([results/DESIGN.md](results/DESIGN.md)). Open: multi-bus aggregation, limiter type in the uncertainty set | Asmar Hasanova |
+| 2 | **Simulation** | **Critical path.** PSCAD 5.0.1 licensed and installed 7 Oct 2026; plan in [docs/PSCAD.md](docs/PSCAD.md) | Asmar Hasanova |
+| 3 | **Detection** | Done on four grids with one protocol: conventional ladder, sequence-trajectory CNN, engineered features, re-implemented Hasan et al. (2026) SVM. Open: an IBR-appropriate ladder rung, MMKF | Asmar Hasanova |
+| 4 | **Embedded** | Open: 87 µs on the laptop, no board, no causal end-to-end protocol | TBD |
 
 ## What is already here (first result, 13 Sep 2026; corrected after review)
 
