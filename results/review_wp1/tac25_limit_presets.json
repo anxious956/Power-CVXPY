@@ -1,0 +1,347 @@
+{
+ "script": "tac25_limit_presets.py",
+ "commit": "92aaf6e00ab5648bc35dde9cb1c72da7ce0278da",
+ "mode": "linear",
+ "i_max": 1.2,
+ "r_step": 0.02,
+ "n_ang": 72,
+ "columns": [
+  "none",
+  "h5_outer",
+  "sum",
+  "phase_disc",
+  "phase",
+  "tac25"
+ ],
+ "presets": {
+  "weak_sg": {
+   "exact_no_limit": 0.504,
+   "h5_outer": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null,
+    "i_plus_max": 1.23,
+    "continuous_check": null,
+    "lps": 0,
+    "runtime_s": 0.0
+   },
+   "sum": {
+    "feasible": true,
+    "abs_delta": 0.26,
+    "angle_deg": 0.0,
+    "injectable_limit": 1.4898241203366165,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 866,
+    "runtime_s": 8.750041723251343
+   },
+   "phase_disc": {
+    "feasible": true,
+    "abs_delta": 0.32,
+    "angle_deg": 0.0,
+    "injectable_limit": 1.549791910413692,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 1082,
+    "runtime_s": 10.064820289611816
+   },
+   "phase": {
+    "feasible": true,
+    "abs_delta": 0.26,
+    "angle_deg": 320.0,
+    "injectable_limit": 1.4850493806804081,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 930,
+    "runtime_s": 13.325303792953491
+   },
+   "none": {
+    "feasible": true,
+    "abs_delta": 0.52,
+    "angle_deg": 325.0,
+    "injectable_limit": 1.7470190745915344,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 1867,
+    "runtime_s": 13.615031719207764
+   },
+   "tac25": {
+    "feasible": true,
+    "abs_delta": 0.5,
+    "angle_deg": 325.0,
+    "injectable_limit": 1.727100629274687,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 1795,
+    "runtime_s": 15.397727489471436
+   }
+  },
+  "weak_sg_noisy": {
+   "exact_no_limit": 0.6908,
+   "h5_outer": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null,
+    "i_plus_max": 1.5000000000000002,
+    "continuous_check": null,
+    "lps": 0,
+    "runtime_s": 0.0
+   },
+   "sum": {
+    "feasible": true,
+    "abs_delta": 0.26,
+    "angle_deg": 249.99999999999997,
+    "injectable_limit": 1.7552553676333016,
+    "i_plus_max": 1.5000000000000002,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 916,
+    "runtime_s": 10.061524629592896
+   },
+   "phase_disc": {
+    "feasible": true,
+    "abs_delta": 0.32,
+    "angle_deg": 265.0,
+    "injectable_limit": 1.8196064946836232,
+    "i_plus_max": 1.5000000000000002,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 1135,
+    "runtime_s": 11.75538444519043
+   },
+   "none": {
+    "feasible": true,
+    "abs_delta": 0.7000000000000001,
+    "angle_deg": 230.0,
+    "injectable_limit": 2.1268341093409666,
+    "i_plus_max": 1.5000000000000002,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 2496,
+    "runtime_s": 20.256062507629395
+   },
+   "phase": {
+    "feasible": true,
+    "abs_delta": 0.26,
+    "angle_deg": 270.0,
+    "injectable_limit": 1.7577714882929778,
+    "i_plus_max": 1.5000000000000002,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 920,
+    "runtime_s": 14.965916156768799
+   },
+   "tac25": {
+    "feasible": true,
+    "abs_delta": 0.52,
+    "angle_deg": 239.99999999999997,
+    "injectable_limit": 1.9920165806098895,
+    "i_plus_max": 1.5000000000000002,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 1850,
+    "runtime_s": 21.10900354385376
+   }
+  },
+  "all_ibr_hard": {
+   "exact_no_limit": 0.3863,
+   "h5_outer": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null,
+    "i_plus_max": 1.23,
+    "continuous_check": null,
+    "lps": 0,
+    "runtime_s": 0.0
+   },
+   "sum": {
+    "feasible": true,
+    "abs_delta": 0.16,
+    "angle_deg": 0.0,
+    "injectable_limit": 1.389883981773968,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 506,
+    "runtime_s": 4.194499731063843
+   },
+   "phase_disc": {
+    "feasible": true,
+    "abs_delta": 0.2,
+    "angle_deg": 310.0,
+    "injectable_limit": 1.4170530111413013,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 712,
+    "runtime_s": 5.2892091274261475
+   },
+   "none": {
+    "feasible": true,
+    "abs_delta": 0.4,
+    "angle_deg": 294.99999999999994,
+    "injectable_limit": 1.5669849089933114,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 1429,
+    "runtime_s": 8.779678106307983
+   },
+   "phase": {
+    "feasible": true,
+    "abs_delta": 0.16,
+    "angle_deg": 310.0,
+    "injectable_limit": 1.3793518003423575,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 568,
+    "runtime_s": 7.276262998580933
+   },
+   "tac25": {
+    "feasible": true,
+    "abs_delta": 0.36,
+    "angle_deg": 300.0,
+    "injectable_limit": 1.5462541243947716,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 1286,
+    "runtime_s": 11.062921047210693
+   }
+  },
+  "weak_sg_eps12": {
+   "exact_no_limit": 1.3186,
+   "h5_outer": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null,
+    "i_plus_max": 1.23,
+    "continuous_check": null,
+    "lps": 0,
+    "runtime_s": 0.0
+   },
+   "sum": {
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null,
+    "i_plus_max": 1.23,
+    "continuous_check": null,
+    "lps": 2161,
+    "runtime_s": 14.483858823776245
+   },
+   "phase_disc": {
+    "feasible": true,
+    "abs_delta": 0.74,
+    "angle_deg": 335.0,
+    "injectable_limit": 1.9694944481123542,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 2661,
+    "runtime_s": 17.63290047645569
+   },
+   "none": {
+    "feasible": true,
+    "abs_delta": 1.34,
+    "angle_deg": 345.0,
+    "injectable_limit": 2.554310082977398,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 4823,
+    "runtime_s": 25.025352478027344
+   },
+   "phase": {
+    "feasible": true,
+    "abs_delta": 0.72,
+    "angle_deg": 70.0,
+    "injectable_limit": 1.9156725322937278,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": false,
+     "n_unseparated": 5,
+     "n_checked": 462
+    },
+    "lps": 2391,
+    "runtime_s": 22.963773488998413
+   },
+   "tac25": {
+    "feasible": true,
+    "abs_delta": 1.32,
+    "angle_deg": 345.0,
+    "injectable_limit": 2.5344230112591704,
+    "i_plus_max": 1.23,
+    "continuous_check": {
+     "holds": true,
+     "n_unseparated": 0,
+     "n_checked": 462
+    },
+    "lps": 4751,
+    "runtime_s": 25.447904109954834
+   }
+  }
+ },
+ "runtime_s": 48.24925875663757
+}

@@ -1,0 +1,6130 @@
+{
+ "script": "b1_long_lines.py --coarse",
+ "commit": "c20976b45e748ed80433e91c5d4b90f8a59aa4ed",
+ "eps_headline": 0.01,
+ "delta_magnitudes_pu": [
+  0.4,
+  1.2
+ ],
+ "note": "scale multiplies Z1 and Z0 of the protected line and the lines beyond its remote bus; scale 1 is b1_delta_screen.json. The |delta| grid stops at 1.2 pu, so a need above it reads as none",
+ "relays": {
+  "cigre_R3": {
+   "1": {
+    "z1_line_ohm": 2.075917591661902,
+    "gap_85_to_remote_ohm": 0.3113876387492853,
+    "without_delta": 19.46078431372549,
+    "delta_le_0p4": 21.91176470588235,
+    "delta_le_1p2": 26.372549019607845,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 1.0395746838903652,
+      "v_remote_pu": 1.00806660789182
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 1.0571268524245871,
+      "v_remote_pu": 1.0277049814721575
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 1.0538963472214007,
+      "v_remote_pu": 1.0236382899982162
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 1.0395746838903652,
+      "v_remote_pu": 1.00806660789182
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 1.0571268524245871,
+      "v_remote_pu": 1.0277049814721575
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 1.0538963472214007,
+      "v_remote_pu": 1.0236382899982162
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 10,
+     "cells_need_above_1p2": 9,
+     "emt_in_zone_in_those_cells": 74,
+     "emt_in_zone_in_cells_need_above_1p2": 66,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.21283783783783783,
+     "emt_weighted_share_le_1p2": 0.24324324324324326
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 48,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.08333333333333333,
+       "eps=0.01": 0.5,
+       "eps=0.02": 0.875
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.5833333333333334,
+      "share_le_1p2": 0.6666666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.012282572172563677,
+       "need_pu": null
+      }
+     },
+     "lg|5-15": {
+      "emt_in_zone": 9,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.875,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.007266294253105682,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.0131854578550724,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 32.0
+       },
+       "distance_at_delta0": 0.013811659543468996,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 1.2,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.6666666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.010724701181310886,
+       "need_pu": null
+      }
+     },
+     "ll|5-15": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 1.2,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.006800535002731478,
+       "need_pu": null
+      }
+     },
+     "ll|15-40": {
+      "emt_in_zone": 10,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 24.0
+       },
+       "distance_at_delta0": 0.0022439666127570257,
+       "need_pu": null
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 34.0
+       },
+       "distance_at_delta0": 0.015414906550127838,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.08333333333333333,
+       "eps=0.01": 0.625,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.4,
+      "share_le_0p4": 0.625,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.014014613877231241,
+       "need_pu": 1.2
+      }
+     },
+     "llg|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.4583333333333333,
+       "eps=0.01": 0.5416666666666666,
+       "eps=0.02": 0.875
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.0034605235217290836,
+       "need_pu": null
+      }
+     },
+     "llg|15-40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.875,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.011354696129567618,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 30.0
+       },
+       "distance_at_delta0": 0.018304468097644938,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.005590052155845349,
+       "need_pu": null
+      }
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 24.0
+       },
+       "distance_at_delta0": 0.0034982433148107173,
+       "need_pu": null
+      }
+     },
+     "3ph|>40": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 32.0
+       },
+       "distance_at_delta0": 0.017708949028110765,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 67.13511323928833
+   },
+   "2": {
+    "z1_line_ohm": 4.151835183323804,
+    "gap_85_to_remote_ohm": 0.6227752774985706,
+    "without_delta": 29.50980392156863,
+    "delta_le_0p4": 31.029411764705884,
+    "delta_le_1p2": 41.27450980392157,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 31,
+      "v_min_pu": 0.9553874089428547,
+      "v_max_pu": 1.0902498826230715,
+      "v_relay_pu": 1.0902498826230715,
+      "v_remote_pu": 1.0322215601542788
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 30,
+      "v_min_pu": 0.9800286012207212,
+      "v_max_pu": 1.1047453069395505,
+      "v_relay_pu": 1.1047453069395503,
+      "v_remote_pu": 1.0506533029626328
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 31,
+      "v_min_pu": 0.9737496963586636,
+      "v_max_pu": 1.1029688937688948,
+      "v_relay_pu": 1.1029688937688946,
+      "v_remote_pu": 1.0472707882280832
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 31,
+      "v_min_pu": 0.9553874089428547,
+      "v_max_pu": 1.0902498826230715,
+      "v_relay_pu": 1.0902498826230715,
+      "v_remote_pu": 1.0322215601542788
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 30,
+      "v_min_pu": 0.9800286012207212,
+      "v_max_pu": 1.1047453069395505,
+      "v_relay_pu": 1.1047453069395503,
+      "v_remote_pu": 1.0506533029626328
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 31,
+      "v_min_pu": 0.9737496963586636,
+      "v_max_pu": 1.1029688937688948,
+      "v_relay_pu": 1.1029688937688946,
+      "v_remote_pu": 1.0472707882280832
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 10,
+     "cells_need_above_1p2": 8,
+     "emt_in_zone_in_those_cells": 74,
+     "emt_in_zone_in_cells_need_above_1p2": 60,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.30067567567567566,
+     "emt_weighted_share_le_1p2": 0.40315315315315314
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 80,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.4583333333333333,
+       "eps=0.02": 0.9583333333333334
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.625,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.011908496618460496,
+       "need_pu": null
+      }
+     },
+     "lg|5-15": {
+      "emt_in_zone": 9,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.625,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.010519546232741012,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.01575610168305308,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 34.0
+       },
+       "distance_at_delta0": 0.01241160471225533,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "low_u2",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "low_u2",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.013035405784107779,
+       "need_pu": 1.2
+      }
+     },
+     "ll|5-15": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "low_u2",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "low_u2",
+        "ft": "ll",
+        "place": "MainLn12-13 5 %",
+        "rf": 6.0
+       },
+       "distance_at_delta0": 0.01570142969817856,
+       "need_pu": 1.2
+      }
+     },
+     "ll|15-40": {
+      "emt_in_zone": 10,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.6666666666666666,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.16666666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 24.0
+       },
+       "distance_at_delta0": 0.01057281444380781,
+       "need_pu": null
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 34.0
+       },
+       "distance_at_delta0": 0.010763643058049707,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.375,
+       "eps=0.02": 0.875
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "low_u2",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "low_u2",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 0.13727356161975204,
+       "need_pu": 0.4
+      }
+     },
+     "llg|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.3333333333333333,
+       "eps=0.02": 0.625
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.875,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.013241611782796092,
+       "need_pu": null
+      }
+     },
+     "llg|15-40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.011252559256222788,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 32.0
+       },
+       "distance_at_delta0": 0.017823502964292456,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "MainLn12-13 20 %",
+        "rf": 6.0
+       },
+       "distance_at_delta0": 0.014384967420606909,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.16666666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 24.0
+       },
+       "distance_at_delta0": 0.0067633204875528485,
+       "need_pu": null
+      }
+     },
+     "3ph|>40": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 34.0
+       },
+       "distance_at_delta0": 0.010306815402541969,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 84.70770287513733
+   },
+   "3": {
+    "z1_line_ohm": 6.2277527749857065,
+    "gap_85_to_remote_ohm": 0.9341629162478559,
+    "without_delta": 31.601731601731597,
+    "delta_le_0p4": 34.74025974025974,
+    "delta_le_1p2": 46.753246753246756,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 37,
+      "v_min_pu": 0.9530015560069514,
+      "v_max_pu": 1.12502944180497,
+      "v_relay_pu": 1.12502944180497,
+      "v_remote_pu": 1.0434400366918641
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9759874626356143,
+      "v_max_pu": 1.13751548259586,
+      "v_relay_pu": 1.13751548259586,
+      "v_remote_pu": 1.0615956089557277
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9705643844985367,
+      "v_max_pu": 1.1369129922191215,
+      "v_relay_pu": 1.1369129922191215,
+      "v_remote_pu": 1.0586582072581734
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 37,
+      "v_min_pu": 0.9530015560069514,
+      "v_max_pu": 1.12502944180497,
+      "v_relay_pu": 1.12502944180497,
+      "v_remote_pu": 1.0434400366918641
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9759874626356143,
+      "v_max_pu": 1.13751548259586,
+      "v_relay_pu": 1.13751548259586,
+      "v_remote_pu": 1.0615956089557277
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9705643844985367,
+      "v_max_pu": 1.1369129922191215,
+      "v_relay_pu": 1.1369129922191215,
+      "v_remote_pu": 1.0586582072581734
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 9,
+     "cells_need_above_1p2": 7,
+     "emt_in_zone_in_those_cells": 66,
+     "emt_in_zone_in_cells_need_above_1p2": 55,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.32575757575757575,
+     "emt_weighted_share_le_1p2": 0.4602272727272727
+    },
+    "unconverged_in": 24,
+    "unconverged_out": 78,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.375,
+       "eps=0.02": 0.875
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.875,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "low_u2",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "low_u2",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.017400999023657833,
+       "need_pu": null
+      }
+     },
+     "lg|5-15": {
+      "emt_in_zone": 9,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.375,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.875,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "low_u2",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "low_u2",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.01546114997470513,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.375,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 24.0
+       },
+       "distance_at_delta0": 0.01217609888598839,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 34.0
+       },
+       "distance_at_delta0": 0.014533946994784191,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.4166666666666667,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "MainLn12-13 20 %",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 0.01953789699363878,
+       "need_pu": 0.4
+      }
+     },
+     "ll|5-15": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.3333333333333333,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "low_u2",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "low_u2",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 0.1900525289275467,
+       "need_pu": 0.4
+      }
+     },
+     "ll|15-40": {
+      "emt_in_zone": 10,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p50",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.01322532134543062,
+       "need_pu": null
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 38.0
+       },
+       "distance_at_delta0": 0.005496275125512318,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.625
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|15-40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.125,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.01332973661088338,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 34.0
+       },
+       "distance_at_delta0": 0.010215939484858994,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 8,
+      "n_model": 0,
+      "ambiguous_at_delta0": null,
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": null,
+      "share_le_1p2": null,
+      "one_angle_for_cell_pu": null
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "MainLn12-13 5 %",
+        "rf": 6.0
+       },
+       "distance_at_delta0": 0.013138672688069786,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 24.0
+       },
+       "distance_at_delta0": 0.019509215252031586,
+       "need_pu": null
+      }
+     },
+     "3ph|>40": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.8333333333333334,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 34.0
+       },
+       "distance_at_delta0": 0.014137026198033698,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 330.692364692688
+   }
+  },
+  "cigre_R1": {
+   "1": {
+    "z1_line_ohm": 3.8625262898556554,
+    "gap_85_to_remote_ohm": 0.5793789434783483,
+    "without_delta": 19.270833333333332,
+    "delta_le_0p4": 22.337962962962962,
+    "delta_le_1p2": 31.88657407407407,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 0.9796633472099278,
+      "v_remote_pu": 0.9624684078991756
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 1.0038214976719726,
+      "v_remote_pu": 0.988307906511864
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 1.0005126695603281,
+      "v_remote_pu": 0.981741976387149
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 0.9796633472099278,
+      "v_remote_pu": 0.9624684078991756
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 1.0038214976719726,
+      "v_remote_pu": 0.988307906511864
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 1.0005126695603281,
+      "v_remote_pu": 0.981741976387149
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 5,
+     "cells_need_above_1p2": 5,
+     "emt_in_zone_in_those_cells": 53,
+     "emt_in_zone_in_cells_need_above_1p2": 53,
+     "stop_rule_met": true,
+     "emt_weighted_share_le_0p4": 0.14150943396226415,
+     "emt_weighted_share_le_1p2": 0.21462264150943397
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 48,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.625
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.875,
+      "share_le_1p2": 0.9166666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.015598047204146398,
+       "need_pu": null
+      }
+     },
+     "lg|5-15": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 0.875
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.625,
+      "share_le_1p2": 0.7083333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.010635354939147149,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 19,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.125,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 20.0
+       },
+       "distance_at_delta0": 0.010878448503528648,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.01948636092199217,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "low_u2",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 2.0
+       },
+       "out_of_zone": {
+        "y2": "low_u2",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 2.0
+       },
+       "distance_at_delta0": 0.013301048203282262,
+       "need_pu": 1.2
+      }
+     },
+     "ll|5-15": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.6666666666666666,
+      "share_le_1p2": 0.8333333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "MainLn1-2 10 %",
+        "rf": 6.0
+       },
+       "distance_at_delta0": 0.005322476137976873,
+       "need_pu": 1.2
+      }
+     },
+     "ll|15-40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.08333333333333333,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 20.0
+       },
+       "distance_at_delta0": 0.014082361697932366,
+       "need_pu": null
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 30.0
+       },
+       "distance_at_delta0": 0.015792316499325554,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.375
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.125,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.875,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "MainLn1-2 5 %",
+        "rf": 6.0
+       },
+       "distance_at_delta0": 0.016594744122114438,
+       "need_pu": 1.2
+      }
+     },
+     "llg|15-40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.625,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.08333333333333333,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 20.0
+       },
+       "distance_at_delta0": 0.008826000110252877,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.875,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 28.0
+       },
+       "distance_at_delta0": 0.012945927187741575,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "MainLn1-2 10 %",
+        "rf": 6.0
+       },
+       "distance_at_delta0": 0.017422520590415325,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 9,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 20.0
+       },
+       "distance_at_delta0": 0.013457311820558093,
+       "need_pu": null
+      }
+     },
+     "3ph|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 30.0
+       },
+       "distance_at_delta0": 0.012660819653956004,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 83.50921392440796
+   },
+   "2": {
+    "z1_line_ohm": 7.725052579711311,
+    "gap_85_to_remote_ohm": 1.1587578869566966,
+    "without_delta": 34.375,
+    "delta_le_0p4": 37.5,
+    "delta_le_1p2": 48.09027777777778,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 38,
+      "v_min_pu": 0.9499834460389327,
+      "v_max_pu": 1.0395746645188193,
+      "v_relay_pu": 0.9781876808350901,
+      "v_remote_pu": 0.9511485714950696
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9770906827856812,
+      "v_max_pu": 1.0571268284703437,
+      "v_relay_pu": 1.0027678802100317,
+      "v_remote_pu": 0.9783394812833156
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 37,
+      "v_min_pu": 0.9682229266072911,
+      "v_max_pu": 1.0538963217226607,
+      "v_relay_pu": 1.0007361172548255,
+      "v_remote_pu": 0.9708755764526127
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 38,
+      "v_min_pu": 0.9499834460389327,
+      "v_max_pu": 1.0395746645188193,
+      "v_relay_pu": 0.9781876808350901,
+      "v_remote_pu": 0.9511485714950696
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9770906827856812,
+      "v_max_pu": 1.0571268284703437,
+      "v_relay_pu": 1.0027678802100317,
+      "v_remote_pu": 0.9783394812833156
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 37,
+      "v_min_pu": 0.9682229266072911,
+      "v_max_pu": 1.0538963217226607,
+      "v_relay_pu": 1.0007361172548255,
+      "v_remote_pu": 0.9708755764526127
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 5,
+     "cells_need_above_1p2": 4,
+     "emt_in_zone_in_those_cells": 53,
+     "emt_in_zone_in_cells_need_above_1p2": 41,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.3490566037735849,
+     "emt_weighted_share_le_1p2": 0.41273584905660377
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 48,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5833333333333334
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.125,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 0.227001311570042,
+       "need_pu": 0.4
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 19,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.375,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.010268105131949673,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 28.0
+       },
+       "distance_at_delta0": 0.016552441878497498,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.9166666666666666
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.16666666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 24.0
+       },
+       "distance_at_delta0": 0.006836936944326827,
+       "need_pu": null
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 32.0
+       },
+       "distance_at_delta0": 0.00709387460619601,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.125
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 0.4231370426918095,
+       "need_pu": 0.4
+      }
+     },
+     "llg|15-40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 20.0
+       },
+       "distance_at_delta0": 0.01170213596990969,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.125,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 30.0
+       },
+       "distance_at_delta0": 0.007727642762409288,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 1.2,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 6.0
+       },
+       "distance_at_delta0": 0.012445293312620398,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 9,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 20.0
+       },
+       "distance_at_delta0": 0.0035298747800918337,
+       "need_pu": null
+      }
+     },
+     "3ph|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 30.0
+       },
+       "distance_at_delta0": 0.008533756413753882,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 83.86621236801147
+   },
+   "3": {
+    "z1_line_ohm": 11.587578869566967,
+    "gap_85_to_remote_ohm": 1.7381368304350449,
+    "without_delta": 54.513888888888886,
+    "delta_le_0p4": 62.268518518518526,
+    "delta_le_1p2": 64.75694444444444,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 57,
+      "v_min_pu": 0.921679628693019,
+      "v_max_pu": 1.0395746642635533,
+      "v_relay_pu": 0.952435004877567,
+      "v_remote_pu": 0.921679628693019
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 52,
+      "v_min_pu": 0.9534211863826385,
+      "v_max_pu": 1.0571268279834876,
+      "v_relay_pu": 0.9815675555681723,
+      "v_remote_pu": 0.9534211863826385
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 54,
+      "v_min_pu": 0.942184726929268,
+      "v_max_pu": 1.0538963214031185,
+      "v_relay_pu": 0.97675839159331,
+      "v_remote_pu": 0.942184726929268
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 57,
+      "v_min_pu": 0.921679628693019,
+      "v_max_pu": 1.0395746642635533,
+      "v_relay_pu": 0.952435004877567,
+      "v_remote_pu": 0.921679628693019
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 52,
+      "v_min_pu": 0.9534211863826385,
+      "v_max_pu": 1.0571268279834876,
+      "v_relay_pu": 0.9815675555681723,
+      "v_remote_pu": 0.9534211863826385
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 54,
+      "v_min_pu": 0.942184726929268,
+      "v_max_pu": 1.0538963214031185,
+      "v_relay_pu": 0.97675839159331,
+      "v_remote_pu": 0.942184726929268
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 5,
+     "cells_need_above_1p2": 4,
+     "emt_in_zone_in_those_cells": 53,
+     "emt_in_zone_in_cells_need_above_1p2": 41,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.5849056603773585,
+     "emt_weighted_share_le_1p2": 0.6187106918238994
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 48,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|15-40": {
+      "emt_in_zone": 19,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.011684449450563864,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.2916666666666667,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 32.0
+       },
+       "distance_at_delta0": 0.015538161533540526,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "MainLn1-2 5 %",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.014715768093137571,
+       "need_pu": null
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.3333333333333333,
+      "share_le_1p2": 0.3333333333333333,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 36.0
+       },
+       "distance_at_delta0": 0.007958800520312864,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|15-40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.3333333333333333,
+      "share_le_1p2": 0.3333333333333333,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.009464294482412768,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 32.0
+       },
+       "distance_at_delta0": 0.014156877383495463,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 9,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.16666666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 22.0
+       },
+       "distance_at_delta0": 0.012289374561001112,
+       "need_pu": null
+      }
+     },
+     "3ph|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 1.0,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 30.0
+       },
+       "distance_at_delta0": 0.008364156925896232,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 576.6541216373444
+   }
+  },
+  "cigre_R4": {
+   "1": {
+    "z1_line_ohm": 2.4643266394085557,
+    "gap_85_to_remote_ohm": 0.36964899591128336,
+    "without_delta": 47.203947368421055,
+    "delta_le_0p4": 52.96052631578947,
+    "delta_le_1p2": 58.55263157894737,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 0.9553874323965362,
+      "v_remote_pu": 0.9624684078991756
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 0.9818943875191143,
+      "v_remote_pu": 0.988307906511864
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 0.9737497310719023,
+      "v_remote_pu": 0.981741976387149
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 0.9553874323965362,
+      "v_remote_pu": 0.9624684078991756
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 0.9818943875191143,
+      "v_remote_pu": 0.988307906511864
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 0.9737497310719023,
+      "v_remote_pu": 0.981741976387149
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 9,
+     "cells_need_above_1p2": 5,
+     "emt_in_zone_in_those_cells": 67,
+     "emt_in_zone_in_cells_need_above_1p2": 41,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.48134328358208955,
+     "emt_weighted_share_le_1p2": 0.5373134328358209
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 48,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.16666666666666666
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.125,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.625
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.008631302159864115,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 14,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.625,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.009866202907497734,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.9583333333333334,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.00934473491292065,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.5833333333333334,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.015065269871007314,
+       "need_pu": 1.2
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.008541858113621181,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.125,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "MainLn2-3 5 %",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 2.485247682769953,
+       "need_pu": 0.4
+      }
+     },
+     "llg|15-40": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.08333333333333333,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.041666666666666664,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.016434703924737323,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.20833333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.015468630589127563,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 11,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|>40": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.8333333333333334,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.01285436225408626,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 39.9585702419281
+   },
+   "2": {
+    "z1_line_ohm": 4.928653278817111,
+    "gap_85_to_remote_ohm": 0.7392979918225667,
+    "without_delta": 58.7719298245614,
+    "delta_le_0p4": 62.5,
+    "delta_le_1p2": 69.02412280701755,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 38,
+      "v_min_pu": 0.9499834460389327,
+      "v_max_pu": 1.0395746645188193,
+      "v_relay_pu": 0.9499834460389327,
+      "v_remote_pu": 0.9511485714950696
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9770906827856812,
+      "v_max_pu": 1.0571268284703437,
+      "v_relay_pu": 0.9770906827856812,
+      "v_remote_pu": 0.9783394812833156
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 37,
+      "v_min_pu": 0.9682229266072911,
+      "v_max_pu": 1.0538963217226607,
+      "v_relay_pu": 0.9682229266072911,
+      "v_remote_pu": 0.9708755764526127
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 38,
+      "v_min_pu": 0.9499834460389327,
+      "v_max_pu": 1.0395746645188193,
+      "v_relay_pu": 0.9499834460389327,
+      "v_remote_pu": 0.9511485714950696
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 36,
+      "v_min_pu": 0.9770906827856812,
+      "v_max_pu": 1.0571268284703437,
+      "v_relay_pu": 0.9770906827856812,
+      "v_remote_pu": 0.9783394812833156
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 37,
+      "v_min_pu": 0.9682229266072911,
+      "v_max_pu": 1.0538963217226607,
+      "v_relay_pu": 0.9682229266072911,
+      "v_remote_pu": 0.9708755764526127
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 9,
+     "cells_need_above_1p2": 5,
+     "emt_in_zone_in_those_cells": 67,
+     "emt_in_zone_in_cells_need_above_1p2": 41,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.582089552238806,
+     "emt_weighted_share_le_1p2": 0.6560945273631841
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 48,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.125
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.125,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.875,
+      "share_le_1p2": 0.9166666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.014476096548579565,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 14,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.16666666666666666,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.012670519706120098,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.75,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.0,
+      "share_le_1p2": 0.125,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.006408114330385961,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.25,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.009053340850253333,
+       "need_pu": 1.2
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.014307523778993816,
+       "need_pu": 1.2
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|15-40": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.6666666666666666,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 1.2,
+      "share_le_0p4": 0.3333333333333333,
+      "share_le_1p2": 0.5416666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.01254698844130419,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5416666666666666,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.16666666666666666,
+      "share_le_1p2": 0.3333333333333333,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.01212772998432543,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 11,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|>40": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.015574818423270742,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 52.92277383804321
+   },
+   "3": {
+    "z1_line_ohm": 7.392979918225667,
+    "gap_85_to_remote_ohm": 1.10894698773385,
+    "without_delta": 64.03508771929823,
+    "delta_le_0p4": 75.21929824561403,
+    "delta_le_1p2": 83.16885964912281,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 57,
+      "v_min_pu": 0.921679628693019,
+      "v_max_pu": 1.0395746642635533,
+      "v_relay_pu": 0.943090954611682,
+      "v_remote_pu": 0.921679628693019
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 52,
+      "v_min_pu": 0.9534211863826385,
+      "v_max_pu": 1.0571268279834876,
+      "v_relay_pu": 0.9712429856443541,
+      "v_remote_pu": 0.9534211863826385
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 54,
+      "v_min_pu": 0.942184726929268,
+      "v_max_pu": 1.0538963214031185,
+      "v_relay_pu": 0.9614131182741957,
+      "v_remote_pu": 0.942184726929268
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 57,
+      "v_min_pu": 0.921679628693019,
+      "v_max_pu": 1.0395746642635533,
+      "v_relay_pu": 0.943090954611682,
+      "v_remote_pu": 0.921679628693019
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 52,
+      "v_min_pu": 0.9534211863826385,
+      "v_max_pu": 1.0571268279834876,
+      "v_relay_pu": 0.9712429856443541,
+      "v_remote_pu": 0.9534211863826385
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 54,
+      "v_min_pu": 0.942184726929268,
+      "v_max_pu": 1.0538963214031185,
+      "v_relay_pu": 0.9614131182741957,
+      "v_remote_pu": 0.942184726929268
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 9,
+     "cells_need_above_1p2": 4,
+     "emt_in_zone_in_those_cells": 67,
+     "emt_in_zone_in_cells_need_above_1p2": 35,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.72636815920398,
+     "emt_weighted_share_le_1p2": 0.8090796019900498
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 48,
+    "n_in": 384,
+    "n_out": 5952,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.125
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.125,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 0.1618636449391755,
+       "need_pu": 0.4
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 14,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.5,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 1.2,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.5833333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.005155741016600518,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.7916666666666666,
+       "eps=0.01": 1.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.16666666666666666,
+      "share_le_1p2": 0.20833333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 38.0
+       },
+       "distance_at_delta0": 0.011637817595636535,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 18.0
+       },
+       "distance_at_delta0": 0.1408290480863158,
+       "need_pu": 0.4
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.014554993763485624,
+       "need_pu": 1.2
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|15-40": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.7083333333333334,
+      "share_le_1p2": 0.7083333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.01467974059128685,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.013839828670839771,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 3,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 11,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|>40": {
+      "emt_in_zone": 8,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.16666666666666666,
+       "eps=0.02": 0.6666666666666666
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.8333333333333334,
+      "share_le_1p2": 0.9166666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p50",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.019576441409946133,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 366.39098167419434
+   }
+  },
+  "cigre_R2": {
+   "1": {
+    "z1_line_ohm": 3.8625262898556554,
+    "gap_85_to_remote_ohm": 0.5793789434783483,
+    "without_delta": 53.47222222222222,
+    "delta_le_0p4": 56.770833333333336,
+    "delta_le_1p2": 70.65972222222223,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 0.9624684078991756,
+      "v_remote_pu": 0.9796633472099278
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 0.988307906511864,
+      "v_remote_pu": 1.0038214976719726
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 0.981741976387149,
+      "v_remote_pu": 1.0005126695603281
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 29,
+      "v_min_pu": 0.9553874323965362,
+      "v_max_pu": 1.0395746838903652,
+      "v_relay_pu": 0.9624684078991756,
+      "v_remote_pu": 0.9796633472099278
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9818943875191143,
+      "v_max_pu": 1.0571268524245871,
+      "v_relay_pu": 0.988307906511864,
+      "v_remote_pu": 1.0038214976719726
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 28,
+      "v_min_pu": 0.9737497310719023,
+      "v_max_pu": 1.0538963472214007,
+      "v_relay_pu": 0.981741976387149,
+      "v_remote_pu": 1.0005126695603281
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 6,
+     "cells_need_above_1p2": 3,
+     "emt_in_zone_in_those_cells": 57,
+     "emt_in_zone_in_cells_need_above_1p2": 33,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.49780701754385964,
+     "emt_weighted_share_le_1p2": 0.6732456140350878
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 24,
+    "n_in": 384,
+    "n_out": 10416,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 11,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.7916666666666666,
+      "share_le_1p2": 0.875,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.010841856634302455,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 16,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.3333333333333333,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.011130652512282568,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.6666666666666666,
+       "eps=0.01": 0.875,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.125,
+      "share_le_1p2": 0.125,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.008375001322746711,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.9166666666666666,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p50",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "MainLn3-8 20 %",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.014049625762785317,
+       "need_pu": 1.2
+      }
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.75
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "remote bus",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.013144261746758479,
+       "need_pu": null
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.125,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "MainLn3-4 5 %",
+        "rf": 0.0
+       },
+       "distance_at_delta0": 1.3069455904138434,
+       "need_pu": 0.4
+      }
+     },
+     "llg|15-40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.2,
+      "share_le_0p4": 0.625,
+      "share_le_1p2": 0.625,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 28.0
+       },
+       "distance_at_delta0": 0.012556507896509111,
+       "need_pu": null
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "MainLn3-4 10 %",
+        "rf": 44.0
+       },
+       "distance_at_delta0": 0.016976818215002187,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "MainLn3-4 5 %",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.0192921464968151,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.6,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 28.0
+       },
+       "distance_at_delta0": 0.017786965634277924,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.014126711679393389,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 81.45520567893982
+   },
+   "2": {
+    "z1_line_ohm": 7.725052579711311,
+    "gap_85_to_remote_ohm": 1.1587578869566966,
+    "without_delta": 75.63657407407408,
+    "delta_le_0p4": 76.44675925925925,
+    "delta_le_1p2": 81.25,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 34,
+      "v_min_pu": 0.952114913301534,
+      "v_max_pu": 1.0395746660221623,
+      "v_relay_pu": 0.9542866848860213,
+      "v_remote_pu": 0.9810978689064608
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 33,
+      "v_min_pu": 0.9789685777643375,
+      "v_max_pu": 1.057126830098136,
+      "v_relay_pu": 0.9809952662593486,
+      "v_remote_pu": 1.0052281821529536
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 33,
+      "v_min_pu": 0.9704105158821086,
+      "v_max_pu": 1.0538963236537497,
+      "v_relay_pu": 0.9733694345858279,
+      "v_remote_pu": 1.00307050051399
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 34,
+      "v_min_pu": 0.952114913301534,
+      "v_max_pu": 1.0395746660221623,
+      "v_relay_pu": 0.9542866848860213,
+      "v_remote_pu": 0.9810978689064608
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 33,
+      "v_min_pu": 0.9789685777643375,
+      "v_max_pu": 1.057126830098136,
+      "v_relay_pu": 0.9809952662593486,
+      "v_remote_pu": 1.0052281821529536
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 33,
+      "v_min_pu": 0.9704105158821086,
+      "v_max_pu": 1.0538963236537497,
+      "v_relay_pu": 0.9733694345858279,
+      "v_remote_pu": 1.00307050051399
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 6,
+     "cells_need_above_1p2": 3,
+     "emt_in_zone_in_those_cells": 57,
+     "emt_in_zone_in_cells_need_above_1p2": 33,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.7214912280701754,
+     "emt_weighted_share_le_1p2": 0.7763157894736842
+    },
+    "unconverged_in": 0,
+    "unconverged_out": 12,
+    "n_in": 384,
+    "n_out": 10416,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.125
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 11,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.125,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.875,
+      "share_le_1p2": 0.9166666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "resistive",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.018781050439061364,
+       "need_pu": null
+      }
+     },
+     "lg|15-40": {
+      "emt_in_zone": 16,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.625,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 1.2,
+      "share_le_0p4": 0.375,
+      "share_le_1p2": 0.5416666666666666,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.00996515859031799,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.75,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.25,
+      "share_le_1p2": 0.25,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.7,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.01672938729799961,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.4,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.4,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "ll",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "ll",
+        "place": "MainLn3-8 20 %",
+        "rf": 32.0
+       },
+       "distance_at_delta0": 0.10298252843758438,
+       "need_pu": 0.4
+      }
+     },
+     "llg|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|15-40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 0.7083333333333334
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.7916666666666666,
+      "share_le_1p2": 0.9583333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p50",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "MainLn3-4 20 %",
+        "rf": 28.0
+       },
+       "distance_at_delta0": 0.01873358550700374,
+       "need_pu": 1.2
+      }
+     },
+     "llg|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.5,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.5,
+      "share_le_1p2": 0.5,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "remote bus",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.017119513743647563,
+       "need_pu": null
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.16666666666666666,
+       "eps=0.02": 0.6666666666666666
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.8333333333333334,
+      "share_le_1p2": 0.8333333333333334,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p50",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "MainLn3-8 20 %",
+        "rf": 42.0
+       },
+       "distance_at_delta0": 0.01976806075946097,
+       "need_pu": null
+      }
+     }
+    },
+    "runtime_s": 60.18561887741089
+   },
+   "3": {
+    "z1_line_ohm": 11.587578869566967,
+    "gap_85_to_remote_ohm": 1.7381368304350449,
+    "without_delta": 81.01851851851853,
+    "delta_le_0p4": 86.22685185185186,
+    "delta_le_1p2": 89.23611111111111,
+    "prefault": [
+     {
+      "grounding": "solid",
+      "op": "p10",
+      "converged": true,
+      "iterations": 41,
+      "v_min_pu": 0.945600927526691,
+      "v_max_pu": 1.0395746643235662,
+      "v_relay_pu": 0.945600927526691,
+      "v_remote_pu": 0.9748837662113458
+     },
+     {
+      "grounding": "solid",
+      "op": "p50",
+      "converged": true,
+      "iterations": 39,
+      "v_min_pu": 0.9733371025791695,
+      "v_max_pu": 1.0571268280954622,
+      "v_relay_pu": 0.9733371025791695,
+      "v_remote_pu": 0.9999790831550718
+     },
+     {
+      "grounding": "solid",
+      "op": "p90",
+      "converged": true,
+      "iterations": 40,
+      "v_min_pu": 0.9645919521477629,
+      "v_max_pu": 1.0538963214769779,
+      "v_relay_pu": 0.9645919521477629,
+      "v_remote_pu": 0.9978838955312264
+     },
+     {
+      "grounding": "resistive",
+      "op": "p10",
+      "converged": true,
+      "iterations": 41,
+      "v_min_pu": 0.945600927526691,
+      "v_max_pu": 1.0395746643235662,
+      "v_relay_pu": 0.945600927526691,
+      "v_remote_pu": 0.9748837662113458
+     },
+     {
+      "grounding": "resistive",
+      "op": "p50",
+      "converged": true,
+      "iterations": 39,
+      "v_min_pu": 0.9733371025791695,
+      "v_max_pu": 1.0571268280954622,
+      "v_relay_pu": 0.9733371025791695,
+      "v_remote_pu": 0.9999790831550718
+     },
+     {
+      "grounding": "resistive",
+      "op": "p90",
+      "converged": true,
+      "iterations": 40,
+      "v_min_pu": 0.9645919521477629,
+      "v_max_pu": 1.0538963214769779,
+      "v_relay_pu": 0.9645919521477629,
+      "v_remote_pu": 0.9978838955312264
+     }
+    ],
+    "verdict_eps_0p01": {
+     "cells_with_min_emt": 6,
+     "cells_need_above_1p2": 2,
+     "emt_in_zone_in_those_cells": 57,
+     "emt_in_zone_in_cells_need_above_1p2": 22,
+     "stop_rule_met": false,
+     "emt_weighted_share_le_0p4": 0.8304093567251463,
+     "emt_weighted_share_le_1p2": 0.868421052631579
+    },
+    "unconverged_in": 4,
+    "unconverged_out": 12,
+    "n_in": 384,
+    "n_out": 10416,
+    "cells": {
+     "lg|<5": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.125
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|5-15": {
+      "emt_in_zone": 11,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.375
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "lg|15-40": {
+      "emt_in_zone": 16,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.3333333333333333,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 27.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 26.0
+       },
+       "distance_at_delta0": 0.013542914826691232,
+       "need_pu": null
+      }
+     },
+     "lg|>40": {
+      "emt_in_zone": 6,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.25,
+       "eps=0.01": 0.7916666666666666,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": null,
+      "need_exceeds_grid": true,
+      "median_one_angle_per_fault_pu": null,
+      "share_le_0p4": 0.3333333333333333,
+      "share_le_1p2": 0.4166666666666667,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "lg",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "lg",
+        "place": "remote bus",
+        "rf": 40.0
+       },
+       "distance_at_delta0": 0.011917709503937501,
+       "need_pu": null
+      }
+     },
+     "ll|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|5-15": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|15-40": {
+      "emt_in_zone": 7,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "ll|>40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.25
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|<5": {
+      "emt_in_zone": 0,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|5-15": {
+      "emt_in_zone": 4,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|15-40": {
+      "emt_in_zone": 2,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5416666666666666
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "llg|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.25,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 0.75,
+      "share_le_1p2": 0.75,
+      "one_angle_for_cell_pu": null,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "llg",
+        "m_rel": 0.85,
+        "rf": 42.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "llg",
+        "place": "MainLn3-4 10 %",
+        "rf": 44.0
+       },
+       "distance_at_delta0": 0.018281102310427455,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|<5": {
+      "emt_in_zone": 1,
+      "n_model": 20,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.0
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|5-15": {
+      "emt_in_zone": 5,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.6666666666666666,
+       "eps=0.02": 1.0
+      },
+      "need_lower_bound_pu": 1.2,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.4,
+      "share_le_0p4": 0.6666666666666666,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 1.2,
+      "binding_pair": {
+       "in_zone": {
+        "g": "solid",
+        "op": "p10",
+        "y2": "secant",
+        "ft": "3ph",
+        "m_rel": 0.7,
+        "rf": 8.5
+       },
+       "out_of_zone": {
+        "y2": "secant",
+        "ft": "3ph",
+        "place": "remote bus",
+        "rf": 8.0
+       },
+       "distance_at_delta0": 0.019537505610191186,
+       "need_pu": 1.2
+      }
+     },
+     "3ph|15-40": {
+      "emt_in_zone": 12,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     },
+     "3ph|>40": {
+      "emt_in_zone": 1,
+      "n_model": 24,
+      "ambiguous_at_delta0": {
+       "eps=0.005": 0.0,
+       "eps=0.01": 0.0,
+       "eps=0.02": 0.5
+      },
+      "need_lower_bound_pu": 0.0,
+      "need_exceeds_grid": false,
+      "median_one_angle_per_fault_pu": 0.0,
+      "share_le_0p4": 1.0,
+      "share_le_1p2": 1.0,
+      "one_angle_for_cell_pu": 0.0
+     }
+    },
+    "runtime_s": 64.08330225944519
+   }
+  }
+ }
+}

@@ -149,3 +149,54 @@ def test_margin_costs_signal():
     b = td.min_delta(ms, i_max=1.2, limit_inside=True, limit_design=False, rho=0.1, r_step=0.04, n_ang=36, r_max=1.5)
     assert a["feasible"] and b["feasible"]
     assert b["abs_delta"] >= a["abs_delta"] - 1e-9
+
+
+# ------------------------------------------------------------------ per-phase limit rows (bridge review B5)
+def _box_points(p, mode="linear", n=400, seed=1):
+    from wp1_common import source_sets
+    _, (c, g) = source_sets(p, mode)
+    u = np.random.default_rng(seed).uniform(-1, 1, (n, 2))
+    return u, c + g[0] * u[:, 0] + g[1] * u[:, 1]
+
+
+def test_phase_rows_keep_every_current_a_per_phase_limiter_allows():
+    """Soundness: any i+ whose three phase currents |i+ + a^k delta| stay within I_max must satisfy every row,
+    in both uncertainty blocks."""
+    p = am.PRESETS["weak_sg"]
+    u, ip = _box_points(p)
+    for dv in (0.3 * np.exp(0.4j), 0.6 * np.exp(-2.0j), 0.9 * np.exp(2.5j)):
+        A, b = td.phase_rows(p, "linear", 4, 1.2, dv)
+        for uk, i in zip(u, ip):
+            if max(abs(i + td.A_OP ** k * dv) for k in range(3)) <= 1.2:
+                uu = np.zeros(8)
+                uu[2], uu[3], uu[6], uu[7] = uk[0], uk[1], uk[0], uk[1]
+                assert np.all(A @ uu <= b + 1e-9)
+
+
+def test_phase_feasible_whenever_some_modelled_current_fits():
+    """phase_feasible must say yes whenever a sampled modelled i+ fits beside delta (it may also say yes a little
+    more often, through the circumscribed polygons)."""
+    p = am.PRESETS["weak_sg"]
+    _, ip = _box_points(p)
+    rng = np.random.default_rng(2)
+    for _ in range(40):
+        dv = rng.uniform(0, 1.2) * np.exp(1j * rng.uniform(0, 2 * np.pi))
+        fits = any(max(abs(i + td.A_OP ** k * dv) for k in range(3)) <= 1.2 for i in ip)
+        if fits:
+            assert td.phase_feasible(p, "linear", 1.2, dv)
+
+
+def test_phase_disc_is_the_largest_realisable_radius():
+    """At delta's best relative angle the largest phase current is sqrt(r^2 + r d + d^2): the disc radius makes it I_max."""
+    for d in (0.0, 0.3, 0.56, 1.0):
+        r = td.headroom(1.2, d, "phase_disc")
+        assert abs(r * r + r * d + d * d - 1.44) < 1e-9
+    assert td.headroom(1.2, 1.3, "phase_disc") < 0
+
+
+def test_injectable_limit_below_the_sum_rule():
+    p = am.PRESETS["weak_sg"]
+    ms = ModelSet(p, mode="linear")
+    for dv in (0.2, 0.5j, -0.7):
+        assert td.injectable_limit(p, "linear", dv) <= td.min_delta(ms, limit_inside=False, limit_design=False,
+                                                                     r_step=0.5, n_ang=4, r_max=0.0)["i_plus_max"] + abs(dv) + 1e-12

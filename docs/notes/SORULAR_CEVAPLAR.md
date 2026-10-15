@@ -1211,6 +1211,290 @@ Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
 ### Araştırmaya etkisi
 - Bu olay sinyal tasarımıyla çözülemez: devreden çıkan invertör sinyal de basamaz. Sürekli basılan bir "pilot" sinyal, kaybolunca invertörün çıktığını gösterebilirdi. Ama bu bir tür haberleşme olur ve sürekli negatif bileşen basmak güç kalitesi açısından uygun bulunmadı.
 - Pratik çözüm: invertör durum sinyaliyle röleyi bloke etmek ya da ayarını değiştirmek. Bu bir kanal ister. Erişim sonucu (B1) da aynı yere çıkmıştı: invertörlü dağıtım fiderinde güvenilir koruma haberleşme istiyor.
-- Böylece bu veride sinyal enjeksiyonunun ne erişimde, ne yönde, ne de arıza/olay ayrımında açık bir değeri kalmadı. Açık kalan tek durum I2'yi bastıran invertörler; o da bu veride yok (REVIEW.md §7 satır 42, 44, 45).
+- Böylece bu veride sinyal enjeksiyonunun ne erişimde, ne yönde, ne de arıza/olay ayrımında açık bir değeri kalmadı. Açık kalan tek durum I2'yi bastıran invertörler; o da bu veride yok (REVIEW.md §7 satır 42, 44, 45). Modelde test ettik: Soru 32.
 
 *Kaynak: `results/CIGREMV.md` §3 ("Telling a fault from an inverter disconnecting"); `results/cigremv/inverter_trip_supervision.json`; `src/review/inverter_trip_supervision.py`; REVIEW.md §7 satır 45.*
+
+---
+
+## 32. Negatif bileşen akımını bastıran invertörlerde yön bozuluyor mu, bir sinyal düzeltiyor mu?
+
+**Kısa cevap:** Bozuluyor. Küçük bir sinyal de düzeltiyor, ama yalnızca arızadan sonra ölçülen V2'ye göre ayarlanan türü. Önceden tasarlanıp invertörün kendi çerçevesinde sabitlenen bir sinyal düzeltmiyor. Düzelten davranış, IEEE 2800'ün invertörlerden zaten istediği şey: I2'yi V2'nin 90° önünde basmak. Ek olarak küçük V2'de yeterli kazanç gerekiyor; bu standardın açık bıraktığı bir ayar.
+
+### Neden bu test
+- Yön sonucumuz (Soru 29–30) bir şeye dayanıyordu: veri setindeki invertörler arızada negatif bileşen akımı basıyor, ΔY2 elemanı da bunu ölçüyor.
+- Eski tip ("coupled control") invertörler I2 basmaz, yani I2 = 0. Veride böyle invertör yok. Bu yüzden testi B1'in statik modelinde yaptık: aynı şebeke, yük durumları, topraklama ve arıza dirençleri.
+- Taylor'ın sinyali için bu veride kalan tek boşluk buydu (Soru 31'in sonu).
+
+### Ne çıktı (`i2_suppressed_direction.py`, dengesiz arızalar, "ΔY2 devredeyse ΔY2, değilse ΔY1" kuralı)
+
+| İnvertör davranışı | R1 iç arıza "ileri" | R3 iç arıza "ileri" | R4 arkadaki arıza "ileri" (hata) |
+|---|---|---|---|
+| Kayıttaki gibi (kontrol) | %95,5 | %91,4 | %2,4 |
+| I2 bastırılmış | **%74,2** | **%51,9** | **%32,1** |
+| Bastırılmış + V1'e göre sabit sinyal (en iyi genlik ve açı) | %90,1 | %68,0 | %9,9 |
+| Bastırılmış + V2'nin önünde 0,1 pu (küçük V2'de k = 5) | %99,6 | %99,7 | %0,8 |
+| IEEE 2800, k = 6 | %99,7 | %100 | %0 |
+| IEEE 2800, k = 2 | %94,2 | %87,4 | %3,2 |
+
+- **Bastırınca yön bozuluyor.**
+  - R1 ve R3'te iç arızaların bir kısmı kaçıyor, çünkü ΔY2 devreye giremiyor (R3'te hiç).
+  - R4'te arkadaki arızaların üçte biri "ileri" sanılıyor; bu bir güvenlik hatası.
+  - R2 etkilenmiyor.
+- **V1'e göre sabit sinyal düzeltmiyor.**
+  - Her röle için 48 genlik/açı denemesinin en iyisini sonradan seçtik; hiçbiri yetmiyor.
+  - Sinyal büyüdükçe kötüleşiyor. R2 ve R4'te 0,1 pu ve üstü, arkadaki arızaların %30–46'sını "ileri" yapıyor.
+  - Sebep: arızada V2'nin V1'e göre açısı arıza tipine ve dirence göre değişiyor. V1'e göre sabitlenmiş bir akım, ΔV2'ye karşı her arızada başka bir açıda kalıyor.
+- **V2'ye göre ayarlanan sinyal düzeltiyor.**
+  - Sinyalin büyüklüğü 0,1 pu yetiyor.
+  - Belirleyici olan, V2'nin en küçük olduğu yüksek dirençli arızalardaki kazanç. Kazanç 2'de kalırsa sonuç IEEE k = 2 satırıyla aynı oluyor, yani yarım çözüm.
+  - Kazançsız, her V2'de sabit 0,1 pu basan sürüm V2 sıfıra yaklaşınca tanımsız. Model R4'teki arızaların beşte birinde çözülemedi, o yüzden o satırı kullanmadık.
+
+### Araştırmaya etkisi
+- **Olumlu taraf:** sinyal fikrinin bu veride işe yaradığı ilk yer burası. Sinyal gerekiyor ve küçük bir sinyal yetiyor.
+- **Ama gereken sinyal kapalı çevrim.** Arızadan sonra ölçülen V2'ye göre ayarlanıyor. Bu, IEEE 2800'ün zaten istediği davranış; gereken kazanç (küçük V2'de yaklaşık 5) ise bir ayar. Taylor'ın tasarımının açık çevrim biçimi, yani önceden seçilip invertörün çerçevesinde sabitlenen δ, işe yaramıyor.
+- **Pratik çözüm:** bir şebeke kodu gereksinimi ("I2'yi V2'nin önünde, yeterli kazançla bas"), tasarlanmış bir δ değil.
+- **Taylor'a sorulacak soru:** Tasarım çerçevesi V2'ye göre ayarlanan, yani geri beslemeli bir sinyal üretebilir mi? Yoksa bu durumda doğru araç şebeke kodu mu?
+- **Sınırlar:**
+  - Statik model; EMT'de denenmedi.
+  - Sinyal akım sınırlayıcıdan sonra eklendi; 0,1 pu sığıyor.
+  - Sadece ilk çevrimdeki fazör elemanları test edildi.
+
+*Kaynak: `results/CIGREMV.md` §3 ("Inverters that suppress negative-sequence current"); `results/cigremv/i2_suppressed_direction.json`; `src/review/i2_suppressed_direction.py`; REVIEW.md §7 satır 46.*
+
+---
+
+## 33. Sinyal hiçbir yerde işe yaramadı; sorun veride mi?
+
+**Kısa cevap:** Veride bir hata yok. Sonucu belirleyen şey, verinin temsil ettiği şebeke türü. Kısa hatlı, 20 kV'luk, şebekeyi izleyen (grid-following) invertörlü bir dağıtım fiderinde Taylor'ın yöntemine iş kalmıyor. Bu, yöntemin başka bir şebekede de çalışmayacağı anlamına gelmiyor.
+
+### Verinin hatası değil
+- Bulduğumuz veri sorunlarını düzelttik ya da kontrol ettik:
+  - R1/R3'teki konum etiketi hatası (REVIEW.md §7 satır 41);
+  - arıza öncesi etiket sızıntısı (satır 25).
+- Düzeltmelerden sonra sonuçlar değişmedi.
+
+### Sonucu şebekenin kendisi belirliyor
+- **Erişim:** Hatlar çok kısa. Hattın %85'indeki arıza ile uzak baradaki arıza arasında sadece 0,3–0,6 Ω var. Sinyal ikisini de aynı miktarda kaydırıyor. Bunu Taylor'ın kendi Teorem 1'i de öngörüyor; hangi veriyi kullansak, kısa hatlı bir fiderde aynısı olur.
+- **Yön:** Bu invertörler arızada zaten I2 basıyor (IEEE 2800'ün istediği gibi). O yüzden yön sinyalsiz çözülüyor.
+- **İnvertörün devreden çıkması:** Çıkan invertör sinyal de basamaz. Bu mantıksal bir sonuç, veriye bağlı değil.
+- **I2 bastıran invertörler:** Önceden sabitlenmiş sinyalin işe yaramamasının sebebi de genel: V2'nin açısı arıza tipine göre değişiyor.
+
+### İki şebeke, iki uç
+- TestGrid (110 kV, güçlü şebeke): sınır sinyalsiz zaten ayrılıyor, δ'ya gerek yok.
+- CIGRE MV (20 kV, kısa hatlar, invertörlü): δ gerekiyor ama yetmiyor.
+- Yöntemin yeri büyük ihtimalle ikisinin arası: daha uzun hatlar ve zayıf, invertör ağırlıklı kaynaklar. Şebeke kurucu (grid-forming) invertörlü sistemler de aday.
+
+### Verinin gerçek sınırları
+- Hiçbir kayıtta enjekte edilmiş sinyal yok. Sinyalli sonuçlarımızın hepsi statik modelden; EMT'de doğrulanmadı.
+- Sadece şebekeyi izleyen invertörler var; şebeke kurucu yok.
+- Sadece iki şebeke var; uzun hatlı, invertörlü bir şebeke yok.
+
+### Ne yapmalı
+- Uzun hatlı ya da şebeke kurucu invertörlü bir şebekede, sinyali gerçekten basan EMT simülasyonları.
+- En iyi aday Taylor'ın 14 baralı modeli. Bu yüzden görüşmede hat verisini ya da Simulink modelini istiyoruz.
+
+*Kaynak: `results/CIGREMV.md` §3–§5; `results/ADAPTGRID.md`; REVIEW.md §7 satır 25, 41, 42, 44–46; Soru 26, 31, 32.*
+
+---
+
+## 34. Taylor'ın yönteminin (tasarlanmış sinyal δ) nerede çalışmasını umuyoruz?
+
+**Kısa cevap:** Üç koşulun bir arada olduğu yerde: uzun hat, invertör ağırlıklı (zayıf) kaynak ve haberleşme kanalı olmaması. Sinyalin biçimi de önemli: ölçülen gerilime göre ayarlanan, kapalı çevrim bir sinyal olmalı. Bu henüz bir hipotez; açık veride bu koşulları birlikte taşıyan şebeke yok.
+
+### Neden bu üç koşul
+Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çıkıyor:
+
+| Koşul | Neden gerekli | Dayanak |
+|---|---|---|
+| Uzun hat | İç arıza ile hemen ötesindeki arızanın sinyale farklı tepki vermesi için aralarında yeterli hat empedansı olmalı. CIGRE MV'de bu fark sadece 0,3–0,6 Ω. | B1 (Soru 26), Taylor'ın Teorem 1'i |
+| İnvertör ağırlıklı kaynak | Güçlü şebekede sınır sinyalsiz zaten ayrılıyor, sinyale gerek kalmıyor. | TestGrid 110 kV (δ = 0'da ayrılıyor) |
+| Haberleşme kanalı yok | Kanal varsa iki uçlu şemalar zaten çalışıyor (%75–82). Sinyalin değeri, tek uçlu bir çözüm olması. | CIGRE MV iki uçlu sonuçları |
+
+### Sinyalin biçimi
+- I2 bastıran invertör testinde önceden sabitlenen sinyal işe yaramadı. Arızadan sonra ölçülen V2'ye göre ayarlanan sinyal işe yaradı (Soru 32).
+- Yani yöntemin şansı, sinyali ölçüme göre ayarlayan, geri beslemeli bir tasarımda.
+- IEEE 2800 bu davranışı iletime bağlı invertörlerden istiyor. Dağıtıma bağlı invertörler için bildiğimiz kadarıyla böyle bir zorunluluk yok. Tasarlanmış bir sinyalin anlam kazanabileceği yer orası.
+
+### Somut aday
+- Kırsal 34,5–69 kV hatlar: uzun (onlarca km), ucunda büyük bir güneş ya da rüzgâr santrali, fiber kanalı yok.
+- Şebeke kurucu (grid-forming) invertörlü sistemler. Taylor'ın 14 baralı modeli bu türden ve yöntem orada geliştirildi.
+
+### Nerede çalışmasını beklemiyoruz
+- Kısa kablolu, 20 kV'luk kent içi dağıtım fiderleri (CIGRE MV).
+- Güçlü, senkron kaynaklı iletim şebekeleri (TestGrid). Orada zaten bizim öğrenen detektörümüz (CNN) %95–99 yakalıyor.
+
+> **Güncelleme:** Uzun hat hipotezini modelde kaba bir taramayla test ettik; 3 kata kadar desteklenmedi. Bkz. Soru 36.
+
+### Nasıl kontrol ederiz
+1. **Modelde, hemen:** B1 taramasını hatları uzatılmış CIGRE MV modelinde tekrar koşmak. Sinyalin erişime katkısı hat boyuyla artıyor mu?
+2. **EMT'de:** Taylor'ın 14 baralı modelinde ya da kendi simülasyonumuzda sinyali gerçekten basmak.
+
+*Kaynak: Soru 26, 31–33; `results/CIGREMV.md` §3–§4; `results/ADAPTGRID.md`; REVIEW.md §7 satır 42, 44–46.*
+
+---
+
+## 35. Soru 34'teki koşulları (uzun hat, invertör ağırlıklı kaynak) sağlayan veri setleri hangileri?
+
+**Kısa cevap:** Hazır veri olarak hiçbiri ikisini birden tam sağlamıyor, ve hiçbirinde sinyal basılmamış. "Haberleşme kanalı yok" koşulu verinin değil, bizim değerlendirmemizin özelliği: her veri setinde röleyi tek uçlu çalıştırabiliriz. Sinyali gerçekten test etmek için model gerekiyor; veri seti yetmiyor.
+
+| Kaynak | Uzun hat | İnvertör ağırlıklı | Sinyal eklenebilir mi | Not |
+|---|---|---|---|---|
+| EvEMTBench multigrid 110 kV | Kısmen: hatlar 1–32 km | Kısmen: kaynakların yarısı invertör olabilir, ama dış şebeke 800–8.000 MVA, invertörler 20–50 MVA | Hayır | Bizim formatımız, kodumuz çalışır; 105 rastgele topoloji; henüz indirilmedi |
+| EvEMTBench multigrid 345 kV | Evet: 1–111 km | Hayır: invertör yok | Hayır | Sadece senkron makineler |
+| IRTSD (PNNL) | Muhtemelen (230/500 kV); hat uzunluğu sayfada yazmıyor | Kısmen: yaklaşık %40 invertör | Evet: PSCAD modeli açık ve değiştirilebilir | 5.500 olay, 29,6 GB, CC BY 4.0; PSCAD lisansı gerekir; 60 Hz |
+| PNNL T&D test sistemi | Belirtilmemiş | GFL + GFM invertör modelleri | Evet (model) | Sadece model ve 3 örnek, olay verisi yok; PSCAD |
+| PV santrali hatları (IEEE 9 bara, DataPort) | Belirtilmemiş | PV santrali | Hayır | Sadece akım var, gerilim yok: mesafe rölesi için kullanılamaz; ücretli |
+| PROTECT-90 | 90 kV çift hat | Hayır: invertör yok | Hayır | Ölçüm zincirini doğrulamak için |
+| Taylor'ın 14 baralı modeli (Baeckeland) | Belirtilmemiş | Evet: şebeke kurucu | Evet | Yazarlardan istenmesi gerekiyor |
+
+### Ne anlama geliyor
+- **Pasif yöntemleri uzun hatta denemek için:** EvEMTBench multigrid 110 kV. Uzun hattı ve invertöre yakın olan topolojileri seçebiliriz. Ama invertörler yine GFL ve zaten I2 basıyor; sinyal testi yapılamaz.
+- **Sinyali test etmek için:** sinyali basabileceğimiz bir model gerekiyor. Seçenekler:
+  1. Kendi statik modelimizde hatları uzatıp B1'i tekrar koşmak. En ucuzu, hemen yapılabilir; ama EMT değil.
+  2. Taylor'ın 14 baralı modeli. En uygun, şebeke kurucu; ama istememiz gerekiyor.
+  3. IRTSD'nin PSCAD modeli. Açık, iletim seviyesi; ama PSCAD lisansı gerekiyor.
+
+*Kaynak: `papers/notes/D_ml_and_datasets.md` §15–16; Soru 13–14; EvEMTBench makalesi (arXiv:2608.19777, multigrid parametreleri); IEEE DataPort sayfaları: IRTSD (DOI 10.21227/mp6d-j677), PNNL T&D modeli (DOI 10.21227/z3r5-p932), "Transients in transmission lines connected to Photovoltaic Farms".*
+
+---
+
+## 36. Hatları uzatınca sinyal erişime daha çok yardım ediyor mu?
+
+**Kısa cevap:** Modelde 3 kata kadar hayır. Hat uzayınca asıl sinyalsiz (pasif) ölçüm iyileşiyor. İnvertöre sığan 0,4 pu'luk sinyalin katkısı her uzunlukta küçük kalıyor (1–11 puan). Soru 34'teki "uzun hat" hipotezi bu modelde desteklenmedi.
+
+### Ne yaptık (`b1_long_lines.py --coarse`)
+- B1 taramasını, korunan hat ve ötesindeki hatlar 2 ve 3 kat uzun olacak şekilde tekrarladık. Başka hiçbir şeyi değiştirmedik.
+- 10 kat denedik ama olmadı: 20 kV'luk fider o uzunlukta invertörün gücünü taşıyamıyor ve arıza öncesi yük akışı çözülmüyor. Model bunu sessizce geçiyordu; artık betik kontrol ediyor.
+- Izgara kaba. Sinyalsiz ayrılabilirliği olduğundan yüksek, sinyalin katkısını olduğundan düşük gösteriyor. Ama bu sapma her uzunlukta aynı, o yüzden sadece eğilime bakıyoruz.
+
+### Ne çıktı (sinyalsiz ayrılabilen iç arıza oranı · 0,4 pu'nun eklediği · 1,2 pu'nun eklediği)
+
+| Röle | ×1 | ×2 | ×3 |
+|---|---|---|---|
+| R1 | %19 · +3 · +13 | %34 · +3 · +14 | %55 · +8 · +10 |
+| R2 | %54 · +3 · +17 | %76 · +1 · +6 | %81 · +5 · +8 |
+| R3 | %20 · +2 · +7 | %30 · +2 · +12 | %32 · +3 · +15 |
+| R4 | %47 · +6 · +11 | %59 · +4 · +10 | %64 · +11 · +19 |
+
+- **Pasif ölçüm hızla iyileşiyor:** ×1'den ×3'e 12–35 puan.
+- **Sinyalin katkısı aynı hızda büyümüyor:**
+  - 0,4 pu sadece R1 ve R4'te, ×3'te biraz artıyor.
+  - 1,2 pu'nun katkısı rölelere göre artıyor ya da azalıyor; ortak bir eğilim yok.
+- **Anlamı:** hat uzadıkça sınır, sinyal işe yaramaya başlamadan önce pasif olarak ayrılabilir hale geliyor. Bu da önceki tabloyla uyumlu: güçlü ve uzun hatlı şebekede (TestGrid) sinyale gerek yoktu.
+
+### Sınırlar
+- Kaba ızgara.
+- Sadece 3 kata kadar: hatlar 6–12 Ω, iç arızanın ucu ile uzak bara arası en fazla 1,74 Ω.
+- Statik model, EMT değil; 20 kV.
+- Gerçekten uzun hatlar (yüksek gerilimde onlarca km) bu modelle test edilemiyor. Onun için Taylor'ın modeli ya da IRTSD gerekiyor (Soru 35).
+
+*Kaynak: `results/CIGREMV.md` §3 (B1, "Longer lines"); `results/cigremv/b1_long_lines_coarse.json`; `src/review/b1_long_lines.py`; REVIEW.md §7 satır 47.*
+
+---
+
+## 37. Taylor'a mailde söylediğimiz iddialar doğrulandı mı?
+
+**Kısa cevap:** Eğilimler doğrulandı, kesin sayılar tam doğrulanmadı. Güçlü kaynakta sinyal gerekmiyor, zayıf kaynakta gerekiyor, gürültü artınca çok daha fazlası gerekiyor: bunlar tutuyor. "0,4–0,7 pu" ve "1 pu'yu geçiyor, invertör veremez" ise modellemeye çok bağlı.
+
+| Mailde dediğimiz | Durum | Ayrıntı |
+|---|---|---|
+| Tasarımı CVXPY ile iki baralı örnekte yeniden kurduk | Yapıldı | `src/aux_signal_toy.py` (CVXPY + Clarabel). Aracın bulduğu sinyaller tam en küçük değil: 0,51 pu yerine kesin minimum 0,50 pu (REVIEW.md §7 satır 1, 5) |
+| Güçlü senkron kaynakta sinyal gerekmiyor | Tutuyor | Bu iki baralı modelde kanıtlı (satır 2). 110 kV gerçek EMT verisinde de aynısı çıktı |
+| Zayıf kaynak/invertörde yüksek dirençli toprak arızaları ayrılamıyor, ~0,4–0,7 pu gerekiyor | Kısmen | Ayrılamama doğru (30 arızanın 5–7'si). Akım sınırı olmayan modelde 0,50–0,69 pu: mailde dediğimiz. Ama sayı modele bağlı: %10 güvenlik payıyla 0,67–1,36 pu; açı belirsizliği doğru modellenince 0,55–1,05 pu; invertörün faz başına akım sınırı probleme eklenince 0,16–0,26 pu (B5). O küçük sinyalleri her durumda basmak için de invertörün faz başına 1,4–1,8 pu verebilmesi gerekiyor (satır 1, 3) |
+| Gürültü %50 artınca iki kat daha çok belirsiz durum, sinyal 1 pu'yu geçiyor, invertörün verebileceğinden fazla | Tutuyor | İki kat doğru (30'da 5 → 10). Akım sınırı olmayan modelde 1,32 pu. Sınır faz başına doğru eklenince (B5) 1,2 pu'da güvenceli bir tasarım yok: en küçük aday 0,72 pu, arıza noktalarının arasında tutmuyor; onu basmak için de faz başına ~1,9 pu gerekir. Ara kontroldeki "0,76 pu ile çözülür" yanlıştı (satır 4) |
+| İkimizin ISAIA'da kabul edilmiş makalesi var | Repoda yok | Kontrol edilemedi |
+
+**Not (B5, 5 Oct 2026):** Akım sınırlı sayılar düzgün yeniden koşuldu. Ara kontrol (0,20–0,32 pu ve ~0,76 pu), gerçekte invertörün taşıyamayacağı akımları da kabul eden gevşek bir kural kullanmıştı. Doğru per-faz kuralıyla 0,16–0,26 pu ve %50 fazla gürültüde güvenceli tasarım yok (`results/DESIGN.md` §3, §4.1; REVIEW.md §7 satır 3–4).
+
+### Görüşmede sorulursa
+> "In the email I quoted 0.4–0.7 pu; that holds without the current limit. With the inverter's per-phase limit inside the problem it drops to about 0.16–0.26 pu, but injecting it on top of the inverter's own current needs 1.4–1.8 pu per phase. With 50 % more noise we find no certified design at a 1.2 pu limit."
+
+*Kaynak: README.md ("What is already here"); REVIEW.md §7 satır 1–6; `results/DESIGN.md` §3, §4.1; `review/WP1_REPORT.md`; `results/CIGREMV.md` §3 ("Room in the inverter").*
+
+---
+
+## 38. Taylor'ın hangi makaleleri NSF'yi ve NREL'i anıyor?
+
+**Kısa cevap:** Taylor'ın 2025–2026 makalelerinin hepsi aynı NSF projesinden fonlanıyor (Grant 2411925). NREL ise Nathan Baeckeland üzerinden geliyor: Baeckeland NREL'de ve şebeke kurucu (GFM) invertör modelini yapan kişi. Yani maildeki iki seçenek, "NSF projenizin simülasyon altyapısı" ve "NREL modelleri", büyük ihtimalle birbirine yakın.
+
+### NSF (Grant 2411925)
+| Makale | NSF teşekkürü |
+|---|---|
+| Active Fault Detection in Static Systems (IEEE TAC, 2025) | Var |
+| Geometry of Distance Protection (2025) | Var |
+| Distance Characteristics with Incremental Quantities (2026) | Var |
+| Reachability-based Time-domain Distance Protection (2026) | Var |
+| Auxiliary Signal Based Distance Protection (2023) | Metinde bulunamadı |
+
+### NREL
+- **Reachability-based Time-domain Distance Protection (2026):** ortak yazar Nathan Baeckeland. Makalede NREL'in yeni adıyla, "National Laboratory of the Rockies" olarak geçiyor; DOE sözleşme numarası (DE-AC36-08GO28308) NREL'inki.
+- **Baeckeland, Yang & Seo (2026, IEEE TPWRS), "Unified Model for Current-Limiting GFM Inverters":** tamamen NREL çalışması. Şebeke kurucu invertör modeli ve 14 baralı Simulink test sistemi buradan.
+
+### Görüşme için
+Taylor "Nathan'ın modeli" ya da "Baeckeland'ın modeli" derse, NREL'in şebeke kurucu invertör modelini kastediyor. Onun simülasyonları büyük ihtimalle bu modele dayanıyor.
+
+*Kaynak: makalelerin teşekkür ve yazar satırları (`papers/Taylor_2025_Geometry_of_Distance_Protection.pdf`, `papers/Taylor_2026_*.pdf`, `papers/library/Taylor_2025_Active_Fault_Detection_Static_Systems.pdf`, `papers/library/Baeckeland_2026_Unified_Model_Current_Limiting_GFM_Inverters.pdf`); `papers/notes/A_taylor_line.md` §5.*
+
+---
+
+## 39. Projede invertörün amacı ne?
+
+**Kısa cevap:** İki rolü var. Arıza akımını sınırladığı için mesafe rölesini yanıltıyor, yani sorunun kaynağı. Ama çıkışı yazılımla kontrol edildiği için Taylor'ın tasarlanmış sinyalini (δ) basıp röleye yardım edebiliyor, yani çözümün aracı.
+
+### 1. Şebekedeki normal işi
+Güneş paneli, rüzgâr türbini ve batarya DC ya da düzensiz bir akım üretir. İnvertör bunu şebekenin 50/60 Hz AC'sine çeviren güç elektroniği cihazı; yenilenebilir santrallerin şebekeye bağlandığı kapı.
+
+### 2. Neden sorun yaratıyor
+- Dönen jeneratörler arızada normal akımlarının 5–10 katını verir; mesafe rölesi arızayı bu büyük akımdan ve gerilim düşümünden anlar.
+- İnvertör kendini korumak için akımını en fazla ~1,2 pu'da tutar (normalin %20 fazlası).
+- Röle arızayı göremeyebilir ya da yerini yanlış hesaplayabilir. İnvertör arttıkça sorun büyüyor.
+
+### 3. Taylor'ın fikrinde çözümün parçası
+İnvertöre arızada küçük, tasarlanmış bir negatif bileşen akımı (δ) bastırılıyor. Bu sinyal arızaları röle için ayırt edilebilir yapıyor.
+
+### 4. Projede invertörle ne yapıyoruz
+Gerçek bir invertör kullanmıyoruz, modelliyoruz:
+- açık veride (EvEMTBench) invertörlerin arızadaki davranışını inceledik;
+- kendi modellerimizde δ basmayı hesapladık;
+- önerdiğimiz EMT simülasyonunda invertör modeli δ'yı gerçekten basacak ve röle/detektörlerin bunu yakalayıp yakalamadığını test edeceğiz.
+
+*Görüşmede:* "The inverter is both the cause and the cure: it limits fault current, which confuses distance relays, but because it is software-controlled it can also inject the designed signal that helps them decide."
+
+*Kaynak: Soru 1, 34; `results/CIGREMV.md` §1 (invertörlerin arıza akımı payı); `papers/notes/A_taylor_line.md`.*
+
+---
+
+## 40. Tasarımı yazılımda tam olarak nasıl yapıyoruz (optimizasyon, CVXPY)?
+
+**Kısa cevap:** Her durumun röle ölçümünü bir "bulut" (zonotop) olarak yazıyoruz. Bulutların örtüşüp örtüşmediğini doğrusal programla (LP) kontrol ediyoruz. Hepsini ayıran en küçük δ'yı da CVXPY ile, iki adımı dönüşümlü tekrarlayarak buluyoruz. İnceleme sırasında bu adımı bütün δ düzlemini tarayan kesin bir aramayla değiştirdik.
+
+1. **Model** (`src/aux_model.py`): iki baralı dizi bileşen ağı. Normal çalışma ve 30 arıza durumu (tip, konum, direnç) için rölenin ölçeceği gerilim ve akımlar.
+2. **Bulut:** ölçüm = merkez + H·δ + G·u + n. Burada u ∈ [−1, 1] kaynak belirsizlikleri, |n| ≤ ε ölçüm hatası. Her durum bir zonotop.
+3. **Örtüşme kontrolü** (`separated_lp`): "iki bulutta aynı ölçümü veren nokta var mı?" sorusu bir LP. Çözüm yoksa ayrık.
+4. **En küçük δ** (`src/aux_signal_toy.py`, CVXPY + Clarabel), dönüşümlü iki adım:
+   - (i) δ sabitken her arıza için en iyi ayırma yönü λ (Farkas sertifikası: izdüşümde iki bulut arasındaki boşluğu en büyük yapan yön);
+   - (ii) λ'lar sabitken "her arızada boşluk ≥ 0" koşuluyla en küçük |δ|² (karesel program).
+
+   weak_sg için 0,514 pu.
+5. **Düzeltme** (`src/review/tac25_design.py`): dönüşümlü yöntem yerel optimumda kalıyordu (gerçek minimum 0,504 pu). δ düzlemi 0,02 pu × 72 açılık ızgarada tarandı, her aday LP ile kontrol edildi. İnvertör akım sınırı doğrusal kısıtlar olarak eklendi (B5, Soru 37).
+
+*Kaynak: `src/aux_model.py`, `src/aux_signal_toy.py`, `src/review/tac25_design.py`; README "What is already here"; REVIEW.md §7 satır 1, 5.*
+
+---
+
+## 41. I2 ve V2 ne demek?
+
+**Kısa cevap:** Negatif bileşen akımı ve gerilimi. Üç fazlı büyüklükler üç parçaya ayrılır: pozitif (normal, dengeli), negatif (ters dönen, dengesizliği gösteren) ve sıfır (üç faz aynı, toprak arızasında). I2 ve V2 normalde neredeyse sıfırdır, dengesiz bir arızada ortaya çıkar.
+
+| Bileşen | Ne demek | Ne zaman görünür |
+|---|---|---|
+| Pozitif (1): I1, V1 | Normal dönüş yönünde, dengeli üç faz | Her zaman; normal güç akışı |
+| Negatif (2): I2, V2 | Dengeli ama ters dönen üç faz | Dengesizlikte, örneğin tek faz toprak arızası |
+| Sıfır (0): I0, V0 | Üç faz aynı anda, aynı yönde | Toprak arızalarında |
+
+- δ negatif bileşen akımı olarak basılır: normalde negatif bileşen olmadığı için küçük bir I2 bile kolay görülür ve güç aktarımını bozmaz.
+- Yön elemanları (ΔY2 gibi) ΔI2 ile ΔV2 arasındaki açıya bakar.
+- "V2'ye kilitli sinyal" (Soru 32): basılan I2'nin ölçülen V2'nin 90° önünde olması; IEEE 2800'ün istediği davranış.
+
+*Kaynak: Soru 29, 32; `results/CIGREMV.md` §3.*

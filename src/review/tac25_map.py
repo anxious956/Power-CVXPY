@@ -3,7 +3,8 @@ IBR share and network homogeneity does an admissible auxiliary signal exist, how
 with how much margin?
 
 Everything here uses src/review/tac25_design.py, i.e. the TAC25 formulation with the inverter
-current limit INSIDE the problem, the sound outer source set (H6), a separation margin in
+current limit INSIDE the problem (rule "phase": each phase current <= I_max, the sound restriction for a
+per-phase limiter; bridge review B5), the sound outer source set (H6), a separation margin in
 measurement units (H14), a global polar solve over the delta-plane (H15), and a dense continuous
 (m, R_f) re-check of whatever delta is returned (H13).
 
@@ -44,6 +45,7 @@ import tac25_design as td
 from review import common as cm
 
 OUT = os.path.join(cm.ROOT, "results", "review_wp1")
+LIMIT_RULE = "phase"            # tac25_design module docstring; the first run (sum rule) is in git history
 CKPT = os.path.join(cm.ROOT, "logs", "ckpt", "tac25_map")
 CODE = ("src/review/tac25_design.py", "src/review/tac25_map.py", "src/review/wp1_common.py", "src/aux_model.py")
 
@@ -71,22 +73,23 @@ def solve_cell(cfg, mode="outer", r_step=0.02, n_ang=72, validate=True):
     p = make_params(cfg["eps"], cfg["strength"], cfg["local"], cfg["homog_deg"], cfg["rf"])
     ms = ModelSet(p, mode=mode)
     t0 = time.time()
-    # what the tool returns with the limit read as TAC25 reads it
+    # what the tool returns with the limit inside the problem, per phase
     r = td.min_delta(ms, i_max=cfg["i_max"], limit_inside=True, limit_design=False,
-                     rho=cfg["rho"], r_step=r_step, n_ang=n_ang, r_max=2.0)
+                     rho=cfg["rho"], r_step=r_step, n_ang=n_ang, r_max=2.0, limit_rule=LIMIT_RULE)
     # the two references: no limit at all, and the limit as H5 applied it (outer check on delta)
     r_free = td.min_delta(ms, i_max=cfg["i_max"], limit_inside=False, limit_design=False,
                           rho=cfg["rho"], r_step=r_step, n_ang=n_ang, r_max=2.0)
     r_h5 = td.min_delta(ms, i_max=cfg["i_max"], limit_inside=False, limit_design=True,
                         rho=cfg["rho"], r_step=r_step, n_ang=n_ang)
     out = dict(cfg=cfg, sir=sir_of(p), mode=mode,
-               tac25=dict(feasible=r["feasible"], abs_delta=r["abs_delta"], angle_deg=r["angle_deg"]),
+               limit_inside=dict(rule=LIMIT_RULE, feasible=r["feasible"], abs_delta=r["abs_delta"], angle_deg=r["angle_deg"],
+                                 injectable_limit=r.get("injectable_limit")),
                no_limit=dict(feasible=r_free["feasible"], abs_delta=r_free["abs_delta"]),
                h5_outer_check=dict(feasible=r_h5["feasible"], abs_delta=r_h5["abs_delta"]),
                i_plus_max=r["i_plus_max"], runtime_s=float(time.time() - t0))
     if validate and r["feasible"]:
         out["continuous_check"] = td.validate_continuous(p, mode, r["delta"], p.eps * (1 + cfg["rho"]),
-                                                         i_max=cfg["i_max"], limit_inside=True)
+                                                         i_max=cfg["i_max"], limit_inside=True, limit_rule=LIMIT_RULE)
     return out
 
 
@@ -103,12 +106,12 @@ def cell(cfg, commit, **kw):
 
 
 def line(tag, r):
-    t, f, h = r["tac25"], r["no_limit"], r["h5_outer_check"]
+    t, f, h = r["limit_inside"], r["no_limit"], r["h5_outer_check"]
     g = lambda d: (f"{d['abs_delta']:.3f}" if d["feasible"] else "none")
     cc = r.get("continuous_check")
     v = "" if cc is None else ("  cont: ok" if cc["holds"] else f"  cont: {cc['n_unseparated']}/{cc['n_checked']} FAIL")
     return (f"{tag:52s} SIR {r['sir']:4.2f}  |i+|max {r['i_plus_max']:.2f}  "
-            f"no-limit {g(f):>5}  H5-outer {g(h):>6}  TAC25 {g(t):>5}{v}  [{r['runtime_s']:.0f}s]")
+            f"no-limit {g(f):>5}  H5-outer {g(h):>6}  limit inside {g(t):>5}{v}  [{r['runtime_s']:.0f}s]")
 
 
 if __name__ == "__main__":
@@ -117,7 +120,7 @@ if __name__ == "__main__":
     a = ap.parse_args()
     kw = dict(mode="outer", r_step=0.04 if a.quick else 0.02, n_ang=36 if a.quick else 72)
     commit = cm.git_commit()
-    out = dict(commit=commit, base=BASE, mode=kw["mode"], r_step=kw["r_step"], n_ang=kw["n_ang"],
+    out = dict(commit=commit, limit_rule=LIMIT_RULE, base=BASE, mode=kw["mode"], r_step=kw["r_step"], n_ang=kw["n_ang"],
                axes=dict(eps=EPS_GRID, i_max=IMAX_GRID, strength=STRENGTH_GRID,
                          homog_deg=HOMOG_GRID, rho=RHO_GRID), plane=[], oat={})
     t0 = time.time()
