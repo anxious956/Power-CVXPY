@@ -19,8 +19,9 @@ inverter-based sources (rung R5, PLAN.md WP3).
 |---|---|
 | Product | PSCAD 5.0.1, build 368, installed 7 Oct 2026 |
 | Compiler | GFortran 8.1, bundled with the installer |
-| Licensing | cloud (`licensing.pscad.com`), configured; no certificate cached on this machine yet |
-| Edition | **unknown — step 1 below** |
+| Licensing | cloud (`licensing.pscad.com`), signed in as the university account |
+| Automation | `mhi.pscad` 2.9.7 in PSCAD's Python 3.7 (`C:\Program Files\Python37`); `src/pscad_sweep.py` drives it, `src/pscad_io.py` reads the output. First runs: [results/PSCAD_FIRST.md](../results/PSCAD_FIRST.md) |
+| Edition | **Educational** (confirmed 15 Oct 2026): 200 nodes, Python automation. Plan A is open |
 
 ## 2. Step 1: find out which edition the licence gives
 

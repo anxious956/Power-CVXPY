@@ -512,8 +512,11 @@ onward) and §10 the roadmap. The re-run numbers live in
       or our own); CIGRE MV has grid-following inverters only and no injection
 - [x] Supervision agreed: Prof. Taylor, as independent research (6 Oct 2026)
 - [x] PSCAD licensed and installed (5.0.1, 7 Oct 2026) — the simulation path is open at last
-- [ ] Confirm which PSCAD edition the licence gives: IRTSD needs Educational (200 nodes) or
-      Professional; the Free edition cannot run it ([docs/PSCAD.md](docs/PSCAD.md))
+- [x] PSCAD edition confirmed: **Educational** (200 nodes, Python automation), so IRTSD is open
+- [x] PSCAD driven from Python and connected to our relay code: the shipped `Relay_Cases/case1` run at
+      four fault points; direction right 8/8, but the faulted-phase selector releases the wrong loop
+      6/8 on this 100 km line ([results/PSCAD_FIRST.md](results/PSCAD_FIRST.md), REVIEW.md §7 row 48)
+- [ ] Fix the faulted-phase selector (sequence-angle selection) and re-run every earlier result with it
 - [ ] Reproduce one documented IRTSD fault event, then add the auxiliary signal as an event type
 - [ ] Team roles assigned
 - [ ] Embedded latency measurement on a board
