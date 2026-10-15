@@ -5,10 +5,11 @@ either has no inverters worth the name (EvEMTBench TestGrid: 0.14 % of short-cir
 has inverters but no way to inject anything (CIGRE MV). Taylor's method needs an inverter that
 injects a designed signal, so it needs a model we can modify.
 
-**What this is for, stated honestly.** On CIGRE MV the screening already refuted the reach use of a
-suppliable δ, and passive elements settled direction ([PLAN.md](PLAN.md) §1). The purpose here is
-*not* to produce a positive result for δ. It is to test whether that negative result generalises or
-is bounded to a 20 kV distribution feeder, on a grid where inverters carry a material share of the
+**What this is for, stated honestly.** On CIGRE MV a static-model screening did not support the reach
+use of a suppliable δ, and passive elements settled direction in EMT data without injection
+([PLAN.md](PLAN.md) §1). **Neither was tested with δ injected**: no dataset contains an injection. The
+purpose here is to run that test, not to produce a positive result for δ: does the static-model
+finding hold in EMT with the signal actually injected, and is it bounded to a 20 kV distribution feeder, on a grid where inverters carry a material share of the
 fault current — and, either way, to run the detector comparison there against a baseline that suits
 inverter-based sources (rung R5, PLAN.md WP3).
 
@@ -36,6 +37,24 @@ This is not a formality. From `papers/notes/D_ml_and_datasets.md` §19–20: IRT
 frequency-dependent distributed lines, the Python automation library, and six buses with five
 synchronous generators and three IBR plants, so it fails the Free edition on three independent
 counts. The plan below branches on the answer.
+
+## 2b. Before any model: learn the tool (Prof. Taylor's request)
+
+He does not use PSCAD, so the learning is ours. The installation ships worked examples in
+`C:\Users\Public\Documents\PSCAD\5.0\Examples`; the ones that matter here:
+
+| Example | Why |
+|---|---|
+| `Relay_Cases/case1.pscx`, `case1_prot.pscx`, `case1_prot_type2.pscx` | a line with faults and relays: the exact setting we study |
+| `Relay_Cases/case1_CT_CCVT.pscx` | CT and CCVT models, the instrument chain every dataset so far lacked |
+| `Relay_Cases/case2_pi.pscx`, `case2_pi_evolving.pscx`, `case3_Mutual*.pscx`, `case3_Multiple_run.pscx` | line models, evolving faults, mutual coupling, and multiple runs (how a sweep is automated) |
+| `Protection/Protection_x4.pscx` | protection components in use |
+| `Photovoltaic/PVshading.pscx`, `hvdc_vsc/`, `WindFarm/` | inverter-interfaced sources, for the inverter study |
+
+For each: run it, export V and I at one terminal, and read them with our pipeline. When the relay
+cases come through `phasors_at()` and the distance element locates a bolted fault, the tool and our
+code are connected, and only then does a larger model make sense. The user guides are under
+`C:\Program Files (x86)\PSCAD50\help`.
 
 ## 3. Plan A (Educational or Professional): IRTSD
 

@@ -21,44 +21,54 @@ and in the claim register, [REVIEW.md](REVIEW.md) §7.
 
 **The question now:** where does a designed auxiliary signal earn its cost, and where does a passive
 element, a channel or a grid-code requirement do the job instead? Four candidate uses have been
-screened on an inverter-rich grid, and three of them closed:
+screened on an inverter-rich grid. Three look closed **in the screening**, with the limit stated
+under the table:
 
-| Candidate use for an injected signal | Verdict | Register row |
+| Candidate use for an injected signal | What the screening found (no injected data, see below) | Register row |
 |---|---|---|
-| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Refuted in the study model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more | 42, 47 |
+| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Not supported in the static model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more | 42, 47 |
 | **Direction** at inverter buses | **Not needed.** Passive superimposed-quantity elements settle it in the first cycle, forward and reverse, for unbalanced and three-phase faults | 44 |
 | Direction when inverters **suppress negative sequence** | **A current is needed, but a V2-referenced one** (IEEE 2800), not a δ fixed in advance — which failed at all 48 magnitudes and angles tried | 46 |
 | Telling a remote **inverter trip** from a fault | **No injection can help**; the tripping inverter is the only source on its feeder. The remedy is an inverter-status channel | 45 |
 
-## What we told Prof. Taylor, and what we owe him next
+> **What none of this is.** No result in this repository comes from data with an injected signal.
+> No public EMT dataset contains one, and we have not simulated one yet. The reach and longer-line
+> verdicts come from a **static sequence model** of the feeder (optimistic for δ: each fault gets its
+> best δ angle); the direction and inverter-trip verdicts come from EMT data **without** injection,
+> plus the same static model. They say where a δ is unlikely to be needed. They do **not** say a δ
+> fails, because that has not been tested. The EMT study with δ injected is what tests it.
 
-Presented 6 Oct 2026 (`Taylor_meeting_v4.pptx`, kept out of the repository). The division of labour
-is the natural one: **his side is the convex design — the signal, the sets, the certificate, in
-CVXPY. Our side is the EMT evaluation of it**, which is what his papers name as the next step and
-what no one has done.
+## What we told Prof. Taylor, what he asked for, and what we owe him
+
+Presented 6 Oct 2026 (`Taylor_meeting_v4.pptx`, kept out of the repository). Prof. Taylor supervises
+the work; **both halves of it are ours: the convex design in CVXPY and the EMT evaluation.**
 
 What the deck told him:
 
 1. On a strong 110 kV grid a learned single-ended detector catches 95–99 % of in-zone faults at zero
    false trips; on the inverter-rich 20 kV feeder **nothing single-ended finds the zone boundary**
-   (≤ 16 %), and only two-ended schemes, which need a channel, hold.
-2. There, a δ the inverter can afford **barely helps reach** (Theorem 1 predicts it: the in-zone and
-   just-beyond faults are 0.3–0.6 Ω apart, so δ moves both almost equally), **direction is already
-   solved without a signal**, and an **inverter trip needs a channel**, not an injection.
+   (≤ 16 %), and only two-ended schemes, which need a channel, hold. *(EMT data, no injection.)*
+2. In a **static model** of that feeder, a δ the inverter can afford barely separates in-zone from
+   just-beyond faults (they are 0.3–0.6 Ω apart, so δ moves both almost equally, as his Theorem 1
+   predicts); in the EMT data, direction was settled without a signal, and an inverter trip needs a
+   channel. **None of this was measured with δ injected**; the deck's slide carries the same caveat.
 3. **The room left for his method:** inverters that suppress negative sequence, longer lines, and
-   grid-forming systems — and we asked to test it there with him.
+   grid-forming systems, and we asked to test it there.
 
-What we committed to, in that order, and where it stands:
+**What he asked for after the deck:** he arranged the PSCAD licence, and asked us to **learn PSCAD**
+(he does not use it himself) and to **study how inverters work**: their control, current limiting,
+grid-following versus grid-forming behaviour. That is the immediate work; see [docs/PLAN.md](docs/PLAN.md) §5.
+
+What we committed to, and where it stands:
 
 | Promised | Status |
 |---|---|
-| A model test with **I₂-suppressing inverters** | **Done** ([PR #27](https://github.com/anxious956/Power-CVXPY/pull/27)). Direction does fail there, and the fix is a **V2-referenced** current with gain at small V2 (IEEE 2800), not a δ fixed in advance in the inverter's frame, which failed at all 48 magnitudes and angles tried |
-| **Longer lines**, where we expected δ to separate more strongly | **Done, and it narrowed our own claim**: up to 3× line length in the study model, separability without δ rises 12–35 points while an affordable δ adds 1–11. Longer lines help the passive measurement more. He should hear this, because the deck offered it as a reason for optimism |
-| **An EMT study with δ injected**, ideally on his 14-bus grid-forming model | **The open one, and now the critical path.** PSCAD 5.0.1 is licensed and installed ([docs/PSCAD.md](docs/PSCAD.md)). It gives us a modifiable inverter-rich grid, but a grid-**following** one; his model is still the only route to grid-forming, so question 4 of the deck stands |
+| A model test with **I₂-suppressing inverters** | **Done in the static model** ([PR #27](https://github.com/anxious956/Power-CVXPY/pull/27)). Direction fails there; a **V2-referenced** current with gain at small V2 (IEEE 2800) repairs it, a δ fixed in advance in the inverter's frame did not at any of 48 magnitudes and angles. Not yet checked in EMT |
+| **Longer lines**, where we expected δ to separate more strongly | **Done in the static model (coarse), and it narrowed our own claim**: up to 3× line length, separability without δ rises 12–35 points while an affordable δ adds 1–11. He should hear this, because the deck offered it as a reason for optimism. Not yet checked in EMT |
+| **An EMT study with δ injected**, ideally on his 14-bus grid-forming model | **Open, and the one that can actually test the method.** It is the critical path, after the PSCAD and inverter groundwork above ([docs/PSCAD.md](docs/PSCAD.md)) |
 
-The four questions put to him in the deck — reach on short lines, where to test δ next, whether the
-inverter current limit includes δ phase by phase or in total, and access to the 14-bus model — are
-open until he answers. They are restated in [docs/PLAN.md](docs/PLAN.md) §6.
+The four questions put to him in the deck are restated, with what we have learned since, in
+[docs/PLAN.md](docs/PLAN.md) §7.
 
 **What remains open is the condition none of this data has:** a grid where inverters carry a material
 share of the fault current *and* the signal can actually be injected. That is now the critical path,
@@ -321,7 +331,8 @@ rather than a 5 % budget.
   instrument error of 0.01 pu, a δ of 0.4 pu raises the share of separable in-zone faults by 2–4
   points and the inverter's whole current (1.2 pu) by 8–13; every cell with five or more EMT faults
   either needs no δ in the model or more than 1.2 pu. The δ design for reach is therefore not pursued on
-  this grid, and the result is reported as a negative one with its mechanism. TestGrid needs no δ (its
+  this grid for now, and the result is reported as a static-model negative with its mechanism, not
+  as a test of δ: no EMT run with δ injected exists yet. TestGrid needs no δ (its
   boundary separates at δ = 0), so a design there would only be a positive control of the tool.
 - **A passive directional baseline** ([results/CIGREMV.md](results/CIGREMV.md) §3): superimposed-quantity
   elements settle direction at the inverter buses in the first cycle. The negative-sequence admittance
