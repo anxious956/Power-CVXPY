@@ -1,6 +1,6 @@
 {
  "script": "tac25_channels",
- "commit": "b3a987f7e5fc6ef295949fbdc1df19a55e6f9238",
+ "commit": "3da5e5c5820dd9a571f34432c25f683badcfc403",
  "channels": {
   "VT": {
    "ratio": 0.06,
@@ -295,5 +295,5 @@
    }
   ]
  },
- "runtime_s": 80.46778726577759
+ "runtime_s": 81.73820304870605
 }

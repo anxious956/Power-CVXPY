@@ -40,19 +40,21 @@ def injections(run, spec, t):
 
 
 def assert_single_branch(net):
-    """E1 = V1 + zs1 I_relay holds only if the relay line is the relay bus's only branch (review finding 10)."""
+    """E1 = V1 + zs1 I_relay holds only if the relay bus carries exactly one synchronous source and nothing but
+    the relay line besides (review findings 10 and round 2). Returns that source's name."""
     rl, end = net.relay
     here = net.lines[rl].a if end == "a" else net.lines[rl].b
     others = [k for k, l in net.lines.items() if k != rl and here in (l.a, l.b)]
     assert not others and here not in net.loads and not any(g.bus == here for g in net.ibrs.values()), \
         f"relay bus {here} has other branches {others}: the frame cannot be fixed from E1 = V1 + zs1 I_relay"
+    sgs = [k for k, g in net.sgs.items() if g.bus == here]
+    assert len(sgs) == 1, f"relay bus {here} must carry exactly one synchronous source, has {sgs}"
+    return sgs[0]
 
 
 def compare(spec, net, t_pre=0.25, t_meas=0.38):
     run = read_case(os.path.join(WORK, spec["name"] + ".gf46"), spec["name"])
-    here_sg = [k for k, g in net.sgs.items() if g.bus == (net.lines[net.relay[0]].a if net.relay[1] == "a" else net.lines[net.relay[0]].b)]
-    assert len(here_sg) == 1, "the frame is fixed by the one synchronous source at the relay bus"
-    assert_single_branch(net)
+    here_sg = [assert_single_branch(net)]
     g = net.sgs[here_sg[0]]
     y_pre = relay_y(run, t_pre)
     e1 = y_pre[0] + g.zs[1] * y_pre[3]

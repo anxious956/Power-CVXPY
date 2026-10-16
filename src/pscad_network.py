@@ -133,10 +133,17 @@ def check_line_model(spec):
     return loops
 
 
+BUILD_VERSION = 1          # raise when build() or update() changes what a run produces
+BUILD_ARGS = dict(t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0)
+
+
 def spec_digest(spec):
-    """A fingerprint of everything that determines a run, so stored output is reused only for the same run."""
+    """A fingerprint of everything that determines a run (the spec, the build arguments and the builder's
+    version), so stored output is reused only for the same run. The analysis keys added after make_spec
+    (kind, tag, case, ...) are included too; they do not change a run, so they only make reuse stricter."""
     import hashlib
-    return hashlib.sha256(json.dumps({k: v for k, v in spec.items() if k != "name"}, sort_keys=True).encode()).hexdigest()
+    payload = dict({k: v for k, v in spec.items() if k != "name"}, _build=BUILD_ARGS, _version=BUILD_VERSION)
+    return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
 
 def reusable(spec):
@@ -151,7 +158,8 @@ def stamp(spec):
         fh.write(spec_digest(spec))
 
 
-def build(pscad, spec, t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0):
+def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_end=BUILD_ARGS["t_end"],
+          dt_us=BUILD_ARGS["dt_us"]):
     from pscad_inverter import INPUTS, OUTPUTS, port_xy, definition_xml, Builder
     name, fault, lim = spec["name"], spec["fault"], spec["lim"]
     for g in spec["ibrs"].values():
@@ -354,6 +362,7 @@ def run_fast(path):
 
 
 def run_specs(path):
+    import glob
     import mhi.pscad
     from pscad_inverter import run
     pscad = mhi.pscad.application()
@@ -361,6 +370,9 @@ def run_specs(path):
         out = os.path.join(WORK, sp["name"] + ".gf46", sp["name"] + "_01.out")
         if reusable(sp):
             continue
+        d = os.path.join(WORK, sp["name"] + ".gf46")
+        for f in (glob.glob(os.path.join(d, sp["name"] + "_*.out")) + glob.glob(os.path.join(d, "spec.sha256"))):
+            os.remove(f)                       # a run that silently writes nothing must not inherit old output
         prj = build(pscad, sp)
         dt, errs = run(prj)
         ok = not errs and os.path.exists(out)

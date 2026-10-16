@@ -31,7 +31,9 @@ with a per-phase current limit) and loads. The tool:
   re-solved as a fault sits exactly at the distance the LP reports, which is a consistency check, not a sign
   test (review/NETWORK_REVIEW.md finding 6).
 
-`src/pscad_network.py` builds **any such network in PSCAD** from Python: lines as R-L per phase plus a
+`src/pscad_network.py` builds such a network in PSCAD from Python, **if it is radial or all its lines have the
+same (z0 − z1)/z1** (the line model is exact only then; `build` refuses anything else, conservatively: a radial
+spur off a uniform loop would also be exact but is refused too): lines as R-L per phase plus a
 ground-return conductor for z0, sources, ungrounded loads, the averaged inverter, the relay's measurements.
 The PSCAD side needs only the standard library: the design side writes each run as plain numbers. A fast mode
 builds each topology once and updates it per run; it is bit-identical to a fresh build on the cases checked.
@@ -72,13 +74,15 @@ fault run; no phase current above 1.2 pu; |EMT − design| at the relay median 0
 | Test | Result |
 |---|---|
 | 48 cases, runs started at their worst realisation, δ = 0 | **8 not separated, the same 8 as the design** (but see below: during the fault the runs are not at that realisation) |
-| 48 cases at their worst realisation, design δ | **48 / 48 separated, all with the margin** (smallest 2.23, design 2.23) |
+| 48 cases, runs started at their worst realisation, design δ | **48 / 48 separated, all with the margin** (smallest 2.23, design 2.23; during the fault the runs are not at that realisation) |
 | normal operation at the 16 box corners, δ-priority limiter (LIM 1) | **0 / 16 outside the normal set** (largest ratio 0.04) |
 | normal operation at the 16 corners, limiter scaling both (LIM 0) | **8 / 16 outside, ratio 2.22–2.46 > 2** |
 
-**The separation the design promises is what the EMT system delivers** on a network with an adjacent line,
-under the conditions found on the two-bus circuit ([PSCAD_TAC25.md](PSCAD_TAC25.md)): a δ-priority limiter, and
-δ's angle set for the current the inverter actually delivers. Three qualifications, from the independent review
+**What the 128 runs show:** with the EMT inverter started at each case's worst realisation (a δ-priority
+limiter, δ's angle set for the current it actually delivers), the EMT system separates every fault case with the
+design's margin and keeps normal operation inside the normal set at every corner. **What they do not show:** that
+the design's fault sets are right case by case, because the runs leave the design's realisation once the fault
+starts (qualification 1). Three qualifications, from the independent review
 ([review/NETWORK_REVIEW.md](../review/NETWORK_REVIEW.md)), all checked again here on the stored runs:
 
 1. **The runs are not at the design's realisation once the fault starts** (finding 3). The inverter keeps I1

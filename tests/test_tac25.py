@@ -232,3 +232,13 @@ def test_limit_rows_follow_the_pair_sign_convention():
     i_mirror = c - g[0] * big[0] - g[1] * big[1]
     if abs(i_mirror) < 0.7 * np.cos(np.pi / td.N_POLY):
         assert np.all(A[1::2] @ uu <= b[1::2] + 1e-9)
+
+
+def test_channels_lp_uses_its_own_fault_sign():
+    """Regression for review round 2: tac25_channels' LP carries the fault block as +u_F, so it must call
+    limit_rows with fault_sign=+1. The kappa 16, I_max 2.1 cell is 1.20 pu with it and 1.08 pu without."""
+    import tac25_channels as ch
+    p = ch.make_params(0.08)
+    spec = ch.imbalance_scale(ch.CHANNELS, 16)
+    r = ch.min_delta_structured(p, spec=spec, rho=0.0, i_max=2.1, r_step=0.04, n_ang=36)
+    assert r["feasible"] and r["abs_delta"] == pytest.approx(1.20)

@@ -89,7 +89,7 @@ def make():
 
 def analyse(t_pre=0.25, t_meas=0.38):
     net, ms = model()
-    assert_single_branch(net)
+    sg = assert_single_branch(net)
     specs = json.load(open(os.path.join(OUT, "three_bus_design.json")))
     rows = []
     for sp in specs:
@@ -97,8 +97,8 @@ def analyse(t_pre=0.25, t_meas=0.38):
             continue
         run = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
         y_pre = relay_y(run, t_pre)
-        e1 = y_pre[0] + net.sgs["G"].zs[1] * y_pre[3]
-        e_spec = complex(*sp["sgs"]["G"]["e"])
+        e1 = y_pre[0] + net.sgs[sg].zs[1] * y_pre[3]
+        e_spec = complex(*sp["sgs"][sg]["e"])
         rot = np.exp(1j * (np.angle(e_spec) - np.angle(e1)))
         tm = t_meas if sp["kind"] == "fault" else t_pre
         y = relay_y(run, tm) * rot
@@ -106,7 +106,7 @@ def analyse(t_pre=0.25, t_meas=0.38):
         dv = complex(*sp["delta"])
         lim = nw.limit_rows(ms, "I", dv)
         fault = None if sp["fault"] is None else tuple(sp["fault"])
-        ys = nw.solve(net, {"G": abs(e1) * np.exp(1j * np.angle(e_spec)), "I": i1}, {"I": i2}, fault)
+        ys = nw.solve(net, {sg: abs(e1) * np.exp(1j * np.angle(e_spec)), "I": i1}, {"I": i2}, fault)
         ratio = nw.noise_to_normal(ms, y, dv, lim) / net.eps
         peak = max(abs(i1 * nw.A3 ** (-k) + i2 * nw.A3 ** k) for k in range(3))
         rows.append(dict(name=sp["name"], kind=sp["kind"], tag=sp["tag"], case=sp.get("case"), corner=sp.get("corner"),
