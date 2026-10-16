@@ -88,6 +88,7 @@ signal.**
 | Design tool | The TAC25 formulation: the current limit inside the problem, a margin in measurement units, a sound source set, a global solve. On the two-bus model only | static model | [results/DESIGN.md](results/DESIGN.md) |
 | Detection, synchronous-dominated grid | A single-ended sequence-trajectory CNN covers 94.6–99.4 % of in-zone faults at relay A with 0–3 of 2,888 off-line trips; relay B is unstable (45–77 %). A settable quadrilateral covers 5–10 % | EMT, EvEMTBench adapt_grid TestGrid 110 kV, no injection | [results/ADAPTGRID.md](results/ADAPTGRID.md) |
 | Detection, inverter-rich feeder | No single-ended detector exceeds 15.8 % at zero false trips; two-ended 67N/67Q schemes reach 75–82 % with a channel | EMT, EvEMTBench CIGRE MV 20 kV, no injection | [results/CIGREMV.md](results/CIGREMV.md) |
+| **Designed δ injected in EMT** | First test of the method with the signal injected: on the design tool's two-bus circuit, the 2 fault cases it cannot separate at δ = 0 (A-G 75 %, 95 %, 40 Ω) are reproduced in PSCAD at the tool's worst-case realisation: not separated without δ (1.93, 1.80 ε), **separated with the designed 0.18 pu** (2.18, 2.05 ε; threshold 2), normal operation stays inside the normal set. EMT and design agree to 1e-5 pu. Margins thin by construction | EMT, PSCAD, our own model, δ injected | [results/PSCAD_DELTA_TEST.md](results/PSCAD_DELTA_TEST.md) |
 | Design circuit in EMT | The design tool's two-bus circuit built in PSCAD around that inverter; relay phasors match the design model to 0.000 pu before the fault and 0.001–0.016 pu during A-G and B-C faults, so design and simulation describe the same circuit | EMT, PSCAD, our own model, no δ yet | [results/PSCAD_TWOBUS.md](results/PSCAD_TWOBUS.md) |
 | Injecting inverter | An averaged grid-following inverter in PSCAD with three negative-sequence modes (suppressed, V2-referenced, a designed δ) and a 1.2 pu limit, built from Python and verified to inject what it is told: δ = 0.1 pu at +90° measured as 0.1000 pu at +89.5° | EMT, PSCAD, our own model, no fault yet | [results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md) |
 | Where δ could help | The four screened uses in the table above | static model, and EMT without injection | [results/CIGREMV.md](results/CIGREMV.md) §3 |
@@ -133,6 +134,7 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             pscad_check.py, pscad_table.py           the distance element on PSCAD runs
             pscad_inverter.py, pscad_inverter_check.py  the averaged inverter with a settable I2, and its check
             pscad_twobus.py, pscad_twobus_check.py      the design tool's two-bus circuit in PSCAD, and the comparison
+            pscad_delta_test.py                         the designed δ against the normal set, from EMT
 src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*_*.py), the
             conventional ladder and settings (ladder.py, setting_study.py, elements_fixed.py),
             grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
@@ -148,6 +150,7 @@ results/    DESIGN.md    the design tool in the TAC25 formulation: certificate, 
             PSCAD_FIRST.md    the first PSCAD runs through our relay code; pscad/ holds their tables
             PSCAD_INVERTER.md the inverter that injects a designed δ, and its verification
             PSCAD_TWOBUS.md   the design tool's circuit in PSCAD, checked against the design model
+            PSCAD_DELTA_TEST.md  the designed δ injected in EMT at the worst-case realisation
             aux_signal_toy_weak_sg.json  the designed δ the synthetic detectors read; kept in place
             review/, review_wp1/, review_synth/, adaptgrid/, cigremv/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
