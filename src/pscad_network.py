@@ -133,13 +133,15 @@ def check_line_model(spec):
     return loops
 
 
-BUILD_VERSION = 1          # raise when build() or update() changes what a run produces
+BUILD_VERSION = 1          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
+                           # changes what a run produces; the fingerprint cannot see code changes itself
 BUILD_ARGS = dict(t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0)
 
 
 def spec_digest(spec):
     """A fingerprint of everything that determines a run (the spec, the build arguments and the builder's
-    version), so stored output is reused only for the same run. The analysis keys added after make_spec
+    version), so stored output is reused only for the same run. It records BUILD_ARGS, which both runners
+    always pass (they call build() with its defaults); a caller passing other arguments must not rely on it. The analysis keys added after make_spec
     (kind, tag, case, ...) are included too; they do not change a run, so they only make reuse stricter."""
     import hashlib
     payload = dict({k: v for k, v in spec.items() if k != "name"}, _build=BUILD_ARGS, _version=BUILD_VERSION)

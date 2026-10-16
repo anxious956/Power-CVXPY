@@ -164,7 +164,7 @@ def test_mimic_filter_removes_decaying_dc():
     assert np.abs(sequence_phasors(x, CYCLE) - seq).max() > 1e-2   # unfiltered is wrong
 
 
-@pytest.mark.parametrize("t_ms", [10, 15, 20, 25, 30, 35, 40, 50])
+@pytest.mark.parametrize("t_ms", [10, 15, 20, 25, 30, 35, 40, 45, 50])
 def test_phasor_view_keeps_one_frame_at_any_decision_time(t_ms):
     """Regression for review/NETWORK_REVIEW.md finding 7: real_ml.phasor_view must put the pre- and post-fault
     cycles of a steady sinusoid in one frame at every decision time, not only on the 10 ms grid."""
