@@ -42,7 +42,9 @@ def _rl(b, a_node, b_node, z, x, y, tag):
 
 def build(pscad, name, m=0.5, scen="N", rf=0.0, t_fault=0.30, dur=0.10, idref=0.9 * math.cos(math.radians(15)),
           iqref=0.9 * math.sin(math.radians(15)), mode2=0, k2=2.0, d2mag=0.0, d2ang=0.0, t_end=0.5,
-          dt_us=10.0):
+          dt_us=10.0, es_pu=1.0, ph_deg=0.0):
+    """es_pu, ph_deg: the source EMF (magnitude in pu of 20 kV, angle), to reproduce a realisation of the
+    design model's uncertainty set."""
     os.makedirs(WORK, exist_ok=True)
     if name in [p["name"] for p in pscad.projects()]:
         pscad.project(name).unload()
@@ -56,7 +58,7 @@ def build(pscad, name, m=0.5, scen="N", rf=0.0, t_fault=0.30, dur=0.10, idref=0.
 
     # source at bus L; neutral port is at (-2,0) or (-4,0) depending on the view: ground both
     b.comp("master:source3", 10, 10, Name="SG", Ctrl="0", View="0", MVA=f"{SBASE} [MVA]", Vm=f"{VLL} [kV]",
-           F=f"{F0} [Hz]", Es=f"{VLL} [kV]", F0=f"{F0} [Hz]", Ph="0.0 [deg]", Term="0", Type="2", Imp="1", ZSeq="1",
+           F=f"{F0} [Hz]", Es=f"{VLL * es_pu:.6g} [kV]", F0=f"{F0} [Hz]", Ph=f"{ph_deg:.6g} [deg]", Term="0", Type="2", Imp="1", ZSeq="1",
            Z1=f"{ZS1} [ohm]", Phi1="89.99 [deg]", Z0=f"{ZS0} [ohm]", Phi0="89.99 [deg]", Tc="0.01 [s]")
     b.ground(8, 10)
     b.ground(6, 10)

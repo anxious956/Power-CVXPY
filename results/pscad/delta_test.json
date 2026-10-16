@@ -1,0 +1,214 @@
+{
+ "design_delta": [
+  0.1558845726811989,
+  -0.09000000000000008
+ ],
+ "eps": 0.08,
+ "threshold": 2.0,
+ "rows": [
+  {
+   "point": "nominal",
+   "case": "normal",
+   "run": "dt_N_d0",
+   "delta": [
+    0.0,
+    0.0
+   ],
+   "injected_I2": [
+    6.97284970815548e-07,
+    4.774903444862545e-07
+   ],
+   "ratio_emt": 2.781045086426193e-05,
+   "ratio_design": 7.992371350158374e-06,
+   "emt_vs_design": 5.9738814468415504e-06,
+   "verdict": "normal, inside N"
+  },
+  {
+   "point": "nominal",
+   "case": "normal",
+   "run": "dt_N_d1",
+   "delta": [
+    0.1558845726811989,
+    -0.09000000000000008
+   ],
+   "injected_I2": [
+    0.15542561614206551,
+    -0.09082384101804912
+   ],
+   "ratio_emt": 0.007315802563291271,
+   "ratio_design": 0.007305282656910016,
+   "emt_vs_design": 5.282645426207839e-06,
+   "verdict": "normal, inside N"
+  },
+  {
+   "point": "nominal",
+   "case": "A-G 75 %",
+   "run": "dt_ag75_d0",
+   "delta": [
+    0.0,
+    0.0
+   ],
+   "injected_I2": [
+    -1.0436708214880471e-05,
+    -7.109897843187203e-06
+   ],
+   "ratio_emt": 2.6527466824970203,
+   "ratio_design": 2.652802689332904,
+   "emt_vs_design": 3.3909134923001465e-05,
+   "verdict": "SEPARATED"
+  },
+  {
+   "point": "nominal",
+   "case": "A-G 75 %",
+   "run": "dt_ag75_d1",
+   "delta": [
+    0.1558845726811989,
+    -0.09000000000000008
+   ],
+   "injected_I2": [
+    0.14550713909126417,
+    -0.10598210812370878
+   ],
+   "ratio_emt": 2.8953246804198143,
+   "ratio_design": 2.895390184360166,
+   "emt_vs_design": 3.5860858609421604e-05,
+   "verdict": "SEPARATED"
+  },
+  {
+   "point": "nominal",
+   "case": "A-G 95 %",
+   "run": "dt_ag95_d0",
+   "delta": [
+    0.0,
+    0.0
+   ],
+   "injected_I2": [
+    -1.1005716938253352e-05,
+    -7.099212664862737e-06
+   ],
+   "ratio_emt": 2.522419605122941,
+   "ratio_design": 2.5224737928652723,
+   "emt_vs_design": 3.303231427850297e-05,
+   "verdict": "SEPARATED"
+  },
+  {
+   "point": "nominal",
+   "case": "A-G 95 %",
+   "run": "dt_ag95_d1",
+   "delta": [
+    0.1558845726811989,
+    -0.09000000000000008
+   ],
+   "injected_I2": [
+    0.14543865717593388,
+    -0.10607521113292218
+   ],
+   "ratio_emt": 2.7735532251735178,
+   "ratio_design": 2.77361473594814,
+   "emt_vs_design": 3.556622915439126e-05,
+   "verdict": "SEPARATED"
+  },
+  {
+   "point": "worst",
+   "case": "normal",
+   "run": "wc_N_d0",
+   "delta": [
+    0.0,
+    0.0
+   ],
+   "injected_I2": [
+    4.594324116404588e-07,
+    1.6349651329457742e-07
+   ],
+   "ratio_emt": 1.644336219956504e-05,
+   "ratio_design": 4.659699064428314e-06,
+   "emt_vs_design": 6.081374787952344e-06,
+   "verdict": "normal, inside N"
+  },
+  {
+   "point": "worst",
+   "case": "normal",
+   "run": "wc_N_d1",
+   "delta": [
+    0.1558845726811989,
+    -0.09000000000000008
+   ],
+   "injected_I2": [
+    0.1555348527278297,
+    -0.09064343198593486
+   ],
+   "ratio_emt": 0.005600668435798949,
+   "ratio_design": 0.005629441091575642,
+   "emt_vs_design": 5.947245443898688e-06,
+   "verdict": "normal, inside N"
+  },
+  {
+   "point": "worst",
+   "case": "A-G 75 %",
+   "run": "wc_ag75_d0",
+   "delta": [
+    0.0,
+    0.0
+   ],
+   "injected_I2": [
+    -8.333256334688776e-06,
+    -1.1045743664864715e-06
+   ],
+   "ratio_emt": 1.9291282817629134,
+   "ratio_design": 1.9291706508758273,
+   "emt_vs_design": 2.530377942178371e-05,
+   "verdict": "not separated"
+  },
+  {
+   "point": "worst",
+   "case": "A-G 75 %",
+   "run": "wc_ag75_d1",
+   "delta": [
+    0.1558845726811989,
+    -0.09000000000000008
+   ],
+   "injected_I2": [
+    0.14733578831636626,
+    -0.10342711011911261
+   ],
+   "ratio_emt": 2.1757273878281658,
+   "ratio_design": 2.1757834013615955,
+   "emt_vs_design": 2.835760994490865e-05,
+   "verdict": "SEPARATED"
+  },
+  {
+   "point": "worst",
+   "case": "A-G 95 %",
+   "run": "wc_ag95_d0",
+   "delta": [
+    0.0,
+    0.0
+   ],
+   "injected_I2": [
+    -8.507773724660488e-06,
+    -9.389608748807809e-07
+   ],
+   "ratio_emt": 1.79868225214017,
+   "ratio_design": 1.7987163514461884,
+   "emt_vs_design": 2.3996825595453895e-05,
+   "verdict": "not separated"
+  },
+  {
+   "point": "worst",
+   "case": "A-G 95 %",
+   "run": "wc_ag95_d1",
+   "delta": [
+    0.1558845726811989,
+    -0.09000000000000008
+   ],
+   "injected_I2": [
+    0.14736464362076787,
+    -0.1033856989890164
+   ],
+   "ratio_emt": 2.0547315746885584,
+   "ratio_design": 2.0547739463596857,
+   "emt_vs_design": 2.6993312492658212e-05,
+   "verdict": "SEPARATED"
+  }
+ ]
+}
