@@ -148,9 +148,16 @@ _B = np.linalg.inv(A_MAT)
 
 
 def sequence_phasors(x3, start, n=CYCLE):
-    """One-cycle DFT of a 3-phase block -> [s0, s+, s-] at the fundamental."""
+    """One-cycle DFT of a 3-phase block -> [s0, s+, s-] at the fundamental.
+
+    The angle reference is the ABSOLUTE sample index (sample 0 of x3), not the start of the window,
+    so phasors from windows at different positions share one frame and can be subtracted
+    (incremental quantities) or compared. Until 16 Oct 2026 the basis started at the window, which is
+    the same thing only when `start` is a multiple of CYCLE; callers with other offsets got pre- and
+    post-fault phasors rotated against each other (2.5 cycles apart = 180 deg). Every synthetic-pipeline
+    call uses multiples of CYCLE and is unchanged."""
     seg = x3[:, start:start + n]
-    basis = np.exp(-2j * np.pi * np.arange(n) / n)
+    basis = np.exp(-2j * np.pi * (start + np.arange(n)) / CYCLE)
     return _B @ ((2.0 / n) * (seg @ basis))
 
 

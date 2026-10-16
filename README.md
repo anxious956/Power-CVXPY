@@ -88,10 +88,11 @@ signal.**
 | Design tool | The TAC25 formulation: the current limit inside the problem, a margin in measurement units, a sound source set, a global solve. On the two-bus model only | static model | [results/DESIGN.md](results/DESIGN.md) |
 | Detection, synchronous-dominated grid | A single-ended sequence-trajectory CNN covers 94.6–99.4 % of in-zone faults at relay A with 0–3 of 2,888 off-line trips; relay B is unstable (45–77 %). A settable quadrilateral covers 5–10 % | EMT, EvEMTBench adapt_grid TestGrid 110 kV, no injection | [results/ADAPTGRID.md](results/ADAPTGRID.md) |
 | Detection, inverter-rich feeder | No single-ended detector exceeds 15.8 % at zero false trips; two-ended 67N/67Q schemes reach 75–82 % with a channel | EMT, EvEMTBench CIGRE MV 20 kV, no injection | [results/CIGREMV.md](results/CIGREMV.md) |
+| Design circuit in EMT | The design tool's two-bus circuit built in PSCAD around that inverter; relay phasors match the design model to 0.000 pu before the fault and 0.001–0.016 pu during A-G and B-C faults, so design and simulation describe the same circuit | EMT, PSCAD, our own model, no δ yet | [results/PSCAD_TWOBUS.md](results/PSCAD_TWOBUS.md) |
 | Injecting inverter | An averaged grid-following inverter in PSCAD with three negative-sequence modes (suppressed, V2-referenced, a designed δ) and a 1.2 pu limit, built from Python and verified to inject what it is told: δ = 0.1 pu at +90° measured as 0.1000 pu at +89.5° | EMT, PSCAD, our own model, no fault yet | [results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md) |
 | Where δ could help | The four screened uses in the table above | static model, and EMT without injection | [results/CIGREMV.md](results/CIGREMV.md) §3 |
 | Evaluation pitfalls | Noise-free benchmark records leak the zone label through the pre-fault waveform; zero-phase resampling leaks the fault ~1 ms backwards; sibling simulations leak across folds | EMT, EvEMTBench | [REVIEW.md](REVIEW.md), [archive/results/REAL_ML.md](archive/results/REAL_ML.md) |
-| PSCAD | Driven from Python, output through the same relay code. Three shipped relay cases, 42 decisions, all right. Then the fault point swept across 50–98 % of a 100 km line: the A-G loop reads every point within +0.3 %, but our faulted-phase selector released the wrong loop inside zone 1 (bolted A-G at 75–84 % and 10 Ω at 65–75 % missed). **Fixed** with sequence-angle selection: 32/32 right on the sweep, never worse on labelled EvEMTBench faults. No false trips | EMT, PSCAD examples, no inverter | [results/PSCAD_FIRST.md](results/PSCAD_FIRST.md) |
+| PSCAD | Driven from Python, output through the same relay code. Three shipped relay cases, 42 decisions, all right (direction, loop selection, zone 1). The fault point swept across 50–98 % of a 100 km line: the A-G loop reads every bolted point within +0.3 %; through 10 Ω remote infeed makes it underreach by 6–12 points. A selector defect reported on 15–16 Oct was an artefact of our own phasor windows and is withdrawn (REVIEW.md row 48) | EMT, PSCAD examples, no inverter | [results/PSCAD_FIRST.md](results/PSCAD_FIRST.md) |
 
 ## Quick start
 
@@ -131,6 +132,7 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             pscad_sweep.py, pscad_location_sweep.py  drive PSCAD from Python (sliders, fault point)
             pscad_check.py, pscad_table.py           the distance element on PSCAD runs
             pscad_inverter.py, pscad_inverter_check.py  the averaged inverter with a settable I2, and its check
+            pscad_twobus.py, pscad_twobus_check.py      the design tool's two-bus circuit in PSCAD, and the comparison
 src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*_*.py), the
             conventional ladder and settings (ladder.py, setting_study.py, elements_fixed.py),
             grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
@@ -145,6 +147,7 @@ results/    DESIGN.md    the design tool in the TAC25 formulation: certificate, 
                               inverter-aware settings, boundary diagnostics and inverter headroom
             PSCAD_FIRST.md    the first PSCAD runs through our relay code; pscad/ holds their tables
             PSCAD_INVERTER.md the inverter that injects a designed δ, and its verification
+            PSCAD_TWOBUS.md   the design tool's circuit in PSCAD, checked against the design model
             aux_signal_toy_weak_sg.json  the designed δ the synthetic detectors read; kept in place
             review/, review_wp1/, review_synth/, adaptgrid/, cigremv/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
@@ -183,10 +186,8 @@ All 46 papers in `papers/` have been read; notes are in `papers/notes/` (36 PDFs
 
 Completed items are listed in [archive/README.md](archive/README.md). What is open, in order:
 
-1. ~~Fix the faulted-phase selector~~ **done 16 Oct 2026** (REVIEW.md §7 row 48). Its impact on the
-   current results is negligible (identical loops on every in-zone fault at six relays; 2 of ~15,000
-   decisions change, both removed false trips). Left: re-run the ladder at adapt_B and cigre_R3 to
-   confirm no zero-false-trip threshold moves.
+1. ~~Fix the faulted-phase selector~~ **withdrawn**: the defect was an artefact of misaligned phasor windows
+   in our analysis script, fixed on 16 Oct 2026; the selector was right all along (REVIEW.md §7 row 48).
 2. **PSCAD groundwork** (Prof. Taylor's request): the remaining shipped examples, other fault types,
    load angles and source strengths on the sweep.
 3. **How inverters work** (Prof. Taylor's request): a written note on grid-following and grid-forming

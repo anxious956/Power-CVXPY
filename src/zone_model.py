@@ -163,26 +163,22 @@ def loop_impedances(y, z1, z0, with_current=False):
     return out
 
 
-SELECTOR = "angle"          # "magnitude" reproduces every result made before 16 Oct 2026
+SELECTOR = "magnitude"      # the reviewed rule; "angle" is an equivalent alternative (see released_loops)
 
 
 def released_loops(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8, selector=None):
     """Faulted-phase selection: which of the six loops a numerical relay releases. Inputs are
     sequence phasors [s0, s+, s-]; selection uses incremental currents (post minus pre).
 
-    Ground fault when |dI0| > ground_ratio * |dI1|. Then, selector="angle" (the default since
-    16 Oct 2026, the sequence-angle method of relay phase selectors):
-        the angle of dI2 / dI0 picks the sector, 0 deg for A, -120 for B, +120 for C (+-60);
-        the angle of dI2 / dI1, rotated into that sector, separates the two faults the sector
-        holds: near 0 deg a single line-to-ground fault (release that ground loop), near 180 deg
-        a double line-to-ground fault on the other two phases (release their phase-phase loop).
-    selector="magnitude" is the rule used before: phases whose incremental current is at least
-    `frac` of the largest are selected. It fails under remote infeed, where the healthy phases'
-    incremental currents rise past `frac`: on a 230 kV, 100 km line in PSCAD it released the
-    phase-phase loop for A-to-ground faults from 65-75 % of the line on, missing in-zone faults
-    (REVIEW.md register row 48). On labelled EvEMTBench own-line faults at six relays the angle
-    rule is never worse and is right more often (single line-to-ground 363 vs 340 of 540, double
-    line-to-ground 213 vs 192 of 270); on the PSCAD sweep 32 of 32 against 6.
+    Ground fault when |dI0| > ground_ratio * |dI1|. Then, by default (selector="magnitude"), phases whose
+    incremental current is at least `frac` of the largest are selected. selector="angle" is the
+    sequence-angle alternative of relay phase selectors: the angle of dI2 / dI0 picks the sector (0 deg
+    A, -120 B, +120 C), and the angle of dI2 / dI1, rotated into that sector, separates a single
+    line-to-ground fault (near 0 deg) from a double line-to-ground fault on the other two phases
+    (near 180 deg). On labelled own-line EvEMTBench faults at six relays and on a PSCAD fault-point sweep
+    both rules release the right loop every time (src/review/selector_compare.py). A defect reported
+    for the magnitude rule on 15-16 Oct 2026 was an artefact of misaligned phasor windows in the
+    analysis script, not of this rule (REVIEW.md register row 48).
 
     Double line-to-ground releases only the phase-phase loop: one of the two ground loops sees the
     other phase's fault current through the shared ground path and overreaches (on EvEMTBench a
