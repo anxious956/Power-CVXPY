@@ -74,6 +74,10 @@ own pre-fault V1_L memory, not to an absolute frame (the E1-based frame used so 
 ## Further decisions (§6 of the review)
 
 - **D1's threshold on noisy data is distance > ε**, not the ratio > 2 used on clean EMT measurements.
+- **The noise box ε is defined in the relay's own frame** (V1_L at 0°); the reference's own noise then rotates the
+  whole vector by at most ε/|V1_L|, a shared symbol in the sets. A systematic VT phase error is different (it turns
+  voltages and reference, not currents: a relative V–I error of 0.035–0.07 rad × |i|) and is tested in the
+  violation matrix with the other class errors, not hidden in ε.
 - **A violation matrix** for the false-alarm side, held out from every detector: unbalanced load (0.15 pu I2
   alarms D1 92–94 % in the static model), a wider box, balanced load ±50 %, CT/VT error at fault-condition
   figures (up to 82 % of ε already). A physically defined hard stratum is reported next to D1's own.
