@@ -37,7 +37,8 @@ def check(out_dir, case, end="1", line="LINE1", after=1.5):
     """Locate the fault seen from terminal `end`. Returns a dict; distance_pct is None when no
     released loop is forward (the element does not trip), never a sentinel value."""
     run = read_case(out_dir, case)
-    z = line_constants(os.path.join(out_dir, line + ".out"))
+    parts = [line_constants(os.path.join(out_dir, n + ".out")) for n in line.split("+")]
+    z = dict(z1=sum(q["z1"] for q in parts), z0=sum(q["z0"] for q in parts), f=parts[0]["f"])
     f0 = z["f"] or 60.0
     v = np.array([run["ch"][f"V{end}{p}"] for p in "abc"])
     i = np.array([run["ch"][f"I{end}{p}"] for p in "abc"])
@@ -80,7 +81,7 @@ def main():
     ap.add_argument("out_dir")
     ap.add_argument("case")
     ap.add_argument("--end", default="1", help="relay terminal, the digit in V1a / I1a")
-    ap.add_argument("--line", default="LINE1")
+    ap.add_argument("--line", default="LINE1", help="line-constants name(s) of the protected line, e.g. T1+T2")
     ap.add_argument("--after", type=float, default=1.5, help="cycles after inception at which to decide")
     a = ap.parse_args()
     report(check(a.out_dir, a.case, a.end, a.line, a.after))

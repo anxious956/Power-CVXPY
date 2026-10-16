@@ -64,15 +64,23 @@ def line_constants(path):
     """Whole-line positive- and zero-sequence series impedance (ohms) from a LCP .out file,
     the plain (not long-line corrected) values, which are what a distance relay is set with."""
     txt = open(path, encoding="latin-1").read()
+    # some cases print per unit ("Base of Per-Unit Quantities : 230.00 kV (L-L) ,100.00 MVA")
+    base = re.search(r"Base of Per-Unit Quantities\s*:\s*([\d.]+)\s*kV.*?,\s*([\d.]+)\s*MVA", txt)
+    zbase = float(base.group(1)) ** 2 / float(base.group(2)) if base else None
     blocks = re.split(r"\n\s*(Positive Sequence|Zero Sequence)\s*(\(Long-Line Corrected\))?\s*\n", txt)
     found = {}
     for i in range(1, len(blocks) - 2, 3):
         kind, corrected, body = blocks[i], blocks[i + 1], blocks[i + 2]
         if corrected:
             continue
-        r = float(re.search(r"Rsq\s+\[Ohms\]:\s*([-\d.Ee+]+)", body).group(1))
-        x = float(re.search(r"Xsq\s+\[Ohms\]:\s*([-\d.Ee+]+)", body).group(1))
-        found["z1" if kind.startswith("Positive") else "z0"] = complex(r, x)
+        m_r = re.search(r"Rsq\s+\[(Ohms|pu)\]:\s*([-\d.Ee+]+)", body)
+        m_x = re.search(r"Xsq\s+\[(Ohms|pu)\]:\s*([-\d.Ee+]+)", body)
+        scale = 1.0
+        if m_r.group(1) == "pu":
+            if zbase is None:
+                raise ValueError(f"{path}: per-unit values without a stated base")
+            scale = zbase
+        found["z1" if kind.startswith("Positive") else "z0"] = complex(float(m_r.group(2)), float(m_x.group(2))) * scale
     m = re.search(r"@\s*([\d.]+)\s*Hz", txt)
     found["f"] = float(m.group(1)) if m else None
     return found

@@ -6,9 +6,11 @@ Runs under PSCAD's own Python (C:\\Program Files\\Python37\\python.exe, which ha
 PSCAD open:
 
     "C:\\Program Files\\Python37\\python.exe" src/pscad_sweep.py <work_dir> case1 "Fault location" 1 2 3 4
+    ... case3 "Fault location" 1 2 3 4 5 6 --set "Fault Type=1" --set "Rf=10"
 
+--set holds other controls fixed for the whole sweep; every control is put back afterwards.
 The case file must already be a working copy (data/pscad_work/, git-ignored), never the shipped
-example. Output folders: <work_dir>/runs/<case>_<slider>=<value>/.
+example. Output folders: <work_dir>/runs/<case>[_<fixed>=<v>...]_<slider>=<value>/.
 """
 import os, sys, shutil, time, glob
 import mhi.pscad
@@ -34,16 +36,27 @@ def find_control(prj, name):
 
 
 def main():
-    work, case, control = sys.argv[1], sys.argv[2], sys.argv[3]
-    values = sys.argv[4:]
+    args, fixed = [], []
+    it = iter(sys.argv[1:])
+    for x in it:
+        if x == "--set":                       # --set "Fault Type=1": held fixed for the whole sweep
+            k, v = next(it).split("=", 1)
+            fixed.append((k, v))
+        else:
+            args.append(x)
+    work, case, control, values = args[0], args[1], args[2], args[3:]
     pscad = mhi.pscad.application()
     if case not in [p["name"] for p in pscad.projects()]:
         pscad.load(os.path.join(work, case + ".pscx"))
     prj = pscad.project(case)
     prj.parameters(PlotType="OUT", output_filename=case + ".out")
     comp = find_control(prj, control)
-    original = comp.parameters()["Value"]
-    out_dir = [d for d in glob.glob(os.path.join(work, case + ".gf*")) if os.path.isdir(d)]
+    restore = [(comp, comp.parameters()["Value"])]
+    for k, v in fixed:
+        c = find_control(prj, k)
+        restore.append((c, c.parameters()["Value"]))
+        c.parameters(Value=v)
+    tag = "".join(f"_{k.strip().replace(' ', '_')}={v}" for k, v in fixed)
     runs = os.path.join(work, "runs")
     os.makedirs(runs, exist_ok=True)
     try:
@@ -52,16 +65,18 @@ def main():
             t0 = time.time()
             prj.run()
             out_dir = [d for d in glob.glob(os.path.join(work, case + ".gf*")) if os.path.isdir(d)][0]
-            dest = os.path.join(runs, f"{case}_{control.strip().replace(' ', '_')}={v}")
+            dest = os.path.join(runs, f"{case}{tag}_{control.strip().replace(' ', '_')}={v}")
             if os.path.isdir(dest):
                 shutil.rmtree(dest)
             os.makedirs(dest)
-            for f in glob.glob(os.path.join(out_dir, case + "*.out")) + glob.glob(os.path.join(out_dir, case + ".inf")) \
-                    + glob.glob(os.path.join(out_dir, "*.tli")) + glob.glob(os.path.join(out_dir, "LINE*.out")):
+            # channel files, the .inf, and the line-constants output of every line in the case
+            for f in glob.glob(os.path.join(out_dir, "*.out")) + glob.glob(os.path.join(out_dir, case + ".inf")) \
+                    + glob.glob(os.path.join(out_dir, "*.tli")):
                 shutil.copy2(f, dest)
             print(f"{control} = {v}: {time.time() - t0:.1f} s -> {dest}", flush=True)
     finally:
-        comp.parameters(Value=original)
+        for c, v in restore:
+            c.parameters(Value=v)
 
 
 if __name__ == "__main__":

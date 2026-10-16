@@ -1,0 +1,146 @@
+[
+ {
+  "run": "location=1",
+  "end": "1",
+  "line": "LINE1",
+  "ag_pct": -0.0,
+  "ag_ohm": [
+   -0.07,
+   -0.01
+  ],
+  "direction": "REV",
+  "released": [
+   "ca"
+  ],
+  "released_ok": false,
+  "element_pct": null,
+  "zone1_trip": false,
+  "t_inception": 0.2018
+ },
+ {
+  "run": "location=1",
+  "end": "2",
+  "line": "LINE1",
+  "ag_pct": 109.4,
+  "ag_ohm": [
+   0.25,
+   55.54
+  ],
+  "direction": "fwd",
+  "released": [
+   "ca"
+  ],
+  "released_ok": false,
+  "element_pct": 137.2,
+  "zone1_trip": false,
+  "t_inception": 0.2018
+ },
+ {
+  "run": "location=2",
+  "end": "1",
+  "line": "LINE1",
+  "ag_pct": 0.0,
+  "ag_ohm": [
+   0.0,
+   0.0
+  ],
+  "direction": "fwd",
+  "released": [
+   "ag"
+  ],
+  "released_ok": true,
+  "element_pct": 0.0,
+  "zone1_trip": true,
+  "t_inception": 0.2012
+ },
+ {
+  "run": "location=2",
+  "end": "2",
+  "line": "LINE1",
+  "ag_pct": 109.3,
+  "ag_ohm": [
+   0.19,
+   55.5
+  ],
+  "direction": "fwd",
+  "released": [
+   "ca"
+  ],
+  "released_ok": false,
+  "element_pct": 137.3,
+  "zone1_trip": false,
+  "t_inception": 0.2018
+ },
+ {
+  "run": "location=3",
+  "end": "1",
+  "line": "LINE1",
+  "ag_pct": 106.6,
+  "ag_ohm": [
+   -0.85,
+   54.12
+  ],
+  "direction": "fwd",
+  "released": [
+   "ab"
+  ],
+  "released_ok": false,
+  "element_pct": 163.4,
+  "zone1_trip": false,
+  "t_inception": 0.2017
+ },
+ {
+  "run": "location=3",
+  "end": "2",
+  "line": "LINE1",
+  "ag_pct": 0.0,
+  "ag_ohm": [
+   0.0,
+   0.0
+  ],
+  "direction": "fwd",
+  "released": [
+   "ag"
+  ],
+  "released_ok": true,
+  "element_pct": 0.0,
+  "zone1_trip": true,
+  "t_inception": 0.201
+ },
+ {
+  "run": "location=4",
+  "end": "1",
+  "line": "LINE1",
+  "ag_pct": 106.6,
+  "ag_ohm": [
+   -0.8,
+   54.15
+  ],
+  "direction": "fwd",
+  "released": [
+   "ab"
+  ],
+  "released_ok": false,
+  "element_pct": 163.5,
+  "zone1_trip": false,
+  "t_inception": 0.2017
+ },
+ {
+  "run": "location=4",
+  "end": "2",
+  "line": "LINE1",
+  "ag_pct": -0.0,
+  "ag_ohm": [
+   -0.07,
+   -0.0
+  ],
+  "direction": "REV",
+  "released": [
+   "ab"
+  ],
+  "released_ok": false,
+  "element_pct": null,
+  "zone1_trip": false,
+  "t_inception": 0.2014
+ }
+]

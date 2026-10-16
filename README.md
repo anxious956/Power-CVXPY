@@ -513,9 +513,12 @@ onward) and §10 the roadmap. The re-run numbers live in
 - [x] Supervision agreed: Prof. Taylor, as independent research (6 Oct 2026)
 - [x] PSCAD licensed and installed (5.0.1, 7 Oct 2026) — the simulation path is open at last
 - [x] PSCAD edition confirmed: **Educational** (200 nodes, Python automation), so IRTSD is open
-- [x] PSCAD driven from Python and connected to our relay code: the shipped `Relay_Cases/case1` run at
-      four fault points; direction right 8/8, but the faulted-phase selector releases the wrong loop
-      6/8 on this 100 km line ([results/PSCAD_FIRST.md](results/PSCAD_FIRST.md), REVIEW.md §7 row 48)
+- [x] PSCAD driven from Python and connected to our relay code: three shipped relay cases (single line,
+      mid-line fault, parallel lines), 42 decisions. Direction and zone-1 decision right 42/42, a mid-line
+      fault located at 50.3 / 50.4 %; the faulted-phase selector releases the wrong loop 32/42, all on
+      far-bus or reverse faults, none on a trip ([results/PSCAD_FIRST.md](results/PSCAD_FIRST.md),
+      REVIEW.md §7 row 48)
+- [ ] Sweep the fault point across 50–100 % of the line in PSCAD (the zone-1 boundary)
 - [ ] Fix the faulted-phase selector (sequence-angle selection) and re-run every earlier result with it
 - [ ] Reproduce one documented IRTSD fault event, then add the auxiliary signal as an event type
 - [ ] Team roles assigned

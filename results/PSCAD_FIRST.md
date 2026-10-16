@@ -57,14 +57,42 @@ What it shows:
    remote infeed the healthy phases' incremental currents pass 50 % of the faulted phase's, two phases
    are selected, and the rule that maps two selected phases to the phase-phase loop (added on
    EvEMTBench for LLG overreach) drops the ground loop. Here the trip decision is still right, because
-   every misselected case is outside zone 1 or reverse anyway. On a fault inside zone 1 away from the
-   relay it would not be. **This narrows an earlier claim** (the element validated within 1.5 % on
-   EvEMTBench): that validation holds there, not on this line. Register row 48.
+   every misselected case is outside zone 1 or reverse anyway. Whether that holds for faults inside
+   zone 1 away from the relay is tested in the next section. **This narrows an earlier claim** (the
+   element validated within 1.5 % on EvEMTBench): register row 48.
+
+## Two more cases: a mid-line fault, and a parallel line
+
+`case2` is the same 100 km line split into two 50 km segments with a fifth fault point between them;
+`case3` is two 100 km lines in parallel between the same two buses, four relays, six fault points.
+Bolted A-G faults (`--set "Fault Type=1"`). Tables: `results/pscad/case{1,2,3}_table.json`, made by
+`src/pscad_table.py`.
+
+| | case1 | case2 | case3 | total |
+|---|---|---|---|---|
+| decisions (fault point × relay) | 8 | 10 | 24 | **42** |
+| direction right | 8 | 10 | 24 | **42 / 42** |
+| zone-1 decision right (trip only for a fault on the relay's own line inside 85 %) | 8 | 10 | 24 | **42 / 42** |
+| zone-1 trips | 2 | 4 | 4 | 10 |
+| … at an A-G loop reading of | 0 % | 0 %, **50.3 %, 50.4 %** | 0 % | |
+| selector released the wrong loop | 6 | 6 | 20 | 32 / 42 |
+| … on a decision that tripped | 0 | 0 | 0 | **0 / 10** |
+
+- **The mid-line fault is located at 50.3 % from end 1 and 50.4 % from end 2**, with the right loop
+  released at both ends, and both trip zone 1.
+- **With a parallel line, the far bus reads 106.4–109.4 %** from every relay (infeed through the
+  parallel circuit), so no relay overreaches onto the far bus. Faults at the near bus on the other
+  circuit are correctly reverse.
+- **The selector fails only on faults at the far bus or behind the relay**: 32 of 42, none of them a
+  trip. On every fault that tripped (0 % and 50 %) it released the right loop. So the risk stated above
+  did **not** appear at 50 %. It is still open between 50 % and 100 %, which is where the 85 % reach
+  boundary sits.
 
 ## What is not done
 
-- No fault inside the line other than at its two ends: the example has four fixed points. The next
-  step is a case with the fault location as a variable, which is what a zone-1 test needs.
+- **Nothing between 50 % and 100 % of the line**, where the zone-1 boundary is. The examples have fixed
+  fault points. Next: a working copy of `case2` whose two segment lengths are set from Python, so the
+  fault point can be swept, in steps, across 50–100 %.
 - The selector is **not changed** here: it is shared by every earlier result, so a fix (for example a
   sequence-angle selector, the angle of ΔI2 against ΔI0) must be re-run on all of them.
 - No inverter. This was the tool check; the inverter study is the next item in PLAN.md §5.
