@@ -1,6 +1,6 @@
 {
  "script": "tac25_softlimit",
- "commit": "4a1fa448cc530a6630e7b748bd4ef696adfa61e6",
+ "commit": "a8a8bcb0e542c351e5e824488f9c162eb474f53f",
  "limit_rule": "phase",
  "band": [
   1.1,
@@ -222,19 +222,19 @@
    "hard": {
     "1.1": {
      "feasible": true,
-     "abs_delta": 0.22
+     "abs_delta": 0.52
     },
     "1.2": {
      "feasible": true,
-     "abs_delta": 0.28
+     "abs_delta": 0.56
     },
     "1.3": {
      "feasible": true,
-     "abs_delta": 0.32
+     "abs_delta": 0.56
     },
     "1.5": {
      "feasible": true,
-     "abs_delta": 0.42
+     "abs_delta": 0.56
     },
     "2.1": {
      "feasible": true,
@@ -268,33 +268,33 @@
    "i_plus_max": 1.2513026641324758,
    "hard": {
     "1.1": {
-     "feasible": true,
-     "abs_delta": 0.64
+     "feasible": false,
+     "abs_delta": null
     },
     "1.2": {
-     "feasible": true,
-     "abs_delta": 0.72
+     "feasible": false,
+     "abs_delta": null
     },
     "1.3": {
-     "feasible": true,
-     "abs_delta": 0.72
+     "feasible": false,
+     "abs_delta": null
     },
     "1.5": {
-     "feasible": true,
-     "abs_delta": 0.84
+     "feasible": false,
+     "abs_delta": null
     },
     "2.1": {
      "feasible": true,
-     "abs_delta": 1.1400000000000001
+     "abs_delta": 1.42
     }
    },
    "robust": {
     "feasible": true,
-    "abs_delta": 1.1400000000000001,
-    "angle_deg": 345.0,
+    "abs_delta": 1.42,
+    "angle_deg": 350.0,
     "pruned_at": 2.1,
-    "min_true_limit_to_inject": 2.3667189011931757,
-    "min_true_limit_to_inject_sum_bound": 2.3913026641324757,
+    "min_true_limit_to_inject": 2.6580006209923095,
+    "min_true_limit_to_inject_sum_bound": 2.671302664132476,
     "injectable_at_band_bottom": false
    },
    "no_limit": {
@@ -331,129 +331,22 @@
      "abs_delta": null
     },
     "2.1": {
-     "feasible": true,
-     "abs_delta": 1.6400000000000001
+     "feasible": false,
+     "abs_delta": null
     }
    },
    "robust": {
-    "feasible": true,
-    "abs_delta": 1.6400000000000001,
-    "angle_deg": 80.0,
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
     "pruned_at": 2.1,
-    "min_true_limit_to_inject": 2.8834288005997397,
-    "min_true_limit_to_inject_sum_bound": 2.8913026641324757,
-    "injectable_at_band_bottom": false
+    "min_true_limit_to_inject": null,
+    "min_true_limit_to_inject_sum_bound": null,
+    "injectable_at_band_bottom": null
    },
    "no_limit": {
     "feasible": false,
     "abs_delta": null
-   },
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 63,
-    "unseparated": [
-     [
-      0.15,
-      0.2,
-      "ag"
-     ],
-     [
-      0.15,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.15,
-      0.4,
-      "ag"
-     ],
-     [
-      0.19,
-      0.2,
-      "ag"
-     ],
-     [
-      0.19,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.19,
-      0.4,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.2,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.4,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.2,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.4,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.2,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.4,
-      "ag"
-     ],
-     [
-      0.35,
-      0.2,
-      "ag"
-     ],
-     [
-      0.35,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.35,
-      0.4,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.2,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.30000000000000004,
-      "ag"
-     ]
-    ],
-    "holds": false
    }
   },
   {
@@ -558,19 +451,19 @@
    "hard": {
     "1.1": {
      "feasible": true,
-     "abs_delta": 0.3
+     "abs_delta": 0.56
     },
     "1.2": {
      "feasible": true,
-     "abs_delta": 0.36
+     "abs_delta": 0.64
     },
     "1.3": {
      "feasible": true,
-     "abs_delta": 0.4
+     "abs_delta": 0.72
     },
     "1.5": {
      "feasible": true,
-     "abs_delta": 0.5
+     "abs_delta": 0.72
     },
     "2.1": {
      "feasible": true,
@@ -612,36 +505,30 @@
      "abs_delta": null
     },
     "1.3": {
-     "feasible": true,
-     "abs_delta": 0.88
+     "feasible": false,
+     "abs_delta": null
     },
     "1.5": {
-     "feasible": true,
-     "abs_delta": 0.98
+     "feasible": false,
+     "abs_delta": null
     },
     "2.1": {
-     "feasible": true,
-     "abs_delta": 1.3
+     "feasible": false,
+     "abs_delta": null
     }
    },
    "robust": {
-    "feasible": true,
-    "abs_delta": 1.3,
-    "angle_deg": 350.0,
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
     "pruned_at": 2.1,
-    "min_true_limit_to_inject": 2.538551834926723,
-    "min_true_limit_to_inject_sum_bound": 2.551302664132476,
-    "injectable_at_band_bottom": false
+    "min_true_limit_to_inject": null,
+    "min_true_limit_to_inject_sum_bound": null,
+    "injectable_at_band_bottom": null
    },
    "no_limit": {
     "feasible": true,
     "abs_delta": 1.72
-   },
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 0,
-    "unseparated": [],
-    "holds": true
    }
   },
   {
@@ -667,131 +554,24 @@
      "abs_delta": null
     },
     "2.1": {
-     "feasible": true,
-     "abs_delta": 1.6600000000000001
+     "feasible": false,
+     "abs_delta": null
     }
    },
    "robust": {
-    "feasible": true,
-    "abs_delta": 1.6600000000000001,
-    "angle_deg": 80.0,
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
     "pruned_at": 2.1,
-    "min_true_limit_to_inject": 2.903387547200019,
-    "min_true_limit_to_inject_sum_bound": 2.911302664132476,
-    "injectable_at_band_bottom": false
+    "min_true_limit_to_inject": null,
+    "min_true_limit_to_inject_sum_bound": null,
+    "injectable_at_band_bottom": null
    },
    "no_limit": {
     "feasible": false,
     "abs_delta": null
-   },
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 47,
-    "unseparated": [
-     [
-      0.15,
-      0.2,
-      "ag"
-     ],
-     [
-      0.15,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.19,
-      0.2,
-      "ag"
-     ],
-     [
-      0.19,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.2,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.2,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.2,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.35,
-      0.2,
-      "ag"
-     ],
-     [
-      0.35,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.1,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.2,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.42999999999999994,
-      0.1,
-      "ag"
-     ],
-     [
-      0.42999999999999994,
-      0.2,
-      "ag"
-     ],
-     [
-      0.42999999999999994,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.47,
-      0.1,
-      "ag"
-     ],
-     [
-      0.47,
-      0.2,
-      "ag"
-     ]
-    ],
-    "holds": false
    }
   }
  ],
- "runtime_s": 1354.5901443958282
+ "runtime_s": 1019.8469710350037
 }

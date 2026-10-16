@@ -42,7 +42,7 @@ def _l(z):
     return f"{max(z.imag, 1e-6) / W:.6g} [H]"
 
 
-def set_case(idx, scen, m, rf, es_pu, ph_deg, idref, iqref, mode2, d2mag, d2ang):
+def set_case(idx, scen, m, rf, es_pu, ph_deg, idref, iqref, mode2, d2mag, d2ang, lim=0):
     za, zb, zn = m * Z1_LINE, (1 - m) * Z1_LINE, m * ZN_LINE
     for k in range(3):
         y = 20 + 4 * k
@@ -59,7 +59,7 @@ def set_case(idx, scen, m, rf, es_pu, ph_deg, idref, iqref, mode2, d2mag, d2ang)
         for y in (44, 48):
             idx[("master:breaker1", 30, y)].parameters(RON=f"{r / 2:.6g} [ohm]")
     idx[("master:source3", 10, 10)].parameters(Es=f"{VLL * es_pu:.6g} [kV]", Ph=f"{ph_deg:.6g} [deg]")
-    values = dict(ID=idref, IQ=iqref, MODE2=float(mode2), D2MAG=d2mag, D2ANG=d2ang)
+    values = dict(ID=idref, IQ=iqref, MODE2=float(mode2), D2MAG=d2mag, D2ANG=d2ang, LIM=float(lim))
     for p, v in values.items():
         px, py = port_xy(p)
         idx[("master:const", CTRL_X + px // 18 - 2, CTRL_Y + py // 18)].parameters(Value=str(v))
@@ -86,12 +86,12 @@ def main():
             continue
         scen = r["scen"]
         if scen not in projects:
-            name = f"fast_{scen}"
+            name = f"fast2_{scen}"
             prj = build(pscad, name, scen=scen, mode2=2)
             projects[scen] = (name, prj, index(prj))
         name, prj, idx = projects[scen]
         set_case(idx, scen, r["m"], r["rf_ohm"], r["es_pu"], r["ph_deg"], r["idref"], r["iqref"], r["mode2"], r["d2mag"],
-                 r["d2ang"])
+                 r["d2ang"], r.get("lim", 0))
         for f in glob.glob(os.path.join(WORK, name + ".gf46", name + "_*.out")):
             os.remove(f)
         dt, errs = run(prj)

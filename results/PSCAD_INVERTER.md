@@ -16,7 +16,7 @@ Taylor's own models (an inverter is a current source with a limit) and of WECC's
 | Measurement | A one-cycle sliding DFT of the three PCC voltages inside the controller gives V1 and V2. Fixed frequency, no PLL: the angle reference is the measured V1. |
 | Positive sequence | I1 = Ibase (ID − j IQ) e^{j∠V1}; IQ > 0 supplies reactive power. |
 | Negative sequence | Three modes. **0** suppressed (I2 = 0). **1** IEEE 2800 style, V2-referenced: I2 = j K2 Ibase V2 / Vbase, so I2 leads V2 by 90°. **2** a designed δ, fixed in the V1 frame: I2 = δ Ibase e^{j(∠V1 + angle)}. |
-| Current limit | Phase-peak limit at 1.2 pu, I1 and I2 scaled together. |
+| Current limit | Phase-peak limit at 1.2 pu. **LIM = 0**: I1 and I2 scaled together. **LIM = 1** (added 16 Oct 2026): I2 kept, I1 alone scaled until every phase fits, the limiter the TAC25 design with the limit inside assumes. Checked with I1 = 1.2 and δ = 0.34 pu asked: LIM 0 delivers 0.958 / 0.271, LIM 1 0.894 / 0.340, both with a 1.200 pu phase peak. |
 | Controller | One user component written in Fortran (`gfl_avm`), added to the project as a definition from Python. |
 
 Everything is placed and connected from Python: components by port coordinates read from PSCAD's
@@ -46,8 +46,8 @@ raises V2 at the PCC from 0.0002 to 0.0096 pu through the source and line impeda
   frequency deviation. Fine for a stiff grid, to be revisited for a weak one.
 - **Grid-following only.** A grid-forming inverter (the third case in the deck) needs a voltage-source
   model with a current limiter; not built.
-- **Limiter type.** One type only (common scaling of the phase peaks). The circular, priority-based and
-  instantaneous limiters of the literature can be added as options in the same component.
+- **Limiter type.** Two types (common scaling; δ priority). The circular and instantaneous limiters of the
+  literature are not modelled.
 
 ## Practical notes
 

@@ -1,5 +1,5 @@
 {
- "commit": "4a1fa448cc530a6630e7b748bd4ef696adfa61e6",
+ "commit": "a8a8bcb0e542c351e5e824488f9c162eb474f53f",
  "limit_rule": "phase",
  "base": {
   "eps": 0.08,
@@ -75,7 +75,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.07209992408752441,
+   "runtime_s": 0.12362265586853027,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -111,7 +111,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.06579256057739258,
+   "runtime_s": 0.11028742790222168,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -147,7 +147,7 @@
     "abs_delta": 0.0
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.28142786026000977,
+   "runtime_s": 0.1106271743774414,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -183,7 +183,7 @@
     "abs_delta": 0.0
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.25200915336608887,
+   "runtime_s": 0.1386411190032959,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -219,7 +219,7 @@
     "abs_delta": 0.0
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.30771350860595703,
+   "runtime_s": 0.12117314338684082,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -255,7 +255,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.19359779357910156,
+   "runtime_s": 0.07414746284484863,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -291,7 +291,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.17771434783935547,
+   "runtime_s": 0.07507586479187012,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -327,7 +327,7 @@
     "abs_delta": 0.0
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.22072434425354004,
+   "runtime_s": 0.1188344955444336,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -363,7 +363,7 @@
     "abs_delta": 0.0
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.21737146377563477,
+   "runtime_s": 0.12585067749023438,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -399,7 +399,7 @@
     "abs_delta": 0.0
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 0.23521924018859863,
+   "runtime_s": 0.1026604175567627,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -422,9 +422,9 @@
    "limit_inside": {
     "rule": "phase",
     "feasible": true,
-    "abs_delta": 0.22,
-    "angle_deg": 325.0,
-    "injectable_limit": 1.4709463147699255
+    "abs_delta": 0.52,
+    "angle_deg": 235.0,
+    "injectable_limit": 1.7689662183381816
    },
    "no_limit": {
     "feasible": true,
@@ -435,7 +435,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 31.771631240844727,
+   "runtime_s": 23.962196588516235,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -458,81 +458,9 @@
    "limit_inside": {
     "rule": "phase",
     "feasible": true,
-    "abs_delta": 0.28,
-    "angle_deg": 320.0,
-    "injectable_limit": 1.528765767793821
-   },
-   "no_limit": {
-    "feasible": true,
-    "abs_delta": 0.56
-   },
-   "h5_outer_check": {
-    "feasible": false,
-    "abs_delta": null
-   },
-   "i_plus_max": 1.2513026641324758,
-   "runtime_s": 34.491610527038574,
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 0,
-    "unseparated": [],
-    "holds": true
-   }
-  },
-  {
-   "cfg": {
-    "eps": 0.08,
-    "i_max": 1.3,
-    "strength": 1.0,
-    "local": "SG",
-    "homog_deg": 0.0,
-    "rho": 0.0,
-    "rf": 1.0
-   },
-   "sir": 1.9900743804199783,
-   "mode": "outer",
-   "limit_inside": {
-    "rule": "phase",
-    "feasible": true,
-    "abs_delta": 0.32,
-    "angle_deg": 325.0,
-    "injectable_limit": 1.5708173086482555
-   },
-   "no_limit": {
-    "feasible": true,
-    "abs_delta": 0.56
-   },
-   "h5_outer_check": {
-    "feasible": false,
-    "abs_delta": null
-   },
-   "i_plus_max": 1.2513026641324758,
-   "runtime_s": 32.478204011917114,
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 0,
-    "unseparated": [],
-    "holds": true
-   }
-  },
-  {
-   "cfg": {
-    "eps": 0.08,
-    "i_max": 1.5,
-    "strength": 1.0,
-    "local": "SG",
-    "homog_deg": 0.0,
-    "rho": 0.0,
-    "rf": 1.0
-   },
-   "sir": 1.9900743804199783,
-   "mode": "outer",
-   "limit_inside": {
-    "rule": "phase",
-    "feasible": true,
-    "abs_delta": 0.42,
+    "abs_delta": 0.56,
     "angle_deg": 330.0,
-    "injectable_limit": 1.6712000891343242
+    "injectable_limit": 1.8111764679737181
    },
    "no_limit": {
     "feasible": true,
@@ -543,7 +471,79 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 39.78961133956909,
+   "runtime_s": 25.292619943618774,
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "cfg": {
+    "eps": 0.08,
+    "i_max": 1.3,
+    "strength": 1.0,
+    "local": "SG",
+    "homog_deg": 0.0,
+    "rho": 0.0,
+    "rf": 1.0
+   },
+   "sir": 1.9900743804199783,
+   "mode": "outer",
+   "limit_inside": {
+    "rule": "phase",
+    "feasible": true,
+    "abs_delta": 0.56,
+    "angle_deg": 330.0,
+    "injectable_limit": 1.8111764679737181
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.56
+   },
+   "h5_outer_check": {
+    "feasible": false,
+    "abs_delta": null
+   },
+   "i_plus_max": 1.2513026641324758,
+   "runtime_s": 28.69865083694458,
+   "continuous_check": {
+    "n_checked": 462,
+    "n_unseparated": 0,
+    "unseparated": [],
+    "holds": true
+   }
+  },
+  {
+   "cfg": {
+    "eps": 0.08,
+    "i_max": 1.5,
+    "strength": 1.0,
+    "local": "SG",
+    "homog_deg": 0.0,
+    "rho": 0.0,
+    "rf": 1.0
+   },
+   "sir": 1.9900743804199783,
+   "mode": "outer",
+   "limit_inside": {
+    "rule": "phase",
+    "feasible": true,
+    "abs_delta": 0.56,
+    "angle_deg": 330.0,
+    "injectable_limit": 1.8111764679737181
+   },
+   "no_limit": {
+    "feasible": true,
+    "abs_delta": 0.56
+   },
+   "h5_outer_check": {
+    "feasible": false,
+    "abs_delta": null
+   },
+   "i_plus_max": 1.2513026641324758,
+   "runtime_s": 30.54763412475586,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -579,7 +579,7 @@
     "abs_delta": 0.56
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 59.27184176445007,
+   "runtime_s": 35.15722441673279,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -601,10 +601,10 @@
    "mode": "outer",
    "limit_inside": {
     "rule": "phase",
-    "feasible": true,
-    "abs_delta": 0.64,
-    "angle_deg": 70.0,
-    "injectable_limit": 1.8692065592584897
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null
    },
    "no_limit": {
     "feasible": true,
@@ -615,99 +615,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 56.4313600063324,
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 17,
-    "unseparated": [
-     [
-      0.35,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.42999999999999994,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.47,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.5099999999999999,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.5499999999999999,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.59,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.6299999999999999,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.6699999999999999,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.71,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.71,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.7499999999999999,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.7899999999999999,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.83,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.8699999999999999,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.9099999999999999,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.95,
-      0.6000000000000001,
-      "ag"
-     ]
-    ],
-    "holds": false
-   }
+   "runtime_s": 36.72305250167847
   },
   {
    "cfg": {
@@ -723,10 +631,10 @@
    "mode": "outer",
    "limit_inside": {
     "rule": "phase",
-    "feasible": true,
-    "abs_delta": 0.72,
-    "angle_deg": 75.0,
-    "injectable_limit": 1.9585657286800304
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null
    },
    "no_limit": {
     "feasible": true,
@@ -737,114 +645,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 58.79545617103577,
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 43,
-    "unseparated": [
-     [
-      0.15,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.15,
-      0.8,
-      "ag"
-     ],
-     [
-      0.19,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.19,
-      0.8,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.8,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.8,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.8,
-      "ag"
-     ],
-     [
-      0.35,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.35,
-      0.8,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.8,
-      "ag"
-     ],
-     [
-      0.42999999999999994,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.42999999999999994,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.47,
-      0.6000000000000001,
-      "ag"
-     ],
-     [
-      0.47,
-      0.7000000000000001,
-      "ag"
-     ],
-     [
-      0.5099999999999999,
-      0.6000000000000001,
-      "ag"
-     ]
-    ],
-    "holds": false
-   }
+   "runtime_s": 42.76344299316406
   },
   {
    "cfg": {
@@ -860,10 +661,10 @@
    "mode": "outer",
    "limit_inside": {
     "rule": "phase",
-    "feasible": true,
-    "abs_delta": 0.72,
-    "angle_deg": 335.0,
-    "injectable_limit": 1.9683955763097478
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null
    },
    "no_limit": {
     "feasible": true,
@@ -874,13 +675,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 56.05191111564636,
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 0,
-    "unseparated": [],
-    "holds": true
-   }
+   "runtime_s": 45.12864303588867
   },
   {
    "cfg": {
@@ -896,10 +691,10 @@
    "mode": "outer",
    "limit_inside": {
     "rule": "phase",
-    "feasible": true,
-    "abs_delta": 0.84,
-    "angle_deg": 339.99999999999994,
-    "injectable_limit": 2.0812523958820437
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null
    },
    "no_limit": {
     "feasible": true,
@@ -910,13 +705,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 67.50881719589233,
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 0,
-    "unseparated": [],
-    "holds": true
-   }
+   "runtime_s": 54.6801221370697
   },
   {
    "cfg": {
@@ -933,9 +722,9 @@
    "limit_inside": {
     "rule": "phase",
     "feasible": true,
-    "abs_delta": 1.1400000000000001,
-    "angle_deg": 345.0,
-    "injectable_limit": 2.3667189011931757
+    "abs_delta": 1.42,
+    "angle_deg": 350.0,
+    "injectable_limit": 2.6580006209923095
    },
    "no_limit": {
     "feasible": true,
@@ -946,7 +735,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 83.18965005874634,
+   "runtime_s": 69.82084846496582,
    "continuous_check": {
     "n_checked": 462,
     "n_unseparated": 0,
@@ -982,7 +771,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 64.09181833267212
+   "runtime_s": 47.31402349472046
   },
   {
    "cfg": {
@@ -1012,7 +801,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 65.08959412574768
+   "runtime_s": 49.795851945877075
   },
   {
    "cfg": {
@@ -1042,7 +831,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 71.0901997089386
+   "runtime_s": 46.22626042366028
   },
   {
    "cfg": {
@@ -1072,7 +861,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 82.77736926078796
+   "runtime_s": 51.878010272979736
   },
   {
    "cfg": {
@@ -1088,10 +877,10 @@
    "mode": "outer",
    "limit_inside": {
     "rule": "phase",
-    "feasible": true,
-    "abs_delta": 1.6400000000000001,
-    "angle_deg": 80.0,
-    "injectable_limit": 2.8834288005997397
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null,
+    "injectable_limit": null
    },
    "no_limit": {
     "feasible": false,
@@ -1102,114 +891,7 @@
     "abs_delta": null
    },
    "i_plus_max": 1.2513026641324758,
-   "runtime_s": 101.03222417831421,
-   "continuous_check": {
-    "n_checked": 462,
-    "n_unseparated": 63,
-    "unseparated": [
-     [
-      0.15,
-      0.2,
-      "ag"
-     ],
-     [
-      0.15,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.15,
-      0.4,
-      "ag"
-     ],
-     [
-      0.19,
-      0.2,
-      "ag"
-     ],
-     [
-      0.19,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.19,
-      0.4,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.2,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.22999999999999998,
-      0.4,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.2,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.26999999999999996,
-      0.4,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.2,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.30999999999999994,
-      0.4,
-      "ag"
-     ],
-     [
-      0.35,
-      0.2,
-      "ag"
-     ],
-     [
-      0.35,
-      0.30000000000000004,
-      "ag"
-     ],
-     [
-      0.35,
-      0.4,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.2,
-      "ag"
-     ],
-     [
-      0.38999999999999996,
-      0.30000000000000004,
-      "ag"
-     ]
-    ],
-    "holds": false
-   }
+   "runtime_s": 72.23530530929565
   }
  ],
  "oat": {
@@ -1242,7 +924,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 0.1293652057647705,
+    "runtime_s": 0.13847875595092773,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1265,9 +947,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.02,
-     "angle_deg": 0.0,
-     "injectable_limit": 1.2712962429333075
+     "abs_delta": 0.08,
+     "angle_deg": 290.0,
+     "injectable_limit": 1.3148245592002676
     },
     "no_limit": {
      "feasible": true,
@@ -1278,7 +960,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 8.648926973342896,
+    "runtime_s": 12.488102436065674,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1301,9 +983,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.28,
-     "angle_deg": 320.0,
-     "injectable_limit": 1.528765767793821
+     "abs_delta": 0.56,
+     "angle_deg": 330.0,
+     "injectable_limit": 1.8111764679737181
     },
     "no_limit": {
      "feasible": true,
@@ -1314,7 +996,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 34.491610527038574,
+    "runtime_s": 28.80843162536621,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1336,10 +1018,10 @@
     "mode": "outer",
     "limit_inside": {
      "rule": "phase",
-     "feasible": true,
-     "abs_delta": 0.56,
-     "angle_deg": 0.0,
-     "injectable_limit": 1.8111764679737181
+     "feasible": false,
+     "abs_delta": null,
+     "angle_deg": null,
+     "injectable_limit": null
     },
     "no_limit": {
      "feasible": true,
@@ -1350,13 +1032,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 42.431819915771484,
-    "continuous_check": {
-     "n_checked": 462,
-     "n_unseparated": 0,
-     "unseparated": [],
-     "holds": true
-    }
+    "runtime_s": 39.822004079818726
    },
    {
     "cfg": {
@@ -1372,10 +1048,10 @@
     "mode": "outer",
     "limit_inside": {
      "rule": "phase",
-     "feasible": true,
-     "abs_delta": 0.5,
-     "angle_deg": 265.0,
-     "injectable_limit": 1.7213250017682609
+     "feasible": false,
+     "abs_delta": null,
+     "angle_deg": null,
+     "injectable_limit": null
     },
     "no_limit": {
      "feasible": true,
@@ -1386,13 +1062,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 48.26695013046265,
-    "continuous_check": {
-     "n_checked": 462,
-     "n_unseparated": 0,
-     "unseparated": [],
-     "holds": true
-    }
+    "runtime_s": 40.12749791145325
    }
   ],
   "homogeneity": [
@@ -1411,9 +1081,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.28,
-     "angle_deg": 320.0,
-     "injectable_limit": 1.528765767793821
+     "abs_delta": 0.56,
+     "angle_deg": 330.0,
+     "injectable_limit": 1.8111764679737181
     },
     "no_limit": {
      "feasible": true,
@@ -1424,7 +1094,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 34.491610527038574,
+    "runtime_s": 27.883042335510254,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1447,9 +1117,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.26,
+     "abs_delta": 0.54,
      "angle_deg": 330.0,
-     "injectable_limit": 1.511232443296557
+     "injectable_limit": 1.7911796163730878
     },
     "no_limit": {
      "feasible": true,
@@ -1460,7 +1130,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 28.493800163269043,
+    "runtime_s": 28.29253649711609,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1483,9 +1153,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.24,
+     "abs_delta": 0.5,
      "angle_deg": 330.0,
-     "injectable_limit": 1.4912369756818564
+     "injectable_limit": 1.7511861288988726
     },
     "no_limit": {
      "feasible": true,
@@ -1496,7 +1166,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 27.26610279083252,
+    "runtime_s": 29.2687509059906,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1519,9 +1189,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.22,
-     "angle_deg": 0.0,
-     "injectable_limit": 1.4712416312793277
+     "abs_delta": 0.42,
+     "angle_deg": 339.99999999999994,
+     "injectable_limit": 1.6650180017990466
     },
     "no_limit": {
      "feasible": true,
@@ -1532,7 +1202,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 24.744254112243652,
+    "runtime_s": 24.436778783798218,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1557,9 +1227,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.28,
-     "angle_deg": 320.0,
-     "injectable_limit": 1.528765767793821
+     "abs_delta": 0.56,
+     "angle_deg": 330.0,
+     "injectable_limit": 1.8111764679737181
     },
     "no_limit": {
      "feasible": true,
@@ -1570,7 +1240,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 34.491610527038574,
+    "runtime_s": 27.189770698547363,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1606,7 +1276,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 0.12731599807739258,
+    "runtime_s": 0.1005408763885498,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1631,9 +1301,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.28,
-     "angle_deg": 320.0,
-     "injectable_limit": 1.528765767793821
+     "abs_delta": 0.56,
+     "angle_deg": 330.0,
+     "injectable_limit": 1.8111764679737181
     },
     "no_limit": {
      "feasible": true,
@@ -1644,7 +1314,7 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 34.491610527038574,
+    "runtime_s": 28.007696628570557,
     "continuous_check": {
      "n_checked": 462,
      "n_unseparated": 0,
@@ -1667,9 +1337,9 @@
     "limit_inside": {
      "rule": "phase",
      "feasible": true,
-     "abs_delta": 0.36,
-     "angle_deg": 320.0,
-     "injectable_limit": 1.6082024677292885
+     "abs_delta": 0.64,
+     "angle_deg": 244.99999999999997,
+     "injectable_limit": 1.890496145733407
     },
     "no_limit": {
      "feasible": true,
@@ -1680,15 +1350,26 @@
      "abs_delta": null
     },
     "i_plus_max": 1.2513026641324758,
-    "runtime_s": 27.78619122505188,
+    "runtime_s": 26.150930404663086,
     "continuous_check": {
      "n_checked": 462,
-     "n_unseparated": 0,
-     "unseparated": [],
-     "holds": true
+     "n_unseparated": 2,
+     "unseparated": [
+      [
+       0.19,
+       1.0,
+       "ag"
+      ],
+      [
+       0.22999999999999998,
+       1.0,
+       "ag"
+      ]
+     ],
+     "holds": false
     }
    }
   ]
  },
- "runtime_s": 1163.1469552516937
+ "runtime_s": 1002.267208814621
 }
