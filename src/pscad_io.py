@@ -34,6 +34,8 @@ def _read_out(path):
     data = []
     for line in open(path, encoding="latin-1"):
         parts = line.split()
+        if not parts:
+            continue
         try:
             data.append([float(p) for p in parts])
         except ValueError:

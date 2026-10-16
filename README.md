@@ -74,7 +74,7 @@ The four questions put to him in the deck are restated, with what we have learne
 | # | Part | Status | Owner |
 |---|------|--------|-------|
 | 1 | **Design tool** | Largely done in the TAC25 formulation: current limit inside the problem, margin, sound source set, global solve ([results/DESIGN.md](results/DESIGN.md)). Open: multi-bus aggregation, limiter type in the uncertainty set | Asmar Hasanova |
-| 2 | **Simulation** | **Critical path.** PSCAD 5.0.1 Educational, driven from Python and connected to our relay code; plan in [docs/PSCAD.md](docs/PSCAD.md) | Asmar Hasanova |
+| 2 | **Simulation** | **Critical path.** PSCAD 5.0.1 Educational, driven from Python and connected to our relay code. An inverter that injects a designed negative-sequence δ is built and verified ([results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md)); next, the grid around it | Asmar Hasanova |
 | 3 | **Detection** | Done on four grids with one protocol: conventional ladder, sequence-trajectory CNN, engineered features, re-implemented Hasan et al. (2026) SVM. Open: an IBR-appropriate ladder rung, MMKF | Asmar Hasanova |
 | 4 | **Embedded** | Open: 87 µs on the laptop, no board, no causal end-to-end protocol | TBD |
 
@@ -88,6 +88,7 @@ signal.**
 | Design tool | The TAC25 formulation: the current limit inside the problem, a margin in measurement units, a sound source set, a global solve. On the two-bus model only | static model | [results/DESIGN.md](results/DESIGN.md) |
 | Detection, synchronous-dominated grid | A single-ended sequence-trajectory CNN covers 94.6–99.4 % of in-zone faults at relay A with 0–3 of 2,888 off-line trips; relay B is unstable (45–77 %). A settable quadrilateral covers 5–10 % | EMT, EvEMTBench adapt_grid TestGrid 110 kV, no injection | [results/ADAPTGRID.md](results/ADAPTGRID.md) |
 | Detection, inverter-rich feeder | No single-ended detector exceeds 15.8 % at zero false trips; two-ended 67N/67Q schemes reach 75–82 % with a channel | EMT, EvEMTBench CIGRE MV 20 kV, no injection | [results/CIGREMV.md](results/CIGREMV.md) |
+| Injecting inverter | An averaged grid-following inverter in PSCAD with three negative-sequence modes (suppressed, V2-referenced, a designed δ) and a 1.2 pu limit, built from Python and verified to inject what it is told: δ = 0.1 pu at +90° measured as 0.1000 pu at +89.5° | EMT, PSCAD, our own model, no fault yet | [results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md) |
 | Where δ could help | The four screened uses in the table above | static model, and EMT without injection | [results/CIGREMV.md](results/CIGREMV.md) §3 |
 | Evaluation pitfalls | Noise-free benchmark records leak the zone label through the pre-fault waveform; zero-phase resampling leaks the fault ~1 ms backwards; sibling simulations leak across folds | EMT, EvEMTBench | [REVIEW.md](REVIEW.md), [archive/results/REAL_ML.md](archive/results/REAL_ML.md) |
 | PSCAD | Driven from Python, output through the same relay code. Three shipped relay cases, 42 decisions, all right. Then the fault point swept across 50–98 % of a 100 km line: the A-G loop reads every point within +0.3 %, but **our faulted-phase selector releases the wrong loop inside zone 1**, so bolted A-G faults at 75–84 % and 10 Ω faults at 65–75 % are missed. No false trips | EMT, PSCAD examples, no inverter | [results/PSCAD_FIRST.md](results/PSCAD_FIRST.md) |
@@ -129,6 +130,7 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             pscad_io.py       PSCAD output and line-constants reader
             pscad_sweep.py, pscad_location_sweep.py  drive PSCAD from Python (sliders, fault point)
             pscad_check.py, pscad_table.py           the distance element on PSCAD runs
+            pscad_inverter.py, pscad_inverter_check.py  the averaged inverter with a settable I2, and its check
 src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*_*.py), the
             conventional ladder and settings (ladder.py, setting_study.py, elements_fixed.py),
             grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
@@ -142,6 +144,7 @@ results/    DESIGN.md    the design tool in the TAC25 formulation: certificate, 
             CIGREMV.md, CIGREMV_FACTS.md      the same on the inverter-rich CIGRE MV 20 kV feeder, with
                               inverter-aware settings, boundary diagnostics and inverter headroom
             PSCAD_FIRST.md    the first PSCAD runs through our relay code; pscad/ holds their tables
+            PSCAD_INVERTER.md the inverter that injects a designed δ, and its verification
             aux_signal_toy_weak_sg.json  the designed δ the synthetic detectors read; kept in place
             review/, review_wp1/, review_synth/, adaptgrid/, cigremv/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
