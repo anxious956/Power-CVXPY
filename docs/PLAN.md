@@ -76,9 +76,13 @@ built in PSCAD from Python, with three negative-sequence modes (suppressed, V2-r
 a designed δ fixed in the V1 frame) and a 1.2 pu limit, **verified to inject what it is told** (δ of
 0.1 pu at +90° measured as 0.1000 pu at +89.5°). Also: PSCAD driven from Python and connected to the
 relay code ([results/PSCAD_FIRST.md](../results/PSCAD_FIRST.md)).
+Also done ([results/PSCAD_TWOBUS.md](../results/PSCAD_TWOBUS.md)): **the design tool's two-bus circuit
+built in PSCAD around that inverter, matching the design model** at the relay to 0.000 pu before the
+fault and 0.001–0.016 pu during A-G and B-C faults.
 Next:
-1. a small multi-bus grid around it (source, protected line, inverter at the remote bus, adjacent
-   line), with faults whose location, resistance and type are swept from Python;
+1. the designed δ injected into that circuit and the separation the tool promises checked in EMT;
+   then a small multi-bus grid (source, protected line, inverter at the remote bus, adjacent line),
+   with faults whose location, resistance and type are swept from Python;
 2. the designed δ from step 1 injected, and the separation the tool promises checked in EMT;
 3. the deck's scenarios: I₂ suppressed, longer lines, and a grid-forming inverter (Taylor's 14-bus
    model if shared, otherwise our own).

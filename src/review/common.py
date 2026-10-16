@@ -425,8 +425,8 @@ def loops(R, vpost, ipost, vpre=None, ipre=None):
 
 def phase_selection(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8, selector=None):
     """Vectorised copy of zone_model.released_loops. (m, 6) boolean mask over LOOPS
-    (ag, bg, cg, ab, bc, ca). selector defaults to zone_model.SELECTOR ("angle" since 16 Oct 2026;
-    "magnitude" reproduces earlier results)."""
+    (ag, bg, cg, ab, bc, ca). selector defaults to zone_model.SELECTOR ("magnitude", the reviewed rule;
+    "angle" is the equivalent sequence-angle alternative)."""
     from zone_model import SELECTOR
     selector = selector or SELECTOR
     di = ipost - ipre

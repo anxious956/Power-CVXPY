@@ -38,15 +38,15 @@
     30
    ],
    "1phg|R=40|magnitude": [
-    18,
+    30,
     30
    ],
    "1phg|R=40|angle": [
-    24,
+    30,
     30
    ],
    "1phg|R=40|angle+V": [
-    24,
+    30,
     30
    ],
    "2ph|R=1|magnitude": [
@@ -110,15 +110,15 @@
     15
    ],
    "2phg|R=40|magnitude": [
-    12,
+    15,
     15
    ],
    "2phg|R=40|angle": [
-    12,
+    15,
     15
    ],
    "2phg|R=40|angle+V": [
-    9,
+    15,
     15
    ],
    "3ph|R=1|magnitude": [
@@ -172,27 +172,27 @@
     15
    ],
    "1phg|R=10|magnitude": [
-    15,
+    30,
     30
    ],
    "1phg|R=10|angle": [
-    15,
+    30,
     30
    ],
    "1phg|R=10|angle+V": [
-    15,
+    30,
     30
    ],
    "1phg|R=40|magnitude": [
-    0,
+    30,
     30
    ],
    "1phg|R=40|angle": [
-    0,
+    30,
     30
    ],
    "1phg|R=40|angle+V": [
-    0,
+    30,
     30
    ],
    "2ph|R=1|magnitude": [
@@ -208,11 +208,11 @@
     15
    ],
    "2ph|R=10|magnitude": [
-    12,
+    15,
     15
    ],
    "2ph|R=10|angle": [
-    12,
+    15,
     15
    ],
    "2ph|R=10|angle+V": [
@@ -220,11 +220,11 @@
     15
    ],
    "2ph|R=40|magnitude": [
-    6,
+    15,
     15
    ],
    "2ph|R=40|angle": [
-    6,
+    15,
     15
    ],
    "2ph|R=40|angle+V": [
@@ -244,27 +244,27 @@
     15
    ],
    "2phg|R=10|magnitude": [
-    9,
+    15,
     15
    ],
    "2phg|R=10|angle": [
-    12,
+    15,
     15
    ],
    "2phg|R=10|angle+V": [
-    12,
+    15,
     15
    ],
    "2phg|R=40|magnitude": [
-    0,
+    15,
     15
    ],
    "2phg|R=40|angle": [
-    3,
+    15,
     15
    ],
    "2phg|R=40|angle+V": [
-    3,
+    15,
     15
    ],
    "3ph|R=1|magnitude": [
@@ -378,15 +378,15 @@
     15
    ],
    "2phg|R=40|magnitude": [
-    12,
+    15,
     15
    ],
    "2phg|R=40|angle": [
-    12,
+    15,
     15
    ],
    "2phg|R=40|angle+V": [
-    9,
+    15,
     15
    ],
    "3ph|R=1|magnitude": [
@@ -426,37 +426,37 @@
     15
    ],
    "1phg|R=40|magnitude": [
-    18,
+    30,
     30
    ],
    "1phg|R=40|angle": [
-    24,
+    30,
     30
    ],
    "1phg|R=40|angle+V": [
-    24,
+    30,
     30
    ]
   },
   "Cub_HV_B_A-B-1\\pex_MainBus2_MainLn1-2A": {
    "1phg|R=1|magnitude": [
-    24,
+    30,
     30
    ],
    "1phg|R=1|angle": [
-    24,
+    30,
     30
    ],
    "1phg|R=1|angle+V": [
-    24,
+    30,
     30
    ],
    "2ph|R=1|magnitude": [
-    12,
+    15,
     15
    ],
    "2ph|R=1|angle": [
-    12,
+    15,
     15
    ],
    "2ph|R=1|angle+V": [
@@ -464,11 +464,11 @@
     15
    ],
    "2ph|R=10|magnitude": [
-    12,
+    15,
     15
    ],
    "2ph|R=10|angle": [
-    12,
+    15,
     15
    ],
    "2ph|R=10|angle+V": [
@@ -476,11 +476,11 @@
     15
    ],
    "2ph|R=40|magnitude": [
-    6,
+    15,
     15
    ],
    "2ph|R=40|angle": [
-    6,
+    15,
     15
    ],
    "2ph|R=40|angle+V": [
@@ -500,39 +500,39 @@
     15
    ],
    "1phg|R=10|magnitude": [
-    12,
+    30,
     30
    ],
    "1phg|R=10|angle": [
-    12,
+    30,
     30
    ],
    "1phg|R=10|angle+V": [
-    12,
+    30,
     30
    ],
    "2phg|R=10|magnitude": [
-    9,
+    15,
     15
    ],
    "2phg|R=10|angle": [
-    12,
+    15,
     15
    ],
    "2phg|R=10|angle+V": [
-    12,
+    15,
     15
    ],
    "2phg|R=40|magnitude": [
-    0,
+    15,
     15
    ],
    "2phg|R=40|angle": [
-    6,
+    15,
     15
    ],
    "2phg|R=40|angle+V": [
-    6,
+    15,
     15
    ],
    "3ph|R=1|magnitude": [
@@ -572,15 +572,15 @@
     15
    ],
    "1phg|R=40|magnitude": [
-    0,
+    30,
     30
    ],
    "1phg|R=40|angle": [
-    0,
+    30,
     30
    ],
    "1phg|R=40|angle+V": [
-    0,
+    30,
     30
    ]
   },
@@ -598,11 +598,11 @@
     15
    ],
    "2ph|R=10|magnitude": [
-    12,
+    15,
     15
    ],
    "2ph|R=10|angle": [
-    12,
+    15,
     15
    ],
    "2ph|R=10|angle+V": [
@@ -610,23 +610,23 @@
     15
    ],
    "1phg|R=1|magnitude": [
-    22,
+    30,
     30
    ],
    "1phg|R=1|angle": [
-    27,
+    30,
     30
    ],
    "1phg|R=1|angle+V": [
-    27,
+    30,
     30
    ],
    "2ph|R=40|magnitude": [
-    0,
+    15,
     15
    ],
    "2ph|R=40|angle": [
-    0,
+    15,
     15
    ],
    "2ph|R=40|angle+V": [
@@ -646,39 +646,39 @@
     15
    ],
    "2phg|R=10|magnitude": [
-    6,
+    15,
     15
    ],
    "2phg|R=10|angle": [
-    12,
+    15,
     15
    ],
    "2phg|R=10|angle+V": [
-    12,
+    15,
     15
    ],
    "1phg|R=10|magnitude": [
-    9,
+    30,
     30
    ],
    "1phg|R=10|angle": [
-    9,
+    30,
     30
    ],
    "1phg|R=10|angle+V": [
-    9,
+    30,
     30
    ],
    "2phg|R=40|magnitude": [
-    0,
+    15,
     15
    ],
    "2phg|R=40|angle": [
-    0,
+    15,
     15
    ],
    "2phg|R=40|angle+V": [
-    0,
+    15,
     15
    ],
    "3ph|R=1|magnitude": [
@@ -718,15 +718,15 @@
     15
    ],
    "1phg|R=40|magnitude": [
-    0,
+    30,
     30
    ],
    "1phg|R=40|angle": [
-    0,
+    30,
     30
    ],
    "1phg|R=40|angle+V": [
-    0,
+    30,
     30
    ]
   },
@@ -800,7 +800,7 @@
     15
    ],
    "2phg|R=10|angle+V": [
-    12,
+    15,
     15
    ],
    "1phg|R=10|magnitude": [
@@ -816,15 +816,15 @@
     30
    ],
    "2phg|R=40|magnitude": [
-    9,
+    15,
     15
    ],
    "2phg|R=40|angle": [
-    9,
+    15,
     15
    ],
    "2phg|R=40|angle+V": [
-    6,
+    15,
     15
    ],
    "3ph|R=1|magnitude": [
@@ -864,30 +864,30 @@
     15
    ],
    "1phg|R=40|magnitude": [
-    12,
+    30,
     30
    ],
    "1phg|R=40|angle": [
-    18,
+    30,
     30
    ],
    "1phg|R=40|angle+V": [
-    18,
+    30,
     30
    ]
   }
  },
  "total": {
   "1phg|magnitude": [
-   340,
+   540,
    540
   ],
   "1phg|angle": [
-   363,
+   540,
    540
   ],
   "1phg|angle+V": [
-   363,
+   540,
    540
   ],
   "3ph|magnitude": [
@@ -903,11 +903,11 @@
    270
   ],
   "2ph|magnitude": [
-   225,
+   270,
    270
   ],
   "2ph|angle": [
-   225,
+   270,
    270
   ],
   "2ph|angle+V": [
@@ -915,27 +915,27 @@
    270
   ],
   "2phg|magnitude": [
-   192,
+   270,
    270
   ],
   "2phg|angle": [
-   213,
+   270,
    270
   ],
   "2phg|angle+V": [
-   201,
+   270,
    270
   ]
  },
  "pscad": {
   "case2_sweep_Fault_Type=1_time_step=5_m=*": {
-   "magnitude": 4,
+   "magnitude": 16,
    "angle": 16,
    "angle+V": 16,
    "n": 16
   },
   "case2_sweep_Fault_Type=1_Rf=10_time_step=5_m=*": {
-   "magnitude": 2,
+   "magnitude": 16,
    "angle": 16,
    "angle+V": 16,
    "n": 16
