@@ -423,24 +423,41 @@ def loops(R, vpost, ipost, vpre=None, ipre=None):
     return out
 
 
-def phase_selection(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8):
-    """Vectorised copy of zone_model.phase_selected_reactance's selector. (m, 6) boolean mask over LOOPS."""
+def phase_selection(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8, selector=None):
+    """Vectorised copy of zone_model.released_loops. (m, 6) boolean mask over LOOPS
+    (ag, bg, cg, ab, bc, ca). selector defaults to zone_model.SELECTOR ("angle" since 16 Oct 2026;
+    "magnitude" reproduces earlier results)."""
+    from zone_model import SELECTOR
+    selector = selector or SELECTOR
     di = ipost - ipre
     di0, di1, di2 = di[:, 0], di[:, 1], di[:, 2]
     dia, dib, dic = di0 + di1 + di2, di0 + A**2 * di1 + A * di2, di0 + A * di1 + A**2 * di2
     m = len(di)
     mask = np.zeros((m, 6), bool)
     ground = np.abs(di0) > ground_ratio * np.maximum(np.abs(di1), 1e-12)
-    mags = np.abs(np.stack([dia, dib, dic], 1))
-    sel = mags >= frac * mags.max(1, keepdims=True)
-    nsel = sel.sum(1)
-    one_or_three = ground & (nsel != 2)
-    mask[one_or_three, :3] = sel[one_or_three]
-    two = ground & (nsel == 2)
-    # pair loop of the two selected phases: ab if a&b, bc if b&c, ca if c&a
-    mask[two & sel[:, 0] & sel[:, 1], 3] = True
-    mask[two & sel[:, 1] & sel[:, 2], 4] = True
-    mask[two & sel[:, 2] & sel[:, 0], 5] = True
+    if selector == "angle":
+        t20 = np.degrees(np.angle(di2 / np.where(np.abs(di0) > 1e-12, di0, 1e-12)))
+        centres = np.array([0.0, -120.0, 120.0])                          # sectors a, b, c
+        sector = np.argmin(np.abs((t20[:, None] - centres[None, :] + 180) % 360 - 180), axis=1)
+        t21 = np.degrees(np.angle(di2 / np.where(np.abs(di1) > 1e-12, di1, 1e-12)))
+        t21 = (t21 - np.array([0.0, 120.0, -120.0])[sector] + 180) % 360 - 180
+        single = ground & (np.abs(t21) <= 90)
+        double = ground & ~single
+        mask[single, sector[single]] = True                              # ag / bg / cg
+        mask[double, 3 + np.array([1, 2, 0])[sector[double]]] = True     # a -> bc, b -> ca, c -> ab
+    elif selector == "magnitude":
+        mags = np.abs(np.stack([dia, dib, dic], 1))
+        sel = mags >= frac * mags.max(1, keepdims=True)
+        nsel = sel.sum(1)
+        one_or_three = ground & (nsel != 2)
+        mask[one_or_three, :3] = sel[one_or_three]
+        two = ground & (nsel == 2)
+        # pair loop of the two selected phases: ab if a&b, bc if b&c, ca if c&a
+        mask[two & sel[:, 0] & sel[:, 1], 3] = True
+        mask[two & sel[:, 1] & sel[:, 2], 4] = True
+        mask[two & sel[:, 2] & sel[:, 0], 5] = True
+    else:
+        raise ValueError(selector)
     pair = np.abs(np.stack([dia - dib, dib - dic, dic - dia], 1))
     ps = pair >= pair_frac * pair.max(1, keepdims=True)
     mask[~ground, 3:] = ps[~ground]

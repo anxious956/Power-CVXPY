@@ -10,9 +10,9 @@
   ],
   "direction": "REV",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
+  "released_ok": true,
   "element_pct": null,
   "zone1_trip": false,
   "t_inception": 0.2014
@@ -28,10 +28,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 156.3,
+  "released_ok": true,
+  "element_pct": 109.3,
   "zone1_trip": false,
   "t_inception": 0.2017
  },
@@ -46,9 +46,9 @@
   ],
   "direction": "REV",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
+  "released_ok": true,
   "element_pct": null,
   "zone1_trip": false,
   "t_inception": 0.2014
@@ -64,10 +64,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 156.3,
+  "released_ok": true,
+  "element_pct": 109.3,
   "zone1_trip": false,
   "t_inception": 0.2017
  },
@@ -100,10 +100,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 156.9,
+  "released_ok": true,
+  "element_pct": 109.1,
   "zone1_trip": false,
   "t_inception": 0.2017
  },
@@ -118,10 +118,10 @@
   ],
   "direction": "REV",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": null,
+  "released_ok": true,
+  "element_pct": 0.1,
   "zone1_trip": false,
   "t_inception": 0.2014
  },
@@ -136,10 +136,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 155.3,
+  "released_ok": true,
+  "element_pct": 109.4,
   "zone1_trip": false,
   "t_inception": 0.2017
  },
@@ -154,10 +154,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 202.9,
+  "released_ok": true,
+  "element_pct": 106.4,
   "zone1_trip": false,
   "t_inception": 0.2016
  },
@@ -190,10 +190,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 204.9,
+  "released_ok": true,
+  "element_pct": 106.8,
   "zone1_trip": false,
   "t_inception": 0.2016
  },
@@ -208,9 +208,9 @@
   ],
   "direction": "REV",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
+  "released_ok": true,
   "element_pct": null,
   "zone1_trip": false,
   "t_inception": 0.2014
@@ -226,10 +226,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 203.6,
+  "released_ok": true,
+  "element_pct": 106.5,
   "zone1_trip": false,
   "t_inception": 0.2016
  },
@@ -244,9 +244,9 @@
   ],
   "direction": "REV",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
+  "released_ok": true,
   "element_pct": null,
   "zone1_trip": false,
   "t_inception": 0.2014
@@ -262,10 +262,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 203.6,
+  "released_ok": true,
+  "element_pct": 106.5,
   "zone1_trip": false,
   "t_inception": 0.2016
  },
@@ -280,9 +280,9 @@
   ],
   "direction": "REV",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
+  "released_ok": true,
   "element_pct": null,
   "zone1_trip": false,
   "t_inception": 0.2014
@@ -298,10 +298,10 @@
   ],
   "direction": "REV",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": null,
+  "released_ok": true,
+  "element_pct": 0.1,
   "zone1_trip": false,
   "t_inception": 0.2014
  },
@@ -316,10 +316,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 155.3,
+  "released_ok": true,
+  "element_pct": 109.4,
   "zone1_trip": false,
   "t_inception": 0.2017
  },
@@ -352,10 +352,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ca"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 156.9,
+  "released_ok": true,
+  "element_pct": 109.1,
   "zone1_trip": false,
   "t_inception": 0.2017
  },
@@ -370,10 +370,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 204.9,
+  "released_ok": true,
+  "element_pct": 106.8,
   "zone1_trip": false,
   "t_inception": 0.2016
  },
@@ -388,9 +388,9 @@
   ],
   "direction": "REV",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
+  "released_ok": true,
   "element_pct": null,
   "zone1_trip": false,
   "t_inception": 0.2014
@@ -406,10 +406,10 @@
   ],
   "direction": "fwd",
   "released": [
-   "ab"
+   "ag"
   ],
-  "released_ok": false,
-  "element_pct": 202.9,
+  "released_ok": true,
+  "element_pct": 106.4,
   "zone1_trip": false,
   "t_inception": 0.2016
  },

@@ -1,0 +1,122 @@
+[
+ {
+  "relay": "adapt_A",
+  "t_ms": 20,
+  "n": 3056,
+  "released_loops_differ": 1.7,
+  "released_loops_differ_in_zone": 0.0,
+  "magnitude": {
+   "in_zone_trip_pct": 72.02,
+   "in_zone_n": 168,
+   "offline_trips": 17,
+   "offline_n": 2888
+  },
+  "angle": {
+   "in_zone_trip_pct": 72.02,
+   "in_zone_n": 168,
+   "offline_trips": 17,
+   "offline_n": 2888
+  },
+  "decisions_changed": 0
+ },
+ {
+  "relay": "adapt_B",
+  "t_ms": 20,
+  "n": 3052,
+  "released_loops_differ": 4.06,
+  "released_loops_differ_in_zone": 0.0,
+  "magnitude": {
+   "in_zone_trip_pct": 59.9,
+   "in_zone_n": 207,
+   "offline_trips": 42,
+   "offline_n": 2845
+  },
+  "angle": {
+   "in_zone_trip_pct": 59.9,
+   "in_zone_n": 207,
+   "offline_trips": 40,
+   "offline_n": 2845
+  },
+  "decisions_changed": 2
+ },
+ {
+  "relay": "cigre_R1",
+  "t_ms": 20,
+  "n": 2382,
+  "released_loops_differ": 2.31,
+  "released_loops_differ_in_zone": 0.0,
+  "magnitude": {
+   "in_zone_trip_pct": 13.89,
+   "in_zone_n": 72,
+   "offline_trips": 9,
+   "offline_n": 2310
+  },
+  "angle": {
+   "in_zone_trip_pct": 13.89,
+   "in_zone_n": 72,
+   "offline_trips": 9,
+   "offline_n": 2310
+  },
+  "decisions_changed": 0
+ },
+ {
+  "relay": "cigre_R2",
+  "t_ms": 20,
+  "n": 2382,
+  "released_loops_differ": 2.52,
+  "released_loops_differ_in_zone": 0.0,
+  "magnitude": {
+   "in_zone_trip_pct": 11.11,
+   "in_zone_n": 72,
+   "offline_trips": 7,
+   "offline_n": 2310
+  },
+  "angle": {
+   "in_zone_trip_pct": 11.11,
+   "in_zone_n": 72,
+   "offline_trips": 7,
+   "offline_n": 2310
+  },
+  "decisions_changed": 0
+ },
+ {
+  "relay": "cigre_R3",
+  "t_ms": 20,
+  "n": 2386,
+  "released_loops_differ": 17.85,
+  "released_loops_differ_in_zone": 0.0,
+  "magnitude": {
+   "in_zone_trip_pct": 8.24,
+   "in_zone_n": 85,
+   "offline_trips": 18,
+   "offline_n": 2301
+  },
+  "angle": {
+   "in_zone_trip_pct": 8.24,
+   "in_zone_n": 85,
+   "offline_trips": 18,
+   "offline_n": 2301
+  },
+  "decisions_changed": 0
+ },
+ {
+  "relay": "cigre_R4",
+  "t_ms": 20,
+  "n": 2377,
+  "released_loops_differ": 2.31,
+  "released_loops_differ_in_zone": 0.0,
+  "magnitude": {
+   "in_zone_trip_pct": 14.47,
+   "in_zone_n": 76,
+   "offline_trips": 0,
+   "offline_n": 2301
+  },
+  "angle": {
+   "in_zone_trip_pct": 14.47,
+   "in_zone_n": 76,
+   "offline_trips": 0,
+   "offline_n": 2301
+  },
+  "decisions_changed": 0
+ }
+]

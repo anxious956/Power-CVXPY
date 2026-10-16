@@ -123,7 +123,44 @@ What it shows:
    carry a resistive reach and a tilt, and not a defect of our code.
 4. **No false trip anywhere**: nothing beyond 85 % trips in either sweep.
 
-The fix belongs to the selector, not the measurement (open item 2 in the README).
+The fix belongs to the selector, not the measurement. It is made in the next section.
+
+## The selector fixed: sequence-angle selection (16 Oct 2026)
+
+`zone_model.released_loops` (and its vectorised copy `review/common.phase_selection`) now selects the
+faulted phases from **angles** of the incremental sequence currents, as relay phase selectors do:
+∠(ΔI2/ΔI0) picks the sector (A at 0°, B at −120°, C at +120°), and ∠(ΔI2/ΔI1), rotated into that
+sector, separates a single line-to-ground fault (near 0°) from a double line-to-ground fault on the
+other two phases (near 180°). The old magnitude rule is kept as `selector="magnitude"`, so every
+earlier number can be reproduced. Both implementations agree on 600 of 600 records under each rule;
+the test suite passes (137, 4 skipped).
+
+**Tested on labelled faults before adoption** (`src/review/selector_compare.py`,
+`results/review/selector_compare.json`): own-line faults at six EvEMTBench relays, where the fault
+type and phases are in the labels, and the PSCAD sweep.
+
+| Correct loop released | magnitude (old) | **angle (new)** | angle + undervoltage pair |
+|---|---|---|---|
+| single line-to-ground, 6 relays | 340 / 540 | **363 / 540** | 363 / 540 |
+| phase-phase | 225 / 270 | **225 / 270** | 90 / 270 |
+| double line-to-ground | 192 / 270 | **213 / 270** | 201 / 270 |
+| three-phase | 270 / 270 | **270 / 270** | 270 / 270 |
+| PSCAD sweep, A-G, bolted and 10 Ω | 6 / 32 | **32 / 32** | 32 / 32 |
+
+The angle rule is never worse than the magnitude rule in any of the 72 relay × type × resistance cells.
+A variant with undervoltage selection of the phase pair was tried and **rejected**: its pair rule is too
+crude and loses most 10–40 Ω phase-phase faults. What both selectors still miss is high-resistance faults
+seen from the weak end of a line (TestGrid relay B side, DoubleLine end 2): there the relay barely sees
+the fault, which is a sensitivity limit, not a selection rule.
+
+**The PSCAD sweep with the new selector**: the A-G loop is released at all 32 points, so the eight
+in-zone faults missed before (bolted 75–84 %, 10 Ω 65–75 %) now trip. Left: the bolted fault at 85 %
+reads 85.3 % (at the boundary), and 10 Ω faults at 78–85 % read 86.5–94.6 % from remote-infeed
+underreach, which is for a resistive reach and tilt to deal with. The three relay cases: selector wrong
+0 of 42 (was 32). Tables in `results/pscad/` are regenerated with the new selector.
+
+**Impact on earlier results.** On the current results the change is negligible (`src/review/selector_impact.py`, plain reactance rule at 20 ms, six relays, ~15,000 records): the released loops are identical on every in-zone fault at all six relays, they differ on 1.7–17.9 % of off-line records, and 2 decisions change, both at adapt_B and both removed false trips (42 → 40 of 2,845). So the ADAPTGRID and CIGREMV conclusions stand without a re-run; the one thing not covered is whether the off-line differences move a zero-false-trip threshold of a mask-based ladder rung, which a ladder re-run at adapt_B and cigre_R3 (largest differences) would settle.
+
 
 ## What is not done
 
