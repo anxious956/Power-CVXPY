@@ -12,7 +12,7 @@ Since the inverter won't give big current, make it inject a small deliberate sig
 
 ## What already exists
 
-A toy version of his method in Python with CVXPY (the tool he recommended). On a two-bus grid: with a strong generator no signature is needed; with a weak source or an inverter at the relay, high-resistance ground faults become invisible and a signature of about 0.5 pu fixes them; raise relay noise by 50 percent and the needed signature exceeds what an inverter can physically give. Runs in 40 seconds on a laptop, no GPU. See `results/RESULTS.md`.
+A toy version of his method in Python with CVXPY (the tool he recommended). On a two-bus grid: with a strong generator no signature is needed; with a weak source or an inverter at the relay, high-resistance ground faults become invisible and a signature of about 0.5 pu fixes them; raise relay noise by 50 percent and the needed signature exceeds what an inverter can physically give. Runs in 40 seconds on a laptop, no GPU. See `archive/results/RESULTS.md`.
 
 ## The four roles
 

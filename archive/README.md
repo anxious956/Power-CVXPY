@@ -1,12 +1,19 @@
 # Archive: the September results and completed items
 
 Moved out of the README on 15 Oct 2026 so the README shows only where the project stands now.
+The result documents those sections describe, with their figures and JSON, are in
+[results/](results/): each was replaced by a later, corrected re-run (the review's grouped re-runs in
+`results/review/`, the TAC25 design in `results/DESIGN.md`, adapt_grid and CIGRE MV). Three scripts
+still write their outputs to the old `results/` location if re-run (`src/detect.py`, `src/real_ml.py`,
+`src/real_zone.py`); those new outputs would not be archived.
+
+
 **Nothing here was deleted or reworded**; it is the README text as it stood, including its
 strike-throughs and in-place corrections. Only relative links were adjusted so they open from this folder.
 
 Read it as history. Several claims below were later narrowed, withdrawn or superseded. The
 authoritative verdict on every claim is the register in [REVIEW.md](../REVIEW.md) §7, and the
-direction the project took afterwards is in [PLAN.md](PLAN.md) §1.
+direction the project took afterwards is in [PLAN.md](../docs/PLAN.md) §1.
 
 ## The six result sections (13–28 Sep 2026)
 
@@ -48,18 +55,18 @@ One claim in `docs/PLAN.md` does not survive: the optimum was **not** verified a
 force. Brute force finds 0.504–0.506 pu, below the published 0.5141 — the alternating scheme
 stops at a local optimum (§7 claim 5, H15).
 
-![weak_sg result](../results/aux_signal_toy_weak_sg.png)
+![weak_sg result](results/aux_signal_toy_weak_sg.png)
 
 Left: which δ separate faults from normal (black = all). Middle: the five hardest faults projected on the Farkas certificate direction at δ = 0, overlapping normal. Right: same at the optimum, separated.
 
-Full numbers and honest caveats: [results/RESULTS.md](../results/RESULTS.md).
+Full numbers and honest caveats: [archive/results/RESULTS.md](results/RESULTS.md).
 
 ### Second result: does the auxiliary signal actually help? (16 Sep 2026)
 
 A waveform generator drives the same circuit family as the design tool, so the certified
 signal and the measured detection rate live on one system. Two studies were run.
 
-**Fault versus load** ([results/DETECTION.md](../results/DETECTION.md)): a conventional
+**Fault versus load** ([archive/results/DETECTION.md](results/DETECTION.md)): a conventional
 multivariate element solves that regime with no injection at all, so the negative was too
 easy. That part holds — engineered features reach 98.8–100 % and the CNN adds nothing
 ([REVIEW.md](../REVIEW.md) §7 claim 8).
@@ -72,7 +79,7 @@ FAR still never exceeds 17.6 %, so the operating-point statement survives and th
 "more signal is worse" reading does not (`results/review_synth/h17_detect_full.json`;
 §7 claim 7).
 
-**In-zone versus out-of-zone** ([results/ZONE.md](../results/ZONE.md)): the decision distance
+**In-zone versus out-of-zone** ([archive/results/ZONE.md](results/ZONE.md)): the decision distance
 protection is actually about, on a three-bus model with an adjacent line, fault resistance,
 remote infeed, and system conditions redrawn per sample. Faults just inside the reach against
 the same faults just past the remote bus.
@@ -91,7 +98,7 @@ set (H17); both are fixed here.
 ROC AUC, mean ± sd over three seeds, 900 train and 450 test waveforms per class per point
 (`results/review_synth/zone_full_fixed.json`, corrected pipeline).
 
-![zone sweep](../results/zone_sweep.png)
+![zone sweep](results/zone_sweep.png)
 
 Three things came out of it. **The first no longer holds, the second was never tested, and the
 third is backwards.**
@@ -120,7 +127,7 @@ These numbers have been corrected three times, twice by strengthening the conven
 baseline (k0 compensation, then faulted-phase selection, both found by running on real EMT
 data) and once by the review, which fixed the learned side. The downward trend in the
 reactance element survived all three; the magnitudes did not, and the CNN trend reversed. See
-[results/ZONE.md](../results/ZONE.md) and [review/SYNTH_REPORT.md](../review/SYNTH_REPORT.md).
+[archive/results/ZONE.md](results/ZONE.md) and [review/SYNTH_REPORT.md](../review/SYNTH_REPORT.md).
 
 ### Third result: real EMT data (17 Sep 2026)
 
@@ -146,10 +153,10 @@ First run on public electromagnetic-transient data, EvEMTBench `benchmark-Double
 - **Running on real data exposed a bug in our element**: no faulted-phase selection, which
   had let healthy loops win. Fixed, and the synthetic zone sweep above re-run with it.
 
-Details: [results/REAL_DOUBLELINE.md](../results/REAL_DOUBLELINE.md); corrected setting tables in
+Details: [archive/results/REAL_DOUBLELINE.md](results/REAL_DOUBLELINE.md); corrected setting tables in
 `results/review/real_zone_rerun.json`.
 
-![real doubleline](../results/real_doubleline.png)
+![real doubleline](results/real_doubleline.png)
 
 ### Fourth result: real EMT data with inverters (17 Sep 2026)
 
@@ -177,10 +184,10 @@ streaming to disk.
   author.** The grouped re-run gives 26 % switching trips for LR at relay B, and 0 % once the
   decision is supervised by a directional element (§7 claim 24).
 
-Details: [results/REAL_TESTGRID.md](../results/REAL_TESTGRID.md); corrected setting tables in
+Details: [archive/results/REAL_TESTGRID.md](results/REAL_TESTGRID.md); corrected setting tables in
 `results/review/real_zone_rerun.json`.
 
-![relay B](../results/real_testgrid_B.png)
+![relay B](results/real_testgrid_B.png)
 
 ### Fifth result: a fair ML comparison on the same real data (17 Sep 2026)
 
@@ -220,10 +227,10 @@ review found further ones — sibling leakage in the cross-validation, the resam
 look-ahead, windows anchored at true inception rather than at a causal starter, and the
 missing directional element.
 
-Details: [results/REAL_ML.md](../results/REAL_ML.md), and the grouped re-runs in
+Details: [archive/results/REAL_ML.md](results/REAL_ML.md), and the grouped re-runs in
 [results/review/TABLES.md](../results/review/TABLES.md).
 
-![real ml](../results/real_ml.png)
+![real ml](results/real_ml.png)
 
 ### Sixth result: a varying operating point, then an inverter-rich grid (17–28 Sep 2026)
 
@@ -302,7 +309,7 @@ exist, e.g. Saleh et al. 2021, but on a nominal model), that nobody has compared
 methods against each other, and that the auxiliary signal appears zero times in the ~600 references
 of the seven ML papers first read. A later find does combine injection with learning: Mohammadhassani
 et al. 2021, an SVM on injected harmonics trained on two bolted faults ([papers/README.md](../papers/README.md) K). The project is repositioned accordingly in
-[`docs/PLAN.md`](PLAN.md).
+[`docs/PLAN.md`](../docs/PLAN.md).
 
 ## Status list as it stood on 15 Oct 2026 (all items, done and open)
 
@@ -312,7 +319,7 @@ et al. 2021, an SVM on injected harmonics trained on two bolted faults ([papers/
 - [x] Waveform generator on the same circuit, with negative-sequence confusers
 - [x] First detector comparison: naive threshold vs engineered features vs CNN
 - [x] Three-bus model and the in-zone vs out-of-zone experiment
-- [x] Error bars over seeds (in [results/ZONE.md](../results/ZONE.md) and every review sweep)
+- [x] Error bars over seeds (in [archive/results/ZONE.md](results/ZONE.md) and every review sweep)
 - [x] EvEMTBench DoubleLine loaded straight from the archive; element validated on real EMT data
 - [x] Inverter grid (TestGrid110kV) run: limiter measured, inverters too small to matter,
       remote-infeed problem reproduced
@@ -345,7 +352,7 @@ et al. 2021, an SVM on injected harmonics trained on two bolted faults ([papers/
       - I2-suppressing inverters (static model): a V2-referenced current, not a δ fixed in advance;
       - longer lines (static model, up to 3×): help the passive measurement more than δ.
       See REVIEW.md §7 rows 42–47.
-- [ ] **Test the above with δ injected in EMT** (PSCAD; [docs/PSCAD.md](PSCAD.md))
+- [ ] **Test the above with δ injected in EMT** (PSCAD; [docs/PSCAD.md](../docs/PSCAD.md))
 - [ ] IEEE 39-bus (60 Hz) EvEMTBench grid
 - [ ] Design tool on a multi-bus network: Taylor's static model on the CIGRE MV sequence network,
       its predicted ambiguity checked against the EMT result (docs/notes/SORULAR_CEVAPLAR.md Q22)
