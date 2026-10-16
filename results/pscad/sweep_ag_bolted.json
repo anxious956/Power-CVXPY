@@ -1,0 +1,233 @@
+{
+ "reach_pct": 85.0,
+ "case": "case2",
+ "end": "1",
+ "line": "T1+T2",
+ "prefix": "case2_sweep_Fault_Type=1_time_step=5",
+ "rows": [
+  {
+   "fault_pct": 50.0,
+   "ag_loop_pct": 50.26,
+   "ag_loop_r_ohm": 1.73,
+   "released": [
+    "ag"
+   ],
+   "element_pct": 50.26,
+   "direction": "forward",
+   "zone1_trip": true,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": true
+  },
+  {
+   "fault_pct": 60.0,
+   "ag_loop_pct": 60.27,
+   "ag_loop_r_ohm": 2.08,
+   "released": [
+    "ag"
+   ],
+   "element_pct": 60.27,
+   "direction": "forward",
+   "zone1_trip": true,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": true
+  },
+  {
+   "fault_pct": 65.0,
+   "ag_loop_pct": 65.27,
+   "ag_loop_r_ohm": 2.25,
+   "released": [
+    "ag"
+   ],
+   "element_pct": 65.27,
+   "direction": "forward",
+   "zone1_trip": true,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": true
+  },
+  {
+   "fault_pct": 70.0,
+   "ag_loop_pct": 70.26,
+   "ag_loop_r_ohm": 2.41,
+   "released": [
+    "ag"
+   ],
+   "element_pct": 70.26,
+   "direction": "forward",
+   "zone1_trip": true,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": true
+  },
+  {
+   "fault_pct": 75.0,
+   "ag_loop_pct": 75.26,
+   "ag_loop_r_ohm": 2.59,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 161.92,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": false
+  },
+  {
+   "fault_pct": 78.0,
+   "ag_loop_pct": 78.28,
+   "ag_loop_r_ohm": 2.7,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 163.84,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": false
+  },
+  {
+   "fault_pct": 80.0,
+   "ag_loop_pct": 80.27,
+   "ag_loop_r_ohm": 2.76,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 164.95,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": false
+  },
+  {
+   "fault_pct": 82.0,
+   "ag_loop_pct": 82.29,
+   "ag_loop_r_ohm": 2.84,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 166.07,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": false
+  },
+  {
+   "fault_pct": 84.0,
+   "ag_loop_pct": 84.27,
+   "ag_loop_r_ohm": 2.9,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 166.93,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": true,
+   "should_trip": true,
+   "correct": false
+  },
+  {
+   "fault_pct": 85.0,
+   "ag_loop_pct": 85.27,
+   "ag_loop_r_ohm": 2.93,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 167.39,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": false,
+   "should_trip": true,
+   "correct": false
+  },
+  {
+   "fault_pct": 86.0,
+   "ag_loop_pct": 86.27,
+   "ag_loop_r_ohm": 2.97,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 167.78,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": false,
+   "should_trip": false,
+   "correct": true
+  },
+  {
+   "fault_pct": 88.0,
+   "ag_loop_pct": 88.28,
+   "ag_loop_r_ohm": 3.03,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 168.5,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": false,
+   "should_trip": false,
+   "correct": true
+  },
+  {
+   "fault_pct": 90.0,
+   "ag_loop_pct": 90.27,
+   "ag_loop_r_ohm": 3.1,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 169.07,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": false,
+   "should_trip": false,
+   "correct": true
+  },
+  {
+   "fault_pct": 92.0,
+   "ag_loop_pct": 92.28,
+   "ag_loop_r_ohm": 3.17,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 169.48,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": false,
+   "should_trip": false,
+   "correct": true
+  },
+  {
+   "fault_pct": 95.0,
+   "ag_loop_pct": 95.28,
+   "ag_loop_r_ohm": 3.27,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 169.92,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": false,
+   "should_trip": false,
+   "correct": true
+  },
+  {
+   "fault_pct": 98.0,
+   "ag_loop_pct": 98.28,
+   "ag_loop_r_ohm": 3.37,
+   "released": [
+    "ab"
+   ],
+   "element_pct": 170.01,
+   "direction": "forward",
+   "zone1_trip": false,
+   "ag_loop_alone_trip": false,
+   "should_trip": false,
+   "correct": true
+  }
+ ]
+}

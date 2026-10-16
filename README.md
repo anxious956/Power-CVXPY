@@ -90,7 +90,7 @@ signal.**
 | Detection, inverter-rich feeder | No single-ended detector exceeds 15.8 % at zero false trips; two-ended 67N/67Q schemes reach 75–82 % with a channel | EMT, EvEMTBench CIGRE MV 20 kV, no injection | [results/CIGREMV.md](results/CIGREMV.md) |
 | Where δ could help | The four screened uses in the table above | static model, and EMT without injection | [results/CIGREMV.md](results/CIGREMV.md) §3 |
 | Evaluation pitfalls | Noise-free benchmark records leak the zone label through the pre-fault waveform; zero-phase resampling leaks the fault ~1 ms backwards; sibling simulations leak across folds | EMT, EvEMTBench | [REVIEW.md](REVIEW.md), [archive/results/REAL_ML.md](archive/results/REAL_ML.md) |
-| PSCAD | Driven from Python, output through the same relay code. Three shipped relay cases, 42 decisions: direction and zone-1 decision right 42/42, a mid-line fault located at 50.3 / 50.4 %. The faulted-phase selector releases the wrong loop 32/42, none of them a trip | EMT, PSCAD examples, no inverter | [results/PSCAD_FIRST.md](results/PSCAD_FIRST.md) |
+| PSCAD | Driven from Python, output through the same relay code. Three shipped relay cases, 42 decisions, all right. Then the fault point swept across 50–98 % of a 100 km line: the A-G loop reads every point within +0.3 %, but **our faulted-phase selector releases the wrong loop inside zone 1**, so bolted A-G faults at 75–84 % and 10 Ω faults at 65–75 % are missed. No false trips | EMT, PSCAD examples, no inverter | [results/PSCAD_FIRST.md](results/PSCAD_FIRST.md) |
 
 ## Quick start
 
@@ -180,10 +180,11 @@ All 46 papers in `papers/` have been read; notes are in `papers/notes/` (36 PDFs
 
 Completed items are listed in [archive/README.md](archive/README.md). What is open, in order:
 
-1. **PSCAD groundwork** (Prof. Taylor's request): work through the shipped examples, and sweep the
-   fault point across 50–100 % of a line, where the 85 % zone-1 boundary sits.
-2. **Fix the faulted-phase selector** (sequence-angle selection), then re-run every earlier result with
-   it (REVIEW.md §7 row 48).
+1. **Fix the faulted-phase selector** (sequence-angle selection): on a 100 km line it misses in-zone
+   ground faults from 65–75 % on (REVIEW.md §7 row 48). Check the fix on the PSCAD sweep first, then
+   re-run every earlier result with it.
+2. **PSCAD groundwork** (Prof. Taylor's request): the remaining shipped examples, other fault types,
+   load angles and source strengths on the sweep.
 3. **How inverters work** (Prof. Taylor's request): a written note on grid-following and grid-forming
    control, current limiters and their negative-sequence behaviour, IEEE 2800 fault response.
 4. **IRTSD in PSCAD**: reproduce one documented fault event, then add the auxiliary signal as an
