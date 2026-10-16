@@ -88,11 +88,47 @@ Bolted A-G faults (`--set "Fault Type=1"`). Tables: `results/pscad/case{1,2,3}_t
   did **not** appear at 50 %. It is still open between 50 % and 100 %, which is where the 85 % reach
   boundary sits.
 
+## The fault point swept across 50–98 % of the line: the selector costs zone-1 dependability
+
+`src/pscad_location_sweep.py` moves the joint between the two 50 km segments of a `case2` copy
+(T1 = m km, T2 = 100 − m km) so fault point 3 sits at m % of the line from end 1, with the line itself
+unchanged. 16 points, bolted and through 10 Ω, A-G, relay at end 1, zone 1 at 85 %. Time step 5 µs:
+at the shipped 50 µs a segment shorter than ~13 km travels faster than one step and EMTDC aborts. A
+first sweep at 50 µs did not notice and copied the 86 % output into every later point; the script now
+deletes old output before a run and stops on any PSCAD error. Tables:
+`results/pscad/sweep_ag_bolted.json`, `sweep_ag_10ohm.json` (`src/pscad_sweep_table.py`).
+
+| Fault at | 50 | 60 | 65 | 70 | 75 | 78 | 80 | 82 | 84 | 85 | 86–98 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| **Bolted**: A-G loop reads | 50.3 | 60.3 | 65.3 | 70.3 | 75.3 | 78.3 | 80.3 | 82.3 | 84.3 | 85.3 | 86.3–98.3 |
+| loop released | ag | ag | ag | ag | **ab** | **ab** | **ab** | **ab** | **ab** | ab | ab |
+| zone 1 trips? (should) | ✓ | ✓ | ✓ | ✓ | **✗** | **✗** | **✗** | **✗** | **✗** | ✗ (A-G reads 85.3) | — ✓ |
+| **10 Ω**: A-G loop reads | 55.8 | 66.6 | 72.1 | 77.6 | 83.1 | 86.5 | 88.8 | 91.1 | 93.4 | 94.6 | 95.7–110.2 |
+| loop released | ag | ag | **ab** | **ab** | **ab** | ab | ab | ab | ab | ab | ab |
+| zone 1 trips? (should) | ✓ | ✓ | **✗** | **✗** | **✗** | ✗ (infeed) | ✗ | ✗ | ✗ | ✗ | — ✓ |
+
+**Bold ✗**: missed only because of the selector; the A-G loop alone would have tripped.
+
+What it shows:
+
+1. **The measurement is right.** The bolted A-G loop reads every point within +0.3 % of the line, from
+   50 % to 98 %.
+2. **The selector failure reaches inside zone 1.** For bolted faults it releases the phase-phase loop
+   from 75 % on, so **five in-zone faults (75–84 %) are missed** that the A-G loop would trip. Through
+   10 Ω it starts at 65 %: **three more (65, 70, 75 %)**. On this line the effective zone-1 reach for a
+   ground fault is about 70 % bolted and 60 % through 10 Ω, not 85 %. This is the risk the first runs
+   could only name; here it is measured.
+3. **Separately, fault resistance under remote infeed makes the A-G loop underreach** by 6–12 points at
+   10 Ω (78–85 % read 86.5–94.6 %): the textbook reactance effect, the reason quadrilateral elements
+   carry a resistive reach and a tilt, and not a defect of our code.
+4. **No false trip anywhere**: nothing beyond 85 % trips in either sweep.
+
+The fix belongs to the selector, not the measurement (open item 2 in the README).
+
 ## What is not done
 
-- **Nothing between 50 % and 100 % of the line**, where the zone-1 boundary is. The examples have fixed
-  fault points. Next: a working copy of `case2` whose two segment lengths are set from Python, so the
-  fault point can be swept, in steps, across 50–100 %.
+- One line, one source arrangement (20° load angle), A-G only, two resistances. Other fault types,
+  load angles and source strengths change where the selector flips.
 - The selector is **not changed** here: it is shared by every earlier result, so a fix (for example a
   sequence-angle selector, the angle of ΔI2 against ΔI0) must be re-run on all of them.
 - No inverter. This was the tool check; the inverter study is the next item in PLAN.md §5.
