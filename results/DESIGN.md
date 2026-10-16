@@ -25,7 +25,7 @@
 Numbers: [`review_wp1/tac25_theorem1.json`](review_wp1/tac25_theorem1.json),
 [`review_wp1/tac25_map.json`](review_wp1/tac25_map.json). Nothing here is typed by hand.
 
-This supersedes the design results in [RESULTS.md](RESULTS.md) and the H1 / H5 rows of
+This supersedes the design results in [RESULTS.md](../archive/results/RESULTS.md) and the H1 / H5 rows of
 [REVIEW.md](../REVIEW.md) §4. The formulation is that of
 
 > J. A. Taylor and A. D. Domínguez-García, *Active fault detection in static systems*,

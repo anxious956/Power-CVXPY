@@ -17,7 +17,7 @@ Taylor and Domínguez-García (2025, 2026) model every unknown the relay faces (
 
 This repository is that next step. It has moved since September, because the measurements moved
 it: what changed and why is in [docs/PLAN.md](docs/PLAN.md) §1; the September results, with their
-corrections, are kept in [docs/ARCHIVE.md](docs/ARCHIVE.md); the verdict on every claim ever made
+corrections, are kept in [archive/README.md](archive/README.md); the verdict on every claim ever made
 here is the register in [REVIEW.md](REVIEW.md) §7.
 
 **The question now:** where does a designed auxiliary signal earn its cost, and where does a passive
@@ -89,7 +89,7 @@ signal.**
 | Detection, synchronous-dominated grid | A single-ended sequence-trajectory CNN covers 94.6–99.4 % of in-zone faults at relay A with 0–3 of 2,888 off-line trips; relay B is unstable (45–77 %). A settable quadrilateral covers 5–10 % | EMT, EvEMTBench adapt_grid TestGrid 110 kV, no injection | [results/ADAPTGRID.md](results/ADAPTGRID.md) |
 | Detection, inverter-rich feeder | No single-ended detector exceeds 15.8 % at zero false trips; two-ended 67N/67Q schemes reach 75–82 % with a channel | EMT, EvEMTBench CIGRE MV 20 kV, no injection | [results/CIGREMV.md](results/CIGREMV.md) |
 | Where δ could help | The four screened uses in the table above | static model, and EMT without injection | [results/CIGREMV.md](results/CIGREMV.md) §3 |
-| Evaluation pitfalls | Noise-free benchmark records leak the zone label through the pre-fault waveform; zero-phase resampling leaks the fault ~1 ms backwards; sibling simulations leak across folds | EMT, EvEMTBench | [REVIEW.md](REVIEW.md), [results/REAL_ML.md](results/REAL_ML.md) |
+| Evaluation pitfalls | Noise-free benchmark records leak the zone label through the pre-fault waveform; zero-phase resampling leaks the fault ~1 ms backwards; sibling simulations leak across folds | EMT, EvEMTBench | [REVIEW.md](REVIEW.md), [archive/results/REAL_ML.md](archive/results/REAL_ML.md) |
 | PSCAD | Driven from Python, output through the same relay code. Three shipped relay cases, 42 decisions: direction and zone-1 decision right 42/42, a mid-line fault located at 50.3 / 50.4 %. The faulted-phase selector releases the wrong loop 32/42, none of them a trip | EMT, PSCAD examples, no inverter | [results/PSCAD_FIRST.md](results/PSCAD_FIRST.md) |
 
 ## Quick start
@@ -134,19 +134,15 @@ src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*
             grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
             (wp1_*.py, tac25_*.py) and the adapt_grid runs (adaptgrid_*.py)
 tests/      pytest suites for the real-data pipeline, the synthetic pipeline, WP1 and TAC25
-results/    RESULTS.md   design-tool results, figures and JSON for every preset
-            DESIGN.md    the design tool in the TAC25 formulation: certificate, soft limit,
+results/    DESIGN.md    the design tool in the TAC25 formulation: certificate, soft limit,
                          structured error set, IEEE 2800 negative-sequence path
-            DETECTION.md fault vs load study, and why that negative was too easy
-            ZONE.md      in-zone vs out-of-zone, synthetic
-            REAL_DOUBLELINE.md, REAL_TESTGRID.md  the same on real EMT data
-            REAL_ML.md        the fair ML comparison, with the errors found and fixed
             DATASET_FACTS.md  fact sheet of the benchmark EMT data
             ADAPTGRID.md, ADAPTGRID_FACTS.md  the zone task on adapt_grid-TestGrid110kV (varied
                               loading and grounding, continuous R_f), at a zero-false-trip threshold
             CIGREMV.md, CIGREMV_FACTS.md      the same on the inverter-rich CIGRE MV 20 kV feeder, with
                               inverter-aware settings, boundary diagnostics and inverter headroom
             PSCAD_FIRST.md    the first PSCAD runs through our relay code; pscad/ holds their tables
+            aux_signal_toy_weak_sg.json  the designed δ the synthetic detectors read; kept in place
             review/, review_wp1/, review_synth/, adaptgrid/, cigremv/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
 review/     WP1_REPORT.md   design-tool findings with commands and JSON keys
@@ -158,9 +154,11 @@ data/       EMT archives, caches and PSCAD working copies, git-ignored: nothing 
             ships data
 papers/     README.md reading list with links, fetch.sh to download the open-access PDFs;
             notes/ reading notes
+archive/    README.md the September result sections and completed status items, verbatim
+            results/  superseded result documents, figures and JSON (RESULTS, DETECTION, ZONE,
+                      REAL_DOUBLELINE, REAL_TESTGRID, REAL_ML), each replaced by a later re-run
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
             PSCAD.md  the simulation plan: license check, which model, what a run must produce
-            ARCHIVE.md  the September results and the completed status items, kept verbatim
             TEAM_BRIEF.md   onboarding note for the team
             notes/    drafts (taylor_matrix_note.md: note to the author on the Fig. 3 matrix, not sent)
 ```
@@ -180,7 +178,7 @@ All 46 papers in `papers/` have been read; notes are in `papers/notes/` (36 PDFs
 
 ## Open items
 
-Completed items are listed in [docs/ARCHIVE.md](docs/ARCHIVE.md). What is open, in order:
+Completed items are listed in [archive/README.md](archive/README.md). What is open, in order:
 
 1. **PSCAD groundwork** (Prof. Taylor's request): work through the shipped examples, and sweep the
    fault point across 50–100 % of a line, where the 85 % zone-1 boundary sits.

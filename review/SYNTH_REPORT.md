@@ -2,7 +2,7 @@
 
 Reviewed commit `321e12b` (origin/main). Branch `review-synth`, worktree
 `Power-CVXPY-synth`. Scope: `src/waveforms.py`, `src/detect.py`, `src/zone_model.py`,
-`src/zone_detect.py`, `results/DETECTION.md`, `results/ZONE.md`, README "Second result".
+`src/zone_detect.py`, `archive/results/DETECTION.md`, `archive/results/ZONE.md`, README "Second result".
 
 Line numbers under **Location** refer to `321e12b`. Every number is followed by the
 command that produced it and the JSON file (under `results/review_synth/`) and key that holds
@@ -13,7 +13,7 @@ waveforms), deltas 0, 0.1, 0.3, 0.514, 3 seeds, 12 CNN epochs. "full" = default 
 per kind (3600 / 1800), 7 deltas, 3 seeds, 20 epochs.
 
 Nothing below is UNVERIFIED except where marked: the "original, full size" column of the sweep
-table is the author's `results/zone_sweep.json`, not re-run here (the |i-| column, which no fix
+table is the author's `archive/results/zone_sweep.json`, not re-run here (the |i-| column, which no fix
 touches, reproduces it to all printed digits, which is evidence the data generation is identical).
 
 ## Findings summary
@@ -38,8 +38,8 @@ Command (28 min 07 s on the shared GPU):
 `python src/zone_detect.py --seeds 3 --out results/review_synth --tag zone_full_fixed`
 (default cfg printed by the run: `oof_folds=5, oof_test='folds', cnn_norm='global',
 fixed_features=True, mimic=True`, polarity chosen on train). Original column:
-`results/zone_sweep.json` (author, UNVERIFIED re-run). Table built by
-`python src/review/sweep_table.py results/zone_sweep.json results/review_synth/zone_full_fixed.json`.
+`archive/results/zone_sweep.json` (author, UNVERIFIED re-run). Table built by
+`python src/review/sweep_table.py archive/results/zone_sweep.json results/review_synth/zone_full_fixed.json`.
 Keys: `rows[i].<detector>.auc / auc_std / detection_rate / detection_std / false_alarm`.
 
 AUC (mean +- sd over seeds), original -> corrected
@@ -327,7 +327,7 @@ train, more signal makes |i-| far better: 0.563 at delta = 0, 0.899 at 0.2, 0.98
 - **Verdict:** CONFIRMED that the trend is outside sampling noise, before and after H17; with the
   mechanism caveat in the verdicts section.
 - **Severity:** Medium (the claim is right, its explanation in ZONE.md is incomplete).
-- **Location:** `results/ZONE.md:58-59, 86`; README.md:74.
+- **Location:** `archive/results/ZONE.md:58-59, 86`; README.md:74.
 - **Evidence:** `python src/review/h26_bootstrap.py <tag> --B 2000` (paired two-level bootstrap:
   seeds with replacement, then test samples within seed stratified by class, same indices at every
   delta; `h26_bootstrap_<tag>.json`, `<tag>.reactance.diff_ci / slope_ci / auc_ci`).
@@ -354,7 +354,7 @@ train, more signal makes |i-| far better: 0.563 at delta = 0, 0.899 at 0.2, 0.98
 
 - **Verdict:** CONFIRMED. **Severity:** Low.
 - `README.md:214`: "- [x] Measured that the auxiliary signal improves multivariate detection, 96.0
-  to 99.4 %". `results/ZONE.md:90-92` withdraws exactly those numbers ("An earlier version of this
+  to 99.4 %". `archive/results/ZONE.md:90-92` withdraws exactly those numbers ("An earlier version of this
   file reported detection rates of 96.0 -> 99.4 % ... came from a run in which the ground fault
   loops had no zero-sequence (k0) compensation"). With the corrections, engineered detection is
   97.0 -> 98.8 % (full) and the "improves" direction for the engineered detector is +0.002 AUC.
