@@ -219,3 +219,36 @@ Residual gaps (cosmetic):
 - Whether the doc sentences PR #40 rewrote read well in context beyond the claims above.
 - The other result documents that cite step 1 (only README.md and docs/PLAN.md were searched).
 - PR #40's own verification claims beyond what is listed: I re-derived what each finding needed instead.
+
+---
+
+## Round 3: PR #40 after `6cfff4e`
+
+Checked at `6cfff4e` (`fix-review-findings`) in the same separate worktree. New script:
+[`checks/check_round3.py`](checks/check_round3.py). [`checks/check_channels_sign.py`](checks/check_channels_sign.py)
+is adapted to pass `fault_sign` through; it now runs on both versions. **Tests: 159 passed, 4 skipped**, as
+claimed (with the `data` junction).
+
+| Item | Verdict | Evidence |
+|---|---|---|
+| 2, docs | **fixed** | MULTIBUS.md:34, README.md:91 and docs/PLAN.md:66 now say "radial or uniform z0/z1". MULTIBUS.md describes the guard as conservative (a spur off a uniform loop is refused though exact), which matches `check_line_guard.py`. None of "builds any such", "any network built in PSCAD" or "design holds in 128" remains. |
+| 3, docs | **fixed** | The MULTIBUS.md headline now states what the 128 runs show (separation by the EMT system, started at each worst realisation) and what they do not (the design's fault sets case by case). Table row 2 is relabelled like row 1. README.md:91 and docs/PLAN.md:66-70 carry both qualifications (δ turns up to 29°; normal output ≤ 0.46 pu) and point to row 50. |
+| 10 | **fixed** | `assert_single_branch` raises for a second SG and for no SG at the relay bus, and returns the SG's name (`'G'`, or `'X'` after renaming). `analyse()` (network_delta_test.py:92,100-101,109) and `compare()` use the returned name. No `sgs["G"]` is left in either. |
+| 11 | **fixed** | `run_specs` deletes `<name>_*.out` and `spec.sha256` before a fresh run, so a silent no-output run can't inherit old output. `spec_digest` now includes `BUILD_ARGS` and `BUILD_VERSION`. `build()`'s defaults equal `BUILD_ARGS`. The 128 stored runs are reusable under the new digest with Python 3.12 **and** PSCAD's 3.7.8. Changing `dt_us` or bumping `BUILD_VERSION` makes all 128 non-reusable. |
+| new test, finding 1 | **bites** | `test_channels_lp_uses_its_own_fault_sign` passes. With the channels call forced back to `fault_sign=-1` it fails (1.08 pu instead of 1.20). The adapted `check_channels_sign.py --stored` on #40 gives 1.20 pu as called and 1.08 pu negated. |
+| new test, finding 7 | **bites** | `test_phasor_view_keeps_one_frame_at_any_decision_time` passes at all 8 times with the new shift. With the pre-#40 shift it fails at exactly 15, 25 and 35 ms. |
+| channels provenance | **fixed** | `tac25_channels.json` now records `3da5e5c`, which contains `fault_sign=+1`. Every value equals the pre-#37 file (only `commit` and `runtime_s` differ). |
+
+What remains is cosmetic, and a matter of discipline rather than a defect:
+
+- `BUILD_VERSION` is bumped by hand and is not tied to the Fortran in `pscad_inverter.py`. Its comment
+  ("raise when build() or update() changes what a run produces") should name the inverter controller too.
+- The digest records `BUILD_ARGS`, not the arguments `build()` was actually called with. The two runners
+  call it with the defaults, so they agree today.
+- The new phasor test's grid is 10–40 ms in 5 ms steps plus 50 ms (no 45 ms). The message to me described
+  it as "10–50 ms in 5 ms steps". 45 ms (n_post mod 128 = 32) would fail on the old code too, so coverage
+  is not affected.
+
+**All twelve round-1 findings are now closed.** The open point from round 2 is still open: the guard of
+finding 2 is conservative (a spur off a uniform loop is refused though exact). That is now documented, so
+it is a design choice, not a defect.
