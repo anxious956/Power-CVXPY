@@ -4,9 +4,12 @@ and the circuit EMT simulates are the same by construction.
 
   - each bus X has phase nodes XA, XB, XC and a local ground-return node G_X;
   - a line a-b is R-L per phase with z1, plus a ground-return conductor (z0 - z1) / 3 from G_a to G_b, so a
-    segment's zero-sequence impedance is z1 + 3 (z0 - z1)/3 = z0. Exact for any topology as long as every
-    grounded element is tied to the return node of its own bus (synchronous-source neutrals, the fault);
-    one return node (the first synchronous source's bus) is tied to earth;
+    segment's zero-sequence impedance is z1 + 3 (z0 - z1)/3 = z0. Exact for a RADIAL network, or a meshed one
+    whose lines all have the same (z0 - z1) / z1; otherwise the phase-sum and return currents obey separate
+    loop laws and the zero-sequence response is wrong (review/NETWORK_REVIEW.md finding 2: 1.9e-2 pu on a test
+    loop), and `build` refuses it. Grounded elements tie to the return node of their own bus (synchronous-
+    source neutrals, the fault); one return node (the first synchronous source's bus) is tied to earth. The
+    inverter sources are phase-to-earth, harmless because their references carry no zero sequence;
   - synchronous sources: source3, inductive, z1 = z2 and z0 from the network, neutral on G_X;
   - loads: wye R-L, neutral not grounded (the network's zero-sequence load admittance must be 0);
   - inverters: the averaged inverter of src/pscad_inverter.py (three controlled current sources and its
@@ -64,6 +67,13 @@ def inverter_settings(net, values, deltas):
 
 def make_spec(name, net, fault=None, values=None, deltas=None, lim=1):
     values, deltas = values or {}, deltas or {}
+    # what the PSCAD build can represent; fail loudly instead of dropping it (review finding 8)
+    for k, g in net.sgs.items():
+        assert abs(complex(g.zs[2]) - complex(g.zs[1])) <= 1e-12 * max(1.0, abs(g.zs[1])), f"{k}: source3 needs z2 = z1"
+    for k, g in net.ibrs.items():
+        assert abs(g.neg_z) >= 1e5, f"{k}: the PSCAD inverter has no negative-sequence shunt (neg_z must be open)"
+    for k, y in net.loads.items():
+        assert abs(complex(y[2]) - complex(y[1])) <= 1e-12 * max(1.0, abs(y[1])), f"load at {k}: needs y2 = y1"
     return dict(name=name, lim=lim, relay=list(net.relay), eps=net.eps,
                 fault=None if fault is None else [fault[0], float(fault[1]), fault[2], float(fault[3])],
                 lines={k: dict(a=l.a, b=l.b, z1=_c(l.z1), z0=_c(l.z0)) for k, l in net.lines.items()},
@@ -100,6 +110,47 @@ def seg_name(lname, ph):
     return f"S{lname}{ph}"
 
 
+def check_line_model(spec):
+    """The return-conductor line model is exact only for a radial network or a uniform (z0 - z1)/z1."""
+    buses = {x for l in spec["lines"].values() for x in (l["a"], l["b"])}
+    parent = {b: b for b in buses}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    loops = False
+    for l in spec["lines"].values():
+        ra, rb = find(l["a"]), find(l["b"])
+        if ra == rb:
+            loops = True
+        parent[ra] = rb
+    if loops:
+        ratios = [(_z(l["z0"]) - _z(l["z1"])) / _z(l["z1"]) for l in spec["lines"].values()]
+        if not all(abs(r - ratios[0]) <= 1e-9 * max(1.0, abs(ratios[0])) for r in ratios):
+            raise ValueError("meshed network with unequal (z0 - z1)/z1: the return-conductor line model is not exact")
+    return loops
+
+
+def spec_digest(spec):
+    """A fingerprint of everything that determines a run, so stored output is reused only for the same run."""
+    import hashlib
+    return hashlib.sha256(json.dumps({k: v for k, v in spec.items() if k != "name"}, sort_keys=True).encode()).hexdigest()
+
+
+def reusable(spec):
+    """Existing output may be reused only if it was made from this exact spec (review finding 11)."""
+    d = os.path.join(WORK, spec["name"] + ".gf46")
+    out, tag = os.path.join(d, spec["name"] + "_01.out"), os.path.join(d, "spec.sha256")
+    return os.path.exists(out) and os.path.exists(tag) and open(tag).read().strip() == spec_digest(spec)
+
+
+def stamp(spec):
+    with open(os.path.join(WORK, spec["name"] + ".gf46", "spec.sha256"), "w") as fh:
+        fh.write(spec_digest(spec))
+
+
 def build(pscad, spec, t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0):
     from pscad_inverter import INPUTS, OUTPUTS, port_xy, definition_xml, Builder
     name, fault, lim = spec["name"], spec["fault"], spec["lim"]
@@ -107,6 +158,7 @@ def build(pscad, spec, t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0):
         assert g["zero_z"] >= 1e5, "inverter zero-sequence path must be open in the PSCAD build"
     for y in spec["loads"].values():
         assert y["y0"] == 0, "loads must be ungrounded in the PSCAD build"
+    check_line_model(spec)
     os.makedirs(WORK, exist_ok=True)
     if name in [p["name"] for p in pscad.projects()]:
         pscad.project(name).unload()
@@ -276,8 +328,7 @@ def run_fast(path):
     projects = {}
     t0 = time.time()
     for k, sp in enumerate(specs):
-        out = os.path.join(WORK, sp["name"] + ".gf46", sp["name"] + "_01.out")
-        if os.path.exists(out):
+        if reusable(sp):
             continue
         key = "N" if sp["fault"] is None else f"{sp['fault'][0]}_{sp['fault'][2]}"
         if key not in projects:
@@ -297,6 +348,7 @@ def run_fast(path):
             os.makedirs(dst)
             for f in glob.glob(os.path.join(src, pname + "_*.out")) + [os.path.join(src, pname + ".inf")]:
                 shutil.copy2(f, os.path.join(dst, os.path.basename(f).replace(pname, sp["name"], 1)))
+            stamp(sp)
         print(f"[{k + 1}/{len(specs)}] {sp['name']}: {dt:.1f} s " + ("ok" if ok else "FAILED " + " | ".join(errs[:2])[:200]), flush=True)
     print(f"done in {time.time() - t0:.0f} s", flush=True)
 
@@ -307,11 +359,13 @@ def run_specs(path):
     pscad = mhi.pscad.application()
     for sp in json.load(open(path)):
         out = os.path.join(WORK, sp["name"] + ".gf46", sp["name"] + "_01.out")
-        if os.path.exists(out):
+        if reusable(sp):
             continue
         prj = build(pscad, sp)
         dt, errs = run(prj)
         ok = not errs and os.path.exists(out)
+        if ok:
+            stamp(sp)
         print(f"{sp['name']}: {dt:.1f} s " + ("ok" if ok else "FAILED " + " | ".join(errs[:2])[:200]), flush=True)
         try:
             prj.unload()

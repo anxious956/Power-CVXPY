@@ -19,7 +19,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import network as nw
 from pscad_network import make_spec, three_bus, WORK
-from pscad_network_check import relay_y, injections, read_case
+from pscad_network_check import relay_y, injections, read_case, assert_single_branch
 
 OUT = os.path.join(HERE, "..", "results", "network")
 RHO = 0.10
@@ -89,6 +89,7 @@ def make():
 
 def analyse(t_pre=0.25, t_meas=0.38):
     net, ms = model()
+    assert_single_branch(net)
     specs = json.load(open(os.path.join(OUT, "three_bus_design.json")))
     rows = []
     for sp in specs:

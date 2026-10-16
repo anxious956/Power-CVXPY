@@ -68,7 +68,10 @@ limiter cuts δ instead, the normal set is wrong again, as in the earlier sweep.
    should name the limiter it assumes, or carry the limiter type in the uncertainty set (PLAN step 1,
    open item 2).
 2. **The angle reference of δ.** The inverter injects δ at an angle relative to its own V1. When the
-   limiter cuts I1, V1 at the inverter moves, and δ turned by 8–14° in absolute terms. In a first pass
+   limiter cuts I1, V1 at the inverter moves, and δ turned by 8–14° in absolute terms. **And when the fault
+   starts V1 moves again**: δ and I1 turn by −10° to +15° (median 6°) in the fault runs (review/NETWORK_REVIEW.md
+   finding 3), so those runs start at the design's worst realisation but sit at another one during the fault;
+   the separation measured is that of the EMT system, not a case-by-case check of the design's fault set. In a first pass
    the inverter's angle setting was computed from the unlimited request: normal operation then left the
    normal set at the 8 limited corners (ratio up to 0.80) even with LIM 1. Setting the angle for the
    current actually delivered removes it. A real inverter cannot do that by itself, so the design must

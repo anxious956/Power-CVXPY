@@ -224,7 +224,11 @@ def test_limit_rows_follow_the_pair_sign_convention():
     A, b = td.limit_rows(p, "linear", k, 0.7)
     big = np.array([1.0, 1.0])                       # realisation c + g0 + g1, far out
     i_big = c + g[0] * big[0] + g[1] * big[1]
-    if abs(i_big) > 0.75:                            # outside the 0.7 disc: must violate a fault-block row as -u
-        uu = np.zeros(2 * k)
-        uu[2 * k - 2:] = -big
-        assert np.any(A @ uu > b + 1e-9)
+    assert abs(i_big) > 0.75                         # outside the 0.7 disc (unconditional: review finding 6)
+    uu = np.zeros(2 * k)
+    uu[2 * k - 2:] = -big                           # the fault realisation c + g big, carried as -big
+    assert np.any(A @ uu > b + 1e-9)
+    uu[2 * k - 2:] = -(-big)                        # its mirror image, inside the disc: no fault-block row may cut it
+    i_mirror = c - g[0] * big[0] - g[1] * big[1]
+    if abs(i_mirror) < 0.7 * np.cos(np.pi / td.N_POLY):
+        assert np.all(A[1::2] @ uu <= b[1::2] + 1e-9)

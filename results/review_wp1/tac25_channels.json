@@ -1,6 +1,6 @@
 {
  "script": "tac25_channels",
- "commit": "a8a8bcb0e542c351e5e824488f9c162eb474f53f",
+ "commit": "b3a987f7e5fc6ef295949fbdc1df19a55e6f9238",
  "channels": {
   "VT": {
    "ratio": 0.06,
@@ -278,7 +278,7 @@
    {
     "kappa": 16.0,
     "separated_at_zero": false,
-    "abs_delta": 1.08,
+    "abs_delta": 1.2,
     "feasible": true
    },
    {
@@ -295,5 +295,5 @@
    }
   ]
  },
- "runtime_s": 68.48066973686218
+ "runtime_s": 80.46778726577759
 }

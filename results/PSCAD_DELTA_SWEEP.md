@@ -72,6 +72,8 @@ false alarms more likely.**
 - One circuit (two-bus, weak source), A-G and phase-phase faults, one line, the box corners plus each
   case's worst realisation, not the whole box.
 - Averaged grid-following inverter, fixed frequency, no PLL dynamics; the inverter references δ to its
-  own V1, the design assumes a fixed δ (the rotation was a few degrees here).
+  own V1, the design assumes a fixed δ. ~~The rotation was a few degrees here.~~ During the fault δ and I1 turned
+  by −11° to +15° (median 6°) against their pre-fault angles (review/NETWORK_REVIEW.md finding 3,
+  `review/checks/check_emt_twobus_turn.py`), so the fault runs start at the worst realisation but do not stay at it.
 - Fundamental-frequency phasors over one cycle, ideal instruments; the "relay" is the design tool's set
   test, not a protection algorithm (that is step 3 of the plan).

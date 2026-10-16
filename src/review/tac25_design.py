@@ -88,9 +88,9 @@ def headroom(i_max, d, rule):
     raise ValueError(rule)
 
 
-def phase_rows(p, mode, n_u_block, i_max, dv, n_poly=N_POLY):
+def phase_rows(p, mode, n_u_block, i_max, dv, n_poly=N_POLY, fault_sign=-1.0):
     """Linear rows enforcing max_k |i+ + a^k delta| <= i_max on BOTH uncertainty blocks (rule "phase"), each disc
-    as a circumscribed polygon. Same layout as limit_rows."""
+    as a circumscribed polygon. Same layout and `fault_sign` as limit_rows."""
     _, (c, g) = source_sets(p, mode)
     k = n_u_block
     rows, rhs = [], []
@@ -99,7 +99,7 @@ def phase_rows(p, mode, n_u_block, i_max, dv, n_poly=N_POLY):
         for th in np.linspace(0, 2 * np.pi, n_poly, endpoint=False):
             e = np.exp(-1j * th)
             for blk in (0, 1):
-                sg = 1.0 if blk == 0 else -1.0           # block 1 enters ModelSet.pair as -u_F (see limit_rows)
+                sg = 1.0 if blk == 0 else fault_sign     # block 1 enters ModelSet.pair as -u_F (see limit_rows)
                 a = np.zeros(2 * k)
                 a[blk * k + k - 2] = sg * (g[0] * e).real
                 a[blk * k + k - 1] = sg * (g[1] * e).real
@@ -138,8 +138,12 @@ def _limit(p, mode, i_max, dv, rule):
 
 
 # --------------------------------------------------------------------------- current-limit rows
-def limit_rows(p, mode, n_u_block, r_head, n_poly=N_POLY):
+def limit_rows(p, mode, n_u_block, r_head, n_poly=N_POLY, fault_sign=-1.0):
     """Linear rows enforcing |i+| <= r_head on BOTH uncertainty blocks of a separation LP.
+
+    fault_sign: how the LP carries the fault block's variable. -1 (default) for ModelSet.pair, which stacks
+    [G_N, G_F] against c_F - c_N so the fault realisation is c - g u; +1 for an LP written as
+    c_N + G_N u_N = c_F + G_F u_F (tac25_channels.separated_structured). The caller must know which it is.
 
     The pair LP has u = [u_N (k), u_F (k)]; within each block the last two coordinates are the
     remote IBR current generators (wp1_common.source_sets returns 2 generators for each source).
@@ -156,7 +160,7 @@ def limit_rows(p, mode, n_u_block, r_head, n_poly=N_POLY):
         # c - g u: the rows change sign there (corrected 16 Oct 2026; before, the limit was applied to the
         # mirror image of the fault-side realisation)
         for blk in (0, 1):
-            sg = 1.0 if blk == 0 else -1.0
+            sg = 1.0 if blk == 0 else fault_sign
             a = np.zeros(2 * k)
             a[blk * k + k - 2] = sg * (g[0] * e).real
             a[blk * k + k - 1] = sg * (g[1] * e).real
