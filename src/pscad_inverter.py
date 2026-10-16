@@ -14,7 +14,10 @@ Control: one user component, gfl_avm, written here in Fortran:
         0  suppressed, I2 = 0
         1  IEEE 2800 style, V2-referenced: I2 = j K2 Ibase V2 / Vbase   (I2 leads V2 by 90 deg)
         2  a designed delta, fixed in the V1 frame: I2 = D2MAG Ibase e^{j (angle V1 + D2ANG)}
-  - phase-peak current limit IMAX (pu of Ibase), applied by scaling I1 and I2 together;
+  - phase-peak current limit IMAX (pu of Ibase). LIM = 0: I1 and I2 scaled together. LIM = 1: I2 priority,
+    I2 kept and I1 alone scaled down until every phase peak fits (I1 and I2 scaled together only if I2
+    alone exceeds the limit). LIM = 1 is the limiter the TAC25 design with the limit inside assumes:
+    the inverter delivers the full delta and only positive-sequence realisations that fit beside it occur;
   - references ramp in over the third cycle (the DFT needs one full cycle first).
 Outputs: the three phase current references (kA) and |V1|, |V2| (pu of Vbase), |I1|, |I2| (pu of Ibase).
 
@@ -28,7 +31,7 @@ import xml.etree.ElementTree as ET
 
 WORK = r"D:\JOSHUA_TAYLOR_data\data\pscad_work\inverter"
 
-INPUTS = ["VA", "VB", "VC", "F0", "ID", "IQ", "MODE2", "K2", "D2MAG", "D2ANG", "IBASE", "VBASE", "IMAX"]
+INPUTS = ["VA", "VB", "VC", "F0", "ID", "IQ", "MODE2", "K2", "D2MAG", "D2ANG", "IBASE", "VBASE", "IMAX", "LIM"]
 OUTPUTS = ["IA", "IB", "IC", "V1M", "V2M", "I1M", "I2M"]
 NMAX = 1700                                   # samples per cycle the DFT buffer can hold
 NSTOR = 7 + 6 * NMAX + 3
@@ -67,6 +70,16 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
 #LOCAL REAL G_PBI
 #LOCAL REAL G_PCR
 #LOCAL REAL G_PCI
+#LOCAL REAL G_S1
+#LOCAL REAL G_QA
+#LOCAL REAL G_QB
+#LOCAL REAL G_QC
+#LOCAL REAL G_QR
+#LOCAL REAL G_QI
+#LOCAL REAL G_RR
+#LOCAL REAL G_RI
+#LOCAL REAL G_LL
+#LOCAL REAL G_SK
       G_W  = 6.283185307*$F0
       G_NS = NINT(1.0/($F0*DELT))
       IF (G_NS .GT. %(nmax)d) G_NS = %(nmax)d
@@ -116,6 +129,38 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
       ELSE IF ($MODE2 .GT. 1.5) THEN
         G_I2R = $D2MAG*$IBASE*COS(G_AN + 0.017453293*$D2ANG)
         G_I2I = $D2MAG*$IBASE*SIN(G_AN + 0.017453293*$D2ANG)
+      END IF
+      IF ($LIM .GT. 0.5) THEN
+        G_LL = ($IMAX*$IBASE)**2
+        G_S1 = 1.0
+        DO G_K = 0, 2
+          IF (G_K .EQ. 0) THEN
+            G_QR = G_I1R
+            G_QI = G_I1I
+            G_RR = G_I2R
+            G_RI = G_I2I
+          ELSE IF (G_K .EQ. 1) THEN
+            G_QR = -0.5*G_I1R + 0.8660254*G_I1I
+            G_QI = -0.8660254*G_I1R - 0.5*G_I1I
+            G_RR = -0.5*G_I2R - 0.8660254*G_I2I
+            G_RI = 0.8660254*G_I2R - 0.5*G_I2I
+          ELSE
+            G_QR = -0.5*G_I1R - 0.8660254*G_I1I
+            G_QI = 0.8660254*G_I1R - 0.5*G_I1I
+            G_RR = -0.5*G_I2R + 0.8660254*G_I2I
+            G_RI = -0.8660254*G_I2R - 0.5*G_I2I
+          END IF
+          G_QA = G_QR**2 + G_QI**2
+          G_QB = G_QR*G_RR + G_QI*G_RI
+          G_QC = G_RR**2 + G_RI**2 - G_LL
+          IF (G_QC .LT. 0.0 .AND. G_QA .GT. 1.0E-12) THEN
+            G_SK = (-G_QB + SQRT(G_QB**2 - G_QA*G_QC))/G_QA
+            IF (G_SK .LT. G_S1) G_S1 = G_SK
+          END IF
+        END DO
+        IF (G_S1 .LT. 0.0) G_S1 = 0.0
+        G_I1R = G_S1*G_I1R
+        G_I1I = G_S1*G_I1I
       END IF
       G_PAR = G_I1R + G_I2R
       G_PAI = G_I1I + G_I2I
@@ -169,7 +214,7 @@ def definition_xml(name="gfl_avm"):
         e = ET.SubElement(svg, "port", model="Transfer", name=p, x=str(x), y=str(y), dim="1",
                           mode="Input" if p in INPUTS else "Output", type="Real", internal="")
         e.text = "true"
-    ET.SubElement(svg, "rect", x="-72", y="-126", width="144", height="252", stroke="Black",
+    ET.SubElement(svg, "rect", x="-72", y="-126", width="144", height="270", stroke="Black",
                   **{"stroke-dasharray": "none", "stroke-width": "0.2", "fill-style": "Hollow",
                      "fill-fg": "Black", "fill-bg": "", "port": ""})
     t = ET.SubElement(svg, "text", x="0", y="0", stroke="Black", fill="Black",
@@ -189,7 +234,7 @@ def definition_xml(name="gfl_avm"):
         for k, v in (("name", p), ("internal", "false"), ("cond", "true"),
                      ("mode", "1" if p in INPUTS else "2"), ("datatype", "3"), ("electype", "0"), ("dim", "1")):
             ET.SubElement(ppl, "param", name=k, value=v)
-    gx = ET.SubElement(g, "Gfx", classid="Graphics.Rectangle", id=_rid(), x="-72", y="-126", w="144", h="252")
+    gx = ET.SubElement(g, "Gfx", classid="Graphics.Rectangle", id=_rid(), x="-72", y="-126", w="144", h="270")
     gpl = ET.SubElement(gx, "paramlist")
     for k, v in (("color", "Black"), ("dasharray", "0"), ("thickness", "0"), ("port", ""), ("fill_style", "0"),
                  ("fill_fg", "Black"), ("fill_bg", "White"), ("cond", "true")):
@@ -272,7 +317,7 @@ def build_test(pscad, name="inv_test", mode2=0, k2=2.0, d2mag=0.1, d2ang=90.0, i
     cx, cy = 60, 30
     c.create_component(defn, cx, cy)
     values = dict(F0=60.0, ID=idref, IQ=iqref, MODE2=float(mode2), K2=k2, D2MAG=d2mag, D2ANG=d2ang,
-                  IBASE=ibase_pk, VBASE=vbase_pk, IMAX=1.2)
+                  IBASE=ibase_pk, VBASE=vbase_pk, IMAX=1.2, LIM=0.0)
     for p in INPUTS:
         px, py = port_xy(p)
         gx, gy = cx + px // 18, cy + py // 18

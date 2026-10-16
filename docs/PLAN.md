@@ -85,8 +85,12 @@ in EMT without the signal and separated with the designed 0.18 pu, as promised; 
 And ([results/PSCAD_DELTA_SWEEP.md](../results/PSCAD_DELTA_SWEEP.md)): all 30 cases and the box corners,
 124 runs. Separation holds everywhere tested, with a 10 % margin; but where the inverter's limiter cuts δ,
 normal operation leaves the design's normal set, so the current limit must be inside the design.
+And ([results/PSCAD_TAC25.md](../results/PSCAD_TAC25.md)): **the TAC25 design (limit inside) holds in EMT** on the
+two-bus circuit, 124 runs, for a δ-priority limiter; not for one that scales both. The test exposed a sign error in
+the design code's limit rows (REVIEW.md row 49): with the limit inside, δ is about the unconstrained value, not half.
 Next:
-1. the TAC25 design (current limit inside the problem) tested in EMT the same way; then a small multi-bus grid (source, protected line, inverter at the remote bus, adjacent line),
+1. the design must name its limiter and the frame of δ (the inverter's own V1 turns δ when the limiter acts);
+   then a small multi-bus grid (source, protected line, inverter at the remote bus, adjacent line),
    with faults whose location, resistance and type are swept from Python;
 2. the designed δ from step 1 injected, and the separation the tool promises checked in EMT;
 3. the deck's scenarios: I₂ suppressed, longer lines, and a grid-forming inverter (Taylor's 14-bus

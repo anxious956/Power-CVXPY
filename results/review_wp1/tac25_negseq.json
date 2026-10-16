@@ -1,6 +1,6 @@
 {
  "script": "tac25_negseq",
- "commit": "28fe0516deb8fd58e398cdd3101fc6fa747fe25f",
+ "commit": "a8a8bcb0e542c351e5e824488f9c162eb474f53f",
  "eps": 0.08,
  "i_max": 2.1,
  "rho": 0.0,
@@ -144,14 +144,14 @@
     "i2_normal": 0.0
    },
    "matched": {
-    "feasible": true,
-    "abs_delta": 1.48,
-    "angle_deg": 339.99999999999994
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
    },
    "crossed": {
-    "feasible": true,
-    "abs_delta": 1.52,
-    "angle_deg": 310.0
+    "feasible": false,
+    "abs_delta": null,
+    "angle_deg": null
    },
    "structured": {
     "feasible": true,
@@ -209,5 +209,5 @@
    }
   }
  ],
- "runtime_s": 371.22423243522644
+ "runtime_s": 136.0962266921997
 }

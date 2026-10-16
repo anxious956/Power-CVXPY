@@ -147,8 +147,10 @@ def test_margin_costs_signal():
     ms = ModelSet(am.PRESETS["weak_sg"], mode="linear")
     a = td.min_delta(ms, i_max=1.2, limit_inside=True, limit_design=False, rho=0.0, r_step=0.04, n_ang=36, r_max=1.5)
     b = td.min_delta(ms, i_max=1.2, limit_inside=True, limit_design=False, rho=0.1, r_step=0.04, n_ang=36, r_max=1.5)
-    assert a["feasible"] and b["feasible"]
-    assert b["abs_delta"] >= a["abs_delta"] - 1e-9
+    # with the limit applied to the right fault-side realisation (16 Oct 2026) the margin design can be
+    # infeasible; it must never be feasible where the plain one is not, nor cheaper
+    assert a["feasible"]
+    assert (not b["feasible"]) or b["abs_delta"] >= a["abs_delta"] - 1e-9
 
 
 # ------------------------------------------------------------------ per-phase limit rows (bridge review B5)
@@ -161,7 +163,8 @@ def _box_points(p, mode="linear", n=400, seed=1):
 
 def test_phase_rows_keep_every_current_a_per_phase_limiter_allows():
     """Soundness: any i+ whose three phase currents |i+ + a^k delta| stay within I_max must satisfy every row,
-    in both uncertainty blocks."""
+    in both uncertainty blocks. The fault block enters ModelSet.pair as -u_F, so the realisation c + g u_k is
+    represented there by -u_k."""
     p = am.PRESETS["weak_sg"]
     u, ip = _box_points(p)
     for dv in (0.3 * np.exp(0.4j), 0.6 * np.exp(-2.0j), 0.9 * np.exp(2.5j)):
@@ -169,7 +172,7 @@ def test_phase_rows_keep_every_current_a_per_phase_limiter_allows():
         for uk, i in zip(u, ip):
             if max(abs(i + td.A_OP ** k * dv) for k in range(3)) <= 1.2:
                 uu = np.zeros(8)
-                uu[2], uu[3], uu[6], uu[7] = uk[0], uk[1], uk[0], uk[1]
+                uu[2], uu[3], uu[6], uu[7] = uk[0], uk[1], -uk[0], -uk[1]
                 assert np.all(A @ uu <= b + 1e-9)
 
 
@@ -200,3 +203,28 @@ def test_injectable_limit_below_the_sum_rule():
     for dv in (0.2, 0.5j, -0.7):
         assert td.injectable_limit(p, "linear", dv) <= td.min_delta(ms, limit_inside=False, limit_design=False,
                                                                      r_step=0.5, n_ang=4, r_max=0.0)["i_plus_max"] + abs(dv) + 1e-12
+
+
+def test_limit_rows_follow_the_pair_sign_convention():
+    """Regression for the 16 Oct 2026 error: ModelSet.pair stacks [G_N, G_F] against c_F - c_N, so a point where
+    the two sets meet has fault-side realisation c_F - G_F u_F. Check it on a pair and on the limit rows."""
+    p = am.PRESETS["weak_sg"]
+    ms = ModelSet(p, mode="linear")
+    f = ms.faults[0]
+    dc, dH, G = ms.pair(f)
+    k = G.shape[1] // 2
+    rng = np.random.default_rng(3)
+    uN, uF = rng.uniform(-1, 1, k), rng.uniform(-1, 1, k)
+    (cN, _, GN), (cF, _, GF) = ms.N, f[1]
+    # the sets meet where cN + GN uN + n = cF + GF uF, i.e. G [uN, -uF] + n = dc: the fault variable is -uF
+    assert np.allclose(dc, cF - cN)
+    assert np.allclose(G @ np.concatenate([uN, -uF]), GN @ uN - GF @ uF)
+    from wp1_common import source_sets
+    _, (c, g) = source_sets(p, "linear")
+    A, b = td.limit_rows(p, "linear", k, 0.7)
+    big = np.array([1.0, 1.0])                       # realisation c + g0 + g1, far out
+    i_big = c + g[0] * big[0] + g[1] * big[1]
+    if abs(i_big) > 0.75:                            # outside the 0.7 disc: must violate a fault-block row as -u
+        uu = np.zeros(2 * k)
+        uu[2 * k - 2:] = -big
+        assert np.any(A @ uu > b + 1e-9)

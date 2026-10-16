@@ -1408,7 +1408,10 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 **Not (B5, 5 Oct 2026):** Akım sınırlı sayılar düzgün yeniden koşuldu. Ara kontrol (0,20–0,32 pu ve ~0,76 pu), gerçekte invertörün taşıyamayacağı akımları da kabul eden gevşek bir kural kullanmıştı. Doğru per-faz kuralıyla 0,16–0,26 pu ve %50 fazla gürültüde güvenceli tasarım yok (`results/DESIGN.md` §3, §4.1; REVIEW.md §7 satır 3–4).
 
 ### Görüşmede sorulursa
-> "In the email I quoted 0.4–0.7 pu; that holds without the current limit. With the inverter's per-phase limit inside the problem it drops to about 0.16–0.26 pu, but injecting it on top of the inverter's own current needs 1.4–1.8 pu per phase. With 50 % more noise we find no certified design at a 1.2 pu limit."
+> ~~"In the email I quoted 0.4–0.7 pu; that holds without the current limit. With the inverter's per-phase limit inside the problem it drops to about 0.16–0.26 pu, but injecting it on top of the inverter's own current needs 1.4–1.8 pu per phase. With 50 % more noise we find no certified design at a 1.2 pu limit."~~
+
+**Düzeltme (16 Oct 2026):** 0,16–0,26 pu bir işaret hatasından geliyordu (REVIEW.md §7 satır 49). Doğru cümle:
+> "In the email I quoted 0.4–0.7 pu; that holds, also with the inverter's per-phase limit inside the problem: 0.32–0.52 pu on the presets, about the unconstrained value. Injecting it on top of the inverter's own current needs 1.6–1.8 pu per phase. With 50 % more noise there is a design only if the inverter can be trusted to 2.1 pu. In a PSCAD test on the two-bus circuit the design held: every fault separated with its margin, and no false alarm, for an inverter that keeps δ and cuts its positive-sequence current." 
 
 *Kaynak: README.md ("What is already here"); REVIEW.md §7 satır 1–6; `results/DESIGN.md` §3, §4.1; `review/WP1_REPORT.md`; `results/CIGREMV.md` §3 ("Room in the inverter").*
 

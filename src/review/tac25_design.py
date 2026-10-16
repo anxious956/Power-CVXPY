@@ -99,9 +99,10 @@ def phase_rows(p, mode, n_u_block, i_max, dv, n_poly=N_POLY):
         for th in np.linspace(0, 2 * np.pi, n_poly, endpoint=False):
             e = np.exp(-1j * th)
             for blk in (0, 1):
+                sg = 1.0 if blk == 0 else -1.0           # block 1 enters ModelSet.pair as -u_F (see limit_rows)
                 a = np.zeros(2 * k)
-                a[blk * k + k - 2] = (g[0] * e).real
-                a[blk * k + k - 1] = (g[1] * e).real
+                a[blk * k + k - 2] = sg * (g[0] * e).real
+                a[blk * k + k - 1] = sg * (g[1] * e).real
                 rows.append(a)
                 rhs.append(i_max - (ck * e).real)
     return np.array(rows), np.array(rhs)
@@ -150,11 +151,15 @@ def limit_rows(p, mode, n_u_block, r_head, n_poly=N_POLY):
     ang = np.linspace(0, 2 * np.pi, n_poly, endpoint=False)
     for th in ang:
         e = np.exp(-1j * th)
-        # Re((c + g0 u_{k-2} + g1 u_{k-1}) e^{-j th}) <= r_head
+        # Re((c + g0 u_{k-2} + g1 u_{k-1}) e^{-j th}) <= r_head on the normal block; ModelSet.pair stacks
+        # [G_N, G_F] against c_F - c_N, so the fault block's variable is -u_F and its realisation is
+        # c - g u: the rows change sign there (corrected 16 Oct 2026; before, the limit was applied to the
+        # mirror image of the fault-side realisation)
         for blk in (0, 1):
+            sg = 1.0 if blk == 0 else -1.0
             a = np.zeros(2 * k)
-            a[blk * k + k - 2] = (g[0] * e).real
-            a[blk * k + k - 1] = (g[1] * e).real
+            a[blk * k + k - 2] = sg * (g[0] * e).real
+            a[blk * k + k - 1] = sg * (g[1] * e).real
             rows.append(a)
             rhs.append(r_head - (c * e).real)
     return np.array(rows), np.array(rhs)

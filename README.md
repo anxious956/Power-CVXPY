@@ -73,7 +73,7 @@ The four questions put to him in the deck are restated, with what we have learne
 
 | # | Part | Status | Owner |
 |---|------|--------|-------|
-| 1 | **Design tool** | Largely done in the TAC25 formulation: current limit inside the problem, margin, sound source set, global solve ([results/DESIGN.md](results/DESIGN.md)). Open: multi-bus aggregation, limiter type in the uncertainty set | Asmar Hasanova |
+| 1 | **Design tool** | Largely done in the TAC25 formulation: current limit inside the problem, margin, sound source set, global solve ([results/DESIGN.md](results/DESIGN.md); limit-row sign error corrected 16 Oct, REVIEW.md row 49). Open: multi-bus aggregation, limiter type in the uncertainty set | Asmar Hasanova |
 | 2 | **Simulation** | **Critical path.** PSCAD 5.0.1 Educational, driven from Python and connected to our relay code. An inverter that injects a designed negative-sequence δ is built and verified ([results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md)); next, the grid around it | Asmar Hasanova |
 | 3 | **Detection** | Done on four grids with one protocol: conventional ladder, sequence-trajectory CNN, engineered features, re-implemented Hasan et al. (2026) SVM. Open: an IBR-appropriate ladder rung, MMKF | Asmar Hasanova |
 | 4 | **Embedded** | Open: 87 µs on the laptop, no board, no causal end-to-end protocol | TBD |
@@ -88,6 +88,7 @@ signal.**
 | Design tool | The TAC25 formulation: the current limit inside the problem, a margin in measurement units, a sound source set, a global solve. On the two-bus model only | static model | [results/DESIGN.md](results/DESIGN.md) |
 | Detection, synchronous-dominated grid | A single-ended sequence-trajectory CNN covers 94.6–99.4 % of in-zone faults at relay A with 0–3 of 2,888 off-line trips; relay B is unstable (45–77 %). A settable quadrilateral covers 5–10 % | EMT, EvEMTBench adapt_grid TestGrid 110 kV, no injection | [results/ADAPTGRID.md](results/ADAPTGRID.md) |
 | Detection, inverter-rich feeder | No single-ended detector exceeds 15.8 % at zero false trips; two-ended 67N/67Q schemes reach 75–82 % with a channel | EMT, EvEMTBench CIGRE MV 20 kV, no injection | [results/CIGREMV.md](results/CIGREMV.md) |
+| **TAC25 design (limit inside) in EMT** | The reviewed design with the current limit inside the problem, 0.38 pu with a 10 % margin, tested on 124 PSCAD runs: every fault case separated with its margin, and normal operation stays inside the normal set at all 16 corners, for an inverter that keeps δ and cuts I1. Not for one that scales both. Building the test exposed a **sign error in the design code's limit rows**: with it fixed, the limit inside no longer halves δ (REVIEW.md row 49) | EMT, PSCAD, δ injected, both limiter types | [results/PSCAD_TAC25.md](results/PSCAD_TAC25.md) |
 | **All cases and corners** | 124 PSCAD runs: with a 10 % margin (δ = 0.34 pu) every fault case is separated at its worst realisation and the two hard cases at all 16 corners. But where the inverter's 1.2 pu limiter cuts δ (8 of 16 corners), normal operation leaves the design's normal set: the design must contain the current limit, and a margin makes false alarms more likely | EMT, PSCAD, δ injected, limiter active | [results/PSCAD_DELTA_SWEEP.md](results/PSCAD_DELTA_SWEEP.md) |
 | **Designed δ injected in EMT** | First test of the method with the signal injected: on the design tool's two-bus circuit, the 2 fault cases it cannot separate at δ = 0 (A-G 75 %, 95 %, 40 Ω) are reproduced in PSCAD at the tool's worst-case realisation: not separated without δ (1.93, 1.80 ε), **separated with the designed 0.18 pu** (2.18, 2.05 ε; threshold 2), normal operation stays inside the normal set. EMT and design agree to 1e-5 pu. Margins thin by construction | EMT, PSCAD, our own model, δ injected | [results/PSCAD_DELTA_TEST.md](results/PSCAD_DELTA_TEST.md) |
 | Design circuit in EMT | The design tool's two-bus circuit built in PSCAD around that inverter; relay phasors match the design model to 0.000 pu before the fault and 0.001–0.016 pu during A-G and B-C faults, so design and simulation describe the same circuit | EMT, PSCAD, our own model, no δ yet | [results/PSCAD_TWOBUS.md](results/PSCAD_TWOBUS.md) |
@@ -137,6 +138,7 @@ src/        aux_model.py      two-bus sequence model, zonotope sets, LP separati
             pscad_twobus.py, pscad_twobus_check.py      the design tool's two-bus circuit in PSCAD, and the comparison
             pscad_delta_test.py                         the designed δ against the normal set, from EMT
             pscad_delta_design.py, pscad_twobus_fast.py, pscad_delta_sweep.py  the full sweep: design, fast runs, analysis
+            pscad_tac25_design.py, pscad_tac25_sweep.py  the same for the TAC25 design
 src/review/ the review's experiments, one script per finding (h*.py, n2_*.py, q*_*.py), the
             conventional ladder and settings (ladder.py, setting_study.py, elements_fixed.py),
             grouped CV with keyed checkpoints (zone_cv.py, common.py), the design-tool re-derivation
@@ -154,6 +156,7 @@ results/    DESIGN.md    the design tool in the TAC25 formulation: certificate, 
             PSCAD_TWOBUS.md   the design tool's circuit in PSCAD, checked against the design model
             PSCAD_DELTA_TEST.md  the designed δ injected in EMT at the worst-case realisation
             PSCAD_DELTA_SWEEP.md all 30 cases and the box corners, with a margin, and the current limit
+            PSCAD_TAC25.md    the TAC25 design (limit inside) in EMT, and the sign error it exposed
             aux_signal_toy_weak_sg.json  the designed δ the synthetic detectors read; kept in place
             review/, review_wp1/, review_synth/, adaptgrid/, cigremv/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
