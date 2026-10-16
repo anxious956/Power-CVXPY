@@ -1,0 +1,70 @@
+"""
+Is a PSCAD network built by src/pscad_network.py the circuit the design tool solves? The relay's sequence
+phasors from EMT against network.solve at the same operating point (the inverters' measured injections, the
+source EMF measured before the fault). One rotation maps PSCAD's time frame onto the design frame: the
+relay-bus source EMF E1 = V1 + zs1 I1 is put at the angle the spec asks for. Nothing else is fitted.
+
+    python src/pscad_network_check.py <specs.json> [t_pre t_meas]
+"""
+import os, sys, json
+import numpy as np
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from pscad_io import read_case
+from pscad_check import to_128_per_cycle
+from waveforms import sequence_phasors, CYCLE
+from pscad_network import WORK, VBASE_PK, IBASE_PK, three_bus
+import network as nw
+
+
+def seq(run, names, t_end, base, sub=None):
+    x = np.array([run["ch"][n] - (run["ch"][sub] if sub else 0.0) for n in names])
+    x, fs = to_128_per_cycle(x, run["fs"], 60.0)
+    return np.array(sequence_phasors(x, int(round(t_end * fs)) - CYCLE)) / base
+
+
+def relay_y(run, t):
+    v = seq(run, ["VLA", "VLB", "VLC"], t, VBASE_PK, sub="VLG")
+    i = seq(run, ["ILA", "ILB", "ILC"], t, IBASE_PK)
+    return np.array([v[1], v[2], v[0], i[1], i[2], i[0]])
+
+
+def injections(run, spec, t):
+    out = {}
+    for name in spec["ibrs"]:
+        j = -seq(run, [f"Iinv{name}{p}" for p in "ABC"], t, IBASE_PK)
+        out[name] = (j[1], j[2])
+    return out
+
+
+def compare(spec, net, t_pre=0.25, t_meas=0.38):
+    run = read_case(os.path.join(WORK, spec["name"] + ".gf46"), spec["name"])
+    here_sg = [k for k, g in net.sgs.items() if g.bus == (net.lines[net.relay[0]].a if net.relay[1] == "a" else net.lines[net.relay[0]].b)]
+    assert len(here_sg) == 1, "the frame is fixed by the one synchronous source at the relay bus"
+    g = net.sgs[here_sg[0]]
+    y_pre = relay_y(run, t_pre)
+    e1 = y_pre[0] + g.zs[1] * y_pre[3]
+    e_spec = complex(*spec["sgs"][here_sg[0]]["e"])
+    rot = np.exp(1j * (np.angle(e_spec) - np.angle(e1)))
+    res = {}
+    for stage, t in (("pre", t_pre), ("fault", t_meas)):
+        if stage == "fault" and spec["fault"] is None:
+            continue
+        y = relay_y(run, t) * rot
+        inj = {k: (a * rot, d * rot) for k, (a, d) in injections(run, spec, t).items()}
+        vals = {here_sg[0]: abs(e1) * np.exp(1j * np.angle(e_spec)), **{k: a for k, (a, _) in inj.items()}}
+        f = None if stage == "pre" else tuple(spec["fault"])
+        ys = nw.solve(net, vals, {k: d for k, (_, d) in inj.items()}, f)
+        res[stage] = dict(y=y, ys=ys, err=float(np.abs(y - ys).max()), inj=inj)
+    return res
+
+
+if __name__ == "__main__":
+    specs = json.load(open(sys.argv[1]))
+    net = three_bus()
+    for sp in specs:
+        r = compare(sp, net)
+        line = f"{sp['name']:<10} fault {sp['fault']}: "
+        for st, q in r.items():
+            i1, i2 = list(q["inj"].values())[0]
+            line += f"{st} max|EMT-design| {q['err']:.4f} pu (largest {np.abs(q['ys']).max():.3f}; inverter I1 {abs(i1):.3f} I2 {abs(i2):.3f})   "
+        print(line)
