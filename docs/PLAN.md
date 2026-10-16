@@ -82,8 +82,11 @@ fault and 0.001–0.016 pu during A-G and B-C faults.
 And ([results/PSCAD_DELTA_TEST.md](../results/PSCAD_DELTA_TEST.md)): **the designed δ injected in EMT**.
 At the design tool's worst-case realisation, the two cases it cannot separate at δ = 0 are not separated
 in EMT without the signal and separated with the designed 0.18 pu, as promised; margins thin.
+And ([results/PSCAD_DELTA_SWEEP.md](../results/PSCAD_DELTA_SWEEP.md)): all 30 cases and the box corners,
+124 runs. Separation holds everywhere tested, with a 10 % margin; but where the inverter's limiter cuts δ,
+normal operation leaves the design's normal set, so the current limit must be inside the design.
 Next:
-1. the full set of cases and box corners with a design margin; then a small multi-bus grid (source, protected line, inverter at the remote bus, adjacent line),
+1. the TAC25 design (current limit inside the problem) tested in EMT the same way; then a small multi-bus grid (source, protected line, inverter at the remote bus, adjacent line),
    with faults whose location, resistance and type are swept from Python;
 2. the designed δ from step 1 injected, and the separation the tool promises checked in EMT;
 3. the deck's scenarios: I₂ suppressed, longer lines, and a grid-forming inverter (Taylor's 14-bus

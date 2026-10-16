@@ -28,6 +28,21 @@ def test_sequence_phasors_recovers_known_phasor_exactly():
         np.testing.assert_allclose(sequence_phasors(x3, start), seq, atol=1e-12)
 
 
+def test_sequence_phasors_share_one_frame_at_any_window_offset():
+    """Regression for the 16 Oct 2026 error (REVIEW.md row 48): windows a non-integer number of cycles
+    apart must give phasors in the same frame, so pre/post phasors can be subtracted. With the old
+    window-start reference a 2.5-cycle offset rotated them by 180 deg."""
+    seq = np.array([0.05 - 0.02j, 0.9 * np.exp(0.3j), 0.12 * np.exp(-1.1j)])
+    ph = A_MAT @ seq
+    n = np.arange(6 * CYCLE)
+    x3 = np.real(ph[:, None] * np.exp(1j * 2 * np.pi * n / CYCLE)[None, :])
+    for start in (0, 1, CYCLE // 2, CYCLE + 37, 2 * CYCLE + CYCLE // 2, 4 * CYCLE + 5):
+        np.testing.assert_allclose(sequence_phasors(x3, start), seq, atol=1e-12)
+    # an incremental quantity between windows 2.5 cycles apart is zero for a steady signal
+    d = sequence_phasors(x3, 2 * CYCLE + CYCLE // 2) - sequence_phasors(x3, 0)
+    assert np.abs(d).max() < 1e-12
+
+
 # ------------------------------------------------------------------ evaluate polarity (H17)
 def test_evaluate_chooses_polarity_on_train_not_test():
     rng = np.random.default_rng(0)
