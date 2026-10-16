@@ -39,52 +39,65 @@ What survived, and is now the spine of the work:
 - a **map of where an injection can and cannot help**, which is a publishable answer to a question
   Taylor's papers leave open, and which no one has measured.
 
-## 2. The one-sentence version
+## 2. What we proposed to Prof. Taylor, and hold to
 
-Design the auxiliary signal (convex optimisation, CVXPY) and evaluate it in EMT against a
-protection-grade baseline, to find **where a designed signal earns its cost and where a passive
-element, a channel or a grid-code requirement does the job instead**. Every answer so far comes from
-data without injection and a static model; the decisive test, an inverter-rich EMT grid where the
-signal is actually injected, is still to be run.
+The deck of 6 Oct 2026 proposed **an EMT test of his method** in four steps. They are the work
+packages, in this order:
 
-## 3. Work packages
+| Step (as presented) | What it means here |
+|---|---|
+| **1 · Design tool**: turn the two-bus design into a tool for a multi-bus network | the TAC25 design engine generalised to the sequence network of the grid we simulate |
+| **2 · EMT grid**: Simulink or PSCAD, with the inverter injecting the designed signal | a PSCAD grid with an inverter whose negative-sequence current is the designed δ |
+| **3 · Detection**: under load and noise, his Kalman filter against a learned detector, shrinking δ until each fails | MMKF (Pirani & Taylor 2022) vs a learned detector on that EMT data, δ swept down |
+| **4 · Real time**: the detector on an embedded board, within one cycle | causal decision and inference latency on a board |
 
-### WP1 Design tool — largely done, two things open
+The deck's "where your method could still matter" (I₂-suppressing inverters, longer lines,
+grid-forming systems) are **scenarios inside steps 2 and 3**, not a separate track: the same EMT grid
+is run with the inverter's negative sequence suppressed, V2-referenced, or the designed δ.
+
+## 3. Work packages, in the deck's order
+
+### Step 1 · Design tool — two-bus done, multi-bus open
 Done ([results/DESIGN.md](../results/DESIGN.md), REVIEW §10 item 2): TAC25 formulation, sound outer
 source set, margin (ρ = 0.1 costs 29 % more signal), the current limit inside the problem, noise tied
 to corrected CT/VT figures, a global polar solve, dense (m, R_f) validation.
 Open:
-1. the multi-bus sequence solver and Minkowski aggregation needed for the IEEE 14-bus example of the
-   Geometry paper (optional; gates nothing on real data);
+1. **the multi-bus tool**: sequence network of an arbitrary grid, Minkowski aggregation of the source
+   sets, the separation problem for the fault cases at one relay. First target: the small grid of
+   step 2, so design and simulation describe the same circuit; then the IEEE 14-bus example of the
+   Geometry paper (needs the Baeckeland line data);
 2. the **current-limiter type** as a dimension of the uncertainty set (measured negative-sequence
    virtual-impedance angles −0.5°, +36.2°, −51.6° for circular, priority-based and instantaneous
-   limiters). Taylor's model does not carry this and neither does ours.
+   limiters).
 
-### WP2 Simulation — now unblocked, the critical path
-PSCAD 5.0.1 is licensed and installed. Plan, branch points and risks: [PSCAD.md](PSCAD.md).
-The goal is **not** "prove δ works". It is to re-run the B1 screen and the detector comparison where
-the inverters carry a material share of the fault current and the injection exists, so that the
-negative result above either generalises or is bounded to distribution grids.
+### Step 2 · EMT grid — the injecting inverter exists; the grid around it is next
+Done ([results/PSCAD_INVERTER.md](../results/PSCAD_INVERTER.md)): an averaged grid-following inverter
+built in PSCAD from Python, with three negative-sequence modes (suppressed, V2-referenced as IEEE 2800,
+a designed δ fixed in the V1 frame) and a 1.2 pu limit, **verified to inject what it is told** (δ of
+0.1 pu at +90° measured as 0.1000 pu at +89.5°). Also: PSCAD driven from Python and connected to the
+relay code ([results/PSCAD_FIRST.md](../results/PSCAD_FIRST.md)).
+Next:
+1. a small multi-bus grid around it (source, protected line, inverter at the remote bus, adjacent
+   line), with faults whose location, resistance and type are swept from Python;
+2. the designed δ from step 1 injected, and the separation the tool promises checked in EMT;
+3. the deck's scenarios: I₂ suppressed, longer lines, and a grid-forming inverter (Taylor's 14-bus
+   model if shared, otherwise our own).
 Owner: Asmar Hasanova.
 
-### WP3 Detection and comparison — done on three grids, two gaps
-Done: the conventional ladder (R0–R4, T1, T2) with directional supervision, a sequence-trajectory
-CNN, engineered features, the re-implemented Hasan et al. (2026) SVM, on EvEMTBench DoubleLine,
-TestGrid110kV, adapt_grid-TestGrid and CIGRE MV, with grouped folds and held-out reverse faults.
+### Step 3 · Detection — learned side done on public data, Kalman filter and δ sweep open
+Done on public data without injection: the conventional ladder (R0–R4, T1, T2) with directional
+supervision, a sequence-trajectory CNN, engineered features, the re-implemented Hasan et al. (2026)
+SVM, on EvEMTBench DoubleLine, TestGrid110kV, adapt_grid-TestGrid and CIGRE MV, with grouped folds
+and held-out reverse faults.
 Open:
-1. **Rung R5, the IBR-appropriate ladder** (Kasztenny 2022): offset quadrilateral with a
-   loop-current-polarised reactance line, voltage-based loop selection, 32G / 32WI / TD32
-   supervision, zone 1 enabled only for a 2–3 cycle window. Today's ladder is memory- and
-   I₂-polarised, which is correct for synchronous-dominated data and **wrong** for the
-   inverter-dominated data of WP2. Add it *before* that data arrives.
-2. **MMKF** (Pirani & Taylor 2022) and an incremental-quantity element as the remaining
-   conventional competitors.
+1. **MMKF** (Pirani & Taylor 2022), the detector the deck names;
+2. both on the step-2 EMT data, under load and noise, **shrinking δ until each fails**;
+3. rung R5, the IBR-appropriate conventional baseline (Kasztenny 2022), before inverter-dominated data.
 
-### WP4 Embedded latency — unchanged, still open
-CNN inference measured on the laptop (87 µs the network, 784 µs with features). What is missing is a
-board and a causal end-to-end protocol: decisions at 10 / 20 ms from a **causal starter**, not from
-true inception, with inference latency measured separately. Budget: one cycle, 20 ms at 50 Hz,
-16.7 ms on the 60 Hz sets.
+### Step 4 · Real time — open
+CNN inference measured on the laptop (87 µs the network, 784 µs with features). Missing: a board and a
+causal end-to-end protocol (decisions at 10 / 20 ms from a causal starter, inference latency measured
+separately; one cycle is 16.7 ms at 60 Hz).
 
 ## 4. What the work can claim today, and what it cannot
 
@@ -105,12 +118,11 @@ Cannot claim:
 
 | When | What |
 |---|---|
-| Oct 2026 | **PSCAD groundwork** (Taylor's request): edition confirmed; the shipped examples worked through (`Relay_Cases`: case1, case1_CT_CCVT, case1_prot, case2_pi, case3_Mutual; `Protection`; `Photovoltaic`; `hvdc_vsc`), each run, its waveforms exported and read by our pipeline. PR #27 merged. |
-| Oct–Nov 2026 | **How inverters work** (Taylor's request): a written note on grid-following vs grid-forming control, current limiters (circular, priority-based, instantaneous) and their negative-sequence behaviour, IEEE 2800 fault response, momentary cessation; built on `papers/notes/F_taylor_tac_and_gfm_model.md` and `G1_mechanism_industry.md`, and checked against a PSCAD inverter example. |
-| Nov 2026 | IRTSD model obtained and one documented fault case reproduced; its waveforms through our pipeline (element locates bolted faults within a few per cent). Rung R5 implemented. |
-| Dec 2026 | Auxiliary signal added as an event type; first δ sweep on an inverter-rich grid. Fall report. |
-| Jan–Feb 2027 | B1 screen re-run on that data; limiter type added to the uncertainty set; MMKF in the comparison. |
-| Mar–Apr 2027 | Embedded latency on a board. Paper written. |
+| Oct 2026 | Step 2: the injecting inverter (done, 16 Oct). PSCAD and inverter groundwork, as Prof. Taylor asked. |
+| Nov 2026 | Step 2: the small multi-bus grid around it with swept faults. Step 1: the multi-bus design tool on the same grid. |
+| Dec 2026 | Steps 1 → 2: the designed δ injected in EMT and the promised separation checked. Fall report. |
+| Jan–Feb 2027 | Step 3: MMKF and a learned detector on that data, δ shrunk until each fails; the deck's scenarios (I₂ suppressed, longer lines, grid-forming). |
+| Mar–Apr 2027 | Step 4: latency on a board. Paper written. |
 | Jun 2027 | Submit to NAPS 2027. |
 
 ## 6. What Prof. Taylor asked for, and what we owe him
