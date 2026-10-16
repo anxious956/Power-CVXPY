@@ -252,3 +252,21 @@ What remains is cosmetic, and a matter of discipline rather than a defect:
 **All twelve round-1 findings are now closed.** The open point from round 2 is still open: the guard of
 finding 2 is conservative (a spur off a uniform loop is refused though exact). That is now documented, so
 it is a design choice, not a defect.
+
+---
+
+## Round 4: PR #40 at `adaeb1a` (the round-3 cosmetics)
+
+- **Scope:** `git show --stat adaeb1a` touches only `src/pscad_network.py` (the `BUILD_VERSION` comment and the
+  `spec_digest` docstring; 5 lines, no code) and `tests/test_synth.py` (45 ms added to the parametrisation).
+  `BUILD_VERSION`, `BUILD_ARGS` and the digest payload are unchanged.
+- **The three leftovers are fixed.** The comment names `pscad_inverter.py` and says the bump is manual. The
+  docstring states that the digest records `BUILD_ARGS`, which both runners pass. The phasor test now runs at
+  10–50 ms in 5 ms steps. 45 ms has n_post mod 128 = 32, which turned 180° under the pre-#40 shift, so the
+  new point also fails on old code.
+- **Tests:** 160 passed, 4 skipped (the one extra is the 45 ms case; the phasor test passes 9 / 9).
+- **Stored runs:** 128 / 128 three-bus runs are still `reusable`, under Python 3.12 and PSCAD's 3.7.8.
+
+**Verdict: PR #40 is OK to merge** as far as this review goes. All twelve findings are fixed, and nothing
+in its last commit changes behaviour. What this review did not cover (no PSCAD runs; the five #37 re-runs
+other than channels) is listed in the round-1 file.
