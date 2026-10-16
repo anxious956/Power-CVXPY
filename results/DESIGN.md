@@ -17,7 +17,10 @@
 > - **§2.1:** the certificates with the limit pruned at 2.1 cover more: |δ| ≤ 2.203 at ε = 0.16 (was 1.596),
 >   ≤ 1.328 at ε = 0.12 (was 0.730). The H1 proof at ε = 0.16 is unaffected.
 > - **§4.4:** the IBR-at-the-relay cell at K₂ = 2 has no design ≤ 2 pu (was 1.48, crossed 1.52).
-> - §4.1.1 (structured error set): one cell moves, 1.20 → 1.08 pu at I_max 2.1.
+> - §4.1.1 (structured error set): **unchanged.** ~~one cell moves, 1.20 → 1.08 pu at I_max 2.1~~: that move came
+>   from applying the new sign to `tac25_channels`, whose own LP carries the fault block as +u_F; fixed with an
+>   explicit `fault_sign` argument, and its results are again identical to the pre-correction file
+>   (review/NETWORK_REVIEW.md finding 1).
 > In EMT ([PSCAD_TAC25.md](PSCAD_TAC25.md)) the corrected TAC25 design holds on the two-bus circuit for a δ-priority
 > limiter: every fault separated with its margin, normal operation inside the normal set.
 >

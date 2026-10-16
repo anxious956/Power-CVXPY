@@ -63,8 +63,11 @@ source set, margin (ρ = 0.1 costs 29 % more signal), the current limit inside t
 to corrected CT/VT figures, a global polar solve, dense (m, R_f) validation.
 Done 16 Oct 2026 ([results/MULTIBUS.md](../results/MULTIBUS.md)): **the multi-bus tool** (`src/network.py`),
 sequence network of any grid, Minkowski aggregation of the source sets, the reviewed design on it; exact against
-the two- and three-bus models; any network built in PSCAD by `src/pscad_network.py`; on a three-bus network the
-design holds in 128 EMT runs (δ-priority limiter).
+the two- and three-bus models; built in PSCAD by `src/pscad_network.py` if radial or of uniform z0/z1; on a
+three-bus network the EMT system separates every case with the margin in 128 runs (δ-priority limiter), but the
+runs leave the design's realisation once the fault starts and the design curtails the inverter's normal output to
+≤ 0.46 pu (REVIEW.md row 50). Needed for a case-by-case check: I1 and δ modelled in the inverter's V1 frame during
+the fault.
 Open:
 1. the IEEE 14-bus example of the Geometry paper (needs the Baeckeland line data); several injecting
    inverters (vector δ); meshed networks in PSCAD;

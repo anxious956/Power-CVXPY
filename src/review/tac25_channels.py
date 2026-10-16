@@ -188,7 +188,8 @@ def separated_structured(p, ms, dv, spec=None, eps_white=EPS_WHITE, rho=0.0, lim
         A_ub = b_ub = None
         if limit is not None:
             pp, mode_l, r_head = limit
-            A, b = td.limit_rows(pp, mode_l, k, r_head)          # acts on [u_N, u_F] only
+            # this LP carries the fault block as +u_F (Aeq has -GF against cF - cN), unlike ModelSet.pair
+            A, b = td.limit_rows(pp, mode_l, k, r_head, fault_sign=+1.0)   # acts on [u_N, u_F] only
             A_ub = np.hstack([A, np.zeros((A.shape[0], q + 2 * k + 2 * n))])
             b_ub = b
         res = linprog(np.zeros(Aeq.shape[1]), A_ub=A_ub, b_ub=b_ub, A_eq=Aeq, b_eq=beq, bounds=bounds, method="highs")

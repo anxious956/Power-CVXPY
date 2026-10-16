@@ -224,7 +224,21 @@ def test_limit_rows_follow_the_pair_sign_convention():
     A, b = td.limit_rows(p, "linear", k, 0.7)
     big = np.array([1.0, 1.0])                       # realisation c + g0 + g1, far out
     i_big = c + g[0] * big[0] + g[1] * big[1]
-    if abs(i_big) > 0.75:                            # outside the 0.7 disc: must violate a fault-block row as -u
-        uu = np.zeros(2 * k)
-        uu[2 * k - 2:] = -big
-        assert np.any(A @ uu > b + 1e-9)
+    assert abs(i_big) > 0.75                         # outside the 0.7 disc (unconditional: review finding 6)
+    uu = np.zeros(2 * k)
+    uu[2 * k - 2:] = -big                           # the fault realisation c + g big, carried as -big
+    assert np.any(A @ uu > b + 1e-9)
+    uu[2 * k - 2:] = -(-big)                        # its mirror image, inside the disc: no fault-block row may cut it
+    i_mirror = c - g[0] * big[0] - g[1] * big[1]
+    if abs(i_mirror) < 0.7 * np.cos(np.pi / td.N_POLY):
+        assert np.all(A[1::2] @ uu <= b[1::2] + 1e-9)
+
+
+def test_channels_lp_uses_its_own_fault_sign():
+    """Regression for review round 2: tac25_channels' LP carries the fault block as +u_F, so it must call
+    limit_rows with fault_sign=+1. The kappa 16, I_max 2.1 cell is 1.20 pu with it and 1.08 pu without."""
+    import tac25_channels as ch
+    p = ch.make_params(0.08)
+    spec = ch.imbalance_scale(ch.CHANNELS, 16)
+    r = ch.min_delta_structured(p, spec=spec, rho=0.0, i_max=2.1, r_step=0.04, n_ang=36)
+    assert r["feasible"] and r["abs_delta"] == pytest.approx(1.20)

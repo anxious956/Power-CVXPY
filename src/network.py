@@ -102,6 +102,8 @@ def solve(net: Network, values=None, deltas=None, fault=None, full=False):
     lines = dict(net.lines)
     if fault is not None:
         fl, m, scen, rf = fault
+        if not 0.0 < m < 1.0:
+            raise ValueError(f"fault position m = {m} must lie strictly inside the line (0 < m < 1)")
         ln = lines.pop(fl)
         nodes.append("F")
         lines["_fa"] = Line(ln.a, "F", m * ln.z1, m * ln.z0)
@@ -323,6 +325,8 @@ def closest(ms: NetModelSet, f, dv=0j, limit=None):
         b_ub.append(b)
     res = linprog(c, A_ub=np.vstack(A_ub), b_ub=np.concatenate(b_ub), A_eq=np.hstack([G, np.eye(n), np.zeros((n, 1))]),
                   b_eq=target, bounds=[(-1, 1)] * k2 + [(None, None)] * n + [(0, None)], method="highs")
+    if res.status != 0:
+        raise RuntimeError(f"closest(): LP failed for {f[0]} ({res.message})")
     k = k2 // 2
     return res.x[:k], -res.x[k:k2], res.x[-1]
 
@@ -356,7 +360,11 @@ def noise_to_normal(ms: NetModelSet, y, dv=0j, limit=None):
         b_ub.append(b[0::2])
     res = linprog(c, A_ub=np.vstack(A_ub), b_ub=np.concatenate(b_ub), A_eq=np.hstack([GN, np.eye(n), np.zeros((n, 1))]),
                   b_eq=target, bounds=[(-1, 1)] * k + [(None, None)] * n + [(0, None)], method="highs")
-    return res.x[-1] if res.status == 0 else np.inf
+    if res.status != 0:
+        # an infeasible set (the limit leaves no modelled current beside dv) or a solver failure: never read it
+        # as "infinitely far", which a caller would take for a certain fault (review finding 9)
+        raise RuntimeError(f"noise_to_normal(): LP failed ({res.message})")
+    return res.x[-1]
 
 
 def limiter(i1, d, i_max, lim=1):

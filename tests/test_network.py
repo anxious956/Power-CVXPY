@@ -103,8 +103,9 @@ def test_minkowski_aggregation_is_generator_stacking():
 
 
 def test_closest_witness_is_a_true_fault_realisation():
-    """The fault realisation closest() returns, re-solved as a fault, sits exactly that far from the normal
-    set: the fault block's sign (ModelSet.pair gives it as -u_F; REVIEW.md row 49) is handled."""
+    """The fault realisation closest() returns, re-solved as a fault, sits exactly that far from the normal set.
+    This is a consistency check only: it holds for either fault-block sign (review/NETWORK_REVIEW.md finding 6).
+    The sign itself is tested by the two tests below."""
     p = am.PRESETS["weak_sg"]
     ms = nw.NetModelSet(two_bus(p, 1.2), [("L1", 0.95, "ag", 1.0), ("L1", 0.35, "ab", 0.5)], mode="outer")
     for f in ms.faults:
@@ -121,3 +122,50 @@ def test_limiter_matches_the_emt_inverter():
     for lim, (i1, d) in ((0, (0.9575, 0.2713)), (1, (0.8935, 0.3400))):
         a, b = nw.limiter(1.2 + 0j, 0.34 * np.exp(1j * np.radians(30)), 1.2, lim)
         assert abs(a) == pytest.approx(i1, abs=2e-4) and abs(b) == pytest.approx(d, abs=2e-4)
+
+
+def _phase_peak(i, d):
+    return max(abs(i * nw.A3 ** (-k) + d * nw.A3 ** k) for k in range(3))
+
+
+def test_limit_rows_keep_every_physical_pair_and_only_with_the_right_sign():
+    """Brute force on the three-bus network: every sampled (u_N, u_F) whose true inverter phase currents fit under
+    the limit satisfies every row when the fault block is passed as -u_F (ModelSet.pair), and reading it as +u_F
+    would cut some of them. Fails for the pre-#37 sign."""
+    sys.path.insert(0, os.path.join(ROOT, "src"))
+    from pscad_network import three_bus
+    net = three_bus()
+    ms = nw.NetModelSet(net, [("L1", 0.55, "ag", 1.0)], mode="outer")
+    k = 2 * len(net.sources)
+    c0, c1 = ms.generator_columns("I")
+    c, g = nw.source_set(net, "ibr", "I", "outer")
+    rng = np.random.default_rng(4)
+    for dv in (0j, 0.6 * np.exp(1.2j), 0.9 * np.exp(1j * np.radians(210))):
+        A, b = nw.limit_rows(ms, "I", dv)(k)
+        kept = cut_if_flipped = 0
+        for _ in range(4000):
+            uN, uF = rng.uniform(-1, 1, k), rng.uniform(-1, 1, k)
+            iN = c + g[0] * uN[c0] + g[1] * uN[c1]
+            iF = c + g[0] * uF[c0] + g[1] * uF[c1]
+            if _phase_peak(iN, dv) <= net.ibrs["I"].i_max and _phase_peak(iF, dv) <= net.ibrs["I"].i_max:
+                kept += 1
+                assert np.all(A @ np.concatenate([uN, -uF]) <= b + 1e-9)
+                cut_if_flipped += bool(np.any(A @ np.concatenate([uN, uF]) > b + 1e-9))
+        assert kept > 100
+        if abs(dv) > 0:
+            assert cut_if_flipped > 0, "the test would not notice a flipped fault-block sign"
+
+
+def test_closest_realisations_respect_the_limit():
+    """The witness closest() returns lies inside the inverter's per-phase limit (up to the 24-gon's 0.9 %)."""
+    sys.path.insert(0, os.path.join(ROOT, "src"))
+    from pscad_network import three_bus
+    net = three_bus()
+    ms = nw.NetModelSet(net, [("L1", 0.95, "ag", 1.0), ("L2", 0.25, "ag", 1.0)], mode="outer")
+    for dv in (0.62 * np.exp(1j * np.radians(230)), 0.9 * np.exp(1j * np.radians(210))):
+        lim = nw.limit_rows(ms, "I", dv)
+        for f in ms.faults:
+            uN, uF, _ = nw.closest(ms, f, dv, lim)
+            for u in (uN, uF):
+                i = nw.realisation(net, u)["I"]
+                assert _phase_peak(i, dv) <= net.ibrs["I"].i_max / np.cos(np.pi / 24) + 1e-9
