@@ -61,11 +61,13 @@ is run with the inverter's negative sequence suppressed, V2-referenced, or the d
 Done ([results/DESIGN.md](../results/DESIGN.md), REVIEW §10 item 2): TAC25 formulation, sound outer
 source set, margin (ρ = 0.1 costs 29 % more signal), the current limit inside the problem, noise tied
 to corrected CT/VT figures, a global polar solve, dense (m, R_f) validation.
+Done 16 Oct 2026 ([results/MULTIBUS.md](../results/MULTIBUS.md)): **the multi-bus tool** (`src/network.py`),
+sequence network of any grid, Minkowski aggregation of the source sets, the reviewed design on it; exact against
+the two- and three-bus models; any network built in PSCAD by `src/pscad_network.py`; on a three-bus network the
+design holds in 128 EMT runs (δ-priority limiter).
 Open:
-1. **the multi-bus tool**: sequence network of an arbitrary grid, Minkowski aggregation of the source
-   sets, the separation problem for the fault cases at one relay. First target: the small grid of
-   step 2, so design and simulation describe the same circuit; then the IEEE 14-bus example of the
-   Geometry paper (needs the Baeckeland line data);
+1. the IEEE 14-bus example of the Geometry paper (needs the Baeckeland line data); several injecting
+   inverters (vector δ); meshed networks in PSCAD;
 2. the **current-limiter type** as a dimension of the uncertainty set (measured negative-sequence
    virtual-impedance angles −0.5°, +36.2°, −51.6° for circular, priority-based and instantaneous
    limiters).
