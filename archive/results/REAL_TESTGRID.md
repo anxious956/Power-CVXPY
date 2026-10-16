@@ -1,9 +1,9 @@
 # Real EMT data with inverters: EvEMTBench `benchmark-TestGrid110kV`
 
-> **Review correction (see [REVIEW.md](../REVIEW.md), findings N2 and N7).** The zone-1 setting numbers below
+> **Review correction (see [REVIEW.md](../../REVIEW.md), findings N2 and N7).** The zone-1 setting numbers below
 > come from `zone_model.phase_selected_reactance`, which discards every released loop with negative reactance
 > (`zone_model.py:206`) and has no directional element. Re-run with the same 20-40 ms phasor window on the same
-> noise-free records (`src/review/real_zone_rerun.py`, [review/real_zone_rerun.json](review/real_zone_rerun.json)):
+> noise-free records (`src/review/real_zone_rerun.py`, [review/real_zone_rerun.json](../../results/review/real_zone_rerun.json)):
 > the table reproduces exactly, but two statements do not hold as written.
 > - "Misses every 40 ohm fault on its line" is **partly the element flaw and partly infeed physics**. At relay B
 >   100 % of in-zone 40 ohm faults read negative reactance on the faulted loop (about R 80 ohm, X -16 ohm), which
@@ -20,7 +20,7 @@
 > quadrilateral set from rules (rung R2), relay B: dependability 55.0 %, out-of-zone trips 0 % (was 4.4 %,
 > 13.3 % at 10 ohm), own line 99 % 0 % (was 6.7 %), relay-bus reverse 0/45 (was 17/45), switching 0/50 (was 1/50).
 > The learned-detector numbers below are superseded by [REAL_ML.md](REAL_ML.md) and, definitively, by the
-> grouped re-runs in [review/TABLES.md](review/TABLES.md). The review is merged into `main`: every script and
+> grouped re-runs in [review/TABLES.md](../../results/review/TABLES.md). The review is merged into `main`: every script and
 > JSON named here is in this repository, not on a branch.
 
 > **Correction, 17 Sep 2026.** The learned-detector numbers below (engineered model, CNN) were obtained on noise-free records with 80 ms windows and in-sample thresholds. The noise-free records let models read the label from pre-fault samples, so the in-distribution 1.000 scores are not valid. The zone-1 setting results are unaffected. See [REAL_ML.md](REAL_ML.md).
