@@ -38,51 +38,51 @@
    "ag_loop_pct": 72.07,
    "ag_loop_r_ohm": 16.64,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 197.19,
+   "element_pct": 72.07,
    "direction": "forward",
-   "zone1_trip": false,
+   "zone1_trip": true,
    "ag_loop_alone_trip": true,
    "should_trip": true,
-   "correct": false
+   "correct": true
   },
   {
    "fault_pct": 70.0,
    "ag_loop_pct": 77.57,
    "ag_loop_r_ohm": 17.62,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 203.02,
+   "element_pct": 77.57,
    "direction": "forward",
-   "zone1_trip": false,
+   "zone1_trip": true,
    "ag_loop_alone_trip": true,
    "should_trip": true,
-   "correct": false
+   "correct": true
   },
   {
    "fault_pct": 75.0,
    "ag_loop_pct": 83.14,
    "ag_loop_r_ohm": 18.73,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 208.43,
+   "element_pct": 83.14,
    "direction": "forward",
-   "zone1_trip": false,
+   "zone1_trip": true,
    "ag_loop_alone_trip": true,
    "should_trip": true,
-   "correct": false
+   "correct": true
   },
   {
    "fault_pct": 78.0,
    "ag_loop_pct": 86.53,
    "ag_loop_r_ohm": 19.45,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 211.48,
+   "element_pct": 86.53,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -94,9 +94,9 @@
    "ag_loop_pct": 88.79,
    "ag_loop_r_ohm": 19.95,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 213.38,
+   "element_pct": 88.79,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -108,9 +108,9 @@
    "ag_loop_pct": 91.11,
    "ag_loop_r_ohm": 20.49,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 215.32,
+   "element_pct": 91.11,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -122,9 +122,9 @@
    "ag_loop_pct": 93.39,
    "ag_loop_r_ohm": 21.04,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 217.04,
+   "element_pct": 93.39,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -136,9 +136,9 @@
    "ag_loop_pct": 94.56,
    "ag_loop_r_ohm": 21.32,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 217.93,
+   "element_pct": 94.56,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -150,9 +150,9 @@
    "ag_loop_pct": 95.71,
    "ag_loop_r_ohm": 21.62,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 218.77,
+   "element_pct": 95.71,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -164,9 +164,9 @@
    "ag_loop_pct": 98.07,
    "ag_loop_r_ohm": 22.23,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 220.41,
+   "element_pct": 98.07,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -178,9 +178,9 @@
    "ag_loop_pct": 100.44,
    "ag_loop_r_ohm": 22.88,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 221.94,
+   "element_pct": 100.44,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -192,9 +192,9 @@
    "ag_loop_pct": 102.83,
    "ag_loop_r_ohm": 23.57,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 223.35,
+   "element_pct": 102.83,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -206,9 +206,9 @@
    "ag_loop_pct": 106.46,
    "ag_loop_r_ohm": 24.69,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 225.37,
+   "element_pct": 106.46,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,
@@ -220,9 +220,9 @@
    "ag_loop_pct": 110.25,
    "ag_loop_r_ohm": 25.86,
    "released": [
-    "ab"
+    "ag"
    ],
-   "element_pct": 227.09,
+   "element_pct": 110.25,
    "direction": "forward",
    "zone1_trip": false,
    "ag_loop_alone_trip": false,

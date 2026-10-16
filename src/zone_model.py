@@ -163,56 +163,50 @@ def loop_impedances(y, z1, z0, with_current=False):
     return out
 
 
-def phase_selected_reactance(vpost, ipre, ipost, z1, z0, ground_ratio=0.2, frac=0.5, pair_frac=0.8, default=10.0):
-    """Distance estimate with faulted-phase selection, the way a numerical relay releases loops.
-
-    Inputs are sequence phasors in the order returned by waveforms.sequence_phasors,
-    [s0, s+, s-]. Selection uses incremental currents (post minus pre), which strip out load.
-
-      ground fault if |dI0| > ground_ratio * |dI1|
-        phases whose incremental current is at least `frac` of the largest are selected;
-        one phase (LG): release that ground loop;
-        two phases (LLG): release only their phase-to-phase loop
-      otherwise
-        release the phase-to-phase loops whose incremental loop current is at least
-        `pair_frac` of the largest (one loop for LL, all three for a symmetrical fault).
-        pair_frac must exceed 0.5: in an LL fault the two healthy pair currents are exactly
-        half the faulted one and would otherwise be released too.
-
-    Then the smallest forward reactance among released loops. Without selection a healthy
-    loop that happens to carry current can read a small reactance and win: on EvEMTBench
-    DoubleLine that produced 40 % zone-1 trips for faults at 99 % of the line.
-    """
-    a = np.exp(2j * np.pi / 3)
-    di0, di1, di2 = ipost - ipre
-    dia, dib, dic = di0 + di1 + di2, di0 + a**2 * di1 + a * di2, di0 + a * di1 + a**2 * di2
-    y = np.array([vpost[1], vpost[2], vpost[0], ipost[1], ipost[2], ipost[0]])
-    L = loop_impedances(y, z1, z0)
-    if abs(di0) > ground_ratio * max(abs(di1), 1e-12):
-        mags = {"a": abs(dia), "b": abs(dib), "c": abs(dic)}
-        top = max(mags.values())
-        sel = [p for p, m in mags.items() if m >= frac * top]
-        loops = [p + "g" for p in sel]
-        if len(sel) == 2:
-            # Double line-to-ground: one of the two ground loops sees the other phase's fault
-            # current through the shared ground path and overreaches (on EvEMTBench a bolted
-            # fault at 50 % read 39 % on the ground loop, 51 % on the phase loop). Release only
-            # the phase-to-phase loop, as relay phase selectors do.
-            loops = [{"ab": "ab", "bc": "bc", "ac": "ca"}["".join(sorted(sel))]]
-    else:
-        pair = {"ab": abs(dia - dib), "bc": abs(dib - dic), "ca": abs(dic - dia)}
-        top = max(pair.values())
-        loops = [k for k, m in pair.items() if m >= pair_frac * top]
-    fwd = [L[k].imag for k in loops if L[k].imag > 0]
-    return min(fwd) if fwd else default
+SELECTOR = "angle"          # "magnitude" reproduces every result made before 16 Oct 2026
 
 
-def released_loops(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8):
-    """The loop names phase_selected_reactance releases (same rules, factored out for review N2)."""
+def released_loops(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8, selector=None):
+    """Faulted-phase selection: which of the six loops a numerical relay releases. Inputs are
+    sequence phasors [s0, s+, s-]; selection uses incremental currents (post minus pre).
+
+    Ground fault when |dI0| > ground_ratio * |dI1|. Then, selector="angle" (the default since
+    16 Oct 2026, the sequence-angle method of relay phase selectors):
+        the angle of dI2 / dI0 picks the sector, 0 deg for A, -120 for B, +120 for C (+-60);
+        the angle of dI2 / dI1, rotated into that sector, separates the two faults the sector
+        holds: near 0 deg a single line-to-ground fault (release that ground loop), near 180 deg
+        a double line-to-ground fault on the other two phases (release their phase-phase loop).
+    selector="magnitude" is the rule used before: phases whose incremental current is at least
+    `frac` of the largest are selected. It fails under remote infeed, where the healthy phases'
+    incremental currents rise past `frac`: on a 230 kV, 100 km line in PSCAD it released the
+    phase-phase loop for A-to-ground faults from 65-75 % of the line on, missing in-zone faults
+    (REVIEW.md register row 48). On labelled EvEMTBench own-line faults at six relays the angle
+    rule is never worse and is right more often (single line-to-ground 363 vs 340 of 540, double
+    line-to-ground 213 vs 192 of 270); on the PSCAD sweep 32 of 32 against 6.
+
+    Double line-to-ground releases only the phase-phase loop: one of the two ground loops sees the
+    other phase's fault current through the shared ground path and overreaches (on EvEMTBench a
+    bolted fault at 50 % read 39 % on the ground loop, 51 % on the phase loop).
+
+    No ground fault: the phase-to-phase loops whose incremental loop current is at least
+    `pair_frac` of the largest (one loop for LL, all three for a symmetrical fault). pair_frac must
+    exceed 0.5: in an LL fault the two healthy pair currents are exactly half the faulted one."""
+    selector = selector or SELECTOR
     a = np.exp(2j * np.pi / 3)
     di0, di1, di2 = ipost - ipre
     dia, dib, dic = di0 + di1 + di2, di0 + a**2 * di1 + a * di2, di0 + a * di1 + a**2 * di2
     if abs(di0) > ground_ratio * max(abs(di1), 1e-12):
+        if selector == "angle":
+            t20 = np.degrees(np.angle(di2 / di0))
+            sector = min((("a", 0.0), ("b", -120.0), ("c", 120.0)),
+                         key=lambda q: abs((t20 - q[1] + 180) % 360 - 180))[0]
+            t21 = np.degrees(np.angle(di2 / (di1 if abs(di1) > 1e-12 else 1e-12)))
+            t21 = (t21 - {"a": 0.0, "b": 120.0, "c": -120.0}[sector] + 180) % 360 - 180
+            if abs(t21) <= 90:
+                return [sector + "g"]
+            return [{"a": "bc", "b": "ca", "c": "ab"}[sector]]
+        if selector != "magnitude":
+            raise ValueError(selector)
         mags = {"a": abs(dia), "b": abs(dib), "c": abs(dic)}
         top = max(mags.values())
         sel = [p for p, m in mags.items() if m >= frac * top]
@@ -223,6 +217,23 @@ def released_loops(ipre, ipost, ground_ratio=0.2, frac=0.5, pair_frac=0.8):
     pair = {"ab": abs(dia - dib), "bc": abs(dib - dic), "ca": abs(dic - dia)}
     top = max(pair.values())
     return [k for k, m in pair.items() if m >= pair_frac * top]
+
+
+def phase_selected_reactance(vpost, ipre, ipost, z1, z0, ground_ratio=0.2, frac=0.5, pair_frac=0.8, default=10.0,
+                             selector=None):
+    """Distance estimate with faulted-phase selection, the way a numerical relay releases loops:
+    the smallest forward reactance among the loops released_loops releases (see there for the
+    selection rules). Inputs are sequence phasors in the order returned by
+    waveforms.sequence_phasors, [s0, s+, s-].
+
+    Without selection a healthy loop that happens to carry current can read a small reactance and
+    win: on EvEMTBench DoubleLine that produced 40 % zone-1 trips for faults at 99 % of the line.
+    """
+    y = np.array([vpost[1], vpost[2], vpost[0], ipost[1], ipost[2], ipost[0]])
+    L = loop_impedances(y, z1, z0)
+    loops = released_loops(ipre, ipost, ground_ratio, frac, pair_frac, selector)
+    fwd = [L[k].imag for k in loops if L[k].imag > 0]
+    return min(fwd) if fwd else default
 
 
 def directional_forward(vpre, vpost, ipre, ipost, z1, i2_ratio=0.1):
