@@ -133,7 +133,7 @@ def check_line_model(spec):
     return loops
 
 
-BUILD_VERSION = 1          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
+BUILD_VERSION = 3          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
                            # changes what a run produces; the fingerprint cannot see code changes itself
 BUILD_ARGS = dict(t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0)
 
@@ -162,6 +162,12 @@ def stamp(spec):
 
 def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_end=BUILD_ARGS["t_end"],
           dt_us=BUILD_ARGS["dt_us"]):
+    """spec["t_fault"] (optional) overrides t_fault per run, for a random inception angle; spec["confuser"]
+    (optional) adds a switched element that is not a fault: {"kind": "load_step", "bus", "y1": [re, im],
+    "t"} (a balanced wye load, ungrounded, switched in at t) or {"kind": "single_phase", "bus", "phase",
+    "z": [re, im], "t"} (one phase to the bus's return node through z, switched in at t)."""
+    t_fault = spec.get("t_fault", t_fault)
+    dur, t_end = spec.get("dur", dur), spec.get("t_end", t_end)
     from pscad_inverter import INPUTS, OUTPUTS, port_xy, definition_xml, Builder
     name, fault, lim = spec["name"], spec["fault"], spec["lim"]
     for g in spec["ibrs"].values():
@@ -245,6 +251,34 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
     b.comp("master:voltmetergnd", 4, y, Name="VLG")
     b.node("G_" + here, 4, y)
 
+    conf = spec.get("confuser")
+    if conf is not None:
+        b.comp("master:tbreakn", 70, 20, Name="CNFT", NUMS="1", INIT="1", TO1=f"{conf['t']} [s]", TO2="1.0 [s]")
+        b.sig("CNF", 68, 20)
+        bus = conf["bus"]
+        if conf["kind"] == "load_step":
+            zl = 1.0 / _z(conf["y1"])
+            assert zl.imag > 0, "capacitive confuser not built"
+            for ph in "ABC":
+                y = next_row(4)
+                b.comp("master:breaker1", 30, y, NAME="CNF", RON="1.0e-3 [ohm]", ROFF="1.0e8 [ohm]", BOpen="2")
+                b.node(bus + ph, 32, y)
+                b.node(f"CNF{ph}", 28, y)
+                _rl(b, f"CNF{ph}", "NCNF", zl, 34, y, "cnf", f"CNFL{ph}")
+            yy = next_row(4)
+            b.series("master:resistor", "NCNF", "GNCNF", 34, yy, R="1.0e6 [ohm]")
+            b.ground(36, yy)
+        elif conf["kind"] == "single_phase":
+            z = _z(conf["z"])
+            assert z.imag > 0, "capacitive confuser not built"
+            y = next_row(4)
+            b.comp("master:breaker1", 30, y, NAME="CNF", RON="1.0e-3 [ohm]", ROFF="1.0e8 [ohm]", BOpen="2")
+            b.node(bus + conf["phase"], 32, y)
+            b.node("CNF1", 28, y)
+            _rl(b, "CNF1", "G_" + bus, z, 34, next_row(4), "cnf1", "CNF1L")
+        else:
+            raise ValueError(conf["kind"])
+
     if fault is not None:
         b.comp("master:tbreakn", 70, 10, Name="FLTT", NUMS="2", INIT="1", TO1=f"{t_fault} [s]", TO2=f"{t_fault + dur} [s]")
         b.sig("FLT", 68, 10)
@@ -277,7 +311,8 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
             b.sig(f"IREF{iname}{ph}", 52, y + 2)
         cy = next_row(24) + 10
         c.create_component(defn, cx, cy)
-        vals = dict(F0=F0, K2=2.0, IBASE=IBASE_PK, VBASE=VBASE_PK, IMAX=g["i_max"], LIM=float(lim), **spec["settings"][iname])
+        vals = dict(F0=F0, K2=2.0, IBASE=IBASE_PK, VBASE=VBASE_PK, IMAX=g["i_max"], LIM=float(lim), TANG=0.0)
+        vals.update(spec["settings"][iname])
         for p in INPUTS:
             px, py = port_xy(p)
             gx, gy = cx + px // 18, cy + py // 18
@@ -293,6 +328,7 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
     chans = [("VL" + p, "kV") for p in "ABC"] + [("VLG", "kV")] + [("IL" + p, "kA") for p in "ABC"]
     for iname in spec["ibrs"]:
         chans += [(f"Iinv{iname}{p}", "kA") for p in "ABC"]
+        chans += [(f"{p}_{iname}", "pu") for p in ("V1M", "V2M", "I1M", "I2M")] + [(f"ANG_{iname}", "deg")]
     r0 = max(row[0] + 10, 200)
     for k, (nm, u) in enumerate(chans):
         b.channel(nm, 120, r0 + 3 * k, u, -50, 50)
@@ -319,10 +355,26 @@ def update(prj, spec):
         r = max(rf * ZBASE, 1e-3)
         for br in c.find_all("master:breaker1", "FLT"):
             br.parameters(RON=f"{(r if scen == 'ag' else r / 2):.6g} [ohm]")
+        tf = spec.get("t_fault", BUILD_ARGS["t_fault"])
+        c.find_first("master:tbreakn", "FLTT").parameters(TO1=f"{tf} [s]", TO2=f"{tf + spec.get('dur', BUILD_ARGS['dur'])} [s]")
+    conf = spec.get("confuser")
+    if conf is not None:
+        c.find_first("master:tbreakn", "CNFT").parameters(TO1=f"{conf['t']} [s]")
+        if conf["kind"] == "load_step":
+            zl = 1.0 / _z(conf["y1"]) * ZBASE
+            for ph in "ABC":
+                c.find_first("master:resistor", f"CNFL{ph}R").parameters(R=f"{max(zl.real, 1e-6):.6g} [ohm]")
+                c.find_first("master:inductor", f"CNFL{ph}L").parameters(L=f"{max(zl.imag, 1e-6) / W:.6g} [H]")
+        else:
+            z = _z(conf["z"]) * ZBASE
+            c.find_first("master:resistor", "CNF1LR").parameters(R=f"{max(z.real, 1e-6):.6g} [ohm]")
+            c.find_first("master:inductor", "CNF1LL").parameters(L=f"{max(z.imag, 1e-6) / W:.6g} [H]")
     for sname, g in spec["sgs"].items():
         e = _z(g["e"])
         c.find_first("master:source3", sname).parameters(Es=f"{VLL * abs(e):.6g} [kV]", Ph=f"{math.degrees(cmath.phase(e)):.6g} [deg]")
+    prj.parameters(time_duration=str(spec.get("t_end", BUILD_ARGS["t_end"])))
     for iname, st in spec["settings"].items():
+        st = dict(st, TANG=st.get("TANG", 0.0))
         for k, v in list(st.items()) + [("LIM", float(spec["lim"])), ("IMAX", spec["ibrs"][iname]["i_max"])]:
             c.find_first("master:const", f"K{iname}{k}").parameters(Value=str(v))
 
@@ -341,6 +393,8 @@ def run_fast(path):
         if reusable(sp):
             continue
         key = "N" if sp["fault"] is None else f"{sp['fault'][0]}_{sp['fault'][2]}"
+        if sp.get("confuser"):
+            key += f"_{sp['confuser']['kind']}_{sp['confuser']['bus']}{sp['confuser'].get('phase', '')}"
         if key not in projects:
             pname = "fastnet_" + key
             projects[key] = (pname, build(pscad, dict(sp, name=pname)))

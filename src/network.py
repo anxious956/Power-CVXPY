@@ -381,3 +381,39 @@ def limiter(i1, d, i_max, lim=1):
     peak = max(abs(i1 * A3 ** (-k) + d * A3 ** k) for k in range(3))
     sc = min(1.0, i_max / peak)
     return sc * i1, sc * d
+
+
+def solve_v1ref(net: Network, sg_values, settings, fault=None, lim=1, tol=1e-12, max_iter=200, relax=1.0):
+    """Like solve(), but with the inverters as the EMT controller actually runs them (src/pscad_inverter.py):
+    each inverter injects I1 = (ID - j IQ) u and delta = D2MAG e^{j D2ANG} u, with u = V1/|V1| at its own bus,
+    then its limiter (LIM 0 or 1); V1 depends on the injections, so this is a fixed point, found by iteration.
+    settings: {inverter: dict(ID=, IQ=, D2MAG=, D2ANG= deg)} in pu of the inverter base, as in the PSCAD spec.
+    Returns (relay measurement, {inverter: (I1, delta) delivered}, iterations). This is the realistic,
+    V1-referenced inverter of the step-3 plan (docs/STEP3.md; review/STEP3_PLAN_REVIEW.md 3.2, 3.3).
+    relax < 1 under-relaxes the frame update (the EMT controller updates it once per cycle)."""
+    u = {k: 1.0 + 0j for k in settings}
+    _, V = solve(net, sg_values, {}, None, full=True)
+    for k in settings:
+        v1 = V[net.ibrs[k].bus][0]
+        u[k] = v1 / abs(v1)
+    inj = {}
+    for it in range(1, max_iter + 1):
+        vals, dels = dict(sg_values), {}
+        for k, st in settings.items():
+            i_req = complex(st["ID"], -st["IQ"]) * u[k]
+            d_req = st["D2MAG"] * np.exp(1j * np.radians(st["D2ANG"])) * u[k] if st.get("D2MAG", 0) else 0j
+            i1, d = limiter(i_req, d_req, net.ibrs[k].i_max or 1.2, lim)
+            vals[k], dels[k] = i1, d
+            inj[k] = (i1, d)
+        y, V = solve(net, vals, dels, fault, full=True)
+        step = 0.0
+        for k in settings:
+            v1 = V[net.ibrs[k].bus][0]
+            new = v1 / abs(v1)
+            new = (1 - relax) * u[k] + relax * new
+            new /= abs(new)
+            step = max(step, abs(new - u[k]))
+            u[k] = new
+        if step < tol:
+            return y, inj, it
+    raise RuntimeError(f"solve_v1ref: no fixed point within {max_iter} iterations (last step {step:.2e})")

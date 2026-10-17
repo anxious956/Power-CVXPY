@@ -1,0 +1,1812 @@
+{
+ "bounds": {
+  "r_I": 0.1,
+  "r_V": 0.06,
+  "theta": 0.06981317007977318
+ },
+ "n_params": 577,
+ "summary": {
+  "hard|0.0": [
+   0.125,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|0.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "rows": [
+  {
+   "name": "s3p_000_l000",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.3556112288625943,
+   "d1_clean_eps": 1.9723817054339798,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5713483094291236,
+   "d2_min": 129.99767580556312,
+   "d3_min": 11.939066886901855,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_001_l000",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 2.0030661321954177,
+   "d1_clean_eps": 2.555682674701768,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7910932921271885,
+   "d2_min": 301.67676904523114,
+   "d3_min": 20.941802978515625,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_002_l000",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 0.9128480906215468,
+   "d1_clean_eps": 1.3020087231073898,
+   "d1_miss": true,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.42395342666010893,
+   "d2_min": 46.0562356484047,
+   "d3_min": 8.548717498779297,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_003_l000",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.2373525480055512,
+   "d1_clean_eps": 1.729125937413604,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5247817766957582,
+   "d2_min": 105.60266165234253,
+   "d3_min": 12.317066192626953,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_004_l000",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.2398879936937435,
+   "d1_clean_eps": 1.6925415036112137,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5298519251342617,
+   "d2_min": 107.4907283247405,
+   "d3_min": 12.040205001831055,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_005_l000",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.1039839144995796,
+   "d1_clean_eps": 1.6606226020407997,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.4924084000792574,
+   "d2_min": 85.8698894000621,
+   "d3_min": 10.876859664916992,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_006_l000",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.936379756673439,
+   "d1_clean_eps": 2.454553673090836,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7367104280743874,
+   "d2_min": 254.98740172470164,
+   "d3_min": 18.588064193725586,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_007_l000",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.3219837745555247,
+   "d1_clean_eps": 1.746281194199685,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5620790816632804,
+   "d2_min": 126.88337035285528,
+   "d3_min": 12.54840087890625,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_008_l000",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 4.804281446680705,
+   "d1_clean_eps": 5.682558316104502,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5529933572789758,
+   "d2_min": 783.1081109178424,
+   "d3_min": 16.483680725097656,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_009_l000",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 4.085168547512816,
+   "d1_clean_eps": 4.705201146568949,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.3604844052705197,
+   "d2_min": 308.0239537345093,
+   "d3_min": 4.7784833908081055,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_010_l000",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 4.242767397849596,
+   "d1_clean_eps": 5.032392420373508,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 1.1246042675324321,
+   "d2_min": 734.7673967410083,
+   "d3_min": 17.014989852905273,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_011_l000",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 9.769650828933528,
+   "d1_clean_eps": 11.345661715120697,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8366014672231145,
+   "d2_min": 1789.2243738406212,
+   "d3_min": 19.652080535888672,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_012_l000",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.360917532719218,
+   "d1_clean_eps": 1.6187211243633999,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5201626367401055,
+   "d2_min": 104.01290958362962,
+   "d3_min": 7.66679048538208,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_013_l000",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 5.0972159325691235,
+   "d1_clean_eps": 6.069196736029939,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.4517965914607078,
+   "d2_min": 481.24204181288394,
+   "d3_min": 6.232786178588867,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_014_l000",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.0,
+   "in_range": false,
+   "d1_min_eps": 10.778617817899631,
+   "d1_clean_eps": 12.46487020167805,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.9398031435491385,
+   "d2_min": 2251.637000227982,
+   "d3_min": 19.39171600341797,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_015_l000",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.0,
+   "in_range": false,
+   "d1_min_eps": 1.0968230734031648,
+   "d1_clean_eps": 1.5066216360716127,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.46015872021834087,
+   "d2_min": 50.607117977198726,
+   "d3_min": 7.599770545959473,
+   "thresholds": {
+    "d0": 0.0003512238795598127,
+    "d2": -45.91294647324161,
+    "d3": -1.8522517681121826
+   }
+  },
+  {
+   "name": "s3p_000_l025",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.803733576719329,
+   "d1_clean_eps": 2.3959089111718472,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6151010575759487,
+   "d2_min": 151.4902888077632,
+   "d3_min": 10.905885696411133,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_001_l025",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 2.2615202115621917,
+   "d1_clean_eps": 2.996744758061366,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8274576170971106,
+   "d2_min": 319.9838882761964,
+   "d3_min": 20.322765350341797,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_002_l025",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.117929908772241,
+   "d1_clean_eps": 1.6384008871638507,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.4570298199854104,
+   "d2_min": 57.72328724100474,
+   "d3_min": 7.994431972503662,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_003_l025",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.5689640011428851,
+   "d1_clean_eps": 2.1245918812179214,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5643319398244959,
+   "d2_min": 123.15922674315325,
+   "d3_min": 11.657785415649414,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_004_l025",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.5238302040502096,
+   "d1_clean_eps": 2.102129478103228,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5696928038732717,
+   "d2_min": 125.66374622111151,
+   "d3_min": 11.480396270751953,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_005_l025",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.4840608021911013,
+   "d1_clean_eps": 2.034040370029108,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5310512848164815,
+   "d2_min": 101.61348452902264,
+   "d3_min": 10.145936965942383,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_006_l025",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.872404350492703,
+   "d1_clean_eps": 2.579569495786813,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7691594753823059,
+   "d2_min": 268.1875072445273,
+   "d3_min": 18.115079879760742,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_007_l025",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.5572273827855765,
+   "d1_clean_eps": 2.1587986576017726,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6007273460377202,
+   "d2_min": 144.96069019592932,
+   "d3_min": 11.869865417480469,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_008_l025",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 4.194598847956914,
+   "d1_clean_eps": 5.247859572022159,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5111973518450924,
+   "d2_min": 766.3041124300473,
+   "d3_min": 16.592601776123047,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_009_l025",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 3.149546689465732,
+   "d1_clean_eps": 3.7681510035949946,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.3250746645743629,
+   "d2_min": 245.75555244018884,
+   "d3_min": 5.307650566101074,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_010_l025",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 4.814693170969201,
+   "d1_clean_eps": 5.409043835755829,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 1.1917863486139142,
+   "d2_min": 834.9266708279981,
+   "d3_min": 14.536369323730469,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_011_l025",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 8.73012769285822,
+   "d1_clean_eps": 10.192160752023552,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7969369961806393,
+   "d2_min": 1614.1852773897826,
+   "d3_min": 21.510282516479492,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_012_l025",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.5332649987928726,
+   "d1_clean_eps": 1.9437276415186755,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.551214904607964,
+   "d2_min": 114.33698216340485,
+   "d3_min": 7.182690143585205,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_013_l025",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 4.124907477286742,
+   "d1_clean_eps": 5.049868276952457,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.4140930275840216,
+   "d2_min": 393.0508693549043,
+   "d3_min": 8.039976119995117,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_014_l025",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.25,
+   "in_range": false,
+   "d1_min_eps": 9.676716392017443,
+   "d1_clean_eps": 11.203233569451315,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8965412215207219,
+   "d2_min": 2107.9613328502587,
+   "d3_min": 20.73367691040039,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_015_l025",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.25,
+   "in_range": false,
+   "d1_min_eps": 1.3411160763878778,
+   "d1_clean_eps": 1.7954265557443752,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.4892036747547085,
+   "d2_min": 59.331295673293575,
+   "d3_min": 6.870015621185303,
+   "thresholds": {
+    "d0": 0.0003548129428003618,
+    "d2": -53.02272246964683,
+    "d3": -0.24172794818878174
+   }
+  },
+  {
+   "name": "s3p_000_l050",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.3034446277262264,
+   "d1_clean_eps": 2.8307830585897125,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6773673504797882,
+   "d2_min": 187.5871579219326,
+   "d3_min": 9.956512451171875,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_001_l050",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.7594430324378925,
+   "d1_clean_eps": 3.4452612855371525,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.880095588632342,
+   "d2_min": 349.8634697834971,
+   "d3_min": 19.792644500732422,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_002_l050",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.5201409914219182,
+   "d1_clean_eps": 1.979487788888273,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5029495220952033,
+   "d2_min": 75.81769717278254,
+   "d3_min": 7.474617004394531,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_003_l050",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.034822367564068,
+   "d1_clean_eps": 2.528179707849151,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6200378292598572,
+   "d2_min": 151.17510297116914,
+   "d3_min": 10.950746536254883,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_004_l050",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.9997241177751652,
+   "d1_clean_eps": 2.5197013317024957,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6263002429080655,
+   "d2_min": 154.5180838621921,
+   "d3_min": 10.88653564453125,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_005_l050",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.9309345928366584,
+   "d1_clean_eps": 2.41521170803905,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5850804737911395,
+   "d2_min": 127.36556298069516,
+   "d3_min": 9.367524147033691,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_006_l050",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.3407433398191757,
+   "d1_clean_eps": 3.004780991695614,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8161337198973166,
+   "d2_min": 289.5548565210888,
+   "d3_min": 17.668853759765625,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_007_l050",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.0368872633131785,
+   "d1_clean_eps": 2.5850341921481244,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.655916437069307,
+   "d2_min": 173.72241301579362,
+   "d3_min": 11.230982780456543,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_008_l050",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 4.513112338245871,
+   "d1_clean_eps": 5.521061651072023,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.4798174407059884,
+   "d2_min": 726.796804897205,
+   "d3_min": 16.662841796875,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_009_l050",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.198780491371822,
+   "d1_clean_eps": 2.925159512337145,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.2954251271627611,
+   "d2_min": 196.62110606468866,
+   "d3_min": 5.733033180236816,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_010_l050",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 5.196428501006709,
+   "d1_clean_eps": 5.817814177953188,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 1.2792233000416875,
+   "d2_min": 944.2261535473673,
+   "d3_min": 12.063545227050781,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_011_l050",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 7.762597801653731,
+   "d1_clean_eps": 9.264905030426945,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7544282923192367,
+   "d2_min": 1384.5597344569326,
+   "d3_min": 23.497217178344727,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_012_l050",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.7642228240543358,
+   "d1_clean_eps": 2.273080707161968,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5927777054542371,
+   "d2_min": 121.3739370401066,
+   "d3_min": 6.628569602966309,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_013_l050",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 3.238973034420988,
+   "d1_clean_eps": 4.080658382087593,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.37557699954293616,
+   "d2_min": 317.7430644138054,
+   "d3_min": 9.864893913269043,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_014_l050",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.5,
+   "in_range": false,
+   "d1_min_eps": 8.570220709000143,
+   "d1_clean_eps": 9.963041240776116,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8571121205365309,
+   "d2_min": 1824.4756705057277,
+   "d3_min": 22.10491943359375,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_015_l050",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.5,
+   "in_range": false,
+   "d1_min_eps": 1.6612403396995645,
+   "d1_clean_eps": 2.088083308999486,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5277211743574344,
+   "d2_min": 68.85544049899622,
+   "d3_min": 6.200880527496338,
+   "thresholds": {
+    "d0": 0.0005535417414577895,
+    "d2": -66.89098920965543,
+    "d3": 1.4293123483657837
+   }
+  },
+  {
+   "name": "s3p_000_l075",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.6765703521101987,
+   "d1_clean_eps": 3.2768155104549024,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7536292019241541,
+   "d2_min": 233.92885956597127,
+   "d3_min": 9.022428512573242,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_001_l075",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 3.1428180518981996,
+   "d1_clean_eps": 3.901919996292294,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.9451638538936045,
+   "d2_min": 389.68223092196206,
+   "d3_min": 19.367294311523438,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_002_l075",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 1.802556602762527,
+   "d1_clean_eps": 2.3252921572040894,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.558643313179606,
+   "d2_min": 99.4088699951632,
+   "d3_min": 6.848268508911133,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_003_l075",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.3585827695417096,
+   "d1_clean_eps": 2.939624640281865,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6881354788134167,
+   "d2_min": 186.19152874621574,
+   "d3_min": 10.278575897216797,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_004_l075",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.349899616649074,
+   "d1_clean_eps": 2.9448364956924586,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.695551841686981,
+   "d2_min": 191.48449527106334,
+   "d3_min": 10.291664123535156,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_005_l075",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.245316393947438,
+   "d1_clean_eps": 2.804314833632395,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6509533509306992,
+   "d2_min": 161.14690879035493,
+   "d3_min": 8.629424095153809,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_006_l075",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.701973053641668,
+   "d1_clean_eps": 3.4349322871706605,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8743383431138523,
+   "d2_min": 318.25506920293435,
+   "d3_min": 17.216245651245117,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_007_l075",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.398575769182849,
+   "d1_clean_eps": 3.01809662110807,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7238182543151309,
+   "d2_min": 210.68314597930234,
+   "d3_min": 10.681047439575195,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_008_l075",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 4.522653548467418,
+   "d1_clean_eps": 5.601439829391162,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.4385402853411679,
+   "d2_min": 633.9253743713515,
+   "d3_min": 16.819107055664062,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_009_l075",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.315352253434522,
+   "d1_clean_eps": 2.9147499237183245,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.2779815315407466,
+   "d2_min": 199.32300431948008,
+   "d3_min": 6.157687187194824,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_010_l075",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 5.457247556968988,
+   "d1_clean_eps": 6.210238041910104,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 1.3725243643964347,
+   "d2_min": 1075.158592685038,
+   "d3_min": 9.367860794067383,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_011_l075",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 6.921043638847836,
+   "d1_clean_eps": 8.765860648115885,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7166100876058408,
+   "d2_min": 1208.5356271469218,
+   "d3_min": 25.608051300048828,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_012_l075",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.082995322730072,
+   "d1_clean_eps": 2.615512569010998,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6344898252451661,
+   "d2_min": 133.35444590317812,
+   "d3_min": 6.071263313293457,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_013_l075",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.8072555380122965,
+   "d1_clean_eps": 3.3683874106509326,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.3480807074408083,
+   "d2_min": 302.3348676509176,
+   "d3_min": 11.794795989990234,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_014_l075",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.75,
+   "in_range": false,
+   "d1_min_eps": 7.448827747280935,
+   "d1_clean_eps": 8.783121026944304,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8159726949881528,
+   "d2_min": 1600.1689023784322,
+   "d3_min": 24.016345977783203,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_015_l075",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.75,
+   "in_range": false,
+   "d1_min_eps": 1.8523966428116552,
+   "d1_clean_eps": 2.386196935250896,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.5738169211276172,
+   "d2_min": 80.56013629365555,
+   "d3_min": 5.471047401428223,
+   "thresholds": {
+    "d0": 0.00037333381478005955,
+    "d2": -74.8524530295626,
+    "d3": 0.40709254145622253
+   }
+  },
+  {
+   "name": "s3p_000_l100",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 3.172797806390336,
+   "d1_clean_eps": 3.855329062050903,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8650590612186784,
+   "d2_min": 361.3642926984925,
+   "d3_min": 8.533552169799805,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_001_l100",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 3.6428713111660853,
+   "d1_clean_eps": 4.451001992944897,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 1.0376253520393808,
+   "d2_min": 536.5439457786358,
+   "d3_min": 19.388187408447266,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_002_l100",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.1725387016096724,
+   "d1_clean_eps": 2.7654944445800376,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.63942017461646,
+   "d2_min": 160.32891367011626,
+   "d3_min": 6.483149528503418,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_003_l100",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.8006231848203282,
+   "d1_clean_eps": 3.4528371936750153,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.783203567775546,
+   "d2_min": 274.50557763851157,
+   "d3_min": 9.912944793701172,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_004_l100",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.831939540274753,
+   "d1_clean_eps": 3.4855744340853763,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7956136262987854,
+   "d2_min": 288.85480291708507,
+   "d3_min": 9.717630386352539,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_005_l100",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.670026588084261,
+   "d1_clean_eps": 3.308475434771854,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7472282104474857,
+   "d2_min": 246.6177818235354,
+   "d3_min": 8.130483627319336,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_006_l100",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 3.147297408063407,
+   "d1_clean_eps": 3.937169320710981,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.9550215908863919,
+   "d2_min": 435.9432661217936,
+   "d3_min": 17.16897964477539,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_007_l100",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.894236468921614,
+   "d1_clean_eps": 3.560415692170086,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.8215166324726066,
+   "d2_min": 312.3261071673377,
+   "d3_min": 10.460369110107422,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_008_l100",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 4.894935070439221,
+   "d1_clean_eps": 5.818989248411721,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.43333826852334295,
+   "d2_min": 837.5723632382746,
+   "d3_min": 17.09063148498535,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_009_l100",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.6913363035133653,
+   "d1_clean_eps": 3.3603438902367806,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.2643423741882821,
+   "d2_min": 345.57260035041463,
+   "d3_min": 6.238969326019287,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_010_l100",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 5.342294797713096,
+   "d1_clean_eps": 6.199957190208489,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 1.4050626285941805,
+   "d2_min": 1211.1808304278868,
+   "d3_min": 4.999762535095215,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_011_l100",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 7.509755125891595,
+   "d1_clean_eps": 9.843387737584171,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.690471165908766,
+   "d2_min": 1926.9741955058319,
+   "d3_min": 28.801502227783203,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_012_l100",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.3933675189709946,
+   "d1_clean_eps": 2.920655236354437,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.670463028132104,
+   "d2_min": 172.63053893723082,
+   "d3_min": 5.465083599090576,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_013_l100",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 4.075909547929756,
+   "d1_clean_eps": 4.4477781883016565,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.33777561466195555,
+   "d2_min": 575.6585655519874,
+   "d3_min": 14.66543197631836,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_014_l100",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 1.0,
+   "in_range": false,
+   "d1_min_eps": 7.9848534372728475,
+   "d1_clean_eps": 9.426357059771936,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.7745047234244652,
+   "d2_min": 2288.7782019849465,
+   "d3_min": 26.808753967285156,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  },
+  {
+   "name": "s3p_015_l100",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 1.0,
+   "in_range": false,
+   "d1_min_eps": 2.2043185900531066,
+   "d1_clean_eps": 2.7191931362040327,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "d0_min": 0.6224498877304517,
+   "d2_min": 122.36866091905051,
+   "d3_min": 4.225874423980713,
+   "thresholds": {
+    "d0": 0.0004296939550138397,
+    "d2": -119.90360393456518,
+    "d3": -0.7294234037399292
+   }
+  }
+ ]
+}

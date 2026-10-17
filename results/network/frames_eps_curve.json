@@ -1,0 +1,121 @@
+{
+ "rho": 0.1,
+ "r_max": 1.14,
+ "points": [
+  {
+   "label": "eps 0.03",
+   "eps_V": 0.03,
+   "eps_I": 0.03,
+   "abs_delta": 0.0,
+   "angle_deg": 0.0,
+   "feasible": true,
+   "unseparated_at_0": 0,
+   "seconds": 53.820581912994385
+  },
+  {
+   "label": "eps 0.04",
+   "eps_V": 0.04,
+   "eps_I": 0.04,
+   "abs_delta": 0.1,
+   "angle_deg": 225.0,
+   "feasible": true,
+   "unseparated_at_0": 1,
+   "inverter_current_left": [
+    0.14330047336884089,
+    0.498618884757589,
+    0.7820641650827976
+   ],
+   "seconds": 507.15157771110535
+  },
+  {
+   "label": "eps 0.05",
+   "eps_V": 0.05,
+   "eps_I": 0.05,
+   "abs_delta": 0.34,
+   "angle_deg": 345.0,
+   "feasible": true,
+   "unseparated_at_0": 4,
+   "inverter_current_left": [
+    0.14330047336884089,
+    0.498618884757589,
+    0.7820641650827976
+   ],
+   "seconds": 755.7870264053345
+  },
+  {
+   "label": "eps 0.06",
+   "eps_V": 0.06,
+   "eps_I": 0.06,
+   "abs_delta": 0.58,
+   "angle_deg": 335.0,
+   "feasible": true,
+   "unseparated_at_0": 5,
+   "inverter_current_left": [
+    0.14330047336884089,
+    0.498618884757589,
+    0.676245884438407
+   ],
+   "seconds": 1354.2694027423859
+  },
+  {
+   "label": "eps 0.12",
+   "eps_V": 0.12,
+   "eps_I": 0.12,
+   "abs_delta": null,
+   "angle_deg": null,
+   "feasible": false,
+   "unseparated_at_0": 25,
+   "seconds": 1148.572438955307
+  },
+  {
+   "label": "design tier",
+   "eps_V": 0.029,
+   "eps_I": 0.053,
+   "abs_delta": 0.04,
+   "angle_deg": 270.0,
+   "feasible": true,
+   "unseparated_at_0": 1,
+   "inverter_current_left": [
+    0.14330047336884089,
+    0.498618884757589,
+    0.7820641650827976
+   ],
+   "seconds": 270.7512321472168
+  },
+  {
+   "label": "eps 0.10",
+   "eps_V": 0.1,
+   "eps_I": 0.1,
+   "abs_delta": null,
+   "angle_deg": null,
+   "feasible": false,
+   "unseparated_at_0": 18,
+   "seconds": 2180.7882125377655
+  },
+  {
+   "label": "class tier",
+   "eps_V": 0.139,
+   "eps_I": 0.168,
+   "abs_delta": null,
+   "angle_deg": null,
+   "feasible": false,
+   "unseparated_at_0": 34,
+   "seconds": 571.5903511047363
+  },
+  {
+   "label": "eps 0.08 (the design)",
+   "eps_V": 0.08,
+   "eps_I": 0.08,
+   "abs_delta": 1.12,
+   "angle_deg": 225.0,
+   "feasible": true,
+   "unseparated_at_0": 14,
+   "inverter_current_left": [
+    0.08000039990637603,
+    0.08407841167061984,
+    0.1425522228245744
+   ],
+   "seconds": 3483.024518251419
+  }
+ ]
+}

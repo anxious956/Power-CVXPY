@@ -1,0 +1,407 @@
+{
+ "design": {
+  "mag": 1.12,
+  "angle_deg": 225.0,
+  "rho": 0.1,
+  "tang_hz": 15.0
+ },
+ "levels": [
+  0.0,
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "scenarios": [
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.31614
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    -1.0,
+    -1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.30784
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    -1.0,
+    1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.30517
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    -1.0,
+    1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.31427
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    1.0,
+    -1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.31232
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    1.0,
+    -1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.30229
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    1.0,
+    1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.30719
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.30594
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    -1.0,
+    -1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.3134
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    -1.0,
+    -1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.30818
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    -1.0,
+    1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.307
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    -1.0,
+    1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.307
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    1.0,
+    -1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.31205
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    1.0,
+    -1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.31624
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    1.0,
+    1.0,
+    -1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.31061
+  },
+  {
+   "stratum": "normal_corner",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "in_range": false,
+   "t_fault": 0.3071
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    0.8848823925408336,
+    -0.38572327842251974,
+    -0.4901867311712842,
+    -0.5547629500195581
+   ],
+   "in_range": false,
+   "t_fault": 0.31032
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    0.572408441371751,
+    -0.5665839105459018,
+    0.6114530076221998,
+    0.4653162930093706
+   ],
+   "in_range": false,
+   "t_fault": 0.31664
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -0.15645053329116343,
+    -0.01633290192859138,
+    0.8184816200270535,
+    0.5819442651566682
+   ],
+   "in_range": false,
+   "t_fault": 0.31501
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -0.6923854243849861,
+    0.49798342389738415,
+    -0.1939827545135857,
+    0.982814321478122
+   ],
+   "in_range": false,
+   "t_fault": 0.30156
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -0.5767845472108342,
+    -0.17904883436189967,
+    0.8865751502110706,
+    0.16040648934115165
+   ],
+   "in_range": false,
+   "t_fault": 0.30403
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    0.4715013469190823,
+    0.20950200521912388,
+    -0.537319561259255,
+    -0.890910860473396
+   ],
+   "in_range": false,
+   "t_fault": 0.30906
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -0.8099075290666551,
+    -0.27973739872586334,
+    -0.8158473416285796,
+    -0.6601761858613793
+   ],
+   "in_range": false,
+   "t_fault": 0.30796
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -0.02821737649244138,
+    -0.2896366741828167,
+    0.12428606659263819,
+    -0.3134063127075368
+   ],
+   "in_range": false,
+   "t_fault": 0.30713
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    0.11211513364866388,
+    0.285930143737418,
+    0.7086570746027918,
+    -0.9329677533749205
+   ],
+   "in_range": false,
+   "t_fault": 0.30546
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    0.5015295510609803,
+    -0.25262151171573555,
+    -0.5015596891152279,
+    -0.7769448644978576
+   ],
+   "in_range": false,
+   "t_fault": 0.31376
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    0.07754474386656551,
+    0.4122039551473029,
+    0.9994102476379898,
+    -0.37894972855037623
+   ],
+   "in_range": false,
+   "t_fault": 0.30871
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    0.9647337541709031,
+    0.05391901865399262,
+    0.7898164506747063,
+    -0.8190115779753597
+   ],
+   "in_range": false,
+   "t_fault": 0.30078
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -0.8869460673169953,
+    -0.12197331750956186,
+    -0.9550592993147986,
+    -0.38575483800285304
+   ],
+   "in_range": false,
+   "t_fault": 0.30956
+  },
+  {
+   "stratum": "normal_random",
+   "fault": null,
+   "confuser": null,
+   "S": [
+    -0.939926356141831,
+    0.6371559205421136,
+    -0.8382245317785364,
+    0.1066190479608553
+   ],
+   "in_range": false,
+   "t_fault": 0.31642
+  }
+ ]
+}
