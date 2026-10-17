@@ -25,6 +25,14 @@ cycles (3.25 ... 5.5) the distance to the own set, for the drift. For normals an
     python src/frames_design_check.py spec       -> results/network/frames_design_specs.json
     "C:/Program Files/Python37/python.exe" src/pscad_network.py fast results/network/frames_design_specs.json
     python src/frames_design_check.py analyse    -> results/network/frames_design_check.json
+
+Another design point, with the PLL-like reference filter in every run (review/STEP3_PART4_REVIEW.md section 3):
+
+    python src/frames_design_check.py spec --mag 1.12 --rho 0.1 --edges 220 231 --tang-hz 15 --tag pll
+    python src/frames_design_check.py analyse --mag 1.12 --rho 0.1 --edges 220 231 --tang-hz 15 --tag pll
+
+writes frames_design_specs_pll.json / frames_design_check_pll.json, run names fq_*, no instrumented group, and an
+extra group "all48": every design case once at 225 deg at a random point of the source box (coverage).
 """
 import os, sys, json, time, itertools
 import numpy as np
@@ -40,6 +48,8 @@ OUT = os.path.join(HERE, "..", "results", "network")
 SPECS = os.path.join(OUT, "frames_design_specs.json")
 EPS = 0.08
 MAG, ANG0, RHO = 1.05, 225.0, 0.04
+EDGES, TANG, PREFIX, TAG = (221.0, 230.0), 0.0, "fd", None
+RESULT = os.path.join(OUT, "frames_design_check.json")
 MAIN = dict(factor=1.1, drift_deg=3.0, ref_phi=0.030333432167374483, model_err=0.1 * EPS)   # src/frames_main.py
 BARE = dict(factor=1.0, drift_deg=3.0, ref_phi=0.0, model_err=0.0)                            # src/frames_emt_check.py
 T_FAULT = 0.30
@@ -55,7 +65,8 @@ def dcmd(ang):
 
 
 def models(net, kw):
-    return {a: fr.FrameModel(net, CASES, n_samples=150, face_pts=3, seed=1, **kw) for a in (221.0, 225.0, 230.0)}
+    fm = fr.FrameModel(net, CASES, n_samples=150, face_pts=3, seed=1, **kw)    # one model serves every delta
+    return {a: fm for a in (EDGES[0], ANG0, EDGES[1])}
 
 
 def _spec(net, name, case, S, ang, kind, group, fm, **extra):
@@ -68,6 +79,8 @@ def _spec(net, name, case, S, ang, kind, group, fm, **extra):
             sp[k] = extra.pop(k)
     if "TANG" in extra:
         sp["settings"]["I"]["TANG"] = float(extra.pop("TANG"))
+    elif TANG > 0:
+        sp["settings"]["I"]["TANG"] = TANG
     sp.update(kind=kind, group=group, case=None if case is None else list(case), S=[float(x) for x in np.ravel(S)],
               d_cmd=[dcmd(ang).real, dcmd(ang).imag], angle=float(ang), **extra)
     return sp
@@ -84,26 +97,30 @@ def make():
           ", ".join(f"{tag(c)} {w['gap'] / EPS:.3f}" for c, w in wit.items()) + f"  [{time.time() - t0:.0f} s]", flush=True)
     specs, normals = [], {}
     for c, w in wit.items():
-        specs.append(_spec(net, f"fd_w_{tag(c)}", c, w["S_F"], 225.0, "fault", "witness", main, gap_eps=w["gap"] / EPS))
+        specs.append(_spec(net, f"{PREFIX}_w_{tag(c)}", c, w["S_F"], 225.0, "fault", "witness", main, gap_eps=w["gap"] / EPS))
         normals.setdefault(tuple(np.round(w["S_N"], 9)), []).append(tag(c))
     for k, (S, owners) in enumerate(normals.items()):
-        specs.append(_spec(net, f"fd_wN{k:02d}", None, np.array(S), 225.0, "normal", "witness", main, witness_of=owners))
+        specs.append(_spec(net, f"{PREFIX}_wN{k:02d}", None, np.array(S), 225.0, "normal", "witness", main, witness_of=owners))
     s114 = {tuple(sp["case"]): sp["S"] for sp in json.load(open(EMT_SPECS)) if sp["dtag"] == "d114" and sp["kind"] == "fault"}
     bc = [c for c in CASES if c[2] == "ab" and c[3] == 0.0]
     ag3 = sorted([c for c in binding if c[2] == "ag"], key=lambda c: wit[c]["gap"])[:3]
     hard = [(c, np.array(s114[c])) for c in bc] + [(c, wit[c]["S_F"]) for c in ag3]
-    for ang in (221.0, 230.0):
+    for ang in EDGES:
         for c, S in hard:
-            specs.append(_spec(net, f"fd_e{int(ang)}_{tag(c)}", c, S, ang, "fault", "edge", main))
+            specs.append(_spec(net, f"{PREFIX}_e{int(ang)}_{tag(c)}", c, S, ang, "fault", "edge", main))
     rng = np.random.default_rng(5)
     for c, S in hard:
         tf = float(np.round(T_FAULT + rng.uniform(0, 1) / 60.0, 5))
-        specs.append(_spec(net, f"fd_p_{tag(c)}", c, S, 225.0, "fault", "pow", main, t_fault=tf))
+        specs.append(_spec(net, f"{PREFIX}_p_{tag(c)}", c, S, 225.0, "fault", "pow", main, t_fault=tf))
     for k, u in enumerate(itertools.product((-1.0, 1.0), repeat=4)):
-        specs.append(_spec(net, f"fd_nc{k:02d}", None, np.array(u), 225.0, "normal", "normal", main, corner=list(u)))
+        specs.append(_spec(net, f"{PREFIX}_nc{k:02d}", None, np.array(u), 225.0, "normal", "normal", main, corner=list(u)))
     for cf in CONFUSERS:
-        specs.append(_spec(net, f"fd_cf_{cf['kind']}", None, np.zeros(4), 225.0, "normal", "confuser", main, confuser=cf))
-    for mag_tag, mag, c in (("114", 1.14, ("L1", 0.15, "ab", 0.0)), ("105", 1.05, ("L1", 0.35, "ab", 0.0))):
+        specs.append(_spec(net, f"{PREFIX}_cf_{cf['kind']}", None, np.zeros(4), 225.0, "normal", "confuser", main, confuser=cf))
+    if TAG is not None:
+        S48 = rng.uniform(-1, 1, (len(CASES), 4))
+        for c, S in zip(CASES, S48):
+            specs.append(_spec(net, f"{PREFIX}_a_{tag(c)}", c, S, 225.0, "fault", "all48", main))
+    for mag_tag, mag, c in (() if TAG is not None else (("114", 1.14, ("L1", 0.15, "ab", 0.0)), ("105", 1.05, ("L1", 0.35, "ab", 0.0)))):
         for ttag, tang in (("dft", 0.0), ("pll", TANG_PLL)):
             sp = _spec(net, f"fd_i{mag_tag}_{tag(c)}_{ttag}", c, np.array(s114[c]), 225.0, "fault", "inst", main,
                        dur=0.30, t_end=0.70, TANG=tang)
@@ -172,7 +189,7 @@ def analyse():
                              post_eps=post))
     print(f"{len(rows)} runs analysed, {len(inst)} instrumented  [{time.time() - t0:.0f} s]")
     summ = {}
-    for g in ("witness", "edge", "pow"):
+    for g in ("witness", "edge", "pow", "all48"):
         f = [r for r in rows if r["group"] == g and "outside_own_eps" in r]
         if f:
             w = max(f, key=lambda r: r["outside_own_eps"])
@@ -197,10 +214,25 @@ def analyse():
         print(f"{nm}: ANG span over the fault {max(a) - min(a):.1f} deg; |I1| {min(tr['I1M_I']):.2f}-{max(tr['I1M_I']):.2f}, "
               f"|I2| {min(tr['I2M_I']):.2f}-{max(tr['I2M_I']):.2f} pu; outside own set at 2/3/5/8/12/16 c: "
               + " ".join(f"{x:.2f}" for x in tr["outside_own_eps"]) if a else f"{nm}: no controller channels")
-    json.dump(dict(design=dict(mag=MAG, angle=ANG0, rho=RHO, main=MAIN, bare=BARE), summary=summ, rows=rows, inst=inst),
-              open(os.path.join(OUT, "frames_design_check.json"), "w"), indent=1, default=float)
-    print("-> results/network/frames_design_check.json")
+    json.dump(dict(design=dict(mag=MAG, angle=ANG0, rho=RHO, edges=EDGES, tang=TANG, main=MAIN, bare=BARE), summary=summ,
+                   rows=rows, inst=inst), open(RESULT, "w"), indent=1, default=float)
+    print(f"-> {os.path.relpath(RESULT)}")
 
 
 if __name__ == "__main__":
-    {"spec": make, "analyse": analyse}[sys.argv[1]]()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("what", choices=["spec", "analyse"])
+    ap.add_argument("--mag", type=float, default=MAG)
+    ap.add_argument("--rho", type=float, default=RHO)
+    ap.add_argument("--edges", type=float, nargs=2, default=EDGES)
+    ap.add_argument("--tang-hz", type=float, default=0.0)
+    ap.add_argument("--tag", default=None)
+    a = ap.parse_args()
+    MAG, RHO, EDGES, TAG = a.mag, a.rho, tuple(a.edges), a.tag
+    TANG = 1.0 / (2 * np.pi * a.tang_hz) if a.tang_hz > 0 else 0.0
+    if TAG is not None:
+        PREFIX = "fq"
+        SPECS = os.path.join(OUT, f"frames_design_specs_{TAG}.json")
+        RESULT = os.path.join(OUT, f"frames_design_check_{TAG}.json")
+    {"spec": make, "analyse": analyse}[a.what]()
