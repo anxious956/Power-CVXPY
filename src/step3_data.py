@@ -19,6 +19,7 @@ Inception is uniform over one cycle from 0.30 s. Instrument errors and noise are
 (src/step3_frontend.py) adds them to the sampled waveforms.
 
     python src/step3_data.py pilot        -> results/step3/pilot_specs.json   (20 scenarios x 5 levels = 100 runs)
+    python src/step3_data.py dense        -> results/step3/dense_specs.json   (70 scenarios x 5 levels = 350 runs)
     "C:/Program Files/Python37/python.exe" src/pscad_network.py fast results/step3/pilot_specs.json
 """
 import os, sys, json
@@ -39,6 +40,7 @@ RANGES = {"L1": (0.15, 0.95), "L2": (0.05, 0.50)}
 OUTSIDE = {"L1": (0.02, 0.15), "L2": (0.50, 0.98)}
 WITNESS_SPECS = os.path.join(HERE, "..", "results", "network", "frames_design_specs_pll.json")
 PILOT = dict(hard=8, hard_bc=2, uniform=4, outside=2, normal=2, load=1, phase1=1)
+DENSE = dict(hard=40, hard_bc=10, uniform=20)          # the worst-case curve (results/STEP3_PILOT.md, option A)
 
 
 def delta(level):
@@ -126,5 +128,16 @@ def pilot():
     print(f"{len(scs)} scenarios {by} x {len(LEVELS)} levels = {len(specs)} runs -> results/step3/pilot_specs.json")
 
 
+def dense():
+    """Clean runs for D1's worst-case curve: the guaranteed fraction (clean distance to N above 2 eps) against delta,
+    with binomial bounds. Its own scenarios (seed 41), disjoint from the pilot's."""
+    os.makedirs(OUT, exist_ok=True)
+    scs = scenarios(DENSE, seed=41)
+    specs = specs_for(scs, "s3w")
+    json.dump(dict(design=DESIGN, levels=LEVELS, scenarios=scs), open(os.path.join(OUT, "dense_scenarios.json"), "w"), indent=1)
+    json.dump(specs, open(os.path.join(OUT, "dense_specs.json"), "w"), indent=1)
+    print(f"{len(scs)} scenarios x {len(LEVELS)} levels = {len(specs)} runs -> results/step3/dense_specs.json")
+
+
 if __name__ == "__main__":
-    {"pilot": pilot}[sys.argv[1]]()
+    {"pilot": pilot, "dense": dense}[sys.argv[1]]()
