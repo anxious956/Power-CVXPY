@@ -28,8 +28,8 @@ cycles (3.25 ... 5.5) the distance to the own set, for the drift. For normals an
 
 Another design point, with the PLL-like reference filter in every run (review/STEP3_PART4_REVIEW.md section 3):
 
-    python src/frames_design_check.py spec --mag 1.12 --rho 0.1 --edges 220 231 --tang-hz 15 --tag pll
-    python src/frames_design_check.py analyse --mag 1.12 --rho 0.1 --edges 220 231 --tang-hz 15 --tag pll
+    python src/frames_design_check.py spec --mag 1.12 --rho 0.1 --edges 223 230 --tang-hz 15 --tag pll
+    python src/frames_design_check.py analyse --mag 1.12 --rho 0.1 --edges 223 230 --tang-hz 15 --tag pll
 
 writes frames_design_specs_pll.json / frames_design_check_pll.json, run names fq_*, no instrumented group, and an
 extra group "all48": every design case once at 225 deg at a random point of the source box (coverage).
@@ -49,6 +49,7 @@ SPECS = os.path.join(OUT, "frames_design_specs.json")
 EPS = 0.08
 MAG, ANG0, RHO = 1.05, 225.0, 0.04
 EDGES, TANG, PREFIX, TAG = (221.0, 230.0), 0.0, "fd", None
+MIMIC_TAU = None          # cycles; --mimic sets L1's X/R / 2 pi (D1's chain, review/STEP3_PART5_REVIEW.md point 2)
 RESULT = os.path.join(OUT, "frames_design_check.json")
 MAIN = dict(factor=1.1, drift_deg=3.0, ref_phi=0.030333432167374483, model_err=0.1 * EPS)   # src/frames_main.py
 BARE = dict(factor=1.0, drift_deg=3.0, ref_phi=0.0, model_err=0.0)                            # src/frames_emt_check.py
@@ -149,9 +150,9 @@ def analyse():
         tf = sp.get("t_fault", T_FAULT)
         ang = sp["angle"]
         d = complex(*sp["d_cmd"])
-        uL = relay_y(run, tf - 0.05)[0]
+        uL = relay_y(run, tf - 0.05, MIMIC_TAU)[0]
         uL /= abs(uL)
-        yat = lambda cyc: relay_y(run, tf + cyc / 60.0) * np.conj(uL)
+        yat = lambda cyc: relay_y(run, tf + cyc / 60.0, MIMIC_TAU) * np.conj(uL)
         if sp["group"] == "regression":
             ref = read_case(os.path.join(WORK, sp["regression_of"] + ".gf46"), sp["regression_of"])
             diff = max(float(np.max(np.abs(np.asarray(run["ch"][ch]) - np.asarray(ref["ch"][ch]))))
@@ -183,7 +184,7 @@ def analyse():
                              gap_eps=sp.get("gap_eps"), outside_own_eps=max(own), outside_own_at=float(WIN[int(np.argmax(own))]),
                              ratio_to_N=min(to_n), separated_margin=bool(min(to_n) > 2 * (1 + RHO)), late_outside_own_eps=max(late)))
         else:
-            pre = fr.distance_to_set(bare[ang].zonotopes(d, None), relay_y(run, tf - 0.05) * np.conj(uL)) / EPS
+            pre = fr.distance_to_set(bare[ang].zonotopes(d, None), relay_y(run, tf - 0.05, MIMIC_TAU) * np.conj(uL)) / EPS
             post = [fr.distance_to_set(bare[ang].zonotopes(d, None), yat(c)) / EPS for c in WIN] if sp.get("confuser") else []
             rows.append(dict(name=sp["name"], group=sp["group"], angle=ang, normal_outside_eps=max([pre] + post), pre_eps=pre,
                              post_eps=post))
@@ -214,7 +215,7 @@ def analyse():
         print(f"{nm}: ANG span over the fault {max(a) - min(a):.1f} deg; |I1| {min(tr['I1M_I']):.2f}-{max(tr['I1M_I']):.2f}, "
               f"|I2| {min(tr['I2M_I']):.2f}-{max(tr['I2M_I']):.2f} pu; outside own set at 2/3/5/8/12/16 c: "
               + " ".join(f"{x:.2f}" for x in tr["outside_own_eps"]) if a else f"{nm}: no controller channels")
-    json.dump(dict(design=dict(mag=MAG, angle=ANG0, rho=RHO, edges=EDGES, tang=TANG, main=MAIN, bare=BARE), summary=summ,
+    json.dump(dict(design=dict(mag=MAG, angle=ANG0, rho=RHO, edges=EDGES, tang=TANG, mimic_tau=MIMIC_TAU, main=MAIN, bare=BARE), summary=summ,
                    rows=rows, inst=inst), open(RESULT, "w"), indent=1, default=float)
     print(f"-> {os.path.relpath(RESULT)}")
 
@@ -228,11 +229,15 @@ if __name__ == "__main__":
     ap.add_argument("--edges", type=float, nargs=2, default=EDGES)
     ap.add_argument("--tang-hz", type=float, default=0.0)
     ap.add_argument("--tag", default=None)
+    ap.add_argument("--mimic", action="store_true", help="mimic filter on the relay currents (L1's X/R)")
     a = ap.parse_args()
     MAG, RHO, EDGES, TAG = a.mag, a.rho, tuple(a.edges), a.tag
+    if a.mimic:
+        z1 = three_bus().lines["L1"].z1
+        MIMIC_TAU = (z1.imag / z1.real) / (2 * np.pi)
     TANG = 1.0 / (2 * np.pi * a.tang_hz) if a.tang_hz > 0 else 0.0
     if TAG is not None:
         PREFIX = "fq"
         SPECS = os.path.join(OUT, f"frames_design_specs_{TAG}.json")
-        RESULT = os.path.join(OUT, f"frames_design_check_{TAG}.json")
+        RESULT = os.path.join(OUT, f"frames_design_check_{TAG}{'_mimic' if a.mimic else ''}.json")
     {"spec": make, "analyse": analyse}[a.what]()

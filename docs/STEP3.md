@@ -85,7 +85,8 @@ The result is the curve of δ* against the relay reference's rotation budget and
 | drift margin | 3° | measured (≤ 2.2° in that window) |
 | decision window | [2, 3] cycles after inception | chosen |
 | margin ρ | 0.04 | chosen for feasibility: at ρ = 0.1 no δ ≤ 1.05 pu separates; at 1.05 pu, 225° the largest is 0.05. Total margin 0.08 ε against 0.073 ε seen outside the sets; remainder factor 1.1 is further headroom |
-| **design point** | **δ = 1.05 pu at 225°** | 87.5 % of the inverter's rating; checks in `results/network/frames_main_fixed.json` |
+| **design point** | **δ = 1.12 pu at 225°, ρ = 0.1, PLL-like reference filter (first order, 15 Hz)** | about 93 % of the inverter's rating. Window 223–230°; `results/network/frames_main_pll.json`. The bare-DFT design (1.05 pu, ρ 0.04, `frames_main_fixed.json`) is kept as the controller-specific result |
+| D1's phasor chain | one-cycle DFT with a mimic filter on the currents (L1's X/R) | the window-start excursions are DC offset (`src/frames_mimic_check.py`); faults inside and outside the design ranges reported separately |
 
 The guarantee is then **worst case over the sources, k-σ over the random noise**; the systematic VT phase error is in
 the violation matrix.

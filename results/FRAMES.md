@@ -182,12 +182,47 @@ ending 1.5–5.5 cycles after inception, i.e. through the whole fault.
 
 - **With the filter the inverter settles at every level, through the whole fault.** The largest excursions sit at the
   2.0-cycle window (L1 ab 15 % bolted), and every point is back inside by 2.25 cycles.
-- **The new cap is 1.14 pu**: the largest level whose excursions fit the 0.1 ε model-error box from 2 cycles on.
-  At 1.18 pu they do not (0.136 ε). At 1.14 pu the inverter keeps about 0.06 pu of I1, so a design that needs the
-  cap is a **95 %-of-rating** design.
+- **The new cap is 1.14 pu.** The criterion: the inverter settles through the whole fault, and its window excursions
+  fit the 0.1 ε model-error box. With the filter every level settles, 1.18 pu included, so the box decides:
+  - 1.14 pu: largest excursion 0.086 ε, inside the box;
+  - 1.18 pu: 0.136 ε, outside it.
+
+  At the cap the inverter keeps about 0.06 pu of I1 (95 % of rating goes to δ). The cap does not bind at ρ = 0.1:
+  the design point below is 1.12 pu.
 - **The conclusion does not hinge on 15 Hz.** With 10 Hz and 30 Hz filters, the two instrumented cases (1.14 pu L1 ab
   15 %, 1.05 pu L1 ab 35 %, 0.3 s fault) stay within 0.04 ε at 2 cycles and at 0 from 3 to 16 cycles.
 - The window start stays at 2 cycles, inside the 0.1 ε box. From 2.25 cycles no box is needed at all at 1.14 pu.
+- **The excursions are DC offset in the relay's one-cycle DFT, not an inverter transient**
+  (`src/frames_mimic_check.py`, results/network/frames_mimic_check.json). They appear at windows ending 1.5 and
+  2.0 cycles, are 0 at 1.75 and 2.25, and every run used t_fault = 0.30 s. Re-evaluated every 1/16 cycle with a
+  mimic filter on the currents (L1's X/R, τ = 1.59 cycles, unity fundamental gain), the stored runs give:
+
+  | \|δ\| | plain DFT, largest from 2.0 cycles | with mimic | with mimic, every point inside from |
+  |---|---|---|---|
+  | 1.05 pu | 0.001 ε | 0 | 1.5 cycles |
+  | 1.10 pu | 0.022 ε | 0 | 1.5 cycles |
+  | 1.14 pu | 0.086 ε | **0** | 1.625 cycles |
+  | 1.18 pu | 0.136 ε | 0.005 ε | 2.06 cycles |
+
+  **D1's chain gets the mimic filter.** With it the model-error box is not used by the window start at all, and an
+  earlier window (1.75 cycles) is open. Both still have to be confirmed over inception angles, on the design-point
+  batch.
+
+## The step-3 design point: 1.12 pu at 225°, ρ = 0.1, with the filtered reference (17 Oct 2026)
+
+`python src/frames_main.py --rmax 1.14 --rho 0.1 --tag pll`, `results/network/frames_main_pll.json`. Same budgets as
+the main configuration (φ_ref 0.0303 rad, model error 0.1 ε, drift 3°, window 2–3 cycles), cap 1.14 pu.
+
+- **δ* = 1.12 pu at 225°**, with a 10 % margin. With the bare DFT reference no δ up to 1.05 pu separated at ρ = 0.1.
+- The separating window is 223–230°. Dense-tier separation at factors 1.0, 1.1 and 1.25 holds. Adversarial
+  containment finds nothing outside, and Calafiore–Campi coverage is ≥ 92 %.
+- The continuous check finds 0 of 486 cases unseparated inside the design ranges. 30 of 198 outside them are
+  unseparated: L1 A-G 5–10 %, L2 ab 80–95 %, L2 A-G 90–95 %. Step 3 reports faults inside and outside the design
+  ranges separately.
+- **Cost:** the inverter keeps 0.08–0.14 pu of I1, against 0.14–0.78 pu asked. About **93 % of its rating** goes to δ.
+- The binding witness gap (L1 15 % A-G, full R_f) is **2.210 ε against 2.20 ε** needed, a design margin of 0.01 ε.
+  The EMT number for it comes from the design-point batch (`frames_design_check.py … --tag pll`).
+- The alternative with a 4 % margin (`--rho 0.04 --tag pll04`) is reported beside it.
 
 ## What it means and does not
 
