@@ -5,9 +5,11 @@ Step-3 detectors on the common front end (src/step3_frontend.py), task T1 (any f
       relay's memory frame, the distance of the measurement to N(delta) (the main design sets: factor 1.1, phi_ref,
       model error 0.1 eps), in units of eps. Alarm when it exceeds 1 (distance > eps, docs/STEP3.md). Its threshold
       is fixed by the design, not calibrated.
-  D0  the conventional floor: zero- and negative-sequence overcurrent (50N / 50Q) on the same windows,
-      score max(3|I0|, |I2|) in pu, threshold calibrated on normal data at the same delta level (the largest
-      calibration-negative score). The signal is negative-sequence, so 50Q's pickup rises with delta.
+  D0  the conventional floor: incremental zero- and negative-sequence overcurrent (delta-50N / delta-50Q) on the
+      same windows, score max(3|I0 - I0_mem|, |I2 - I2_mem|) in pu against the relay's pre-fault memory, threshold
+      calibrated on normal data at the same delta level (the largest calibration-negative score). Incremental, so the
+      designed delta's steady I2 does not raise its pickup (review/STEP3_PILOT_REVIEW.md; the pilot's first version
+      used total |I2| and lost B-C faults as delta grew, an artefact of that choice).
 
 Triggers: "starter" (the front end's superimposed-current starter; no pickup means no decision), "oracle" (the true
 inception, to separate the starter from the detector), and for runs without a fault, "forced" at the scenario's
@@ -51,11 +53,22 @@ def d1_score(relay, spec, how="starter", c0=2.0, c1=3.0):
     return max(fr.distance_to_set(pieces, y) / EPS for _, y in relay.windows(inc, c0, c1))
 
 
+def _memory(relay, inc):
+    ends = inc - CYCLE // 2 - np.arange(0, 2 * CYCLE + 1, CYCLE // 4)
+    return np.mean([relay.y(e) for e in ends], axis=0)
+
+
+def _d0(relay, inc, c0, c1):
+    m = _memory(relay, inc)
+    return max(max(3 * abs(relay.y(inc + int(round(c * CYCLE)))[5] - m[5]), abs(relay.y(inc + int(round(c * CYCLE)))[4] - m[4]))
+               for c in np.arange(c0, c1 + 1e-9, 0.25))
+
+
 def d0_score(relay, spec, how="starter", c0=2.0, c1=3.0):
     inc = trigger(relay, spec, how)
     if inc is None:
         return None
-    return max(max(3 * abs(y[5]), abs(y[4])) for _, y in relay.windows(inc, c0, c1))
+    return _d0(relay, inc, c0, c1)
 
 
 def d0_calibration_scores(relay, spec, c0=2.0, c1=3.0, n_pre=6):
@@ -66,7 +79,7 @@ def d0_calibration_scores(relay, spec, c0=2.0, c1=3.0, n_pre=6):
     last = true - int(round(c1 * CYCLE)) - 1
     out = []
     for inc in np.linspace(first, last, n_pre).astype(int):
-        out.append(max(max(3 * abs(y[5]), abs(y[4])) for _, y in relay.windows(inc, c0, c1)))
+        out.append(_d0(relay, inc, c0, c1))
     return out
 
 

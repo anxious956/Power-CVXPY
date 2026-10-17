@@ -297,9 +297,10 @@ class FrameModel:
 def _meet(cN, GN, cF, GF, bound):
     """Do N + box(bound) and F intersect? (LP feasibility; bound = 2 eps for two noisy sets)."""
     n = cN.size
+    bb = np.broadcast_to(np.asarray(bound, float), (n,))         # a scalar, or one bound per real component
     Aeq = np.hstack([GN, -GF, np.eye(n)])
     res = linprog(np.zeros(Aeq.shape[1]), A_eq=Aeq, b_eq=cF - cN,
-                  bounds=[(-1, 1)] * (GN.shape[1] + GF.shape[1]) + [(-bound, bound)] * n, method="highs")
+                  bounds=[(-1, 1)] * (GN.shape[1] + GF.shape[1]) + [(-x, x) for x in bb], method="highs")
     return res.status == 0
 
 
