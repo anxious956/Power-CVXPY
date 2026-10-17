@@ -1,4 +1,18 @@
-# High fault resistance: the band where the signal would matter is empty on this network
+# High fault resistance: is there a band where the signal earns its cost?
+
+> **Correction (review/HIGHR_REVIEW.md, 17 Oct 2026).** The first version of this page concluded that "the band is
+> empty". That does not hold (REVIEW.md §7 row 54). The design's 16-case set mixed A-G and B-C faults at the same
+> high resistance. The infeasibility came from B-C at 160 Ω, a case that does not occur: phase-phase faults carry
+> only arc resistance. The conventional screen tested A-G only, so the two halves were measured on different fault
+> sets.
+>
+> Split by type, at 160 Ω, the signal at 1.12 pu, 315° separates **every A-G case** from N in the design's own
+> sets. Meanwhile incremental 50N/50Q fails at 4 of 8 locations. At 200 Ω, 315° puts every sampled clean A-G point
+> beyond two boxes (smallest 2.26) while the sets still say "unseparated": outer-set conservatism, "not certified by
+> the design" rather than "the signal runs out".
+>
+> The A-G-only design (B-C only to its arc range) is `src/highr_ag_design.py`, and an EMT check at its design point
+> follows. The sections below are the first version, kept for the record.
 
 17 Oct 2026. Follow-up to step 3 ([results/STEP3_PILOT.md](STEP3_PILOT.md)). The pilot found that up to 40 Ω every
 detector, the conventional incremental element included, detects every fault without the signal. The question here:

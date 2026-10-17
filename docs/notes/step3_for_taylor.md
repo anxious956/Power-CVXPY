@@ -41,13 +41,10 @@ relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); de
    - protection-class fault-condition errors (CT 10 %, VT 6 % / 4°): about 93 % of the inverter.
 5. **Against worst-case noise per detector** (a stress bound, pilot only), D1 has no worst-case miss from ¾ δ*. D2
    improves with δ but does not reach zero. D0 and the CNN do not benefit from δ.
-6. **Higher fault resistance does not open a window for the signal** (*static only*; results/HIGHR.md).
-   - The conventional incremental element starts to fail at about 160 Ω.
-   - The guarantee already costs about 1 pu of signal at 80 Ω.
-   - From 120 Ω no signal within the inverter's limit provides it, even with near-nominal instruments and no margin.
-
-   On this network there is no fault-resistance band where conventional detection fails and the designed signal can
-   guarantee detection.
+6. **High-resistance ground faults: being redone** (*static*; results/HIGHR.md). At about 160 Ω the conventional
+   incremental element fails at half the locations. In the design's own sets the signal at 1.12 pu, 315°, separates
+   every A-G case there. This would be the band where the method earns its cost. The A-G-only design and its EMT
+   check are running; this item is not final.
 7. **An inverter at the relay end does not change the detection answer** (*static, nominal sources*;
    results/IBR_GRID_SCREEN.md). With a grid-following inverter in place of the relay-end synchronous source, current
    elements go blind when its sequence paths are open, but 59N then sees |V0| = 0.31–0.57 pu on every hard ground
