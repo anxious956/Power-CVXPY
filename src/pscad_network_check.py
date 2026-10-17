@@ -19,15 +19,24 @@ from pscad_network import WORK, VBASE_PK, IBASE_PK, three_bus
 import network as nw
 
 
-def seq(run, names, t_end, base, sub=None):
+def seq(run, names, t_end, base, sub=None, mimic_tau=None):
+    """One-cycle sequence phasors ending at t_end. mimic_tau (cycles): a causal DC-removal (mimic) filter first,
+    y[k] = x[k] - e^{-Ts/tau} x[k-1], its fundamental gain divided out (as src/review/common.py's mimic)."""
     x = np.array([run["ch"][n] - (run["ch"][sub] if sub else 0.0) for n in names])
     x, fs = to_128_per_cycle(x, run["fs"], 60.0)
-    return np.array(sequence_phasors(x, int(round(t_end * fs)) - CYCLE)) / base
+    H = 1.0
+    if mimic_tau:
+        dd = np.exp(-1.0 / (mimic_tau * CYCLE))
+        x = np.concatenate([x[:, :1], x[:, 1:] - dd * x[:, :-1]], axis=1)
+        H = 1 - dd * np.exp(-2j * np.pi / CYCLE)
+    return np.array(sequence_phasors(x, int(round(t_end * fs)) - CYCLE)) / base / H
 
 
-def relay_y(run, t):
+def relay_y(run, t, mimic_tau=None):
+    """The relay's six sequence phasors at t. mimic_tau: a mimic filter on the currents (tau in cycles; the
+    protected line's X/R / 2 pi removes its DC offset)."""
     v = seq(run, ["VLA", "VLB", "VLC"], t, VBASE_PK, sub="VLG")
-    i = seq(run, ["ILA", "ILB", "ILC"], t, IBASE_PK)
+    i = seq(run, ["ILA", "ILB", "ILC"], t, IBASE_PK, mimic_tau=mimic_tau)
     return np.array([v[1], v[2], v[0], i[1], i[2], i[0]])
 
 

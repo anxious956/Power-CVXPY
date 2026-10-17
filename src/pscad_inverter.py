@@ -18,8 +18,11 @@ Control: one user component, gfl_avm, written here in Fortran:
     I2 kept and I1 alone scaled down until every phase peak fits (I1 and I2 scaled together only if I2
     alone exceeds the limit). LIM = 1 is the limiter the TAC25 design with the limit inside assumes:
     the inverter delivers the full delta and only positive-sequence realisations that fit beside it occur;
-  - references ramp in over the third cycle (the DFT needs one full cycle first).
-Outputs: the three phase current references (kA) and |V1|, |V2| (pu of Vbase), |I1|, |I2| (pu of Ibase).
+  - references ramp in over the third cycle (the DFT needs one full cycle first);
+  - TANG > 0 (s): the angle reference is the V1 angle through a first-order low-pass on its unit phasor, a PLL-like
+    reference of bandwidth 1/(2 pi TANG); TANG = 0 is the bare DFT angle (the default, and every run before it).
+Outputs: the three phase current references (kA), |V1|, |V2| (pu of Vbase), |I1|, |I2| (pu of Ibase), and the
+reference angle ANG (deg, in the DFT's absolute frame e^{j w t}).
 
 PSCAD cannot build a new project on a path with non-ASCII characters or through the data/ junction:
 keep projects under D:\\JOSHUA_TAYLOR_data\\data\\pscad_work\\.
@@ -31,10 +34,10 @@ import xml.etree.ElementTree as ET
 
 WORK = r"D:\JOSHUA_TAYLOR_data\data\pscad_work\inverter"
 
-INPUTS = ["VA", "VB", "VC", "F0", "ID", "IQ", "MODE2", "K2", "D2MAG", "D2ANG", "IBASE", "VBASE", "IMAX", "LIM"]
-OUTPUTS = ["IA", "IB", "IC", "V1M", "V2M", "I1M", "I2M"]
+INPUTS = ["VA", "VB", "VC", "F0", "ID", "IQ", "MODE2", "K2", "D2MAG", "D2ANG", "IBASE", "VBASE", "IMAX", "LIM", "TANG"]
+OUTPUTS = ["IA", "IB", "IC", "V1M", "V2M", "I1M", "I2M", "ANG"]
 NMAX = 1700                                   # samples per cycle the DFT buffer can hold
-NSTOR = 7 + 6 * NMAX + 3
+NSTOR = 7 + 6 * NMAX + 3                      # the last two hold the low-passed reference (TANG > 0)
 
 FORTRAN = """#STORAGE REAL:%(nstor)d
 #LOCAL INTEGER G_NS
@@ -119,6 +122,19 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
       G_AN = ATAN2(G_V1I, G_V1R + 1.0E-12)
       G_CA = COS(G_AN)
       G_SA = SIN(G_AN)
+      IF ($TANG .GT. 0.0) THEN
+        G_J = NSTORF + 7 + 6*%(nmax)d
+        IF (TIME*$F0 .LT. 1.0) THEN
+          STORF(G_J)   = G_CA
+          STORF(G_J+1) = G_SA
+        ELSE
+          STORF(G_J)   = STORF(G_J) + DELT/$TANG*(G_CA - STORF(G_J))
+          STORF(G_J+1) = STORF(G_J+1) + DELT/$TANG*(G_SA - STORF(G_J+1))
+        END IF
+        G_AN = ATAN2(STORF(G_J+1), STORF(G_J) + 1.0E-12)
+        G_CA = COS(G_AN)
+        G_SA = SIN(G_AN)
+      END IF
       G_I1R = $IBASE*($ID*G_CA + $IQ*G_SA)
       G_I1I = $IBASE*($ID*G_SA - $IQ*G_CA)
       G_I2R = 0.0
@@ -187,6 +203,7 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
       $V2M = SQRT(G_V2R**2 + G_V2I**2)/$VBASE
       $I1M = G_SC*G_RMP*SQRT(G_I1R**2 + G_I1I**2)/$IBASE
       $I2M = G_SC*G_RMP*SQRT(G_I2R**2 + G_I2I**2)/$IBASE
+      $ANG = 57.29577951*G_AN
       NSTORF = NSTORF + %(nstor)d
 """ % dict(nstor=NSTOR, nmax=NMAX)
 
@@ -317,7 +334,7 @@ def build_test(pscad, name="inv_test", mode2=0, k2=2.0, d2mag=0.1, d2ang=90.0, i
     cx, cy = 60, 30
     c.create_component(defn, cx, cy)
     values = dict(F0=60.0, ID=idref, IQ=iqref, MODE2=float(mode2), K2=k2, D2MAG=d2mag, D2ANG=d2ang,
-                  IBASE=ibase_pk, VBASE=vbase_pk, IMAX=1.2, LIM=0.0)
+                  IBASE=ibase_pk, VBASE=vbase_pk, IMAX=1.2, LIM=0.0, TANG=0.0)
     for p in INPUTS:
         px, py = port_xy(p)
         gx, gy = cx + px // 18, cy + py // 18
