@@ -185,11 +185,13 @@ The smallest clean D1 distance on the hard A-G faults is 1.21 / 1.53 / 1.85 / 2.
 | noise bound | margin | δ* | cases unseparated at δ = 0 | inverter current left |
 |---|---|---|---|---|
 | design tier, V 0.029 / I 0.053 pu | ρ = 0 | **0.94 pu** at 225° | 6 | 0.14–0.33 pu |
+| design tier, V 0.029 / I 0.053 pu | ρ = 0.1 | **1.08 pu** at 30° | 9 | 0.12–0.21 pu |
+| design ε, 0.08 pu | ρ = 0 | **none up to the 1.14 pu cap** | 36 | — |
+| design ε, 0.08 pu | ρ = 0.1 | **none up to the cap** | 41 | — |
 
 At 40 Ω and the same noise bound, δ* was 0. **At high fault resistance the guarantee needs the signal even at the
 design tier's noise bound.** This is static only. It is "where the guarantee needs the signal", not yet "where
 detection needs it". Before that claim, three things are needed:
-- the ρ = 0.1 and design-ε runs (running);
 - an EMT model-error check at 80 Ω;
 - a pilot showing whether the statistical detectors also struggle there.
 
