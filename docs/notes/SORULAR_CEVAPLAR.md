@@ -1501,3 +1501,16 @@ Gerçek bir invertör kullanmıyoruz, modelliyoruz:
 - "V2'ye kilitli sinyal" (Soru 32): basılan I2'nin ölçülen V2'nin 90° önünde olması; IEEE 2800'ün istediği davranış.
 
 *Kaynak: Soru 29, 32; `results/CIGREMV.md` §3.*
+
+---
+
+## 42. Hocanın araştırması bir sonuç vermiyor mu o zaman?
+
+**Kısa cevap:** Veriyor. Yöntem söz verdiğini tutuyor, ama bizim test ağımızda gerekli değil. Bu bir başarısızlık değil, yöntemin ne zaman işe yaradığına dair bir sınır.
+
+- **Olumlu sonuç:** Yöntem ilk kez EMT'de, sinyal gerçekten enjekte edilerek sınandı ve en kötü durum garantisi tutuyor. Zor A-G arızalarında garantili oran δ olmadan %33, tasarım δ'sının ¾'ünde %100. Yolda gerçek bir sistemin şartları bulundu ve çözüldü: limiter tipi, inverterin kendi çerçevesi, PLL benzeri referans, rölenin hafıza çerçevesi, DC filtresi.
+- **Beklenmeyen sonuç:** Bu ağda klasik koruma da arızaları görüyor. Artımlı 50N, sinyal olmadan zor arızaları yakalıyor. Sinyal yalnızca "en kötü gürültüde bile garanti" için gerekiyor. Bedelini ölçü trafolarının doğruluğu belirliyor: nominale yakın doğrulukta bedava, arıza koşulundaki sınıf hatalarında inverterin yaklaşık %93'ü.
+- **Asıl önemli nokta:** Test ağı hocanın hedeflediği ortam değil. Hocanın motivasyonu, arıza akımını inverterlerin sınırladığı ve klasik korumanın arızayı göremediği şebekeler. Bizim üç baralı ağda rölenin arkasında topraklı bir senkron kaynak var, bu yüzden 3I0 büyük ve 50N çalışıyor. CIGRE MV gibi inverter ağırlıklı fiderde ise sıfır yanlış açmada hiçbir tek uçlu dedektör %15.8'i geçemedi. Bu sonuç sinyalsiz EMT verisinden; δ enjekte edilerek sınanmadı.
+- **Sonraki adım:** Aynı altyapıyla rölenin bulunduğu uçtaki senkron kaynak bir inverterle değiştirilir (tüm kaynaklar inverter) ve adım 3 tekrarlanır. Bu, sunumdaki "yönteminizin hâlâ önemli olabileceği yerler"in karşılığı; dört adımın içinde.
+
+*Kaynak: `results/STEP3_PILOT.md`, `results/FRAMES.md`, `review/STEP3_STRUCTURED_REVIEW.md`; README "Detection, inverter-rich feeder"; REVIEW.md §7 satır 52–53.*
