@@ -222,7 +222,13 @@ the main configuration (φ_ref 0.0303 rad, model error 0.1 ε, drift 3°, window
 - **Cost:** the inverter keeps 0.08–0.14 pu of I1, against 0.14–0.78 pu asked. About **93 % of its rating** goes to δ.
 - The binding witness gap (L1 15 % A-G, full R_f) is **2.210 ε against 2.20 ε** needed, a design margin of 0.01 ε.
   The EMT number for it comes from the design-point batch (`frames_design_check.py … --tag pll`).
-- The alternative with a 4 % margin (`--rho 0.04 --tag pll04`) is reported beside it.
+- The alternative with a 4 % margin (`--rho 0.04 --tag pll04`, `results/network/frames_main_pll04.json`):
+  - δ* = 1.04 pu at 225°, separating window 224–230°;
+  - dense-tier separation holds at factors 1.0 and 1.1 but **not at 1.25**, so this point is sensitive to the
+    remainders;
+  - containment 0; I1 left 0.14–0.26 pu; continuous check 53 of 684 unseparated.
+
+  The 10 % design (1.12 pu) stays the step-3 design point.
 
 **The design point in EMT** (`frames_design_check.py --mag 1.12 --rho 0.1 --edges 223 230 --tang-hz 15 --tag pll`,
 117 PSCAD runs, all with the filtered reference). Results are in `results/network/frames_design_check_pll.json`
