@@ -148,18 +148,26 @@ def box_samples(lo, hi, n_random, rng, face_pts=5):
     return np.vstack(pts)
 
 
-def scenario_bound(n, beta=1e-3):
-    """Calafiore-Campi: with n i.i.d. samples, an envelope that covers them all covers, per component, a fraction
-    of the box (by the sampling measure) of at least 1 - eps_cc with confidence 1 - beta, eps_cc = 2(ln(1/beta)+1)/n
-    (one decision variable per component bound). Stated, not used to set r."""
-    return 1.0 - 2.0 * (np.log(1.0 / beta) + 1.0) / n
+def scenario_bound(n_iid, d, beta=1e-3):
+    """Calafiore-Campi: an envelope fitted to n_iid i.i.d. samples with d decision variables per component (the
+    fitted c and J, plus the bound itself) covers, per component, at least a fraction 1 - 2(ln(1/beta) + d)/n_iid
+    of the sampling measure, with confidence 1 - beta. Only the random interior points are i.i.d.; the corners,
+    face grid and the lambda / drift / reference grids are deterministic and do not count (review of PR #44).
+    Stated, not used to set r."""
+    return 1.0 - 2.0 * (np.log(1.0 / beta) + d) / n_iid
 
 
 class FrameModel:
     """Normal operation and fault cases at one relay, with both frames, for one injecting inverter."""
 
     def __init__(self, net, cases, eps=None, lim=1, n_samples=400, factor=1.1, drift_deg=6.0, v1_min=0.05,
-                 transient_steps=5, seed=0, split=True, ref_noise=True, shared=True, face_pts=5):
+                 transient_steps=5, seed=0, split=True, ref_noise=True, shared=True, face_pts=5, ref_phi=None,
+                 model_err=0.0):
+        """ref_phi: the relay reference's rotation budget in rad (None: eps / min|V1_L|, the instantaneous worst
+        case; the memory averages random noise over its window, and a systematic VT phase error moves voltages and
+        reference together, so a smaller budget is defensible: report delta* against it). model_err: a box (pu,
+        per real component) added to every remainder for the static-vs-EMT model error (up to 0.35 eps at 0.38 s on
+        the stored runs, review of PR #44)."""
         self.net, self.cases, self.lim = net, list(cases), lim
         self.eps = net.eps if eps is None else eps
         (self.inj,) = net.injectors
@@ -168,6 +176,7 @@ class FrameModel:
         self.i_max = g.i_max or 1.2
         self.n, self.factor, self.drift, self.v1_min, self.steps = n_samples, factor, np.radians(drift_deg), v1_min, transient_steps
         self.split, self.ref_noise, self.shared = split, ref_noise, shared
+        self.ref_phi, self.model_err = ref_phi, model_err
         self.maps_N = unit_maps(net, self.inj, None)
         self.maps_F = [unit_maps(net, self.inj, (ln, m, s, mr * net.rF)) for ln, m, s, mr in self.cases]
         _, V = nw.solve(net, {}, {}, None, full=True)
@@ -244,6 +253,8 @@ class FrameModel:
         return Sx, lam, dr, ref, W
 
     def phi_max(self, d_cmd):
+        if self.ref_phi is not None:
+            return self.ref_phi
         S = np.vstack(self.samples)
         return self.eps / np.min(np.abs(self.measure(S, d_cmd, None)[:, 0]))
 
@@ -273,7 +284,7 @@ class FrameModel:
                 J = np.zeros((12, 0))
                 R = Yr - c
             resid = np.abs(R).max(0)                    # the fitted J's actual largest residual over all samples
-            r = resid * self.factor + 1e-9
+            r = resid * self.factor + self.model_err + 1e-9
             assert np.all(r >= resid), "remainder must cover the actual residual, not the fit's own estimate"
             out.append((c, np.hstack([J, np.diag(r)])))
         self._cache[key] = out
@@ -419,3 +430,18 @@ def containment_adversarial(fm, d_cmd, cases=None, n_fresh=300, face_pts=9, n_lo
                 cand.append(y * np.exp(1j * phi * w[-1]))
         out["N" if case is None else fm.cases[case]] = max(distance_to_set(pieces, y) for y in cand)
     return out
+
+
+def window(fm, r, rho=0.0, center_deg=None, half_width_deg=15, step_deg=1.0):
+    """The angles (deg) at radius r that separate, scanned in 1 deg steps around center_deg (or over the full circle):
+    the width of the separating window, which a two-decimal delta* should be quoted with."""
+    angs = np.arange(0, 360, step_deg) if center_deg is None else \
+        np.arange(center_deg - half_width_deg, center_deg + half_width_deg + 1e-9, step_deg)
+    ok = []
+    for a in angs:
+        try:
+            if separated_fast(fm, r * np.exp(1j * np.radians(a)), rho):
+                ok.append(float(a % 360))
+        except Inadmissible:
+            pass
+    return ok

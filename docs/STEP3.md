@@ -71,6 +71,31 @@ own pre-fault V1_L memory, not to an absolute frame (the E1-based frame used so 
   the grid points, through the transient window) lies in the (B) set with zero noise; then the same on EMT
   phasors. Measure what the shared symbol buys: δ* with independent boxes vs the shared symbol.
 
+## The main design configuration (review of PR #44, rounds 1–2)
+
+The result is the curve of δ* against the relay reference's rotation budget and the model-error box
+(`src/frames_budget.py`, `results/network/frames_budget.json`). The detectors need one N(δ), from
+`src/frames_main.py`, with every parameter labelled:
+
+| parameter | value | label |
+|---|---|---|
+| reference rotation φ_ref | k·σ_white / (√n_mem · min\|V1_L\|), k = 4, σ_white = 0.01 pu, n_mem = 3 cycles | k and σ chosen (the generator's random-noise model); n_mem from the relay memory |
+| model-error box | 0.1 ε | measured in EMT with δ injected (`src/frames_emt_check.py`, 168 runs): EMT points outside their own set by ≤ 0.073 ε. The earlier 0.25 ε was the distance to the settled point, which the frame symbols already cover |
+| largest \|δ\| | 1.05 pu | measured: the EMT inverter settles at 1.0 and 1.05 pu on every case, not at 1.14 pu on bolted ab faults (results/FRAMES.md); verified at 225° only |
+| drift margin | 3° | measured (≤ 2.2° in that window) |
+| decision window | [2, 3] cycles after inception | chosen |
+| margin ρ | 0.04 | at ρ = 0.1 no δ ≤ 1.05 pu separates; at 1.05 pu, 225° the largest is 0.05 |
+| **design point** | **δ = 1.05 pu at 225°** | 87.5 % of the inverter's rating; checks in `results/network/frames_main_fixed.json` |
+
+The guarantee is then **worst case over the sources, k-σ over the random noise**; the systematic VT phase error is in
+the violation matrix.
+
+**D1 cannot hold its guarantee inside one cycle on this model.** One cycle after inception the inverter's own DFT is
+still turning (28.7° beyond the fixed point) and the DC and network transients are not over: |EMT − model| reaches
+1.33 ε. It falls to 0.17–0.23 ε at 2–3 cycles. A guarantee from 2 cycles is slower than step 4's "within one cycle";
+that is a stated result, and a fair place for D2 and D3, which carry no guarantee, to decide earlier.
+D1 decides only on windows wholly after the starter's inception estimate; mixed windows belong to no set.
+
 ## Further decisions (§6 of the review)
 
 - **D1's threshold on noisy data is distance > ε**, not the ratio > 2 used on clean EMT measurements.

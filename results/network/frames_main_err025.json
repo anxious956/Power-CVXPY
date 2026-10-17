@@ -1,0 +1,126 @@
+{
+ "config": {
+  "phi_ref": 0.030333432167374483,
+  "k": 4.0,
+  "sigma_white": 0.01,
+  "n_mem": 3,
+  "min_V1L": 0.761338533673222,
+  "model_err": 0.02,
+  "drift_deg": 3.0,
+  "rho": 0.1,
+  "window_cycles": [
+   2,
+   3
+  ],
+  "labels": {
+   "k": "chosen",
+   "sigma_white": "chosen",
+   "n_mem": "relay design",
+   "model_err": "measured, provisional",
+   "drift_deg": "measured",
+   "window_cycles": "chosen",
+   "rho": "chosen"
+  }
+ },
+ "abs_delta": null,
+ "angle_deg": null,
+ "unseparated_at_0": [
+  [
+   "L1",
+   0.15,
+   "ag",
+   1.0
+  ],
+  [
+   "L1",
+   0.35,
+   "ag",
+   0.5
+  ],
+  [
+   "L1",
+   0.35,
+   "ag",
+   1.0
+  ],
+  [
+   "L1",
+   0.55,
+   "ag",
+   0.5
+  ],
+  [
+   "L1",
+   0.55,
+   "ag",
+   1.0
+  ],
+  [
+   "L1",
+   0.75,
+   "ag",
+   0.5
+  ],
+  [
+   "L1",
+   0.75,
+   "ag",
+   1.0
+  ],
+  [
+   "L1",
+   0.95,
+   "ag",
+   0.5
+  ],
+  [
+   "L1",
+   0.95,
+   "ag",
+   1.0
+  ],
+  [
+   "L2",
+   0.05,
+   "ag",
+   0.5
+  ],
+  [
+   "L2",
+   0.05,
+   "ag",
+   1.0
+  ],
+  [
+   "L2",
+   0.25,
+   "ag",
+   0.5
+  ],
+  [
+   "L2",
+   0.25,
+   "ag",
+   1.0
+  ],
+  [
+   "L2",
+   0.5,
+   "ag",
+   0.0
+  ],
+  [
+   "L2",
+   0.5,
+   "ag",
+   0.5
+  ],
+  [
+   "L2",
+   0.5,
+   "ag",
+   1.0
+  ]
+ ],
+ "inadmissible": 0
+}

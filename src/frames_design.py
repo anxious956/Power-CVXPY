@@ -52,7 +52,8 @@ def main():
         wb = fr.containment_adversarial(dense, d_below, n_fresh=200, face_pts=5, n_local=30, seed=10)
         res["containment_below"] = dict(abs_delta=float(below), max_outside_pu=float(max(wb.values())))
     n_rows = len(dense._expand(dense.samples[0], 0)[0])
-    res["scenario_bound"] = dict(rows_per_fault_piece=n_rows, coverage_beta_1e3=float(fr.scenario_bound(n_rows)))
+    res["scenario_bound"] = dict(iid_samples_per_piece=dense.n, fitted_params_per_component=9,
+                                 coverage_beta_1e3=float(fr.scenario_bound(dense.n, 9)))
     print(f"containment at delta*: largest outside {res['containment_at_dstar']['max_outside_pu']:.2e} pu; "
           f"coverage >= {res['scenario_bound']['coverage_beta_1e3']:.4f} (beta 1e-3)  [{time.time() - t0:.0f} s]", flush=True)
     res["factor_check"] = {}
