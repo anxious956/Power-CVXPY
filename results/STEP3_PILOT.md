@@ -176,6 +176,27 @@ random interior normals. The alarms are all on the confusers:
 
 These are 8 hard A-G scenarios. The dense batch (option A) gives the worst-case curve with binomial bounds.
 
+### Multiplicative systematic errors, regime-dependent, with white noise
+
+`src/step3_multiplicative.py`, `results/step3/multiplicative_pilot.json`. The errors are per-phase VT and CT ratio
+and phase errors, constant over a run, in two independent regimes:
+- normal operation and the memory: CT 1 % / 1°, VT 3 % / 2°;
+- fault windows: CT 10 % / 1°, VT 6 % / 4°.
+
+On top is the design tier's white noise, added to the samples (3 seeds). The search covers 289 parameter sets per run
+(zero, 256 random corners of the 24-parameter box, 32 interior points) and takes the worst over sets and seeds: a
+lower bound. Thresholds are worst-case over the 150 normal runs and the pre-fault windows. D0's threshold is now
+0.126 pu at every level; with white noise it is no longer degenerate.
+
+| | δ = 0 | ¼ δ* | ½ δ* | ¾ δ* | δ* |
+|---|---|---|---|---|---|
+| worst-case miss, every stratum (D1 / D0 / D2 / D3) | 0 / 0 / 0 / 0 (D3: 1 of 2 B-C) | 0 | 0 | 0 | 0 |
+| D1 false alarms on the 30 normal runs | 0 | 0 | 0 | 0 | 0 |
+
+**Realistic systematic instrument errors hide no pilot fault from any detector at any δ, and cause no false alarm.**
+This matches the statistical result. Regime-dependent multiplicative errors are not where the signal matters on this
+network; only a per-window additive worst case (the stress bound above) is.
+
 ### Multiplicative systematic errors: the stress case
 
 This first version applied the fault-condition limits to every window and to the memory. That makes it a **stress

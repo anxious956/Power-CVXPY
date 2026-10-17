@@ -1,0 +1,2649 @@
+{
+ "bounds": {
+  "N": [
+   0.03,
+   0.03490658503988659,
+   0.01,
+   0.017453292519943295
+  ],
+  "F": [
+   0.06,
+   0.06981317007977318,
+   0.1,
+   0.017453292519943295
+  ]
+ },
+ "tier": "white",
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "n_params": 289,
+ "summary": {
+  "hard|0.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|0.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.5
+  ],
+  "hard_bc|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "hard_bc|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "uniform|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.25": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.5": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|0.75": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "outside|1.0": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "rows": [
+  {
+   "name": "s3p_000_l000",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.4525890734222415,
+   "d0_min": 0.4315719220674973,
+   "d2_min": 130.5820395669769,
+   "d3_min": 7.794153690338135,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_001_l000",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 2.103660999938552,
+   "d0_min": 0.6678848088792381,
+   "d2_min": 296.65569932245364,
+   "d3_min": 17.861703872680664,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_002_l000",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.0206351451027964,
+   "d0_min": 0.31086638288760654,
+   "d2_min": 46.640769802188,
+   "d3_min": 4.899199962615967,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_003_l000",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.3186224488158231,
+   "d0_min": 0.4125500765983642,
+   "d2_min": 103.5160634339714,
+   "d3_min": 8.487500190734863,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_004_l000",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.3704131199836822,
+   "d0_min": 0.42177720967638904,
+   "d2_min": 112.95379363264306,
+   "d3_min": 7.975729465484619,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_005_l000",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.1225692655715547,
+   "d0_min": 0.3514182858569751,
+   "d2_min": 84.45466462303402,
+   "d3_min": 7.119471549987793,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_006_l000",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.909942906491222,
+   "d0_min": 0.6281851853421546,
+   "d2_min": 252.5283789272636,
+   "d3_min": 14.995716094970703,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_007_l000",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.4426888409677547,
+   "d0_min": 0.4374213641906079,
+   "d2_min": 126.98727917148615,
+   "d3_min": 8.512800216674805,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_008_l000",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 4.886402582214043,
+   "d0_min": 0.5413006221708305,
+   "d2_min": 778.8758000909196,
+   "d3_min": 12.206942558288574,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_009_l000",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 4.06920224748592,
+   "d0_min": 0.3363496488640737,
+   "d2_min": 317.67440797881244,
+   "d3_min": -6.124951362609863,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": true,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_010_l000",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 4.432738941503518,
+   "d0_min": 1.1083216306700137,
+   "d2_min": 736.1431746136578,
+   "d3_min": 14.290024757385254,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_011_l000",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 9.693425762871508,
+   "d0_min": 0.7899192594317951,
+   "d2_min": 1754.6048790730592,
+   "d3_min": 16.935277938842773,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_012_l000",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 1.4781603621105774,
+   "d0_min": 0.4760886735080777,
+   "d2_min": 105.74202600839321,
+   "d3_min": 3.216784715652466,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_013_l000",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.0,
+   "in_range": true,
+   "d1_min_eps": 4.984004680492313,
+   "d0_min": 0.42028246545631776,
+   "d2_min": 470.1527934052374,
+   "d3_min": -0.26787254214286804,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_014_l000",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.0,
+   "in_range": false,
+   "d1_min_eps": 10.765357824731117,
+   "d0_min": 0.9059969586107114,
+   "d2_min": 2241.056602282335,
+   "d3_min": 14.616131782531738,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_015_l000",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.0,
+   "in_range": false,
+   "d1_min_eps": 1.097078210446624,
+   "d0_min": 0.318317795377773,
+   "d2_min": 44.918281901611465,
+   "d3_min": 2.3262832164764404,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074544368367,
+    "d2": -92.82075600535187,
+    "d3": -5.512459754943848
+   }
+  },
+  {
+   "name": "s3p_000_l025",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.8523413231093144,
+   "d0_min": 0.48079407669605456,
+   "d2_min": 152.50142740184236,
+   "d3_min": 7.034152507781982,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_001_l025",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 2.3300042641734104,
+   "d0_min": 0.7019188930879399,
+   "d2_min": 315.997186848665,
+   "d3_min": 17.49262046813965,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_002_l025",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.1567431897431966,
+   "d0_min": 0.3511978727933807,
+   "d2_min": 56.18396715711746,
+   "d3_min": 4.316332817077637,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_003_l025",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.580518161697756,
+   "d0_min": 0.4564333058751058,
+   "d2_min": 119.43762010579519,
+   "d3_min": 7.9116291999816895,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_004_l025",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.5671616248356053,
+   "d0_min": 0.4507767874357539,
+   "d2_min": 129.19193448385667,
+   "d3_min": 7.2533369064331055,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_005_l025",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.4464343014420893,
+   "d0_min": 0.3961000625596533,
+   "d2_min": 99.14266189568477,
+   "d3_min": 6.5856523513793945,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_006_l025",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 2.0230784392845838,
+   "d0_min": 0.6466848341101598,
+   "d2_min": 270.30247549723924,
+   "d3_min": 14.635751724243164,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_007_l025",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.5855540821290113,
+   "d0_min": 0.4701187717494489,
+   "d2_min": 145.81720566466277,
+   "d3_min": 7.873398780822754,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_008_l025",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 4.494376688737792,
+   "d0_min": 0.4954446814717754,
+   "d2_min": 737.7535782644964,
+   "d3_min": 12.790532112121582,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_009_l025",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 3.154405970818618,
+   "d0_min": 0.2897885559171238,
+   "d2_min": 245.14822101986925,
+   "d3_min": -3.9040048122406006,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_010_l025",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 4.968633979079252,
+   "d0_min": 1.203458132723912,
+   "d2_min": 820.736203019303,
+   "d3_min": 11.680091857910156,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_011_l025",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 8.691657395301949,
+   "d0_min": 0.7403515575523708,
+   "d2_min": 1617.0741600874785,
+   "d3_min": 18.69834327697754,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_012_l025",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 1.6902479287218868,
+   "d0_min": 0.5007269285520016,
+   "d2_min": 108.08738298918094,
+   "d3_min": 3.0655906200408936,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_013_l025",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.25,
+   "in_range": true,
+   "d1_min_eps": 4.051257339487188,
+   "d0_min": 0.37552800847187906,
+   "d2_min": 386.6128255117283,
+   "d3_min": 2.722449541091919,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_014_l025",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.25,
+   "in_range": false,
+   "d1_min_eps": 9.592824233508788,
+   "d0_min": 0.8613355611334127,
+   "d2_min": 2118.621983479402,
+   "d3_min": 15.868786811828613,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_015_l025",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.25,
+   "in_range": false,
+   "d1_min_eps": 1.2825230106999805,
+   "d0_min": 0.3572157366086016,
+   "d2_min": 48.31306904878205,
+   "d3_min": 2.147059440612793,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.1257207315473537,
+    "d2": -103.09901945880158,
+    "d3": -4.755630016326904
+   }
+  },
+  {
+   "name": "s3p_000_l050",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.3037936257447154,
+   "d0_min": 0.5485443790554397,
+   "d2_min": 178.5868497109151,
+   "d3_min": 6.087667465209961,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_001_l050",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.7723961346240293,
+   "d0_min": 0.7497295119362664,
+   "d2_min": 329.5689822683571,
+   "d3_min": 17.120309829711914,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_002_l050",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.4967818732358165,
+   "d0_min": 0.3988156871269023,
+   "d2_min": 64.10453970461342,
+   "d3_min": 3.7288968563079834,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_003_l050",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.0025460438048377,
+   "d0_min": 0.511932897450473,
+   "d2_min": 136.67712683803236,
+   "d3_min": 7.234603404998779,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_004_l050",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.9988752190325043,
+   "d0_min": 0.5052065800484322,
+   "d2_min": 147.06558593668308,
+   "d3_min": 6.564355373382568,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_005_l050",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.8436698779193759,
+   "d0_min": 0.4536322620297426,
+   "d2_min": 115.42438245490129,
+   "d3_min": 5.750680923461914,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_006_l050",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.323463837346526,
+   "d0_min": 0.673800255252627,
+   "d2_min": 282.8804615960733,
+   "d3_min": 14.322818756103516,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_007_l050",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.019642385613089,
+   "d0_min": 0.5208662508065932,
+   "d2_min": 166.2812723537953,
+   "d3_min": 7.240471839904785,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_008_l050",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 4.773537087916022,
+   "d0_min": 0.46339716286896965,
+   "d2_min": 702.8644011108225,
+   "d3_min": 13.185744285583496,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_009_l050",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 2.2985920382525533,
+   "d0_min": 0.2540566767588702,
+   "d2_min": 197.99542581821606,
+   "d3_min": -2.2937965393066406,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_010_l050",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 5.324576015274732,
+   "d0_min": 1.2780084464889507,
+   "d2_min": 930.5722212144489,
+   "d3_min": 8.918129920959473,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_011_l050",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 7.8038921628035425,
+   "d0_min": 0.6879135968500397,
+   "d2_min": 1438.563722114115,
+   "d3_min": 20.610496520996094,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_012_l050",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 1.8691692387496592,
+   "d0_min": 0.5031970549746321,
+   "d2_min": 112.94888570692117,
+   "d3_min": 2.4167888164520264,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_013_l050",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.5,
+   "in_range": true,
+   "d1_min_eps": 3.2012823807980673,
+   "d0_min": 0.33167262412320947,
+   "d2_min": 320.33457233561205,
+   "d3_min": 4.913005352020264,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_014_l050",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.5,
+   "in_range": false,
+   "d1_min_eps": 8.414297442225665,
+   "d0_min": 0.8151192737357478,
+   "d2_min": 1879.328206413818,
+   "d3_min": 17.223676681518555,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_015_l050",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.5,
+   "in_range": false,
+   "d1_min_eps": 1.5289815582302402,
+   "d0_min": 0.38464777072392964,
+   "d2_min": 47.901166753466654,
+   "d3_min": 1.7066303491592407,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074762662752,
+    "d2": -112.97851717725082,
+    "d3": -4.826753616333008
+   }
+  },
+  {
+   "name": "s3p_000_l075",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.6126241534831487,
+   "d0_min": 0.6191664899529283,
+   "d2_min": 217.85711700598128,
+   "d3_min": 4.646877288818359,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_001_l075",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 3.0656340015895327,
+   "d0_min": 0.7847304452727054,
+   "d2_min": 357.54039246225227,
+   "d3_min": 16.7088680267334,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_002_l075",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 1.7171157270383437,
+   "d0_min": 0.4410487563397018,
+   "d2_min": 80.46283567877653,
+   "d3_min": 2.492004871368408,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_003_l075",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.260850425454411,
+   "d0_min": 0.564111219163078,
+   "d2_min": 163.73405971551693,
+   "d3_min": 6.446045398712158,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_004_l075",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.2928895446996918,
+   "d0_min": 0.5729500229689358,
+   "d2_min": 174.8799142450793,
+   "d3_min": 5.876389980316162,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_005_l075",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.0835349186391636,
+   "d0_min": 0.5110284200646474,
+   "d2_min": 142.01494469662106,
+   "d3_min": 4.375402450561523,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_006_l075",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.5882313397009566,
+   "d0_min": 0.6928571281490261,
+   "d2_min": 304.2439125049899,
+   "d3_min": 13.77989673614502,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_007_l075",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.296207822971878,
+   "d0_min": 0.562050412561886,
+   "d2_min": 196.23824532576282,
+   "d3_min": 6.072172164916992,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_008_l075",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 4.714630992325432,
+   "d0_min": 0.4173394116562057,
+   "d2_min": 615.7296966855426,
+   "d3_min": 12.726863861083984,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_009_l075",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.2951629817065045,
+   "d0_min": 0.2461373139390024,
+   "d2_min": 195.6390386047079,
+   "d3_min": -1.130035638809204,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_010_l075",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 5.593494121454631,
+   "d0_min": 1.349896105029063,
+   "d2_min": 1062.6647744071504,
+   "d3_min": 5.760510444641113,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_011_l075",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 7.123091373677131,
+   "d0_min": 0.6455408985529472,
+   "d2_min": 1286.4953133106303,
+   "d3_min": 22.633785247802734,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_012_l075",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.1333346457070257,
+   "d0_min": 0.5409996886670211,
+   "d2_min": 116.93016315234351,
+   "d3_min": 0.9774422645568848,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_013_l075",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 0.75,
+   "in_range": true,
+   "d1_min_eps": 2.860743259990592,
+   "d0_min": 0.31047288405146745,
+   "d2_min": 308.8302156669569,
+   "d3_min": 6.94161319732666,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_014_l075",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 0.75,
+   "in_range": false,
+   "d1_min_eps": 7.310311224095919,
+   "d0_min": 0.7708190102690624,
+   "d2_min": 1676.5475474313225,
+   "d3_min": 19.120580673217773,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_015_l075",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 0.75,
+   "in_range": false,
+   "d1_min_eps": 1.6854879070535542,
+   "d0_min": 0.4135122113443842,
+   "d2_min": 54.38116609996766,
+   "d3_min": 0.32531338930130005,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572074328602173,
+    "d2": -123.65481230262863,
+    "d3": -5.471834182739258
+   }
+  },
+  {
+   "name": "s3p_000_l100",
+   "scenario": 0,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 3.1110772148173513,
+   "d0_min": 0.7460958511914578,
+   "d2_min": 336.0343199426312,
+   "d3_min": 3.0573184490203857,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_001_l100",
+   "scenario": 1,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 3.537271671957355,
+   "d0_min": 0.8818191119652288,
+   "d2_min": 489.95447321471914,
+   "d3_min": 15.787829399108887,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_002_l100",
+   "scenario": 2,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.0754827315093993,
+   "d0_min": 0.5192834863951387,
+   "d2_min": 133.79344893170406,
+   "d3_min": 1.019304633140564,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_003_l100",
+   "scenario": 3,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.694031292798875,
+   "d0_min": 0.668076744333596,
+   "d2_min": 244.60919472664347,
+   "d3_min": 5.048456192016602,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_004_l100",
+   "scenario": 4,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.748478062641647,
+   "d0_min": 0.6925054381997487,
+   "d2_min": 263.3698960839756,
+   "d3_min": 4.060999393463135,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_005_l100",
+   "scenario": 5,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.510555223073611,
+   "d0_min": 0.6203456868024,
+   "d2_min": 222.25033593816715,
+   "d3_min": 2.710232734680176,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_006_l100",
+   "scenario": 6,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 3.0080716309898428,
+   "d0_min": 0.7505164587649232,
+   "d2_min": 410.1622275399171,
+   "d3_min": 12.686840057373047,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_007_l100",
+   "scenario": 7,
+   "stratum": "hard",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.7618685139650814,
+   "d0_min": 0.6610640194400172,
+   "d2_min": 290.7869750730407,
+   "d3_min": 4.764066696166992,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_008_l100",
+   "scenario": 8,
+   "stratum": "hard_bc",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 5.022604561628451,
+   "d0_min": 0.39467433422500237,
+   "d2_min": 824.5787490327226,
+   "d3_min": 12.393627166748047,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_009_l100",
+   "scenario": 9,
+   "stratum": "hard_bc",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.878411100910674,
+   "d0_min": 0.21573669181447527,
+   "d2_min": 332.3241411838062,
+   "d3_min": -1.500939965248108,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_010_l100",
+   "scenario": 10,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 5.406237081788364,
+   "d0_min": 1.3463303263371786,
+   "d2_min": 1193.1803208827782,
+   "d3_min": 0.41715413331985474,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_011_l100",
+   "scenario": 11,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 7.580489882181693,
+   "d0_min": 0.618669645327327,
+   "d2_min": 2009.9353332018654,
+   "d3_min": 25.795272827148438,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_012_l100",
+   "scenario": 12,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 2.3844576583173547,
+   "d0_min": 0.5897437617736927,
+   "d2_min": 146.71508980209512,
+   "d3_min": -1.0915120840072632,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_013_l100",
+   "scenario": 13,
+   "stratum": "uniform",
+   "level": 1.0,
+   "in_range": true,
+   "d1_min_eps": 4.075965825761417,
+   "d0_min": 0.3023746080720936,
+   "d2_min": 583.4551771536941,
+   "d3_min": 9.819010734558105,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_014_l100",
+   "scenario": 14,
+   "stratum": "outside",
+   "level": 1.0,
+   "in_range": false,
+   "d1_min_eps": 7.867846640079806,
+   "d0_min": 0.7226571619041218,
+   "d2_min": 2368.3871044732596,
+   "d3_min": 21.9943904876709,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  },
+  {
+   "name": "s3p_015_l100",
+   "scenario": 15,
+   "stratum": "outside",
+   "level": 1.0,
+   "in_range": false,
+   "d1_min_eps": 2.0051749814055775,
+   "d0_min": 0.5123444649257275,
+   "d2_min": 91.2196176660679,
+   "d3_min": -2.5088398456573486,
+   "d1_miss": false,
+   "d0_miss": false,
+   "d2_miss": false,
+   "d3_miss": false,
+   "thresholds": {
+    "d0": 0.12572072347861357,
+    "d2": -176.26751099693217,
+    "d3": -6.744405746459961
+   }
+  }
+ ],
+ "normal_rows": [
+  {
+   "name": "s3n_000_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.510067868174752,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_001_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.41629046177381784,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_002_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5832620199880025,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_003_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.4612140185010096,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_004_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.46803183210765836,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_005_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.47363995636680173,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_006_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5844661808996733,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_007_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5137080827663988,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_008_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5366942086572066,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_009_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.464210682149848,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_010_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.6307629569637017,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_011_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.557214669593978,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_012_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5130072653909084,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_013_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.46228586498797414,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_014_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5591622778215214,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_015_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5545864345856213,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_016_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5257682237145148,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_017_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.47818463213825146,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_018_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.4692331744095969,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_019_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5099977817907836,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_020_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5566762113535666,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_021_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5284684643694999,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_022_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.4759618098501811,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_023_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5662751567880265,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_024_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.6029320677507058,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_025_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5286024231664709,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_026_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.5089420291666735,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_027_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.6242322538507855,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_028_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.4728821116376739,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_029_l000",
+   "level": 0.0,
+   "d1_worst_eps": 0.4575243543404916,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_000_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5040932129180864,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_001_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.42756584735653774,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_002_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5948912971060415,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_003_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.46482832195280305,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_004_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.4795018879345724,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_005_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.48493643752117654,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_006_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5961965509979211,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_007_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5255731014777613,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_008_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5365061137423087,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_009_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.4755313232567994,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_010_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.6423839356859641,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_011_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5689605380534833,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_012_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5245302926441995,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_013_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.4601111922571188,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_014_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5709207124646762,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_015_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5664236271965875,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_016_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5380033751696919,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_017_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.48404194423128705,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_018_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.48020252100242994,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_019_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5216154051985512,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_020_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5683058283143532,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_021_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5399578037974563,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_022_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.4873946827960238,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_023_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5778352342594064,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_024_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.6145695642823199,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_025_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5408672376700938,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_026_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.5207398087106376,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_027_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.6358220687902135,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_028_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.48521727731850445,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_029_l025",
+   "level": 0.25,
+   "d1_worst_eps": 0.4613297587491769,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_000_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5094820221310883,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_001_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.43886931058972706,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_002_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5932639696453306,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_003_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.4863216840704696,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_004_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.4909921837904031,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_005_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.4962423509275635,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_006_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5965743068087568,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_007_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5431423516603491,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_008_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5487877915833238,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_009_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.4868799093779493,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_010_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.6404306954683346,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_011_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5836298496581781,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_012_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5360763044539916,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_013_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.47155188712671037,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_014_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5715742244965187,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_015_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5826542029567923,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_016_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5502145272873078,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_017_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.49568920738355166,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_018_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.4929921301203154,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_019_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5332411292875685,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_020_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5774300661517925,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_021_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5514547313528483,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_022_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.4988505989427616,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_023_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5894034327196294,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_024_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.6214887527424557,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_025_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5531036301803797,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_026_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.5276928501477484,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_027_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.6408721662171296,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_028_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.497523056344644,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_029_l050",
+   "level": 0.5,
+   "d1_worst_eps": 0.47273220975839025,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_000_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5211099082528582,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_001_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.4502032533448057,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_002_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5729236072639382,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_003_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5116527088078414,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_004_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5025065321402968,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_005_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5075571266525504,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_006_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5799101114240661,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_007_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5577024299238945,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_008_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5610454064916489,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_009_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.4982540021697652,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_010_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.6200898079985014,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_011_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5930279051458637,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_012_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5476427082176805,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_013_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.4830039614272996,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_014_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5582174514761714,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_015_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5956662516647228,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_016_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5623995810140676,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_017_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.509343528508372,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_018_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.510000599681084,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_019_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5456068859311345,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_020_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5716951483255237,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_021_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5629658220794764,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_022_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5103312884609504,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_023_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5890306515678481,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_024_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.6024180621668399,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_025_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5653173673099309,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_026_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5213394004729274,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_027_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.6213609692004781,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_028_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.5097987856745057,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_029_l075",
+   "level": 0.75,
+   "d1_worst_eps": 0.48414637227989343,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_000_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5095766897165089,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_001_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.47742571409013723,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_002_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5461797470198967,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_003_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5234157491433861,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_004_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.49075281106568036,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_005_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5240875094255465,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_006_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5564775054609565,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_007_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5571006349871445,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_008_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5508336869861318,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_009_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5249989222763596,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_010_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5940420006833796,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_011_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5892202074686621,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_012_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5359825289908254,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_013_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.503226583715,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_014_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5437168837375096,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_015_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5954412804348196,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_016_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5507411660927872,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_017_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.517196900165264,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_018_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5162366965848816,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_019_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5560035150266814,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_020_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5549470286518284,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_021_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5362468593418976,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_022_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5013067851044909,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_023_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5690138415486873,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_024_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5773001460511215,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_025_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5452843356264857,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_026_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5144327107634791,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_027_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5958229788713465,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_028_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.5103511894012461,
+   "d1_false_alarm": false
+  },
+  {
+   "name": "s3n_029_l100",
+   "level": 1.0,
+   "d1_worst_eps": 0.48606176107363547,
+   "d1_false_alarm": false
+  }
+ ]
+}
