@@ -91,6 +91,31 @@
    "feasible": false,
    "unseparated_at_0": 18,
    "seconds": 2180.7882125377655
+  },
+  {
+   "label": "class tier",
+   "eps_V": 0.139,
+   "eps_I": 0.168,
+   "abs_delta": null,
+   "angle_deg": null,
+   "feasible": false,
+   "unseparated_at_0": 34,
+   "seconds": 571.5903511047363
+  },
+  {
+   "label": "eps 0.08 (the design)",
+   "eps_V": 0.08,
+   "eps_I": 0.08,
+   "abs_delta": 1.12,
+   "angle_deg": 225.0,
+   "feasible": true,
+   "unseparated_at_0": 14,
+   "inverter_current_left": [
+    0.08000039990637603,
+    0.08407841167061984,
+    0.1425522228245744
+   ],
+   "seconds": 3483.024518251419
   }
  ]
 }

@@ -95,8 +95,25 @@ re-run with that bound per component, keeping the main configuration otherwise (
 rating) with a 10 % margin.** The design tier is near-nominal instrument accuracy: CT ≤ 1 %, VT ≤ 0.5 %, 0.3°.
 At the class tier (CT 5–10 %, VT 3–6 %, VT phase 2–4°) the bound exceeds ε (review/STEP3_WORSTCASE_REVIEW.md).
 The 1.12 pu design is the price of ε = 0.08 pu, about 1.5 times the design tier's current error and 2.8 times its
-voltage error. The signal's size is set by the noise bound assumed, not by the faults. δ*(ε) is computed as a
-curve with both tiers marked (`src/frames_eps_curve.py`).
+voltage error. The signal's size is set by the noise bound assumed, not by the faults.
+
+**δ*(ε)**, from `src/frames_eps_curve.py` (`results/network/frames_eps_curve.json`). Settings: ρ = 0.1, faults up to
+40 Ω, cap 1.14 pu, main configuration otherwise. The noise bound applies to every real component; the two tiers are
+per-component bounds.
+
+| noise bound (pu) | 0.03 | **design tier** (V 0.029 / I 0.053) | 0.04 | 0.05 | 0.06 | **0.08 (the design)** | 0.10 | 0.12 | **class tier** (V 0.139 / I 0.168) |
+|---|---|---|---|---|---|---|---|---|---|
+| δ* (pu) | 0 | **0.04** | 0.10 | 0.34 | 0.58 | **1.12** | none ≤ 1.14 | none | **none ≤ 1.14** |
+| cases unseparated at δ = 0 | 0 | 1 | 1 | 4 | 5 | 14 | 18 | 25 | 34 |
+| share of the inverter's rating | 0 | 3 % | 9 % | 30 % | 51 % | 93 % | — | — | — |
+
+- The signal grows steeply with the noise bound. Between 0.03 and 0.08 pu it goes from nothing to 93 % of the
+  inverter.
+- Above about 0.09 pu no admissible signal guarantees detection on this network.
+- With near-nominal instruments (design tier) the guarantee is almost free.
+- With class-accuracy instruments under fault (CT 5–10 %, VT 3–6 %, 2–4°) no signal the inverter can deliver buys
+  it. Taylor's guarantee is then not available at all, and detection rests on statistics (the pilot) or on
+  incremental elements, which are immune to additive offsets.
 
 ## Each detector against its own worst case (option B)
 
