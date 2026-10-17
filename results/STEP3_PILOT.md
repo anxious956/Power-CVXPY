@@ -146,6 +146,42 @@ all on the confusers:
 
 These are 8 hard A-G scenarios. The dense batch (option A) gives the worst-case curve with binomial bounds.
 
+## D1's worst-case curve with bounds (option A)
+
+The dense batch has 350 clean PSCAD runs (`src/step3_data.py dense`): 70 new scenarios (40 hard A-G, 10 hard B-C,
+20 uniform, all inside the design's ranges), each at the five δ levels, all with the filtered reference.
+`src/step3_worstcase.py` computes, for each run, the fraction of faults D1 detects under any noise inside the ε box,
+i.e. whose clean distance to N exceeds 2ε in every 2–3-cycle window. Bounds are Clopper–Pearson 95 %. Results are
+in `results/step3/worstcase_dense.json`.
+
+| stratum | n | δ = 0 | ¼ δ* | ½ δ* | ¾ δ* | δ* |
+|---|---|---|---|---|---|---|
+| hard A-G | 40 | **0.33** [0.19, 0.49] | 0.60 [0.43, 0.75] | 0.93 [0.80, 0.98] | **1.00** [0.91, 1.00] | 1.00 [0.91, 1.00] |
+| hard B-C | 10 | 1.00 [0.69, 1.00] | 1.00 | 1.00 | 1.00 | 1.00 |
+| uniform | 20 | 0.95 [0.75, 1.00] | 1.00 [0.83, 1.00] | 1.00 | 1.00 | 1.00 |
+| all in range | 70 | 0.60 [0.48, 0.72] | 0.77 [0.66, 0.86] | 0.96 [0.88, 0.99] | **1.00** [0.95, 1.00] | 1.00 [0.95, 1.00] |
+
+The smallest clean D1 distance on the hard A-G faults is 1.21 / 1.53 / 1.85 / 2.17 / 2.52 ε across the five levels.
+
+**This is Taylor's guarantee, measured in EMT.**
+- Without the signal, two thirds of the high-resistance A-G faults can be hidden by a noise the design admits.
+- At ¾ δ* (0.84 pu) none of these 40 can be (95 % bound ≥ 0.91).
+- EMT reaches the guarantee below the design's δ*: the design covers the extreme realisation pair of every case, and
+  random realisations near the witnesses are not that extreme.
+
+## A higher fault resistance (option C, static)
+
+`src/frames_rf80.py`, `results/network/frames_rf80.json`. The design's grid has R_f up to 80 Ω (R_f / rF in
+{0, 0.5, 1, 1.5, 2}), the main configuration otherwise, cap 1.14 pu.
+
+| noise bound | margin | δ* | cases unseparated at δ = 0 | inverter current left |
+|---|---|---|---|---|
+| front end, V 0.029 / I 0.053 pu | ρ = 0 | **0.94 pu** at 225° | 6 | 0.14–0.33 pu |
+
+At 40 Ω and the same noise bound, δ* was 0. **At high fault resistance the signal is needed even at the noise bound
+the relay actually has.** That is where a designed signal could earn its cost on this network. The remaining
+configurations (ρ = 0.1, design ε) are still running.
+
 ## What could make the experiment informative
 
 Not started; the choice belongs with the project (docs/STEP3.md, "no sweep until all six hold"):
