@@ -126,8 +126,12 @@ per-component bounds.
   | **class tier, structured, regime-dependent** | **1.08 pu** at 225° (I1 left 0.12–0.21 pu) | **1.12 pu** at 225° (I1 left 0.08–0.14 pu) |
   | design tier, structured | **0** | **0** |
 
-  **At the class tier the guarantee is available, at the same price as the design** (1.12 pu, about 93 % of the
-  inverter). The box was too pessimistic. The earlier line "with class-accuracy instruments no signal the inverter
+  **At the class tier the guarantee is available, at about 93 % of the inverter** (1.12 pu at ρ = 0.1). The box was
+  too pessimistic. That this equals the ε = 0.08 box result (also 1.12 pu at 225°) is a numerical coincidence: the
+  two sets are different. The review checked the structured set at the design point
+  (review/STEP3_STRUCTURED_REVIEW.md, `review/checks/p44g_structured.py`). It aimed the sign corner at each residual
+  gradient for 25 fresh source points in N and 3 fault sets, and found 0 of 2,400 points outside their own union.
+  That covers 4 of the 49 sets. The earlier line "with class-accuracy instruments no signal the inverter
   can deliver buys it" is withdrawn (REVIEW.md §7 row 53). With the structured set the design tier needs no signal
   even with a 10 % margin.
 
@@ -204,9 +208,12 @@ lower bound. Thresholds are worst-case over the 150 normal runs and the pre-faul
 | worst-case miss, every stratum (D1 / D0 / D2 / D3) | 0 / 0 / 0 / 0 (D3: 1 of 2 B-C) | 0 | 0 | 0 | 0 |
 | D1 false alarms on the 30 normal runs | 0 | 0 | 0 | 0 | 0 |
 
-**Realistic systematic instrument errors hide no pilot fault from any detector at any δ, and cause no false alarm.**
-This matches the statistical result. Regime-dependent multiplicative errors are not where the signal matters on this
-network; only a per-window additive worst case (the stress bound above) is.
+**In this sample, realistic systematic instrument errors hid no pilot fault from any detector at any δ, and caused
+no false alarm.** It is a sample, a lower bound on misses: 289 multiplicative settings × 3 white-noise seeds, with
+the white noise random, not at its k·σ worst. It matches the statistical result. The two statements are different:
+- **sampled** errors, regime-dependent multiplicative plus random white noise, need no δ for detection on the pilot;
+- the **worst case** of the same errors, as a structured set in the design, still needs δ at the class tier (13 cases
+  unseparated at δ = 0, δ* 1.12 pu).
 
 ### Multiplicative systematic errors: the stress case
 
