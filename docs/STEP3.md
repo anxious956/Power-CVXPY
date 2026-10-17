@@ -80,11 +80,11 @@ The result is the curve of δ* against the relay reference's rotation budget and
 | parameter | value | label |
 |---|---|---|
 | reference rotation φ_ref | k·σ_white / (√n_mem · min\|V1_L\|), k = 4, σ_white = 0.01 pu, n_mem = 3 cycles | k and σ chosen (the generator's random-noise model); n_mem from the relay memory |
-| model-error box | 0.1 ε | measured in EMT with δ injected (`src/frames_emt_check.py`, 168 runs): EMT points outside their own set by ≤ 0.073 ε. The earlier 0.25 ε was the distance to the settled point, which the frame symbols already cover |
-| largest \|δ\| | 1.05 pu | measured: the EMT inverter settles at 1.0 and 1.05 pu on every case, not at 1.14 pu on bolted ab faults (results/FRAMES.md); verified at 225° only |
+| model-error box | 0.1 ε | **provisional**: measured on random interior source points at 225° (`src/frames_emt_check.py`, 168 runs), EMT points outside their own set by ≤ 0.073 ε; no A-G case at 1.00 / 1.05 pu. The earlier 0.25 ε was the distance to the settled point, which the frame symbols already cover. To be confirmed at the design point's witnesses (review/STEP3_PART3_REVIEW.md §5) |
+| largest \|δ\| | 1.05 pu | measured at 225° on ab faults, inside the 2–3-cycle window, for this controller (one-cycle DFT reference, no PLL): at 1.14 pu it does not settle on bolted ab faults; at 1.05 pu 3 of 8 bolted ab runs drift up to 21° after 3 cycles |
 | drift margin | 3° | measured (≤ 2.2° in that window) |
 | decision window | [2, 3] cycles after inception | chosen |
-| margin ρ | 0.04 | at ρ = 0.1 no δ ≤ 1.05 pu separates; at 1.05 pu, 225° the largest is 0.05 |
+| margin ρ | 0.04 | chosen for feasibility: at ρ = 0.1 no δ ≤ 1.05 pu separates; at 1.05 pu, 225° the largest is 0.05. Total margin 0.08 ε against 0.073 ε seen outside the sets; remainder factor 1.1 is further headroom |
 | **design point** | **δ = 1.05 pu at 225°** | 87.5 % of the inverter's rating; checks in `results/network/frames_main_fixed.json` |
 
 The guarantee is then **worst case over the sources, k-σ over the random noise**; the systematic VT phase error is in

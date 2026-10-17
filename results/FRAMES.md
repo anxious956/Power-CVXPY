@@ -62,28 +62,42 @@ phase-to-phase cases plus 4 normals. All at 225°, at random points of the sourc
 1.0 / 1.05 / 1.14 pu. Each run is compared in the relay's frame on windows ending 2, 2.25, …, 3 cycles after
 inception, with the frame-model sets at model_err = 0.
 
-| \|δ\| | fault points outside their own set | largest \|EMT − settled model\| | EMT settles |
+| \|δ\| | fault points outside their own set | largest \|EMT − settled model\| | EMT settles, in the 2–3-cycle window |
 |---|---|---|---|
 | 0.90 pu | 12 of 240, at most **0.073 ε** | 0.40 ε | all 48 cases |
-| 1.00 pu | 0 of 120 | 0.47 ε | all 24 ab cases |
-| 1.05 pu | 0 of 120 | 0.54 ε | all 24 ab cases |
+| 1.00 pu | 0 of 120 | 0.47 ε | the 24 ab cases run (no A-G run) |
+| 1.05 pu | 0 of 120 | 0.54 ε | the 24 ab cases run (no A-G run); **3 of 8 bolted ab runs drift up to 21° after 3 cycles** |
 | 1.14 pu | 90 of 240, up to **18.7 ε** | 18.9 ε | **not on 7 bolted ab faults** |
 
 - **At 1.14 pu the inverter does not settle on bolted phase-to-phase faults.** The δ-priority limiter cuts I1 to
   0.06 pu. The inverter's angle, from its one-cycle DFT of V1, keeps turning through the fault: δ turns 80° in three
   cycles, and the relay current reaches 3 pu against 1.4 pu at 0.9 pu. The static fixed point exists, is unique and
-  has a small angle gain (≈ 0.25). The failure is dynamic. Neither the loop gain nor the inverter's own share of its
-  bus voltage predicts it across δ levels. The mechanism is not identified.
+  has a small angle gain (≈ 0.25, falling with |δ|). The failure is dynamic. It grows smoothly with |δ|, occurs on
+  phase-to-phase faults only (where δ makes positive-sequence voltage at the inverter's own bus), and the runs first
+  approach the fixed point and then leave it. The review (review/STEP3_PART3_REVIEW.md §2) finds that δ's own term
+  over the smallest |V1_R| on the circle orders the cases checked (0.59 / 0.67 hold, 0.73 / 0.79 drift at 1.05 pu,
+  0.87 / 1.94 diverge at 1.14 pu). The mechanism is not established. Whatever it is, it belongs to **this**
+  controller (a one-cycle DFT reference, no PLL), not to inverters in general.
+- **Even at 1.05 pu the settled state holds only in the decision window.** On bolted ab faults, 3 of 8 runs leave it
+  between 3.25 and 5.5 cycles, by up to 20.8°, before the fault clears at 6 cycles (1.00 pu: 2.6°; 0.90 pu: 0.3°). D1's
+  guarantee survives if it decides within 2–3 cycles. The inverter then keeps injecting about 1 pu of drifting δ
+  until the fault clears, a behaviour of the protected system, not just of the relay.
 - **The model error the sets need is small where the inverter settles.** Measured as the distance to the set, not
   to the settled point, it is at most 0.073 ε: the frame symbols (λ, drift) already cover the turn through the window.
   The earlier box of 0.25 ε (the distance to the settled point, `frames_main_err025.json`) double-counted it.
+  The evidence is thin, and 0.1 ε is **provisional**. It comes from one random interior source point per case, at
+  225° only, with one inception time, and no A-G case at 1.00 / 1.05 pu. The worst point is at the window's 2.0-cycle
+  edge. The remainder factor 1.1 adds 0.04–0.1 ε of headroom on top; it is reported as margin, not as model error.
 - **The design with measured budgets.** Main configuration: φ_ref 0.0303 rad, model error 0.1 ε, drift 3°,
-  window 2–3 cycles. |δ| is capped at 1.05 pu, the largest level verified in EMT. Results:
+  window 2–3 cycles. |δ| is capped at 1.05 pu: the largest level at which this controller holds its state in
+  EMT, measured at 225° on ab faults inside the decision window. Results:
   - At ρ = 0.1, no δ up to 1.05 pu separates.
   - At 1.05 pu, 225° every case separates for ρ up to 0.05; the binding case is L1 15 % A-G at full R_f.
   - Between 60° and 165° at 1.05 pu the inverter has no settled state in the static model.
   - Per angle at 1.05 pu (cases unseparated at ρ = 0): 210–225° none; 195° 5; 240° 5; 270° 20.
-  - The design point for step 3 is **δ = 1.05 pu at 225°, ρ = 0.04**, 87.5 % of the inverter's rating. Its
+  - The design point for step 3 is **δ = 1.05 pu at 225°, ρ = 0.04**, 87.5 % of the inverter's rating. ρ is chosen
+    to make the design feasible (the largest is 0.05). The whole margin, 2ε·0.04 = **0.08 ε**, is about the
+    **0.073 ε** seen outside the sets: the design has almost no slack left if the model error is larger. Its
     checks (`results/network/frames_main_fixed.json`):
     - separating window at 1.05 pu: **221–230°**;
     - separation on the dense tier at remainder factors 1.0, 1.1 and 1.25: all hold;
@@ -96,7 +110,9 @@ inception, with the frame-model sets at model_err = 0.
 **What this changes.** "δ* = 1.14 pu at 225° (ρ 0.1)" above is a static-model number that EMT does not support:
 REVIEW.md §7 row 51. The headline gets stronger, not weaker. With the frames, the measured model error and the
 inverter's dynamics, the guarantee on this network needs 87.5 % of the inverter. It holds only in a narrow angle
-window and with a 5 % margin at most. The 1.05 pu cap is verified at 225° only.
+window, with a 5 % margin at most, and only within the 2–3-cycle window on bolted ab faults. The 1.05 pu cap is
+verified at 225° on ab faults only. The design point's own EMT check (binding cases at their witnesses, window
+edges, point on wave, normal corners, confusers) is review §5 and comes next.
 
 ## What it means and does not
 

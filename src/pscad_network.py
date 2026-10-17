@@ -133,7 +133,7 @@ def check_line_model(spec):
     return loops
 
 
-BUILD_VERSION = 2          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
+BUILD_VERSION = 3          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
                            # changes what a run produces; the fingerprint cannot see code changes itself
 BUILD_ARGS = dict(t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0)
 
@@ -167,6 +167,7 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
     "t"} (a balanced wye load, ungrounded, switched in at t) or {"kind": "single_phase", "bus", "phase",
     "z": [re, im], "t"} (one phase to the bus's return node through z, switched in at t)."""
     t_fault = spec.get("t_fault", t_fault)
+    dur, t_end = spec.get("dur", dur), spec.get("t_end", t_end)
     from pscad_inverter import INPUTS, OUTPUTS, port_xy, definition_xml, Builder
     name, fault, lim = spec["name"], spec["fault"], spec["lim"]
     for g in spec["ibrs"].values():
@@ -310,7 +311,8 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
             b.sig(f"IREF{iname}{ph}", 52, y + 2)
         cy = next_row(24) + 10
         c.create_component(defn, cx, cy)
-        vals = dict(F0=F0, K2=2.0, IBASE=IBASE_PK, VBASE=VBASE_PK, IMAX=g["i_max"], LIM=float(lim), **spec["settings"][iname])
+        vals = dict(F0=F0, K2=2.0, IBASE=IBASE_PK, VBASE=VBASE_PK, IMAX=g["i_max"], LIM=float(lim), TANG=0.0)
+        vals.update(spec["settings"][iname])
         for p in INPUTS:
             px, py = port_xy(p)
             gx, gy = cx + px // 18, cy + py // 18
@@ -326,6 +328,7 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
     chans = [("VL" + p, "kV") for p in "ABC"] + [("VLG", "kV")] + [("IL" + p, "kA") for p in "ABC"]
     for iname in spec["ibrs"]:
         chans += [(f"Iinv{iname}{p}", "kA") for p in "ABC"]
+        chans += [(f"{p}_{iname}", "pu") for p in ("V1M", "V2M", "I1M", "I2M")] + [(f"ANG_{iname}", "deg")]
     r0 = max(row[0] + 10, 200)
     for k, (nm, u) in enumerate(chans):
         b.channel(nm, 120, r0 + 3 * k, u, -50, 50)
@@ -353,7 +356,7 @@ def update(prj, spec):
         for br in c.find_all("master:breaker1", "FLT"):
             br.parameters(RON=f"{(r if scen == 'ag' else r / 2):.6g} [ohm]")
         tf = spec.get("t_fault", BUILD_ARGS["t_fault"])
-        c.find_first("master:tbreakn", "FLTT").parameters(TO1=f"{tf} [s]", TO2=f"{tf + BUILD_ARGS['dur']} [s]")
+        c.find_first("master:tbreakn", "FLTT").parameters(TO1=f"{tf} [s]", TO2=f"{tf + spec.get('dur', BUILD_ARGS['dur'])} [s]")
     conf = spec.get("confuser")
     if conf is not None:
         c.find_first("master:tbreakn", "CNFT").parameters(TO1=f"{conf['t']} [s]")
@@ -369,7 +372,9 @@ def update(prj, spec):
     for sname, g in spec["sgs"].items():
         e = _z(g["e"])
         c.find_first("master:source3", sname).parameters(Es=f"{VLL * abs(e):.6g} [kV]", Ph=f"{math.degrees(cmath.phase(e)):.6g} [deg]")
+    prj.parameters(time_duration=str(spec.get("t_end", BUILD_ARGS["t_end"])))
     for iname, st in spec["settings"].items():
+        st = dict(st, TANG=st.get("TANG", 0.0))
         for k, v in list(st.items()) + [("LIM", float(spec["lim"])), ("IMAX", spec["ibrs"][iname]["i_max"])]:
             c.find_first("master:const", f"K{iname}{k}").parameters(Value=str(v))
 

@@ -319,6 +319,32 @@ def unseparated(fm, d_cmd, rho=0.0):
     return [fm.cases[k] for k, Fs in enumerate(F) if _meet_union(Ns, Fs, b)]
 
 
+def witness(fm, d_cmd, case):
+    """The closest pair of N(d_cmd) and one fault set: their infinity-norm gap (pu; the case separates with margin
+    rho if gap > 2 eps (1 + rho)) and the source points where it occurs, S_N and S_F in the [-1, 1]^4 box, with
+    the fault side's frame symbols. These are the realisations to run in EMT for a design check."""
+    k = fm.cases.index(tuple(case)) if not isinstance(case, int) else case
+    best = None
+    for i, (cN, GN) in enumerate(fm.zonotopes(d_cmd, None)):
+        for j, (cF, GF) in enumerate(fm.zonotopes(d_cmd, k)):
+            n, kn, kf = cN.size, GN.shape[1], GF.shape[1]
+            c = np.zeros(kn + kf + n + 1)
+            c[-1] = 1
+            A_eq = np.hstack([GN, -GF, np.eye(n), np.zeros((n, 1))])
+            A_ub = np.vstack([np.hstack([np.zeros((n, kn + kf)), np.eye(n), -np.ones((n, 1))]),
+                              np.hstack([np.zeros((n, kn + kf)), -np.eye(n), -np.ones((n, 1))])])
+            res = linprog(c, A_ub=A_ub, b_ub=np.zeros(2 * n), A_eq=A_eq, b_eq=cF - cN,
+                          bounds=[(-1, 1)] * (kn + kf) + [(None, None)] * n + [(0, None)], method="highs")
+            if res.status != 0:
+                raise RuntimeError(f"frames.witness: LP failed ({res.message})")
+            if best is None or res.x[-1] < best[0]:
+                best = (res.x[-1], i, j, res.x[:kn], res.x[kn:kn + kf])
+    gap, i, j, a, b = best
+    to_box = lambda piece, w: (np.add(*map(np.asarray, fm.pieces[piece])) / 2
+                               + (np.subtract(fm.pieces[piece][1], fm.pieces[piece][0]) / 2) * w[:4])
+    return dict(gap=float(gap), S_N=to_box(i, a), S_F=to_box(j, b), lam=float((b[4] + 1) / 2), drift=float(b[5]))
+
+
 class Inadmissible(Exception):
     pass
 
