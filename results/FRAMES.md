@@ -224,6 +224,38 @@ the main configuration (φ_ref 0.0303 rad, model error 0.1 ε, drift 3°, window
   The EMT number for it comes from the design-point batch (`frames_design_check.py … --tag pll`).
 - The alternative with a 4 % margin (`--rho 0.04 --tag pll04`) is reported beside it.
 
+**The design point in EMT** (`frames_design_check.py --mag 1.12 --rho 0.1 --edges 223 230 --tang-hz 15 --tag pll`,
+117 PSCAD runs, all with the filtered reference). Results are in `results/network/frames_design_check_pll.json`
+(plain DFT) and `frames_design_check_pll_mimic.json` (D1's chain, mimic filter on the currents). Faults are judged
+on windows ending 2.0–3.0 cycles after each run's own inception.
+
+| group | runs | outside own set, plain DFT | **outside own set, with mimic** | clean distance to N, smallest (2.20 ε needed) |
+|---|---|---|---|---|
+| 14 binding cases at their witnesses | 14 | 0 | **0** | **2.41 ε** (design gap there 2.21 ε) |
+| window edges 223° / 230° | 22 | 6, up to 0.029 ε | **0** | 2.40 ε |
+| inception over one cycle | 11 | 3, up to 0.054 ε | **0** | 2.42 ε |
+| all 48 cases, random source point | 48 | 27, up to **0.112 ε** | **0** | 2.45 ε |
+
+| normal operation | runs | outside N (bare sets) |
+|---|---|---|
+| witness normals | 4 | 0.033 ε |
+| 16 corners of the source box | 16 | 0.036 ε |
+| balanced load step at bus S | 1 | **0.95 ε** |
+| single-phase load at bus S | 1 | 0.43 ε |
+
+- **With D1's chain (mimic filter) the design point holds in EMT everywhere it was checked.** Across all 95 fault runs
+  (witnesses, window edges, random inception, every case) no point leaves its own bare set, and every fault stays at
+  least 2.40 ε from N against the 2.20 ε the 10 % margin needs. The model-error box is not used.
+- **Without the mimic filter the plain DFT exceeds the box** (0.112 ε on L2 ab 25 %, at the 2.0-cycle window). The
+  filter is part of the design, not an option.
+- **The window can start earlier with the filter.** Over the 95 runs with random inception, every point is inside its
+  own set from 1.875 cycles, and inside the 0.1 ε box from 1.5 cycles (`results/network/frames_mimic_check_pll.json`).
+  The guarantee is stated for 2–3 cycles; 1.875 cycles is measured, not designed.
+- **The filtered inverter settles through the fault.** After 3 cycles the largest excursion is 0.04 ε (plain DFT), 0
+  with the filter.
+- **The balanced load step is 0.95 ε outside N, close to D1's alarm threshold of ε.** By the decision of 17 Oct
+  (loads fixed) this is a designed-in false-alarm source, reported in its own row in step 3.
+
 ## What it means and does not
 
 - It is a static-model result on one three-bus network with the design's ε, for detection, not zone discrimination.
