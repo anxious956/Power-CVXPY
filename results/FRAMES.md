@@ -166,6 +166,29 @@ design's sets, which separates with the margin above 2(1 + ρ) = 2.08 ε.
   (0.40–0.77 pu with the filter). Step 3 uses the filtered reference. The cap under it, the window start and a 10 / 30 Hz
   sensitivity are measured by `src/frames_pll_check.py` (review/STEP3_PART4_REVIEW.md §3). A component regression run (TANG = 0) reproduces the stored run exactly (difference 0).
 
+## The cap with the PLL-like reference filter (17 Oct 2026)
+
+`src/frames_pll_check.py`, 136 PSCAD runs with the first-order 15 Hz reference filter. Output:
+`results/network/frames_pll_check.json`. The runs cover |δ| 1.05 / 1.10 / 1.14 / 1.18 pu at 221°, 225° and 230°,
+on the 8 bolted ab cases and the 3 hardest A-G witnesses. Each run is judged against its own bare set on windows
+ending 1.5–5.5 cycles after inception, i.e. through the whole fault.
+
+| \|δ\| | outside own set from 2.0 cycles, largest | from 2.25 cycles to 5.5 cycles | clean distance to N, 2–3 cycles, smallest |
+|---|---|---|---|
+| 1.05 pu | 0.001 ε | 0 | 2.30 ε |
+| 1.10 pu | 0.022 ε | 0 | 2.37 ε |
+| **1.14 pu** | **0.086 ε** (inside the 0.1 ε box) | **0** | 2.43 ε |
+| 1.18 pu | 0.136 ε (outside the box) | 0.031 ε at 2.5 cycles, 0 from 3 cycles | 2.49 ε |
+
+- **With the filter the inverter settles at every level, through the whole fault.** The largest excursions sit at the
+  2.0-cycle window (L1 ab 15 % bolted), and every point is back inside by 2.25 cycles.
+- **The new cap is 1.14 pu**: the largest level whose excursions fit the 0.1 ε model-error box from 2 cycles on.
+  At 1.18 pu they do not (0.136 ε). At 1.14 pu the inverter keeps about 0.06 pu of I1, so a design that needs the
+  cap is a **95 %-of-rating** design.
+- **The conclusion does not hinge on 15 Hz.** With 10 Hz and 30 Hz filters, the two instrumented cases (1.14 pu L1 ab
+  15 %, 1.05 pu L1 ab 35 %, 0.3 s fault) stay within 0.04 ε at 2 cycles and at 0 from 3 to 16 cycles.
+- The window start stays at 2 cycles, inside the 0.1 ε box. From 2.25 cycles no box is needed at all at 1.14 pu.
+
 ## What it means and does not
 
 - It is a static-model result on one three-bus network with the design's ε, for detection, not zone discrimination.
