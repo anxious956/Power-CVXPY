@@ -2,9 +2,9 @@
 delta* in the two-frame model as a function of the two budgets the review of PR #44 found to carry the result
 (review/STEP3_PART2_REVIEW.md): the relay reference's rotation budget phi_ref, and a model-error box for the
 static-vs-EMT difference. rho = 0.1, drift margin 3 deg (EMT drift beyond the fixed point is <= 2.2 deg in 4.8
-cycles on the stored runs). Model error 0.1 eps and |delta| <= 1.05 pu, both measured in EMT with delta injected
-(src/frames_emt_check.py: points outside their own set by <= 0.073 eps at 0.9 pu, none at 1.0 / 1.05 pu; at 1.14 pu
-the inverter does not settle on bolted ab faults). For each configuration: delta* on the search tier, the separating angle window at
+cycles on the stored runs). Model error 0.1 eps (src/frames_emt_check.py, confirmed at the design point's witnesses
+by src/frames_design_check.py) and |delta| <= 1.14 pu, the cap with the PLL-like reference filter step 3 uses
+(src/frames_pll_check.py; the bare DFT reference holds only to 1.05 pu). For each configuration: delta* on the search tier, the separating angle window at
 delta* in 1 deg steps, and separation at delta* on the dense tier at remainder factors 1.0 / 1.1 / 1.25.
 
     python src/frames_budget.py [workers]     -> results/network/frames_budget.json
@@ -22,7 +22,7 @@ RHO, DRIFT = 0.1, 3.0
 EPS = 0.08
 PHIS = [0.0, 0.05, None]                    # None: eps / min|V1_L| (~0.085 rad); 0.0303 is src/frames_main.py
 MODEL_ERRS = [0.1 * EPS]
-R_MAX = 1.05
+R_MAX = 1.14
 OUT = os.path.join(HERE, "..", "results", "network", "frames_budget.json")
 
 
