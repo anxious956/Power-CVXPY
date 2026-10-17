@@ -114,6 +114,48 @@ window, with a 5 % margin at most, and only within the 2–3-cycle window on bol
 verified at 225° on ab faults only. The design point's own EMT check (binding cases at their witnesses, window
 edges, point on wave, normal corners, confusers) is review §5 and comes next.
 
+## The design point in EMT (17 Oct 2026)
+
+`src/frames_design_check.py`, 71 PSCAD runs at δ = 1.05 pu, 225°, ρ = 0.04 (review/STEP3_PART3_REVIEW.md §5). Output:
+`results/network/frames_design_check.json`. Faults are judged on windows ending 2.0–3.0 cycles after each run's own
+inception. Two distances are reported. The first is to the case's own set, built bare: factor 1.0, no reference
+noise, no model-error box. This is what the model error must cover. The second is the clean distance to N in the
+design's sets, which separates with the margin above 2(1 + ρ) = 2.08 ε.
+
+| group | runs | outside own set, 2–3 cycles | clean distance to N, smallest | outside own set after 3 cycles |
+|---|---|---|---|---|
+| 13 binding cases at their witness realisations | 13 | **0** | **2.33 ε** (L1 15 % A-G, full R_f) | 0 |
+| window edges 221° / 230° (8 bolted ab, 3 hardest A-G) | 22 | **0** | 2.34 ε | up to 15.6 ε (bolted ab) |
+| inception over one cycle (same 11 cases, 225°) | 11 | **0** | 2.33 ε | up to 10.1 ε (bolted ab) |
+
+| normal operation | runs | outside N (bare sets) |
+|---|---|---|
+| witness normals | 2 | 0 |
+| 16 corners of the source box | 16 | at most 0.034 ε (inside the 0.1 ε box) |
+| balanced load step at bus S | 1 | **0.87 ε** |
+| single-phase load at bus S | 1 | 0.41 ε |
+
+- **Inside the decision window the design point holds in EMT where it is tightest.** At the witnesses, the window
+  edges and random inception angles, no fault point leaves its own set, and every fault stays at least 2.33 ε from N
+  against the 2.08 ε the margin needs. The provisional 0.1 ε model error is not used up there.
+- **After 3 cycles bolted ab faults leave their sets** (up to 15.6 ε), as the review found. A decision after 3 cycles
+  is not covered.
+- **A balanced 0.2 pu load step moves normal operation 0.87 ε outside N.** On clean data that is below D1's alarm
+  threshold (distance > ε), but not by much: it belongs in the violation matrix.
+- **The drift belongs to the controller's bare DFT reference.** Four instrumented runs, with a 0.3 s fault and the
+  controller's own outputs recorded:
+
+  | run | angle reference | reference angle span over the fault | outside own set at 2 / 3 / 5 / 8 / 12 / 16 cycles |
+  |---|---|---|---|
+  | 1.14 pu, L1 ab 15 % bolted | bare DFT | 451° (runs away) | 13.6 / 18.7 / 12.9 / 21.7 / 23.9 / 15.9 ε |
+  | 1.14 pu, L1 ab 15 % bolted | DFT + 15 Hz low-pass (PLL-like) | 26° | 0.04 / 0 / 0 / 0 / 0 / 0 ε |
+  | 1.05 pu, L1 ab 35 % bolted | bare DFT | 112° | 0 / 0 / 2.9 / 6.6 / 1.4 / 15.2 ε |
+  | 1.05 pu, L1 ab 35 % bolted | DFT + 15 Hz low-pass | 25° | 0 at every window |
+
+  A 15 Hz low-pass on the angle reference removes the instability at 1.14 pu and the drift at 1.05 pu. The model
+  then holds through the whole fault. The 1.05 pu cap is therefore a property of the bare-DFT controller, as the
+  review suspected. A component regression run (TANG = 0) reproduces the stored run exactly (difference 0).
+
 ## What it means and does not
 
 - It is a static-model result on one three-bus network with the design's ε, for detection, not zone discrimination.

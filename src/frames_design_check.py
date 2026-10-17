@@ -198,7 +198,7 @@ def analyse():
               f"|I2| {min(tr['I2M_I']):.2f}-{max(tr['I2M_I']):.2f} pu; outside own set at 2/3/5/8/12/16 c: "
               + " ".join(f"{x:.2f}" for x in tr["outside_own_eps"]) if a else f"{nm}: no controller channels")
     json.dump(dict(design=dict(mag=MAG, angle=ANG0, rho=RHO, main=MAIN, bare=BARE), summary=summ, rows=rows, inst=inst),
-              open(os.path.join(OUT, "frames_design_check.json"), "w"), indent=1)
+              open(os.path.join(OUT, "frames_design_check.json"), "w"), indent=1, default=float)
     print("-> results/network/frames_design_check.json")
 
 
