@@ -16,13 +16,13 @@
   "per-window|hard|0.5": [
    0.125,
    1.0,
-   0.625,
+   0.75,
    1.0
   ],
   "per-window|hard|0.75": [
    0.0,
    1.0,
-   0.25,
+   0.625,
    1.0
   ],
   "per-window|hard|1.0": [
@@ -46,13 +46,13 @@
   "per-window|hard_bc|0.5": [
    0.0,
    1.0,
-   0.0,
+   0.5,
    1.0
   ],
   "per-window|hard_bc|0.75": [
    0.0,
    1.0,
-   0.0,
+   0.5,
    1.0
   ],
   "per-window|hard_bc|1.0": [
@@ -136,13 +136,13 @@
   "constant|hard|0.5": [
    0.125,
    0.0,
-   0.625,
+   0.75,
    0.75
   ],
   "constant|hard|0.75": [
    0.0,
    0.0,
-   0.25,
+   0.625,
    0.75
   ],
   "constant|hard|1.0": [
@@ -166,13 +166,13 @@
   "constant|hard_bc|0.5": [
    0.0,
    0.0,
-   0.0,
+   0.5,
    0.5
   ],
   "constant|hard_bc|0.75": [
    0.0,
    0.0,
-   0.0,
+   0.5,
    0.5
   ],
   "constant|hard_bc|1.0": [
@@ -1293,7 +1293,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": true,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -1410,7 +1410,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": true,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -1553,7 +1553,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": false,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -1670,7 +1670,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": false,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -1852,7 +1852,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": true,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -1865,7 +1865,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": true,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -1904,7 +1904,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": true,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -1930,7 +1930,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": true,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -2112,7 +2112,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": false,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -2125,7 +2125,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": false,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -2164,7 +2164,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": false,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {
@@ -2190,7 +2190,7 @@
    "in_range": true,
    "d1_miss": false,
    "d0_miss": false,
-   "d2_miss": false,
+   "d2_miss": true,
    "d3_miss": true
   },
   {

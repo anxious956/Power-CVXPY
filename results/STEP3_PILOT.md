@@ -171,6 +171,36 @@ random interior normals. The alarms are all on the confusers:
 
 These are 8 hard A-G scenarios. The dense batch (option A) gives the worst-case curve with binomial bounds.
 
+### Multiplicative systematic errors in the class bounds
+
+`src/step3_multiplicative.py` writes `results/step3/multiplicative_pilot.json`. The adversary uses per-phase CT
+ratio errors |r_I| ≤ 10 %, VT ratio errors ≤ 6 % and VT phase errors ≤ 4°, constant over the run. They apply to
+every window and to the memory, so they scale the increments and turn the memory frame. There is no white noise on
+top. The search covers 577 parameter sets: the 512 corners of the box, 64 random points and the zero-error point.
+That is a lower bound on the worst case. Thresholds are the largest score under the same adversary over the 150
+dense normal runs (16 box corners and 14 random points per level, forced trigger) and the pre-fault windows. D1 keeps
+the design's threshold.
+
+| | δ = 0 | ¼ δ* | ½ δ* | ¾ δ* | δ* |
+|---|---|---|---|---|---|
+| worst-case miss, hard A-G (D1 / D0 / D2 / D3) | .12 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | 0 | 0 | 0 |
+| D1's smallest distance on hard A-G, clean → worst error (ε) | 1.30 → 0.91 | 1.64 → 1.12 | 1.98 → 1.52 | 2.33 → 1.80 | 2.77 → 2.17 |
+| **normal runs on which D1 can false-alarm** (of 30) | 0 | 0 | 0 | 0 | **24** |
+
+- **A class-accuracy systematic error hides almost nothing.** It scales a fault's measurement by at most about 10 %.
+  The one miss is D1 at δ = 0, on one hard A-G fault.
+- **It makes the design's own signal a false-alarm source.** At δ* the injected 1.12 pu, scaled by a 10 % CT ratio
+  error, moves normal operation by about 0.1 pu, more than ε. D1 then alarms on 24 of the 30 normal runs (counted
+  on a sample of the parameter sets: a lower bound). At ¾ δ* it alarms on none.
+- The incremental detectors' thresholds come out near 0 (D0 0.000–0.001 pu). In steady state a constant
+  multiplicative error leaves an increment at zero. With no white noise in this adversary, D0's perfect record here
+  says nothing about noise; the per-window additive bound above does.
+
+**Restarts.** With 4 random starts added to D2's and D3's searches, and the 150 normal runs in the calibration, the
+additive tables above change only for D2. Its hard A-G misses at ½ / ¾ δ* rise to 0.75 / 0.62 (from 0.62 / 0.25),
+and its B-C misses to 0.5 from ¼ to ¾ δ*. The searches find more with more starts, so D2's and D3's numbers remain
+lower bounds.
+
 ## D1's worst-case curve with bounds (option A)
 
 The dense batch has 350 clean PSCAD runs (`src/step3_data.py dense`): 70 new scenarios (40 hard A-G, 10 hard B-C,
