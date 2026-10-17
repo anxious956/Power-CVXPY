@@ -43,11 +43,20 @@ relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); de
    improves with δ but does not reach zero. D0 and the CNN do not benefit from δ.
 6. **At 80 Ω** (*static only*) the guarantee needs about 1 pu of signal even at near-nominal accuracy. We have not yet
    tested in EMT whether detection itself struggles there.
+7. **An inverter at the relay end does not change the detection answer** (*static, nominal sources*;
+   results/IBR_GRID_SCREEN.md). With a grid-following inverter in place of the relay-end synchronous source, current
+   elements go blind when its sequence paths are open, but 59N then sees |V0| = 0.31–0.57 pu on every hard ground
+   fault. Behind a YNd transformer, 50N sees 0.44–1.2 pu; with IEEE 2800 negative-sequence current, 50Q sees
+   0.10–0.18 pu. What fails from one end is selectivity: telling a fault on the line from one beyond it.
 
 **Questions for you**
 - Is "the guarantee's price is set by instrument accuracy" the result you would expect, and is it worth a write-up?
 - Should step 3 continue toward high-resistance faults (80 Ω and beyond), where the guarantee needs the signal even
   with good instruments, rather than a larger sweep at 40 Ω, where detection does not need it?
+- Or toward selectivity (fault on my line or beyond it) at an inverter-fed relay, where one end fails without the
+  signal? That needs a design separating fault sets from each other. Our earlier static screen on a CIGRE MV feeder
+  saw only a 2–4 point gain at 0.4 pu of δ, and your Geometry example separates fault types rather than zones, so we
+  do not presume δ helps there.
 - Is D2, your multiple-model structure moved to the relay's phasor model, an acceptable stand-in for your MMKF?
 
 ## Draft email
@@ -72,8 +81,10 @@ EMT. A one-page summary is attached. In short:
 
 We would value your view on two things:
 1. Is this worth writing up as it stands?
-2. Should we take step 3 toward high-resistance faults, where the guarantee needs the signal even with good
-   instruments?
+2. Where should step 3 go next? One option is high-resistance faults, where the guarantee needs the signal even
+   with good instruments. The other is selectivity at an inverter-fed relay, where conventional single-ended
+   elements fail. (A static screen shows an inverter at the relay end still lets voltage or current elements detect
+   faults; telling where the fault is fails.)
 
 We also kept your multiple-model structure, moved to the relay's phasor model, and would like to know whether that
 is an acceptable stand-in for your MMKF.
