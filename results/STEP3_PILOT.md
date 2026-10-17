@@ -115,10 +115,21 @@ per-component bounds.
   a 1.28 pu fault current) applied to every component of every measurement, normal ones included. A multiplicative
   error is a generator proportional to y, so the right set is structured (review/STEP3_CLASS_REVIEW.md). On the
   two-bus model the structured set needed no signal where the box said infeasible (DESIGN.md §4.1.1).
-  **"No guarantee at the class tier" is therefore not a finding yet.** `src/frames_structured.py` computes δ* with
-  per-phase CT and VT ratio and phase errors as shared symbols, with regime-dependent bounds (normal operation and
-  the memory: CT 1 % / 1°, VT 3 % / 2°; fault windows: CT 10 % / 1°, VT 6 % / 4°) and only the white noise in the
-  box.
+  `src/frames_structured.py` (`results/network/frames_structured.json`) computes δ* with per-phase CT and VT ratio
+  and phase errors as shared symbols of the frame model. The bounds are regime-dependent: normal operation and the
+  memory CT 1 % / 1°, VT 3 % / 2°; fault windows CT 10 % / 1°, VT 6 % / 4°. Only the white noise (V 0.02 / I 0.04 pu)
+  stays in the box.
+
+  | instrument errors | ρ = 0 | ρ = 0.1 |
+  |---|---|---|
+  | class tier as a box (V 0.139 / I 0.168 pu) | none within the cap | none within the cap |
+  | **class tier, structured, regime-dependent** | **1.08 pu** at 225° (I1 left 0.12–0.21 pu) | **1.12 pu** at 225° (I1 left 0.08–0.14 pu) |
+  | design tier, structured | **0** | **0** |
+
+  **At the class tier the guarantee is available, at the same price as the design** (1.12 pu, about 93 % of the
+  inverter). The box was too pessimistic. The earlier line "with class-accuracy instruments no signal the inverter
+  can deliver buys it" is withdrawn (REVIEW.md §7 row 53). With the structured set the design tier needs no signal
+  even with a 10 % margin.
 
 ## Each detector against its own worst case (option B)
 
