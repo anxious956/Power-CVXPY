@@ -139,5 +139,20 @@ def dense():
     print(f"{len(scs)} scenarios x {len(LEVELS)} levels = {len(specs)} runs -> results/step3/dense_specs.json")
 
 
+def normals():
+    """Normal operation for worst-case thresholds (review/STEP3_WORSTCASE_REVIEW.md): the 16 corners of the source box
+    and 14 random interior points, at every delta level (no fault; t_fault is the pseudo-trigger)."""
+    import itertools
+    os.makedirs(OUT, exist_ok=True)
+    rng = np.random.default_rng(51)
+    pts = [list(map(float, u)) for u in itertools.product((-1.0, 1.0), repeat=4)] +           [list(map(float, x)) for x in rng.uniform(-1, 1, (14, 4))]
+    scs = [dict(stratum="normal_corner" if k < 16 else "normal_random", fault=None, confuser=None, S=S, in_range=False,
+                t_fault=float(np.round(T0 + rng.uniform(0, 1) / 60, 5))) for k, S in enumerate(pts)]
+    specs = specs_for(scs, "s3n")
+    json.dump(dict(design=DESIGN, levels=LEVELS, scenarios=scs), open(os.path.join(OUT, "normals_scenarios.json"), "w"), indent=1)
+    json.dump(specs, open(os.path.join(OUT, "normals_specs.json"), "w"), indent=1)
+    print(f"{len(scs)} normal points x {len(LEVELS)} levels = {len(specs)} runs -> results/step3/normals_specs.json")
+
+
 if __name__ == "__main__":
-    {"pilot": pilot, "dense": dense}[sys.argv[1]]()
+    {"pilot": pilot, "dense": dense, "normals": normals}[sys.argv[1]]()

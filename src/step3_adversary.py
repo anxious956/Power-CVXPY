@@ -37,6 +37,7 @@ OUT = os.path.join(HERE, "..", "results", "step3")
 EPS = det.EPS
 WIN = np.arange(2.0, 3.0001, 0.25)
 PGD_STEPS, PGD_FRAC = 60, 0.08
+N_RESTARTS = 4            # random sign-corner starts at eps / 2, besides the start at zero (review: lower bounds)
 
 
 def realv(z):
@@ -143,19 +144,21 @@ def d2_llr_adv(M, joint, mode, sense):
     """Worst-case log posterior odds (fault vs normal) by projected sign-gradient steps."""
     Y0 = np.concatenate(M["d2"])
     n = Y0.size // 2
-    e = np.zeros(n if mode == "constant" else 2 * n)
+    dim = n if mode == "constant" else 2 * n
     expand = (lambda e: np.concatenate([e, e])) if mode == "constant" else (lambda e: e)
     step = PGD_FRAC * EPS
+    rng = np.random.default_rng(int(abs(Y0[0]) * 1e6) % 2 ** 31)
+    starts = [np.zeros(dim)] + [0.5 * EPS * rng.choice([-1.0, 1.0], dim) for _ in range(N_RESTARTS)]
     best = None
-    for _ in range(PGD_STEPS):
-        llr, gr = _llr_grad(Y0 + expand(e), joint)
-        if best is None or (llr < best if sense == "min" else llr > best):
-            best = llr
-        if mode == "constant":
-            gr = gr[:n] + gr[n:]
-        e = np.clip(e + (-1 if sense == "min" else 1) * step * np.sign(gr), -EPS, EPS)
-    llr, _ = _llr_grad(Y0 + expand(e), joint)
-    return min(best, llr) if sense == "min" else max(best, llr)
+    for e in starts:
+        for _ in range(PGD_STEPS + 1):
+            llr, gr = _llr_grad(Y0 + expand(e), joint)
+            if best is None or (llr < best if sense == "min" else llr > best):
+                best = llr
+            if mode == "constant":
+                gr = gr[:n] + gr[n:]
+            e = np.clip(e + (-1 if sense == "min" else 1) * step * np.sign(gr), -EPS, EPS)
+    return best
 
 
 # ----------------------------------------------------------------------------- D3
@@ -180,19 +183,30 @@ def d3_adv_scores(model_pack, Ms, mode, sense):
         return (X + dlt - mu_t) / sd_t
 
     best = None
-    for _ in range(PGD_STEPS):
-        out = model(feats(e, em)).squeeze(1)
-        cur = out.detach().cpu().numpy()
-        best = cur if best is None else (np.minimum(best, cur) if sense == "min" else np.maximum(best, cur))
-        out.sum().backward()
+    gen = torch.Generator(device="cpu").manual_seed(0)
+    for r in range(N_RESTARTS + 1):
         with torch.no_grad():
-            e += sgn * PGD_FRAC * EPS * torch.sign(e.grad)
-            e.clamp_(-EPS, EPS)
-            e.grad.zero_()
-            if em.requires_grad:
-                em += sgn * PGD_FRAC * EPS * torch.sign(em.grad)
-                em.clamp_(-EPS, EPS)
-                em.grad.zero_()
+            if r == 0:
+                e.zero_()
+                em.zero_()
+            else:
+                e.copy_(0.5 * EPS * (torch.randint(0, 2, shape, generator=gen).float() * 2 - 1).to(dev))
+                em.copy_(0.5 * EPS * (torch.randint(0, 2, tuple(em.shape), generator=gen).float() * 2 - 1).to(dev))
+        for _ in range(PGD_STEPS):
+            out = model(feats(e, em)).squeeze(1)
+            cur = out.detach().cpu().numpy()
+            best = cur if best is None else (np.minimum(best, cur) if sense == "min" else np.maximum(best, cur))
+            out.sum().backward()
+            with torch.no_grad():
+                e += sgn * PGD_FRAC * EPS * torch.sign(e.grad)
+                e.clamp_(-EPS, EPS)
+                e.grad.zero_()
+                if em.requires_grad:
+                    em += sgn * PGD_FRAC * EPS * torch.sign(em.grad)
+                    em.clamp_(-EPS, EPS)
+                    em.grad.zero_()
+                elif em.grad is not None:
+                    em.grad.zero_()
     return best
 
 
@@ -250,7 +264,17 @@ def main(path):
         true = rel.idx(sp["t_fault"])
         cal = [int(i) for i in np.linspace(rel.idx(0.18), true - 3 * CYCLE - 1, 4)]
         data[sp["name"]] = dict(test=clean_measurements(rel, true), cal=[clean_measurements(rel, i) for i in cal])
-    print(f"measurements of {len(specs)} runs  [{time.time() - t0:.0f} s]", flush=True)
+    # the dense normal runs (16 box corners + 14 random points per level, forced trigger) join the calibration set
+    npath = os.path.join(OUT, "normals_specs.json")
+    extra_cal = {}
+    if os.path.exists(npath):
+        for sp in json.load(open(npath)):
+            try:
+                rel = Relay(sp["name"], tier="clean", seed=0)
+            except FileNotFoundError:
+                continue
+            extra_cal.setdefault(sp["level"], []).append(clean_measurements(rel, rel.idx(sp["t_fault"])))
+    print(f"measurements of {len(specs)} runs, {sum(map(len, extra_cal.values()))} extra normal runs  [{time.time() - t0:.0f} s]", flush=True)
     levels = sorted({sp["level"] for sp in specs})
     scen = sorted({sp["scenario"] for sp in specs})
     folds = [scen[k::5] for k in range(5)]
@@ -263,7 +287,7 @@ def main(path):
         pieces = det.normal_set(d)
         joint = d2_joint(d)
         for mode in ("per-window", "constant"):
-            cal = [M for sp in group for M in data[sp["name"]]["cal"]]
+            cal = [M for sp in group for M in data[sp["name"]]["cal"]] + extra_cal.get(lv, [])
             thr0 = max(d0_score_adv(M, mode, "max") for M in cal)
             thr2 = max(d2_llr_adv(M, joint, mode, "max") for M in cal)
             thr3, s3 = -np.inf, {}

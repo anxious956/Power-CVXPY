@@ -89,12 +89,14 @@ re-run with that bound per component, keeping the main configuration otherwise (
 | noise bound | cases unseparated at δ = 0, ρ = 0 | ρ = 0.1 | δ*, ρ = 0.1 | inverter current left |
 |---|---|---|---|---|
 | design ε, 0.08 pu | 13 | 14 | **1.12 pu** at 225° | 0.08–0.14 pu (about 93 % of rating to δ) |
-| front end, V 0.029 / I 0.053 pu | **0** | 1 (L2 50 % A-G, full R_f) | **0.04 pu** at 270° (window 270–310°) | 0.14–0.78 pu (essentially all of it) |
+| design tier, V 0.029 / I 0.053 pu | **0** | 1 (L2 50 % A-G, full R_f) | **0.04 pu** at 270° (window 270–310°) | 0.14–0.78 pu (essentially all of it) |
 
-**At the noise bound the relay actually has, the design needs no signal without margin, and 0.04 pu, 3 % of the
-inverter's rating, with a 10 % margin.** The 1.12 pu design is the price of ε = 0.08 pu, about 1.5 times the front
-end's current error and 2.8 times its voltage error. The signal's size is set by the noise bound assumed, not by the
-faults.
+**At the design tier's noise bound, the design needs no signal without margin, and 0.04 pu (3 % of the inverter's
+rating) with a 10 % margin.** The design tier is near-nominal instrument accuracy: CT ≤ 1 %, VT ≤ 0.5 %, 0.3°.
+At the class tier (CT 5–10 %, VT 3–6 %, VT phase 2–4°) the bound exceeds ε (review/STEP3_WORSTCASE_REVIEW.md).
+The 1.12 pu design is the price of ε = 0.08 pu, about 1.5 times the design tier's current error and 2.8 times its
+voltage error. The signal's size is set by the noise bound assumed, not by the faults. δ*(ε) is computed as a
+curve with both tiers marked (`src/frames_eps_curve.py`).
 
 ## Each detector against its own worst case (option B)
 
@@ -124,8 +126,10 @@ cases are:
 **Constant adversary.** D1 and D2 are unchanged. D0 misses nothing at any level, because a constant error cancels in
 an increment. D3 misses 50–75 % at every level.
 
-**Worst-case false alarms.** None of the four detectors alarms on a normal run under either adversary. The alarms are
-all on the confusers:
+**Worst-case false alarms.** None of the four detectors alarms on the 2 normal runs (per δ level) under either
+adversary. With so few normal runs, and thresholds from 20 operating points × 4 pre-fault windows, this favours D0,
+D2 and D3 against D1, whose threshold covers all of N. The thresholds are being rebuilt on the 16 box corners plus
+random interior normals. The alarms are all on the confusers:
 - the single-phase load: D1, D0 and D2 at every level;
 - the load step: D1 3 of 5, D2 1 of 5, D0 0 (per window) or 4 of 5 (constant).
 
@@ -134,15 +138,19 @@ all on the confusers:
   - D1, the design's own test, has no worst-case miss in the design's set from ¾ δ*. Below that it fails: 75 % of
     the hard A-G faults at δ = 0, 12 % at ¼ and ½ δ*.
   - D2 benefits from δ too (88 % → 12 % on hard A-G), but never reaches zero. Its misses at δ* are one hard, one
-    uniform and one outside-the-ranges fault, and the hypothesis grid does not cover the last one.
-  - D0 and D3 fail at every δ against a per-window adversary. δ does not help them: an incremental element cannot
-    see a constant signal, and the CNN is not robust to small worst-case input changes.
-- **Against a constant (systematic) error the picture turns round for D0.** The incremental element is immune, while
-  D1 needs δ. The guarantee D1 buys with the signal is one an incremental element gets free against systematic
-  errors, but not against per-window noise.
+    uniform and one outside-the-ranges fault, and the hypothesis grid does not cover the last one. D2's and D3's
+    misses are what a 60-step search from one start found: **lower bounds**. Restarts are to be added.
+  - D0 and D3 fail at every δ against the per-window adversary. That adversary is a **stress bound**: every window
+    and the memory get their own worst-case error, and for D0 the memory's error even differs per window (it is one
+    measurement, so this slightly overstates D0's misses). δ does not help them: an incremental element cannot see
+    a constant signal, and the CNN is not robust to small worst-case input changes.
+- **Against an additive constant offset D0 is immune**, because the offset cancels in an increment. D1 still needs δ
+  against it. Real systematic instrument errors are **multiplicative** (per-phase ratio and phase, constant over
+  the run). They scale the increments, and at CT 10 % they shift D1's absolute measurement by about ε on fault
+  currents. A multiplicative adversary within the class bounds, for all four detectors, comes next. Until it is in,
+  option B is not a result to report.
 - With realistic random noise all four detect everything at every δ (above). So the signal matters only for
-  worst-case, per-window noise. At the noise bound the front end actually has, the design needs almost none of it
-  (δ* 0 or 0.04 pu).
+  worst-case noise. At the design tier's noise bound the design needs almost none of it (δ* 0 or 0.04 pu).
 
 These are 8 hard A-G scenarios. The dense batch (option A) gives the worst-case curve with binomial bounds.
 
@@ -176,11 +184,14 @@ The smallest clean D1 distance on the hard A-G faults is 1.21 / 1.53 / 1.85 / 2.
 
 | noise bound | margin | δ* | cases unseparated at δ = 0 | inverter current left |
 |---|---|---|---|---|
-| front end, V 0.029 / I 0.053 pu | ρ = 0 | **0.94 pu** at 225° | 6 | 0.14–0.33 pu |
+| design tier, V 0.029 / I 0.053 pu | ρ = 0 | **0.94 pu** at 225° | 6 | 0.14–0.33 pu |
 
-At 40 Ω and the same noise bound, δ* was 0. **At high fault resistance the signal is needed even at the noise bound
-the relay actually has.** That is where a designed signal could earn its cost on this network. The remaining
-configurations (ρ = 0.1, design ε) are still running.
+At 40 Ω and the same noise bound, δ* was 0. **At high fault resistance the guarantee needs the signal even at the
+design tier's noise bound.** This is static only. It is "where the guarantee needs the signal", not yet "where
+detection needs it". Before that claim, three things are needed:
+- the ρ = 0.1 and design-ε runs (running);
+- an EMT model-error check at 80 Ω;
+- a pilot showing whether the statistical detectors also struggle there.
 
 ## What could make the experiment informative
 
