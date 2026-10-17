@@ -31,6 +31,8 @@ TIERS = {
     "clean": None,
     "design": dict(sigma_i=0.01, sigma_v=0.005, ct=(0.0, 0.01), vt=(0.0, 0.005), vt_phase_deg=(0.0, 0.3)),
     "class": dict(sigma_i=0.01, sigma_v=0.005, ct=(0.05, 0.10), vt=(0.03, 0.06), vt_phase_deg=(2.0, 4.0)),
+    # the design tier's white noise only (systematic errors applied separately, e.g. src/step3_multiplicative.py)
+    "white": dict(sigma_i=0.01, sigma_v=0.005, ct=(0.0, 0.0), vt=(0.0, 0.0), vt_phase_deg=(0.0, 0.0)),
     # the design's own noise scale: k = 4 standard deviations fill the eps box (0.08 pu) on every component
     "stress": dict(sigma_i=0.02, sigma_v=0.02, ct=(0.0, 0.0), vt=(0.0, 0.0), vt_phase_deg=(0.0, 0.0)),
 }

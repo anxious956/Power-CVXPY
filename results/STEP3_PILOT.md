@@ -109,11 +109,16 @@ per-component bounds.
 
 - The signal grows steeply with the noise bound. Between 0.03 and 0.08 pu it goes from nothing to 93 % of the
   inverter.
-- Above about 0.09 pu no admissible signal guarantees detection on this network.
+- Above about 0.09 pu no admissible signal guarantees detection on this network, against a **box** bound.
 - With near-nominal instruments (design tier) the guarantee is almost free.
-- With class-accuracy instruments under fault (CT 5–10 %, VT 3–6 %, 2–4°) no signal the inverter can deliver buys
-  it. Taylor's guarantee is then not available at all, and detection rests on statistics (the pilot) or on
-  incremental elements, which are immune to additive offsets.
+- The class-tier box (0.139 / 0.168 pu) gives no δ within the cap, but it is the worst multiplicative term (10 % of
+  a 1.28 pu fault current) applied to every component of every measurement, normal ones included. A multiplicative
+  error is a generator proportional to y, so the right set is structured (review/STEP3_CLASS_REVIEW.md). On the
+  two-bus model the structured set needed no signal where the box said infeasible (DESIGN.md §4.1.1).
+  **"No guarantee at the class tier" is therefore not a finding yet.** `src/frames_structured.py` computes δ* with
+  per-phase CT and VT ratio and phase errors as shared symbols, with regime-dependent bounds (normal operation and
+  the memory: CT 1 % / 1°, VT 3 % / 2°; fault windows: CT 10 % / 1°, VT 6 % / 4°) and only the white noise in the
+  box.
 
 ## Each detector against its own worst case (option B)
 
@@ -171,9 +176,14 @@ random interior normals. The alarms are all on the confusers:
 
 These are 8 hard A-G scenarios. The dense batch (option A) gives the worst-case curve with binomial bounds.
 
-### Multiplicative systematic errors in the class bounds
+### Multiplicative systematic errors: the stress case
 
-`src/step3_multiplicative.py` writes `results/step3/multiplicative_pilot.json`. The adversary uses per-phase CT
+This first version applied the fault-condition limits to every window and to the memory. That makes it a **stress
+case**, not a finding (review/STEP3_CLASS_REVIEW.md). At load current a 5P CT stays within about ±1 % / ±60′ and a 3P
+VT within ±3 % / ±120′. A 1 % CT error on the 0.867 pu steady I2 that δ* creates at the relay is 0.009 pu, well inside
+ε. The regime-dependent version, with white noise on top, is `src/step3_multiplicative.py`.
+
+`results/step3/multiplicative_pilot_stress_v1.json`. The adversary uses per-phase CT
 ratio errors |r_I| ≤ 10 %, VT ratio errors ≤ 6 % and VT phase errors ≤ 4°, constant over the run. They apply to
 every window and to the memory, so they scale the increments and turn the memory frame. There is no white noise on
 top. The search covers 577 parameter sets: the 512 corners of the box, 64 random points and the zero-error point.
@@ -189,9 +199,10 @@ the design's threshold.
 
 - **A class-accuracy systematic error hides almost nothing.** It scales a fault's measurement by at most about 10 %.
   The one miss is D1 at δ = 0, on one hard A-G fault.
-- **It makes the design's own signal a false-alarm source.** At δ* the injected 1.12 pu, scaled by a 10 % CT ratio
-  error, moves normal operation by about 0.1 pu, more than ε. D1 then alarms on 24 of the 30 normal runs (counted
-  on a sample of the parameter sets: a lower bound). At ¾ δ* it alarms on none.
+- **Stress case only: with fault-condition CT error in normal operation, the design's own signal becomes a
+  false-alarm source.** At δ* the relay carries a steady |I2| of 0.867 pu (0.650 pu at ¾ δ*). 10 % of it,
+  0.087 pu, exceeds ε, so D1 alarms on 24 of 30 normal runs. At ¾ δ* the error is 0.065 pu and D1 alarms on none.
+  A CT within its rated-current accuracy (1 %) removes this.
 - The incremental detectors' thresholds come out near 0 (D0 0.000–0.001 pu). In steady state a constant
   multiplicative error leaves an increment at zero. With no white noise in this adversary, D0's perfect record here
   says nothing about noise; the per-window additive bound above does.

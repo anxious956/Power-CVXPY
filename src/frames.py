@@ -162,12 +162,19 @@ class FrameModel:
 
     def __init__(self, net, cases, eps=None, lim=1, n_samples=400, factor=1.1, drift_deg=6.0, v1_min=0.05,
                  transient_steps=5, seed=0, split=True, ref_noise=True, shared=True, face_pts=5, ref_phi=None,
-                 model_err=0.0):
+                 model_err=0.0, instr=None):
         """ref_phi: the relay reference's rotation budget in rad (None: eps / min|V1_L|, the instantaneous worst
         case; the memory averages random noise over its window, and a systematic VT phase error moves voltages and
         reference together, so a smaller budget is defensible: report delta* against it). model_err: a box (pu,
         per real component) added to every remainder for the static-vs-EMT model error (up to 0.35 eps at 0.38 s on
-        the stored runs, review of PR #44)."""
+        the stored runs, review of PR #44).
+        instr: per-phase instrument errors as shared symbols (review/STEP3_CLASS_REVIEW.md), a structured set
+        instead of a box: dict(N=b, F=b) with b = (vt, vt_ph, ct, ct_ph), the bounds of the VT ratio, VT phase (rad),
+        CT ratio and CT phase (rad) errors for normal operation and the memory (N) and for fault windows (F),
+        independent of each other (a CT's error depends on its current). Constant over a run, they multiply each
+        phase phasor; the relay frame follows the memory's (normal-regime) VT phase error. 12 symbols for N, 24 for
+        a fault set (its own 12 and the memory's 12)."""
+        self.instr = instr
         self.net, self.cases, self.lim = net, list(cases), lim
         self.eps = net.eps if eps is None else eps
         (self.inj,) = net.injectors
@@ -203,13 +210,34 @@ class FrameModel:
         y = My[:, 0][None] * e[:, None] + My[:, 1][None] * i1[:, None] + My[:, 2][None] * d[:, None]
         return y, y[:, 0] / np.abs(y[:, 0]), u
 
-    def measure(self, S, d_cmd, case=None, lam=None, drift=None):
+    @staticmethod
+    def _instr_apply(y, E, b):
+        """Sequence measurements [V1 V2 V0 I1 I2 I0] (n, 6) through per-phase gains: E (n, 12) in [-1, 1] times the
+        bounds b = (vt, vt_ph, ct, ct_ph): VT ratio, VT phase, CT ratio, CT phase for phases a, b, c."""
+        vt, vt_ph, ct, ct_ph = b
+        gv = (1 + E[:, 0:3] * vt) * np.exp(1j * E[:, 3:6] * vt_ph)
+        gi = (1 + E[:, 6:9] * ct) * np.exp(1j * E[:, 9:12] * ct_ph)
+        out = np.empty_like(y)
+        for off, g in ((0, gv), (3, gi)):
+            s1, s2, s0 = y[:, off], y[:, off + 1], y[:, off + 2]
+            ph = np.stack([s0 + s1 + s2, s0 + A3 ** 2 * s1 + A3 * s2, s0 + A3 * s1 + A3 ** 2 * s2], 1) * g
+            out[:, off + 2] = ph.sum(1) / 3
+            out[:, off] = (ph[:, 0] + A3 * ph[:, 1] + A3 ** 2 * ph[:, 2]) / 3
+            out[:, off + 1] = (ph[:, 0] + A3 ** 2 * ph[:, 1] + A3 * ph[:, 2]) / 3
+        return out
+
+    def measure(self, S, d_cmd, case=None, lam=None, drift=None, E=None):
         """Relay measurements in the relay's own pre-fault frame, one row per sample. For a fault, lam in [0, 1]
         (the inverter frame's position between its pre-fault and fault angles) and drift in [-1, 1] (times the
-        drift margin) are per-sample arrays (default: the settled fault state, no drift)."""
+        drift margin) are per-sample arrays (default: the settled fault state, no drift). E: the instrument-error
+        symbols (instr), (n, 12) for normal operation, (n, 24) for a fault (its own, then the memory's)."""
         yN, uL, u_pre = self.normal_state(S, d_cmd)
+        use = self.instr is not None and E is not None
+        if use:
+            yNm = self._instr_apply(yN, E[:, -12:], self.instr["N"])
+            uL = yNm[:, 0] / np.abs(yNm[:, 0])
         if case is None:
-            return yN * np.conj(uL)[:, None]
+            return (yNm if use else yN) * np.conj(uL)[:, None]
         e, i_cmd = self.sources(S)
         My, mv = self.maps_F[case]
         u_f, _, _, v1 = fixed_point(mv, e, i_cmd, d_cmd, self.i_max, self.lim, u_pre)
@@ -223,6 +251,8 @@ class FrameModel:
             uu[dead] = np.exp(1j * self.rng.uniform(0, 2 * np.pi, dead.sum()))
         i1, d = limiter_vec(i_cmd * uu, d_cmd * uu, self.i_max, self.lim)
         y = My[:, 0][None] * e[:, None] + My[:, 1][None] * i1[:, None] + My[:, 2][None] * d[:, None]
+        if use:
+            y = self._instr_apply(y, E[:, :12], self.instr["F"])
         return y * np.conj(uL)[:, None]
 
     def dead_frames(self, d_cmd):
@@ -243,14 +273,26 @@ class FrameModel:
         if case is None:
             Sx = np.repeat(S, len(refs), 0)
             ref = np.tile(refs, len(S))
-            return Sx, None, None, ref, np.hstack([Sx, ref[:, None]])
+            return Sx, None, None, ref, self._with_instr(np.hstack([Sx, ref[:, None]]), 12)
         lams = np.linspace(0.0, 1.0, self.steps)
         drs = np.array([-1.0, 0.0, 1.0]) if self.drift else np.array([0.0])
         grid = np.array(list(itertools.product(lams, drs, refs)))
         Sx = np.repeat(S, len(grid), 0)
         lam, dr, ref = (np.tile(grid[:, j], len(S)) for j in range(3))
         W = np.hstack([Sx, (2 * lam - 1)[:, None], dr[:, None], ref[:, None]])
-        return Sx, lam, dr, ref, W
+        return Sx, lam, dr, ref, self._with_instr(W, 24)
+
+    def _with_instr(self, W, n_e):
+        """Append the instrument-error symbols as shared-symbol columns: half the rows at random corners of the
+        symbol box, half uniform inside it (the error is near-linear in its symbols, so the corners carry the
+        extremes the remainder must cover)."""
+        if self.instr is None:
+            return W
+        rng = np.random.default_rng(len(W) * 7 + n_e)
+        E = rng.uniform(-1, 1, (len(W), n_e))
+        corner = rng.random(len(W)) < 0.5
+        E[corner] = np.sign(E[corner])
+        return np.hstack([W, E])
 
     def phi_max(self, d_cmd):
         if self.ref_phi is not None:
@@ -268,7 +310,8 @@ class FrameModel:
         phi = self.phi_max(d_cmd) if self.ref_noise else 0.0
         for (lo, hi), S in zip(self.pieces, self.samples):
             Sx, lam, dr, ref, W = self._expand(S, case)
-            Y = self.measure(Sx, d_cmd, case, lam, dr) * np.exp(1j * phi * ref)[:, None]
+            E = None if self.instr is None else W[:, -(12 if case is None else 24):]
+            Y = self.measure(Sx, d_cmd, case, lam, dr, E=E) * np.exp(1j * phi * ref)[:, None]
             Yr = _realify2(Y)
             lo_, hi_ = np.asarray(lo, float), np.asarray(hi, float)
             mid, half = (lo_ + hi_) / 2, (hi_ - lo_) / 2
