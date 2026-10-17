@@ -96,6 +96,56 @@ inverter's rating, with a 10 % margin.** The 1.12 pu design is the price of ε =
 end's current error and 2.8 times its voltage error. The signal's size is set by the noise bound assumed, not by the
 faults.
 
+## Each detector against its own worst case (option B)
+
+`src/step3_adversary.py` uses the pilot's clean measurements (100 runs) and writes
+`results/step3/adversary_pilot.json`. The adversary adds noise inside the design's ε box (0.08 pu on every real
+component, relay frame) in one of two ways:
+- **per window**: every one-cycle measurement and the pre-fault memory get their own perturbation;
+- **constant**: one perturbation for the whole run, the same on the memory and every window, i.e. a systematic
+  instrument error.
+
+Thresholds are worst-case too. A detector's threshold is the largest score its own adversary produces on the
+calibration normals (pre-fault pseudo-triggers at the same δ level). D1 keeps the design's threshold. The worst
+cases are:
+- D1: exact (within 2ε of N in every window, or an LP for the constant adversary);
+- D0: exact;
+- D2 (Gaussian) and D3: projected sign-gradient search, 60 steps.
+
+**Worst-case miss rate, per-window adversary.** Each cell lists D1 / D0 / D2 / D3.
+
+| stratum | δ = 0 | ¼ δ* | ½ δ* | ¾ δ* | δ* |
+|---|---|---|---|---|---|
+| hard A-G (8) | **.75** / 1 / .88 / 1 | .12 / 1 / .75 / 1 | .12 / 1 / .62 / 1 | **0** / 1 / .25 / 1 | **0** / 1 / .12 / 1 |
+| hard B-C (2) | 0 / 1 / 0 / 1 | 0 / 1 / .5 / 1 | 0 / 1 / 0 / 1 | 0 / 1 / 0 / 1 | 0 / 1 / 0 / 1 |
+| uniform (4) | .25 / .5 / .25 / 1 | .25 / .5 / .25 / 1 | 0 / .75 / .25 / 1 | 0 / .75 / .25 / 1 | 0 / .75 / .25 / 1 |
+| outside the ranges (2) | .5 / .5 / .5 / 1 | .5 / .5 / .5 / 1 | 0 / .5 / .5 / 1 | 0 / .5 / .5 / 1 | 0 / 1 / .5 / 1 |
+
+**Constant adversary.** D1 and D2 are unchanged. D0 misses nothing at any level, because a constant error cancels in
+an increment. D3 misses 50–75 % at every level.
+
+**Worst-case false alarms.** None of the four detectors alarms on a normal run under either adversary. The alarms are
+all on the confusers:
+- the single-phase load: D1, D0 and D2 at every level;
+- the load step: D1 3 of 5, D2 1 of 5, D0 0 (per window) or 4 of 5 (constant).
+
+**Reading.**
+- **"Shrink δ until each fails", in Taylor's worst-case sense, has a clear answer on this pilot.**
+  - D1, the design's own test, has no worst-case miss in the design's set from ¾ δ*. Below that it fails: 75 % of
+    the hard A-G faults at δ = 0, 12 % at ¼ and ½ δ*.
+  - D2 benefits from δ too (88 % → 12 % on hard A-G), but never reaches zero. Its misses at δ* are one hard, one
+    uniform and one outside-the-ranges fault, and the hypothesis grid does not cover the last one.
+  - D0 and D3 fail at every δ against a per-window adversary. δ does not help them: an incremental element cannot
+    see a constant signal, and the CNN is not robust to small worst-case input changes.
+- **Against a constant (systematic) error the picture turns round for D0.** The incremental element is immune, while
+  D1 needs δ. The guarantee D1 buys with the signal is one an incremental element gets free against systematic
+  errors, but not against per-window noise.
+- With realistic random noise all four detect everything at every δ (above). So the signal matters only for
+  worst-case, per-window noise. At the noise bound the front end actually has, the design needs almost none of it
+  (δ* 0 or 0.04 pu).
+
+These are 8 hard A-G scenarios. The dense batch (option A) gives the worst-case curve with binomial bounds.
+
 ## What could make the experiment informative
 
 Not started; the choice belongs with the project (docs/STEP3.md, "no sweep until all six hold"):
