@@ -124,7 +124,7 @@ design's sets, which separates with the margin above 2(1 + ρ) = 2.08 ε.
 
 | group | runs | outside own set, 2–3 cycles | clean distance to N, smallest | outside own set after 3 cycles |
 |---|---|---|---|---|
-| 13 binding cases at their witness realisations | 13 | **0** | **2.33 ε** (L1 15 % A-G, full R_f) | 0 |
+| 13 binding cases at their witness realisations | 13 | **0** | **2.33 ε** (L1 15 % A-G, full R_f; the design's own gap there is 2.10 ε) | 0 |
 | window edges 221° / 230° (8 bolted ab, 3 hardest A-G) | 22 | **0** | 2.34 ε | up to 15.6 ε (bolted ab) |
 | inception over one cycle (same 11 cases, 225°) | 11 | **0** | 2.33 ε | up to 10.1 ε (bolted ab) |
 
@@ -137,11 +137,17 @@ design's sets, which separates with the margin above 2(1 + ρ) = 2.08 ε.
 
 - **Inside the decision window the design point holds in EMT where it is tightest.** At the witnesses, the window
   edges and random inception angles, no fault point leaves its own set, and every fault stays at least 2.33 ε from N
-  against the 2.08 ε the margin needs. The provisional 0.1 ε model error is not used up there.
+  against the 2.08 ε the margin needs. The provisional 0.1 ε model error is not used up there. In the design itself
+  the binding gap is **2.10 ε against 2.08 ε** (L1 15 % A-G, full R_f): it holds there by 0.02 ε. EMT has more room
+  (2.33 ε) because its realisation is not the design's extreme pair.
 - **After 3 cycles bolted ab faults leave their sets** (up to 15.6 ε), as the review found. A decision after 3 cycles
   is not covered.
 - **A balanced 0.2 pu load step moves normal operation 0.87 ε outside N.** On clean data that is below D1's alarm
-  threshold (distance > ε), but not by much: it belongs in the violation matrix.
+  threshold (distance > ε), but not by much: about 0.2 ε of measurement noise in the wrong direction makes D1
+  alarm. The single-phase load (0.41 ε) is the same question. **Decision (17 Oct 2026): loads stay fixed in the
+  design**, as in network.py and the TAC25 formulation. D1's false alarms on load steps and unbalanced loads are
+  reported as a designed-in limitation in the violation matrix, not as a discovery. Giving N a load-scale symbol
+  would be a new design, outside the four steps (review/STEP3_PART4_REVIEW.md §2.4, option b).
 - **The drift belongs to the controller's bare DFT reference.** Four instrumented runs, with a 0.3 s fault and the
   controller's own outputs recorded:
 
@@ -152,9 +158,13 @@ design's sets, which separates with the margin above 2(1 + ρ) = 2.08 ε.
   | 1.05 pu, L1 ab 35 % bolted | bare DFT | 112° | 0 / 0 / 2.9 / 6.6 / 1.4 / 15.2 ε |
   | 1.05 pu, L1 ab 35 % bolted | DFT + 15 Hz low-pass | 25° | 0 at every window |
 
-  A 15 Hz low-pass on the angle reference removes the instability at 1.14 pu and the drift at 1.05 pu. The model
-  then holds through the whole fault. The 1.05 pu cap is therefore a property of the bare-DFT controller, as the
-  review suspected. A component regression run (TANG = 0) reproduces the stored run exactly (difference 0).
+  A first-order 15 Hz low-pass on the angle reference (a **PLL-like reference filter**, not a PLL: a real SRF-PLL
+  is second order, tracks frequency, overshoots and can itself go unstable on weak grids) removes the instability at
+  1.14 pu and the drift at 1.05 pu. The model then holds through the whole fault. The 1.05 pu cap is therefore a
+  property of the bare-DFT controller, as the review suspected. The bare-DFT instability is an equipment-level
+  finding, not only a relay one: at 1.14 pu the inverter's own measured |V1| swings between 0.23 and **2.76 pu**
+  (0.40–0.77 pu with the filter). Step 3 uses the filtered reference. The cap under it, the window start and a 10 / 30 Hz
+  sensitivity are measured by `src/frames_pll_check.py` (review/STEP3_PART4_REVIEW.md §3). A component regression run (TANG = 0) reproduces the stored run exactly (difference 0).
 
 ## What it means and does not
 

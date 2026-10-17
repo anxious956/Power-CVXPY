@@ -24,6 +24,7 @@ the inverter current left.
 
     python src/frames_main.py                      -> results/network/frames_main.json
     python src/frames_main.py 1.05 225 0.05        -> results/network/frames_main_fixed.json
+    python src/frames_main.py --rmax 1.18 --rho 0.1 --tag pll   -> results/network/frames_main_pll.json
 
 The second form skips the search and checks a given design point (|delta| pu, angle deg, rho): at rho 0.1 no delta
 up to 1.05 pu separates (results/network/frames_main_err025.json is the run with the earlier 0.25 eps box); at
@@ -42,29 +43,30 @@ MODEL_ERR, DRIFT, RHO, R_MAX = 0.1 * EPS, 3.0, 0.1, 1.05
 OUT = os.path.join(HERE, "..", "results", "network", "frames_main.json")
 
 
-def main(fixed=None):
-    rho = RHO
+def main(fixed=None, rho=RHO, r_max=R_MAX, tag=None):
     net = three_bus()
     t0 = time.time()
     probe = fr.FrameModel(net, CASES[:1], n_samples=400, face_pts=5, seed=2)
     v1min = float(np.min(np.abs(probe.measure(np.vstack(probe.samples), 0j, None)[:, 0])))
     phi = K * SIGMA / (np.sqrt(N_MEM) * v1min)
     cfg = dict(phi_ref=float(phi), k=K, sigma_white=SIGMA, n_mem=N_MEM, min_V1L=v1min, model_err=MODEL_ERR, drift_deg=DRIFT,
-               rho=rho, r_max=R_MAX, window_cycles=[2, 3],
+               rho=rho, r_max=r_max, window_cycles=[2, 3],
                labels=dict(k="chosen", sigma_white="chosen", n_mem="relay design", model_err="measured (EMT, delta injected)", r_max="measured (EMT settles)",
                            drift_deg="measured", window_cycles="chosen", rho="chosen"))
     print(f"phi_ref = {phi:.4f} rad", flush=True)
     kw = dict(factor=1.1, drift_deg=DRIFT, ref_phi=phi, model_err=MODEL_ERR)
     search = fr.FrameModel(net, CASES, n_samples=150, face_pts=3, seed=1, **kw)
-    out = OUT
-    if fixed is not None:
+    out = OUT if tag is None else OUT.replace(".json", f"_{tag}.json")
+    if fixed is None:
+        r = fr.min_delta_fast(search, rho=rho, r_max=r_max)
+    else:
         mag, ang, rho = fixed
         cfg["rho"] = rho
         d0 = mag * np.exp(1j * np.radians(ang))
         sep = fr.separated(search, d0, rho)
         r = dict(feasible=bool(sep), d_cmd=d0 if sep else None, abs_delta=mag, angle_deg=ang, fixed=True,
                  unseparated_at_0=fr.unseparated(search, 0j, rho))
-        out = OUT.replace(".json", "_fixed.json")
+        out = out.replace(".json", "_fixed.json")
     res = dict(config=cfg, abs_delta=r["abs_delta"], angle_deg=r["angle_deg"], unseparated_at_0=[list(c) for c in r.get("unseparated_at_0", [])],
                inadmissible=r.get("inadmissible"), fixed=bool(fixed), separated_search_tier=r["feasible"])
     print(f"delta* = {r['abs_delta']} at {r['angle_deg']} deg; unseparated at 0: {len(res['unseparated_at_0'])}  [{time.time() - t0:.0f} s]", flush=True)
@@ -102,4 +104,11 @@ def main(fixed=None):
 
 
 if __name__ == "__main__":
-    main(tuple(float(x) for x in sys.argv[1:4]) if len(sys.argv) > 3 else None)
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("fixed", nargs="*", type=float, help="|delta| angle rho: check this design point, no search")
+    ap.add_argument("--rho", type=float, default=RHO)
+    ap.add_argument("--rmax", type=float, default=R_MAX)
+    ap.add_argument("--tag", default=None)
+    a = ap.parse_args()
+    main(tuple(a.fixed) if len(a.fixed) == 3 else None, rho=a.rho, r_max=a.rmax, tag=a.tag)
