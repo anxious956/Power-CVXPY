@@ -24,6 +24,7 @@ from network_delta_test import CASES
 
 OUT = os.path.join(HERE, "..", "results", "step3")
 K = 4.0
+TIERS_RUN = ("clean", "design", "stress")
 N_SEEDS = 5
 D3_FEATS = {}
 DETS = ("d1", "d0", "d2g", "d2p", "d3")
@@ -70,7 +71,7 @@ def main():
         r = dict(name=sp["name"], scenario=sp["scenario"], stratum=sp["stratum"], level=sp["level"], kind=sp["kind"],
                  in_range=sp["in_range"], confuser=(sp.get("confuser") or {}).get("kind"))
         d = complex(*sp["d_cmd"])
-        for tier in ("clean", "design"):
+        for tier in TIERS_RUN:
             rel = Relay(sp["name"], tier=tier, seed=1000 + sp["scenario"])
             if tier == "clean":
                 pre = rel.idx(sp["t_fault"] - 0.05)
@@ -113,8 +114,8 @@ def main():
     levels = sorted({q["level"] for q in rows})
     thr = {}
     for dn in ("d0", "d2g", "d2p", "d3"):
-        for t in ("clean", "design"):
-            if dn == "d3" and t == "clean":
+        for t in TIERS_RUN:
+            if dn == "d3" and t != "design":
                 continue
             for lv in levels:
                 thr[(dn, t, lv)] = max(x for q in rows if q["level"] == lv for x in q[f"{t}_{dn}_cal"])
@@ -158,13 +159,19 @@ def main():
                     confusers_in_spec=all(("confuser" in sp) == bool(sp.get("confuser")) for sp in specs))
     # detection table
     tab = {}
-    for tier in ("clean", "design"):
+    for tier in TIERS_RUN:
         for st in ("hard", "hard_bc", "uniform", "outside", "normal", "load", "phase1"):
             for lv in sorted({q["level"] for q in rows}):
                 q = [x for x in rows if x["stratum"] == st and x["level"] == lv]
                 if q:
                     tab[f"{tier}|{st}|{lv}"] = {f"{dn}_{how}": float(np.mean([alarm(x, tier, dn, how) for x in q]))
                                                 for dn in (DETS if tier == "design" else DETS[:4]) for how in ("starter", "true")}
+    # D1's worst case: a clean distance above 2 eps is detected under ANY noise inside the eps box (the noise moves
+    # the measurement by at most eps on every component, and D1 alarms above eps); the design's guarantee
+    for st in ("hard", "hard_bc", "uniform", "outside"):
+        for lv in sorted({q["level"] for q in rows}):
+            q = [x for x in rows if x["stratum"] == st and x["level"] == lv]
+            tab[f"guaranteed|{st}|{lv}"] = float(np.mean([x["clean_d1_true"] > 2.0 for x in q]))
     res["table"] = tab
     json.dump(dict(result=res, rows=rows), open(os.path.join(OUT, "pilot_eval.json"), "w"), indent=1, default=float)
     print(f"\n(a) pre-fault |EMT - model| max {ea:.4f} pu (<= 0.005): {'PASS' if ea <= 0.005 else 'FAIL'}")
@@ -185,6 +192,13 @@ def main():
     for st in ("hard", "hard_bc", "uniform", "outside", "normal", "load", "phase1"):
         cells = [" ".join(f"{tab[k][dn + '_true']:.2f}" for dn in DETS) for k in tab if k.startswith(f"design|{st}|")]
         print(f"    {st:8s} " + "  |  ".join(cells))
+    print("\nalarm rate, true trigger, stress tier (eps-scale noise), D1 D0 D2g D2p:")
+    for st in ("hard", "hard_bc", "uniform", "outside", "normal", "load", "phase1"):
+        cells = [" ".join(f"{tab[k][dn + '_true']:.2f}" for dn in DETS[:4]) for k in tab if k.startswith(f"stress|{st}|")]
+        print(f"    {st:8s} " + "  |  ".join(cells))
+    print("\nD1 guaranteed under any noise inside the eps box (clean distance > 2 eps), delta level 0 / .25 / .5 / .75 / 1:")
+    for st in ("hard", "hard_bc", "uniform", "outside"):
+        print(f"    {st:8s} " + "  ".join(f"{tab[k]:.2f}" for k in tab if k.startswith(f"guaranteed|{st}|")))
     print("-> results/step3/pilot_eval.json")
 
 

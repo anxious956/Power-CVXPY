@@ -37,9 +37,10 @@ def normal_set(d_cmd):
 
 def trigger(relay, spec, how):
     true = relay.idx(spec.get("t_fault", 0.30))
-    if how == "oracle" or (how == "forced"):
-        return true
-    return relay.inception                               # None when the starter does not pick up
+    inc = true if how in ("oracle", "forced") else relay.inception    # None when the starter does not pick up
+    if inc is not None and inc + 3 * CYCLE + 1 > relay.v.shape[1]:
+        return None                                      # a pickup too late in the record to reach a decision
+    return inc
 
 
 def d1_score(relay, spec, how="starter", c0=2.0, c1=3.0):
@@ -80,7 +81,7 @@ def d0_calibration_scores(relay, spec, c0=2.0, c1=3.0, n_pre=6):
 # the non-overlapping windows ending 2.0 and 3.0 cycles after it. Score: 1 - P(normal).
 
 D2_UPDATES = (2.0, 3.0)
-NOISE_STD = dict(clean=(1e-3, 1e-3), design=(0.005, 0.01), **{"class": (0.005, 0.01)})   # (voltage, current) per component
+NOISE_STD = dict(clean=(1e-3, 1e-3), design=(0.005, 0.01), stress=(0.02, 0.02), **{"class": (0.005, 0.01)})   # (voltage, current) per component
 
 
 def _modes(d_cmd):
