@@ -119,14 +119,54 @@ D1 decides only on windows wholly after the starter's inception estimate; mixed 
   counterfactual.
 - **Ask Taylor first** about D2 (draft email in this repository, sent by the user).
 
-## Pilot (~100 runs) go / no-go, written before it runs
+## The front end and the noise model (review/STEP3_PART5_REVIEW.md, verdict of 17 Oct 2026)
 
-- (a) EMT matches the static model at the relay before the fault (≤ 0.005 pu), with the realistic inverter setting.
-- (b) The hard stratum is hard at δ = 0: D1 misses some of it.
-- (c) D1, D2 and D3 run end to end on a handful of runs.
-- (d) The output fingerprint covers everything that varies (t_fault, the inverter setting rule, confusers).
+Every detector reads the relay through one front end (`src/step3_frontend.py`):
 
-No sweep until all four hold.
+1. Instrument errors are applied to the **sampled waveforms**: systematic per-run, per-channel CT and VT ratio
+   errors and a VT phase error, plus white noise.
+2. Resample to 128 samples per cycle.
+3. A **mimic filter on the currents** with τ fixed by L1's X/R (1.59 cycles). It is a relay setting, the same for
+   every detector, including the CNN's seq_traj.
+4. One-cycle sequence phasors in the relay's memory frame. The frame is the pre-fault V1_L averaged over 3 cycles
+   before the starter's inception estimate.
+
+The mimic filter amplifies white noise on the current phasors: variance ×7.4, std ×2.7 (reviewer's figure, checked by
+Monte Carlo in the front end). Systematic CT errors pass through it unchanged. Three consequences:
+- the white noise is added before the mimic filter, never at phasor level;
+- the noise levels are set by their **post-filter** phasor standard deviation;
+- D2's likelihood uses the post-filter current covariance, including the correlation between overlapping windows.
+
+Noise tiers:
+
+| tier | white noise, post-filter phasor std | systematic | role |
+|---|---|---|---|
+| clean | none | none | consistency with the design check |
+| design | currents 0.01 pu, voltages 0.005 pu | CT ratio ±1 %, VT ratio ±0.5 %, VT phase ±0.3° | inside the ε box at k = 4: D1's guarantee applies |
+| class | as design | CT 5–10 %, VT 3–6 %, VT phase 2–4° (the §3.7 figures) | the violation matrix; no guarantee |
+
+D1's threshold is distance > ε on noisy data. The design tier must fit the ε box: k·σ plus the largest systematic
+term ≤ ε on every real component. The pilot checks this on the measured fault currents.
+
+## Pilot go / no-go, written before it runs (17 Oct 2026)
+
+Pilot: about 100 runs, `src/step3_data.py pilot`. There are 16 fault scenarios and 4 normal or confuser scenarios,
+each run at 5 δ levels: 0, ¼, ½, ¾ and 1 × the design δ (1.12 pu at 225°). Every run uses the filtered reference.
+
+- (a) **Static model before the fault.** EMT matches the V1-referenced model at the relay before the fault
+  (≤ 0.005 pu) on every pilot run.
+- (b) **The hard stratum is hard at δ = 0.** D1 misses at least a quarter of the hard in-range faults at δ = 0, and
+  so does D0.
+- (c) **The design holds on clean pilot data.** At the design δ with the clean tier, D1 detects every in-range fault
+  in the 2–3-cycle window and alarms on no normal run. Confusers are reported, not counted.
+- (d) **End to end.** D1, D2, D3 and D0 run end to end on the pilot. Every detector reads the same front end and
+  is calibrated the same way.
+- (e) **Noise budget.** On the pilot's fault currents the design tier fits the ε box at k = 4 after the mimic filter.
+  If it does not, the design tier's white noise is reduced until it does, and that is stated.
+- (f) **Fingerprint.** It covers everything that varies: t_fault, TANG, the inverter settings, the confusers and
+  dur / t_end.
+
+No sweep until all six hold. Faults inside and outside the design ranges are reported separately throughout.
 
 ## Compute
 
