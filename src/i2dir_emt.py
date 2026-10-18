@@ -10,6 +10,7 @@ source point; the hard forward (L1) and reverse (L2) sets; one pre-fault run per
 """
 import os, sys, json
 import numpy as np
+from pscad_io import read_case
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import network as nw
@@ -47,14 +48,18 @@ def make():
 
 
 def decide(rel, inc):
-    """The first window (2.0 ... 3.0 cycles) that decides, with the 0.05 pu pickups; increments against the memory."""
+    """The first window (2.0 ... 3.0 cycles) that decides, with the 0.05 pu pickups; increments against the memory.
+    Also the decision at every window."""
     mem_ends = inc - CYCLE // 2 - np.arange(0, 2 * CYCLE + 1, CYCLE // 4)
     mem = np.mean([rel.y(e) for e in mem_ends], axis=0)
-    for c in WIN:
-        d = direction_pk(mem, rel.y(inc + int(round(c * CYCLE))))
-        if d is not None:
-            return d, float(c)
-    return None, None
+    per = [direction_pk(mem, rel.y(inc + int(round(c * CYCLE)))) for c in WIN]
+    first = next(((d, float(c)) for d, c in zip(per, WIN) if d is not None), (None, None))
+    return first[0], first[1], per
+
+
+def v1m(run, name, t):
+    x = np.asarray(run["ch"].get(f"V1M_{name}", []))
+    return float(x[int(round((t - float(run["t"][0])) * run["fs"]))]) if len(x) else None
 
 
 def analyse():
@@ -66,13 +71,18 @@ def analyse():
         yN, _ = solve_v1(net, sg, st, None)
         # pre-fault check: sink and source-inverter currents, EMT against static
         sp = [s for s in specs if s["law"] == lt and s["kind"] == "normal"][0]
-        rel = Relay(sp["name"], tier="clean")
-        from pscad_io import read_case
         run = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
-        inj_emt = injections(run, sp, 0.28)
-        _, inj_static, _ = nw.solve_v1ref(net, sg, st, None) if True else (None, None, None)
-        checks[lt] = {k: dict(emt=abs(inj_emt[k][0]), static=abs(inj_static[k][0])) for k in inj_static}
-        print(f"{law}: pre-fault |I1| EMT vs static: " + ", ".join(f"{k} {v['emt']:.3f} / {v['static']:.3f}" for k, v in checks[lt].items()))
+        inj25, inj28 = injections(run, sp, 0.25), injections(run, sp, 0.28)
+        _, inj_static, _ = nw.solve_v1ref(net, sg, st, None)
+        checks[lt] = {k: dict(emt=abs(inj28[k][0]), emt_025=abs(inj25[k][0]), static=abs(inj_static[k][0])) for k in inj_static}
+        for v in checks[lt].values():
+            v["err"] = abs(v["emt"] / v["static"] - 1)
+            v["settled"] = abs(v["emt"] / v["emt_025"] - 1)
+        gate = all(v["err"] <= 0.03 and v["settled"] <= 0.03 for v in checks[lt].values())
+        checks[lt]["gate_passed"] = gate
+        print(f"{law}: pre-fault |I1| EMT vs static (error, settling): " + ", ".join(
+            f"{k} {v['emt']:.3f} / {v['static']:.3f} ({v['err']:.1%}, {v['settled']:.1%})" for k, v in checks[lt].items() if k != "gate_passed")
+              + f"; gate {'PASSED' if gate else 'FAILED: results not interpreted'}")
         for sp in [s for s in specs if s["law"] == lt and s["kind"] == "fault"]:
             c = tuple(sp["case"])
             y, _ = solve_v1(net, sg, st, (c[0], c[1], c[2], c[3] * net.rF))
@@ -82,9 +92,13 @@ def analyse():
             except FileNotFoundError:
                 print("missing", sp["name"])
                 continue
-            d_emt, at = decide(rel, rel.idx(T_FAULT))
+            d_emt, at, per = decide(rel, rel.idx(T_FAULT))
             want = "f" if sp["side"] == "forward" else "r"
+            run = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
+            v_sink = {k: v1m(run, k, T_FAULT + 2.5 / 60) for k in ("SR", "SS")}
             rows.append(dict(name=sp["name"], law=lt, side=sp["side"], case=list(c), static=d_static, emt=d_emt, at_cycles=at,
+                             per_window=per, flips=len({d for d in per if d is not None}) > 1, sink_v1=v_sink,
+                             collapsed=any(v is not None and v < 0.2 for v in v_sink.values()),
                              emt_misdirected=d_emt is not None and d_emt != want, emt_undecided=d_emt is None,
                              static_misdirected=d_static is not None and d_static != want, static_undecided=d_static is None))
     summ = {}
@@ -96,10 +110,12 @@ def analyse():
             s = {k: float(np.mean([r[k] for r in q])) for k in ("emt_misdirected", "emt_undecided", "static_misdirected", "static_undecided")}
             s["n"] = len(q)
             s["disagree"] = [r["name"] for r in q if r["emt"] != r["static"]]
+            s["flips"] = [r["name"] for r in q if r["flips"]]
+            s["collapsed"] = [r["name"] for r in q if r["collapsed"]]
             summ[f"{lt}|{side}"] = s
             print(f"{law:20s} {side:8s}: EMT misdirected {s['emt_misdirected']:.2f} undecided {s['emt_undecided']:.2f} | static "
                   f"(same cases) misdirected {s['static_misdirected']:.2f} undecided {s['static_undecided']:.2f} | EMT vs static differ on "
-                  f"{len(s['disagree'])} of {len(q)}")
+                  f"{len(s['disagree'])} of {len(q)}; flips across windows {len(s['flips'])}; sink |V1| < 0.2 pu {len(s['collapsed'])}")
     f0, f1 = summ.get("m0|forward"), summ.get("m1|forward")
     r0, r1 = summ.get("m0|reverse"), summ.get("m1|reverse")
     if f0 and f1 and r0 and r1:

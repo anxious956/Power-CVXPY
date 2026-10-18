@@ -161,3 +161,14 @@ IEEE 2800 gives 0 at every s, and the reverse set is 0 everywhere.
   - at random source points and λ, the prediction agrees with solve_v1ref within the fitted remainder.
 - **"Yes"** means every forward–reverse pair separated by 2ε(1 + ρ) at a δ within the limiter, at s = 1. The prior
   (row 46) predicts no.
+
+**Additions before reading stage (c)'s results** (review of the stage-(c) code, 18 Oct 2026):
+- **Pre-fault gate.** Each inverter's pre-fault |I1| must match the static operating point within ±3 % and be settled
+  (0.25 s against 0.28 s). If it fails, the direction results are not interpreted.
+- **Window stability.** Besides the first decided window, the decision at every window from 2.0 to 3.0 cycles is
+  stored. Cases that flip are reported, since the early windows sit at the end of the filtered reference's
+  transient.
+- **Collapsed buses.** The sinks' own |V1| in the fault (their V1M channel) is reported. Cases below 0.2 pu are
+  flagged, not dropped: a real drive would trip there.
+- **One point on wave** (t_fault 0.30 s for every run) is a known limit. A repeat at a second inception angle on the
+  misdirected cases would settle it.
