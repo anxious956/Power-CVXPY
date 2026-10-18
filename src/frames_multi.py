@@ -76,6 +76,7 @@ class FrameModelMulti(fr.FrameModel):
                     u[k] = new
                 if step < tol:
                     X, i1, d = self._x(e, i_cmd, d_cmd, u)
+                    self._v1_last = {k: np.abs(X @ mv[k]) for k in mv}
                     return u, X, np.abs(X @ mv[self.inj])
         raise RuntimeError(f"FrameModelMulti: fixed point not converged even under-relaxed (step {step:.1e})")
 
@@ -104,20 +105,25 @@ class FrameModelMulti(fr.FrameModel):
         for k in u_pre:
             w = (1 - lam) * u_pre[k] + lam * u_f[k]
             uu[k] = w / np.maximum(np.abs(w), 1e-12) * np.exp(1j * self.drift * drift * lam)
-        dead = v1 < self.v1_min
-        if dead.any():
-            uu[self.inj] = uu[self.inj].copy()
-            uu[self.inj][dead] = np.exp(1j * self.rng.uniform(0, 2 * np.pi, dead.sum()))
+        # no usable frame where a source's own bus V1 collapses: any angle, independently per source; the rule is
+        # per bus (I and SR share bus R), each source judged on its own bus V1 in the fault
+        v1s = self._v1_last
+        for k in uu:
+            dead = v1s[k] < self.v1_min
+            if dead.any():
+                uu[k] = uu[k].copy()
+                uu[k][dead] = np.exp(1j * self.rng.uniform(0, 2 * np.pi, dead.sum()))
         X, _, _ = self._x(e, i_cmd, d_cmd, uu)
         return (X @ My.T) * np.conj(uL)[:, None]
 
     def dead_frames(self, d_cmd):
+        """Cases where any source's own bus V1 falls below v1_min at some sample point."""
         S = np.vstack(self.samples)
         e, i_cmd = self.sources(S)
         _, _, u_pre = self.normal_state(S, d_cmd)
         out = []
         for k in range(len(self.cases)):
-            _, _, v1 = self._fixed(self.maps_F[k][1], e, i_cmd, d_cmd, u_pre)
-            if (v1 < self.v1_min).any():
+            self._fixed(self.maps_F[k][1], e, i_cmd, d_cmd, u_pre)
+            if any((v < self.v1_min).any() for v in self._v1_last.values()):
                 out.append(self.cases[k])
         return out

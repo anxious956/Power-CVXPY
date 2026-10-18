@@ -386,3 +386,11 @@ direction.
 A fourth regression, at δ ≠ 0 (0.5 and 1.0 pu, three angles, random points), also agrees with solve_v1ref: ≤ 2·10⁻¹²
 pu. The multi-frame fixed point falls back to under-relaxed iteration where plain iteration swings between frames;
 the fixed point is unchanged.
+
+**Limiter-active δ regression and dead frames** (review of 74a3725). |δ| 0.5 and 1.1 pu at 0°, 90°, 225° and 300°,
+random source points, normal operation and 10 faults, settled frames, against solve_v1ref with D2MAG / D2ANG. In
+5 of the 8 settings the δ-priority limiter acts (command peak per phase 1.20–1.79). Largest difference: 1.9·10⁻¹² pu.
+
+The dead-frame rule is now per bus: each source is judged on its own bus V1 in the fault, and I and SR, both at R,
+are randomised independently. In the hard set no source bus |V1| falls below 0.05 pu at δ = 0 or 1.1 pu, so the rule
+never triggers and the running design is unaffected.
