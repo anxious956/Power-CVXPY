@@ -247,3 +247,13 @@ specs are resubmitted):
 - an optional per-spec solver step dt_us, with the output plot step kept at 50 µs;
 - the fast-mode project key now includes the shunts, the step and the inverter set, so a project is never reused
   for another topology.
+
+**The 2 µs diagnostic is dropped** (review of the builder commit). The inverter's DFT buffer holds at most 1700
+samples (NMAX). At a 2 µs step a cycle needs 8333, so the window would clamp to about 0.2 cycle: a broken
+sequence extraction, not a smaller step. Every step below about 9.8 µs is affected. Instead:
+- if MODE2 1 with the shunts is stable at 10 µs, that already points to the undamped cut-set as the cause;
+- the grid-side bracket's MODE2 1 (no shunt) then uses the registered fallback, a first-order low-pass on the
+  controller's V2 measurement. It will be registered with its time constant before it runs.
+
+Known limit of the shunt key: the fast-mode key carries the shunt buses, not their values, and update() does not set
+them. This is harmless here, since every spec has the same shunts, but a study that varies them must add the values.
