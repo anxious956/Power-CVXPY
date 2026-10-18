@@ -394,3 +394,17 @@ random source points, normal operation and 10 faults, settled frames, against so
 The dead-frame rule is now per bus: each source is judged on its own bus V1 in the fault, and I and SR, both at R,
 are randomised independently. In the hard set no source bus |V1| falls below 0.05 pu at δ = 0 or 1.1 pu, so the rule
 never triggers and the running design is unaffected.
+
+**The under-relaxed fixed point is the physical one** (`src/i2dir_fixedpoint_check.py`,
+`results/network/i2dir_fixedpoint_check.json`). A period-2 swing of the plain iteration means the frame map has a
+slope below −1. The EMT frames follow first-order filter dynamics, du/dt = (f(u) − u)/τ, which converge to the same
+point whenever the slope is below 1; that is the point under-relaxation finds.
+
+| \|δ\| (225°) | sample-point fixed points needing relaxation | relax 0.5 vs 0.25, largest frame difference |
+|---|---|---|
+| 0 | 201 of 38 964 | 6·10⁻¹⁶ |
+| 0.56 pu | 3 of 38 964 | 2·10⁻¹⁶ |
+| 1.12 pu | 159 of 38 964 | 4·10⁻¹⁶ |
+| 1.14 pu | 105 of 38 964 | 4·10⁻¹⁶ |
+
+Both relaxations land on the same point to machine precision. No dead frame occurs at the 1.14 pu cap either.
