@@ -1,10 +1,14 @@
-# High fault resistance: the guarantee reaches 160 Ω, detection does not need it there
+# High fault resistance: the guarantee reaches 160 Ω; whether 50N fails first depends on its pickup
 
 18 Oct 2026. Follow-up to step 3 ([results/STEP3_PILOT.md](STEP3_PILOT.md)): is there a fault-resistance band where
 conventional detection fails but the designed signal can guarantee detection within the inverter's limit? Two
 reviews shaped this page (review/HIGHR_REVIEW.md and the review of the A-G-only design). Two earlier readings were
-withdrawn on the way (REVIEW.md §7 rows 54–55): "the band is empty" (mixed fault types) and "a band around 160 Ω"
-(a static worst-corner screen with a conservative pickup).
+revised on the way (REVIEW.md §7 rows 54–55): "the band is empty" was withdrawn (mixed fault types), and "a band
+around 160 Ω" was narrowed to a pickup-dependent statement.
+
+**Units.** Distances on this page are in the high-R design's white-noise box, V 0.02 / I 0.04 pu per real component.
+The 40 Ω results (FRAMES.md, STEP3_PILOT.md) are in ε = 0.08 pu. One box is 0.25 ε on a voltage component and
+0.5 ε on a current component.
 
 The network is the step-3 three-bus network, with a synchronous source at the relay bus. High fault resistance is a
 ground-fault phenomenon, so the case set is:
@@ -55,8 +59,11 @@ bare set; "N" is the design's normal set.
 
 - **The design holds in EMT at 160 Ω.** At the witnesses, the window edges and random inception, the fault points
   stay in their sets and at least 2.78 boxes from N, against 2 needed. The inverter settles at 328° up to the cap.
-- **With the smaller box, the load step is a clear false alarm.** It sits 2.04 white boxes outside N. This is the
-  designed-in limitation of fixed loads, now larger.
+- **With the smaller box, the load step is a certain false alarm for D1.** It sits 2.04 boxes outside N, about
+  0.076 pu, mostly on a current component. That is the same physical offset as the 0.95 ε at the 40 Ω design (only
+  the unit changed). Beyond 2 boxes, D1 alarms on a 0.2 pu balanced load step at S under any noise inside the box:
+  the designed-in limitation of fixed loads, now with certainty. Incremental D0 sees a balanced step as
+  ΔI0 = ΔI2 ≈ 0 and does not alarm.
 
 ## Conventional and statistical detection in the same runs
 
@@ -69,22 +76,37 @@ batch's normal runs and pre-fault windows. D1 is the distance to N, alarming abo
 | δ = 0: D1 | 1 box | 1.00 | 1.00 | 0 |
 | δ = 1.12 pu: D0 / D1, every A-G band 0–160 Ω | | 1.00 / 1.00 | 1.00 / 1.00 | 0 |
 
-**Without the signal, incremental 50N detects every 120 Ω and 160 Ω ground fault in EMT.** Its smallest score is
-0.205 pu, twice the pickup set by normal-operation noise (0.099 pu) and above the pilot's more conservative 0.162 pu.
-D1 detects them all too. The static screen's "50N fails at half the locations at 160 Ω" (`src/highr_screen.py`)
-combined the worst corner of the source box with the 0.162 pu pickup. In the static model at the worst corner, a
-0.1 pu pickup still detects up to about 200 Ω (score 0.12 pu). 50N falls below it only beyond about 250 Ω, where the
-design is not certified.
+**Without the signal, incremental 50N detects every 120 Ω and 160 Ω ground fault in these EMT runs.** Its smallest
+score is 0.205 pu, against a pickup of 0.099 pu set by normal-operation noise. D1 detects them all too. But the EMT
+fault runs sit at random source points. 50N's worst case is the worst corner of the source box, which EMT did not
+run. Whether 50N fails first therefore depends on its pickup. The worst-corner crossover, interpolated from the static
+screen (`src/highr_screen.py`):
+
+| 50N pickup | worst-corner crossover R_f | the design certifies detection up to |
+|---|---|---|
+| 0.10 pu (bare noise level, this batch) | about 250 Ω (between 200 and 300) | 160 Ω (ρ = 0): **no band** |
+| 0.15 pu (security factor about 1.5) | about 160 Ω (between 120 and 160) | 160 Ω: **a narrow band at about 160 Ω** |
+| 0.20 pu (security factor about 2) | about 115 Ω (between 80 and 120) | 160 Ω (ρ = 0), 120 Ω (ρ = 0.1): **a band of about 115–160 Ω** |
+
+A protection engineer sets 50N above standing unbalance and noise with a security factor, typically 1.5–2 times,
+about 0.15–0.2 pu here, where the pilot's calibrated 0.162 pu sat. Sensitive earth-fault elements reach much higher
+fault resistance with a time delay. The comparison here is at the 2–3-cycle decision time.
 
 ## Reading
 
 - **The designed signal certifies ground-fault detection up to about 160 Ω on this network**, at about 93 % of the
   inverter, with no margin, in a 5° window, and verified in EMT. At 120 Ω it does so with a 10 % margin for 0.82 pu.
-- **Detection does not need the signal in that range.** Incremental 50N and the set test both detect every such
-  fault without it, in EMT with realistic noise. **The signal buys the worst-case guarantee, not the detection.**
-- **Where conventional detection does fail (beyond about 250 Ω), the design cannot certify detection** within the
-  inverter's limit. So there is no band where conventional detection fails and the designed signal certifies it.
-  This is a measured conclusion for this network and this instrument model; at 200 Ω and beyond the "not certified"
-  includes the outer sets' conservatism.
+- **Whether there is a band where conventional detection fails first depends on the 50N setting policy.**
+  - At a bare 0.1 pu pickup, 50N detects up to about 250 Ω at the worst corner, beyond what the design certifies,
+    so there is no band.
+  - At 0.15–0.2 pu, the pickup a security factor gives, 50N's worst corner fails from about 115–160 Ω, inside the
+    range the design certifies. That is a band, narrow, at 93 % of the inverter and no margin.
+- **The set test detects these faults statistically without the signal** in EMT (D1 at δ = 0: every 120 Ω and
+  160 Ω fault). Even inside the band, what the signal buys is the worst-case guarantee, not detection by every
+  detector.
+- **The guarantee has a cost beyond the inverter's output.** At this design D1 alarms on a balanced 0.2 pu load step
+  with certainty.
+- At 200 Ω and beyond the design does not certify detection; that "not certified" includes the outer sets'
+  conservatism.
 
 One three-bus network with a synchronous source at the relay bus; 8 locations per fault type; EMT checks at 160 Ω only.

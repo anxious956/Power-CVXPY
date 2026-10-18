@@ -45,11 +45,14 @@ relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); de
    - The designed signal certifies ground-fault detection up to about 160 Ω: 1.12 pu, no margin, a 5° window. It is
      verified in EMT at its witnesses, window edges and random inception. At 120 Ω it holds with a 10 % margin for
      0.82 pu.
-   - In the same EMT runs, without the signal, a conventional incremental 50N element and the set test both detect
-     every 120 Ω and 160 Ω ground fault. 50N's smallest score is 0.205 pu, against a 0.1 pu pickup.
-   - Conventional detection fails only beyond about 250 Ω, where the design cannot certify detection.
-
-   So again the signal buys the guarantee, not the detection.
+   - Whether a conventional incremental 50N element fails first depends on its pickup. At a bare 0.1 pu it detects
+     these faults too: in EMT the smallest score is 0.205 pu, and at the worst corner of the source box it detects to
+     about 250 Ω. At a pickup of 0.15–0.2 pu, which a security factor gives, its worst corner fails from about
+     115–160 Ω. That leaves a narrow band where the signal certifies what 50N misses.
+   - The set test detects these faults without the signal, statistically.
+   - At this design the set test alarms with certainty on a balanced 0.2 pu load step.
+   - Sensitive earth-fault elements reach further with a time delay; the comparison is at 2–3 cycles.
+   - Units: these results use a box of V 0.02 / I 0.04 pu, i.e. 0.25 ε / 0.5 ε of the 40 Ω design's ε = 0.08 pu.
 7. **An inverter at the relay end does not change the detection answer** (*static, nominal sources*;
    results/IBR_GRID_SCREEN.md). With a grid-following inverter in place of the relay-end synchronous source, current
    elements go blind when its sequence paths are open, but 59N then sees |V0| = 0.31–0.57 pu on every hard ground
