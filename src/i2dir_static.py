@@ -168,7 +168,7 @@ def filter_shunts(s):
     return out
 
 
-def network_s(s, neg_z=1e6, filters=False):
+def network_s(s, neg_z=1e6, filters=False, inject=False):
     """Share s of the loads at R and S as V1-referenced current sinks SR, SS (open negative- and zero-sequence
     paths); the rest an impedance with y2 = y1. The source inverter I carries the law (neg_z). filters: the RC
     output-filter shunts at R and S (positive and negative sequence, no zero sequence)."""
@@ -177,7 +177,7 @@ def network_s(s, neg_z=1e6, filters=False):
     if filters:
         for b, f in filter_shunts(s).items():
             loads[b] = {1: loads[b][1] + f["y"], 2: loads[b][2] + f["y"], 0: loads[b][0]}
-    ibrs = {"I": nw.IBR("R", p.i0, (0.3, 0.3), neg_z, 1e6, inject=False, i_max=1.2)}
+    ibrs = {"I": nw.IBR("R", p.i0, (0.3, 0.3), neg_z, 1e6, inject=inject, i_max=1.2)}
     if s > 0:
         ibrs["SR"] = nw.IBR("R", 0j, (0.0, 0.0), 1e6, 1e6, inject=False, i_max=10.0)
         ibrs["SS"] = nw.IBR("S", 0j, (0.0, 0.0), 1e6, 1e6, inject=False, i_max=10.0)

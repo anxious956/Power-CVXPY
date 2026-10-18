@@ -346,3 +346,24 @@ The grid-code V2-referenced negative-sequence current restores direction complet
 s = 0.8 suppression costs only dependability (about 28 % undecided, no misdirection). The positive-sequence
 reactive-current response (K-factor) is not modelled. No δ was injected; whether a designed δ can do this job is
 stage (b).
+
+## Stage (b): the designed δ for direction, pre-registered (18 Oct 2026, before the design runs)
+
+**Model** (`src/frames_multi.py`). The two-frame model with several V1-referenced current sources:
+- the source inverter I, with the box of the source symbols, injecting δ in its own frame;
+- the sinks SR and SS, with fixed commands from the all-impedance operating point the EMT runs used.
+
+The fixed point runs over all three frames. λ and drift are shared symbols. Network: s = 1 with the filter shunts
+(the converter-side-control bracket, clean in EMT under both laws), the source inverter suppressing I2.
+
+**Regressions, all passed** (`src/i2dir_design.py regress`):
+1. with no sinks, the sets equal frames.FrameModel's on the step-3 network: largest difference in (c, G) 1·10⁻¹³;
+2. at δ = 0, the nominal point, settled frames, the relay measurements equal solve_v1ref's: 5·10⁻¹³ pu over normal
+   operation and 10 faults;
+3. the same at three random source points: ≤ 7·10⁻¹³ pu.
+
+**"Yes" means:** every forward–reverse pair of case sets separated by 2ε(1 + ρ) with ρ = 0.1, at a δ within the
+1.14 pu cap, at s = 1. ρ = 0 is reported too. The main configuration applies otherwise (ε = 0.08 pu box, φ_ref
+0.0303 rad, model error 0.008 pu, drift 3°). The forward set is A-G at 20–40 Ω and B-C at arc on L1; the reverse set
+is the same on L2. The prior (REVIEW row 46, static, CIGRE) says a δ fixed in the inverter's frame does not repair
+direction.
