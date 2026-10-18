@@ -8,6 +8,15 @@ run, the mimic chain at the relay. Groups, as src/frames_design_check.py:
   pow      the same 6 at the design angle with the inception drawn over one cycle
   all      every case once at the design angle, at a random source point
   normal   the 16 corners of the source box, and the two confusers at the box centre
+  cap      settling at the design angle (review of the A-G-only design, point 2): the 8 bolted B-C cases and the 3
+           smallest-gap A-G witnesses at |delta| 1.10 / 1.12 / 1.14 pu; outside own set through the whole fault
+  zero     delta = 0: every A-G case with R_f >= 120 ohm at a random source point, and the 16 normal corners, for
+           conventional and statistical detection without the signal (point 3)
+
+Conventional and statistical detection (point 3), through the step-3 front end with the design tier's noise
+(src/step3_frontend.py, 3 seeds): incremental D0 = max(3|dI0|, |dI2|), pickup the largest score on this batch's
+normal runs (corners, witness normals; forced trigger) and pre-fault windows at the same delta; D1 = distance to the
+design's N in units of the white box, alarm above 1.
 
 Measured, on windows ending 2.0 ... 3.0 cycles after each run's own inception, through the mimic chain:
   outside own set   distance of the fault point to its case's BARE set (factor 1, no reference noise, no model-error
@@ -70,7 +79,7 @@ def make(a):
                   d_cmd=[dd.real, dd.imag], angle=float(ang), **extra)
         return sp
 
-    p = f"fh{a.rtop}"
+    p = f"fh{a.rtop}_{int(a.angle)}"
     specs, normals = [], {}
     for c, w in wit.items():
         specs.append(sp_for(f"{p}_w_{tag(c)}", c, w["S_F"], a.angle, "fault", "witness", gap=w["gap"]))
@@ -91,7 +100,25 @@ def make(a):
         specs.append(sp_for(f"{p}_nc{k:02d}", None, np.array(u), a.angle, "normal", "normal"))
     for cf in CONFUSERS:
         specs.append(sp_for(f"{p}_cf_{cf['kind']}", None, np.zeros(4), a.angle, "normal", "confuser", confuser=cf))
-    path = os.path.join(OUT, f"highr_emt_specs_{a.rtop}.json")
+    bc0 = [c for c in cases if c[2] == "ab" and c[3] == 0.0]
+    for mag in (1.10, 1.12, 1.14):
+        for c in bc0 + hard[:3]:
+            S = wit[c]["S_F"] if c in wit else rng.uniform(-1, 1, 4)
+            sp = sp_for(f"{p}_c{int(round(mag * 100))}_{tag(c)}", c, S, a.angle, "fault", "cap")
+            sp["settings"]["I"]["D2MAG"] = mag
+            sp["d_cmd"] = [mag * np.cos(np.radians(a.angle)), mag * np.sin(np.radians(a.angle))]
+            specs.append(sp)
+    for c in [c for c in cases if c[2] == "ag" and c[3] >= 3.0]:
+        sp = sp_for(f"{p}_z_{tag(c)}", c, rng.uniform(-1, 1, 4), a.angle, "fault", "zero")
+        sp["settings"]["I"].update(MODE2=0.0, D2MAG=0.0, D2ANG=0.0)
+        sp["d_cmd"] = [0.0, 0.0]
+        specs.append(sp)
+    for k, u in enumerate(itertools.product((-1.0, 1.0), repeat=4)):
+        sp = sp_for(f"{p}_zn{k:02d}", None, np.array(u), a.angle, "normal", "zero")
+        sp["settings"]["I"].update(MODE2=0.0, D2MAG=0.0, D2ANG=0.0)
+        sp["d_cmd"] = [0.0, 0.0]
+        specs.append(sp)
+    path = os.path.join(OUT, f"highr_emt_specs_{a.rtop}_{int(a.angle)}.json")
     json.dump(specs, open(path, "w"), indent=1, default=float)
     by = {}
     for sp in specs:
@@ -105,7 +132,7 @@ def analyse(a):
     main, bare = models(net, cases)
     z1 = net.lines["L1"].z1
     tau = (z1.imag / z1.real) / (2 * np.pi)
-    specs = json.load(open(os.path.join(OUT, f"highr_emt_specs_{a.rtop}.json")))
+    specs = json.load(open(os.path.join(OUT, f"highr_emt_specs_{a.rtop}_{int(a.angle)}.json")))
     rows = []
     for sp in specs:
         path = os.path.join(WORK, sp["name"] + ".gf46")
@@ -118,6 +145,14 @@ def analyse(a):
         uL = relay_y(run, tf - 0.05, tau)[0]
         uL /= abs(uL)
         yat = lambda c: relay_y(run, tf + c / 60.0, tau) * np.conj(uL)
+        if sp["group"] == "cap":
+            k = cases.index(tuple(sp["case"]))
+            own = [fr.distance_to_set(bare.zonotopes(d, k), yat(c), SCALE) for c in np.arange(2.0, 5.5001, 0.25)]
+            rows.append(dict(name=sp["name"], group="cap", case=sp["case"], mag=abs(d), outside_own_whole_fault=max(own)))
+            continue
+        if sp["group"] == "zero":
+            rows.append(dict(name=sp["name"], group="zero", kind=sp["kind"], case=sp["case"]))
+            continue
         if sp["kind"] == "fault":
             k = cases.index(tuple(sp["case"]))
             own = [fr.distance_to_set(bare.zonotopes(d, k), yat(c), SCALE) for c in WIN]
@@ -145,9 +180,64 @@ def analyse(a):
             w = max(n, key=lambda r: r["normal_outside"])
             summ[g + "_normal"] = dict(n=len(n), outside_max=w["normal_outside"], at=w["name"])
             print(f"  {g:8s}: {len(n)} normal runs; outside N max {w['normal_outside']:.3f} ({w['name']})")
-    path = os.path.join(OUT, f"highr_emt_check_{a.rtop}.json")
+    q = [r for r in rows if r["group"] == "cap"]
+    if q:
+        for mag in sorted({round(r["mag"], 2) for r in q}):
+            qq = [r for r in q if round(r["mag"], 2) == mag]
+            w = max(qq, key=lambda r: r["outside_own_whole_fault"])
+            summ[f"cap_{mag}"] = dict(n=len(qq), max=w["outside_own_whole_fault"], at=w["name"])
+            print(f"  cap {mag:.2f} pu: outside own set, 2-5.5 cycles, max {w['outside_own_whole_fault']:.3f} ({w['name']})")
+    summ["detection"] = detection(a, specs, cases, main)
+    path = os.path.join(OUT, f"highr_emt_check_{a.rtop}_{int(a.angle)}.json")
     json.dump(dict(design=vars(a), summary=summ, rows=rows), open(path, "w"), indent=1, default=float)
     print(f"-> {os.path.relpath(path)}")
+
+
+def detection(a, specs, cases, main):
+    """Incremental D0 and D1 with the design tier's noise, at delta = 0 (group zero) and at the design delta (group
+    all, its A-G cases), against pickups from the normal runs and pre-fault windows of the same delta."""
+    import step3_detectors as det
+    from step3_frontend import Relay, CYCLE
+    out = {}
+    for label, dsel, fsel, nsel in (("delta 0", 0.0, lambda sp: sp["group"] == "zero" and sp["kind"] == "fault",
+                                     lambda sp: sp["group"] == "zero" and sp["kind"] == "normal"),
+                                    ("design delta", a.mag, lambda sp: sp["group"] == "all" and sp["case"][2] == "ag",
+                                     lambda sp: sp["group"] in ("normal", "witness") and sp["kind"] == "normal")):
+        d = complex(*[x for x in (a.mag * np.cos(np.radians(a.angle)), a.mag * np.sin(np.radians(a.angle)))]) if dsel else 0j
+        pieces = main.zonotopes(d, None)
+        cal0, faults = [], []
+        for sp in specs:
+            if not (fsel(sp) or nsel(sp)):
+                continue
+            for sd in range(3):
+                try:
+                    rel = Relay(sp["name"], tier="design", seed=100 * sd + 7)
+                except FileNotFoundError:
+                    break
+                tf = rel.idx(sp.get("t_fault", T_FAULT))
+                d0 = det._d0(rel, tf, 2.0, 3.0)
+                uL = np.conj(rel.frame(tf))
+                d1 = max(fr.distance_to_set(pieces, rel.y(tf + int(round(c * CYCLE))) * uL, SCALE) for c in WIN)
+                if nsel(sp):
+                    cal0.append(d0)
+                    out.setdefault(label + "_normal_d1", []).append(d1)
+                else:
+                    faults.append((sp["case"], d0, d1))
+                for i in np.linspace(rel.idx(0.18), tf - 3 * CYCLE - 1, 2).astype(int):
+                    cal0.append(det._d0(rel, int(i), 2.0, 3.0))
+        pick = max(cal0)
+        rf = lambda c: 40 * c[3]
+        res = dict(pickup_d0=pick, n_faults=len(faults))
+        for band in sorted({rf(c) for c, _, _ in faults}):
+            fb = [(d0, d1) for c, d0, d1 in faults if rf(c) == band]
+            res[f"R_f {band:.0f}"] = dict(n=len(fb), d0_detect=float(np.mean([x > pick for x, _ in fb])),
+                                          d1_detect=float(np.mean([y > 1.0 for _, y in fb])))
+        res["d1_normal_alarms"] = float(np.mean([v > 1.0 for v in out.get(label + "_normal_d1", [0.0])]))
+        out[label] = res
+        print(f"  detection, {label}: D0 pickup {pick:.3f} pu; " + "; ".join(
+            f"{k}: D0 {v['d0_detect']:.2f}, D1 {v['d1_detect']:.2f} (n {v['n']})" for k, v in res.items() if k.startswith("R_f"))
+              + f"; D1 alarms on normals {res['d1_normal_alarms']:.2f}")
+    return {k: v for k, v in out.items() if not k.endswith("_normal_d1")}
 
 
 if __name__ == "__main__":
