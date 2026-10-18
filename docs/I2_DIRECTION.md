@@ -294,3 +294,26 @@ inverter-interfaced):
   be run.
 - That is the deck's claim for the I2-suppressing case, now in EMT. The designed δ (MODE2 2) for direction is stage
   (b), still to come; row 46's static prior says it will not do this job.
+
+**Scope and the narrowness of the regime** (review of e577755).
+- The brackets table covers one three-bus network, the nominal source point, one point on wave, clean measurements,
+  25 forward and 25 reverse cases, and **δ = 0: no auxiliary signal injected**. No verdict on δ comes from it; that
+  is stage (b).
+- The regime is narrow. On this network, suppression costs the relay its direction when nearly all of the load
+  behind it is inverter-interfaced (s → 1). At s = 0.8 there are no misdirections, only about 28–29 % undecided, with
+  or without shunts: dependability is lost, not security. The CIGRE row-46 case is this regime.
+- gfl_avm holds ID / IQ, with no K-factor positive-sequence reactive current. That is still the first objection: such
+  a current would give dY1 a reactive back-side source.
+
+**The grid-side bracket's IEEE 2800 cell: the V2 filter, registered before it runs.**
+- A first-order low-pass with TV2 = 1/(2π·15 Hz) on the controller's **demodulated V2 phasor** (its two components,
+  as TANG filters the V1 angle), not on the abc voltages, so the 60 Hz law is unchanged. It is a new gfl_avm input,
+  default 0. BUILD_VERSION goes to 5.
+- **Stop rule:** if MODE2 1 without shunts still diverges at TV2 = 15 Hz, that cell is reported as "not runnable in
+  this model". τ is not tuned further.
+- **Regression:** one stored shunt-case MODE2 1 spec rerun with TV2 = 0 must reproduce its output to round-off.
+- **Consistency across brackets:** 5 shunt-case MODE2 1 forward cases rerun with TV2 = 15 Hz must give the same
+  decisions. Then the two IEEE 2800 cells differ only in control structure, not in the filter.
+- The lag (τ ≈ 0.64 cycle, I2 at about 96 % by 2 cycles) keeps the static prediction applicable.
+
+**Stage (b) will use the shunt bracket** (converter-side control), whose EMT is clean in both laws.
