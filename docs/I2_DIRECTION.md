@@ -172,3 +172,59 @@ IEEE 2800 gives 0 at every s, and the reverse set is 0 everywhere.
   flagged, not dropped: a real drive would trip there.
 - **One point on wave** (t_fault 0.30 s for every run) is a known limit. A repeat at a second inception angle on the
   misdirected cases would settle it.
+
+## Stage (c) result, the IEEE 2800 instability, and the filter shunts (18 Oct 2026, before any further run)
+
+**Suppressed law (MODE2 0), EMT, s = 1, without filter shunts.** The pre-fault gate passed (0.0 % on all three
+inverters).
+- Forward: **20 % misdirected + 60 % undecided = 80 %**, so the claim is reproduced (≥ ¼). Direction is lost mostly
+  as no decision. Only 20 % go the wrong way, against 36 % misdirected in the static prediction for the same cases;
+  the static "misdirects 44 %" is not the EMT result.
+- Reverse: 0.
+- These runs are free of the numerical mode below: peak |vA| in the fault is ≤ 1.01 × nominal and the 5–10 kHz energy
+  share is ≤ 1.2·10⁻³.
+
+**IEEE 2800 (MODE2 1) failed its pre-fault gate.** The run diverges numerically before any fault (from about 0.10 s).
+The 56 % / 40 % misdirection figures from it are not results and are not quoted. The diagnostics
+(`src/i2dir_diag.py`):
+- The law is correct: injected I2 / V2 = 2.00 ∠ 89.8° in a stable unbalanced run, so row 46 and PR #27 stand.
+- The divergence is not the V2 loop gain. K2 = 0.5 and 2 both diverge (×15–18 per cycle, a ~9 kHz component at
+  K2 = 0.5). K2 = 1 grew ×9 within the run without diverging, possibly an early transient. MODE2 0 stays bounded.
+- The cause, the review session's reading: at s = 1 the cut separating {R, S} from the rest crosses only the series
+  R-L line L1 and current sources, an ill-posed cut-set. A current command that depends on V2 one step behind gives
+  the trapezoidal rule's high-frequency chatter a loop to grow in. A real inverter bus always has an output-filter
+  capacitor.
+
+**The fix, fixed now: an RC filter shunt at each inverter bus.**
+- **Sizing rule.** At each bus (R, S):
+  - C is 0.05 pu of the inverters' ratings there. I is rated 1 pu; each sink's rating is its pre-fault current.
+  - In series is a damping resistor R = 2ζ·√(X_th / B), with ζ = 0.3 and X_th the positive-sequence Thevenin
+    reactance at the bus with the inverters open (R: L1 + zs; S: L1 + L2 + zs).
+  - The shunt is wye, ungrounded, so it carries no zero sequence.
+- **This is a passive negative-sequence path**, the thing whose absence the claim rests on. So (a'') is first
+  re-predicted statically with the shunts: 16 corners, both laws, the 0.05 pu pickups. That prediction is recorded
+  below before any EMT run, with the criteria unchanged. If the shunts restore direction statically, that is the
+  finding (filter capacitors carry enough I2 on this network), and C is not tuned to keep the effect.
+- **Stage (c) is then rerun on the same network for both laws** (MODE2 0 and 1, about 100 runs, in small batches).
+  The MODE2 0 result above stays recorded as "without filter shunts".
+- Diagnostic only: one normal MODE2 1 run at a 2 µs step, without shunts. If the mode moves with the step or goes
+  away, it is numerical. A smaller step is not the fix.
+- If MODE2 1 still diverges with the shunts, the fallback, registered now, is a first-order low-pass on the
+  controller's V2 measurement.
+
+**The static prediction with the filter shunts, recorded before any EMT run** (`src/i2dir_static.py a2f`,
+`results/network/i2dir_static_a2_filters.json`). The shunts at s = 1 are R: B = 0.066 pu, R = 1.81 pu; S:
+B = 0.029 pu, R = 3.26 pu. Hard forward set, 16 corners, misdirected / undecided:
+
+| | no pickup | with the 0.05 pu pickups |
+|---|---|---|
+| suppressed, s = 1 | **1.00 / 0** | **0.55 / 0.27** (A-G 0.25, B-C 1.00 misdirected) |
+| suppressed, s = 0.8 | 0 / 0 | 0 / 0.29 |
+| IEEE 2800, s = 1 and 0.8 | 0 / 0 | 0 / 0 |
+
+Reverse is 0 everywhere.
+
+**The filter capacitors make direction worse under suppression, not better.** With no other negative-sequence path
+behind the relay, the only one is capacitive. The element then sees the back-side impedance with the opposite sign
+and calls forward faults reverse. IEEE 2800's current law still fixes direction completely. The EMT rerun (both laws,
+with the shunts) tests this prediction under the criteria already fixed.

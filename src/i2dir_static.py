@@ -147,11 +147,36 @@ def stage_b(rhos):
 PICKUP = 0.05
 
 
-def network_s(s, neg_z=1e6):
+ZETA, C_PU = 0.3, 0.05
+
+
+def filter_shunts(s):
+    """The RC output-filter shunt at each inverter bus (docs/I2_DIRECTION.md, the sizing rule): C = 0.05 pu of the
+    inverters' ratings at the bus (I: 1 pu; each sink: its pre-fault current), a series damping R = 2 zeta sqrt(X_th / B)
+    with zeta = 0.3, X_th the positive-sequence Thevenin reactance with the inverters open. Wye, ungrounded.
+    Returns {bus: dict(B=, R=, y=)} in pu."""
+    p = zm.ZoneParams()
+    ratings = {"R": 1.0 + s * abs(p.yR[1]), "S": s * abs(p.yS[1])}
+    xth = {"R": (p.z1 + p.zs[1]).imag, "S": (p.z1 + p.z2 + p.zs[1]).imag}
+    out = {}
+    for b in ("R", "S"):
+        B = C_PU * ratings[b]
+        if B <= 0:
+            continue
+        R = 2 * ZETA * np.sqrt(xth[b] / B)
+        out[b] = dict(B=B, R=R, y=1.0 / (R + 1.0 / (1j * B)))
+    return out
+
+
+def network_s(s, neg_z=1e6, filters=False):
     """Share s of the loads at R and S as V1-referenced current sinks SR, SS (open negative- and zero-sequence
-    paths); the rest an impedance with y2 = y1. The source inverter I carries the law (neg_z)."""
+    paths); the rest an impedance with y2 = y1. The source inverter I carries the law (neg_z). filters: the RC
+    output-filter shunts at R and S (positive and negative sequence, no zero sequence)."""
     p = zm.ZoneParams()
     loads = {b: {1: (1 - s) * y[1], 2: (1 - s) * y[1], 0: y[0]} for b, y in (("R", p.yR), ("S", p.yS))}
+    if filters:
+        for b, f in filter_shunts(s).items():
+            loads[b] = {1: loads[b][1] + f["y"], 2: loads[b][2] + f["y"], 0: loads[b][0]}
     ibrs = {"I": nw.IBR("R", p.i0, (0.3, 0.3), neg_z, 1e6, inject=False, i_max=1.2)}
     if s > 0:
         ibrs["SR"] = nw.IBR("R", 0j, (0.0, 0.0), 1e6, 1e6, inject=False, i_max=10.0)
@@ -194,12 +219,12 @@ def direction_pk(yN, y, pickup=PICKUP):
     return None
 
 
-def stage_a2(shares=(0.0, 0.5, 0.8, 1.0)):
+def stage_a2(shares=(0.0, 0.5, 0.8, 1.0), filters=False):
     corners = list(itertools.product((-1, 1), repeat=4))
     out = {}
     for law, neg_z in (("suppressed", 1e6), ("IEEE 2800 (K2 = 2)", 0.5j)):
         for sh in shares:
-            net = network_s(sh, neg_z)
+            net = network_s(sh, neg_z, filters)
             res, relaxed = {}, 0
             for side, cases, want in (("forward", FWD, "f"), ("reverse", REV, "r")):
                 cnt = dict(n=0, mis=0, und=0, mis_pk=0, und_pk=0)
@@ -227,8 +252,9 @@ def stage_a2(shares=(0.0, 0.5, 0.8, 1.0)):
                       f"(misdirected by type {res[side]['misdirected_pk_by_type']})", flush=True)
             res["relaxed_solves"] = relaxed
             out[f"{law}|s={sh}"] = res
-    json.dump(dict(fwd=FWD, rev=REV, shares=shares, pickup=PICKUP, results=out),
-              open(os.path.join(OUT, "i2dir_static_a2.json"), "w"), indent=1)
+    json.dump(dict(fwd=FWD, rev=REV, shares=shares, pickup=PICKUP, filters=filters,
+                   filter_shunts={str(sh): {b: dict(B=f["B"], R=f["R"]) for b, f in filter_shunts(sh).items()} for sh in shares} if filters else None,
+                   results=out), open(os.path.join(OUT, "i2dir_static_a2%s.json" % ("_filters" if filters else "")), "w"), indent=1)
     t = out["suppressed|s=1.0"]["forward"]
     print(f"(a'') s = 1, suppressed: misdirected {t['mis_pk']:.2f} + undecided {t['und_pk']:.2f} with pickups "
           f"(the blind test is EMT stage c)")
@@ -237,6 +263,9 @@ def stage_a2(shares=(0.0, 0.5, 0.8, 1.0)):
 if __name__ == "__main__":
     if sys.argv[1] == "a2":
         stage_a2()
+    elif sys.argv[1] == "a2f":
+        print("filter shunts at s = 1:", {b: (round(f["B"], 4), round(f["R"], 3)) for b, f in filter_shunts(1.0).items()})
+        stage_a2(filters=True)
     elif sys.argv[1] == "a":
         stage_a()
     else:
