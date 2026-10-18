@@ -1,6 +1,7 @@
 # Project plan
 
-Last updated **15 Oct 2026**. This revision follows the technical review ([REVIEW.md](../REVIEW.md)),
+Last updated **18 Oct 2026** (status and milestones, §3–§5: steps 1 and 2 done on the three-bus grid, step 3 in
+progress, about three months ahead of the October schedule). The 15 Oct revision follows the technical review ([REVIEW.md](../REVIEW.md)),
 the CIGRE MV runs and the B1 screening, which moved the project away from the plan written on
 16 Sep 2026. The old plan is in git history; what changed is stated in §1 so the shift is on record.
 Evidence for every statement below is in [REVIEW.md](../REVIEW.md) §7 (the claim register) and the
@@ -57,7 +58,18 @@ is run with the inverter's negative sequence suppressed, V2-referenced, or the d
 
 ## 3. Work packages, in the deck's order
 
-### Step 1 · Design tool — two-bus done, multi-bus open
+### Step 1 · Design tool — two-bus and multi-bus done
+
+Done 16–17 Oct 2026 ([results/FRAMES.md](../results/FRAMES.md)): the design with **both frames** a real system has, the
+inverter's own V1 and the relay's pre-fault memory. It is a sampled Taylor model, verified by containment. The
+measured budgets (reference noise, model error, drift) are in it, and so are structured, regime-dependent CT/VT
+errors (REVIEW.md row 53). On the three-bus grid:
+- the design point is **δ = 1.12 pu at 225°, ρ = 0.1**, about 93 % of the inverter's rating;
+- δ*(ε) is 0.04 pu at the design tier's noise bound (box; 0 with the structured design tier) and 1.12 pu at
+  ε = 0.08;
+- with structured class-tier errors δ* = 1.12 pu.
+
+
 Done ([results/DESIGN.md](../results/DESIGN.md), REVIEW §10 item 2): TAC25 formulation, sound outer
 source set, margin (ρ = 0.1 costs 29 % more signal), the current limit inside the problem, noise tied
 to corrected CT/VT figures, a global polar solve, dense (m, R_f) validation.
@@ -75,7 +87,19 @@ Open:
    virtual-impedance angles −0.5°, +36.2°, −51.6° for circular, priority-based and instantaneous
    limiters).
 
-### Step 2 · EMT grid — the injecting inverter exists; the grid around it is next
+### Step 2 · EMT grid — done on the three-bus grid
+
+Done 16–17 Oct 2026 ([results/FRAMES.md](../results/FRAMES.md)): the three-bus PSCAD grid, with the inverter
+V1-referenced as its controller runs.
+- **The bare-DFT reference is unstable above about 1.0 pu on bolted B-C faults.** A first-order PLL-like reference
+  filter (15 Hz) removes it, and the cap becomes 1.14 pu.
+- The relay chain has a mimic filter.
+- **The design point holds in EMT** at its witnesses, window edges and random inception, and over all 48 cases (0
+  points outside their own sets in the 2–3-cycle window).
+- Still open: the deck's scenarios (I₂ suppressed, longer lines, grid-forming) with δ injected.
+
+The history up to 16 Oct:
+
 Done ([results/PSCAD_INVERTER.md](../results/PSCAD_INVERTER.md)): an averaged grid-following inverter
 built in PSCAD from Python, with three negative-sequence modes (suppressed, V2-referenced as IEEE 2800,
 a designed δ fixed in the V1 frame) and a 1.2 pu limit, **verified to inject what it is told** (δ of
@@ -102,7 +126,25 @@ Next:
    model if shared, otherwise our own).
 Owner: Asmar Hasanova.
 
-### Step 3 · Detection — learned side done on public data, Kalman filter and δ sweep open
+### Step 3 · Detection — in progress on the EMT data with δ injected
+
+Done 17–18 Oct 2026 ([docs/STEP3.md](STEP3.md), [results/STEP3_PILOT.md](../results/STEP3_PILOT.md)):
+- **Front end:** a common chain with instrument errors on the samples, the mimic filter, a starter and the memory
+  frame.
+- **Detectors:** D1 the set test, D0 incremental 50N/50Q, D2 the multiple-model test (Pirani et al., moved to the
+  relay), and D3 the CNN.
+- **Pilot, with realistic noise:** every detector, 50N included, detects the hard faults without δ. That is why the
+  δ sweep was not run as planned.
+- **Worst case:** D1's worst-case curve on 350 clean runs (hard A-G guaranteed 0.33 at δ = 0 → 1.00 at ¾ δ*), plus
+  each detector against its own worst case (a stress bound).
+- **Two screens:**
+  - an inverter-fed relay end ([results/IBR_GRID_SCREEN.md](../results/IBR_GRID_SCREEN.md)): 59N detects without δ;
+    selectivity (T2) is the open question;
+  - high resistance (`results/HIGHR.md`, branch `step3-highR`): around **160 Ω the signal certifies ground-fault
+    detection where incremental 50N fails** (static, ρ = 0, 5° window); the EMT check is next.
+
+The history up to 16 Oct:
+
 Done on public data without injection: the conventional ladder (R0–R4, T1, T2) with directional
 supervision, a sequence-trajectory CNN, engineered features, the re-implemented Hasan et al. (2026)
 SVM, on EvEMTBench DoubleLine, TestGrid110kV, adapt_grid-TestGrid and CIGRE MV, with grouped folds
@@ -125,7 +167,11 @@ Claim (REVIEW §10 item 8):
 - the design tool in the TAC25 formulation, within its two-bus model;
 - on adapt_grid, a single-ended learned detector covering most of the high-R_f in-zone faults no
   settable quadrilateral can enclose, at zero off-line false trips — at one relay of two;
-- the map of §1: where an injection helps, and what replaces it where it does not.
+- the map of §1: where an injection helps, and what replaces it where it does not;
+- (18 Oct) on one three-bus grid, EMT with δ injected: Taylor's design keeps its promise. The guarantee it buys is a
+  worst-case one, and its price is set by the instruments: free at near-nominal accuracy, about 93 % of the
+  inverter at protection-class fault-condition errors. Under realistic noise, conventional incremental 50N already
+  detects the faults it was designed for, up to about 120 Ω.
 
 Cannot claim:
 - that auxiliary signals help detection on inverter-dominated grids (untested — that is WP2);
@@ -134,14 +180,23 @@ Cannot claim:
 
 ## 5. Milestones from here
 
-| When | What |
-|---|---|
-| Oct 2026 | Step 2: the injecting inverter (done, 16 Oct). PSCAD and inverter groundwork, as Prof. Taylor asked. |
-| Nov 2026 | Step 2: the small multi-bus grid around it with swept faults. Step 1: the multi-bus design tool on the same grid. |
-| Dec 2026 | Steps 1 → 2: the designed δ injected in EMT and the promised separation checked. Fall report. |
-| Jan–Feb 2027 | Step 3: MMKF and a learned detector on that data, δ shrunk until each fails; the deck's scenarios (I₂ suppressed, longer lines, grid-forming). |
-| Mar–Apr 2027 | Step 4: latency on a board. Paper written. |
-| Jun 2027 | Submit to NAPS 2027. |
+Revised 18 Oct 2026. The October schedule is kept below the new one for the record.
+
+| When | What | Status |
+|---|---|---|
+| Oct 2026 | Step 2: the injecting inverter; PSCAD and inverter groundwork, as Prof. Taylor asked | **done** (16 Oct) |
+| Oct 2026 (planned Nov) | Steps 1 and 2: the three-bus PSCAD grid with swept faults; the multi-bus design tool on it | **done** (PR #38–#41) |
+| Oct 2026 (planned Dec) | Steps 1 → 2: the designed δ injected in EMT and the promised separation checked | **done** (PR #44: both frames, filtered reference, mimic chain) |
+| Oct–Nov 2026 (planned Jan–Feb 2027) | Step 3: detectors on the EMT data, the worst-case sweep | **in progress**: pilot, worst-case curve, structured errors, inverter-fed and high-R screens done; the high-R EMT check next |
+| Nov 2026 | The package for Prof. Taylor (`docs/notes/step3_for_taylor.md`) and the email (draft); his call on selectivity (T2) | open |
+| Nov–Dec 2026 | The deck's scenarios with δ injected: I₂ suppressed, longer lines, grid-forming | open |
+| Dec 2026 | Fall report | open |
+| Jan–Apr 2027 | Step 4: latency on a board; the paper | open |
+| Jun 2027 | Submit to NAPS 2027 | |
+
+The October schedule: Oct, the injecting inverter; Nov, the small multi-bus grid and the multi-bus tool; Dec, δ
+injected in EMT and the fall report; Jan–Feb 2027, step 3 and the deck's scenarios; Mar–Apr 2027, step 4 and the
+paper; Jun 2027, NAPS 2027.
 
 ## 6. What Prof. Taylor asked for, and what we owe him
 
