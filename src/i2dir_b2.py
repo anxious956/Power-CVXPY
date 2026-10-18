@@ -8,6 +8,7 @@ suppressing I2 otherwise.
   analyse the same runs read twice: (b1-EMT) each window's distance to its own case set and to the nearest
           opposite-side set (the tier the delta was designed for), and (b2) the conventional element (decide)
 
+    python src/i2dir_b2.py carry             -> results/network/i2dir_b2_box_carried.json (after the map)
     python src/i2dir_b2.py static
     python src/i2dir_b2.py spec <point>      -> results/network/i2dir_b2_<point>_specs.json
     "C:/Program Files/Python37/python.exe" src/pscad_network.py fast results/network/i2dir_b2_<point>_specs.json
@@ -31,19 +32,10 @@ OUT = os.path.join(HERE, "..", "results", "network")
 # carried points: (tier the delta was designed for, |delta| pu, angle deg in the inverter's V1 frame)
 PT = {"st020": ("structured design tier", 0.20, 230.0)}
 _box = os.path.join(OUT, "i2dir_b1_patch.json")
-if os.path.exists(_box):
-    # the registered rule: angular width = span (largest minus smallest feasible angle) at 0.98 pu, radial width =
-    # span of feasible radii at 205 deg; a sliver (angular span under 3 deg or radial span under 0.03 pu) carries the
-    # centroid of all feasible grid points, otherwise 0.98 pu at 205 deg
-    _g = json.load(open(_box))["box_patch_rho_0.1"]
-    _f = [(g["abs_delta"], a) for g in _g for a in g["separating_angles_deg"]]
-    if _f:
-        _r, _a = zip(*_f)
-        _a98 = [a for g in _g if abs(g["abs_delta"] - 0.98) < 1e-9 for a in g["separating_angles_deg"]]
-        _r205 = [g["abs_delta"] for g in _g if 205 in g["separating_angles_deg"]]
-        _sliver = (max(_a98) - min(_a98) if _a98 else 0) < 3 or (max(_r205) - min(_r205) if _r205 else 0) < 0.03 - 1e-9
-        PT["box"] = ("box 0.08", round(float(np.mean(_r)), 3), round(float(np.mean(_a)), 1)) if _sliver else ("box 0.08", 0.98, 205.0)
-        BOX_SLIVER = _sliver
+_carried = os.path.join(OUT, "i2dir_b2_box_carried.json")
+if os.path.exists(_carried):
+    _c = json.load(open(_carried))
+    PT["box"] = ("box 0.08", _c["abs_delta"], _c["angle_deg"])
 RHO = 0.1
 FLAG_V1 = 0.2
 
@@ -90,6 +82,43 @@ def static():
               f"{res['reverse']['misdirected']:.2f} undecided {res['reverse']['undecided']:.2f}", flush=True)
     json.dump(out, open(os.path.join(OUT, "i2dir_b2_static.json"), "w"), indent=1)
     print("-> results/network/i2dir_b2_static.json")
+
+
+def carry():
+    """The registered rule for the box tier's carried point, from the neighbourhood map (results/network/
+    i2dir_b1_patch.json). Angular width = span of the feasible angles at 0.98 pu; radial width = span of the feasible
+    radii at 205 deg. A sliver (angular width under 3 deg or radial width under 0.03 pu) carries the centroid of all
+    feasible grid points if the centroid itself separates every forward-reverse pair, else the feasible grid point
+    nearest to it (in the delta plane); otherwise 0.98 pu at 205 deg. The carried point's margin is reported."""
+    from i2dir_b1_followup import margin
+    g = json.load(open(_box))["box_patch_rho_0.1"]
+    f = [(x["abs_delta"], a) for x in g for a in x["separating_angles_deg"]]
+    a98 = [a for x in g if abs(x["abs_delta"] - 0.98) < 1e-9 for a in x["separating_angles_deg"]]
+    r205 = [x["abs_delta"] for x in g if 205 in x["separating_angles_deg"]]
+    wa = max(a98) - min(a98) if a98 else 0.0
+    wr = max(r205) - min(r205) if r205 else 0.0
+    sliver = wa < 3 or wr < 0.03 - 1e-9
+    fm = build("box 0.08")
+    out = dict(feasible_grid_points=len(f), angular_width_deg=wa, radial_width_pu=wr, sliver=sliver)
+    if not sliver:
+        mag, ang, how = 0.98, 205.0, "not a sliver: the design point"
+    else:
+        r, a = map(np.array, zip(*f))
+        cen = complex(np.mean(r * np.exp(1j * np.radians(a))))
+        cm, ca = abs(cen), float(np.degrees(np.angle(cen)) % 360)
+        b = 2 * fm.eps * (1 + RHO)
+        ok = all(not fr._meet_union(fm.zonotopes(cen, i), fm.zonotopes(cen, j), b) for i in A for j in B)
+        out.update(centroid=[cm, ca], centroid_separates=ok)
+        if ok:
+            mag, ang, how = round(cm, 4), round(ca, 2), "sliver: the centroid (separates)"
+        else:
+            k = int(np.argmin(np.abs(r * np.exp(1j * np.radians(a)) - cen)))
+            mag, ang, how = float(r[k]), float(a[k]), "sliver: the feasible grid point nearest the centroid"
+    m = margin(fm, mag * np.exp(1j * np.radians(ang)), RHO)
+    out.update(abs_delta=mag, angle_deg=ang, how=how, margin=m)
+    json.dump(out, open(_carried, "w"), indent=1)
+    print(f"box carried point: {mag} pu @ {ang} deg ({how}); widths {wa} deg at 0.98 pu, {wr:.2f} pu at 205 deg; "
+          f"margin {m['margin_eps']:.3f} eps ({m['margin_pu']:.4f} pu), closest pair {m['pair']}")
 
 
 def specs_path(p):
@@ -195,4 +224,4 @@ def analyse(p):
 
 if __name__ == "__main__":
     cmd = sys.argv[1]
-    {"static": static, "spec": lambda: make(sys.argv[2]), "analyse": lambda: analyse(sys.argv[2])}[cmd]()
+    {"carry": carry, "static": static, "spec": lambda: make(sys.argv[2]), "analyse": lambda: analyse(sys.argv[2])}[cmd]()

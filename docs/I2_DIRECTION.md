@@ -494,7 +494,9 @@ where the PLL frame is weakest; their EMT runs are flagged as in stage (c).
   - **Widths, fixed before the map's radii 0.99–1.08 came in** (review): the angular width is the span between the
     extreme feasible angles at 0.98 pu (202°–205° would be 3°, not under 3°). The radial width is the span between
     the extreme feasible radii at 205°.
-  - "Centre" means the centroid of all feasible grid points. At the carried box δ the static 16-corner (b2) runs
+  - "Centre" means the centroid of all feasible grid points, in the δ plane. If the centroid does not itself
+    separate every forward–reverse pair, the feasible grid point nearest to it is carried (review, before the map
+    finished). The carried point's margin is reported either way (`src/i2dir_b2.py carry`). At the carried box δ the static 16-corner (b2) runs
     before its EMT. The weak-frame runs (L1 B-C bolted near R) are read separately, not excluded. The smallest forward–reverse margin at the carried
   point is reported with it.
 
