@@ -143,8 +143,101 @@ def stage_b(rhos):
         json.dump(dict(fwd=FWD, rev=REV, runs=out), open(os.path.join(OUT, "i2dir_static_b.json"), "w"), indent=1)
 
 
+# ----------------------------------------------------------------------------- (a''): inverter-interfaced load
+PICKUP = 0.05
+
+
+def network_s(s, neg_z=1e6):
+    """Share s of the loads at R and S as V1-referenced current sinks SR, SS (open negative- and zero-sequence
+    paths); the rest an impedance with y2 = y1. The source inverter I carries the law (neg_z)."""
+    p = zm.ZoneParams()
+    loads = {b: {1: (1 - s) * y[1], 2: (1 - s) * y[1], 0: y[0]} for b, y in (("R", p.yR), ("S", p.yS))}
+    ibrs = {"I": nw.IBR("R", p.i0, (0.3, 0.3), neg_z, 1e6, inject=False, i_max=1.2)}
+    if s > 0:
+        ibrs["SR"] = nw.IBR("R", 0j, (0.0, 0.0), 1e6, 1e6, inject=False, i_max=10.0)
+        ibrs["SS"] = nw.IBR("S", 0j, (0.0, 0.0), 1e6, 1e6, inject=False, i_max=10.0)
+    return nw.Network(lines={"L1": nw.Line("L", "R", p.z1, p.z0_ratio * p.z1), "L2": nw.Line("R", "S", p.z2, p.z0_ratio * p.z2)},
+                      sgs={"G": nw.SG("L", dict(p.zs), p.e0)}, ibrs=ibrs, loads=loads, relay=("L1", "b"), eps=0.08, rF=p.rF)
+
+
+def operating_point(s, neg_z, u):
+    """Settings for one source-box corner u (SG |e|, angle; inverter |i|, angle): the source inverter's command in
+    its own frame, and the sinks drawing share s of their load's current at the all-impedance operating point."""
+    base = network(neg_z, 1.0)
+    v = nw.realisation(base, u)
+    _, V = nw.solve(base, v, full=True)
+    p = zm.ZoneParams()
+    uR = V["R"][0] / abs(V["R"][0])
+    st = {"I": dict(ID=float((v["I"] / uR).real), IQ=float(-(v["I"] / uR).imag), D2MAG=0.0, D2ANG=0.0)}
+    if s > 0:
+        for k, b, y in (("SR", "R", p.yR), ("SS", "S", p.yS)):
+            ub = V[b][0] / abs(V[b][0])
+            i = -s * y[1] * V[b][0] / ub                      # drawn current in the sink's own V1 frame
+            st[k] = dict(ID=float(i.real), IQ=float(-i.imag), D2MAG=0.0, D2ANG=0.0)
+    return {"G": v["G"]}, st
+
+
+def solve_v1(net, sg, st, fault):
+    try:
+        return nw.solve_v1ref(net, sg, st, fault)[0], False
+    except RuntimeError:
+        return nw.solve_v1ref(net, sg, st, fault, relax=0.3, max_iter=3000)[0], True
+
+
+def direction_pk(yN, y, pickup=PICKUP):
+    dI2, dI1 = abs(y[4] - yN[4]), abs(y[3] - yN[3])
+    for k_i, k_v, ok in ((4, 1, dI2 >= I2_I1_MIN * dI1 and dI2 >= pickup), (3, 0, abs(y[0] - yN[0]) >= DV1_MIN and dI1 >= pickup)):
+        dI, dV = y[k_i] - yN[k_i], y[k_v] - yN[k_v]
+        if ok and abs(dV) > 1e-9:
+            ang = np.degrees(np.angle(dI / dV)) % 360
+            return "f" if PHI < ang < 180 + PHI else "r"
+    return None
+
+
+def stage_a2(shares=(0.0, 0.5, 0.8, 1.0)):
+    corners = list(itertools.product((-1, 1), repeat=4))
+    out = {}
+    for law, neg_z in (("suppressed", 1e6), ("IEEE 2800 (K2 = 2)", 0.5j)):
+        for sh in shares:
+            net = network_s(sh, neg_z)
+            res, relaxed = {}, 0
+            for side, cases, want in (("forward", FWD, "f"), ("reverse", REV, "r")):
+                cnt = dict(n=0, mis=0, und=0, mis_pk=0, und_pk=0)
+                by = {}
+                for u in corners:
+                    sg, st = operating_point(sh, neg_z, u)
+                    yN, r0 = solve_v1(net, sg, st, None)
+                    relaxed += r0
+                    for c in cases:
+                        y, r1 = solve_v1(net, sg, st, (c[0], c[1], c[2], c[3] * net.rF))
+                        relaxed += r1
+                        d0, d1 = direction(yN, y), direction_pk(yN, y)
+                        cnt["n"] += 1
+                        cnt["mis"] += d0 is not None and d0 != want
+                        cnt["und"] += d0 is None
+                        cnt["mis_pk"] += d1 is not None and d1 != want
+                        cnt["und_pk"] += d1 is None
+                        b = by.setdefault(c[2], [0, 0])
+                        b[0] += d1 is not None and d1 != want
+                        b[1] += 1
+                res[side] = {k: (v / cnt["n"] if k != "n" else v) for k, v in cnt.items()}
+                res[side]["misdirected_pk_by_type"] = {k: v[0] / v[1] for k, v in by.items()}
+                print(f"{law:20s} s {sh:.1f} {side:8s}: no pickup misdirected {res[side]['mis']:.2f} undecided {res[side]['und']:.2f}; "
+                      f"with 0.05 pu pickups misdirected {res[side]['mis_pk']:.2f} undecided {res[side]['und_pk']:.2f} "
+                      f"(misdirected by type {res[side]['misdirected_pk_by_type']})", flush=True)
+            res["relaxed_solves"] = relaxed
+            out[f"{law}|s={sh}"] = res
+    json.dump(dict(fwd=FWD, rev=REV, shares=shares, pickup=PICKUP, results=out),
+              open(os.path.join(OUT, "i2dir_static_a2.json"), "w"), indent=1)
+    t = out["suppressed|s=1.0"]["forward"]
+    print(f"(a'') s = 1, suppressed: misdirected {t['mis_pk']:.2f} + undecided {t['und_pk']:.2f} with pickups "
+          f"(the blind test is EMT stage c)")
+
+
 if __name__ == "__main__":
-    if sys.argv[1] == "a":
+    if sys.argv[1] == "a2":
+        stage_a2()
+    elif sys.argv[1] == "a":
         stage_a()
     else:
         stage_b([float(x) for x in sys.argv[2:]] or [0.1, 0.0])
