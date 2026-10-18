@@ -63,52 +63,74 @@ def regress():
               f"(delta 0, settled frames) {worst:.2e} pu")
 
 
-def design(rhos=(0.1, 0.0)):
+deg = np.pi / 180
+TIERS = {
+    # primary: the step-3 design point's noise model, the 0.08 pu box (FRAMES.md main configuration)
+    "box 0.08": dict(eps=None, instr=None),
+    # secondary: the structured design tier (CT 1 % / 0.3 deg, VT 0.5 % / 0.3 deg as shared symbols, white box V 0.02 / I 0.04)
+    "structured design tier": dict(eps=np.array([0.02] * 3 + [0.04] * 3 + [0.02] * 3 + [0.04] * 3),
+                                   instr=dict(N=(0.005, 0.3 * deg, 0.01, 0.3 * deg), F=(0.005, 0.3 * deg, 0.01, 0.3 * deg))),
+}
+
+
+def design(tiers=("box 0.08", "structured design tier"), rhos=(0.1, 0.0)):
+    """(b1): the set test for direction. delta = 0 pairwise first; then the full polar search (5 deg over 360 deg,
+    0.02 pu steps up to the 1.14 pu cap), and at the smallest separating radius the whole set of separating angles."""
     cases = FWD + REV
-    fm, _, _ = model(cases)
     A, B = list(range(len(FWD))), list(range(len(FWD), len(cases)))
-    order = {"last": None}
-
-    def apart(d, rho):
-        b = 2 * fm.eps * (1 + rho)
-        pairs = [(i, j) for i in A for j in B]
-        if order["last"] in pairs:
-            pairs.remove(order["last"])
-            pairs.insert(0, order["last"])
-        for i, j in pairs:
-            if fr._meet_union(fm.zonotopes(d, i), fm.zonotopes(d, j), b):
-                order["last"] = (i, j)
-                return False
-        return True
-
-    def try_(d, rho):
-        try:
-            return apart(d, rho)
-        except RuntimeError:
-            return False
-
     out = []
-    for rho in rhos:
-        t0 = time.time()
-        b = 2 * fm.eps * (1 + rho)
-        n0 = sum(fr._meet_union(fm.zonotopes(0j, i), fm.zonotopes(0j, j), b) for i in A for j in B)
-        res = dict(rho=rho, pairs=len(A) * len(B), unseparated_pairs_at_0=int(n0))
-        print(f"rho {rho}: forward-reverse pairs not apart at delta = 0: {n0} of {len(A) * len(B)}  [{time.time() - t0:.0f} s]", flush=True)
-        found = (0.0, 0.0) if n0 == 0 else None
-        if found is None:
-            r0 = next((r for r in np.arange(0.1, 1.14 + 1e-9, 0.1) if any(try_(r * np.exp(1j * np.radians(a)), rho) for a in range(0, 360, 15))), None)
-            if r0 is not None:
-                for r in np.arange(max(0.02, r0 - 0.1), r0 + 1e-9, 0.02):
-                    a = next((a for a in np.arange(0, 360, 5) if try_(r * np.exp(1j * np.radians(a)), rho)), None)
-                    if a is not None:
-                        found = (float(round(r, 4)), float(a))
+    for tier in tiers:
+        net = network_s(1.0, 1e6, filters=True, inject=True)
+        _, st = operating_point(1.0, 1e6, U0)
+        sinks = {k: complex(v["ID"], -v["IQ"]) for k, v in st.items() if k != "I"}
+        kw = dict(KW)
+        if TIERS[tier]["eps"] is not None:
+            kw["eps"] = TIERS[tier]["eps"]
+        fm = FrameModelMulti(net, cases, sinks=sinks, base_net=network(1e6, 1.0), n_samples=150, face_pts=3, seed=1,
+                             instr=TIERS[tier]["instr"], **kw)
+        for rho in rhos:
+            t0 = time.time()
+            b = 2 * fm.eps * (1 + rho)
+            order = {"last": None}
+
+            def apart(d):
+                pairs = [(i, j) for i in A for j in B]
+                if order["last"] in pairs:
+                    pairs.remove(order["last"])
+                    pairs.insert(0, order["last"])
+                for i, j in pairs:
+                    if fr._meet_union(fm.zonotopes(d, i), fm.zonotopes(d, j), b):
+                        order["last"] = (i, j)
+                        return False
+                return True
+
+            unsep0 = [(cases[i], cases[j]) for i in A for j in B if fr._meet_union(fm.zonotopes(0j, i), fm.zonotopes(0j, j), b)]
+            res = dict(tier=tier, rho=rho, pairs=len(A) * len(B), unseparated_pairs_at_0=len(unsep0),
+                       unseparated_examples=[list(map(list, p)) for p in unsep0[:10]])
+            print(f"[{tier}] rho {rho}: forward-reverse pairs not apart at delta = 0: {len(unsep0)} of {len(A) * len(B)}  "
+                  f"[{time.time() - t0:.0f} s]", flush=True)
+            found, angles, inadmissible = None, [], 0
+            if not unsep0:
+                found = 0.0
+            else:
+                for r in np.arange(0.02, 1.14 + 1e-9, 0.02):
+                    ok = []
+                    for a in range(0, 360, 5):
+                        try:
+                            if apart(r * np.exp(1j * np.radians(a))):
+                                ok.append(a)
+                        except RuntimeError:
+                            inadmissible += 1
+                    if ok:
+                        found, angles = float(round(r, 4)), ok
                         break
-        res.update(abs_delta=None if found is None else found[0], angle_deg=None if found is None else found[1],
-                   feasible=found is not None, seconds=time.time() - t0)
-        out.append(res)
-        print(f"rho {rho}: direction delta* {res['abs_delta']} at {res['angle_deg']} (feasible {res['feasible']})  [{res['seconds']:.0f} s]", flush=True)
-        json.dump(dict(bracket="converter-side control (filter shunts), s = 1", fwd=FWD, rev=REV, runs=out),
-                  open(os.path.join(OUT, "i2dir_design.json"), "w"), indent=1)
+            res.update(abs_delta=found, separating_angles_deg=angles, feasible=found is not None, inadmissible_candidates=inadmissible,
+                       seconds=time.time() - t0)
+            out.append(res)
+            print(f"[{tier}] rho {rho}: direction delta* {found} pu; separating angles {angles}; candidates without a settled "
+                  f"state {inadmissible}  [{res['seconds']:.0f} s]", flush=True)
+            json.dump(dict(bracket="converter-side control (filter shunts), s = 1, source inverter suppressing I2", fwd=FWD, rev=REV,
+                           runs=out), open(os.path.join(OUT, "i2dir_design.json"), "w"), indent=1)
 
 
 if __name__ == "__main__":

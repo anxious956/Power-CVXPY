@@ -58,22 +58,26 @@ class FrameModelMulti(fr.FrameModel):
         cols = [e, i1, d] + [self.sinks[k] * u[k] for k in self.sinks]
         return np.stack(cols, 1), i1, d
 
-    def _fixed(self, mv, e, i_cmd, d_cmd, u0, iters=400, tol=1e-12):
-        u = {k: v.copy() for k, v in u0.items()}
-        for _ in range(iters):
-            X, i1, d = self._x(e, i_cmd, d_cmd, u)
-            step = 0.0
-            for k in u:
-                v = X @ mv[k]
-                new = v / np.maximum(np.abs(v), 1e-12)
-                step = max(step, float(np.max(np.abs(new - u[k]))))
-                u[k] = new
-            if step < tol:
-                break
-        else:
-            raise RuntimeError(f"FrameModelMulti: fixed point not converged (step {step:.1e})")
-        X, i1, d = self._x(e, i_cmd, d_cmd, u)
-        return u, X, np.abs(X @ mv[self.inj])
+    def _fixed(self, mv, e, i_cmd, d_cmd, u0, tol=1e-12):
+        """The fixed point over all frames. Plain iteration first; where it does not converge (a period-2 swing between
+        frames), under-relaxed iteration from the same start (as network.solve_v1ref's relax): the relaxation changes
+        the path, not the fixed point."""
+        for relax, iters in ((1.0, 400), (0.5, 2000), (0.25, 6000)):
+            u = {k: v.copy() for k, v in u0.items()}
+            for _ in range(iters):
+                X, i1, d = self._x(e, i_cmd, d_cmd, u)
+                step = 0.0
+                for k in u:
+                    v = X @ mv[k]
+                    new = v / np.maximum(np.abs(v), 1e-12)
+                    new = (1 - relax) * u[k] + relax * new
+                    new /= np.maximum(np.abs(new), 1e-12)
+                    step = max(step, float(np.max(np.abs(new - u[k]))))
+                    u[k] = new
+                if step < tol:
+                    X, i1, d = self._x(e, i_cmd, d_cmd, u)
+                    return u, X, np.abs(X @ mv[self.inj])
+        raise RuntimeError(f"FrameModelMulti: fixed point not converged even under-relaxed (step {step:.1e})")
 
     def _u0(self, n):
         u = {self.inj: np.full(n, self.u_nom)}

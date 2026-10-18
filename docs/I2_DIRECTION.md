@@ -367,3 +367,22 @@ The fixed point runs over all three frames. λ and drift are shared symbols. Net
 0.0303 rad, model error 0.008 pu, drift 3°). The forward set is A-G at 20–40 Ω and B-C at arc on L1; the reverse set
 is the same on L2. The prior (REVIEW row 46, static, CIGRE) says a δ fixed in the inverter's frame does not repair
 direction.
+
+**Additions before the first design number** (review session, 18 Oct 2026):
+1. **Noise model.** Primary: the 0.08 pu box, the step-3 design point's main configuration. Secondary: the
+   structured design tier (CT 1 % / 0.3°, VT 0.5 % / 0.3° as shared symbols, white box V 0.02 / I 0.04 pu).
+2. **δ = 0 first.** The pairwise forward–reverse separation at δ = 0 is reported before any search. If every pair is
+   already apart, δ* = 0 and the finding is "the set test decides direction here without δ".
+3. **Two questions, kept apart.**
+   - **(b1)** The set test: the smallest |δ| within the cap for which every forward–reverse pair is 2ε(1 + ρ)
+     apart, ρ = 0.1 and 0. That gives a set-based direction decision, a new detector.
+   - **(b2)** The conventional element at that δ: does direction_pk on the injected measurements get the forward set
+     right? Static at the 16 corners first, then EMT with MODE2 2.
+
+   Row 46's prior is about (b2). A yes on (b1) with a no on (b2) is a legitimate result, and they are not merged.
+4. **The search.** The full polar grid: 5° over 360°, 0.02 pu steps up to the 1.14 pu cap. The whole set of
+   separating angles at δ* is recorded.
+
+A fourth regression, at δ ≠ 0 (0.5 and 1.0 pu, three angles, random points), also agrees with solve_v1ref: ≤ 2·10⁻¹²
+pu. The multi-frame fixed point falls back to under-relaxed iteration where plain iteration swings between frames;
+the fixed point is unchanged.
