@@ -41,8 +41,18 @@ relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); de
    - protection-class fault-condition errors (CT 10 %, VT 6 % / 4°): about 93 % of the inverter.
 5. **Against worst-case noise per detector** (a stress bound, pilot only), D1 has no worst-case miss from ¾ δ*. D2
    improves with δ but does not reach zero. D0 and the CNN do not benefit from δ.
-6. **At 80 Ω** (*static only*) the guarantee needs about 1 pu of signal even at near-nominal accuracy. We have not yet
-   tested in EMT whether detection itself struggles there.
+6. **High-resistance ground faults** (results/HIGHR.md).
+   - The designed signal certifies ground-fault detection up to about 160 Ω: 1.12 pu, no margin, a 5° window. It is
+     verified in EMT at its witnesses, window edges and random inception. At 120 Ω it holds with a 10 % margin for
+     0.82 pu.
+   - Whether a conventional incremental 50N element fails first depends on its pickup. At a bare 0.1 pu it detects
+     these faults too: in EMT the smallest score is 0.205 pu, and at the worst corner of the source box it detects to
+     about 250 Ω. At a pickup of 0.15–0.2 pu, which a security factor gives, its worst corner fails from about
+     115–160 Ω. That leaves a narrow band where the signal certifies what 50N misses.
+   - The set test detects these faults without the signal, statistically.
+   - At this design the set test alarms with certainty on a balanced 0.2 pu load step.
+   - Sensitive earth-fault elements reach further with a time delay; the comparison is at 2–3 cycles.
+   - Units: these results use a box of V 0.02 / I 0.04 pu, i.e. 0.25 ε / 0.5 ε of the 40 Ω design's ε = 0.08 pu.
 7. **An inverter at the relay end does not change the detection answer** (*static, nominal sources*;
    results/IBR_GRID_SCREEN.md). With a grid-following inverter in place of the relay-end synchronous source, current
    elements go blind when its sequence paths are open, but 59N then sees |V0| = 0.31–0.57 pu on every hard ground
@@ -51,9 +61,7 @@ relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); de
 
 **Questions for you**
 - Is "the guarantee's price is set by instrument accuracy" the result you would expect, and is it worth a write-up?
-- Should step 3 continue toward high-resistance faults (80 Ω and beyond), where the guarantee needs the signal even
-  with good instruments, rather than a larger sweep at 40 Ω, where detection does not need it?
-- Or toward selectivity (fault on my line or beyond it) at an inverter-fed relay, where one end fails without the
+- Should step 3 go toward selectivity (fault on my line or beyond it) at an inverter-fed relay, where one end fails without the
   signal? That needs a design separating fault sets from each other. Our earlier static screen on a CIGRE MV feeder
   saw only a 2–4 point gain at 0.4 pu of δ, and your Geometry example separates fault types rather than zones, so we
   do not presume δ helps there.
@@ -81,10 +89,10 @@ EMT. A one-page summary is attached. In short:
 
 We would value your view on two things:
 1. Is this worth writing up as it stands?
-2. Where should step 3 go next? One option is high-resistance faults, where the guarantee needs the signal even
-   with good instruments. The other is selectivity at an inverter-fed relay, where conventional single-ended
-   elements fail. (A static screen shows an inverter at the relay end still lets voltage or current elements detect
-   faults; telling where the fault is fails.)
+2. Where should step 3 go next? We checked high-resistance faults statically: where the conventional element starts
+   to fail (about 160 Ω), no signal within the inverter's limit can guarantee detection either. The remaining
+   candidate is selectivity at an inverter-fed relay. There conventional single-ended elements still detect faults
+   but cannot tell where they are.
 
 We also kept your multiple-model structure, moved to the relay's phasor model, and would like to know whether that
 is an acceptable stand-in for your MMKF.

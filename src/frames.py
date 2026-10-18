@@ -450,16 +450,18 @@ def min_delta_fast(fm, rho=0.0, coarse=(0.1, 24), fine=(0.02, 72), r_max=None):
                 inadmissible=len(skipped))
 
 
-def distance_to_set(pieces, y_rel):
-    """The smallest noise box (pu) that puts a relay measurement inside the union `pieces` (min over pieces)."""
+def distance_to_set(pieces, y_rel, scale=None):
+    """The smallest noise box that puts a relay measurement inside the union `pieces` (min over pieces): in pu, or,
+    with scale (one positive number per real component, e.g. a per-component noise bound), in units of it."""
     best = np.inf
     target_all = nw._realify(np.asarray(y_rel))
     for cN, GN in pieces:
         n, k = cN.size, GN.shape[1]
+        w = np.ones((n, 1)) if scale is None else np.asarray(scale, float).reshape(n, 1)
         c = np.zeros(k + n + 1)
         c[-1] = 1
-        A_ub = np.vstack([np.hstack([np.zeros((n, k)), np.eye(n), -np.ones((n, 1))]),
-                          np.hstack([np.zeros((n, k)), -np.eye(n), -np.ones((n, 1))])])
+        A_ub = np.vstack([np.hstack([np.zeros((n, k)), np.eye(n), -w]),
+                          np.hstack([np.zeros((n, k)), -np.eye(n), -w])])
         res = linprog(c, A_ub=A_ub, b_ub=np.zeros(2 * n), A_eq=np.hstack([GN, np.eye(n), np.zeros((n, 1))]),
                       b_eq=target_all - cN, bounds=[(-1, 1)] * k + [(None, None)] * n + [(0, None)], method="highs")
         if res.status != 0:
