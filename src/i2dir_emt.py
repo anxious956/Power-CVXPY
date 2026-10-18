@@ -14,14 +14,17 @@ from pscad_io import read_case
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import network as nw
-from pscad_network import make_spec, WORK, IBASE_PK
+from pscad_network import make_spec, WORK, IBASE_PK, ZBASE, W
 from pscad_network_check import injections
 from step3_frontend import Relay, CYCLE
 from network_delta_test import tag
-from i2dir_static import network_s, operating_point, solve_v1, direction_pk, FWD, REV
+from i2dir_static import network_s, operating_point, solve_v1, direction_pk, filter_shunts, FWD, REV
 
 OUT = os.path.join(HERE, "..", "results", "network")
-SPECS = os.path.join(OUT, "i2dir_emt_specs.json")
+SHUNTS = "--shunts" in sys.argv          # the converter-side-control bracket: RC output-filter shunts at R and S
+SPECS = os.path.join(OUT, "i2dir_emt_sh_specs.json" if SHUNTS else "i2dir_emt_specs.json")
+RESULT = os.path.join(OUT, "i2dir_emt_sh.json" if SHUNTS else "i2dir_emt.json")
+PREFIX = "i2s" if SHUNTS else "i2"
 TANG = 1.0 / (2 * np.pi * 15.0)
 LAWS = {"m0": ("suppressed", 1e6, 0.0), "m1": ("IEEE 2800 (K2 = 2)", 0.5j, 1.0)}
 U0 = (0.0, 0.0, 0.0, 0.0)
@@ -36,8 +39,10 @@ def make():
         sg, st = operating_point(1.0, neg_z, U0)
         for c in [None] + FWD + REV:
             fault = None if c is None else (c[0], c[1], c[2], c[3] * net.rF)
-            name = f"i2_{lt}_" + ("N" if c is None else tag(c))
+            name = f"{PREFIX}_{lt}_" + ("N" if c is None else tag(c))
             sp = make_spec(name, net, fault, {"G": sg["G"]}, {}, 1)
+            if SHUNTS:
+                sp["shunts"] = {b: dict(r_ohm=f["R"] * ZBASE, c_uF=f["B"] / (W * ZBASE) * 1e6) for b, f in filter_shunts(1.0).items()}
             sp["settings"] = {k: dict(ID=v["ID"], IQ=v["IQ"], MODE2=(mode2 if k == "I" else 0.0), D2MAG=0.0, D2ANG=0.0, TANG=TANG)
                               for k, v in st.items()}
             sp.update(kind="normal" if c is None else "fault", law=lt, case=None if c is None else list(c),
@@ -66,7 +71,7 @@ def analyse():
     specs = json.load(open(SPECS))
     rows, checks = [], {}
     for lt, (law, neg_z, mode2) in LAWS.items():
-        net = network_s(1.0, neg_z)
+        net = network_s(1.0, neg_z, filters=SHUNTS)
         sg, st = operating_point(1.0, neg_z, U0)
         yN, _ = solve_v1(net, sg, st, None)
         # pre-fault check: sink and source-inverter currents, EMT against static
@@ -123,9 +128,9 @@ def analyse():
               f"{'REPRODUCED' if f0['emt_misdirected'] + f0['emt_undecided'] >= 0.25 else 'NOT reproduced'}")
         print(f"fix (MODE2 1 forward misdirected <= 0.05): {f1['emt_misdirected']:.2f} -> {'REPRODUCED' if f1['emt_misdirected'] <= 0.05 else 'NOT reproduced'}")
         print(f"reverse misdirected <= 0.05 under both: {r0['emt_misdirected']:.2f} / {r1['emt_misdirected']:.2f}")
-    json.dump(dict(prefault_checks=checks, summary=summ, rows=rows), open(os.path.join(OUT, "i2dir_emt.json"), "w"), indent=1, default=str)
-    print("-> results/network/i2dir_emt.json")
+    json.dump(dict(shunts=SHUNTS, prefault_checks=checks, summary=summ, rows=rows), open(RESULT, "w"), indent=1, default=str)
+    print(f"-> {os.path.relpath(RESULT)}")
 
 
 if __name__ == "__main__":
-    {"spec": make, "analyse": analyse}[sys.argv[1]]()
+    {"spec": make, "analyse": analyse}[sys.argv[1]]()     # add --shunts for the converter-side-control bracket

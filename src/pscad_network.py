@@ -133,7 +133,7 @@ def check_line_model(spec):
     return loops
 
 
-BUILD_VERSION = 3          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
+BUILD_VERSION = 4          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
                            # changes what a run produces; the fingerprint cannot see code changes itself
 BUILD_ARGS = dict(t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0)
 
@@ -168,6 +168,7 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
     "z": [re, im], "t"} (one phase to the bus's return node through z, switched in at t)."""
     t_fault = spec.get("t_fault", t_fault)
     dur, t_end = spec.get("dur", dur), spec.get("t_end", t_end)
+    dt_us = spec.get("dt_us", dt_us)                       # the output plot step stays 50 us whatever the solver step
     from pscad_inverter import INPUTS, OUTPUTS, port_xy, definition_xml, Builder
     name, fault, lim = spec["name"], spec["fault"], spec["lim"]
     for g in spec["ibrs"].values():
@@ -243,6 +244,19 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
             _rl(b, bus + ph, "NLD_" + bus, zl, 34, next_row(4), "ld")
         yy = next_row(4)
         b.series("master:resistor", "NLD_" + bus, "GNL_" + bus, 34, yy, R="1.0e6 [ohm]")
+        b.ground(36, yy)
+
+    # RC output-filter shunts (docs/I2_DIRECTION.md): per phase a series R and C from the bus to a neutral, the
+    # neutral tied to ground through 1e8 ohm so EMTDC has no floating node (no zero-sequence path in effect).
+    # They connect at the bus, beside the inverters' ammeters, so the Iinv* channels still read the injections.
+    for bus, sh in (spec.get("shunts") or {}).items():
+        for ph in "ABC":
+            y = next_row(4)
+            mid = f"SHM_{bus}{ph}"
+            b.series("master:resistor", bus + ph, mid, 34, y, R=f"{sh['r_ohm']:.6g} [ohm]", Name=f"SH{bus}{ph}R")
+            b.series("master:capacitor", mid, "NSH_" + bus, 38, y, C=f"{sh['c_uF']:.6g} [uF]", Name=f"SH{bus}{ph}C")
+        yy = next_row(4)
+        b.series("master:resistor", "NSH_" + bus, "GNSH_" + bus, 34, yy, R="1.0e8 [ohm]")
         b.ground(36, yy)
 
     for ph in "ABC":
@@ -397,6 +411,12 @@ def run_fast(path):
         key = "N" if sp["fault"] is None else f"{sp['fault'][0]}_{sp['fault'][2]}"
         if sp.get("confuser"):
             key += f"_{sp['confuser']['kind']}_{sp['confuser']['bus']}{sp['confuser'].get('phase', '')}"
+        # the topology and solver must match the project: shunts and the solver step are built, not updated
+        if sp.get("shunts"):
+            key += "_sh" + "".join(sorted(sp["shunts"]))
+        if sp.get("dt_us"):
+            key += f"_dt{sp['dt_us']:g}".replace(".", "p")
+        key += "_" + "".join(sorted(sp["ibrs"]))
         if key not in projects:
             pname = "fastnet_" + key
             projects[key] = (pname, build(pscad, dict(sp, name=pname)))

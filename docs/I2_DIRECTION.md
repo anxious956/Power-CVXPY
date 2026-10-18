@@ -228,3 +228,22 @@ Reverse is 0 everywhere.
 behind the relay, the only one is capacitive. The element then sees the back-side impedance with the opposite sign
 and calls forward faults reverse. IEEE 2800's current law still fixes direction completely. The EMT rerun (both laws,
 with the shunts) tests this prediction under the criteria already fixed.
+
+**Assumption that decides which case is physical, stated before the rerun** (review of 1c1c1fa). The shunt result
+assumes **converter-side current control**: the averaged inverter regulates the current behind its filter, so the
+capacitor sits outside the I2-suppression loop and is a passive path. With **grid-side current control** the
+capacitor current is inside the loop, the terminal I2 is suppressed including the capacitor, and the back side is the
+no-shunt case. The two EMT runs therefore bracket the two common control designs:
+- no shunt = grid-side current control;
+- shunt = converter-side current control.
+
+Both are reported as such; neither is "the realistic one". (A SEL-type 32Q gives the same verdict as our element on
+the shunt case: projected on the line angle, the measured Z2 is about +10 pu, far above any reverse setting.)
+
+**Builder changes** (BUILD_VERSION 4, which changes every spec's digest: old outputs are simply not reused if old
+specs are resubmitted):
+- an optional "shunts" field {bus: {r_ohm, c_uF}}, built as three series R-C branches to a neutral tied to ground
+  through 1e8 Ω, connected at the bus beside the inverters' ammeters;
+- an optional per-spec solver step dt_us, with the output plot step kept at 50 µs;
+- the fast-mode project key now includes the shunts, the step and the inverter set, so a project is never reused
+  for another topology.
