@@ -317,3 +317,32 @@ inverter-interfaced):
 - The lag (τ ≈ 0.64 cycle, I2 at about 96 % by 2 cycles) keeps the static prediction applicable.
 
 **Stage (b) will use the shunt bracket** (converter-side control), whose EMT is clean in both laws.
+
+## The grid-side IEEE 2800 cell with the V2 filter (18 Oct 2026)
+
+`src/i2dir_tv2.py`, `results/network/i2dir_tv2.json`, 57 PSCAD runs:
+- **Regression** (BUILD_VERSION 5, TV2 = 0) against the stored i2s_m1_L1ag55r100: largest channel difference
+  **0**.
+- **Consistency:** 5 shunt-case MODE2 1 cases (4 forward, 1 reverse) with TV2 = 15 Hz: **5 of 5 decisions
+  unchanged**.
+- **Grid-side bracket, MODE2 1 with TV2:** stable (normal-run tail peak 1.15 × nominal, pre-fault |I1| errors 0.0 %),
+  so the stop rule does not apply. Every fault run passes the per-run numerical check: **25 of 25 interpretable** on
+  each side. **Forward misdirected 0 %, undecided 0 %; reverse 0 %**, and EMT agrees with static on every case.
+
+**The brackets, complete** (EMT, s = 1, every load behind the relay inverter-interfaced; nominal source point, one
+point on wave, clean measurements, 25 forward and 25 reverse cases, δ = 0):
+
+| control design | suppressed I2: forward lost (of which misdirected) | IEEE 2800 V2-referenced I2: forward lost |
+|---|---|---|
+| grid-side current control (no shunt) | 80 % (20 %) | **0 %** (with the V2 filter) |
+| converter-side current control (filter shunt) | 68 % (40 %) | **0 %** |
+
+**Reading.** On an inverter-dominated back side (s → 1), I2-suppressing inverters cost the relay at the inverter bus
+its direction decision in EMT, under either control design:
+- with grid-side current control, mostly as no decision;
+- with the filter capacitor as the only passive path, mostly as wrong-way decisions.
+
+The grid-code V2-referenced negative-sequence current restores direction completely in both. The regime is narrow: at
+s = 0.8 suppression costs only dependability (about 28 % undecided, no misdirection). The positive-sequence
+reactive-current response (K-factor) is not modelled. No δ was injected; whether a designed δ can do this job is
+stage (b).
