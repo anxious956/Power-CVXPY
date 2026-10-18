@@ -235,6 +235,8 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
         _rl(b, "G_" + a, "G_" + bb, (lz0 - lz1) / 3.0, 14, next_row(4), lname + "n", seg_name(lname, "n"))
 
     for bus, y in spec["loads"].items():
+        if abs(_z(y["y1"])) < 1e-12:
+            continue                                        # no passive load here (e.g. all of it inverter-interfaced)
         zl = 1.0 / _z(y["y1"])
         assert zl.imag > 0, "capacitive loads not built"
         for ph in "ABC":
