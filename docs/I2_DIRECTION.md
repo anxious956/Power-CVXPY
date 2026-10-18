@@ -257,3 +257,40 @@ sequence extraction, not a smaller step. Every step below about 9.8 µs is affec
 
 Known limit of the shunt key: the fast-mode key carries the shunt buses, not their values, and update() does not set
 them. This is harmless here, since every spec has the same shunts, but a study that varies them must add the values.
+
+## Stage (c) with the filter shunts: the converter-side-control bracket (18 Oct 2026)
+
+`results/network/i2dir_emt_sh.json`, 102 PSCAD runs at s = 1 with the RC shunts. Both laws passed the pre-fault gate
+(0.0 % on all three inverters). The runs are free of the numerical mode: peak |vA| in the fault ≤ 1.00 × nominal and
+5–10 kHz energy share ≤ 3·10⁻⁸. The shunts damp the cut-set, as diagnosed.
+
+| | forward misdirected | forward undecided | reverse misdirected | EMT vs static, same cases |
+|---|---|---|---|---|
+| suppressed (MODE2 0) | **0.40** | 0.28 | 0.00 | 24 of 25 agree |
+| IEEE 2800 (MODE2 1) | **0.00** | 0.00 | 0.00 | 25 of 25 agree |
+
+Against the criteria fixed before the run:
+- **the claim is reproduced**: suppressed loses 68 % of the forward set, 40 % misdirected;
+- **the fix is reproduced**: IEEE 2800 misdirects 0 %;
+- **reverse** is 0 under both;
+- no case flips across the 2–3-cycle windows, and no sink's |V1| falls below 0.2 pu.
+
+The static prediction for the 16 corners (0.55 / 0.27) and for these nominal cases (0.40 / 0.24) matches EMT closely.
+
+**The two brackets together** (EMT with the source inverter's law as stated; s = 1, every load behind the relay
+inverter-interfaced):
+
+| control design | suppressed: forward lost (misdirected) | IEEE 2800 |
+|---|---|---|
+| grid-side current control (no shunt) | 80 % (20 %), mostly undecided | not yet run: needs the V2-filter fallback |
+| converter-side current control (shunt) | 68 % (40 %) | **0 %** |
+
+**Reading.**
+- On an inverter-dominated back side, I2 suppression costs the relay its direction decision in EMT, under either
+  control design.
+- With the filter capacitors as the only passive path behind the relay, wrong-way decisions take the place of
+  no-decisions.
+- IEEE 2800's V2-referenced negative-sequence current restores direction completely in the bracket where it could
+  be run.
+- That is the deck's claim for the I2-suppressing case, now in EMT. The designed δ (MODE2 2) for direction is stage
+  (b), still to come; row 46's static prior says it will not do this job.
