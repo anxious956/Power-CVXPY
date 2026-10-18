@@ -114,3 +114,50 @@ A fixed-current back side is degenerate, so the fix is:
   reactive current (ΔIq = K·ΔV1, K ≥ 2). That gives dY1 a reactive back-side source and would likely restore
   direction even under suppression. It is not modelled in the test case; it is reported as one static sensitivity.
 - **Then (b)**: the δ design for direction at s = 1 on the solve_v1ref model.
+
+## (a'') reproduced, and EMT stage (c) pre-registered (18 Oct 2026, before any run)
+
+`src/i2dir_static.py a2` reproduces the review's static check (`results/network/i2dir_static_a2.json`). Suppressed law,
+hard forward set, 16 corners:
+- with no pickup: misdirected 0 / 0 / 0 / **0.44** at s = 0 / 0.5 / 0.8 / 1;
+- with the 0.05 pu pickups at s = 1: **0.36 misdirected** (B-C 0.78, A-G 0.09) and 0.31 undecided.
+
+IEEE 2800 gives 0 at every s, and the reverse set is 0 everywhere.
+
+**Stage (c), EMT, the blind test.** It runs MODE2 0 and 1 first; MODE2 2 follows after the design (b).
+- **Network:** s = 1, every load behind the relay inverter-interfaced. The R and S loads are replaced by two
+  gfl_avm sinks.
+  - The sinks always run MODE2 0 (open negative and zero sequence), whatever the source inverter's mode; a sink
+    with an I2 law would put the passive path back.
+  - Their ID / IQ come from the static operating point at the EMT case's source point.
+  - They use TANG 15 Hz and i_max 10.
+  - **Assumption:** the sinks hold their current through the fault, with no trip and no low-voltage blocking. Real
+    drives may trip on deep sags; that is a limitation.
+- **Source point:** nominal, one point. Cases: the hard forward set (25) and reverse set (25), for each law.
+  - Each EMT case is compared with the static prediction for that exact case (solve_v1ref, same point). The
+    16-corner fractions stay the static result.
+  - First, one pre-fault run per law checks V1 at R and S and the sink currents against static (within a few
+    percent), and the TANG lock.
+- **Relay chain:** the step-3 front end, clean: mimic filter on the currents, pre-fault memory (windows ending 0.5–2.5
+  cycles before inception) for the increments, one phasor frame for V and I. The element, with 0.05 pu pickups, is
+  evaluated on windows ending 2.0, 2.25, …, 3.0 cycles after inception. The relay's decision is the first window
+  that decides; a wrong first decision is a misdirection. White noise is a second pass.
+- **Criteria, fixed now:**
+  - the **claim is reproduced** if MODE2 0 has ≥ ¼ of the forward set misdirected or undecided, with misdirected
+    reported separately;
+  - the **fix is reproduced** if MODE2 1 has ≤ 5 % of the forward set misdirected;
+  - **reverse** stays ≤ 5 % misdirected under both laws;
+  - per case, where EMT disagrees with static is reported. The filtered reference turns the frames less in the
+    decision window than the static fixed point does, which could reduce the misdirection; that is what EMT tests.
+
+**Stage (b) scope, fixed now.**
+- The sinks sit at their share of the nominal load, without box symbols, like the impedance loads now. This differs
+  slightly from (a''), which set them per corner.
+- The fixed point runs over three V1-referenced frames (I, SR, SS), with per-source unit maps. λ and drift are
+  shared symbols across the three frames (identical TANG, same inception, one frequency), each frame turning with its
+  own bus V1.
+- Regression tests before use:
+  - with s = 0, the generalised model reproduces the main configuration's sets to round-off;
+  - at random source points and λ, the prediction agrees with solve_v1ref within the fitted remainder.
+- **"Yes"** means every forward–reverse pair separated by 2ε(1 + ρ) at a δ within the limiter, at s = 1. The prior
+  (row 46) predicts no.
