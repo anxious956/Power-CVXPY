@@ -1,0 +1,3263 @@
+{
+ "point": "st020",
+ "tier": "structured design tier",
+ "abs_delta": 0.2,
+ "angle_deg": 230.0,
+ "gate": {
+  "checks": {
+   "I I1": {
+    "emt": 0.446687964058571,
+    "static": 0.44665023668442055,
+    "err": 8.446737749534527e-05,
+    "settled": 4.4348964012286274e-07
+   },
+   "I I2": {
+    "emt": 0.20001762052137637,
+    "static": 0.2,
+    "err": 8.810260688174587e-05,
+    "settled": 2.330997462385298e-06
+   },
+   "SR I1": {
+    "emt": 0.26823700742689494,
+    "static": 0.2682145965685674,
+    "err": 8.355569985485367e-05,
+    "settled": 2.987815950206141e-08
+   },
+   "SS I1": {
+    "emt": 0.4630896552080565,
+    "static": 0.46305096466068035,
+    "err": 8.355569975870836e-05,
+    "settled": 2.987779545993163e-08
+   }
+  },
+  "passed": true
+ },
+ "summary": {
+  "forward": {
+   "n": 25,
+   "of": 25,
+   "b1_contained": 25,
+   "b1_separated": 25,
+   "own_max_eps": 0.0,
+   "opp_min_eps": 3.322334335513746,
+   "misdirected": 0.44,
+   "undecided": 0.2,
+   "emt_vs_static_differ": 1,
+   "weak_frame": []
+  },
+  "reverse": {
+   "n": 25,
+   "of": 25,
+   "b1_contained": 25,
+   "b1_separated": 25,
+   "own_max_eps": 0.0,
+   "opp_min_eps": 3.8141124421759645,
+   "misdirected": 0.0,
+   "undecided": 0.0,
+   "emt_vs_static_differ": 0,
+   "weak_frame": []
+  }
+ },
+ "rows": [
+  {
+   "name": "i2d_st020_L1ag15r050",
+   "case": [
+    "L1",
+    0.15,
+    "ag",
+    0.5
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.7430614139671661,
+   "hf": 6.032533617121781e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3520199981249137,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.334755407724016,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3308900762600424,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.323420062291677,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.322334335513746,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.25,
+   "per_window": [
+    null,
+    "f",
+    "f",
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.74251826777648,
+    "SS": 0.69534704779366
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag15r075",
+   "case": [
+    "L1",
+    0.15,
+    "ag",
+    0.75
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.8397078489653899,
+   "hf": 1.8843386703994772e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.363429152466651,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3512968088048205,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3465431294191923,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.342040130954075,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.340448241535242,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.75,
+   "per_window": [
+    null,
+    null,
+    null,
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.79398210238511,
+    "SS": 0.7476559200086
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag15r100",
+   "case": [
+    "L1",
+    0.15,
+    "ag",
+    1.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.8951411770052033,
+   "hf": 1.0678713973656116e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.444564318479066,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.439150372091985,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.4241332800203743,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.421294552613814,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.416019188177108,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": null,
+   "at_cycles": null,
+   "per_window": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "static": null,
+   "misdirected": false,
+   "undecided": true,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.82632140470007,
+    "SS": 0.7803164667883
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag35r050",
+   "case": [
+    "L1",
+    0.35,
+    "ag",
+    0.5
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.7016618319995169,
+   "hf": 1.9185246751882805e-10,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.652696949175136,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.638859421205466,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.6342393039267575,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.628657008580521,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.626339486810901,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.25,
+   "per_window": [
+    null,
+    "f",
+    "f",
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.73155716932058,
+    "SS": 0.68406798761111
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag35r075",
+   "case": [
+    "L1",
+    0.35,
+    "ag",
+    0.75
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.8041340788397846,
+   "hf": 4.330408359798965e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.365295294141042,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3484082443088896,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3439425647451593,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.338528705205177,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3369287233495033,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.75,
+   "per_window": [
+    null,
+    null,
+    null,
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.78111094855671,
+    "SS": 0.73455093486155
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag35r100",
+   "case": [
+    "L1",
+    0.35,
+    "ag",
+    1.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.865283332914118,
+   "hf": 6.644017514643966e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.4314324065019157,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.4205774133391453,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.415651891936801,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.41168684243198,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.410016568832006,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": null,
+   "at_cycles": null,
+   "per_window": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "static": null,
+   "misdirected": false,
+   "undecided": true,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.81463077470195,
+    "SS": 0.76847648160786
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag55r050",
+   "case": [
+    "L1",
+    0.55,
+    "ag",
+    0.5
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.6645840167855672,
+   "hf": 4.946467633957896e-10,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.015466807961967,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.002103768321996,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.997378699701007,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.9913958973463366,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.988543942496439,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.25,
+   "per_window": [
+    null,
+    "f",
+    "f",
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.7226404306472,
+    "SS": 0.67486565129876
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag55r075",
+   "case": [
+    "L1",
+    0.55,
+    "ag",
+    0.75
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.7708342175973153,
+   "hf": 7.34990420348837e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.35775241678795,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3454623333115543,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3404004342432825,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3358900664184765,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3342422197310717,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.5,
+   "per_window": [
+    null,
+    null,
+    "f",
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.76956980436756,
+    "SS": 0.72277239242525
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag55r100",
+   "case": [
+    "L1",
+    0.55,
+    "ag",
+    1.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.8365256941646569,
+   "hf": 1.568125716428318e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3881616298013255,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3772000231163584,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3721213817704556,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.368117962756676,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3664151797485165,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": null,
+   "at_cycles": null,
+   "per_window": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "static": null,
+   "misdirected": false,
+   "undecided": true,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.80353443134584,
+    "SS": 0.75721753616529
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag75r050",
+   "case": [
+    "L1",
+    0.75,
+    "ag",
+    0.5
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.6313470100345145,
+   "hf": 6.353604957945064e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.337436871916858,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.325353948627915,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.32098881922107,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.31463639282107,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.3111291815630155,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.25,
+   "per_window": [
+    null,
+    "f",
+    "f",
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.71539955268473,
+    "SS": 0.66737269049925
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag75r075",
+   "case": [
+    "L1",
+    0.75,
+    "ag",
+    0.75
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.7397286026144184,
+   "hf": 9.608671220785445e-09,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.355874157457938,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.343692385137189,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3385652557169525,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3341405264834423,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.332498820260836,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.5,
+   "per_window": [
+    null,
+    null,
+    "f",
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.75930626604814,
+    "SS": 0.71227184791797
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag75r100",
+   "case": [
+    "L1",
+    0.75,
+    "ag",
+    1.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.8088613763808116,
+   "hf": 4.652145321831056e-09,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3675576468075876,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.356296200757214,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3518042169437745,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3476265636259286,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.346147495888145,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": null,
+   "at_cycles": null,
+   "per_window": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "static": null,
+   "misdirected": false,
+   "undecided": true,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.79311238650003,
+    "SS": 0.74662150892906
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag95r050",
+   "case": [
+    "L1",
+    0.95,
+    "ag",
+    0.5
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.6015244419940795,
+   "hf": 3.541403150613609e-08,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.60918558437715,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.598636139971385,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.5949774753117545,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.5884167128944355,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.584429309009839,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.25,
+   "per_window": [
+    null,
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.70952165504105,
+    "SS": 0.6612713752344
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag95r075",
+   "case": [
+    "L1",
+    0.95,
+    "ag",
+    0.75
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.7105952895368958,
+   "hf": 1.54561070393292e-08,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.512019761140935,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.4947344164860796,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.4894633585326695,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.483384792953358,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.4814360501825043,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "f",
+   "at_cycles": 2.5,
+   "per_window": [
+    null,
+    null,
+    "f",
+    "f",
+    "f"
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.75023324030124,
+    "SS": 0.70297089405529
+   }
+  },
+  {
+   "name": "i2d_st020_L1ag95r100",
+   "case": [
+    "L1",
+    0.95,
+    "ag",
+    1.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 0.7822043826353019,
+   "hf": 7.980913038992484e-09,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.365261377896646,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3539041790079183,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3492738444885086,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3450716787688655,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.3435631396417476,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": null,
+   "at_cycles": null,
+   "per_window": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "static": "f",
+   "misdirected": false,
+   "undecided": true,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.78340654498562,
+    "SS": 0.73673740271698
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab15r000",
+   "case": [
+    "L1",
+    0.15,
+    "ab",
+    0.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.001663079724468,
+   "hf": 2.834758434790394e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.506796387893697,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.420291562832626,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.418612275796642,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.384089025819685,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.382666528309793,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.44443933064755,
+    "SS": 0.3917015100598
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab15r012",
+   "case": [
+    "L1",
+    0.15,
+    "ab",
+    0.125
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0015071432932148,
+   "hf": 7.0059716861842295e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.163745497081283,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.040073060275681,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.045656345643085,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.009090843785174,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.003743533379003,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.46069264965933,
+    "SS": 0.40981800509108
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab35r000",
+   "case": [
+    "L1",
+    0.35,
+    "ab",
+    0.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0015289796023397,
+   "hf": 2.5580708357692226e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.333963888935864,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.24489242850827,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.243267425710219,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.207410754869803,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.2061373996364,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.45372456924697,
+    "SS": 0.40129548325212
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab35r012",
+   "case": [
+    "L1",
+    0.35,
+    "ab",
+    0.125
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0013945784500937,
+   "hf": 2.544985978923234e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.033533591966586,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.909698435922823,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.914640551867856,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.87595705165085,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.871360346126082,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.46769143996977,
+    "SS": 0.41691933165265
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab55r000",
+   "case": [
+    "L1",
+    0.55,
+    "ab",
+    0.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0014253063846237,
+   "hf": 1.057396401800209e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.18789552367961,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.0966213144262,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.095101248149279,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.058046231022018,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.056962297098458,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.46286934119183,
+    "SS": 0.41072833940455
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab55r012",
+   "case": [
+    "L1",
+    0.55,
+    "ab",
+    0.125
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0013059041900578,
+   "hf": 1.096333611715362e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.89755782599368,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.773665199456123,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.778083911651688,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.737584071447251,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.733678943637412,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.47501215051634,
+    "SS": 0.42435860135305
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab75r000",
+   "case": [
+    "L1",
+    0.75,
+    "ab",
+    0.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0013332211608663,
+   "hf": 3.0177461880171744e-13,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.018679278983988,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.925602801195565,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.924177831335735,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.886080213696632,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.885193081929499,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.47187959644966,
+    "SS": 0.4200074891111
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab75r012",
+   "case": [
+    "L1",
+    0.75,
+    "ab",
+    0.125
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0012258132103589,
+   "hf": 3.1683849969410305e-13,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.8068062454327665,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.651418136918343,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.700017221742067,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.636188820033145,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.656903581707066,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.48253897866882,
+    "SS": 0.43201270837662
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab95r000",
+   "case": [
+    "L1",
+    0.95,
+    "ab",
+    0.0
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0012371886857796,
+   "hf": 4.098935452773828e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.851155623100139,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.7566190936176715,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.755304040775261,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.716301131241117,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.7156234089197095,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.48076023123258,
+    "SS": 0.42913899189794
+   }
+  },
+  {
+   "name": "i2d_st020_L1ab95r012",
+   "case": [
+    "L1",
+    0.95,
+    "ab",
+    0.125
+   ],
+   "side": "forward",
+   "clean": true,
+   "peak": 1.0011551819053863,
+   "hf": 3.109313167707301e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.811000882151755,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.663166663339243,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.709386288173441,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.648381764058352,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 7.668718174513732,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": true,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.4901934865563,
+    "SS": 0.43980357190194
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag05r050",
+   "case": [
+    "L2",
+    0.05,
+    "ag",
+    0.5
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.5906017422542842,
+   "hf": 3.503063515948137e-08,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.708302059432719,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.695704341625333,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.689626332217277,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.682504169462254,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.676079200622785,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.71049102657167,
+    "SS": 0.65865719608503
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag05r075",
+   "case": [
+    "L2",
+    0.05,
+    "ag",
+    0.75
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.6981662356428723,
+   "hf": 1.678588271226937e-08,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.250683399251928,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.230021482108452,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.220349971983469,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.213443239363538,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.2097496803858006,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.74850902039869,
+    "SS": 0.69841508482934
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag05r100",
+   "case": [
+    "L2",
+    0.05,
+    "ag",
+    1.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.770100200522021,
+   "hf": 9.11690735797257e-09,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.041622462745875,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.023453550925248,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.01839592748752,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.012594681112788,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.010891646225659,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.78048163134463,
+    "SS": 0.73160807703312
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag25r050",
+   "case": [
+    "L2",
+    0.25,
+    "ag",
+    0.5
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.5824019969910108,
+   "hf": 3.424625432327388e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.331168473513178,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.322201116461337,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.318318108268015,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.311507365087652,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 6.304552144239972,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.71978458055235,
+    "SS": 0.65469226694312
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag25r075",
+   "case": [
+    "L2",
+    0.25,
+    "ag",
+    0.75
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.6818997659263462,
+   "hf": 1.8157532310628808e-10,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.111543255230705,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.091855455011341,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.080901536668817,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.074105162726699,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.0696673782371535,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.75094217362349,
+    "SS": 0.68998979038874
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag25r100",
+   "case": [
+    "L2",
+    0.25,
+    "ag",
+    1.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.7515634521390794,
+   "hf": 9.349781640308664e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.0431077560487605,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.024127384025004,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.016715557654065,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.010538531294169,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.007928672522672,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.77902969348974,
+    "SS": 0.72142995385143
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag50r050",
+   "case": [
+    "L2",
+    0.5,
+    "ag",
+    0.5
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.5853350270688028,
+   "hf": 1.3800031509536588e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.890465271696151,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.885787155771132,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.885321079793211,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.8789002107195705,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.871577415558276,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.731529947059,
+    "SS": 0.65179660869899
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag50r075",
+   "case": [
+    "L2",
+    0.5,
+    "ag",
+    0.75
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.6718645795767236,
+   "hf": 1.1351722043910494e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.912081838494956,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.894382671090567,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.883191829809592,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.876771807854183,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.87183212859998,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.75556679980066,
+    "SS": 0.68182740727492
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag50r100",
+   "case": [
+    "L2",
+    0.5,
+    "ag",
+    1.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.7363242119798413,
+   "hf": 1.0839251914077271e-10,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.002483992884003,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.9833185242434856,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.9738197443636514,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.967489214204618,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.9640510830419675,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.77907136570055,
+    "SS": 0.71063765715747
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag75r050",
+   "case": [
+    "L2",
+    0.75,
+    "ag",
+    0.5
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.5972942412109996,
+   "hf": 6.3370677554825875e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.487412886689886,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.486573160352289,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.489720785447056,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.483673463000154,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.476192571810038,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.74297480244958,
+    "SS": 0.6505930609918
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag75r075",
+   "case": [
+    "L2",
+    0.75,
+    "ag",
+    0.75
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.6704886404443984,
+   "hf": 5.13862259809723e-12,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.699548826045654,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.684374313735212,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.6741001610044455,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.668198946810348,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.6630922862278394,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.7612930447343,
+    "SS": 0.67584363325207
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag75r100",
+   "case": [
+    "L2",
+    0.75,
+    "ag",
+    1.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.7281841563184107,
+   "hf": 1.531301240115536e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.928493920123007,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.9098987044474995,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.8992327710785797,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.8930225200020256,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.889069907759632,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.78066815342865,
+    "SS": 0.70179385289509
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag95r050",
+   "case": [
+    "L2",
+    0.95,
+    "ag",
+    0.5
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.6103907497470685,
+   "hf": 1.5677592889015457e-10,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.191945231278512,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.193812791348253,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.1997699325183175,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.194012340839256,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 5.186511424287753,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.75175173594118,
+    "SS": 0.65053346674329
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag95r075",
+   "case": [
+    "L2",
+    0.95,
+    "ag",
+    0.75
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.6737594912545241,
+   "hf": 1.5095460250369756e-10,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.52738707098671,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.514438786197531,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.505489447848344,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.500046985069695,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 4.494967104091808,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.76633585986169,
+    "SS": 0.67234267134057
+   }
+  },
+  {
+   "name": "i2d_st020_L2ag95r100",
+   "case": [
+    "L2",
+    0.95,
+    "ag",
+    1.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 0.725633137832698,
+   "hf": 1.9384084494049525e-11,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.8529653200458425,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.8352539892655084,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.824253083161765,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.8182832268501947,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 3.8141124421759645,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.78277184952292,
+    "SS": 0.69596879090934
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab05r000",
+   "case": [
+    "L2",
+    0.05,
+    "ab",
+    0.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0011900619773093,
+   "hf": 3.7405905218255605e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 14.060358601169998,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.998661975169066,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.885086915360265,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.861938279523866,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.811878456203063,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.49270716046203,
+    "SS": 0.43352749738985
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab05r012",
+   "case": [
+    "L2",
+    0.05,
+    "ab",
+    0.125
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0011079029307752,
+   "hf": 5.1821497013417535e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.371390802218261,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.281432188565114,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.134977333641634,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.10351519080351,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 13.0380895128244,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.50084713962038,
+    "SS": 0.44317054103592
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab25r000",
+   "case": [
+    "L2",
+    0.25,
+    "ab",
+    0.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0010863756376651,
+   "hf": 3.823068661958084e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 12.732774193946408,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 12.673195117494876,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 12.568049852113086,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 12.547201825125025,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 12.500630953244082,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.52828403184139,
+    "SS": 0.44195327719038
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab25r012",
+   "case": [
+    "L2",
+    0.25,
+    "ab",
+    0.125
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0010281810472885,
+   "hf": 4.3197878728424825e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 12.148053960939352,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 12.066632942657659,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.92941466096624,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.89993957681463,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.840242906440784,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.53314912046048,
+    "SS": 0.44910675155218
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab50r000",
+   "case": [
+    "L2",
+    0.5,
+    "ab",
+    0.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0009597305874691,
+   "hf": 3.641852846674922e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.351840858221685,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.296899881811605,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.20391199961874,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.186342334981914,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 11.144820346392505,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.56638166037018,
+    "SS": 0.4522681688675
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab50r012",
+   "case": [
+    "L2",
+    0.5,
+    "ab",
+    0.125
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0009243036419617,
+   "hf": 4.0381010202967816e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.87126583675291,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.800629573224901,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.677091816401923,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.650471854609764,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.598181294573092,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.56841011384471,
+    "SS": 0.45694181322802
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab75r000",
+   "case": [
+    "L2",
+    0.75,
+    "ab",
+    0.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.000821693487117,
+   "hf": 6.59775379348706e-15,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.209562486006588,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.160524218132542,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.080590064400392,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.066386304595106,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 10.030286784524563,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.59894459537529,
+    "SS": 0.46231642378293
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab75r012",
+   "case": [
+    "L2",
+    0.75,
+    "ab",
+    0.125
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0008037735831408,
+   "hf": 6.825439747207565e-15,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.811209676228009,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.75102508808707,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.642243209732252,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.618560140751027,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.5735666404548,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.59902247966099,
+    "SS": 0.46501935041055
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab95r000",
+   "case": [
+    "L2",
+    0.95,
+    "ab",
+    0.0
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0007362118479035,
+   "hf": 7.078168546966519e-15,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.430727622395425,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.38694768790847,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.317731053535512,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.30619512757807,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.2745525435131,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.6218324940973,
+    "SS": 0.47014913738398
+   }
+  },
+  {
+   "name": "i2d_st020_L2ab95r012",
+   "case": [
+    "L2",
+    0.95,
+    "ab",
+    0.125
+   ],
+   "side": "reverse",
+   "clean": true,
+   "peak": 1.0007439944454677,
+   "hf": 3.3538767631711163e-14,
+   "windows": [
+    {
+     "cycles": 2.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.085987526282226,
+     "separated": true
+    },
+    {
+     "cycles": 2.25,
+     "own_eps": 0.0,
+     "opp_min_eps": 9.033840960307462,
+     "separated": true
+    },
+    {
+     "cycles": 2.5,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.937128736612099,
+     "separated": true
+    },
+    {
+     "cycles": 2.75,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.915786214739347,
+     "separated": true
+    },
+    {
+     "cycles": 3.0,
+     "own_eps": 0.0,
+     "opp_min_eps": 8.876442732650657,
+     "separated": true
+    }
+   ],
+   "b1_contained": true,
+   "b1_separated": true,
+   "emt": "r",
+   "at_cycles": 2.0,
+   "per_window": [
+    "r",
+    "r",
+    "r",
+    "r",
+    "r"
+   ],
+   "static": "r",
+   "misdirected": false,
+   "undecided": false,
+   "weak_frame": false,
+   "sink_v1": {
+    "SR": 0.62077611033564,
+    "SS": 0.4715471648739
+   }
+  }
+ ]
+}

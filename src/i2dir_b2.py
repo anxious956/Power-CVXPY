@@ -31,9 +31,14 @@ OUT = os.path.join(HERE, "..", "results", "network")
 # carried points: (tier the delta was designed for, |delta| pu, angle deg in the inverter's V1 frame)
 PT = {"st020": ("structured design tier", 0.20, 230.0)}
 _box = os.path.join(OUT, "i2dir_b1_patch.json")
-if os.path.exists(_box) and "box_patch_carried" in json.load(open(_box)):
-    _c = json.load(open(_box))["box_patch_carried"]
-    PT["box"] = ("box 0.08", _c[0], _c[1])
+if os.path.exists(_box):
+    # the registered rule: a sliver (under 3 deg or 0.03 pu across) carries its centre, otherwise 0.98 pu at 205 deg
+    _f = [(g["abs_delta"], a) for g in json.load(open(_box))["box_patch_rho_0.1"] for a in g["separating_angles_deg"]]
+    if _f:
+        _r, _a = zip(*_f)
+        _sliver = max(_a) - min(_a) < 3 or max(_r) - min(_r) < 0.03
+        PT["box"] = ("box 0.08", round(float(np.mean(_r)), 3), round(float(np.mean(_a)), 1)) if _sliver else ("box 0.08", 0.98, 205.0)
+        BOX_SLIVER = _sliver
 RHO = 0.1
 FLAG_V1 = 0.2
 

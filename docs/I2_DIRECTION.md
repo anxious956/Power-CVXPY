@@ -518,3 +518,30 @@ The same runs are read twice:
 - If (b2) fails while (b1) holds, that is the result: "δ certifies direction for the set test, not for the
   conventional element". That would confirm REVIEW row 46's prior for (b2).
 - Every static δ verdict keeps the no-injection caveat until its EMT is in.
+
+### Static (b2) at the 16 corners (`results/network/i2dir_b2_static.json`)
+
+| δ | forward misdirected | forward undecided | B-C forward misdirected | reverse misdirected |
+|---|---|---|---|---|
+| 0 | 0.54 | 0.30 | 160 of 160 | 0 |
+| structured 0.20 pu @ 230° | 0.49 | 0.29 | 130 of 160 | 0 |
+
+### Structured point in EMT: (b1) holds, (b2) does not (`results/network/i2dir_b2_st020.json`)
+
+51 runs, 0.20 pu at 230°, MODE2 2. Pre-fault gate passed: the source inverter delivers |I1| 0.447 and |I2| 0.200 pu,
+both 0.0 % from static. Every run is numerically clean and none has a weak frame.
+
+| | (b1-EMT) contained | (b1-EMT) separated | nearest opposite set | (b2) forward | (b2) reverse |
+|---|---|---|---|---|---|
+| forward, 25 runs | 25 | 25 | 3.32 ε (needs > 2.2) | B-C 10 of 10 reverse; A-G 9 f, 5 undecided, 1 r | |
+| reverse, 25 runs | 25 | 25 | 3.81 ε | | 25 of 25 reverse |
+
+- (b1-EMT) holds under the structured tier: every window is inside its own case set (largest distance 0.000 ε), and
+  every window is beyond 2(1 + ρ) of every opposite-side set.
+- (b2) fails: forward misdirected 0.44 and undecided 0.20, against 0.40 and 0.28 at δ = 0 (stage (c), the same
+  bracket). EMT and static disagree on 1 of 50 runs.
+
+**Reading, registered stop rule 2: δ certifies direction for the set test, not for the conventional element.** At
+0.20 pu the injected I2 is too small to dominate the fault's own sequence currents, so the conventional element
+misdirects every forward B-C fault, as without δ. The set test gets all 50 right, as it already did at δ = 0 for B-C.
+This confirms REVIEW row 46's prior for (b2), now in EMT with δ injected. The box (primary) point is still to run.
