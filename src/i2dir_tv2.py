@@ -3,9 +3,12 @@ The grid-side bracket's IEEE 2800 cell with the V2 filter (docs/I2_DIRECTION.md,
 
   reg     one stored shunt-case MODE2 1 run (i2s_m1_L1ag55r100) rerun under BUILD_VERSION 5 with TV2 = 0: must match
           the stored output to round-off
-  cons    5 shunt-case MODE2 1 forward cases with TV2 = 1/(2 pi 15 Hz): the decisions must not change
+  cons    5 shunt-case MODE2 1 cases (4 forward, 1 reverse: L2ab05r000) with TV2 = 1/(2 pi 15 Hz): the decisions
+          must not change
   grid    no shunts (grid-side current control), MODE2 1 with TV2 = 1/(2 pi 15 Hz): the normal run and the 50 fault
-          cases. Stop rule: if it still diverges, the cell is "not runnable in this model"
+          cases. Stop rule: if it still diverges, the cell is "not runnable in this model". Every fault run also gets
+          the per-run numerical check (peak |vA| in the fault <= 2 x nominal, 5-10 kHz energy share <= 1e-3); runs
+          failing it are excluded and counted, so the cell reads "n of 25 interpretable"
 
     python src/i2dir_tv2.py spec      -> results/network/i2dir_tv2_specs.json
     "C:/Program Files/Python37/python.exe" src/pscad_network.py fast results/network/i2dir_tv2_specs.json
@@ -92,22 +95,41 @@ def analyse():
     print(f"grid-side, MODE2 1 + TV2: normal run tail peak {tail:.2f} x nominal; pre-fault |I1| errors "
           + ", ".join(f"{k} {v:.1%}" for k, v in gate.items()) + f"; gate {'PASSED' if stable else 'FAILED: not runnable in this model'}")
     rows = []
+
+    def numerically_clean(name):
+        r = read_case(os.path.join(WORK, name + ".gf46"), name)
+        tt, fs = np.asarray(r["t"]), r["fs"]
+        v = np.asarray(r["ch"]["VLA"])
+        nm = np.abs(v[(tt > 0.2) & (tt < 0.29)]).max()
+        seg = v[(tt >= 0.30) & (tt < 0.40)]
+        f = np.fft.rfftfreq(len(seg), 1 / fs)
+        P = np.abs(np.fft.rfft((seg - seg.mean()) * np.hanning(len(seg)))) ** 2
+        pk, hf = float(np.abs(seg).max() / nm), float(P[(f >= 5000) & (f <= 10000)].sum() / P.sum())
+        return pk <= 2.0 and hf <= 1e-3, pk, hf
+
     if stable:
         for sp in [s for s in specs if s["group"] == "grid" and s["kind"] == "fault"]:
+            ok, pk, hf = numerically_clean(sp["name"])
+            if not ok:
+                rows.append(dict(name=sp["name"], side=sp["side"], excluded=True, peak=pk, hf=hf))
+                continue
             c = tuple(sp["case"])
             y, _ = solve_v1(net, sg, st, (c[0], c[1], c[2], c[3] * net.rF))
             rel = Relay(sp["name"], tier="clean")
             d_emt = decide(rel, rel.idx(T_FAULT))[0]
             want = "f" if sp["side"] == "forward" else "r"
             d_st = direction_pk(yN, y)
-            rows.append(dict(name=sp["name"], side=sp["side"], emt=d_emt, static=d_st,
+            rows.append(dict(name=sp["name"], side=sp["side"], excluded=False, emt=d_emt, static=d_st,
                              misdirected=d_emt is not None and d_emt != want, undecided=d_emt is None))
         for side in ("forward", "reverse"):
-            q = [r for r in rows if r["side"] == side]
-            out[side] = dict(n=len(q), misdirected=float(np.mean([r["misdirected"] for r in q])),
-                             undecided=float(np.mean([r["undecided"] for r in q])), disagree=sum(r["emt"] != r["static"] for r in q))
-            print(f"grid-side IEEE 2800 {side}: misdirected {out[side]['misdirected']:.2f}, undecided {out[side]['undecided']:.2f}; "
-                  f"EMT vs static differ on {out[side]['disagree']} of {len(q)}")
+            allq = [r for r in rows if r["side"] == side]
+            q = [r for r in allq if not r["excluded"]]
+            out[side] = dict(n=len(q), of=len(allq), excluded=len(allq) - len(q),
+                             misdirected=float(np.mean([r["misdirected"] for r in q])) if q else None,
+                             undecided=float(np.mean([r["undecided"] for r in q])) if q else None,
+                             disagree=sum(r["emt"] != r["static"] for r in q))
+            print(f"grid-side IEEE 2800 {side}: {len(q)} of {len(allq)} interpretable; misdirected {out[side]['misdirected']}, "
+                  f"undecided {out[side]['undecided']}; EMT vs static differ on {out[side]['disagree']}")
     out["rows"] = rows
     json.dump(out, open(os.path.join(OUT, "i2dir_tv2.json"), "w"), indent=1, default=str)
     print("-> results/network/i2dir_tv2.json")
