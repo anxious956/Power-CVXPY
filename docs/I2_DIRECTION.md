@@ -490,7 +490,12 @@ where the PLL frame is weakest; their EMT runs are flagged as in stage (c).
 - **structured tier: 0.20 pu at 230°**, the centre of its 210°–250° window;
 - **box tier (primary): set by the neighbourhood map** (1° × 0.01 pu, 195°–215°, 0.94–1.08 pu, ρ 0.1). If the
   feasible patch is a sliver (narrower than 3° or than 0.03 pu), its centre is carried and the reading says
-  "feasible on a sliver". Otherwise 0.98 pu at 205° is carried. The smallest forward–reverse margin at the carried
+  "feasible on a sliver". Otherwise 0.98 pu at 205° is carried.
+  - **Widths, fixed before the map's radii 0.99–1.08 came in** (review): the angular width is the span between the
+    extreme feasible angles at 0.98 pu (202°–205° would be 3°, not under 3°). The radial width is the span between
+    the extreme feasible radii at 205°.
+  - "Centre" means the centroid of all feasible grid points. At the carried box δ the static 16-corner (b2) runs
+    before its EMT. The weak-frame runs (L1 B-C bolted near R) are read separately, not excluded. The smallest forward–reverse margin at the carried
   point is reported with it.
 
 **Static (b2) first.** direction_pk on solve_v1ref's measurements at the 16 corners of the source box, all 50
@@ -544,3 +549,24 @@ both 0.0 % from static. Every run is numerically clean and none has a weak frame
 **Reading, registered stop rule 2: δ certifies direction for the set test, not for the conventional element.** The
 conventional element misdirects every forward B-C fault with δ as without it (why is not examined here). The set test gets all 50 right, as it already did at δ = 0 for B-C.
 This confirms REVIEW row 46's prior for (b2), now in EMT with δ injected. The box (primary) point is still to run.
+
+**Main conclusion so far** (EMT without and with δ, review). In EMT without injection the set test already separates
+every clean run point by point:
+- B-C 100 of 100 windows in both tiers;
+- A-G 150 of 150 under the structured tier, 25–40 of 150 under the box tier.
+
+The structured design δ (0.20 pu) adds the worst-case guarantee over the whole case sets. So on this network, as in
+step 3, **δ buys the guarantee, not the decision**. The set test decides direction without δ in the clean nominal
+runs, where the conventional element sends every forward B-C fault the wrong way, with or without δ.
+
+Point separation (EMT runs) and set separation (the design) are different things. At δ = 0 the structured design
+leaves 93 (ρ 0.1) and 50 (ρ 0) pairs of sets unseparated while every EMT point separates: a worst case over the
+source box against one sample of it, not a contradiction.
+
+Caveats:
+- one network;
+- the nominal source point;
+- one point on wave;
+- clean runs;
+- s = 1;
+- the converter-side bracket.

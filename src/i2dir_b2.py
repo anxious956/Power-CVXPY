@@ -32,11 +32,16 @@ OUT = os.path.join(HERE, "..", "results", "network")
 PT = {"st020": ("structured design tier", 0.20, 230.0)}
 _box = os.path.join(OUT, "i2dir_b1_patch.json")
 if os.path.exists(_box):
-    # the registered rule: a sliver (under 3 deg or 0.03 pu across) carries its centre, otherwise 0.98 pu at 205 deg
-    _f = [(g["abs_delta"], a) for g in json.load(open(_box))["box_patch_rho_0.1"] for a in g["separating_angles_deg"]]
+    # the registered rule: angular width = span (largest minus smallest feasible angle) at 0.98 pu, radial width =
+    # span of feasible radii at 205 deg; a sliver (angular span under 3 deg or radial span under 0.03 pu) carries the
+    # centroid of all feasible grid points, otherwise 0.98 pu at 205 deg
+    _g = json.load(open(_box))["box_patch_rho_0.1"]
+    _f = [(g["abs_delta"], a) for g in _g for a in g["separating_angles_deg"]]
     if _f:
         _r, _a = zip(*_f)
-        _sliver = max(_a) - min(_a) < 3 or max(_r) - min(_r) < 0.03
+        _a98 = [a for g in _g if abs(g["abs_delta"] - 0.98) < 1e-9 for a in g["separating_angles_deg"]]
+        _r205 = [g["abs_delta"] for g in _g if 205 in g["separating_angles_deg"]]
+        _sliver = (max(_a98) - min(_a98) if _a98 else 0) < 3 or (max(_r205) - min(_r205) if _r205 else 0) < 0.03 - 1e-9
         PT["box"] = ("box 0.08", round(float(np.mean(_r)), 3), round(float(np.mean(_a)), 1)) if _sliver else ("box 0.08", 0.98, 205.0)
         BOX_SLIVER = _sliver
 RHO = 0.1
