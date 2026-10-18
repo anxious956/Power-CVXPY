@@ -133,7 +133,7 @@ def check_line_model(spec):
     return loops
 
 
-BUILD_VERSION = 4          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
+BUILD_VERSION = 5          # raise by hand when build(), update() or the Fortran inverter (pscad_inverter.py)
                            # changes what a run produces; the fingerprint cannot see code changes itself
 BUILD_ARGS = dict(t_fault=0.30, dur=0.10, t_end=0.5, dt_us=10.0)
 
@@ -327,7 +327,7 @@ def build(pscad, spec, t_fault=BUILD_ARGS["t_fault"], dur=BUILD_ARGS["dur"], t_e
             b.sig(f"IREF{iname}{ph}", 52, y + 2)
         cy = next_row(24) + 10
         c.create_component(defn, cx, cy)
-        vals = dict(F0=F0, K2=2.0, IBASE=IBASE_PK, VBASE=VBASE_PK, IMAX=g["i_max"], LIM=float(lim), TANG=0.0)
+        vals = dict(F0=F0, K2=2.0, IBASE=IBASE_PK, VBASE=VBASE_PK, IMAX=g["i_max"], LIM=float(lim), TANG=0.0, TV2=0.0)
         vals.update(spec["settings"][iname])
         for p in INPUTS:
             px, py = port_xy(p)
@@ -390,7 +390,7 @@ def update(prj, spec):
         c.find_first("master:source3", sname).parameters(Es=f"{VLL * abs(e):.6g} [kV]", Ph=f"{math.degrees(cmath.phase(e)):.6g} [deg]")
     prj.parameters(time_duration=str(spec.get("t_end", BUILD_ARGS["t_end"])))
     for iname, st in spec["settings"].items():
-        st = dict(st, TANG=st.get("TANG", 0.0))
+        st = dict(st, TANG=st.get("TANG", 0.0), TV2=st.get("TV2", 0.0))
         for k, v in list(st.items()) + [("LIM", float(spec["lim"])), ("IMAX", spec["ibrs"][iname]["i_max"])]:
             c.find_first("master:const", f"K{iname}{k}").parameters(Value=str(v))
 
