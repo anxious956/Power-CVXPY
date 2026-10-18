@@ -483,3 +483,38 @@ uses the voltages too, and it beats the conventional element without δ. Only A-
 
 At the box point δ priority curtails the inverter's I1 to at most 0.35 pu. The three bolted B-C cases close to R are
 where the PLL frame is weakest; their EMT runs are flagged as in stage (c).
+
+## Stage (b2) and (b1) in EMT, pre-registered (18 Oct 2026, before any run)
+
+`src/i2dir_b2.py`. Two carried points, δ in the source inverter's own V1 frame, LIM 1:
+- **structured tier: 0.20 pu at 230°**, the centre of its 210°–250° window;
+- **box tier (primary): set by the neighbourhood map** (1° × 0.01 pu, 195°–215°, 0.94–1.08 pu, ρ 0.1). If the
+  feasible patch is a sliver (narrower than 3° or than 0.03 pu), its centre is carried and the reading says
+  "feasible on a sliver". Otherwise 0.98 pu at 205° is carried. The smallest forward–reverse margin at the carried
+  point is reported with it.
+
+**Static (b2) first.** direction_pk on solve_v1ref's measurements at the 16 corners of the source box, all 50
+cases, at δ = 0 and at each carried point.
+
+**EMT.** The 50 stage (c) shunt-bracket cases plus the normal run, nominal source point, MODE2 2 with the carried δ.
+Sinks are unchanged. Gates:
+- Pre-fault: every inverter's |I1| and |I2| above 0.02 pu, EMT against static, within 3 % and settled (0.25 against
+  0.28 s). If this fails, nothing is interpreted.
+- Per run: peak |vA| ≤ 2 × nominal and the 5–10 kHz energy share ≤ 10⁻³. Failing runs are excluded and counted.
+- Runs whose case has |V1_R| < 0.2 pu in the design's state check, or whose sink |V1| falls below 0.2 pu in EMT, are
+  flagged as weak-frame and reported separately.
+
+The same runs are read twice:
+- **(b1-EMT)**, in the tier the δ was designed for, on windows ending 2–3 cycles after inception, memory frame:
+  - contained: every window's distance to its own case set ≤ 0.1 ε;
+  - separated: the nearest opposite-side set lies further than 2(1 + ρ) − own distance, with ρ = 0.1.
+  - (b1-EMT) holds if every clean run is contained and separated.
+- **(b2)**, the conventional element (`decide`, the stage (c) element). It holds if forward misdirected ≤ 0.05,
+  forward undecided ≤ 0.05 and reverse misdirected ≤ 0.05.
+
+**Stop rules, fixed now** (review):
+- If the box point fails (b1-EMT), the result reads "the primary-tier direction guarantee is not confirmed in EMT".
+  The angle is not re-tuned.
+- If (b2) fails while (b1) holds, that is the result: "δ certifies direction for the set test, not for the
+  conventional element". That would confirm REVIEW row 46's prior for (b2).
+- Every static δ verdict keeps the no-injection caveat until its EMT is in.
