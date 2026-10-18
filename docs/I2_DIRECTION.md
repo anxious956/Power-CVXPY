@@ -541,7 +541,6 @@ both 0.0 % from static. Every run is numerically clean and none has a weak frame
 - (b2) fails: forward misdirected 0.44 and undecided 0.20, against 0.40 and 0.28 at δ = 0 (stage (c), the same
   bracket). EMT and static disagree on 1 of 50 runs.
 
-**Reading, registered stop rule 2: δ certifies direction for the set test, not for the conventional element.** At
-0.20 pu the injected I2 is too small to dominate the fault's own sequence currents, so the conventional element
-misdirects every forward B-C fault, as without δ. The set test gets all 50 right, as it already did at δ = 0 for B-C.
+**Reading, registered stop rule 2: δ certifies direction for the set test, not for the conventional element.** The
+conventional element misdirects every forward B-C fault with δ as without it (why is not examined here). The set test gets all 50 right, as it already did at δ = 0 for B-C.
 This confirms REVIEW row 46's prior for (b2), now in EMT with δ injected. The box (primary) point is still to run.

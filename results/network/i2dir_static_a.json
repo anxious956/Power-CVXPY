@@ -303,8 +303,14 @@
    0.125
   ]
  ],
+ "ks": [
+  1.0,
+  0.5,
+  0.2,
+  0.0
+ ],
  "results": {
-  "suppressed": {
+  "k=1.0|suppressed": {
    "forward": {
     "n": 400,
     "misdirected": 0.0,
@@ -324,7 +330,127 @@
     }
    }
   },
-  "IEEE 2800 (K2 = 2)": {
+  "k=1.0|IEEE 2800 (K2 = 2)": {
+   "forward": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   },
+   "reverse": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   }
+  },
+  "k=0.5|suppressed": {
+   "forward": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   },
+   "reverse": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   }
+  },
+  "k=0.5|IEEE 2800 (K2 = 2)": {
+   "forward": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   },
+   "reverse": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   }
+  },
+  "k=0.2|suppressed": {
+   "forward": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   },
+   "reverse": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   }
+  },
+  "k=0.2|IEEE 2800 (K2 = 2)": {
+   "forward": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   },
+   "reverse": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   }
+  },
+  "k=0.0|suppressed": {
+   "forward": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   },
+   "reverse": {
+    "n": 400,
+    "misdirected": 0.0,
+    "no_decision": 0.0,
+    "by_type": {
+     "ag": 0.0,
+     "ab": 0.0
+    }
+   }
+  },
+  "k=0.0|IEEE 2800 (K2 = 2)": {
    "forward": {
     "n": 400,
     "misdirected": 0.0,
