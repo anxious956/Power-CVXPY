@@ -84,3 +84,33 @@ relay sees.
 Then (b), the set-vs-set design at k = 0, and (c), EMT. In EMT the inverter-interfaced load is a second gfl_avm drawing
 current (negative ID, IQ for its reactive part, MODE2 = 0, the same TANG), because wye R-L loads have k = 1 by
 construction.
+
+## (a') result and the model fix (a''), 18 Oct 2026
+
+**(a') stops: 0 % misdirected at every k.** Removing only the loads' negative-sequence path does not break direction.
+At k = 0, dY2 is never enabled, but dY1 decides all 400 forward cases correctly (margin ≥ 66.6°), because the loads
+are still passive in positive sequence. This is reported as a finding.
+
+**The model was incomplete in two ways** (review session, cross-session message of 18 Oct 2026):
+- An inverter-interfaced load is current-controlled in both sequences.
+- The source inverter itself ran as a fixed phasor (nw.solve). The model matching gfl_avm (MODE2 = 0) in EMT is
+  the V1-referenced fixed point, nw.solve_v1ref.
+
+A fixed-current back side is degenerate, so the fix is:
+- **(a'') model.** A share s of each load behind the relay (at R and S) becomes a V1-referenced current sink, drawing
+  that share's pre-fault current, with open negative- and zero-sequence paths. The rest stays an impedance with
+  y2 = y1. The source inverter is also V1-referenced. Everything is solved with nw.solve_v1ref; where it does not
+  converge, relax 0.3 and 3000 iterations are used (relax changes the path, not the fixed point).
+- s ∈ {0, 0.5, 0.8, 1}; laws suppressed and IEEE 2800 (K2 = 2).
+- **Element.** As before (incremental dY2 enabling), plus absolute pickups |ΔI2| ≥ 0.05 pu for dY2 and
+  |ΔI1| ≥ 0.05 pu for dY1, as 32-element supervision does. Misdirected (security) and undecided (dependability) are
+  reported separately; misdirection is the failure that matters.
+- **Not blind.** The review session ran this static check first. At s = 1, suppressed, it found 44 % of the hard
+  forward set misdirected (68 % misdirected or undecided with the pickups), and 0 % under IEEE 2800.
+  `src/i2dir_static.py a2` reproduces it here. **The blind test is EMT stage (c) at s = 1, suppressed**, with its
+  GO criterion fixed now: the conventional element misdirects or leaves undecided at least ¼ of the hard forward
+  set, through the relay's mimic chain.
+- **Limitation, stated now.** gfl_avm holds ID / IQ. A real IEEE 2800 inverter also injects positive-sequence
+  reactive current (ΔIq = K·ΔV1, K ≥ 2). That gives dY1 a reactive back-side source and would likely restore
+  direction even under suppression. It is not modelled in the test case; it is reported as one static sensitivity.
+- **Then (b)**: the δ design for direction at s = 1 on the solve_v1ref model.
