@@ -41,10 +41,15 @@ relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); de
    - protection-class fault-condition errors (CT 10 %, VT 6 % / 4°): about 93 % of the inverter.
 5. **Against worst-case noise per detector** (a stress bound, pilot only), D1 has no worst-case miss from ¾ δ*. D2
    improves with δ but does not reach zero. D0 and the CNN do not benefit from δ.
-6. **High-resistance ground faults: being redone** (*static*; results/HIGHR.md). At about 160 Ω the conventional
-   incremental element fails at half the locations. In the design's own sets the signal at 1.12 pu, 315°, separates
-   every A-G case there. This would be the band where the method earns its cost. The A-G-only design and its EMT
-   check are running; this item is not final.
+6. **High-resistance ground faults** (results/HIGHR.md).
+   - The designed signal certifies ground-fault detection up to about 160 Ω: 1.12 pu, no margin, a 5° window. It is
+     verified in EMT at its witnesses, window edges and random inception. At 120 Ω it holds with a 10 % margin for
+     0.82 pu.
+   - In the same EMT runs, without the signal, a conventional incremental 50N element and the set test both detect
+     every 120 Ω and 160 Ω ground fault. 50N's smallest score is 0.205 pu, against a 0.1 pu pickup.
+   - Conventional detection fails only beyond about 250 Ω, where the design cannot certify detection.
+
+   So again the signal buys the guarantee, not the detection.
 7. **An inverter at the relay end does not change the detection answer** (*static, nominal sources*;
    results/IBR_GRID_SCREEN.md). With a grid-following inverter in place of the relay-end synchronous source, current
    elements go blind when its sequence paths are open, but 59N then sees |V0| = 0.31–0.57 pu on every hard ground
