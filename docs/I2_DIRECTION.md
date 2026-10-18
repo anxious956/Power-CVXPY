@@ -445,3 +445,41 @@ cap" was at 225°.
 which of the two case sets its measurement can belong to. It says nothing yet about the conventional element; that
 is (b2), still to run, where REVIEW row 46's static prior (a δ fixed in the inverter's frame does not repair
 direction) applies.
+
+### (b0): the set test at δ = 0 in EMT, on the existing runs (review addition 1)
+
+`src/i2dir_b1_followup.py emt0` → `results/network/i2dir_b0_emt.json`. These are the 50 stage (c) shunt-bracket runs
+with the source suppressing I2 (MODE2 0, nominal source point), so no new runs and nothing injected. The relay
+measurement is taken in the memory frame, on windows ending 2–3 cycles after inception. Two distances are computed,
+in ε units, against the design's δ = 0 sets: to the measurement's own case set, and the smallest to any
+opposite-side set. The test separates a window if the opposite-side distance exceeds 2(1 + ρ) minus the own-set
+distance.
+
+| | windows (runs) | inside own set | separated, box ρ 0.1 / ρ 0 | separated, structured ρ 0.1 / ρ 0 | nearest opposite set |
+|---|---|---|---|---|---|
+| B-C | 100 (20) | all (largest 0.0 ε) | 100 / 100 | 100 / 100 | box 4.36 ε, structured 8.78 ε |
+| A-G | 150 (30) | all (largest 0.0 ε) | 25 / 40 | 150 / 150 | box 1.31 ε, structured 2.69 ε |
+
+On the same runs the conventional element (stage (c), shunt bracket, MODE2 0) gives:
+- B-C: 10 of 10 forward cases **reverse** and 10 of 10 reverse cases reverse;
+- A-G: 8 of 15 forward cases forward, the other 7 undecided; 15 of 15 reverse cases reverse.
+
+**Finding (b0), EMT without injection.** At δ = 0 the set test decides direction for every B-C case in EMT, where
+the conventional element sends every forward B-C fault the wrong way. This is the step-3 pattern again: the set test
+uses the voltages too, and it beats the conventional element without δ. Only A-G needs δ.
+- Under the box tier most A-G windows at the nominal point already fall within 2ε(1 + ρ) of a reverse set.
+- Under the structured tier all 150 A-G windows separate at the nominal point. The static design's 93 unseparated
+  A-G pairs at δ = 0 come from elsewhere in the source box.
+
+### Operating state at the carried δ (review addition 3)
+
+`src/i2dir_b1_followup.py state` → `results/network/i2dir_b1_state.json`, over the design's sample set (LIM 1,
+δ priority):
+
+| carried point | delivered \|I1\| (pu) | smallest \|V1\| at R | smallest \|V1\| at S | cases with \|V1_R\| < 0.2 pu |
+|---|---|---|---|---|
+| box 0.98 pu @ 205° | 0.14–0.35 (command up to 0.78) | 0.187 | 0.109 | L1 B-C bolted at m 0.15, 0.35, 0.55 |
+| structured 0.20 pu @ 230° | 0.14–0.78 | 0.248 | 0.180 | none |
+
+At the box point δ priority curtails the inverter's I1 to at most 0.35 pu. The three bolted B-C cases close to R are
+where the PLL frame is weakest; their EMT runs are flagged as in stage (c).
