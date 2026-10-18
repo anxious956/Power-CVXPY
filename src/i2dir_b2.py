@@ -182,7 +182,7 @@ def analyse(p):
                           opp_min_eps=min(x["opp_min_eps"] for r in q for x in r["windows"]),
                           misdirected=float(np.mean([r["misdirected"] for r in q])), undecided=float(np.mean([r["undecided"] for r in q])),
                           emt_vs_static_differ=sum(r["emt"] != r["static"] for r in q),
-                          weak_frame=[r["name"] for r in q if r["weak_frame"]])
+                          weak_frame=[dict(name=r["name"], emt=r["emt"], b1_contained=r["b1_contained"], b1_separated=r["b1_separated"]) for r in q if r["weak_frame"]])
         x = summ[side]
         print(f"[{p}] {side}: {x['n']} of {x['of']} numerically clean | (b1-EMT) contained {x['b1_contained']}, separated "
               f"{x['b1_separated']} (own max {x['own_max_eps']:.3f} eps, nearest opposite {x['opp_min_eps']:.2f} eps) | (b2) "
