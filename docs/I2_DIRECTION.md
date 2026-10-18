@@ -408,3 +408,40 @@ point whenever the slope is below 1; that is the point under-relaxation finds.
 | 1.14 pu | 105 of 38 964 | 4·10⁻¹⁶ |
 
 Both relaxations land on the same point to machine precision. No dead frame occurs at the 1.14 pu cap either.
+
+## Stage (b1) result: the set test for direction (18 Oct 2026)
+
+`src/i2dir_design.py design` → `results/network/i2dir_design.json`; the full δ = 0 pair lists in
+`results/network/i2dir_b1_unseparated0.json`; dead frames in `results/network/i2dir_b1_deadframes.json`
+(`src/i2dir_b1_deadframes.py`). Static model (the generalised two-frame model); δ not yet injected in EMT.
+
+| noise tier | ρ | pairs not apart at δ = 0 (of 625) | δ* | separating angles at δ* | candidates without a settled state |
+|---|---|---|---|---|---|
+| box 0.08 (primary) | 0.1 | 225 | **0.98 pu** | 205° only | 0 |
+| box 0.08 (primary) | 0 | 225 | 0.88 pu | 200° only | 0 |
+| structured design tier | 0.1 | 93 | **0.20 pu** | 210°–250° (9 angles) | 0 |
+| structured design tier | 0 | 50 | 0.14 pu | 200°–260° (13 angles) | 0 |
+
+**At δ = 0 the set test already decides every B-C pair.** All unseparated pairs are A-G forward against A-G reverse.
+- Box tier: all 15 forward A-G cases against all 15 reverse A-G cases (15 × 15 = 225), at both ρ.
+- Structured tier: every forward A-G case is involved, but only part of the reverse side: 8 reverse cases at ρ 0.1
+  (mostly R_f/rF 1.0, also 0.75), 4 at ρ 0 (all R_f/rF 1.0, L2 0.25–0.95).
+
+**(b1) answer: yes in both tiers**, within the cap, with ρ = 0.1. Under the pre-registered primary tier the answer is
+narrow:
+- δ* is 0.98 pu, 86 % of the 1.14 pu cap;
+- only one 5° grid angle separates (205°), so the angular window is narrower than the grid step.
+
+Under the structured tier the δ* is five times smaller and the window is 40° wide.
+
+**Dead frames** (review request). None at any tier's δ* and none at any separating angle (0.14 pu at 200°–260°,
+0.20 pu at 210°–250°, 0.88 pu at 200°, 0.98 pu at 205°). The design ran with the I-only rule; since the per-bus rule
+gives nothing there either, it stands as is. At the 1.14 pu cap the same angles give none except 200°:
+L1 B-C bolted at m 0.55, 0.75 and 0.95, where a source bus |V1| falls below 0.05 pu at some sample point. The cap is
+never a design point here (every δ* is below it), so this does not touch the result. The earlier "no dead frame at the
+cap" was at 225°.
+
+**What it is and is not.** (b1) is a set-based direction decision, a new detector in Taylor's sense: the relay tests
+which of the two case sets its measurement can belong to. It says nothing yet about the conventional element; that
+is (b2), still to run, where REVIEW row 46's static prior (a δ fixed in the inverter's frame does not repair
+direction) applies.
