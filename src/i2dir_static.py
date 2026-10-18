@@ -29,17 +29,21 @@ REV = [("L2", m, "ag", r) for m in L2_M for r in HARD_AG] + [("L2", m, "ab", r) 
 PHI, I2_I1_MIN, DV1_MIN = 45.0, 0.1, 0.05
 
 
-def network(neg_z=1e6):
+def network(neg_z=1e6, k=1.0):
+    """k: the negative-sequence share of the loads behind the relay (R and S), y2 = k y1 with y1 unchanged
+    (docs/I2_DIRECTION.md, stage a'): 1 a passive constant-impedance load, 0 an inverter-interfaced load."""
     p = zm.ZoneParams()
+    loads = {b: {1: y[1], 2: k * y[1], 0: y[0]} for b, y in (("R", p.yR), ("S", p.yS))}
     return nw.Network(lines={"L1": nw.Line("L", "R", p.z1, p.z0_ratio * p.z1), "L2": nw.Line("R", "S", p.z2, p.z0_ratio * p.z2)},
                       sgs={"G": nw.SG("L", dict(p.zs), p.e0)},
                       ibrs={"I": nw.IBR("R", p.i0, (0.3, 0.3), neg_z, 1e6, inject=True, i_max=1.2)},
-                      loads={"R": dict(p.yR), "S": dict(p.yS)}, relay=("L1", "b"), eps=0.08, rF=p.rF)
+                      loads=loads, relay=("L1", "b"), eps=0.08, rF=p.rF)
 
 
 def direction(yN, y):
-    """'f', 'r' or None (no decision): dY2 when enabled, else dY1."""
-    for k_i, k_v, ok in ((4, 1, abs(y[4]) >= I2_I1_MIN * abs(y[3])), (3, 0, abs(y[0] - yN[0]) >= DV1_MIN)):
+    """'f', 'r' or None (no decision): dY2 when enabled (incremental: |dI2| >= 0.1 |dI1|), else dY1 (|dV1| >= 5 %)."""
+    en2 = abs(y[4] - yN[4]) >= I2_I1_MIN * abs(y[3] - yN[3])
+    for k_i, k_v, ok in ((4, 1, en2), (3, 0, abs(y[0] - yN[0]) >= DV1_MIN)):
         dI, dV = y[k_i] - yN[k_i], y[k_v] - yN[k_v]
         if ok and abs(dV) > 1e-9 and abs(dI) > 1e-9:
             ang = np.degrees(np.angle(dI / dV)) % 360
@@ -47,10 +51,10 @@ def direction(yN, y):
     return None
 
 
-def stage_a():
+def stage_a(ks=(1.0, 0.5, 0.2, 0.0)):
     out = {}
-    for law, neg_z in (("suppressed", 1e6), ("IEEE 2800 (K2 = 2)", 0.5j)):
-        net = network(neg_z)
+    for law, neg_z, k in [(l, z, k) for k in ks for l, z in (("suppressed", 1e6), ("IEEE 2800 (K2 = 2)", 0.5j))]:
+        net = network(neg_z, k)
         corners = list(itertools.product((-1, 1), repeat=2 * len(net.sources)))
         res = {}
         for side, cases, want in (("forward", FWD, "f"), ("reverse", REV, "r")):
@@ -71,12 +75,12 @@ def stage_a():
                     t[1] += 1
             res[side] = dict(n=n, misdirected=wrong / n, no_decision=none / n,
                              by_type={k: v[0] / v[1] for k, v in by_type.items()})
-            print(f"{law:20s} {side:8s}: misdirected or undecided {wrong / n:.2f} (no decision {none / n:.2f}); by type "
+            print(f"k {k:.1f} {law:20s} {side:8s}: misdirected or undecided {wrong / n:.2f} (no decision {none / n:.2f}); by type "
                   + ", ".join(f"{k} {v[0] / v[1]:.2f}" for k, v in by_type.items()), flush=True)
-        out[law] = res
-    json.dump(dict(fwd=FWD, rev=REV, results=out), open(os.path.join(OUT, "i2dir_static_a.json"), "w"), indent=1)
-    s = out["suppressed"]["forward"]["misdirected"]
-    print(f"(a) suppressed, hard forward set misdirected {s:.2f}: {'GO (>= 0.25)' if s >= 0.25 else 'STOP (< 0.25)'}")
+        out[f"k={k}|{law}"] = res
+    json.dump(dict(fwd=FWD, rev=REV, ks=ks, results=out), open(os.path.join(OUT, "i2dir_static_a.json"), "w"), indent=1)
+    s = out["k=0.0|suppressed"]["forward"]["misdirected"]
+    print(f"(a') k = 0, suppressed, hard forward set misdirected or undecided {s:.2f}: {'GO (>= 0.25)' if s >= 0.25 else 'STOP (< 0.25)'}")
 
 
 def stage_b(rhos):

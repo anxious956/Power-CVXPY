@@ -50,3 +50,37 @@ The prior from row 46 predicts "no" at (b). Then the result is "V2-referenced cu
 direction, a designed δ does not", now on this network and, if it gets that far, in EMT.
 
 Code: `src/i2dir_static.py` (stages a and b), `results/network/i2dir_static.json`.
+
+## Stage (a) result, and the re-stated test (18 Oct 2026, before anything else runs)
+
+**(a) stops on the network as built.** With constant-impedance loads behind the relay, I2 suppression does not break
+direction:
+- 0 % of the hard forward set and 0 % of the reverse set misdirected, under both laws;
+- dY2 enabled on every fault, |I2| / |I1| ≥ 0.103;
+- angle margins ≥ 46.9°.
+
+The reason is that the passive loads at R and S, behind the relay, carry the negative-sequence current. Removing them
+leaves the relay with no decision. This is a finding, reported as it stands (`results/network/i2dir_static_a.json`).
+
+**The deck's scenario is the other regime**: an inverter-dominated back side with no passive negative-sequence path,
+as at the CIGRE MV relays where suppression broke direction (REVIEW.md §7 row 46). The review session endorsed one
+physical parameter, fixed now, before running:
+- **k, the negative-sequence share of the loads behind the relay**: y2 = k·y1 at R and S, with y1 unchanged (so
+  the pre-fault flow does not change);
+- k ∈ {1, 0.5, 0.2, 0}. k = 1 is a passive constant-impedance load (as built); k = 0 is inverter-interfaced load
+  (drives, rectifiers, chargers) that draws no I2;
+- the reverse faults are unaffected, since their I2 comes from the source side.
+
+The element's enabling test becomes incremental: dY2 when |ΔI2| ≥ 0.1 |ΔI1|, else dY1, as in Opoku's superimposed
+element. With δ injected, a standing I2 would otherwise keep dY2 enabled all the time. At δ = 0 nothing changes;
+(a) is re-run with it. With δ > 0, ΔI2 includes δ's own change in the fault (the frame's turn), which is what the
+relay sees.
+
+**(a') go / no-go:**
+- the misdirected-or-undecided fraction on the hard forward set for each k, suppressed and IEEE 2800 laws;
+- **the pre-registered test case is k = 0**: all load behind the relay inverter-interfaced, the CIGRE-like case;
+- **GO if k = 0 gives ≥ ¼** for the suppressed law. The whole k curve is reported either way.
+
+Then (b), the set-vs-set design at k = 0, and (c), EMT. In EMT the inverter-interfaced load is a second gfl_avm drawing
+current (negative ID, IQ for its reactive part, MODE2 = 0, the same TANG), because wye R-L loads have k = 1 by
+construction.
