@@ -105,7 +105,7 @@ def preflight_one(kl):
     except RuntimeError as ex:
         res.update(converged=False, error=str(ex), v_ok=False)
     res["in_set"] = res["converged"] and res["v_ok"]
-    if res["in_set"]:
+    if res["converged"]:
         phi, v1min = phi_ref(net)
         res.update(phi_ref=float(phi), min_V1L=v1min)
     return res
@@ -141,6 +141,8 @@ def kl_set():
 # ---------------------------------------------------------------- Q1: static, 16 corners, delta = 0
 def static():
     kls, rows = kl_set()
+    if "--all" in sys.argv:                       # every converged k_L, for information, whatever the pre-flight set
+        kls = [kl for kl in sorted(rows) if rows[kl]["converged"]]
     S = np.array(list(itertools.product((-1.0, 1.0), repeat=4)))
     out = {}
     for kl in kls:

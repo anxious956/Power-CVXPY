@@ -159,6 +159,32 @@ little information):
 - Stop rules: no re-tuning of angle, pickup or tier after a result; a k_L that fails pre-flight is out, not
   patched; no δ verdict from the δ = 0 runs.
 
+## Pre-flight result, and a registration error (19 Oct 2026, before Q1 is read)
+
+`src/longlines.py preflight` → `results/network/longlines_preflight.json`. The pre-fault load flow converges at
+every k_L (37–68 iterations) and the inverter delivers its 0.447 pu command everywhere (no limiter action):
+
+| k_L | V1 at L (relay) | R (inverter) | S | 0.9–1.1 window |
+|---|---|---|---|---|
+| 1 | 0.905 | 0.857 | 0.805 | out (R, S) |
+| 2 | 0.907 | 0.813 | 0.711 | out |
+| 3 | 0.914 | 0.785 | 0.636 | out |
+| 4 | 0.923 | 0.770 | 0.576 | out |
+| 8 | 0.952 | 0.776 | 0.431 | out |
+
+**The registered window excludes k_L = 1, the step-3 network itself.** The base network is a weak-source radial
+with S at 0.805 pu; the 0.9–1.1 window was taken from the CIGRE screen and not checked against the base before it
+was registered. That is an error in the registration, not a finding about long lines. Since the loads are constant
+impedances they shed power as the voltage falls (P ∝ V²): at k_L = 8 the S load runs at 29 % of its rating, so
+"the same loads" no longer holds there either.
+
+The rule is being re-fixed **from this table alone, before any Q1 number is read**, by the review session, among:
+- A: every bus within 0.7–1.1 pu → {1, 2};
+- B: every load's delivered power within −25 % of its k_L = 1 value (V ≥ 0.866 × base) → {1, 2};
+- C: the window on the relay bus L only → all five, with S at 0.43 pu flagged as not a credible operating point.
+If the set is {1, 2}, k_L = 1.5 is proposed as the fallback instead of 3. Q1 is computed at every k_L for
+information meanwhile; it does not depend on the rule.
+
 ## 5. Caveats carried on every line
 
 One network (three-bus, weak source, X/R 10); nominal source point in EMT; one point on wave; clean runs; the lumped
