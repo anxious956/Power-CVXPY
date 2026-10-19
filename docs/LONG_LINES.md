@@ -113,9 +113,13 @@ operation (detection), as in step 3.
 **Q2. δ*(k_L) (`design`).** The step-3 set-vs-set design, fault against normal, `frames.FrameModel` on the scaled
 network, main configuration (factor 1.1, drift 3°, φ_ref per k_L, model error 0.008 pu), ρ 0.1 (ρ 0 reported),
 **both tiers**, the full polar search (5° × 0.02 pu to the 1.14 pu cap) with the set of separating angles at δ*.
-At each k_L: the δ = 0 unseparated count, δ*, the margin at δ* (gap minus 2ε(1 + ρ) over the closest pairs), the
-price (the inverter's delivered |I1| in normal operation under LIM 1 at δ*, against the 0.45 pu command), and dead
-frames at δ*.
+At each k_L: the δ = 0 unseparated count, δ*, the margin at every separating angle at δ* (the smallest
+fault-vs-normal gap minus 2(1 + ρ), in ε units), the price (the inverter's delivered |I1| in normal operation under
+LIM 1 at δ*, against the 0.45 pu command), and dead frames at δ*. **The carried angle** at δ* is the separating
+angle with the largest margin (fixed now; step 3 chose inside its window by hand).
+
+Corner measurements in Q1 are clean (nominal instruments): the structured tier's instrument errors live in its
+sets, so its D1 distance is "clean measurement against the structured normal set".
 
 **Q3. EMT (`spec` / `analyse`).** Two halves, each at the k_L where what it tests exists (review):
 - **the δ* half**, 49 runs (the 48 cases plus the normal run) with δ* injected (MODE2 2, LIM 1, TANG 15 Hz), at
@@ -133,7 +137,10 @@ Nominal source point, PSCAD fast mode, stage-(c) gates: pre-fault |I1| and |I2| 
 per-run peak and 5–10 kHz checks; the weak-frame flag on the **source inverter's own |V1| at R** below 0.2 pu (there
 are no sinks in the step-3 configuration), read separately, not excluded. Read on the same runs:
 - **the step-3 EMT design check:** each window (2–3 cycles after inception, memory frame) contained in its own
-  case set (own distance ≤ 0.1 ε) and separated from N(δ*) by more than 2(1 + ρ) minus the own distance;
+  case set (distance to the design's own-case set ≤ 0.1 ε) and separated from N(δ*) by more than 2(1 + ρ) minus
+  the own distance. The distance to the **bare** own-case set (factor 1, no reference noise, no model-error box) is
+  reported beside it: that is the model error re-measured at this k_L, to be compared with the 0.1 ε box carried
+  from k_L = 1;
 - **the conventional element** D0 at 0.162 pu on the same windows, with and without δ;
 - **D1 at δ = 0** on the δ = 0 runs: point separation from N(0).
 
