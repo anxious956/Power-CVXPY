@@ -292,7 +292,29 @@ D0 at 0.162 pu: 0 of 48 missed, on the clean tier and on the design tier (seed 7
   point is inside that. Under the structured tier every run clears by at least 3.72 ε.
 - D0 misses nothing in EMT at k_L = 2, as in the static Q1.
 
-The δ* half waits for Q2's carried points.
+### Q3, the δ* half, box tier, at k_L = 1 (19 Oct 2026, EMT, δ injected)
+
+Q2's box-tier keys (below, when complete) give δ* within the cap at k_L = 1 and none at 1.5 (ρ 0.1), so the box
+tier's δ* half runs at **k_L = 1: 1.12 pu at 230°**, the carried angle by the registered largest-margin rule
+(margin 0.031 ε; step 3 chose 225° by hand inside the same {225°, 230°} window). `spec dstar 1 box` / `analyse
+dstar 1 box` → `results/network/longlines_emt_dstar1_box.json`. 49 PSCAD runs, MODE2 2, LIM 1, TANG 15 Hz, nominal
+source point. Pre-fault gate passed: |I1| 0.080 / 0.080 pu and |δ| 1.120 / 1.120 pu against static (0.0 %, settled).
+48 of 48 clean; no weak frame.
+
+Side by side with step 3's EMT check of the same design on the same network (results/FRAMES.md, "The step-3 design
+point", `frames_design_check … --tag pll`, mimic chain), as a consistency check across the carried-angle rule:
+
+| | this run: 1.12 pu @ **230°**, nominal point, 48 cases | step 3: 1.12 pu @ **225°**, 95 fault runs (witnesses, window edges, random inception, 48 cases at random source points) |
+|---|---|---|
+| outside own set (bare, mimic chain) | 0 of 48, largest **0.000 ε** | 0 of 95 |
+| contained in the design's own set (≤ 0.1 ε) | 48 of 48 | — (not reported there) |
+| nearest N(δ*), 2.20 ε needed | **2.58 ε** | 2.40 ε (smallest over the 95), 2.45 ε over the 48 random-point cases |
+| D1 missed, alarm / guaranteed | 0 / 0 | 0 (every fault separated with margin) |
+| D0 at 0.162 pu | 0 of 48 missed, clean and design tier | 0 missed on the pilot (STEP3_PILOT.md) |
+
+The two angles agree: the design holds in EMT at both, with the nominal-point margin at 230° (2.58 ε) above the
+random-point margins at 225° (2.40–2.45 ε), as a nominal point against a sample should sit. The price at the point:
+|I1| delivered / commanded **0.080 / 0.447 pu**.
 
 ## 5. Caveats carried on every line
 
