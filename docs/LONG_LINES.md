@@ -234,9 +234,9 @@ plain fixed-point iteration (`frames.fixed_point`, as step 3 ran it):
 |---|---|---|---|---|---|
 | 1 | 0.905 / 0.857 / 0.805 | 1.000 / 1.000 | 0 | 0.0303 | yes |
 | 1.5 (fallback) | 0.905 / 0.833 / 0.755 | 0.945 / 0.881 | 0 | 0.0302 | yes |
-| 2 | 0.907 / 0.813 / 0.711 | 0.901 / 0.780 | 0 | 0.0300 | yes |
-| 4 | 0.923 / 0.770 / 0.576 | 0.807 / 0.513 | 30 | 0.0303 | no (S power, unsettled frames) |
-| 8 | 0.952 / 0.776 / 0.431 | 0.820 / 0.287 | — | — | no (S power, no model) |
+| 2 | 0.907 / 0.813 / 0.711 | 0.901 / 0.780 | 0 | 0.0300 | yes, by a hair at S (0.780 vs 0.75) |
+| 4 (outside the set; the model does not stand here) | 0.923 / 0.770 / 0.576 | 0.807 / 0.513 | 30 | 0.0303 | no (S power, unsettled frames) |
+| 8 (outside the set; no model) | 0.952 / 0.776 / 0.431 | 0.820 / 0.287 | — | — | no (S power, no model) |
 
 k_L = 3 (evaluated before the rule was fixed) would fail too: S at 0.636 (P/P₁ 0.62) and 10 unsettled points.
 **The set is {1, 1.5, 2}.** φ_ref barely moves (0.0300–0.0303 rad), since the relay bus L stays at 0.905–0.907.
@@ -254,11 +254,22 @@ unsettled corner points left out):
 | 4 (info) | 8 (4): L2 B-C at 0.05–0.5 (all R_f but two), L1 B-C m 0.95 at 40 Ω | 14 / 30 | 0 / 10 |
 
 - **On the registered set the conventional element misses nothing**, at either pickup, so the "misses ≥ ¼" branch
-  of the go/no-go is not reached up to 2× on this network. For information, its first failures beyond the set are
-  far-end, high-R_f B-C faults on L2, as the prior said, and even at 4× it misses 17 %.
+  of the go/no-go is not reached up to 2× on this network. The k_L 3 and 4 rows are **outside the pre-flight set;
+  the model does not stand there**: their first failures (far-end, high-R_f B-C faults on L2) support the prior's
+  direction but are not results.
 - D1's guaranteed-miss count under the box tier grows with k_L (7 → 11 → 14): the δ = 0 design gets harder with the
-  line, which is Q2's δ = 0 unseparated count seen from the corners. Under the structured tier it stays at 0.
+  line while the conventional element does not notice. δ*(k_L) in Q2 is the quantity that tells whether δ keeps
+  up. Under the structured tier the count stays at 0.
+- k_L = 2 passes rule B by a hair at S (P/P₁ 0.780 against 0.75).
 - Q3's δ = 0 half therefore goes to k_L = 2, the largest in the set, as registered.
+
+**Verdict on the registered criterion, written 19 Oct 2026 before Q2 finished.** The "holds" branch needs the
+conventional element to miss at least a quarter of the hard set at some k_L in the pre-flight set, and it misses
+0 of 48 at k_L 1, 1.5 and 2. So, for both tiers, **the deck's claim does not hold for detection up to 2× on this
+network**, whatever Q2 and Q3 give. A longer range would need a stiffer source or lighter loads, a second network,
+not this scenario. Q2 and Q3 still run as registered: the curve δ*(k_L), margin, price and the δ = 0 unseparated
+count, then the two EMT halves, are the deliverable, read as information and not as a second chance at the verdict.
+Static model; nothing injected yet.
 
 ## 5. Caveats carried on every line
 
