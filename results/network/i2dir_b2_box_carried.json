@@ -1,0 +1,28 @@
+{
+ "feasible_grid_points": 83,
+ "angular_width_deg": 3,
+ "radial_width_pu": 0.06000000000000005,
+ "sliver": false,
+ "abs_delta": 0.98,
+ "angle_deg": 205.0,
+ "how": "not a sliver: the design point",
+ "margin": {
+  "gap_eps": 2.2239367019505907,
+  "margin_eps": 0.0239367019505905,
+  "margin_pu": 0.0019149361560472401,
+  "pair": [
+   [
+    "L1",
+    0.75,
+    "ab",
+    0.125
+   ],
+   [
+    "L2",
+    0.95,
+    "ab",
+    0.0
+   ]
+  ]
+ }
+}

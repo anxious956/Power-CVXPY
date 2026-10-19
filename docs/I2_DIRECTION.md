@@ -572,3 +572,64 @@ Caveats:
 - clean runs;
 - s = 1;
 - the converter-side bracket.
+
+### The box (primary) point: map, carried point, static and EMT (18 Oct 2026)
+
+**Neighbourhood map** (`results/network/i2dir_b1_patch.json`, ρ 0.1, 1° × 0.01 pu, 195°–215°):
+
+| \|δ\| (pu) | 0.94–0.96 | 0.97 | 0.98 | 0.99 | 1.00 | 1.01 | 1.02 | 1.03 | 1.04 |
+|---|---|---|---|---|---|---|---|---|---|
+| separating angles | none | 204° | 202°–205° | 199°–206° | 197°–207° | 195°–208° | 195°–208° | 195°–209° | 195°–210° |
+
+- The run stopped at 1.05 pu with a MemoryError. The zonotope cache grew over the map's points; it is now cleared per
+  point.
+- From 1.01 pu the window reaches the map's 195° edge, so the feasible region extends beyond the map.
+
+**Carried point by the registered rule.** The angular width at 0.98 pu is 3°, not under 3°. The radial width at 205°
+is 0.06 pu (0.98–1.04). The patch is not a sliver, so the design point **0.98 pu at 205°** is carried. It sits on
+the patch's lower tip: the feasible region is a wedge that widens with |δ|.
+
+**Margins at the carried points**, forward–reverse gap minus 2(1 + ρ), ρ 0.1 (`results/network/i2dir_b2_box_carried.json`,
+`results/network/i2dir_b2_st020_margin.json`):
+
+| point | margin | closest pair |
+|---|---|---|
+| box 0.98 pu @ 205° | 0.024 ε (0.002 pu) | L1 B-C m 0.75 rF 0.125 vs L2 B-C m 0.95 bolted |
+| structured 0.20 pu @ 230° | 0.048 ε | L1 A-G m 0.95 rF 0.75 vs L2 A-G m 0.95 rF 1.0 |
+
+Both are thin beyond the 10 % margin ρ already holds. At the box point the binding pair is a B-C one, although every
+B-C pair is apart at δ = 0.
+
+**Static (b2), 16 corners:** forward misdirected 0.98 (B-C 160 of 160, A-G 232 of 240), undecided 0.02, reverse
+misdirected 0. The EMT runs were started while this ran, not after it. The static result was in before any EMT run
+was read.
+
+**EMT** (`results/network/i2dir_b2_box.json`, 51 runs, MODE2 2, 0.98 pu at 205°). The pre-fault gate passed: the
+source inverter delivers |I1| 0.243 and |I2| 0.980 pu, both 0.0 % from static. All 50 fault runs are numerically
+clean.
+
+| | (b1-EMT) contained | (b1-EMT) separated | nearest opposite set | (b2) |
+|---|---|---|---|---|
+| forward B-C, 10 | 10 | 10 | 3.30 ε | 10 of 10 reverse |
+| forward A-G, 15 | 15 | 15 | 2.45 ε (needs > 2.2) | 14 reverse, 1 undecided |
+| reverse B-C, 10 | 10 | 10 | 3.46 ε | 10 of 10 reverse |
+| reverse A-G, 15 | 15 | 15 | 2.90 ε | 15 of 15 reverse |
+
+The three weak-frame runs, L1 B-C bolted at m 0.15, 0.35 and 0.55 (|V1_R| < 0.2 pu in the design state), are read
+separately. Each is contained and separated under (b1); under (b2) each reads reverse.
+
+**Reading (registered stop rules):**
+- **(b1-EMT) holds at the primary point.** The primary-tier direction guarantee is confirmed in EMT at the nominal
+  point: 50 of 50 runs are contained and separated, the weak-frame ones included.
+- **(b2) fails worse than without δ.** Forward misdirected rises from 0.40 to 0.96: the large injected I2 drives the
+  conventional element's negative-sequence decision reverse. This is stop rule 2, "δ certifies direction for the set
+  test, not for the conventional element". At the box point δ actively breaks the conventional element.
+
+| | set test (b1) | conventional element (b2), forward misdirected / undecided |
+|---|---|---|
+| δ = 0 (stage c, shunt) | point separation: B-C all; A-G 25/150 box, 150/150 structured | 0.40 / 0.28 |
+| structured 0.20 pu @ 230° | 50 of 50 | 0.44 / 0.20 |
+| box 0.98 pu @ 205° | 50 of 50 | 0.96 / 0.04 |
+
+Caveats as above: one network, nominal source point, one point on wave, clean runs, s = 1, converter-side bracket,
+and thin set margins (0.02–0.05 ε).

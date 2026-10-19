@@ -1,0 +1,141 @@
+{
+ "box_patch_rho_0.1": [
+  {
+   "abs_delta": 0.94,
+   "separating_angles_deg": []
+  },
+  {
+   "abs_delta": 0.95,
+   "separating_angles_deg": []
+  },
+  {
+   "abs_delta": 0.96,
+   "separating_angles_deg": []
+  },
+  {
+   "abs_delta": 0.97,
+   "separating_angles_deg": [
+    204
+   ]
+  },
+  {
+   "abs_delta": 0.98,
+   "separating_angles_deg": [
+    202,
+    203,
+    204,
+    205
+   ]
+  },
+  {
+   "abs_delta": 0.99,
+   "separating_angles_deg": [
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206
+   ]
+  },
+  {
+   "abs_delta": 1.0,
+   "separating_angles_deg": [
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207
+   ]
+  },
+  {
+   "abs_delta": 1.01,
+   "separating_angles_deg": [
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208
+   ]
+  },
+  {
+   "abs_delta": 1.02,
+   "separating_angles_deg": [
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208
+   ]
+  },
+  {
+   "abs_delta": 1.03,
+   "separating_angles_deg": [
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209
+   ]
+  },
+  {
+   "abs_delta": 1.04,
+   "separating_angles_deg": [
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210
+   ]
+  }
+ ],
+ "box_patch_points": 83,
+ "note": "radii 0.94-1.04 mapped; the run stopped at 1.05 pu with a MemoryError (zonotope cache, fixed since); from 1.01 pu the window reaches the map's 195 deg edge, so the patch extends beyond the map"
+}

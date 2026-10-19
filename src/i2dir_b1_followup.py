@@ -130,7 +130,11 @@ def patch():
         return True
 
     for r in np.round(np.arange(0.94, 1.08 + 1e-9, 0.01), 2):
-        ok = [a for a in range(195, 216) if apart(r * np.exp(1j * np.radians(a)))]
+        ok = []
+        for a in range(195, 216):
+            if apart(r * np.exp(1j * np.radians(a))):
+                ok.append(a)
+            fm._cache.clear()                   # one set of zonotopes per delta: the cache would grow without bound
         grid.append(dict(abs_delta=float(r), separating_angles_deg=ok))
         print(f"|delta| {r:.2f} pu: separating angles {ok}  [{time.time() - t0:.0f} s]", flush=True)
     out["box_patch_rho_0.1"] = grid
