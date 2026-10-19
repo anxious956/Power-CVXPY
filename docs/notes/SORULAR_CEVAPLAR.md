@@ -1522,3 +1522,28 @@ Gerçek bir invertör kullanmıyoruz, modelliyoruz:
 - **Sonraki adım:** Aynı altyapıyla rölenin bulunduğu uçtaki senkron kaynak bir inverterle değiştirilir (tüm kaynaklar inverter) ve adım 3 tekrarlanır. Bu, sunumdaki "yönteminizin hâlâ önemli olabileceği yerler"in karşılığı; dört adımın içinde. **[19 Eki 2026: durum: tüm-invertör şebeke taraması statik modelde yapıldı (results/IBR_GRID_SCREEN.md); I2 bastıran invertörde yön çalışması tamamlandı (PR #57, #58; REVIEW.md §7 satır 56–59; bkz. docs/I2_DIRECTION.md); uzun hatlar sürüyor (docs/LONG_LINES.md: statik model, Q2/Q3 bekliyor); şebeke kurucu (grid-forming) senaryo başlamadı.]**
 
 *Kaynak: `results/STEP3_PILOT.md`, `results/FRAMES.md`, `review/STEP3_STRUCTURED_REVIEW.md`; README "Detection, inverter-rich feeder"; REVIEW.md §7 satır 52–53.*
+
+## 43. Milestone olarak neredeyiz? (19 Ekim 2026)
+
+Sunumda hocaya anlattığımız dört adımın (docs/PLAN.md §2) üçü ve "yönteminizin hâlâ önemli olabileceği yerler"in
+ilki bitti; Ekim planına göre yaklaşık dört ay öndeyiz (docs/PLAN.md §5).
+
+| Adım / senaryo | Durum (19 Eki) | Planlanan |
+|---|---|---|
+| 1 · Tasarım aracı, çok baralı | **bitti** (PR #38–#41) | Kasım |
+| 2 · EMT şebekesi, sinyali basan inverter | **bitti** (16 Eki; PR #33–#37) | Ekim |
+| 1 → 2 · Tasarlanan δ EMT'de enjekte, vaat edilen ayrışma kontrol | **bitti** (PR #44) | Aralık |
+| 3 · Tespit: dedektörler EMT verisinde, en kötü durum eğrisi | **bitti** (18 Eki; PR #44, #56) | Oca–Şub 2027 |
+| Senaryo 1 · I₂ bastıran inverter, yön, δ enjekte | **bitti** (19 Eki; PR #57, inceleme #58) | Kas–Ara |
+| Senaryo 2 · Uzun hatlar | **sürüyor**: ön kontrol eğriyi 1–2× ile sınırlıyor; kayıtlı ölçüte göre iddia 2×'e kadar tutmuyor (statik, Q1); δ*(k_L) ve EMT yarıları koşuyor | Kas–Ara |
+| Senaryo 3 · Şebeke kurucu (grid-forming) inverter | açık; PSCAD'de model gerekiyor | Kas–Ara |
+| Hocaya paket ve e-posta | **ertelendi** (18 Eki: şimdilik kendi başımıza); güncel tutuluyor | Kasım |
+| Güz raporu | açık | Aralık |
+| 4 · Gerçek zaman: kart üzerinde gecikme; makale | açık | Oca–Nis 2027 |
+| NAPS 2027'ye gönderim | | Haziran 2027 |
+
+Bugünkü ana bulgu, üç çalışmada da aynı: **δ kararı değil, en kötü durum garantisini satın alıyor**; bedelini ölçü
+trafolarının doğruluğu belirliyor (REVIEW.md §7 satır 51–58). Hepsi tek bir üç baralı şebekede, nominal çalışma
+noktasında; inverterlerin arıza akımını taşıdığı şebekede tespit hâlâ sınanmadı.
+
+*Kaynak: `docs/PLAN.md` §3–§5; REVIEW.md §7 satır 47–59.*
