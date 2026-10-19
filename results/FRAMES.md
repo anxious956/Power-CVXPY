@@ -284,7 +284,7 @@ on windows ending 2.0–3.0 cycles after each run's own inception.
   *[The EMT checks followed: the 1.12 pu design point holds in EMT with the filtered reference and the mimic filter.]*
 - It strengthens the deck's own question, *where does a designed signal earn its cost?* Here the cost of a guarantee
   is the inverter's output. The step-3 detectors will show what a statistical criterion needs instead (docs/STEP3.md).
-  *[They did, 17–18 Oct: under realistic noise every detector detects every fault without δ; δ buys the worst-case
+  *[They did, 17–18 Oct: under realistic noise every detector, 50N included, detected the pilot's 20 hard-set scenarios (R_f ≤ 40 Ω) without δ; δ buys the worst-case
   guarantee, results/STEP3_PILOT.md, REVIEW.md rows 51–55.]*
 - The EMT checks of the frame model, and the relay's memory freeze across the fault windows, wait for PSCAD.
   *[Done: the two sections above.]*

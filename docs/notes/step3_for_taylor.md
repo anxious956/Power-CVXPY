@@ -95,8 +95,8 @@ EMT. A one-page summary is attached. In short:
 
 - The design holds in PSCAD with the inverter injecting it. On our three-bus network it needs 1.12 pu, about 93 %
   of the inverter, at ε = 0.08 pu.
-- With realistic noise, all our detectors, including a conventional incremental element, detect every fault
-  without the signal.
+- With realistic noise, all our detectors, including a conventional incremental element, detected every fault in
+  the pilot (20 hard-set scenarios, R_f ≤ 40 Ω) without the signal.
 - What the signal buys is your worst-case guarantee. The share of high-resistance faults that no admissible noise
   can hide rises from about a third at δ = 0 to all of them at three quarters of the design δ.
 - Its price is set by the instruments: free with near-nominal accuracy, about 93 % of the inverter with
