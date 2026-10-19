@@ -325,8 +325,14 @@ inverter-interfaced):
   **0**.
 - **Consistency:** 5 shunt-case MODE2 1 cases (4 forward, 1 reverse) with TV2 = 15 Hz: **5 of 5 decisions
   unchanged**.
-- **Grid-side bracket, MODE2 1 with TV2:** stable (normal-run tail peak 1.15 × nominal, pre-fault |I1| errors 0.0 %),
-  so the stop rule does not apply. Every fault run passes the per-run numerical check: **25 of 25 interpretable** on
+- **Grid-side bracket, MODE2 1 with TV2:** the gate passed (normal-run tail peak 1.15 × nominal, pre-fault |I1|
+  errors 0.0 %), so the stop rule does not apply.
+  - **The mode is slowed, not removed** (review check `review/checks/p_i2dir_tv2_hf.py`, on the stored output). The
+    normal run's per-cycle peak drifts 0.92–1.02 up to 0.40 s, then rises to 1.15 by 0.45 s, and 5.8 % of the
+    spectrum after 0.30 s sits near 10 kHz.
+  - The fault runs carry 2.9·10⁻³ above 5 kHz in the pre-fault memory span and ≤ 1.2·10⁻³ in the fault span.
+  - Decisions read inside 0.35 s, where the one-cycle DFT rejects that content (about 10⁻⁴ pu in a phasor). The
+    converter-side bracket is the clean one. Every fault run passes the per-run numerical check: **25 of 25 interpretable** on
   each side. **Forward misdirected 0 %, undecided 0 %; reverse 0 %**, and EMT agrees with static on every case.
 
 **The brackets, complete** (EMT, s = 1, every load behind the relay inverter-interfaced; nominal source point, one
@@ -648,10 +654,15 @@ The price decides whether the primary-tier design is usable, as in step 3. At 0.
 of the inverter's normal positive-sequence output for the whole time it runs. The structured point costs nothing in
 I1.
 
-**Hypothesis for (b2), untested.** At 0.98 pu the increment ΔI2 seen by the relay is dominated by the injected
-signal's own frame turn, δ(e^{jΔθ} − 1) times the share entering L1, plus the curtailed I1. The element would then
-read the inverter's reaction, not the fault's direction, which is what REVIEW row 46 says. It can be checked
-statically by comparing ΔI2 at the relay with that term case by case. This has not been done.
+**Why (b2) fails: static, nominal point, review check** (`review/checks/p_i2dir_b2_frameturn.py`, solve_v1ref,
+shunt bracket; reproduced here). ΔI2 at the relay is split into a fault part (the same fault at δ = 0) and a signal
+part (the rest).
+- **Box 0.98 pu @ 205°.** The signal part dominates in 24 of 25 forward cases. It matches δ's own delivered change
+  within 7 % (B-C) and 15 % (A-G), medians. 24 of the 25 wrong decisions follow the signal part's direction. The
+  element reads the inverter's reaction, not the fault's direction, as REVIEW row 46 says.
+- **Structured 0.20 pu @ 230°.** The B-C failures are the δ = 0 mechanism (the capacitive back side): the fault part
+  dominates in 10 of 10 B-C cases. A-G is signal-dominated in 15 of 15 but mostly decided right; 1 wrong decision
+  follows the signal.
 
 Caveats as above: one network, nominal source point, one point on wave, clean runs, s = 1, converter-side bracket,
 and thin set margins (0.02–0.05 ε).
