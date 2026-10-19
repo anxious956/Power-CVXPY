@@ -41,8 +41,9 @@ from step3_detectors import _d0
 
 OUT = os.path.join(HERE, "..", "results", "network")
 KL = (1, 2, 4, 8)
-KL_FALLBACK = 3                                   # added if k_L = 4 fails pre-flight (registered)
-VWIN = (0.9, 1.1)
+KL_FALLBACK = 1.5                                 # added if the set has fewer than 3 points (review, 19 Oct 2026)
+P_MIN = 0.75                                      # rule B: every load keeps >= 75 % of its k_L = 1 power (V >= 0.866 x base)
+VMAX = 1.1
 K, SIGMA, N_MEM = 4.0, 0.01, 3                    # phi_ref rule, frames_main.py
 FACTOR, DRIFT, MODEL_ERR, RHO, CAP = 1.1, 3.0, 0.008, 0.1, 1.14
 PICKUP, PICKUP_LOW = 0.162, 0.126                 # highr_screen.py: D0 calibrated at the design tier, upper / lower end
@@ -91,7 +92,10 @@ def nominal(fm):
 
 
 # ---------------------------------------------------------------- pre-flight
-def preflight_one(kl):
+def preflight_one(kl, base_v=None):
+    """Rule B (review, 19 Oct 2026): the pre-fault load flow converges; every load keeps at least 75 % of its k_L = 1
+    power (constant impedance: (V/V_1)^2 >= 0.75) and no bus exceeds 1.1 pu; the inverter frame settles at every
+    phi_ref probe point; and every (case, corner) of the hard set has a settled fault frame."""
     net = net_k(kl)
     fm = fr.FrameModel(net, CASES[:1], n_samples=4, face_pts=2, seed=0)
     e0, ic, st = nominal(fm)
@@ -100,39 +104,59 @@ def preflight_one(kl):
         y, inj, it = nw.solve_v1ref(net, {"G": e0}, st, None, relax=0.5, max_iter=2000)
         _, V = nw.solve(net, {"G": e0, "I": inj["I"][0]}, {}, None, full=True)
         v = {b: float(abs(V[b][0])) for b in sorted(V)}
-        res.update(converged=True, iterations=it, bus_v1=v, i1_delivered=float(abs(inj["I"][0])),
-                   v_ok=all(VWIN[0] <= x <= VWIN[1] for x in v.values()))
+        pr = {b: (v[b] / base_v[b]) ** 2 for b in net.loads} if base_v else {b: 1.0 for b in net.loads}
+        res.update(converged=True, iterations=it, bus_v1=v, i1_delivered=float(abs(inj["I"][0])), load_power_ratio=pr,
+                   v_ok=all(x >= P_MIN for x in pr.values()) and all(x <= VMAX for x in v.values()))
     except RuntimeError as ex:
         res.update(converged=False, error=str(ex), v_ok=False)
     # the frame model needs a settled inverter frame at every source-box sample point (the phi_ref probe, 2032
     # points); where even under-relaxed iteration finds none, the k_L has no model and is out
-    res["frame_settles"] = False
+    res["frame_settles"], res["unsettled_points"] = False, None
     if res["converged"]:
         try:
             phi, v1min = phi_ref(net)
             res.update(phi_ref=float(phi), min_V1L=v1min, frame_settles=True)
         except RuntimeError as ex:
             res["frame_error"] = str(ex)
-    res["in_set"] = res["converged"] and res["v_ok"] and res["frame_settles"]
+    if res["frame_settles"]:
+        fmc = fr.FrameModel(net, CASES, n_samples=4, face_pts=2, seed=1)
+        S = np.array(list(itertools.product((-1.0, 1.0), repeat=4)))
+        e, icc = fmc.sources(S)
+        _, _, u_pre = fmc.normal_state(S, 0j)
+        n_bad = 0
+        for k in range(len(CASES)):
+            for i in range(len(S)):
+                try:
+                    fr.fixed_point(fmc.maps_F[k][1], e[i:i + 1], icc[i:i + 1], 0j, fmc.i_max, fmc.lim, u_pre[i:i + 1])
+                except RuntimeError:
+                    n_bad += 1
+        res["unsettled_points"] = n_bad
+    res["in_set"] = res["converged"] and res["v_ok"] and res["frame_settles"] and res["unsettled_points"] == 0
     return res
 
 
 def preflight(save=True):
-    rows = {kl: preflight_one(kl) for kl in KL}
-    if not rows[4]["in_set"]:
-        rows[KL_FALLBACK] = preflight_one(KL_FALLBACK)
+    base = preflight_one(1)
+    rows = {1: base}
+    for kl in KL[1:]:
+        rows[kl] = preflight_one(kl, base["bus_v1"])
+    if sum(r["in_set"] for r in rows.values()) < 3:
+        rows[KL_FALLBACK] = preflight_one(KL_FALLBACK, base["bus_v1"])
     rows = dict(sorted(rows.items()))
     kls = [kl for kl, r in rows.items() if r["in_set"]]
     for kl, r in rows.items():
         if r["converged"]:
-            why = "IN" if r["in_set"] else "OUT (" + ", ".join(w for w, bad in (("voltage window", not r["v_ok"]), ("frame does not settle", not r["frame_settles"])) if bad) + ")"
+            why = "IN" if r["in_set"] else "OUT (" + ", ".join(w for w, bad in (("load power / voltage", not r["v_ok"]), ("frame does not settle", not r["frame_settles"]),
+                                                                              ("unsettled fault frames", bool(r["unsettled_points"]))) if bad) + ")"
             print(f"k_L {kl}: load flow converged ({r['iterations']} it); bus |V1| " + ", ".join(f"{b} {v:.3f}" for b, v in r["bus_v1"].items())
-                  + f"; inverter |I1| {r['i1_delivered']:.3f} pu; {why}"
+                  + "; load P/P1 " + ", ".join(f"{b} {x:.3f}" for b, x in r["load_power_ratio"].items())
+                  + f"; inverter |I1| {r['i1_delivered']:.3f} pu; unsettled (case, corner) points {r['unsettled_points']}; {why}"
                   + (f"; phi_ref {r['phi_ref']:.4f} rad (min |V1_L| {r['min_V1L']:.3f})" if r["frame_settles"] else f"; {r['frame_error']}"), flush=True)
         else:
             print(f"k_L {kl}: load flow did not converge: {r['error']}; OUT", flush=True)
     print(f"k_L set: {kls}")
-    out = dict(window=VWIN, rows={str(k): v for k, v in rows.items()}, k_L_set=kls)
+    out = dict(rule="B: load power >= 75 % of k_L 1, V <= 1.1, solve_v1ref converges, frame settles on the probe and at every (case, corner)",
+               rows={str(k): v for k, v in rows.items()}, k_L_set=kls)
     if save:
         json.dump(out, open(os.path.join(OUT, "longlines_preflight.json"), "w"), indent=1)
         print("-> results/network/longlines_preflight.json")
@@ -142,7 +166,11 @@ def preflight(save=True):
 def kl_set():
     p = os.path.join(OUT, "longlines_preflight.json")
     pf = json.load(open(p)) if os.path.exists(p) else preflight()
-    return pf["k_L_set"], {int(k): v for k, v in pf["rows"].items()}
+    return pf["k_L_set"], {float(k): v for k, v in pf["rows"].items()}
+
+
+def kl_tag(kl):
+    return str(kl).replace(".", "p")
 
 
 # ---------------------------------------------------------------- Q1: static, 16 corners, delta = 0
@@ -321,11 +349,11 @@ def make(half, kl, tier=None):
     specs = []
     for c in [None] + list(CASES):
         fault = None if c is None else (c[0], c[1], c[2], c[3] * net.rF)
-        name = f"ll{kl}{'' if half == 'zero' else tier[0]}_" + ("N" if c is None else tag(c))
+        name = f"ll{kl_tag(kl)}{'' if half == 'zero' else tier[0]}_" + ("N" if c is None else tag(c))
         sp = make_spec(name, net, fault, {"G": e0}, {}, 1)
         sp["settings"] = _settings(ic, d)
         sp["settings"]["I"]["TANG"] = TANG
-        sp["key_extra"] = f"kL{kl}"                   # a different line impedance needs its own built project
+        sp["key_extra"] = f"kL{kl_tag(kl)}"           # a different line impedance needs its own built project
         sp.update(kind="normal" if c is None else "fault", case=None if c is None else list(c), k_L=kl, half=half,
                   tier=tier, d_cmd=[d.real, d.imag])
         specs.append(sp)
@@ -441,6 +469,7 @@ if __name__ == "__main__":
     elif cmd == "design":
         design()
     elif cmd in ("spec", "analyse"):
-        half, kl = sys.argv[2], int(sys.argv[3])
+        half, kl = sys.argv[2], float(sys.argv[3])
+        kl = int(kl) if kl == int(kl) else kl
         tier = sys.argv[4] if half == "dstar" else None
         (make if cmd == "spec" else analyse)(half, kl, tier)

@@ -178,12 +178,25 @@ was registered. That is an error in the registration, not a finding about long l
 impedances they shed power as the voltage falls (P ∝ V²): at k_L = 8 the S load runs at 29 % of its rating, so
 "the same loads" no longer holds there either.
 
-The rule is being re-fixed **from this table alone, before any Q1 number is read**, by the review session, among:
-- A: every bus within 0.7–1.1 pu → {1, 2};
-- B: every load's delivered power within −25 % of its k_L = 1 value (V ≥ 0.866 × base) → {1, 2};
-- C: the window on the relay bus L only → all five, with S at 0.43 pu flagged as not a credible operating point.
-If the set is {1, 2}, k_L = 1.5 is proposed as the fallback instead of 3. Q1 is computed at every k_L for
-information meanwhile; it does not depend on the rule.
+The rule was re-fixed **from this table alone, before any Q1 number was read** (the review session did not open
+the Q1 section), among A: every bus within 0.7–1.1 pu; B: every load's delivered power within −25 % of its k_L = 1
+value; C: the window on the relay bus L only.
+
+**Registered rule, B** (registration deviation, 19 Oct 2026; reason: the 0.9–1.1 window was taken from the CIGRE
+screen without checking the base network, a weak radial with S already at 0.805 pu): a k_L is in if
+- the pre-fault load flow converges (solve_v1ref, V1-referenced inverter);
+- every load keeps at least 75 % of its k_L = 1 power (constant impedance: (V/V₁)² ≥ 0.75, V ≥ 0.866 × base) and no
+  bus exceeds 1.1 pu. A feeder whose loads lose more than a quarter of their power is not operated that way, so the
+  model stops standing for anything;
+- the inverter frame settles at every φ_ref probe point and at every (case, corner) of the hard set.
+The fallback is **k_L = 1.5** (not 3) when the set has fewer than three points; 2.5 is not added (S would sit near
+0.67 pu, under the rule). The pre-flight table reports the delivered load power P/P₁ at R and S and the count of
+unsettled (case, corner) points per k_L.
+
+**Consequence for the go/no-go.** The curve covers 1–2× only, and the limit comes from the base network's load
+flow, not from the claim. The "never misses a quarter" branch therefore reads "up to 2× on this network", and the
+verdict says that a longer range would need a stiffer source or lighter loads: a second network, not this
+scenario, and not run now.
 
 **A second pre-flight condition, found while computing φ_ref.** The frame model needs a settled inverter frame at
 every source-box sample point. On the φ_ref probe (2032 points) and the hard set's fault states (48 × 344 points),
@@ -213,26 +226,43 @@ plain fixed-point iteration (`frames.fixed_point`, as step 3 ran it):
   points and leaves them out of that case's statistics, and the k_L is flagged as partially modelled. Together with
   the voltage table this puts k_L 3 and 4 out on two grounds under rules A or B.
 
-### Q1 at every k_L with a model, for information (19 Oct 2026; the pre-flight set is not yet fixed)
+### Pre-flight under rule B, and Q1 (19 Oct 2026)
 
-`src/longlines.py static --all` → `results/network/longlines_static.json`. 16 corners, δ = 0, hard set of 48; a
-case is missed when any settled corner misses; corner points with no settled fault frame are left out and counted.
+`src/longlines.py preflight` → `results/network/longlines_preflight.json`:
 
-| k_L | D0 missed at 0.162 pu (at 0.126) | D1 box, alarm / guaranteed missed | D1 structured, alarm / guaranteed | unsettled corner points |
-|---|---|---|---|---|
-| 1 | 0 of 48 (0) | 0 / 7 | 0 / 0 | 0 |
-| 2 | 0 (0) | 1 / 14 | 0 / 0 | 0 |
-| 3 | 3 (1): L2 B-C m 0.25 at 40 Ω, m 0.5 at 20 and 40 Ω | 7 / 23 | 0 / 1 | 10 of 768 (3 cases) |
-| 4 | 8 (4): L2 B-C at 0.05–0.5 (all R_f but two), L1 B-C m 0.95 at 40 Ω | 14 / 30 | 0 / 10 | 30 of 768 (9 cases) |
+| k_L | V1 at L / R / S | load P/P₁ at R / S | unsettled (case, corner) points | φ_ref (rad) | in |
+|---|---|---|---|---|---|
+| 1 | 0.905 / 0.857 / 0.805 | 1.000 / 1.000 | 0 | 0.0303 | yes |
+| 1.5 (fallback) | 0.905 / 0.833 / 0.755 | 0.945 / 0.881 | 0 | 0.0302 | yes |
+| 2 | 0.907 / 0.813 / 0.711 | 0.901 / 0.780 | 0 | 0.0300 | yes |
+| 4 | 0.923 / 0.770 / 0.576 | 0.807 / 0.513 | 30 | 0.0303 | no (S power, unsettled frames) |
+| 8 | 0.952 / 0.776 / 0.431 | 0.820 / 0.287 | — | — | no (S power, no model) |
 
-Read as information only until the pre-flight rule is fixed:
-- The conventional element's first failures are far-end, high-R_f B-C faults on L2, as the prior said, and it
-  never misses a quarter of the hard set up to k_L = 4 (8 of 48 = 17 %).
-- D1's guaranteed miss count under the box tier grows with k_L (7 → 14 → 23 → 30): the δ = 0 design gets harder
-  with the line, which is Q2's δ = 0 unseparated count seen from the corners. Under the structured tier it stays at
-  0 to k_L = 2.
+k_L = 3 (evaluated before the rule was fixed) would fail too: S at 0.636 (P/P₁ 0.62) and 10 unsettled points.
+**The set is {1, 1.5, 2}.** φ_ref barely moves (0.0300–0.0303 rad), since the relay bus L stays at 0.905–0.907.
+
+**Q1** (`src/longlines.py static` → `results/network/longlines_static.json`; 16 corners, δ = 0, hard set of 48; a
+case is missed when any corner misses; k_L 3 and 4 kept as information from the earlier `--all` run, with their
+unsettled corner points left out):
+
+| k_L | D0 missed at 0.162 pu (at 0.126) | D1 box, alarm / guaranteed missed | D1 structured, alarm / guaranteed |
+|---|---|---|---|
+| **1** | 0 of 48 (0) | 0 / 7 | 0 / 0 |
+| **1.5** | 0 (0) | 0 / 11 | 0 / 0 |
+| **2** | 0 (0) | 1 / 14 | 0 / 0 |
+| 3 (info) | 3 (1): L2 B-C m 0.25 at 40 Ω, m 0.5 at 20 and 40 Ω | 7 / 23 | 0 / 1 |
+| 4 (info) | 8 (4): L2 B-C at 0.05–0.5 (all R_f but two), L1 B-C m 0.95 at 40 Ω | 14 / 30 | 0 / 10 |
+
+- **On the registered set the conventional element misses nothing**, at either pickup, so the "misses ≥ ¼" branch
+  of the go/no-go is not reached up to 2× on this network. For information, its first failures beyond the set are
+  far-end, high-R_f B-C faults on L2, as the prior said, and even at 4× it misses 17 %.
+- D1's guaranteed-miss count under the box tier grows with k_L (7 → 11 → 14): the δ = 0 design gets harder with the
+  line, which is Q2's δ = 0 unseparated count seen from the corners. Under the structured tier it stays at 0.
+- Q3's δ = 0 half therefore goes to k_L = 2, the largest in the set, as registered.
 
 ## 5. Caveats carried on every line
 
 One network (three-bus, weak source, X/R 10); nominal source point in EMT; one point on wave; clean runs; the lumped
-R-L line (overhead abstraction); the step-3 relay chain and noise tiers; the model-error box measured at k_L = 1.
+R-L line (overhead abstraction); the step-3 relay chain and noise tiers; the model-error box measured at k_L = 1;
+the k_L range 1–2× set by the base network's load flow (a longer range needs a stiffer source or lighter loads,
+a second network).
