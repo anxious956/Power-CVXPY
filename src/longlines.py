@@ -279,18 +279,70 @@ def price(fm, d):
     return dict(nominal_delivered=nom[0], nominal_command=nom[1], samples_min_median_max=rng)
 
 
-def design():
+def apart(fm, d, rho, state, skipped):
+    """frames.separated_fast with the case that met N last checked first at the next candidate (the binding case
+    changes slowly with the angle). The test per case and the all-cases requirement are unchanged, so the result at
+    every candidate, hence delta* and the separating angle set, is identical; only the time to a False changes."""
+    try:
+        Ns = fm.zonotopes(d, None)
+    except RuntimeError:
+        skipped.append(complex(d))
+        return False
+    b = 2 * fm.eps * (1 + rho)
+    for k in list(state["order"]):
+        try:
+            Fs = fm.zonotopes(d, k)
+        except RuntimeError:
+            skipped.append(complex(d))
+            return False
+        if fr._meet_union(Ns, Fs, b):
+            state["order"].remove(k)
+            state["order"].insert(0, k)
+            return False
+    return True
+
+
+_W = {}
+
+
+def _w_init(kl, tier, phi, order):
+    """Worker: its own copy of the frame model (Windows spawns processes) and its own case order, hardest first."""
+    import warnings
+    warnings.filterwarnings("ignore")
+    fm = model(net_k(kl), tier, phi)
+    _W.update(fm=fm, state={"order": list(order)})
+
+
+def _w_eval(args):
+    """One candidate: (r, a, rho) -> (a, separates, inadmissible). The candidates are independent, so splitting the
+    72 angles of a radius over processes gives the same answer at every one of them."""
+    r, a, rho = args
+    skipped = []
+    ok = apart(_W["fm"], r * np.exp(1j * np.radians(a)), rho, _W["state"], skipped)
+    _W["fm"]._cache.clear()
+    return a, ok, bool(skipped)
+
+
+WORKERS = 6
+
+
+def design(redo=None):
+    """redo: 'k_L|tier|rho' recomputes that key without saving and prints it beside the stored one (a check that
+    the reordered search reproduces the stored result)."""
     kls, rows = kl_set()
     path = os.path.join(OUT, "longlines_design.json")
     out = json.load(open(path)) if os.path.exists(path) else {}
     for kl in kls:
         net, phi = net_k(kl), rows[kl]["phi_ref"]
         for tier in TIERS:
-            fm = model(net, tier, phi)
+            fm = None
             for rho in (RHO, 0.0):
                 key = f"{kl}|{tier}|{rho}"
-                if key in out:
+                if redo is not None and key != redo:
                     continue
+                if key in out and redo is None:
+                    continue
+                fm = fm or model(net, tier, phi)
                 t0 = time.time()
                 hard = [tuple(c) for c in fr.unseparated(fm, 0j, rho)]
                 res = dict(k_L=kl, tier=tier, rho=rho, phi_ref=phi, unseparated_at_0=len(hard), unseparated_cases=[list(c) for c in hard])
@@ -300,17 +352,17 @@ def design():
                                margin=margin(fm, 0j, rho), price=price(fm, 0j), dead_frames=[], carried_angle_deg=None)
                 else:
                     order = [k for k, c in enumerate(fm.cases) if tuple(c) in hard] + [k for k, c in enumerate(fm.cases) if tuple(c) not in hard]
-                    skipped, found, angles = [], None, []
-                    for r in np.arange(0.02, CAP + 1e-9, 0.02):
-                        ok = []
-                        for a in range(0, 360, 5):
-                            if fr._try(fm, r * np.exp(1j * np.radians(a)), rho, order, skipped):
-                                ok.append(a)
-                            fm._cache.clear()
-                        if ok:
-                            found, angles = float(round(r, 4)), ok
-                            break
-                    res.update(abs_delta=found, separating_angles_deg=angles, feasible=found is not None, inadmissible=len(skipped))
+                    found, angles, n_inadm = None, [], 0
+                    from concurrent.futures import ProcessPoolExecutor
+                    with ProcessPoolExecutor(WORKERS, initializer=_w_init, initargs=(kl, tier, phi, order)) as pool:
+                        for r in np.arange(0.02, CAP + 1e-9, 0.02):
+                            res_r = list(pool.map(_w_eval, [(float(r), a, rho) for a in range(0, 360, 5)]))
+                            n_inadm += sum(x[2] for x in res_r)
+                            ok = [a for a, good, _ in res_r if good]
+                            if ok:
+                                found, angles = float(round(r, 4)), ok
+                                break
+                    res.update(abs_delta=found, separating_angles_deg=angles, feasible=found is not None, inadmissible=n_inadm)
                     if found is not None:
                         ms = {a: margin(fm, found * np.exp(1j * np.radians(a)), rho) for a in angles}
                         a_star = max(ms, key=lambda a: ms[a]["margin_eps"])
@@ -318,6 +370,12 @@ def design():
                         res.update(margins_by_angle={str(a): m for a, m in ms.items()}, carried_angle_deg=a_star, margin=ms[a_star],
                                    price=price(fm, d), dead_frames=[list(c) for c in fm.dead_frames(d)])
                 res["seconds"] = time.time() - t0
+                if redo is not None:
+                    old = out.get(key, {})
+                    same = old.get("abs_delta") == res["abs_delta"] and old.get("separating_angles_deg") == res["separating_angles_deg"]
+                    print(f"REDO {key}: stored delta* {old.get('abs_delta')} angles {old.get('separating_angles_deg')} | recomputed delta* {res['abs_delta']} "
+                          f"angles {res['separating_angles_deg']} | {'IDENTICAL' if same else 'DIFFERENT'}  [{res['seconds']:.0f} s vs {old.get('seconds', 0):.0f} s]", flush=True)
+                    return
                 out[key] = res
                 json.dump(out, open(path, "w"), indent=1)
                 if res["feasible"]:
@@ -467,7 +525,7 @@ if __name__ == "__main__":
     elif cmd == "static":
         static()
     elif cmd == "design":
-        design()
+        design(redo=sys.argv[sys.argv.index("--redo") + 1] if "--redo" in sys.argv else None)
     elif cmd in ("spec", "analyse"):
         half, kl = sys.argv[2], float(sys.argv[3])
         kl = int(kl) if kl == int(kl) else kl
