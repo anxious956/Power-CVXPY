@@ -185,6 +185,27 @@ The rule is being re-fixed **from this table alone, before any Q1 number is read
 If the set is {1, 2}, k_L = 1.5 is proposed as the fallback instead of 3. Q1 is computed at every k_L for
 information meanwhile; it does not depend on the rule.
 
+**A second pre-flight condition, found while computing φ_ref.** The frame model needs a settled inverter frame at
+every source-box sample point. On the φ_ref probe (2032 points) and the hard set's fault states (48 × 344 points),
+plain fixed-point iteration (`frames.fixed_point`, as step 3 ran it):
+
+| k_L | normal state, plain iteration fails | under-relaxed (0.5 / 0.25) | fault states, plain iteration fails |
+|---|---|---|---|
+| 1 | 0 of 2032 | — | 0 of 16 512 |
+| 2 | 0 | — | 0 |
+| 3 | 0 | — | 77 |
+| 4 | 0 | — | 286 |
+| 8 | 204 | still 204, and the two relaxations disagree (2.0) | 3 217 |
+
+- `frames.fixed_point` now falls back to under-relaxed iteration (0.5 then 0.25) where plain iteration does not
+  converge, exactly as `FrameModelMulti._fixed` (reviewed in the I2 study: relaxation changes the path, not the
+  fixed point). It never runs where plain iteration converges, so k_L = 1 and 2, and every step-3 result, are
+  unchanged by construction. Checked: `i2dir_design.py regress` after the change gives 3.1·10⁻¹³ (FrameModel vs
+  FrameModelMulti at 1.12 pu) and ≤ 7.4·10⁻¹³ pu against solve_v1ref, as before.
+- **k_L = 8 has no model**: at 10 % of the source points the inverter's frame has no fixed point even
+  under-relaxed. It is out on this condition alone, whatever the voltage rule. The condition is added to the
+  pre-flight ("the frame settles at every probe point") as a model requirement, not a design choice.
+
 ## 5. Caveats carried on every line
 
 One network (three-bus, weak source, X/R 10); nominal source point in EMT; one point on wave; clean runs; the lumped

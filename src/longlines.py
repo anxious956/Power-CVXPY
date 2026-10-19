@@ -104,10 +104,16 @@ def preflight_one(kl):
                    v_ok=all(VWIN[0] <= x <= VWIN[1] for x in v.values()))
     except RuntimeError as ex:
         res.update(converged=False, error=str(ex), v_ok=False)
-    res["in_set"] = res["converged"] and res["v_ok"]
+    # the frame model needs a settled inverter frame at every source-box sample point (the phi_ref probe, 2032
+    # points); where even under-relaxed iteration finds none, the k_L has no model and is out
+    res["frame_settles"] = False
     if res["converged"]:
-        phi, v1min = phi_ref(net)
-        res.update(phi_ref=float(phi), min_V1L=v1min)
+        try:
+            phi, v1min = phi_ref(net)
+            res.update(phi_ref=float(phi), min_V1L=v1min, frame_settles=True)
+        except RuntimeError as ex:
+            res["frame_error"] = str(ex)
+    res["in_set"] = res["converged"] and res["v_ok"] and res["frame_settles"]
     return res
 
 
@@ -119,9 +125,10 @@ def preflight(save=True):
     kls = [kl for kl, r in rows.items() if r["in_set"]]
     for kl, r in rows.items():
         if r["converged"]:
+            why = "IN" if r["in_set"] else "OUT (" + ", ".join(w for w, bad in (("voltage window", not r["v_ok"]), ("frame does not settle", not r["frame_settles"])) if bad) + ")"
             print(f"k_L {kl}: load flow converged ({r['iterations']} it); bus |V1| " + ", ".join(f"{b} {v:.3f}" for b, v in r["bus_v1"].items())
-                  + f"; inverter |I1| {r['i1_delivered']:.3f} pu; {'IN' if r['in_set'] else 'OUT (voltage window)'}"
-                  + (f"; phi_ref {r['phi_ref']:.4f} rad (min |V1_L| {r['min_V1L']:.3f})" if r["in_set"] else ""), flush=True)
+                  + f"; inverter |I1| {r['i1_delivered']:.3f} pu; {why}"
+                  + (f"; phi_ref {r['phi_ref']:.4f} rad (min |V1_L| {r['min_V1L']:.3f})" if r["frame_settles"] else f"; {r['frame_error']}"), flush=True)
         else:
             print(f"k_L {kl}: load flow did not converge: {r['error']}; OUT", flush=True)
     print(f"k_L set: {kls}")
@@ -141,8 +148,8 @@ def kl_set():
 # ---------------------------------------------------------------- Q1: static, 16 corners, delta = 0
 def static():
     kls, rows = kl_set()
-    if "--all" in sys.argv:                       # every converged k_L, for information, whatever the pre-flight set
-        kls = [kl for kl in sorted(rows) if rows[kl]["converged"]]
+    if "--all" in sys.argv:                       # every k_L with a model, for information, whatever the voltage window says
+        kls = [kl for kl in sorted(rows) if rows[kl]["converged"] and rows[kl]["frame_settles"]]
     S = np.array(list(itertools.product((-1.0, 1.0), repeat=4)))
     out = {}
     for kl in kls:
