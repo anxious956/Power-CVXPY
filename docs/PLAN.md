@@ -139,7 +139,8 @@ Done 17–19 Oct 2026 ([docs/STEP3.md](STEP3.md), [results/STEP3_PILOT.md](../re
   frame.
 - **Detectors:** D1 the set test, D0 incremental 50N/50Q, D2 the multiple-model test (Pirani et al., moved to the
   relay), and D3 the CNN.
-- **Pilot, with realistic noise:** every detector, 50N included, detects the hard faults without δ. That is why the
+- **Pilot, with realistic noise:** every detector, 50N included, detected the pilot's 20 hard-set scenarios
+  (R_f ≤ 40 Ω) without δ. That is why the
   δ sweep was not run as planned.
 - **Worst case:** D1's worst-case curve on 350 clean runs (hard A-G guaranteed 0.33 at δ = 0 → 1.00 at ¾ δ*), plus
   each detector against its own worst case (a stress bound).
@@ -169,7 +170,8 @@ supervision, a sequence-trajectory CNN, engineered features, the re-implemented 
 SVM, on EvEMTBench DoubleLine, TestGrid110kV, adapt_grid-TestGrid and CIGRE MV, with grouped folds
 and held-out reverse faults.
 Open on 16 Oct (1 and 2 done since in step 3, above: D2 is the multiple-model test in the sense of Pirani et al.,
-and the δ sweep was replaced by the worst-case curve because every detector detects without δ under realistic
+and the δ sweep was replaced by the worst-case curve because every detector detected the pilot's 20 hard-set
+scenarios (R_f ≤ 40 Ω) without δ under realistic
 noise; 3 is still open):
 1. **MMKF** (Pirani & Taylor 2022), the detector the deck names;
 2. both on the step-2 EMT data, under load and noise, **shrinking δ until each fails**;
