@@ -213,6 +213,25 @@ plain fixed-point iteration (`frames.fixed_point`, as step 3 ran it):
   points and leaves them out of that case's statistics, and the k_L is flagged as partially modelled. Together with
   the voltage table this puts k_L 3 and 4 out on two grounds under rules A or B.
 
+### Q1 at every k_L with a model, for information (19 Oct 2026; the pre-flight set is not yet fixed)
+
+`src/longlines.py static --all` → `results/network/longlines_static.json`. 16 corners, δ = 0, hard set of 48; a
+case is missed when any settled corner misses; corner points with no settled fault frame are left out and counted.
+
+| k_L | D0 missed at 0.162 pu (at 0.126) | D1 box, alarm / guaranteed missed | D1 structured, alarm / guaranteed | unsettled corner points |
+|---|---|---|---|---|
+| 1 | 0 of 48 (0) | 0 / 7 | 0 / 0 | 0 |
+| 2 | 0 (0) | 1 / 14 | 0 / 0 | 0 |
+| 3 | 3 (1): L2 B-C m 0.25 at 40 Ω, m 0.5 at 20 and 40 Ω | 7 / 23 | 0 / 1 | 10 of 768 (3 cases) |
+| 4 | 8 (4): L2 B-C at 0.05–0.5 (all R_f but two), L1 B-C m 0.95 at 40 Ω | 14 / 30 | 0 / 10 | 30 of 768 (9 cases) |
+
+Read as information only until the pre-flight rule is fixed:
+- The conventional element's first failures are far-end, high-R_f B-C faults on L2, as the prior said, and it
+  never misses a quarter of the hard set up to k_L = 4 (8 of 48 = 17 %).
+- D1's guaranteed miss count under the box tier grows with k_L (7 → 14 → 23 → 30): the δ = 0 design gets harder
+  with the line, which is Q2's δ = 0 unseparated count seen from the corners. Under the structured tier it stays at
+  0 to k_L = 2.
+
 ## 5. Caveats carried on every line
 
 One network (three-bus, weak source, X/R 10); nominal source point in EMT; one point on wave; clean runs; the lumped
