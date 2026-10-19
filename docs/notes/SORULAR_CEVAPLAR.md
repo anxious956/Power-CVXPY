@@ -1522,3 +1522,53 @@ Gerçek bir invertör kullanmıyoruz, modelliyoruz:
 - **Sonraki adım:** Aynı altyapıyla rölenin bulunduğu uçtaki senkron kaynak bir inverterle değiştirilir (tüm kaynaklar inverter) ve adım 3 tekrarlanır. Bu, sunumdaki "yönteminizin hâlâ önemli olabileceği yerler"in karşılığı; dört adımın içinde. **[19 Eki 2026: durum: tüm-invertör şebeke taraması statik modelde yapıldı (results/IBR_GRID_SCREEN.md); I2 bastıran invertörde yön çalışması tamamlandı (PR #57, #58; REVIEW.md §7 satır 56–59; bkz. docs/I2_DIRECTION.md); uzun hatlar sürüyor (docs/LONG_LINES.md: statik model, Q2/Q3 bekliyor); şebeke kurucu (grid-forming) senaryo başlamadı.]**
 
 *Kaynak: `results/STEP3_PILOT.md`, `results/FRAMES.md`, `review/STEP3_STRUCTURED_REVIEW.md`; README "Detection, inverter-rich feeder"; REVIEW.md §7 satır 52–53.*
+
+## 43. Milestone olarak neredeyiz? (19 Ekim 2026)
+
+Sunumda hocaya anlattığımız dört adımın (docs/PLAN.md §2) üçü ve "yönteminizin hâlâ önemli olabileceği yerler"in
+ilki bitti; Ekim planına göre yaklaşık dört ay öndeyiz (docs/PLAN.md §5).
+
+| Adım / senaryo | Durum (19 Eki) | Planlanan |
+|---|---|---|
+| 1 · Tasarım aracı, çok baralı | **bitti** (PR #38–#41) | Kasım |
+| 2 · EMT şebekesi, sinyali basan inverter | **bitti** (16 Eki; PR #33–#37) | Ekim |
+| 1 → 2 · Tasarlanan δ EMT'de enjekte, vaat edilen ayrışma kontrol | **bitti** (PR #44) | Aralık |
+| 3 · Tespit: dedektörler EMT verisinde, en kötü durum eğrisi | **bitti** (18 Eki; PR #44, #56) | Oca–Şub 2027 |
+| Senaryo 1 · I₂ bastıran inverter, yön, δ enjekte | **bitti** (19 Eki; PR #57, inceleme #58) | Kas–Ara |
+| Senaryo 2 · Uzun hatlar | **sürüyor**: ön kontrol eğriyi 1–2× ile sınırlıyor; kayıtlı ölçüte göre iddia 2×'e kadar tutmuyor (statik, Q1); δ*(k_L) ve EMT yarıları koşuyor | Kas–Ara |
+| Senaryo 3 · Şebeke kurucu (grid-forming) inverter | açık; PSCAD'de model gerekiyor | Kas–Ara |
+| Hocaya paket ve e-posta | **ertelendi** (18 Eki: şimdilik kendi başımıza); güncel tutuluyor | Kasım |
+| Güz raporu | açık | Aralık |
+| 4 · Gerçek zaman: kart üzerinde gecikme; makale | açık | Oca–Nis 2027 |
+| NAPS 2027'ye gönderim | | Haziran 2027 |
+
+Bugünkü ana bulgu, üç çalışmada da aynı: **δ kararı değil, en kötü durum garantisini satın alıyor**; bedelini ölçü
+trafolarının doğruluğu belirliyor (REVIEW.md §7 satır 51–58). Hepsi tek bir üç baralı şebekede, nominal çalışma
+noktasında; inverterlerin arıza akımını taşıdığı şebekede tespit hâlâ sınanmadı.
+
+*Kaynak: `docs/PLAN.md` §3–§5; REVIEW.md §7 satır 47–59.*
+
+## 44. Verdiğimiz sözün ne kadarı tutuldu? (19 Ekim 2026)
+
+6 Ekim sunumunda hocaya verdiğimiz söz: yöntemini EMT'de dört adımda test etmek (docs/PLAN.md §2) ve "hâlâ önemli
+olabileceği" üç yerde denemek. Toplantıda o da iki şey istedi: PSCAD'i öğrenmek, inverterlerin nasıl çalıştığını
+çalışmak (§6).
+
+| Söz | Tutuldu mu | Eksik / sınır |
+|---|---|---|
+| Adım 1: iki baralı tasarımı çok baralı araca çevirmek | **evet** | radyal şebekeler; 14 baralı örnek yeniden üretilmedi |
+| Adım 2: sinyali basan inverterle EMT şebekesi | **evet** | kendi üç baralı PSCAD şebekemiz; onun 14 baralı modeli değil |
+| Adım 3: yük ve gürültü altında, onun Kalman filtresi ile öğrenen dedektör, δ'yı her biri bozulana kadar küçültmek | **kısmen** | dedektörler EMT verisinde koştu; ama δ taraması yapılmadı, çünkü gerçekçi gürültüde her dedektör pilotun 20 zor senaryosunu δ olmadan buldu; yerine en kötü durum eğrisi ölçüldü. D2 onun MMKF'si değil, "Pirani ve diğerleri anlamında, röleye taşınmış" bir uyarlama |
+| Adım 4: dedektör gömülü kartta, bir çevrim içinde | **hayır** | başlanmadı (Oca–Nis 2027) |
+| Senaryo 1: I₂ bastıran inverter | **evet** | yön için; δ enjekte edilmiş EMT (PR #57) |
+| Senaryo 2: uzun hatlar | **sürüyor** | temel şebekenin yük akışı eğriyi 2× ile sınırlıyor; statik sonuç "tutmuyor", EMT bekliyor |
+| Senaryo 3: şebeke kurucu (grid-forming) inverter | **hayır** | PSCAD'de model yok; onun Baeckeland modeli istenmedi |
+| PSCAD'i öğrenmek | **evet** | Python'dan sürülen kendi şebekelerimiz, 600'den fazla koşu |
+| İnverterleri çalışmak | **kısmen** | ortalamalı grid-following modeli kurarak; yazılı not yok, grid-forming yok |
+| Sonuçları ona götürmek | **henüz değil** | paket hazır ve güncel (docs/notes/step3_for_taylor.md), 18 Ekim'de ertelendi |
+
+Özet: dört adımın ikisi tam, biri kısmen, biri hiç; üç senaryonun biri tam, biri sürüyor, biri hiç. Hepsi tek bir
+küçük şebekede, nominal çalışma noktasında. Sözün "onun modelinde, inverterlerin arıza akımını taşıdığı yerde"
+kısmı tutulmadı; sözün karşılığı olan sonuçlar da henüz ona gitmedi.
+
+*Kaynak: `docs/PLAN.md` §2, §5, §6; `docs/STEP3.md`; REVIEW.md §7 satır 47–59.*
