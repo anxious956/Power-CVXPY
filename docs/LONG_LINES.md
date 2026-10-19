@@ -271,6 +271,29 @@ not this scenario. Q2 and Q3 still run as registered: the curve δ*(k_L), margin
 count, then the two EMT halves, are the deliverable, read as information and not as a second chance at the verdict.
 Static model; nothing injected yet.
 
+### Q3, the δ = 0 half at k_L = 2 (19 Oct 2026, EMT, no injection)
+
+`src/longlines.py spec zero 2` / `analyse zero 2` → `results/network/longlines_emt_zero2.json`. 49 PSCAD runs (the 48
+cases and the normal run), k_L = 2, MODE2 0, TANG 15 Hz, nominal source point, the scaled line built as its own
+project (`key_extra`). Pre-fault gate passed: |I1| 0.447 pu, 0.0 % from static. All 48 fault runs numerically clean;
+no weak frame.
+
+| tier | contained in own set (main, ≤ 0.1 ε) | bare-set model error, largest | separated from N(0) by 2(1 + ρ) | nearest N | D1 missed, alarm / guaranteed |
+|---|---|---|---|---|---|
+| box 0.08 | 48 of 48 | **0.000 ε** | 39 of 48 | 1.30 ε | 0 / 7 |
+| structured | 48 of 48 | 0.000 ε | 48 of 48 | 3.72 ε | 0 / 0 |
+
+D0 at 0.162 pu: 0 of 48 missed, on the clean tier and on the design tier (seed 7).
+
+- **The model error re-measured at k_L = 2 is 0.000 ε** on every window of every run: the 0.1 ε box carried from
+  k_L = 1 is not used. The lumped-line scaling introduces no new static-vs-EMT error at the nominal point.
+- Point separation at δ = 0 under the box tier: 39 of 48 runs clear the design margin, 7 are within 2 boxes of
+  N(0) (guaranteed-missed) and 9 within 2.2 ε. The static 16-corner count was 14 guaranteed-missed; the nominal
+  point is inside that. Under the structured tier every run clears by at least 3.72 ε.
+- D0 misses nothing in EMT at k_L = 2, as in the static Q1.
+
+The δ* half waits for Q2's carried points.
+
 ## 5. Caveats carried on every line
 
 One network (three-bus, weak source, X/R 10); nominal source point in EMT; one point on wave; clean runs; the lumped
