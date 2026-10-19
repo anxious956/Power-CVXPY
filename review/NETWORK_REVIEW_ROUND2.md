@@ -1,5 +1,8 @@
 # Review round 2: the fixes of PR #40
 
+> **Status, 19 Oct 2026.** PR #40 is merged. The one point left open at the end of this file, the `if` guarding the
+> mirror-image half of the tac25 test, has not been re-checked since; everything else here is closed.
+
 16 Oct 2026. Reviewed PR #40 (`fix-review-findings` at `3da5e5c`, open) against the findings of
 [NETWORK_REVIEW.md](NETWORK_REVIEW.md). The work was done in a separate worktree; nothing in `src/`,
 `tests/` or `results/` was changed. New check scripts are in [`review/checks/`](checks/):

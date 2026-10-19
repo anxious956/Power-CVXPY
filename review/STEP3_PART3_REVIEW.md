@@ -1,5 +1,9 @@
 # Review of PR #44, part 3: EMT with δ injected, and the 1.05 pu design point
 
+> **Status, 19 Oct 2026.** Item 3's provisional 0.1 ε model-error box was confirmed by the design point's own EMT
+> check (REVIEW row 51, `src/frames_emt_check.py`); the main configuration uses 0.1 ε = 0.008 pu. The 1.05 pu point
+> was superseded by the 1.12 pu point with the PLL-like reference filter ([STEP3_PART5_REVIEW.md](STEP3_PART5_REVIEW.md)).
+
 16 Oct 2026. Reviewed `step3-detection` at `6d8f812` ("Step 3, part 3") in a separate worktree. Nothing in `src/`,
 `tests/` or `results/` was changed, and no PSCAD runs were made. Every number below comes from #44's stored outputs:
 `results/network/frames_*.json`, and the 168 `fe_*` runs under `D:\JOSHUA_TAYLOR_data\data\pscad_work\network\`.

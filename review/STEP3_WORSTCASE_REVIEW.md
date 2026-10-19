@@ -1,5 +1,10 @@
 # Review of step 3's worst-case study (PR #44, `978e14e`, `30d9746`, `6804087`, `d0dafb4`)
 
+> **Status, 19 Oct 2026.** Both "not yet" rows of the verdict table were closed later: each detector against its own
+> worst case is in [results/STEP3_PILOT.md](../results/STEP3_PILOT.md) (a stress bound), and the 80 Ω claim was
+> replaced by the high-resistance study, where the band is pickup-dependent and the 160 Ω design holds in EMT
+> (REVIEW rows 54–55, [HIGHR_REVIEW.md](HIGHR_REVIEW.md)).
+
 17 Oct 2026. Reviewed in a separate worktree, reading `src/step3_adversary.py`, `src/step3_worstcase.py`,
 `src/frames_rf80.py`, `results/STEP3_PILOT.md` and the JSON outputs. No `src/`, `tests/` or `results/` change and no runs.
 
