@@ -1,0 +1,23 @@
+{
+ "0.0": {
+  "points": 38964,
+  "needing_relaxation": 201,
+  "relax_05_vs_025_max_diff": 5.661048867003677e-16
+ },
+ "0.56": {
+  "points": 38964,
+  "needing_relaxation": 3,
+  "relax_05_vs_025_max_diff": 2.220446049250313e-16
+ },
+ "1.12": {
+  "points": 38964,
+  "needing_relaxation": 159,
+  "relax_05_vs_025_max_diff": 4.0029660424867215e-16
+ },
+ "1.14": {
+  "points": 38964,
+  "needing_relaxation": 105,
+  "relax_05_vs_025_max_diff": 3.554447978966673e-16
+ },
+ "dead_frames_at_cap": []
+}
