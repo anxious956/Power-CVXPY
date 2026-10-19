@@ -1,5 +1,9 @@
 # Simulation plan: our own inverter-rich EMT grid in PSCAD
 
+**[19 Oct 2026: this is the plan of 15 Oct 2026. Since then steps 1–3 were done on our own two- and three-bus PSCAD
+grids (results/PSCAD_DELTA_TEST.md, results/MULTIBUS.md, docs/STEP3.md; REVIEW.md §7 rows 49–55); the current status
+is in docs/PLAN.md.]**
+
 15 Oct 2026. This closes the oldest open item in the project: every public dataset we have used
 either has no inverters worth the name (EvEMTBench TestGrid: 0.14 % of short-circuit capacity) or
 has inverters but no way to inject anything (CIGRE MV). Taylor's method needs an inverter that
@@ -11,7 +15,10 @@ use of a suppliable δ, and passive elements settled direction in EMT data witho
 purpose here is to run that test, not to produce a positive result for δ: does the static-model
 finding hold in EMT with the signal actually injected, and is it bounded to a 20 kV distribution feeder, on a grid where inverters carry a material share of the
 fault current — and, either way, to run the detector comparison there against a baseline that suits
-inverter-based sources (rung R5, PLAN.md WP3).
+inverter-based sources (rung R5, PLAN.md WP3). **[19 Oct 2026: done. Step 3 ran with δ injected in EMT on the three-bus
+grid (17–18 Oct 2026, PRs #44, #56): design point 1.12 pu at 225°, ρ = 0.1, about 93 % of the inverter; "δ buys the
+worst-case guarantee, not detection"; REVIEW.md §7 rows 51–55; see docs/STEP3.md. The I2-suppression direction question
+was also run in EMT (PRs #57, #58; rows 56–59; see docs/I2_DIRECTION.md).]**
 
 ## 1. What we have
 
@@ -21,7 +28,7 @@ inverter-based sources (rung R5, PLAN.md WP3).
 | Compiler | GFortran 8.1, bundled with the installer |
 | Licensing | cloud (`licensing.pscad.com`), signed in as the university account |
 | Automation | `mhi.pscad` 2.9.7 in PSCAD's Python 3.7 (`C:\Program Files\Python37`); `src/pscad_sweep.py` drives it, `src/pscad_io.py` reads the output. First runs: [results/PSCAD_FIRST.md](../results/PSCAD_FIRST.md) |
-| Edition | **Educational** (confirmed 15 Oct 2026): 200 nodes, Python automation. Plan A is open |
+| Edition | **Educational** (confirmed 15 Oct 2026): 200 nodes, Python automation. Plan A is open **[19 Oct 2026: the project went via Plan B and the three-bus grid (results/MULTIBUS.md, docs/STEP3.md); REVIEW.md §7 rows 49–55; see docs/PLAN.md.]** |
 
 ## 2. Step 1: find out which edition the licence gives
 
@@ -105,7 +112,8 @@ exact two-bus sequence circuit of `src/aux_model.py` in EMT: one source behind a
 current-limited inverter, one line, faults at a swept location and resistance, and the inverter's
 negative-sequence injection as a settable input. Well under 15 nodes.
 
-What it buys: the design tool says "δ = 0.5 pu separates these faults". Nobody has ever checked that
+What it buys: the design tool says "δ = 0.5 pu separates these faults" **[19 Oct 2026: old two-bus number; the
+step-3 design point is 1.12 pu at 225°, results/FRAMES.md; REVIEW.md §7 row 51.]**. Nobody has ever checked that
 claim against a time-domain simulation of the same circuit. This answers it, and it is a result on
 its own, positive or negative.
 

@@ -1,9 +1,15 @@
 # The design with the frames a real system has: the signal takes almost the whole inverter
 
+> **[19 Oct 2026: the title is the 16 Oct static headline, superseded (REVIEW.md §7 row 51). The step-3 design
+> point is in the section "The step-3 design point: 1.12 pu at 225°, ρ = 0.1, with the filtered reference" below:
+> 1.12 pu, about 93 % of the inverter, holds in EMT with the PLL-like reference filter and the mimic filter. This
+> file is a log; each section is dated and the later ones supersede the earlier.]**
+
 16 Oct 2026. Part of step 3 ([docs/STEP3.md](../docs/STEP3.md)), done before any detector because the review of the
 plan found it would otherwise decide the result ([review/STEP3_PLAN_REVIEW.md](../review/STEP3_PLAN_REVIEW.md) §3.2,
 §3.3, §6). Code: `network.solve_v1ref`, `src/frames.py`, `src/frames_design.py`. Numbers:
-`results/network/frames_design.json`. Static model only; the EMT side waits for PSCAD.
+`results/network/frames_design.json`. Static model only; the EMT side waits for PSCAD. *[The EMT side followed the
+same day and on 17 Oct: the sections from "EMT with the signal injected" on.]*
 
 ## Two frames the design had assumed away
 
@@ -52,6 +58,9 @@ guaranteed design needs nearly the whole inverter for the signal. With the margi
 inverter's rating for active and reactive power. The shared symbols buy almost nothing (0.02 pu): the frames cost is
 real, not an artefact of loose sets.
 
+*[Static, 16 Oct. The 1.14 pu figure is withdrawn as a headline (row 51): with the measured budgets and the filtered
+reference the design point is 1.12 pu at 225°, ρ = 0.1, verified in EMT; see the last two sections.]*
+
 ## EMT with the signal injected: the 1.14 pu design does not exist, 1.05 pu at 225° does (16 Oct 2026, evening)
 
 The table above is static. Review of PR #44 asked for two budgets the result rests on: the relay reference's
@@ -90,12 +99,15 @@ inception, with the frame-model sets at model_err = 0.
   edge. The remainder factor 1.1 adds 0.04–0.1 ε of headroom on top; it is reported as margin, not as model error.
 - **The design with measured budgets.** Main configuration: φ_ref 0.0303 rad, model error 0.1 ε, drift 3°,
   window 2–3 cycles. |δ| is capped at 1.05 pu: the largest level at which this controller holds its state in
-  EMT, measured at 225° on ab faults inside the decision window. Results:
+  EMT, measured at 225° on ab faults inside the decision window. *[Bare-DFT controller; the results in this list are
+  superseded by the filtered-reference design point (1.12 pu, ρ 0.1, cap 1.14 pu) in the last section, 17 Oct.]*
+  Results:
   - At ρ = 0.1, no δ up to 1.05 pu separates.
   - At 1.05 pu, 225° every case separates for ρ up to 0.05; the binding case is L1 15 % A-G at full R_f.
   - Between 60° and 165° at 1.05 pu the inverter has no settled state in the static model.
   - Per angle at 1.05 pu (cases unseparated at ρ = 0): 210–225° none; 195° 5; 240° 5; 270° 20.
-  - The design point for step 3 is **δ = 1.05 pu at 225°, ρ = 0.04**, 87.5 % of the inverter's rating. ρ is chosen
+  - The design point for step 3 is **δ = 1.05 pu at 225°, ρ = 0.04**, 87.5 % of the inverter's rating *[superseded
+    17 Oct by 1.12 pu, ρ = 0.1, with the filtered reference; kept as the controller-specific result]*. ρ is chosen
     to make the design feasible (the largest is 0.05). The whole margin, 2ε·0.04 = **0.08 ε**, is about the
     **0.073 ε** seen outside the sets: the design has almost no slack left if the model error is larger. Its
     checks (`results/network/frames_main_fixed.json`):
@@ -112,7 +124,8 @@ REVIEW.md §7 row 51. The headline gets stronger, not weaker. With the frames, t
 inverter's dynamics, the guarantee on this network needs 87.5 % of the inverter. It holds only in a narrow angle
 window, with a 5 % margin at most, and only within the 2–3-cycle window on bolted ab faults. The 1.05 pu cap is
 verified at 225° on ab faults only. The design point's own EMT check (binding cases at their witnesses, window
-edges, point on wave, normal corners, confusers) is review §5 and comes next.
+edges, point on wave, normal corners, confusers) is review §5 and comes next. *[Done 17 Oct, next section; and the
+87.5 % / 5 % figures were themselves superseded the same day by the filtered-reference point: 93 %, ρ = 0.1.]*
 
 ## The design point in EMT (17 Oct 2026)
 
@@ -206,7 +219,8 @@ ending 1.5–5.5 cycles after inception, i.e. through the whole fault.
 
   **D1's chain gets the mimic filter.** With it the model-error box is not used by the window start at all, and an
   earlier window (1.75 cycles) is open. Both still have to be confirmed over inception angles, on the design-point
-  batch.
+  batch. *[Confirmed on the 1.12 pu batch, next section: no point outside its set over 95 runs; inside from
+  1.875 cycles with random inception.]*
 
 ## The step-3 design point: 1.12 pu at 225°, ρ = 0.1, with the filtered reference (17 Oct 2026)
 
@@ -264,7 +278,13 @@ on windows ending 2.0–3.0 cycles after each run's own inception.
 
 ## What it means and does not
 
+*[Written 16 Oct for the static result; read with the 17 Oct sections above.]*
+
 - It is a static-model result on one three-bus network with the design's ε, for detection, not zone discrimination.
+  *[The EMT checks followed: the 1.12 pu design point holds in EMT with the filtered reference and the mimic filter.]*
 - It strengthens the deck's own question, *where does a designed signal earn its cost?* Here the cost of a guarantee
   is the inverter's output. The step-3 detectors will show what a statistical criterion needs instead (docs/STEP3.md).
+  *[They did, 17–18 Oct: under realistic noise every detector, 50N included, detected the pilot's 20 hard-set scenarios (R_f ≤ 40 Ω) without δ; δ buys the worst-case
+  guarantee, results/STEP3_PILOT.md, REVIEW.md rows 51–55.]*
 - The EMT checks of the frame model, and the relay's memory freeze across the fault windows, wait for PSCAD.
+  *[Done: the two sections above.]*

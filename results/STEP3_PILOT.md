@@ -166,7 +166,9 @@ an increment. D3 misses 50–75 % at every level.
 **Worst-case false alarms.** None of the four detectors alarms on the 2 normal runs (per δ level) under either
 adversary. With so few normal runs, and thresholds from 20 operating points × 4 pre-fault windows, this favours D0,
 D2 and D3 against D1, whose threshold covers all of N. The thresholds are being rebuilt on the 16 box corners plus
-random interior normals. The alarms are all on the confusers:
+random interior normals. **[19 Oct 2026: done; the thresholds now come from the 150 dense normal runs (16 box corners
+plus random interior points), see the multiplicative sections and "Restarts" below; REVIEW.md §7 rows 51–55; see
+docs/STEP3.md.]** The alarms are all on the confusers:
 - the single-phase load: D1, D0 and D2 at every level;
 - the load step: D1 3 of 5, D2 1 of 5, D0 0 (per window) or 4 of 5 (constant).
 
@@ -185,7 +187,9 @@ random interior normals. The alarms are all on the confusers:
   against it. Real systematic instrument errors are **multiplicative** (per-phase ratio and phase, constant over
   the run). They scale the increments, and at CT 10 % they shift D1's absolute measurement by about ε on fault
   currents. A multiplicative adversary within the class bounds, for all four detectors, comes next. Until it is in,
-  option B is not a result to report.
+  option B is not a result to report. **[19 Oct 2026: done; the multiplicative adversary (regime-dependent with white
+  noise, and the stress case) is in the two sections below: it hid no pilot fault from any detector at any δ;
+  REVIEW.md §7 rows 51–55; see docs/STEP3.md.]**
 - With realistic random noise all four detect everything at every δ (above). So the signal matters only for
   worst-case noise. At the design tier's noise bound the design needs almost none of it (δ* 0 or 0.04 pu).
 
@@ -292,7 +296,16 @@ detection needs it". Before that claim, three things are needed:
 - an EMT model-error check at 80 Ω;
 - a pilot showing whether the statistical detectors also struggle there.
 
+**[19 Oct 2026: the EMT high-R check is done, results/HIGHR.md: the crossover where 50N fails is pickup-dependent,
+about 115 / 160 / 250 Ω at 0.20 / 0.15 / 0.10 pu, and the 160 Ω design holds in EMT; REVIEW.md §7 row 55.]**
+
 ## What could make the experiment informative
+
+**[19 Oct 2026: all three were done since (PRs #44, #56): (A) "D1's worst-case curve with bounds (option A)" above;
+(B) "Each detector against its own worst case (option B)" above; (C) results/HIGHR.md and results/IBR_GRID_SCREEN.md.
+The step-3 design point is 1.12 pu at 225°, ρ = 0.1, about 93 % of the inverter; "δ buys the worst-case guarantee,
+not detection"; REVIEW.md §7 rows 51–55; see docs/STEP3.md and results/FRAMES.md ("The step-3 design point: 1.12 pu
+at 225°").]**
 
 Not started; the choice belongs with the project (docs/STEP3.md, "no sweep until all six hold"):
 

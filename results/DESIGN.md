@@ -31,7 +31,8 @@
 > at 1.184 < 1.2 yet is pruned. It is sound only for an inverter that enforces |I₁| + |I₂| ≤ I_max.
 > **Re-run with sound rows (B5, 5 Oct 2026).** `tac25_design.py` now takes the exact set for a per-phase limiter,
 > every phase current |i⁺ + aᵏδ| ≤ I_max, which is not a disc; §3, §3.1 and §4.1 below are the re-run.
-> - The §3 minima stay **0.26 / 0.26 / 0.16 pu** (weak_sg / noisy / all_ibr_hard; TAC25 as written 0.50 / 0.52 /
+> - The §3 minima stay **~~0.26 / 0.26 / 0.16 pu~~** [withdrawn, REVIEW.md §7 row 49: the limit-inside design gives
+>   0.52 / 0.32 / 0.40 pu; never quote 0.16–0.26] (weak_sg / noisy / all_ibr_hard; TAC25 as written 0.50 / 0.52 /
 >   0.36). The sum rule removed realisations a per-phase limiter allows, but not the ones that decide separation here.
 > - The scratch figures (0.32 / 0.32 / 0.20, and ε = 0.12 feasible at about 0.76 pu) came from the bounding disc
 >   |i⁺| ≤ (−|δ| + √(4I_max² − 3|δ|²))/2, which also admits currents the inverter cannot carry beside δ. The disc's
