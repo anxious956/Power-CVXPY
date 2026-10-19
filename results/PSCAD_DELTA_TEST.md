@@ -56,7 +56,8 @@ uses the inverter's measured injection, not the box corner exactly.
   first such test in this project, and the step Taylor's papers name as next.
 - **Thin margins.** 2.05 against a threshold of 2 at 95 %: the design is the smallest δ that separates,
   by construction. Any unmodelled effect of a few hundredths of ε would close it. A design margin (the
-  TAC25 formulation in [DESIGN.md](DESIGN.md) has one) is the obvious next run.
+  TAC25 formulation in [DESIGN.md](DESIGN.md) has one) is the obvious next run. **[19 Oct 2026: done; the designs
+  since carry ρ = 0.1 (results/MULTIBUS.md, results/FRAMES.md: 1.12 pu at 225°); REVIEW.md §7 rows 49–51.]**
 - **The inverter references δ to its own V1, the design assumes a fixed δ.** During these faults V1 at
   the inverter rotates by about 6°, so the injected δ sat at −36° instead of −30°. Separation held
   anyway here; for bolted or closer faults the rotation is larger, and it is an effect the design model
@@ -64,4 +65,6 @@ uses the inverter's measured injection, not the box corner exactly.
 - **One circuit, two fault cases, one realisation each**, fundamental-frequency phasors over one cycle,
   ideal instruments, a grid-following averaged inverter without PLL dynamics. Not yet: the full set of
   30 cases, the corners of the box other than the worst, other limiter types, a multi-bus grid,
-  grid-forming inverters, and detection by a real relay algorithm (step 3).
+  grid-forming inverters, and detection by a real relay algorithm (step 3). **[19 Oct 2026: the multi-bus grid
+  (results/MULTIBUS.md, 128 runs) and step-3 detection with δ injected (docs/STEP3.md, results/FRAMES.md; 17–18 Oct,
+  PRs #44, #56) are done; grid-forming is the remaining deck scenario, not started; REVIEW.md §7 rows 49–55.]**

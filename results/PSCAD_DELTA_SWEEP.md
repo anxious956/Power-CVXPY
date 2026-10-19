@@ -63,7 +63,9 @@ false alarms more likely.**
 2. **The design must contain the current limit.** A design that ignores it promises a normal set the
    inverter cannot produce. This is the review's correction H5 (REVIEW.md; [DESIGN.md](DESIGN.md)),
    now seen in EMT rather than argued from the model. The TAC25 formulation in the repository puts the
-   limit inside the problem; testing that design the same way is the next step.
+   limit inside the problem; testing that design the same way is the next step. **[19 Oct 2026: done; the
+   limit-inside design held in EMT on the two-bus circuit (results/PSCAD_TAC25.md), then on the three-bus grid
+   (results/MULTIBUS.md) and in step 3 with detectors (docs/STEP3.md, results/FRAMES.md); REVIEW.md §7 rows 49–55.]**
 3. **A margin is not free.** It doubled δ (0.18 → 0.34 pu) and, with the limit outside the design,
    tripled the false-alarm exposure.
 

@@ -41,7 +41,9 @@ raises V2 at the PCC from 0.0002 to 0.0096 pu through the source and line impeda
 ## What it does not do yet
 
 - **No fault.** The next step is a fault on a line next to the inverter, so the designed δ can be
-  checked against what the design tool predicts (step 1 → step 2 of the plan).
+  checked against what the design tool predicts (step 1 → step 2 of the plan). **[19 Oct 2026: done; steps 1–3
+  ran on the two-bus and three-bus grids (results/PSCAD_DELTA_TEST.md, results/MULTIBUS.md, results/FRAMES.md,
+  docs/STEP3.md); REVIEW.md §7 rows 49–55.]**
 - **Fixed frequency, no PLL.** The angle follows the measured V1, but there is no PLL dynamics or
   frequency deviation. Fine for a stiff grid, to be revisited for a weak one.
 - **Grid-following only.** A grid-forming inverter (the third case in the deck) needs a voltage-source

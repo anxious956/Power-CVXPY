@@ -1,8 +1,17 @@
-# The I2-suppressing inverter with δ injected: direction at the inverter's relay (plan)
+# The I2-suppressing inverter with δ injected: direction at the inverter's relay
+
+> **Status, 19 Oct 2026: done and merged** (PR #57; independent review PR #58, review/I2DIR_REVIEW.md; REVIEW.md §7
+> rows 56–59). Findings, three-bus network, s = share of inverter-interfaced load behind the relay: suppression breaks
+> direction **only as s → 1** (EMT: 80 % of forward faults lost with grid-side control, 68 % with converter-side;
+> reverse never misdirected); **IEEE 2800's V2-referenced current restores direction** in both control brackets; a
+> designed δ (0.20 pu structured tier, free in I1; 0.98 pu box tier, displacing 46 % of the inverter's normal output)
+> **certifies direction for the set test in 50 of 50 EMT runs and does not fix the conventional element** (forward
+> misdirected 0.44 / 0.96). **δ buys the guarantee, not the decision.** Caveats: one network, nominal source point,
+> one point on wave, clean runs, thin set margins. The plan below is kept as registered, stage by stage.
 
 18 Oct 2026. The meeting deck named three places where Taylor's method "could still matter": I2-suppressing
 inverters, longer lines and grid-forming inverters. PLAN.md §6 owes "an EMT study with δ injected" there. The
-I2-suppressing case has only a static screen so far, on CIGRE MV (REVIEW.md §7 row 46):
+I2-suppressing case had, on 18 Oct, only a static screen, on CIGRE MV (REVIEW.md §7 row 46):
 - suppression breaks direction at inverter buses;
 - a δ fixed in the inverter's V1 frame did not repair it at any of the 48 settings tried;
 - a V2-referenced current (IEEE 2800's rule) did.
