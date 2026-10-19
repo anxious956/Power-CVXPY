@@ -121,6 +121,45 @@ def carry():
           f"margin {m['margin_eps']:.3f} eps ({m['margin_pu']:.4f} pu), closest pair {m['pair']}")
 
 
+def gaps(fm, d, pairs=None):
+    """Forward-reverse gaps (eps units) at d, for the given (i, j) pairs or all, smallest first."""
+    from i2dir_b1_followup import gap
+    w = np.broadcast_to(np.asarray(fm.eps, float), (12,))
+    pairs = pairs or [(i, j) for i in A for j in B]
+    Z = {k: fm.zonotopes(d, k) for k in {x for p in pairs for x in p}}
+    out = sorted((min(gap(cA, GA, cB, GB, w) for cA, GA in Z[i] for cB, GB in Z[j]), i, j) for i, j in pairs)
+    fm._cache.clear()
+    return out
+
+
+def seeds():
+    """Seed robustness of the thin margins (review): the 10 closest pairs at each carried point under seed 1, their
+    gaps with the sets rebuilt from seeds 2 and 3 (same n_samples); and the margin at an interior wedge point
+    (1.02 pu at 202 deg, box) for contrast, not a design point."""
+    out = {}
+    need = 2 * (1 + RHO)
+    for p, (tier, mag, ang) in PT.items():
+        d = mag * np.exp(1j * np.radians(ang))
+        g1 = gaps(build(tier, 1), d)
+        top = [(i, j) for _, i, j in g1[:10]]
+        res = dict(tier=tier, abs_delta=mag, angle_deg=ang, need_eps=need,
+                   seed1=[dict(pair=[list(CASES[i]), list(CASES[j])], gap_eps=g) for g, i, j in g1[:10]])
+        for sd in (2, 3):
+            gs = gaps(build(tier, sd), d, top)
+            res[f"seed{sd}"] = [dict(pair=[list(CASES[i]), list(CASES[j])], gap_eps=g) for g, i, j in gs]
+        low = min(x["gap_eps"] for k in ("seed1", "seed2", "seed3") for x in res[k])
+        res["smallest_gap_eps"], res["below_need"] = low, low < need
+        out[p] = res
+        print(f"[{p}] {mag} pu @ {ang} deg: smallest gap over the 10 closest pairs, seeds 1/2/3: "
+              + " / ".join(f"{min(x['gap_eps'] for x in res[k]):.3f}" for k in ("seed1", "seed2", "seed3"))
+              + f" eps (need > {need:.1f}); {'BELOW: within sampling variation' if low < need else 'all above'}", flush=True)
+    g = gaps(build("box 0.08", 1), 1.02 * np.exp(1j * np.radians(202)))
+    out["interior_box_1.02_202"] = dict(gap_eps=g[0][0], margin_eps=g[0][0] - need, pair=[list(CASES[g[0][1]]), list(CASES[g[0][2]])])
+    print(f"interior wedge point 1.02 pu @ 202 deg (box, information only): margin {g[0][0] - need:.3f} eps", flush=True)
+    json.dump(out, open(os.path.join(OUT, "i2dir_b2_seeds.json"), "w"), indent=1)
+    print("-> results/network/i2dir_b2_seeds.json")
+
+
 def specs_path(p):
     return os.path.join(OUT, f"i2dir_b2_{p}_specs.json")
 
@@ -224,4 +263,4 @@ def analyse(p):
 
 if __name__ == "__main__":
     cmd = sys.argv[1]
-    {"carry": carry, "static": static, "spec": lambda: make(sys.argv[2]), "analyse": lambda: analyse(sys.argv[2])}[cmd]()
+    {"carry": carry, "seeds": seeds, "static": static, "spec": lambda: make(sys.argv[2]), "analyse": lambda: analyse(sys.argv[2])}[cmd]()

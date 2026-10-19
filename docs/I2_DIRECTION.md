@@ -597,7 +597,19 @@ the patch's lower tip: the feasible region is a wedge that widens with |δ|.
 | box 0.98 pu @ 205° | 0.024 ε (0.002 pu) | L1 B-C m 0.75 rF 0.125 vs L2 B-C m 0.95 bolted |
 | structured 0.20 pu @ 230° | 0.048 ε | L1 A-G m 0.95 rF 0.75 vs L2 A-G m 0.95 rF 1.0 |
 
-Both are thin beyond the 10 % margin ρ already holds. At the box point the binding pair is a B-C one, although every
+Both are thin beyond the 10 % margin ρ already holds.
+
+**Seed robustness** (review; `src/i2dir_b2.py seeds`, `results/network/i2dir_b2_seeds.json`). The sets were rebuilt
+from seeds 2 and 3 (same 150 samples, 3 face points) and the 10 closest pairs of seed 1 were re-measured:
+
+| point | smallest gap, seeds 1 / 2 / 3 | needed |
+|---|---|---|
+| box 0.98 pu @ 205° | 2.224 / 2.223 / 2.221 ε | > 2.2 |
+| structured 0.20 pu @ 230° | 2.248 / 2.251 / 2.249 ε | > 2.2 |
+
+The seed-to-seed spread is about 0.003 ε, below both margins, so they are not within sampling variation of this
+size. They stay thin. For contrast, an interior wedge point, 1.02 pu at 202° (box, information only, not a design
+point), has a margin of 0.099 ε. At the box point the binding pair is a B-C one, although every
 B-C pair is apart at δ = 0.
 
 **Static (b2), 16 corners:** forward misdirected 0.98 (B-C 160 of 160, A-G 232 of 240), undecided 0.02, reverse
@@ -619,17 +631,27 @@ The three weak-frame runs, L1 B-C bolted at m 0.15, 0.35 and 0.55 (|V1_R| < 0.2 
 separately. Each is contained and separated under (b1); under (b2) each reads reverse.
 
 **Reading (registered stop rules):**
-- **(b1-EMT) holds at the primary point.** The primary-tier direction guarantee is confirmed in EMT at the nominal
-  point: 50 of 50 runs are contained and separated, the weak-frame ones included.
+- **(b1-EMT) holds at the primary point.** EMT at the nominal point is consistent with the primary-tier guarantee:
+  50 of 50 runs are contained and separated, the weak-frame ones included, with the nearest opposite set at 2.45 ε
+  against 2.2 needed. Fifty clean nominal runs cannot confirm a worst-case guarantee; they fail to refute it.
 - **(b2) fails worse than without δ.** Forward misdirected rises from 0.40 to 0.96 (the mechanism is not examined
   here). This is stop rule 2, "δ certifies direction for the set
   test, not for the conventional element". At the box point δ actively breaks the conventional element.
 
-| | set test (b1) | conventional element (b2), forward misdirected / undecided |
-|---|---|---|
-| δ = 0 (stage c, shunt) | point separation: B-C all; A-G 25/150 box, 150/150 structured | 0.40 / 0.28 |
-| structured 0.20 pu @ 230° | 50 of 50 | 0.44 / 0.20 |
-| box 0.98 pu @ 205° | 50 of 50 | 0.96 / 0.04 |
+| | price: source inverter's I1 in normal operation (LIM 1) | set test (b1) | conventional element (b2), forward misdirected / undecided |
+|---|---|---|---|
+| δ = 0 (stage c, shunt) | 0.447 pu (the command) | point separation: B-C all; A-G 25/150 box, 150/150 structured | 0.40 / 0.28 |
+| structured 0.20 pu @ 230° | 0.447 pu, untouched | 50 of 50 | 0.44 / 0.20 |
+| box 0.98 pu @ 205° | **0.243 pu: 46 % of the positive-sequence output displaced, all the time** | 50 of 50 | 0.96 / 0.04 |
+
+The price decides whether the primary-tier design is usable, as in step 3. At 0.98 pu, δ priority takes almost half
+of the inverter's normal positive-sequence output for the whole time it runs. The structured point costs nothing in
+I1.
+
+**Hypothesis for (b2), untested.** At 0.98 pu the increment ΔI2 seen by the relay is dominated by the injected
+signal's own frame turn, δ(e^{jΔθ} − 1) times the share entering L1, plus the curtailed I1. The element would then
+read the inverter's reaction, not the fault's direction, which is what REVIEW row 46 says. It can be checked
+statically by comparing ΔI2 at the relay with that term case by case. This has not been done.
 
 Caveats as above: one network, nominal source point, one point on wave, clean runs, s = 1, converter-side bracket,
 and thin set margins (0.02–0.05 ε).

@@ -35,14 +35,14 @@ A, B = list(range(len(FWD))), list(range(len(FWD), len(CASES)))
 POINTS = {"box 0.08": 0.98 * np.exp(1j * np.radians(205)), "structured design tier": 0.20 * np.exp(1j * np.radians(230))}
 
 
-def build(tier):
+def build(tier, seed=1):
     net = network_s(1.0, 1e6, filters=True, inject=True)
     _, st = operating_point(1.0, 1e6, U0)
     sinks = {k: complex(v["ID"], -v["IQ"]) for k, v in st.items() if k != "I"}
     kw = dict(KW)
     if TIERS[tier]["eps"] is not None:
         kw["eps"] = TIERS[tier]["eps"]
-    return FrameModelMulti(net, CASES, sinks=sinks, base_net=network(1e6, 1.0), n_samples=150, face_pts=3, seed=1,
+    return FrameModelMulti(net, CASES, sinks=sinks, base_net=network(1e6, 1.0), n_samples=150, face_pts=3, seed=seed,
                            instr=TIERS[tier]["instr"], **kw)
 
 
