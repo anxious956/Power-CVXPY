@@ -205,6 +205,13 @@ plain fixed-point iteration (`frames.fixed_point`, as step 3 ran it):
 - **k_L = 8 has no model**: at 10 % of the source points the inverter's frame has no fixed point even
   under-relaxed. It is out on this condition alone, whatever the voltage rule. The condition is added to the
   pre-flight ("the frame settles at every probe point") as a model requirement, not a design choice.
+- **k_L = 3 and 4 have fault states with no settled frame at the source corners** (even under-relaxed), all at the
+  inverter's high-current corners (i_mag = +1, i_ang = +1), on faults close to the relay: k_L 3, 10 of 768
+  (case, corner) points, L1 B-C bolted at m 0.15 / 0.35 / 0.55; k_L 4, 30 of 768, adding L1 A-G bolted at 0.15 /
+  0.35, B-C at 20 Ω at 0.15 / 0.35 / 0.55 and B-C bolted at 0.75. k_L 1 and 2 have none. Where this happens the
+  V1-referenced inverter has no steady state, so the set test has no fault set to build; Q1 counts these corner
+  points and leaves them out of that case's statistics, and the k_L is flagged as partially modelled. Together with
+  the voltage table this puts k_L 3 and 4 out on two grounds under rules A or B.
 
 ## 5. Caveats carried on every line
 

@@ -160,12 +160,25 @@ def static():
         yN = fms["box"].measure(S, 0j, None)                     # the measurement does not depend on the tier
         pieces = {t: fms[t].zonotopes(0j, None) for t in TIERS}
         for k, c in enumerate(CASES):
-            yF = fms["box"].measure(S, 0j, k)
-            d0 = np.maximum(3 * np.abs(yF[:, 5] - yN[:, 5]), np.abs(yF[:, 4] - yN[:, 4]))
-            row = dict(case=list(c), d0_worst=float(d0.min()), d0_nominal=None,
+            # corners where the inverter's fault frame has no fixed point even under-relaxed (longer lines) are
+            # counted and left out of this case's corner statistics; a case with such corners is flagged
+            yF, settled = [], []
+            for i in range(len(S)):
+                try:
+                    yF.append(fms["box"].measure(S[i:i + 1], 0j, k)[0])
+                    settled.append(True)
+                except RuntimeError:
+                    settled.append(False)
+            settled = np.array(settled)
+            if not settled.any():
+                res["cases"].append(dict(case=list(c), unsettled_corners=16, d0_worst=None, d0_missed=None))
+                continue
+            yF, yNs = np.array(yF), yN[settled]
+            d0 = np.maximum(3 * np.abs(yF[:, 5] - yNs[:, 5]), np.abs(yF[:, 4] - yNs[:, 4]))
+            row = dict(case=list(c), unsettled_corners=int((~settled).sum()), d0_worst=float(d0.min()), d0_nominal=None,
                        d0_missed=bool(d0.min() < PICKUP), d0_missed_low=bool(d0.min() < PICKUP_LOW))
             for t in TIERS:
-                dist = np.array([fr.distance_to_set(pieces[t], yF[i], scale(fms[t])) for i in range(len(S))])
+                dist = np.array([fr.distance_to_set(pieces[t], yF[i], scale(fms[t])) for i in range(len(yF))])
                 row[f"d1_{t}_min_boxes"] = float(dist.min())
                 row[f"d1_{t}_alarm_missed"] = bool(dist.min() <= 1.0)
                 row[f"d1_{t}_guaranteed_missed"] = bool(dist.min() <= 2.0)
@@ -175,15 +188,19 @@ def static():
             yFn = fms["box"].measure(np.zeros((1, 4)), 0j, k)[0]
             row["d0_nominal"] = float(max(3 * abs(yFn[5] - yNn[5]), abs(yFn[4] - yNn[4])))
         n = len(CASES)
+        cnt = lambda key: sum(bool(r.get(key)) for r in res["cases"])
         res["summary"] = dict(
-            d0_missed=sum(r["d0_missed"] for r in res["cases"]), d0_missed_low=sum(r["d0_missed_low"] for r in res["cases"]),
-            d0_missed_cases=[r["case"] for r in res["cases"] if r["d0_missed"]],
-            **{f"d1_{t}_{w}_missed": sum(r[f"d1_{t}_{w}_missed"] for r in res["cases"]) for t in TIERS for w in ("alarm", "guaranteed")},
-            d0_quarter=sum(r["d0_missed"] for r in res["cases"]) >= n / 4, n=n, seconds=time.time() - t0)
+            d0_missed=cnt("d0_missed"), d0_missed_low=cnt("d0_missed_low"),
+            d0_missed_cases=[r["case"] for r in res["cases"] if r.get("d0_missed")],
+            **{f"d1_{t}_{w}_missed": cnt(f"d1_{t}_{w}_missed") for t in TIERS for w in ("alarm", "guaranteed")},
+            unsettled_points=sum(r["unsettled_corners"] for r in res["cases"]),
+            unsettled_cases=[r["case"] for r in res["cases"] if r["unsettled_corners"]],
+            d0_quarter=cnt("d0_missed") >= n / 4, n=n, seconds=time.time() - t0)
         s = res["summary"]
         print(f"k_L {kl}: D0 missed {s['d0_missed']} of {n} at {PICKUP} pu ({s['d0_missed_low']} at {PICKUP_LOW}); "
               f"D1 missed (alarm / guaranteed) box {s['d1_box_alarm_missed']} / {s['d1_box_guaranteed_missed']}, structured "
-              f"{s['d1_structured_alarm_missed']} / {s['d1_structured_guaranteed_missed']}; D0 >= 1/4: {s['d0_quarter']}  [{s['seconds']:.0f} s]", flush=True)
+              f"{s['d1_structured_alarm_missed']} / {s['d1_structured_guaranteed_missed']}; D0 >= 1/4: {s['d0_quarter']}; "
+              f"corner points with no settled fault frame {s['unsettled_points']} of {16 * n} in {len(s['unsettled_cases'])} cases  [{s['seconds']:.0f} s]", flush=True)
         if s["d0_missed_cases"]:
             print("   D0 missed: " + ", ".join(tag(tuple(c)) for c in s["d0_missed_cases"]), flush=True)
         out[str(kl)] = res
