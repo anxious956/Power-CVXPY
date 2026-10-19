@@ -1,5 +1,10 @@
 # Bridge review, consolidated (28 Sep 2026)
 
+> **Status, 19 Oct 2026.** "No task left for an open-loop designed δ" (direction on CIGRE MV, static) was tested in
+> EMT with δ injected on the three-bus grid: a designed δ does not repair the conventional direction element, and
+> the set test gets a worst-case direction guarantee from it (REVIEW row 58, [docs/I2_DIRECTION.md](../../docs/I2_DIRECTION.md));
+> IEEE 2800's V2-referenced current restores direction in EMT (row 57). Static, one network, nominal point otherwise.
+
 Five specialist reviews (V&V, protection, optimisation, inverter controls, ML/signal processing;
 [SPECIALIST_REPORTS.md](SPECIALIST_REPORTS.md)) of the planned "bridge" — Taylor's auxiliary-signal design
 method on the CIGRE MV sequence network — consolidated by a lead review that re-checked the decisive claims.

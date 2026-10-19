@@ -207,7 +207,7 @@ Revised 19 Oct 2026. The October schedule is kept below the new one for the reco
 | Oct 2026 (planned Dec) | Steps 1 → 2: the designed δ injected in EMT and the promised separation checked | **done** (PR #44: both frames, filtered reference, mimic chain) |
 | Oct 2026 (planned Jan–Feb 2027) | Step 3: detectors on the EMT data, the worst-case sweep | **done** (18 Oct): pilot, worst-case curve, structured errors, inverter-fed and high-R screens, the high-R EMT check (PR #56) |
 | Oct 2026 (planned Nov–Dec) | Deck scenario 1: I₂ suppressed, direction, δ designed and injected in EMT | **done** (19 Oct, PR #57, review PR #58) |
-| Nov 2026 | Deck scenario 2: longer lines, with the same machinery (static δ*(length), conventional element vs set test, EMT check where the conventional element first fails), pre-registered | **next** |
+| Oct–Nov 2026 | Deck scenario 2: longer lines, with the same machinery (static δ*(length), conventional element vs set test, EMT check where the conventional element first fails), pre-registered ([docs/LONG_LINES.md](LONG_LINES.md), branch `long-lines`) | **in progress** (19 Oct): the pre-flight limits the curve to 1–2× the line, a limit of the base network's load flow, not of the claim; on the registered criterion the claim does not hold up to 2× on this network (the conventional element misses nothing; static, Q1); δ*(k_L) and the two EMT halves pending |
 | Nov–Dec 2026 | Deck scenario 3: grid-forming (needs a grid-forming inverter model in PSCAD) | open |
 | — | The package for Prof. Taylor (`docs/notes/step3_for_taylor.md`) and the email (draft); his call on selectivity (T2) | **deferred** (18 Oct): the team works on its own for now; the package is kept current |
 | Dec 2026 | Fall report | open |
@@ -229,8 +229,10 @@ grid-forming systems) and asked to test it there. The I₂ case is now **tested 
 ([docs/I2_DIRECTION.md](I2_DIRECTION.md)): suppression breaks direction only on an inverter-dominated back side,
 a V2-referenced current (IEEE 2800) restores it, and a designed δ certifies direction for the set test without
 repairing the conventional element. The longer-line case was screened **in the static model only**, for reach on
-CIGRE MV (REVIEW row 47: not supported up to 3× length); its EMT test with δ injected, on the three-bus grid and
-with the step-3 machinery, is next. Grid-forming is untested.
+CIGRE MV (REVIEW row 47: not supported up to 3× length); its test for detection on the three-bus grid, with the
+step-3 machinery, is pre-registered and running ([docs/LONG_LINES.md](LONG_LINES.md)): the base network's load flow
+limits it to 1–2× the line, and there the conventional element misses nothing (static, Q1), so on the registered
+criterion the claim does not hold up to 2×; δ*(length) and the EMT halves are pending. Grid-forming is untested.
 
 ## 7. Questions for Prof. Taylor
 
