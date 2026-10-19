@@ -621,8 +621,8 @@ separately. Each is contained and separated under (b1); under (b2) each reads re
 **Reading (registered stop rules):**
 - **(b1-EMT) holds at the primary point.** The primary-tier direction guarantee is confirmed in EMT at the nominal
   point: 50 of 50 runs are contained and separated, the weak-frame ones included.
-- **(b2) fails worse than without δ.** Forward misdirected rises from 0.40 to 0.96: the large injected I2 drives the
-  conventional element's negative-sequence decision reverse. This is stop rule 2, "δ certifies direction for the set
+- **(b2) fails worse than without δ.** Forward misdirected rises from 0.40 to 0.96 (the mechanism is not examined
+  here). This is stop rule 2, "δ certifies direction for the set
   test, not for the conventional element". At the box point δ actively breaks the conventional element.
 
 | | set test (b1) | conventional element (b2), forward misdirected / undecided |
