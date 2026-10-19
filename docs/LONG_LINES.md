@@ -41,7 +41,9 @@ tenable. The result is read as an overhead-line abstraction.
 fails is out and said so (the CIGRE screen lost 10× this way). Expectation written now: 0.85 pu of constant-impedance
 load fed through k_L × 0.2 pu of reactance from a 0.4 pu source, with 0.45 pu from the inverter at R, will likely
 leave the window at k_L = 8 and possibly at 4. If k_L = 4 fails, k_L = 3 is added so the curve has at least three
-points; this fallback is fixed now, not chosen after the fact.
+points; this fallback is fixed now, not chosen after the fact. If 8 fails as well, the set is {1, 2, 3, 4} or
+{1, 2, 3}: the curve is read as far as pre-flight allows, and the "never misses a quarter" branch of the go/no-go
+is then conditional on that set, which the verdict must say.
 
 Also recomputed per k_L and reported, by the main configuration's own rules (`frames_main.py`):
 - φ_ref = k σ_white / (√n_mem · min|V1_L|) with k = 4, σ_white = 0.01 pu, n_mem = 3 cycles: min|V1_L| changes with
@@ -66,7 +68,9 @@ point F, at fraction m of L1 from the relay:
 - δ must traverse the whole line to reach the relay. In normal operation the relay's share of δ is the source path
   against the loads, ~ Y_src / (Y_src + Y_load), Y_src = 1 / (k_L z1 + zs); in the fault the branch at F diverts
   part of it. Both shares fall as k_L grows, so **|ΔH| falls at the full-line rate ~ 1 / |k_L z1 + zs| for every
-  fault**, bolted ones included (there the fault takes all of δ and ΔH is the whole normal share).
+  fault**, bolted ones included (approximately: for a bolted A-G fault the fault takes nearly all of δ and ΔH is
+  about the whole normal share; for a bolted B-C fault the negative-sequence network at F connects to the
+  positive-sequence network, not to ground, so δ is not simply shunted; the direction of the prior stands).
 
 So longer lines weaken both terms. The deck's claim needs the conventional element to fail (Δc below its pickup)
 while δ still has enough leverage within the cap. The prior from the terms above:
@@ -77,8 +81,14 @@ while δ still has enough leverage within the cap. The prior from the terms abov
    configuration). Any growth of δ* with k_L leaves the cap at k_L = 2 unless the changed load flow moves the
    normal set in δ's favour.
 
-The prior therefore leans to **"does not hold"**: δ* is expected to leave the cap before the conventional element
-misses a quarter of the hard set. The test decides. Theorem 1 (TAC25) states a necessary condition
+The prior therefore leans to **"does not hold"** under the box tier: δ* is expected to leave the cap before the
+conventional element misses a quarter of the hard set. The test decides.
+
+**Per tier.** At k_L = 1 the box tier (main configuration) is already at 1.12 pu against the 1.14 pu cap, so its
+verdict is nearly decided by construction, and carries little information about the claim. The structured design
+tier needs no δ at k_L = 1 (review/STEP3_STRUCTURED_REVIEW.md §3: "design tier needs no δ; class tier needs
+1.12 pu"), so it is the tier where δ*(k_L) can rise from zero and the claim can show. The verdict is given per
+tier: the box tier primary, as in step 3, the structured design tier reported with equal weight. Theorem 1 (TAC25) states a necessary condition
 ‖θ‖ ≥ (1 − ζ)/χ with χ from the leverage matrices and ζ from the model difference; longer lines lower both, the
 theorem gives no sign for their ratio, and on this box-bounded uncertainty it is vacuous anyway (DESIGN.md §2). It
 is not used as a prediction.
@@ -90,11 +100,14 @@ and on L2 at 0.05 / 0.25 / 0.5, each at R_f/rF 0 / 0.5 / 1.0 (0 / 20 / 40 Ω): 4
 operation (detection), as in step 3.
 
 **Q1. Static, 16 corners, at each k_L (`static`).** On the hard set, at δ = 0:
-- the conventional incremental element D0 = max(3|ΔI0|, |ΔI2|) at the HIGHR pickup policy, **0.162 pu** (the
-  calibrated D0 pickup's upper end at the design tier, `src/highr_screen.py`; the lower end 0.126 pu is reported
-  as a sensitivity, not a second verdict); a case is missed when D0 is below the pickup at any of the 16 corners;
-- D1, the set test, at δ = 0: a corner measurement detects when its distance to the normal set N(0) exceeds the
-  noise bound (ε box; structured tier reported too); a case is missed when any corner fails.
+- the conventional incremental element D0 = max(3|ΔI0|, |ΔI2|) at the HIGHR pickup policy, **0.162 pu**: the
+  value `src/highr_screen.py` used, the upper end of the D0 pickup calibrated on the pilot at the **design tier**
+  (0.126–0.162 pu, results/step3/pilot_eval.json); the lower end 0.126 pu is reported as a sensitivity, not a
+  second verdict. A case is missed when D0 is below the pickup at any of the 16 corners;
+- D1, the set test, at δ = 0: the distance of a corner measurement to the normal set N(0), in noise boxes (ε per
+  component; structured tier reported too). Both fractions are reported, as review/HIGHR_REVIEW.md §3 did:
+  **alarm** (distance > 1 box) and **guaranteed** (> 2 boxes). The registered "missed" uses the guaranteed one: a
+  case is missed when any corner is within 2 boxes of N(0).
 - Where, in location m and R_f, does the conventional element first fail as k_L grows?
 
 **Q2. δ*(k_L) (`design`).** The step-3 set-vs-set design, fault against normal, `frames.FrameModel` on the scaled
@@ -104,15 +117,21 @@ At each k_L: the δ = 0 unseparated count, δ*, the margin at δ* (gap minus 2ε
 price (the inverter's delivered |I1| in normal operation under LIM 1 at δ*, against the 0.45 pu command), and dead
 frames at δ*.
 
-**Q3. EMT (`spec` / `analyse`).** At **the smallest k_L where the conventional element misses ≥ ¼ of the hard set
-in Q1** (12 of 48); if it never does, at k_L = 4, or at the largest k_L that passes pre-flight if 4 is out. If δ*
-at that k_L is infeasible within the cap, the EMT step runs at the cap (1.14 pu at the best angle) and is read as
-"no feasible δ; the cap's point for information". Runs, nominal source point, PSCAD fast mode, stage-(c) gates
-(pre-fault |I1| and |I2| within 3 % of static and settled; per-run peak and 5–10 kHz checks; weak-frame flag on
-sink or source |V1| < 0.2 pu, read separately):
-- δ* injected (MODE2 2, LIM 1, TANG 15 Hz): the 48 cases plus the normal run, 49 runs;
-- δ = 0: the same 48 cases plus the normal run, 49 runs, for the point-separation reading as in I2_DIRECTION (b0).
-About 100 runs. Read on the same runs:
+**Q3. EMT (`spec` / `analyse`).** Two halves, each at the k_L where what it tests exists (review):
+- **the δ* half**, 49 runs (the 48 cases plus the normal run) with δ* injected (MODE2 2, LIM 1, TANG 15 Hz), at
+  **the largest k_L where δ* is feasible within the cap** (per tier; the box tier's δ* is injected, the structured
+  tier's δ* too if it differs and is non-zero), so the step-3 EMT design check has a pass/fail criterion where the
+  guarantee exists;
+- **the δ = 0 half**, 49 runs, at **the smallest k_L where D0 misses ≥ ¼ of the hard set in Q1** (12 of 48); if it
+  never does, at k_L = 4, or at the largest k_L in the pre-flight set if 4 is out. This gives the (b0)-style point
+  separation and D0 in EMT where the conventional element fails.
+- If the two k_L coincide, it is one network and about 100 runs; if not, two networks and still about 100 runs.
+  The reading of "holds" is unchanged either way: the claim needs both at the same k_L, which the static curve
+  decides. No run at the cap when δ* is infeasible: "best angle" has no definition when no angle separates.
+
+Nominal source point, PSCAD fast mode, stage-(c) gates: pre-fault |I1| and |I2| within 3 % of static and settled;
+per-run peak and 5–10 kHz checks; the weak-frame flag on the **source inverter's own |V1| at R** below 0.2 pu (there
+are no sinks in the step-3 configuration), read separately, not excluded. Read on the same runs:
 - **the step-3 EMT design check:** each window (2–3 cycles after inception, memory frame) contained in its own
   case set (own distance ≤ 0.1 ε) and separated from N(δ*) by more than 2(1 + ρ) minus the own distance;
 - **the conventional element** D0 at 0.162 pu on the same windows, with and without δ;
@@ -120,11 +139,14 @@ About 100 runs. Read on the same runs:
 
 ## 4. Go / no-go, fixed now
 
+A verdict **per tier** (box primary, structured design tier with equal weight; §2 says why the box verdict carries
+little information):
 - **"The deck's claim holds for detection"** if some k_L ≤ 8 (in the pre-flight set) has the conventional element
   missing ≥ ¼ of the hard set in Q1 while δ*(k_L) is feasible within the 1.14 pu cap in Q2 and holds in EMT in Q3
   (every clean run contained and separated).
 - **"Does not hold"** if δ* leaves the cap at a smaller k_L than the one where the conventional element first misses
-  a quarter, or if the conventional element never misses a quarter up to the largest k_L in the set.
+  a quarter, or if the conventional element never misses a quarter up to the largest k_L in the set (then stated
+  as conditional on the pre-flight set).
 - The whole k_L curve is reported either way: Q1 miss fractions by element, Q2 δ*, margin, price, unseparated
   count, and the δ = 0 point separation of the EMT runs.
 - Stop rules: no re-tuning of angle, pickup or tier after a result; a k_L that fails pre-flight is out, not
