@@ -1547,3 +1547,28 @@ trafolarının doğruluğu belirliyor (REVIEW.md §7 satır 51–58). Hepsi tek 
 noktasında; inverterlerin arıza akımını taşıdığı şebekede tespit hâlâ sınanmadı.
 
 *Kaynak: `docs/PLAN.md` §3–§5; REVIEW.md §7 satır 47–59.*
+
+## 44. Verdiğimiz sözün ne kadarı tutuldu? (19 Ekim 2026)
+
+6 Ekim sunumunda hocaya verdiğimiz söz: yöntemini EMT'de dört adımda test etmek (docs/PLAN.md §2) ve "hâlâ önemli
+olabileceği" üç yerde denemek. Toplantıda o da iki şey istedi: PSCAD'i öğrenmek, inverterlerin nasıl çalıştığını
+çalışmak (§6).
+
+| Söz | Tutuldu mu | Eksik / sınır |
+|---|---|---|
+| Adım 1: iki baralı tasarımı çok baralı araca çevirmek | **evet** | radyal şebekeler; 14 baralı örnek yeniden üretilmedi |
+| Adım 2: sinyali basan inverterle EMT şebekesi | **evet** | kendi üç baralı PSCAD şebekemiz; onun 14 baralı modeli değil |
+| Adım 3: yük ve gürültü altında, onun Kalman filtresi ile öğrenen dedektör, δ'yı her biri bozulana kadar küçültmek | **kısmen** | dedektörler EMT verisinde koştu; ama δ taraması yapılmadı, çünkü gerçekçi gürültüde her dedektör pilotun 20 zor senaryosunu δ olmadan buldu; yerine en kötü durum eğrisi ölçüldü. D2 onun MMKF'si değil, "Pirani ve diğerleri anlamında, röleye taşınmış" bir uyarlama |
+| Adım 4: dedektör gömülü kartta, bir çevrim içinde | **hayır** | başlanmadı (Oca–Nis 2027) |
+| Senaryo 1: I₂ bastıran inverter | **evet** | yön için; δ enjekte edilmiş EMT (PR #57) |
+| Senaryo 2: uzun hatlar | **sürüyor** | temel şebekenin yük akışı eğriyi 2× ile sınırlıyor; statik sonuç "tutmuyor", EMT bekliyor |
+| Senaryo 3: şebeke kurucu (grid-forming) inverter | **hayır** | PSCAD'de model yok; onun Baeckeland modeli istenmedi |
+| PSCAD'i öğrenmek | **evet** | Python'dan sürülen kendi şebekelerimiz, 600'den fazla koşu |
+| İnverterleri çalışmak | **kısmen** | ortalamalı grid-following modeli kurarak; yazılı not yok, grid-forming yok |
+| Sonuçları ona götürmek | **henüz değil** | paket hazır ve güncel (docs/notes/step3_for_taylor.md), 18 Ekim'de ertelendi |
+
+Özet: dört adımın ikisi tam, biri kısmen, biri hiç; üç senaryonun biri tam, biri sürüyor, biri hiç. Hepsi tek bir
+küçük şebekede, nominal çalışma noktasında. Sözün "onun modelinde, inverterlerin arıza akımını taşıdığı yerde"
+kısmı tutulmadı; sözün karşılığı olan sonuçlar da henüz ona gitmedi.
+
+*Kaynak: `docs/PLAN.md` §2, §5, §6; `docs/STEP3.md`; REVIEW.md §7 satır 47–59.*
