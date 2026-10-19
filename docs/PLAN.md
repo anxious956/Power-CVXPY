@@ -1,7 +1,8 @@
 # Project plan
 
-Last updated **18 Oct 2026** (status and milestones, §3–§5: steps 1 and 2 done on the three-bus grid, step 3 in
-progress, about three months ahead of the October schedule). The 15 Oct revision follows the technical review ([REVIEW.md](../REVIEW.md)),
+Last updated **19 Oct 2026** (status and milestones, §3–§6: steps 1–3 done on the three-bus grid; the first of the
+deck's scenarios, I₂ suppression, done with δ injected; longer lines next; about four months ahead of the October
+schedule). The 15 Oct revision follows the technical review ([REVIEW.md](../REVIEW.md)),
 the CIGRE MV runs and the B1 screening, which moved the project away from the plan written on
 16 Sep 2026. The old plan is in git history; what changed is stated in §1 so the shift is on record.
 Evidence for every statement below is in [REVIEW.md](../REVIEW.md) §7 (the claim register) and the
@@ -96,7 +97,8 @@ V1-referenced as its controller runs.
 - The relay chain has a mimic filter.
 - **The design point holds in EMT** at its witnesses, window edges and random inception, and over all 48 cases (0
   points outside their own sets in the 2–3-cycle window).
-- Still open: the deck's scenarios (I₂ suppressed, longer lines, grid-forming) with δ injected.
+- The deck's scenarios with δ injected: I₂ suppressed done (19 Oct, under step 3 below); longer lines next;
+  grid-forming open.
 
 The history up to 16 Oct:
 
@@ -126,9 +128,9 @@ Next:
    model if shared, otherwise our own).
 Owner: Asmar Hasanova.
 
-### Step 3 · Detection — in progress on the EMT data with δ injected
+### Step 3 · Detection — done on the EMT data with δ injected; the deck's scenarios follow
 
-Done 17–18 Oct 2026 ([docs/STEP3.md](STEP3.md), [results/STEP3_PILOT.md](../results/STEP3_PILOT.md)):
+Done 17–19 Oct 2026 ([docs/STEP3.md](STEP3.md), [results/STEP3_PILOT.md](../results/STEP3_PILOT.md)):
 - **Front end:** a common chain with instrument errors on the samples, the mimic filter, a starter and the memory
   frame.
 - **Detectors:** D1 the set test, D0 incremental 50N/50Q, D2 the multiple-model test (Pirani et al., moved to the
@@ -140,8 +142,21 @@ Done 17–18 Oct 2026 ([docs/STEP3.md](STEP3.md), [results/STEP3_PILOT.md](../re
 - **Two screens:**
   - an inverter-fed relay end ([results/IBR_GRID_SCREEN.md](../results/IBR_GRID_SCREEN.md)): 59N detects without δ;
     selectivity (T2) is the open question;
-  - high resistance (`results/HIGHR.md`, branch `step3-highR`): around **160 Ω the signal certifies ground-fault
-    detection where incremental 50N fails** (static, ρ = 0, 5° window); the EMT check is next.
+  - high resistance ([results/HIGHR.md](../results/HIGHR.md), PR #56): **the band where the signal certifies
+    ground-fault detection and incremental 50N fails depends on the 50N pickup**, crossover about 115 / 160 / 250 Ω
+    at a 0.20 / 0.15 / 0.10 pu pickup; the 160 Ω design holds in EMT; a 0.2 pu load step is a certain D1 false
+    alarm at that design (REVIEW row 55).
+- **Deck scenario 1, the I₂-suppressing inverter** ([docs/I2_DIRECTION.md](I2_DIRECTION.md), PR #57, review PR #58,
+  REVIEW rows 56–59), direction at the inverter's relay, δ designed and injected in EMT:
+  - suppression breaks direction **only when nearly all of the load behind the relay is inverter-interfaced**
+    (s → 1): in EMT 80 % (grid-side control) or 68 % (converter-side) of the forward set is lost, 20 % or 40 % of it
+    wrong-way; at s = 0.8 only dependability is lost (static);
+  - IEEE 2800's V2-referenced current **restores direction in both control brackets** (0 % misdirected);
+  - a designed δ **does not fix the conventional element** (REVIEW row 46's prior holds in EMT); the set test decides
+    direction without δ for every B-C run and gets the worst-case guarantee from δ: 0.20 pu at the structured tier,
+    free in I1; 0.98 pu at the box tier, displacing 46 % of the inverter's normal output. **δ buys the guarantee,
+    not the decision**, as in the step-3 detection results.
+  - One network, nominal source point, one point on wave, clean runs.
 
 The history up to 16 Oct:
 
@@ -172,6 +187,9 @@ Claim (REVIEW §10 item 8):
   worst-case one, and its price is set by the instruments: free at near-nominal accuracy, about 93 % of the
   inverter at protection-class fault-condition errors. Under realistic noise, conventional incremental 50N already
   detects the faults it was designed for, up to about 120 Ω.
+- (19 Oct) the deck's I₂-suppression scenario, in EMT with δ injected: suppression costs the relay its direction
+  only on an inverter-dominated back side (s → 1); IEEE 2800's negative-sequence current restores it; a designed δ
+  certifies direction for the set test and does not repair the conventional element. Same scope as above.
 
 Cannot claim:
 - that auxiliary signals help detection on inverter-dominated grids (untested — that is WP2);
@@ -180,16 +198,18 @@ Cannot claim:
 
 ## 5. Milestones from here
 
-Revised 18 Oct 2026. The October schedule is kept below the new one for the record.
+Revised 19 Oct 2026. The October schedule is kept below the new one for the record.
 
 | When | What | Status |
 |---|---|---|
 | Oct 2026 | Step 2: the injecting inverter; PSCAD and inverter groundwork, as Prof. Taylor asked | **done** (16 Oct) |
 | Oct 2026 (planned Nov) | Steps 1 and 2: the three-bus PSCAD grid with swept faults; the multi-bus design tool on it | **done** (PR #38–#41) |
 | Oct 2026 (planned Dec) | Steps 1 → 2: the designed δ injected in EMT and the promised separation checked | **done** (PR #44: both frames, filtered reference, mimic chain) |
-| Oct–Nov 2026 (planned Jan–Feb 2027) | Step 3: detectors on the EMT data, the worst-case sweep | **in progress**: pilot, worst-case curve, structured errors, inverter-fed and high-R screens done; the high-R EMT check next |
-| Nov 2026 | The package for Prof. Taylor (`docs/notes/step3_for_taylor.md`) and the email (draft); his call on selectivity (T2) | open |
-| Nov–Dec 2026 | The deck's scenarios with δ injected: I₂ suppressed, longer lines, grid-forming | open |
+| Oct 2026 (planned Jan–Feb 2027) | Step 3: detectors on the EMT data, the worst-case sweep | **done** (18 Oct): pilot, worst-case curve, structured errors, inverter-fed and high-R screens, the high-R EMT check (PR #56) |
+| Oct 2026 (planned Nov–Dec) | Deck scenario 1: I₂ suppressed, direction, δ designed and injected in EMT | **done** (19 Oct, PR #57, review PR #58) |
+| Nov 2026 | Deck scenario 2: longer lines, with the same machinery (static δ*(length), conventional element vs set test, EMT check where the conventional element first fails), pre-registered | **next** |
+| Nov–Dec 2026 | Deck scenario 3: grid-forming (needs a grid-forming inverter model in PSCAD) | open |
+| — | The package for Prof. Taylor (`docs/notes/step3_for_taylor.md`) and the email (draft); his call on selectivity (T2) | **deferred** (18 Oct): the team works on its own for now; the package is kept current |
 | Dec 2026 | Fall report | open |
 | Jan–Apr 2027 | Step 4: latency on a board; the paper | open |
 | Jun 2027 | Submit to NAPS 2027 | |
@@ -205,11 +225,12 @@ Both halves of the work are ours: the convex design in CVXPY and the EMT evaluat
 **study how inverters work**. Those come first (§5).
 
 The deck named three places his method still has room (I₂-suppressing inverters, longer lines,
-grid-forming systems) and asked to test it there. Two have since been screened **in the static model
-only**: the I₂ case points to a V2-referenced current rather than a designed δ, and the longer-line
-case did not behave as the deck suggested. That correction is ours to deliver, with its limit
-attached: neither was tested with δ injected in EMT. What is left of the promise is the test that
-can settle all three, an EMT study with δ injected.
+grid-forming systems) and asked to test it there. The I₂ case is now **tested in EMT with δ injected**
+([docs/I2_DIRECTION.md](I2_DIRECTION.md)): suppression breaks direction only on an inverter-dominated back side,
+a V2-referenced current (IEEE 2800) restores it, and a designed δ certifies direction for the set test without
+repairing the conventional element. The longer-line case was screened **in the static model only**, for reach on
+CIGRE MV (REVIEW row 47: not supported up to 3× length); its EMT test with δ injected, on the three-bus grid and
+with the step-3 machinery, is next. Grid-forming is untested.
 
 ## 7. Questions for Prof. Taylor
 
@@ -219,9 +240,10 @@ These are the deck's four questions, in the deck's order, with what we have lear
    from just-beyond faults on 2–4 Ω lines, as Theorem 1 predicts. Does that match his expectation,
    and **is there an observable — time domain, wideband — where the difference is larger?**
 2. **Where to test δ next.** We offered I₂-suppressing inverters, longer lines, grid-forming systems.
-   Since the deck, the static model pointed the first towards a grid-code question and did not
-   support the second, which leaves grid-forming as the strongest case. None of the three has been
-   tested with δ injected in EMT; which should the first injected EMT run target?
+   Since the deck, the first has been tested with δ injected in EMT (a grid-code question: IEEE 2800 restores
+   direction, a designed δ does not repair the conventional element), the static model did not support the
+   second for reach, and grid-forming is untested. Longer lines are being run next; is grid-forming the case
+   he would want first?
 3. **The current limit.** During a fault the inverter already runs near 1.2 pu, so δ has to fit in
    what is left. Should the limit in the design include δ, **checked phase by phase or as one
    total?** (Our own correction: the limit belongs inside the problem, not as an outer check.)
