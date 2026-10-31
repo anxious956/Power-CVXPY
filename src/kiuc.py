@@ -450,7 +450,7 @@ Q3_PATH = os.path.join(OUT, "kiuc_q3_design.json")
 _W = {}
 
 
-def q3_model(study, tier):
+def q3_model(study, tier, seed=1):
     hydro, relay, A, B = STUDIES[study]
     net = network(hydro, "DYg", relay=relay, inject=True)
     probe = fr.FrameModel(net, A[:1], n_samples=400, face_pts=5, seed=2)
@@ -460,7 +460,7 @@ def q3_model(study, tier):
     if TIERS[tier]["eps"] is not None:
         kw["eps"] = TIERS[tier]["eps"]
     cases = list(A) + (list(B) if B else [])
-    return fr.FrameModel(net, cases, n_samples=150, face_pts=3, seed=1, **kw), phi, len(A)
+    return fr.FrameModel(net, cases, n_samples=150, face_pts=3, seed=seed, **kw), phi, len(A)
 
 
 def q3_apart(fm, d, rho, nA, direction, order):
@@ -600,6 +600,128 @@ def design_q3():
     print(f"-> {os.path.relpath(Q3_PATH)}")
 
 
+def q3_extras():
+    """Review additions, static: (a) seed robustness of the thinnest margin (detection R2, hydro off, box): every
+    case's gap at delta = 0 with the sets rebuilt from seeds 1, 2, 3; (b) information only: the R2 box margin against
+    |delta| at its best angle (5 deg grid) and the price in I1 there."""
+    study, out = "detection R2 | hydro off", {}
+    w = None
+    seeds = {}
+    for sd in (1, 2, 3):
+        fm, _, _ = q3_model(study, "box", seed=sd)
+        w = np.broadcast_to(np.asarray(fm.eps, float), (12,))
+        Ns = fm.zonotopes(0j, None)
+        gaps = {tag(c): min(q3_gap(a1, g1, a2, g2, w) for a1, g1 in Ns for a2, g2 in fm.zonotopes(0j, k)) for k, c in enumerate(fm.cases)}
+        seeds[sd] = gaps
+        low = sorted(gaps.items(), key=lambda x: x[1])[:3]
+        print(f"seed {sd}: smallest gaps at delta = 0 (eps): " + ", ".join(f"{n} {g:.3f}" for n, g in low) + f"; margin (rho 0.1) {low[0][1] - 2.2:.3f}", flush=True)
+        fm._cache.clear()
+    out["seeds"] = {str(k): v for k, v in seeds.items()}
+    fm, _, nA = q3_model(study, "box", seed=1)
+    curve = []
+    for r in (0.0, 0.2, 0.5, 1.0):
+        best = None
+        for a in ([0] if r == 0 else range(0, 360, 5)):
+            d = r * np.exp(1j * np.radians(a))
+            try:
+                m = q3_margin(fm, d, Q3_RHO, nA, False)
+            except (RuntimeError, AssertionError):
+                continue
+            if best is None or m["margin_eps"] > best[1]["margin_eps"]:
+                best = (a, m)
+        a, m = best
+        pr = q3_price(fm, r * np.exp(1j * np.radians(a)))
+        curve.append(dict(abs_delta=r, best_angle_deg=a, margin_eps=m["margin_eps"], binding=m["binding"], **pr))
+        print(f"|delta| {r:.1f} pu: best angle {a} deg, margin {m['margin_eps']:.3f} eps ({m['binding']}); |I1| {pr['I1_delivered']:.3f} / {pr['I1_commanded']:.3f}", flush=True)
+    out["margin_vs_delta"] = curve
+    json.dump(out, open(os.path.join(OUT, "kiuc_q3_extras.json"), "w"), indent=1)
+    print("-> results/network/kiuc_q3_extras.json")
+
+
+Q3_SPECS = os.path.join(OUT, "kiuc_q3_specs.json")
+Q3_GROUPS = [("R2", "off", "detection R2 | hydro off", FWD, ("L2", "b")),
+             ("R2", "sg", "detection R2 | hydro on (Thevenin)", FWD, ("L2", "b")),
+             ("R1rev", "off", "direction R1 | hydro off", REV_R1, ("L2", "a")),
+             ("R1fwd", "off", "direction R1 | hydro off", FWD, ("L2", "a"))]
+
+
+def make_q3():
+    """The Q3 EMT check at delta* = 0 on Q3's inverter: FRT off, LIM 1, MODE2 0, TANG 15 Hz, nominal point."""
+    from pscad_network import make_spec
+    specs = []
+    for rel, hydro, study, cases, relay in Q3_GROUPS:
+        net = network(hydro, "DYg", relay=relay)
+        st = emt_settings(net, 0.0, 0.0)
+        for c in [None] + list(cases):
+            sp = make_spec(f"kq3_{rel}_{hydro}_" + ("N" if c is None else tag(c)), net, c, nominal_sg(net), {}, 1)
+            sp["settings"] = json.loads(json.dumps(st))
+            sp["key_extra"] = f"q3{hydro}{rel}"
+            sp.update(kind="normal" if c is None else "fault", case=None if c is None else list(c), relay_name=rel, hydro=hydro,
+                      study=study, k2=0.0, frt=0.0, lim_rule=1, op="P0.25Q0.15")
+            specs.append(sp)
+    json.dump(specs, open(Q3_SPECS, "w"), indent=1)
+    print(f"{len(specs)} runs -> {os.path.relpath(Q3_SPECS)}")
+
+
+def analyse_q3():
+    """The set test at delta = 0 on the Q3 runs: each window's distance to its own case set (main and bare) and to N
+    (R2) or to the nearest opposite-side set (R1), per tier; and the two conventional elements."""
+    from pscad_io import read_case
+    from pscad_network import WORK
+    from pscad_network_check import injections
+    from step3_frontend import Relay, CYCLE
+    specs = json.load(open(Q3_SPECS))
+    out = {}
+    for rel, hydro, study, cases, relay in Q3_GROUPS:
+        g = [s for s in specs if s["relay_name"] == rel and s["hydro"] == hydro]
+        spn = [s for s in g if s["kind"] == "normal"][0]
+        net = network(hydro, "DYg", relay=relay)
+        sg = nominal_sg(net)
+        st = settings(net, sg, net.ibrs["I"].i0, 0.0, 0.0)
+        _, inj_st, _ = solve(net, sg, st, None, 1)
+        run = read_case(os.path.join(WORK, spn["name"] + ".gf46"), spn["name"])
+        i25, i28 = injections(run, spn, 0.25), injections(run, spn, 0.28)
+        e1 = abs(abs(i28["I"][0]) / abs(inj_st["I"][0]) - 1)
+        s1 = abs(abs(i28["I"][0]) / max(abs(i25["I"][0]), 1e-9) - 1)
+        res = dict(gate=dict(err=e1, settled=s1, passed=e1 <= 0.03 and s1 <= 0.03), tiers={})
+        direction = STUDIES[study][3] is not None
+        for tier in TIERS:
+            fm, _, nA = q3_model(study, tier)
+            w = np.broadcast_to(np.asarray(fm.eps, float), (12,))
+            bare = fr.FrameModel(fm.net, fm.cases, n_samples=150, face_pts=3, seed=1, factor=1.0, drift_deg=3.0, ref_phi=0.0,
+                                 model_err=0.0, lim=1, **({} if TIERS[tier]["eps"] is None else dict(eps=TIERS[tier]["eps"])))
+            N = None if direction else fm.zonotopes(0j, None)
+            rows = []
+            for sp in [s for s in g if s["kind"] == "fault"]:
+                c = tuple(sp["case"])
+                k = [tuple(x) for x in fm.cases].index(c)
+                rl = Relay(sp["name"], tier="clean", mimic_tau=MIMIC_TAU)
+                rr = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
+                ok, pk, hf = numerically_clean(rr)
+                own_m, own_b = fm.zonotopes(0j, k), bare.zonotopes(0j, k)
+                opp = [j for j in range(len(fm.cases)) if (j >= nA) != (k >= nA)] if direction else None
+                win = []
+                for cyc, y in rl.windows(rl.idx(T_FAULT)):
+                    om, ob = fr.distance_to_set(own_m, y, w), fr.distance_to_set(own_b, y, w)
+                    dn = (min(fr.distance_to_set(fm.zonotopes(0j, j), y, w) for j in opp) if direction
+                          else fr.distance_to_set(N, y, w))
+                    win.append(dict(cycles=float(cyc), own=float(om), own_bare=float(ob), other=float(dn), separated=bool(dn > 2 * (1 + Q3_RHO) - om)))
+                rows.append(dict(name=sp["name"], case=list(c), clean=ok, contained=all(x["own"] <= 0.1 for x in win),
+                                 separated=all(x["separated"] for x in win), model_err=max(x["own_bare"] for x in win),
+                                 nearest_other=min(x["other"] for x in win)))
+            q = [r for r in rows if r["clean"]]
+            res["tiers"][tier] = dict(n=len(q), of=len(rows), contained=sum(r["contained"] for r in q), separated=sum(r["separated"] for r in q),
+                                      model_err_max=max((r["model_err"] for r in q), default=None),
+                                      nearest_other_min=min((r["nearest_other"] for r in q), default=None), rows=rows)
+            t = res["tiers"][tier]
+            print(f"[{rel} | hydro {hydro} | {tier}] gate {'PASSED' if res['gate']['passed'] else 'FAILED'} | {t['n']} of {t['of']} clean | "
+                  f"contained {t['contained']}, separated {t['separated']} | bare-set model error max {t['model_err_max']:.3f} eps | nearest "
+                  f"{'opposite set' if direction else 'N'} {t['nearest_other_min']:.2f} eps (needs > 2.2)", flush=True)
+        out[f"{rel} | hydro {hydro}"] = res
+    json.dump(out, open(os.path.join(OUT, "kiuc_q3_emt.json"), "w"), indent=1, default=str)
+    print("-> results/network/kiuc_q3_emt.json")
+
+
 def fig16_emt():
     """The EMT Fig.-16 pair (R2, hydro off, IEEE 2800, K1 4, LIM 2): the IBR's I_P+, I_Q+, |I2|, |I2|/|V2| and the angle
     of I2 against V2 at Bus-2, 2.5 cycles after inception, against static."""
@@ -630,4 +752,4 @@ def fig16_emt():
 
 if __name__ == "__main__":
     {"preflight": preflight, "static": static, "spec": make_q2, "analyse": analyse_q2, "fig16": fig16_emt,
-     "design": design_q3}[sys.argv[1]]()
+     "design": design_q3, "spec3": make_q3, "analyse3": analyse_q3, "extras3": q3_extras}[sys.argv[1]]()

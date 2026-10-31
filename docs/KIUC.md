@@ -366,9 +366,23 @@ test separates every fault from normal operation at the IBR-end relay (R2) and e
 fault at the grid-end relay (R1), at δ = 0, under both noise tiers, with margins of 1.7–13.7 ε (detection) and
 30–60 ε (direction). The conventional negative-sequence elements need the IEEE 2800 law for the same job (Q2), and
 the designed δ would have to replace that law open-loop; it does not have to, because the set test does not need
-I2 at all here: it uses the voltages and the positive sequence. **The prior "δ buys the guarantee, not the decision"
-becomes "the set test needs no δ for the guarantee either" on this system** (strong grid behind R1, SIR about 4,
-short line). The EMT check therefore runs at δ = 0, below.
+I2 at all here: it uses the voltages and the positive sequence. The EMT check therefore runs at δ = 0, below.
+
+**What kind of result δ* = 0 is** (review): a design output, not a run without injection, so it is a legitimate δ
+verdict: on this system the set test's worst-case guarantee needs no signal. The finding is the comparison on the
+same system: **the report's negative-sequence elements need the IEEE 2800 law to work at all; the set test needs
+neither the law nor δ, at both relays, in both tiers.** The prior's wording updates to "δ buys the guarantee where the
+guarantee is not already free; here it is free", because a short line on a comparatively strong source, with no
+load behind R2, makes the voltage and positive-sequence signatures large against the uncertainty box.
+
+**Review additions, static** (`src/kiuc.py extras3` → `results/network/kiuc_q3_extras.json`):
+- **Seed robustness of the thinnest margin** (detection R2, hydro off, box): the three smallest gaps at δ = 0 are
+  L2 A-G 80 % / 50 % / 5 % from Bus-2 at 5 Ω, 3.874 / 3.953 / 4.054 ε, **identical to three decimals with seeds 1, 2 and
+  3** (margin 1.674 ε at ρ 0.1). At δ = 0 nothing nonlinear binds (the limiter is idle, the frame barely turns), so the
+  near-minimax fit is exact on any sample set and the sets do not depend on the seed.
+- **What δ would buy here** (information only, R2 box, best angle on a 5° grid): margin 1.674 / 1.736 / 1.830 /
+  1.984 ε at |δ| = 0 / 0.2 / 0.5 / 1.0 pu (best angle 270–275°), binding case unchanged, |I1| still 0.287 / 0.287.
+  **δ adds margin, not feasibility**: +0.31 ε at 1 pu.
 
 ### Deviations during Q2 (recorded)
 
