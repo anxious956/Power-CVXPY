@@ -1572,3 +1572,25 @@ küçük şebekede, nominal çalışma noktasında. Sözün "onun modelinde, inv
 kısmı tutulmadı; sözün karşılığı olan sonuçlar da henüz ona gitmedi.
 
 *Kaynak: `docs/PLAN.md` §2, §5, §6; `docs/STEP3.md`; REVIEW.md §7 satır 47–59.*
+
+## 45. Hangi devreleri (şebekeleri) denedik? (31 Ekim 2026)
+
+İki tür devre var: başkalarının hazır EMT verisi (biz koşmadık, sinyal yok) ve PSCAD'de kendi kurduğumuz şebekeler
+(kendi inverterimizle; δ'yı içine basabiliyoruz).
+
+**Hazır veri, δ yok:** 110 kV güçlü şebeke ve inverterli 20 kV CIGRE MV fideri (EvEMTBench). Öğrenen dedektör,
+menzil (reach), yön ve inverter açması burada tarandı; δ ayrıca statik modelde denendi.
+
+**PSCAD'de kendi şebekelerimiz:**
+
+| Şebeke | Kuruluşu | Ne denendi |
+|---|---|---|
+| İki baralı | kaynak, hat, inverter | inverterin ilk testi; δ'nın ilk kez EMT'ye basılması |
+| Üç baralı (asıl şebeke) | zayıf kaynak (bara L), hat L1, inverter ve yük (bara R), hat L2, yük (bara S); röle L'de, L1'e bakıyor; 20 kV | adım 3 (tespit, δ enjekte); I₂ bastıran inverter ve yön; uzun hatlar (L1 ve L2 1, 1.5, 2 katına uzatıldı) |
+| KIUC (hocanın NREL raporu) | şebeke kaynağı, eşdeğer hat, bara 1 (hidro jeneratör açık/kapalı), 4.6 millik hat 2, bara 2'de 15 MVA inverter; röleler R1 ve R2; 57.1 kV | raporun bulgusunun tekrarı; I₂ modları (bastırılmış, IEEE 2800 K = 5); FRT; iki akım sınırlayıcı; set testi ve δ |
+
+Her şebekede hatalar: faz-toprak (A-G) ve faz-faz (B-C), hattın farklı noktalarında, birkaç arıza direnciyle.
+
+**Denenmeyen:** şebeke kurucu (grid-forming) inverter, hocanın 14 baralı modeli ve 2 katından uzun hatlar.
+
+*Kaynak: `docs/KIUC.md` §1; `docs/LONG_LINES.md`; `docs/STEP3.md`; `src/pscad_network.py`.*
