@@ -237,6 +237,37 @@ R1 reverse 0.79 right / 0.11 wrong).
   reactive-current support; with IEEE 2800-style FRT the positive-sequence element recovers, the negative-sequence one
   does not. That is the K-factor limitation of the I2 study, measured.
 
+### The EMT Fig.-16 pair, before the batch was read (31 Oct 2026)
+
+`src/kiuc.py fig16` → `results/network/kiuc_fig16_emt.json`. R2, hydro off, TF2 ΔYg (the only TF2 in PSCAD), IEEE 2800
+K2 = 5, K1 = 4, LIM 2, TANG = TV2 = 15 Hz, bolted A-G at 5 % from Bus-2. Pre-fault gate passed (|I1| 0.291 EMT,
+0.292 static); numerically clean; both elements forward; no weak frame.
+
+| cycles after inception | I_Q+ | I_P+ | \|V1\| at Bus-2 | \|I2\| |
+|---|---|---|---|---|
+| 2.0 | 0.575 | 0.274 | 0.724 | 1.030 |
+| 2.5 | 0.736 | 0.252 | 0.730 | 1.164 |
+| 3.0 | 0.796 | 0.245 | 0.732 | 1.197 |
+| 4.0 | 0.821 | 0.245 | 0.733 | 1.200 |
+| 5.0 | 0.822 | 0.245 | 0.733 | 1.200 |
+| static (same settings) | 0.821 | 0.248 | 0.733 | 1.200 |
+
+At 2.5 cycles: |I2| = 4.73 |V2| (static 4.86), ∠I2 − ∠V2 = 90.5° (static 90.0°), phase peak 1.92 pu (static 2.04,
+beyond the 1.5 pu envelope). The EMT converges to the static state by 4 cycles; inside the relay's 2–3-cycle window the
+FRT is still rising (it acts on the 15 Hz-filtered |V1|), which is the real controller and registered as such.
+
+### Deviations during Q2 (recorded)
+
+- **Launch order:** the batch was started before the review asked for the EMT Fig.-16 pair first; the pair was then
+  run and read on its own before anything else.
+- **Two PSCAD clients for about 5 minutes:** the first launch (a harness-backgrounded command whose Python 3.7 output
+  was buffered) was still alive when the batch was relaunched as a detached process; runs 2–3 failed ("simulation
+  process stopped unexpectedly", a file lock). The duplicate client was stopped, the 7 outputs it may have touched
+  deleted, and nothing from them read; the batch was relaunched once, one client, unbuffered.
+- **The project key:** the kiuc branch lacked `key_extra` (it was on long-lines), so different topologies in one batch
+  could have shared a built project; added before the relaunch. Outputs are reusable only by spec digest (BUILD 6),
+  so nothing from before the fix can be read by mistake.
+
 ## 5. What this does not do
 
 Their GFM inverter (we have none yet), their switching model, momentary cessation, slow/fast controller tunings,
