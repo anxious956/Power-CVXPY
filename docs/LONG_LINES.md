@@ -271,6 +271,47 @@ not this scenario. Q2 and Q3 still run as registered: the curve δ*(k_L), margin
 count, then the two EMT halves, are the deliverable, read as information and not as a second chance at the verdict.
 Static model; nothing injected yet.
 
+### Q2, δ*(k_L) (completed 31 Oct 2026, static model, nothing injected)
+
+`src/longlines.py design` → `results/network/longlines_design.json`. The full 5° × 0.02 pu polar grid runs to the
+1.14 pu cap. Every key has 0 inadmissible candidates and 0 dead frames at δ*. "None within the cap" means no point
+of that full grid separates all 48 cases. The search ran in parallel from k_L 2 on (6 processes, commit 2b479c7). It
+re-ran the stored key 1.5 | structured | 0.1 and gave the identical δ* and angle set.
+
+| k_L | tier | ρ | unseparated at δ = 0 (of 48) | δ* (pu) | separating angles at δ* | carried | margin at carried | price, \|I1\| delivered / commanded |
+|---|---|---|---|---|---|---|---|---|
+| 1 | box | 0.1 | 14 | **1.12** | 225, 230 | 230° | 0.031 ε | 0.080 / 0.447 |
+| 1 | box | 0 | 11 | 0.98 | | 225° | 0.009 ε | |
+| 1 | structured | 0.1 / 0 | 0 / 0 | 0 | (δ = 0 separates) | | 0.39 / 0.59 ε | 0.447 / 0.447 |
+| 1.5 | box | 0.1 | 17 | **none within the cap** | | | | |
+| 1.5 | box | 0 | 14 | 1.08 | | 220° | 0.010 ε | |
+| 1.5 | structured | 0.1 | 2 | **0.06** | 270–285 | 280° | 0.005 ε | 0.447 / 0.447 |
+| 1.5 | structured | 0 | 0 | 0 | (δ = 0 separates) | | 0.011 ε | |
+| 2 | box | 0.1 / 0 | 23 / 20 | **none within the cap** | | | | |
+| 2 | structured | 0.1 | 4 | **0.48** | 190 only | 190° | 0.011 ε | 0.447 / 0.447 |
+| 2 | structured | 0 | 3 | 0.20 | 245–295 | 265° | 0.047 ε | 0.447 / 0.447 |
+
+- **Box tier, the primary.** δ* leaves the cap between k_L 1 and 1.5 at ρ 0.1, and at ρ 0 between 1.5 and 2. The
+  unseparated count at δ = 0 grows from 14 to 23 of 48. δ does not keep up with the line under the box tier.
+- **Structured design tier.** δ* rises from 0 through 0.06 to 0.48 pu. The design tier needs no δ on this network
+  until the last point of the set at ρ 0.1, and at ρ 0 not until k_L 2.
+- **The k_L 2, ρ 0.1 point is feasible only in a wedge of about 10° around 190°**, up to at least 0.54 pu, at 5°
+  resolution. The reviewer extended the angle set above δ* with the same FrameModel and seed
+  (review/checks/p_ll_widen.py): {190} at 0.48 pu, {190, 195} at 0.50 and 0.54 pu, and no separating angle in
+  240–300° at either radius. The margin column does not measure fragility. A margin at δ* is where the gap
+  crosses 2(1 + ρ) inside one 0.02 pu grid step, so all six feasible margins sit at 0.005–0.047 ε by construction.
+- **The jump from 0.06 to 0.48 pu is a change of binding direction, not growth.** At k_L 1.5 the two unseparated
+  cases, the 40 Ω A-G faults on L2 at m 0.25 and 0.5, separate at 270–285°. At k_L 2 two more 40 Ω A-G faults
+  join, L1 at m 0.95 and L2 at m 0.05, both at the R-bus end. The only angle that separates all four is 190°,
+  reached at 0.48 pu. At ρ 0 the set 245–295° continues k_L 1.5's direction, so the ρ 0.1 point is a different
+  design, not the ρ 0 one scaled up.
+- Every unseparated case in the structured tier, at every key, is a 40 Ω A-G fault (R_f/r_F = 1.0); bolted faults
+  separate at δ = 0 everywhere. The binding case at every structured key is the 40 Ω A-G fault at m 0.5 on L2.
+- At these δ the inverter delivers its full command under LIM 1. The price is paid only by the box design at
+  k_L 1, where the delivered |I1| is 0.080 of 0.447 pu.
+- The verdict above does not change. D0 misses 0 of 48 on the set, so this curve is information and not a second
+  chance at the verdict.
+
 ### Q3, the δ = 0 half at k_L = 2 (19 Oct 2026, EMT, no injection)
 
 `src/longlines.py spec zero 2` / `analyse zero 2` → `results/network/longlines_emt_zero2.json`. 49 PSCAD runs (the 48
@@ -294,7 +335,7 @@ D0 at 0.162 pu: 0 of 48 missed, on the clean tier and on the design tier (seed 7
 
 ### Q3, the δ* half, box tier, at k_L = 1 (19 Oct 2026, EMT, δ injected)
 
-Q2's box-tier keys (below, when complete) give δ* within the cap at k_L = 1 and none at 1.5 (ρ 0.1), so the box
+Q2's box-tier keys [31 Oct 2026: complete, see "Q2, δ*(k_L)" above] give δ* within the cap at k_L = 1 and none at 1.5 (ρ 0.1), so the box
 tier's δ* half runs at **k_L = 1: 1.12 pu at 230°**, the carried angle by the registered largest-margin rule
 (margin 0.031 ε; step 3 chose 225° by hand inside the same {225°, 230°} window). `spec dstar 1 box` / `analyse
 dstar 1 box` → `results/network/longlines_emt_dstar1_box.json`. 49 PSCAD runs, MODE2 2, LIM 1, TANG 15 Hz, nominal
@@ -315,6 +356,36 @@ point", `frames_design_check … --tag pll`, mimic chain), as a consistency chec
 The two angles agree: the design holds in EMT at both, with the nominal-point margin at 230° (2.58 ε) above the
 random-point margins at 225° (2.40–2.45 ε), as a nominal point against a sample should sit. The price at the point:
 |I1| delivered / commanded **0.080 / 0.447 pu**.
+
+### Q3, the δ* half, structured tier, at k_L = 2 (31 Oct 2026, EMT, δ injected)
+
+The structured tier's δ* is non-zero and differs from the box tier's, so it gets its own half, as registered. It runs
+at the largest k_L where it is feasible: **k_L = 2, 0.48 pu at 190°**, ρ 0.1, the only separating angle on the
+grid. `spec dstar 2 structured` / `analyse dstar 2 structured` → `results/network/longlines_emt_dstar2_structured.json`.
+49 PSCAD runs, MODE2 2, LIM 1, TANG 15 Hz, nominal source point, the k_L 2 project (`key_extra`). Pre-fault gate
+passed: |I1| 0.447 / 0.447 pu and |δ| 0.480 / 0.480 pu against static (0.0 %, settled). 48 of 48 clean; no weak
+frame.
+
+| | structured tier, 0.48 pu @ 190°, k_L 2 |
+|---|---|
+| contained in the design's own set (≤ 0.1 ε) | 48 of 48 |
+| outside own set (bare), largest | **0.000 ε** |
+| separated from N(δ*) by 2(1 + ρ) = 2.2 ε | 48 of 48 |
+| nearest N(δ*) | **3.98 ε**, the 40 Ω B-C fault at m 0.5 on L2 |
+| D1 missed, alarm / guaranteed | 0 / 0 |
+| D0 at 0.162 pu | 0 of 48 missed, clean and design tier |
+
+- **The design holds in EMT at the registered point**: every window of every run is contained and separated. The
+  model error re-measured with δ injected is 0.000 ε, as at δ = 0.
+- The four static binding cases, the 40 Ω A-G faults, sit 4.26–5.15 ε from N(δ*). On the δ = 0 runs at the same
+  k_L they sat 3.72–4.44 ε from N(0). The nominal point already cleared 2.2 ε at δ = 0 in EMT: the static
+  unseparated cases come from the source-box corners, not from the nominal point. The EMT half checks the design at
+  the nominal point and cannot show the worst-case guarantee itself.
+- Distances to N(δ*) and N(0) are to different normal sets, so the per-case change is not a gain from δ alone.
+- The price at the point: |I1| delivered / commanded **0.447 / 0.447 pu**. The inverter delivers its full command
+  beside the 0.48 pu δ under LIM 1.
+- The point is feasible only in a wedge of about 10° (Q2 above). This run tests 190° only.
+- The verdict is unchanged: D0 misses 0 of 48 on the set, so this half is information.
 
 ## 5. Caveats carried on every line
 
