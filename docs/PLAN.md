@@ -2,7 +2,8 @@
 
 Last updated **19 Oct 2026** (status and milestones, §3–§6: steps 1–3 done on the three-bus grid; the first of the
 deck's scenarios, I₂ suppression, done with δ injected; longer lines next; about four months ahead of the October
-schedule). The 15 Oct revision follows the technical review ([REVIEW.md](../REVIEW.md)),
+schedule). *[31 Oct 2026: longer lines done with δ injected (§5 row, §6, REVIEW rows 66–68); grid-forming is the
+remaining scenario.]* The 15 Oct revision follows the technical review ([REVIEW.md](../REVIEW.md)),
 the CIGRE MV runs and the B1 screening, which moved the project away from the plan written on
 16 Sep 2026. The old plan is in git history; what changed is stated in §1 so the shift is on record.
 Evidence for every statement below is in [REVIEW.md](../REVIEW.md) §7 (the claim register) and the
@@ -101,7 +102,7 @@ V1-referenced as its controller runs.
 - **The design point holds in EMT** at its witnesses, window edges and random inception, and over all 48 cases (0
   points outside their own sets in the 2–3-cycle window).
 - The deck's scenarios with δ injected: I₂ suppressed done (19 Oct, under step 3 below); longer lines next;
-  grid-forming open.
+  grid-forming open. *[31 Oct 2026: longer lines done, rows 66–68; grid-forming open.]*
 
 The history up to 16 Oct:
 
@@ -219,7 +220,7 @@ Revised 19 Oct 2026. The October schedule is kept below the new one for the reco
 | Oct 2026 (planned Dec) | Steps 1 → 2: the designed δ injected in EMT and the promised separation checked | **done** (PR #44: both frames, filtered reference, mimic chain) |
 | Oct 2026 (planned Jan–Feb 2027) | Step 3: detectors on the EMT data, the worst-case sweep | **done** (18 Oct): pilot, worst-case curve, structured errors, inverter-fed and high-R screens, the high-R EMT check (PR #56) |
 | Oct 2026 (planned Nov–Dec) | Deck scenario 1: I₂ suppressed, direction, δ designed and injected in EMT | **done** (19 Oct, PR #57, review PR #58) |
-| Oct–Nov 2026 | Deck scenario 2: longer lines, with the same machinery (static δ*(length), conventional element vs set test, EMT check where the conventional element first fails), pre-registered ([docs/LONG_LINES.md](LONG_LINES.md), branch `long-lines`) | **in progress** (19 Oct): the pre-flight limits the curve to 1–2× the line, a limit of the base network's load flow, not of the claim; on the registered criterion the claim does not hold up to 2× on this network (the conventional element misses nothing; static, Q1); δ*(k_L) and the two EMT halves pending |
+| Oct–Nov 2026 | Deck scenario 2: longer lines, with the same machinery (static δ*(length), conventional element vs set test, EMT check where the conventional element first fails), pre-registered ([docs/LONG_LINES.md](LONG_LINES.md), branch `long-lines`) | **in progress** (19 Oct): the pre-flight limits the curve to 1–2× the line, a limit of the base network's load flow, not of the claim; on the registered criterion the claim does not hold up to 2× on this network (the conventional element misses nothing; static, Q1); δ*(k_L) and the two EMT halves pending. *[31 Oct 2026: **done**, EMT with δ injected at the nominal point, rows 66–68: not supported up to 2× on this network, both tiers; δ* grows with the line (structured 0 → 0.06 → 0.48 pu in a ~10° wedge; box out of the cap from 1.5×) and holds in EMT where it exists. Not merged yet; review PR #67.]* |
 | Nov–Dec 2026 | Deck scenario 3: grid-forming (needs a grid-forming inverter model in PSCAD) | open |
 | — | The package for Prof. Taylor (`docs/notes/step3_for_taylor.md`) and the email (draft); his call on selectivity (T2) | **deferred** (18 Oct): the team works on its own for now; the package is kept current |
 | Dec 2026 | Fall report | open |
@@ -245,6 +246,10 @@ CIGRE MV (REVIEW row 47: not supported up to 3× length); its test for detection
 step-3 machinery, is pre-registered and running ([docs/LONG_LINES.md](LONG_LINES.md)): the base network's load flow
 limits it to 1–2× the line, and there the conventional element misses nothing (static, Q1), so on the registered
 criterion the claim does not hold up to 2×; δ*(length) and the EMT halves are pending. Grid-forming is untested.
+*[31 Oct 2026: the longer-line detection test is done, with δ injected in EMT at the nominal point (REVIEW rows
+66–68): not supported up to 2× on this network for either tier. The conventional element misses none of the 48
+hard cases, and the designed δ, where it exists, holds in EMT. So two of the three scenarios have now been tested
+with δ injected; grid-forming is the one left.]*
 
 ## 7. Questions for Prof. Taylor
 
@@ -257,7 +262,8 @@ These are the deck's four questions, in the deck's order, with what we have lear
    Since the deck, the first has been tested with δ injected in EMT (a grid-code question: IEEE 2800 restores
    direction, a designed δ does not repair the conventional element), the static model did not support the
    second for reach, and grid-forming is untested. Longer lines are being run next; is grid-forming the case
-   he would want first?
+   he would want first? *[31 Oct 2026: longer lines are now tested with δ injected for detection (rows 66–68,
+   not supported up to 2× on the three-bus network); grid-forming is the remaining case.]*
 3. **The current limit.** During a fault the inverter already runs near 1.2 pu, so δ has to fit in
    what is left. Should the limit in the design include δ, **checked phase by phase or as one
    total?** (Our own correction: the limit belongs inside the problem, not as an outer check.)

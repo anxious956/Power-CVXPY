@@ -253,6 +253,11 @@ unsettled corner points left out):
 | 3 (info) | 3 (1): L2 B-C m 0.25 at 40 Ω, m 0.5 at 20 and 40 Ω | 7 / 23 | 0 / 1 |
 | 4 (info) | 8 (4): L2 B-C at 0.05–0.5 (all R_f but two), L1 B-C m 0.95 at 40 Ω | 14 / 30 | 0 / 10 |
 
+[31 Oct 2026, on review: the k_L 3 and 4 rows came from an `--all` run of 19 Oct whose output the registered-set
+run then overwrote, so they were never committed. `static --all` now writes its own file. Re-run on 31 Oct →
+`results/network/longlines_static_all.json`: k_L 1, 1.5, 2 and 4 reproduce the rows above exactly. k_L 3 is not in
+the rule-B pre-flight file, so its row stays from the uncommitted 19 Oct run and is not stored.]
+
 - **On the registered set the conventional element misses nothing**, at either pickup, so the "misses ≥ ¼" branch
   of the go/no-go is not reached up to 2× on this network. The k_L 3 and 4 rows are **outside the pre-flight set;
   the model does not stand there**: their first failures (far-end, high-R_f B-C faults on L2) support the prior's
@@ -261,6 +266,10 @@ unsettled corner points left out):
   line while the conventional element does not notice. δ*(k_L) in Q2 is the quantity that tells whether δ keeps
   up. Under the structured tier the count stays at 0.
 - k_L = 2 passes rule B by a hair at S (P/P₁ 0.780 against 0.75).
+- [31 Oct 2026, information added on review] D0's thinnest corner is the 40 Ω B-C fault at m 0.5 on L2 at every
+  k_L: 0.280, 0.219 and 0.176 pu at k_L 1, 1.5 and 2, against the 0.162 pu pickup. The single-case margin at k_L 2
+  is 0.014 pu, but the verdict is not near its threshold: it needs twelve misses. The two elements fail on
+  different faults: D0 on 40 Ω B-C, the set test on 40 Ω A-G.
 - Q3's δ = 0 half therefore goes to k_L = 2, the largest in the set, as registered.
 
 **Verdict on the registered criterion, written 19 Oct 2026 before Q2 finished.** The "holds" branch needs the
