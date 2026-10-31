@@ -1,4 +1,24 @@
-# The NREL / KIUC two-bus system: our inverter, their numbers (plan, pre-registered 31 Oct 2026)
+# The NREL / KIUC two-bus system: our inverter, their numbers
+
+> **Status, 31 Oct 2026: Q1–Q3 done (static and EMT), under review.** On the 57.1 kV KIUC line of NREL/TP-5D00-94430,
+> with our inverter in PSCAD:
+> - **The report's finding reproduces at both relays, static and EMT** (Q1, Q2; 143 runs, EMT = static on every
+>   report-element decision): with I2 suppressed the negative-sequence directional elements are never enabled; with
+>   the IEEE 2800 law (K = 5) they decide right on every case, forward at the IBR end and reverse at the grid end.
+> - **IEEE 2800-style reactive-current support (FRT) restores our positive-sequence incremental element** under
+>   suppression (R2 12/12; R1 reverse 0.75 right, 0.08 wrong): the K-factor limitation of the I2 study, measured.
+> - **The set test needs neither the IEEE 2800 law nor δ here** (Q3): δ* = 0 for detection at R2 and direction at R1
+>   in both tiers; in EMT, on runs where both conventional elements decide nothing, it is contained and separated on
+>   every case (margins 4.3–70 ε). δ adds margin, not feasibility (+0.31 ε at 1 pu).
+> - Side findings: whether the 32QG's k2 restraint blocks it depends on the inverter's I2 magnitude (the limiter is
+>   part of a relay result's specification); our per-phase limiter with K = 5 is numerically unstable on B-C faults;
+>   a static-model bug (the IEEE 2800 law outside the limiter, REVIEW row 60) was found and fixed.
+> - Caveats: one system, nominal source point in EMT, one point on wave, clean measurements, TF2 ΔYg only in EMT,
+>   the hydro as a source behind X''d, the report's own limiter (LIM 2) unphysical above 1.5 pu of phase peak.
+>
+> The plan below is kept as registered, with every change dated in §1b, §1c and the Q2/Q3 registrations.
+
+*Plan, pre-registered 31 Oct 2026.*
 
 Prof. Taylor sent NREL/TP-5D00-94430 (Wang, Pinheiro, Chakraborty, Johnson, Goncalves Bainy, Hoke, Nov 2025;
 https://www.osti.gov/biblio/3011876) at the 20 Oct meeting ([meetings/2026-10-20_biweekly.md](meetings/2026-10-20_biweekly.md)),
@@ -383,6 +403,32 @@ load behind R2, makes the voltage and positive-sequence signatures large against
 - **What δ would buy here** (information only, R2 box, best angle on a 5° grid): margin 1.674 / 1.736 / 1.830 /
   1.984 ε at |δ| = 0 / 0.2 / 0.5 / 1.0 pu (best angle 270–275°), binding case unchanged, |I1| still 0.287 / 0.287.
   **δ adds margin, not feasibility**: +0.31 ε at 1 pu.
+
+### Q3 in EMT: the set test at δ = 0 against the conventional elements on the same runs (31 Oct 2026)
+
+`src/kiuc.py spec3` / `analyse3` → `results/network/kiuc_q3_emt.json`. 52 PSCAD runs, Q3's inverter (FRT off, LIM 1,
+I2 suppressed, MODE2 0, TANG 15 Hz), nominal point, windows ending 2–3 cycles after inception, memory frame. Every
+pre-fault gate passed; every run numerically clean. The hydro-on group runs the two-source network; its design is on
+the Thevenin network (equivalent to 1.9·10⁻⁵ pu at R2).
+
+| relay, set | grid | set test, box: contained / separated, nearest other set | set test, structured | bare-set model error max (box / structured) | report element: right / not enabled / wrong | incremental: right / none / wrong |
+|---|---|---|---|---|---|---|
+| R2 forward (vs N) | hydro off | 12 / 12, 4.31 ε | 12 / 12, 16.9 ε | 0.027 / 0.106 ε | 0 / 1.00 / 0 | 0 / 1.00 / 0 |
+| R2 forward (vs N) | two sources | 12 / 12, 4.56 ε | 12 / 12, 17.9 ε | 0.029 / 0.115 ε | 0 / 1.00 / 0 | 0 / 1.00 / 0 |
+| R1 reverse (vs forward set) | hydro off | 12 / 12, 32.4 ε | 12 / 12, 63.6 ε | 0.032 / 0.118 ε | 0 / 1.00 / 0 | 0 / 1.00 / 0 |
+| R1 forward (vs reverse set) | hydro off | 12 / 12, 34.9 ε | 12 / 12, 69.7 ε | 0.091 / 0.181 ε | 1.00 / 0 / 0 | 1.00 / 0 / 0 |
+
+(Separation needs > 2.2 ε at ρ 0.1. The bare-set model error is in units of each tier's own ε, which per component
+is 4–2 times smaller in the structured tier than the 0.08 pu box: 0.181 structured-ε is 0.007 pu; every point lies
+inside the design's own set, which carries the 0.008 pu model-error box.)
+
+**Reading (EMT at δ* = 0, consistent with the design's guarantee, not a proof of it):** on the same runs, with the
+inverter's I2 suppressed and no FRT, **the conventional elements decide nothing at the IBR-end relay and nothing for
+faults behind the grid-end relay** (both all "none"), while **the set test detects every fault at R2 and gives every
+direction at R1, with margins of 4.3–70 ε, without any injected signal**. Of the three remedies on this system, the
+IEEE 2800 law repairs the negative-sequence elements (Q2), FRT repairs the positive-sequence incremental element (Q2),
+and the set test needs neither, nor δ (Q3). Caveats: one system (short line, comparatively strong source, no load
+behind R2), the nominal source point in EMT, one point on wave, clean measurements, FRT off and LIM 1 in Q3.
 
 ### Deviations during Q2 (recorded)
 
