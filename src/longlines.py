@@ -176,8 +176,10 @@ def kl_tag(kl):
 # ---------------------------------------------------------------- Q1: static, 16 corners, delta = 0
 def static():
     kls, rows = kl_set()
+    out_name = "longlines_static.json"
     if "--all" in sys.argv:                       # every k_L with a model, for information, whatever the voltage window says
         kls = [kl for kl in sorted(rows) if rows[kl]["converged"] and rows[kl]["frame_settles"]]
+        out_name = "longlines_static_all.json"    # its own file: the registered set's file is never overwritten
     S = np.array(list(itertools.product((-1.0, 1.0), repeat=4)))
     out = {}
     for kl in kls:
@@ -232,9 +234,11 @@ def static():
         if s["d0_missed_cases"]:
             print("   D0 missed: " + ", ".join(tag(tuple(c)) for c in s["d0_missed_cases"]), flush=True)
         out[str(kl)] = res
-        json.dump(dict(pickup=PICKUP, pickup_low=PICKUP_LOW, k_L_set=kls, results=out),
-                  open(os.path.join(OUT, "longlines_static.json"), "w"), indent=1)
-    print("-> results/network/longlines_static.json")
+        json.dump(dict(pickup=PICKUP, pickup_low=PICKUP_LOW, k_L_set=kls, results=out,
+                       **(dict(note="--all: every k_L with a model, for information; k_L outside the pre-flight set "
+                                    "{1, 1.5, 2} are not results") if "--all" in sys.argv else {})),
+                  open(os.path.join(OUT, out_name), "w"), indent=1)
+    print(f"-> results/network/{out_name}")
 
 
 # ---------------------------------------------------------------- Q2: delta*(k_L)

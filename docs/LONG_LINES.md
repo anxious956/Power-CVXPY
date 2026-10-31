@@ -382,8 +382,10 @@ frame.
   frame drift at its 3° extreme; the nominal point is 3.7–4.4 ε clear in EMT and in the model.** The reviewer's
   set-vs-set witness at δ = 0 (review/checks/p_ll_witness.py, this FrameModel at k_L 2, structured) gives gaps of
   1.49–2.13 ε against 2.2 needed for the four cases. The fault-side witness is the source corner (−1, −1, −1, +1)
-  for L1 0.95, L2 0.05 and L2 0.25: both coordinates of the source EMF at −1 and the inverter command's two coordinates at
-  (−1, +1). For L2 0.5 it is (−1, −1, 0, +1), with the command's first coordinate at its centre. In all four the
+  for L1 0.95, L2 0.05 and L2 0.25, with S = (EMF magnitude, EMF angle, command magnitude, command angle) as
+  `frames.sector_outer_box` aligns the box with the nominal phasor: the source EMF at its lower magnitude and lower
+  angle, the inverter command at its lower magnitude and upper angle. For L2 0.5 it is (−1, −1, 0, +1): the command
+  magnitude at its centre, which is the split face between the two sample pieces, so still on a piece face. In all four the
   fault-frame drift is at +1 and λ = 0. The normal-side witness lies
   on the faces S_1 = −1, S_3 = +1. The EMT half therefore checks the design at the nominal point and cannot show
   the worst-case guarantee itself.
