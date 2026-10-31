@@ -293,8 +293,8 @@ re-ran the stored key 1.5 | structured | 0.1 and gave the identical δ* and angl
 
 - **Box tier, the primary.** δ* leaves the cap between k_L 1 and 1.5 at ρ 0.1, and at ρ 0 between 1.5 and 2. The
   unseparated count at δ = 0 grows from 14 to 23 of 48. δ does not keep up with the line under the box tier.
-- **Structured design tier.** δ* rises from 0 through 0.06 to 0.48 pu. The design tier needs no δ on this network
-  until the last point of the set at ρ 0.1, and at ρ 0 not until k_L 2.
+- **Structured design tier.** δ* rises from 0 through 0.06 to 0.48 pu. At ρ 0.1 the design tier needs δ from
+  k_L 1.5 on (0.06 pu, then 0.48 pu at k_L 2); at ρ 0 not until k_L 2 (0.20 pu).
 - **The k_L 2, ρ 0.1 point is feasible only in a wedge of about 10° around 190°**, up to at least 0.54 pu, at 5°
   resolution. The reviewer extended the angle set above δ* with the same FrameModel and seed
   (review/checks/p_ll_widen.py): {190} at 0.48 pu, {190, 195} at 0.50 and 0.54 pu, and no separating angle in
@@ -378,9 +378,15 @@ frame.
 - **The design holds in EMT at the registered point**: every window of every run is contained and separated. The
   model error re-measured with δ injected is 0.000 ε, as at δ = 0.
 - The four static binding cases, the 40 Ω A-G faults, sit 4.26–5.15 ε from N(δ*). On the δ = 0 runs at the same
-  k_L they sat 3.72–4.44 ε from N(0). The nominal point already cleared 2.2 ε at δ = 0 in EMT: the static
-  unseparated cases come from the source-box corners, not from the nominal point. The EMT half checks the design at
-  the nominal point and cannot show the worst-case guarantee itself.
+  k_L they sat 3.72–4.44 ε from N(0). **The static meeting at δ = 0 occurs at one corner of the source box with the
+  frame drift at its 3° extreme; the nominal point is 3.7–4.4 ε clear in EMT and in the model.** The reviewer's
+  set-vs-set witness at δ = 0 (review/checks/p_ll_witness.py, this FrameModel at k_L 2, structured) gives gaps of
+  1.49–2.13 ε against 2.2 needed for the four cases. The fault-side witness is the source corner (−1, −1, −1, +1)
+  for L1 0.95, L2 0.05 and L2 0.25: the SG EMF at its lower bound on both generators and the inverter command at
+  (−1, +1). For L2 0.5 it is (−1, −1, 0, +1), with the command's first coordinate at its centre. In all four the
+  fault-frame drift is at +1 and λ = 0. The normal-side witness lies
+  on the faces S_1 = −1, S_3 = +1. The EMT half therefore checks the design at the nominal point and cannot show
+  the worst-case guarantee itself.
 - Distances to N(δ*) and N(0) are to different normal sets, so the per-case change is not a gain from δ alone.
 - The price at the point: |I1| delivered / commanded **0.447 / 0.447 pu**. The inverter delivers its full command
   beside the 0.48 pu δ under LIM 1.
