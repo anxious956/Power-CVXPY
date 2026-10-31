@@ -4039,5 +4039,226 @@
    "excluded": [],
    "weak": []
   }
+ },
+ "_aggregation_majority": {
+  "R1fwd | hydro off | IEEE 2800 K2=5 | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R1fwd | hydro off | IEEE 2800 K2=5 | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R1fwd | hydro off | suppressed | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R1fwd | hydro off | suppressed | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R1rev | hydro off | IEEE 2800 K2=5 | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "r": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R1rev | hydro off | IEEE 2800 K2=5 | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "r": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R1rev | hydro off | suppressed | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 10,
+    "none": 2,
+    "wrong": 0
+   },
+   "per_window": {
+    "r": 49,
+    "None": 10,
+    "f": 1
+   },
+   "n": 12,
+   "runs_changing_across_windows": 1
+  },
+  "R1rev | hydro off | suppressed | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 0,
+    "none": 12,
+    "wrong": 0
+   },
+   "per_window": {
+    "None": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro off | IEEE 2800 K2=5 | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro off | IEEE 2800 K2=5 | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro off | suppressed | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro off | suppressed | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 0,
+    "none": 12,
+    "wrong": 0
+   },
+   "per_window": {
+    "None": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro off | suppressed | P1.0Q0 | inc": {
+   "majority": {
+    "right": 6,
+    "none": 0,
+    "wrong": 6
+   },
+   "per_window": {
+    "f": 35,
+    "r": 25
+   },
+   "n": 12,
+   "runs_changing_across_windows": 5
+  },
+  "R2 | hydro off | suppressed | P1.0Q0 | q": {
+   "majority": {
+    "right": 0,
+    "none": 12,
+    "wrong": 0
+   },
+   "per_window": {
+    "None": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro sg | IEEE 2800 K2=5 | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro sg | IEEE 2800 K2=5 | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro sg | suppressed | P0.25Q0.15 | inc": {
+   "majority": {
+    "right": 12,
+    "none": 0,
+    "wrong": 0
+   },
+   "per_window": {
+    "f": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  },
+  "R2 | hydro sg | suppressed | P0.25Q0.15 | q": {
+   "majority": {
+    "right": 0,
+    "none": 12,
+    "wrong": 0
+   },
+   "per_window": {
+    "None": 60
+   },
+   "n": 12,
+   "runs_changing_across_windows": 0
+  }
  }
 }

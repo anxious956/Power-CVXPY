@@ -6,7 +6,8 @@
 >   report-element decision): with I2 suppressed the negative-sequence directional elements are never enabled; with
 >   the IEEE 2800 law (K = 5) they decide right on every case, forward at the IBR end and reverse at the grid end.
 > - **IEEE 2800-style reactive-current support (FRT) restores our positive-sequence incremental element** under
->   suppression (R2 12/12; R1 reverse 0.75 right, 0.08 wrong): the K-factor limitation of the I2 study, measured.
+>   suppression on every case at a quarter output, on ground faults only at full output, with no wrong-way decision
+>   at R1 (majority over the 2–3-cycle window): the K-factor limitation of the I2 study, measured.
 > - **The set test, with the design's sets, needs neither the IEEE 2800 law nor δ here** (Q3; static design, EMT at
 >   the nominal point, clean runs, FRT off): δ* = 0 for detection at R2 and direction at R1 in both tiers; in EMT, on
 >   runs where both conventional elements decide nothing, it is contained and separated on every case (margins
@@ -138,9 +139,12 @@ Two-source against Thevenin at R2, pre-fault and bolted AG at 5 %: 1.9·10⁻⁵
   K = 5, angle 90°; measured K lower where I2 saturates at 1.2 pu"; the go/no-go's 3I2 > 10 % I1 test is unaffected,
   and the reported K is the measured one.
 - **Unresolved difference:** their I_Q− = 0.45 pu at K = 5 (V2 ≈ 0.09 at their terminal) against our 1.2 pu
-  (V2 0.23–0.38 at Bus-2, saturated). Two candidates: their V2 is measured behind TF2's series impedance, or their
-  fault is farther. Not a model error of ours as far as the evidence goes, and it does not touch the direction
-  questions: the elements use the angle, which matches.
+  (V2 0.23–0.38 at Bus-2, saturated). Not a model error of ours as far as the evidence goes, and it does not touch
+  the direction questions: the elements use the angle, which matches. *[Corrected 31 Oct 2026, review/KIUC_REVIEW.md:
+  the first candidate, V2 measured behind TF2's series impedance, cannot carry 1.2 → 0.45 pu alone at X_TF2 = 0.06:
+  the effective gain K/(1 + X_TF2·K) = 3.85 still saturates 1.2 pu for |V2| at Bus-2 ≥ 0.31 pu, and 0.45 pu needs
+  0.12 pu at Bus-2 where the forward set gives 0.23–0.35. What remains: a farther fault in their figure, or a
+  different K or current-base definition.]*
 - Q1 runs with K2 = 5, LIM 2, K1 = 4 (FRT on); sensitivities K1 = 2, K1 = 0, LIM 1, K2 = 2.
 
 ## 2. Pre-flight
@@ -292,8 +296,8 @@ and on R1's forward set, reverse on R1's reverse set.
 | R2 forward | hydro off | IEEE 2800 | LIM 2 | 12/12 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.23 (12) |
 | R2 forward | two sources | suppressed | LIM 2 | 12/12 | **0 / 1.00 / 0** | 1.00 / 0 / 0 | 0 | 0 / 0 | 1.23 (0) |
 | R2 forward | two sources | IEEE 2800 | LIM 2 | 12/12 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.25 (12) |
-| R2 forward, P 1.0 / Q 0 | hydro off | suppressed | LIM 2 | 12/12 | 0 / 1.00 / 0 | 0.92 / 0 / 0.08 | 0 | 0 / 5 | 1.24 (0) |
-| R1 reverse | hydro off | suppressed | LIM 2 | 12/12 | **0 / 1.00 / 0** | 0.75 / 0.17 / **0.08** | 0 | 0 / 1 | 1.22 (0) |
+| R2 forward, P 1.0 / Q 0 | hydro off | suppressed | LIM 2 | 12/12 | 0 / 1.00 / 0 | 0.92 / 0 / 0.08 *(first window; by majority 0.50 / 0 / 0.50, below)* | 0 | 0 / 5 | 1.24 (0) |
+| R1 reverse | hydro off | suppressed | LIM 2 | 12/12 | **0 / 1.00 / 0** | 0.75 / 0.17 / 0.08 *(first window; by majority 0.83 / 0.17 / 0, below)* | 0 | 0 / 1 | 1.22 (0) |
 | R1 reverse | hydro off | IEEE 2800 | LIM 2 | 12/12 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.24 (9) |
 | R1 forward (control) | hydro off | suppressed | LIM 2 | 12/12 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 1.22 (0) |
 | R1 forward (control) | hydro off | IEEE 2800 | LIM 2 | 12/12 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.23 (12) |
@@ -308,12 +312,30 @@ No weak frame anywhere (|V1| at the inverter ≥ 0.2 pu).
   (≥ 70 %).
 - **Reproduction holds at R1 (direction).** IEEE 2800: reverse on 12 of 12 and forward on none; suppressed: not
   enabled on 12 of 12; the forward control right in both modes.
-- **EMT agrees with static on every report-element decision** (0 of 107 clean fault runs differ).
+- **EMT agrees with static on every report-element decision** (0 of 108 clean LIM 2 fault runs differ; 121 with the
+  LIM 1 group). *[Count corrected from "107", review.]*
 
-**The FRT sub-question (pre-registered):** under suppression, the positive-sequence FRT (K1 = 4) restores our
-incremental element: R2 forward 12 of 12 right in both grid cases (static 0.97–0.98); **R1 reverse 0.75 right,
-0.17 none, 0.08 wrong** (static 0.79 / 0.10 / 0.11): fewer wrong and more undecided than static, as the TANG lag
-predicted. At P 1.0 / Q 0 (less reactive headroom) R2 drops to 0.92 right, 0.08 wrong.
+**Window aggregation, a dated addition (31 Oct 2026, review/KIUC_REVIEW.md).** The table above takes each run's
+first decided window, a rule that was not in the registration. The report's element is the same on all five windows
+of every run, so its column does not depend on the rule. The incremental element changes across windows on 6 of 108
+runs, all in the FRT groups, so it is re-read here **by majority over the five windows (a tie counts as none), with
+the per-window counts**, as in I2_DIRECTION stage (c); `results/network/kiuc_q2.json`, key `_aggregation_majority`:
+
+| group (suppressed, FRT K1 = 4) | incremental by majority: right / none / wrong | per-window decisions (60 windows) |
+|---|---|---|
+| R2 forward, hydro off, P 0.25 / Q 0.15 | 12 / 0 / 0 | f 60 |
+| R2 forward, two sources, P 0.25 / Q 0.15 | 12 / 0 / 0 | f 60 |
+| R2 forward, hydro off, **P 1.0 / Q 0** | **6 / 0 / 6** (A-G 6 right; every B-C wrong) | f 35, r 25 |
+| R1 reverse, hydro off | **10 / 2 / 0** (no wrong-way decision) | r 49, none 10, f 1 |
+
+At P 1.0 / Q 0 the element misdirects all six B-C cases from 2.5 cycles on (static agrees); the first-window rule had
+read five of them as right. At R1 the one "wrong" case (EQ A-G 50 %, 5 Ω) is forward on the 2.0-cycle window only and
+reverse on the rest; the two undecided are the faults at 5 % from Bus-1 (all windows none).
+
+**The FRT sub-question (pre-registered), re-read by majority:** under suppression, the positive-sequence FRT (K1 = 4)
+restores our incremental element **on every case at a quarter output (P 0.25 / Q 0.15) at R2, on ground faults only
+at full output (P 1.0 / Q 0, every B-C misdirected), and at R1 with no wrong-way decision (10 right, 2 undecided of
+12)**. *[The first-window reading, superseded: R2 P 1.0 0.92 right / 0.08 wrong; R1 0.75 / 0.17 / 0.08.]*
 
 **LIM 1 (ours, per phase, I2 first) is numerically unstable on B-C faults at K2 = 5.** Every excluded run is a B-C
 case (11 of 12 B-C across the two groups; peaks 9–30 × nominal, 5–10 kHz share 0.03–0.13); every A-G run is clean and
@@ -327,7 +349,8 @@ are "not interpretable", and LIM 1 confirms the A-G result only.
   decide right on every case, forward at the IBR end and reverse at the grid end for faults behind it.
 - **The I2 study's s = 1 result stands for inverters without reactive-current support; with IEEE 2800-style FRT the
   positive-sequence element recovers, the negative-sequence one does not.** That is the K-factor limitation of the
-  I2 study, measured: R2 fully, R1 at 0.75 with 8 % wrong-way.
+  I2 study, measured: on every case at a quarter output, on ground faults only at full output, and with no
+  wrong-way decision at R1 (majority over the window, as re-read above).
 - **LIM 2's unphysical side**: with the K2 law active, the IBR's phase peak is 2.2 pu on most cases, beyond the report's
   Fig.-16 envelope; LIM 1 holds 1.2 pu on the A-G cases with the same decisions and cannot run B-C.
 - Caveats: one system, nominal source point, one point on wave, clean measurements, TF2 ΔYg only in EMT, the hydro as
@@ -430,7 +453,11 @@ inverter's I2 suppressed and no FRT, **the conventional elements decide nothing 
 faults behind the grid-end relay** (both all "none"), while **the set test detects every fault at R2 and gives every
 direction at R1, with margins of 4.3–70 ε, without any injected signal**. Of the three remedies on this system, the
 IEEE 2800 law repairs the negative-sequence elements (Q2), FRT repairs the positive-sequence incremental element (Q2),
-and the set test needs neither, nor δ (Q3). Caveats: one system (short line, comparatively strong source, no load
+and the set test needs neither, nor δ (Q3). *[Review framing, 31 Oct 2026:]* the set test's margins here are |V1| and
+|I1| effects (|V1| at R2 falls to 0.50–0.80 pu against 1.02 pre-fault; the relay current at R1 is 0.29 pu in normal
+operation against several pu in the fault), and the comparison is with the two elements tested, not with
+conventional protection in general: an undervoltage-supervised or memory-polarised 32P would read the same
+quantities. Caveats: one system (short line, comparatively strong source, no load
 behind R2), the nominal source point in EMT, one point on wave, clean measurements, FRT off and LIM 1 in Q3.
 
 ### Deviations during Q2 (recorded)
@@ -454,7 +481,9 @@ branch, not a machine. One line, one operating regime, lumped R-L.
 ## 6. Code
 
 - `src/pscad_network.py`: per-spec base (S_base, V_LL) instead of the module constants 10 MVA / 20 kV; otherwise
-  the builder as is (one SG with zs, lines with z0, the inverter with zero_z).
+  the builder as is (one SG with zs, lines with z0, the inverter with zero_z). *[Not done, corrected 31 Oct 2026: the
+  PSCAD runs are built per unit on the builder's 10 MVA / 20 kV base and the relay divides by the same bases, so
+  every quantity is the same per-unit circuit; results are base-independent.]*
 - `src/network.py`: no change expected (any radial network).
 - `src/kiuc.py`: the network from the table above, the pre-flight, Q1, the specs and the analysis, the 32QG element.
 - `src/frames.py`: the long-lines under-relaxed fixed point (branch long-lines) is cherry-picked if needed.
