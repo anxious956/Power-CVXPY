@@ -1,5 +1,16 @@
 # Review of the longer-lines study (branch `long-lines`, `4ecacd0`)
 
+> **Status, 1 Nov 2026.** The three pre-merge items of §4 are on `long-lines` at `3627493` (after a clean merge of
+> `origin/main` at `f3e7bec`), checked against the diff `f3e7bec..3627493`: (a) dated brackets in README (intro,
+> reach row, "Longer lines" row, docs tree, open item 11), PLAN (header, §3, §5 roadmap row, §6, §7 Q2) and REVIEW
+> §7 rows 66–68 inserted after row 59 and numbered after KIUC's 60–65; (b) `static --all` writes its own labelled
+> `longlines_static_all.json` and never touches the registered file: its k_L 1, 1.5 and 2 entries equal the
+> registered ones case for case (only the run times differ) and its k_L 4 entry reproduces the information row
+> (8 (4) missed, 14 / 30, 0 / 10, 30 unsettled points), the k_L 3 row is labelled as coming from the uncommitted
+> 19 Oct run; (c) the coordinates named as `sector_outer_box` defines them, the L2 0.5 "0" as the split face. The D0
+> thinnest-corner bullet was added as information. The frame / network / step-3 tests pass at `3627493` (29).
+> Nothing left from this review; the long-lines PR and the merge are the user's.
+
 1 Nov 2026 (night of 31 Oct). Reviewed in a separate worktree. Read `docs/LONG_LINES.md` in full at the tip,
 `src/longlines.py`, the branch's diffs of `src/frames.py` (under-relaxed `fixed_point`) and `src/pscad_network.py`
 (`key_extra`), and the stage reports the research session sent on 19 and 31 Oct. Every number in LONG_LINES.md's
