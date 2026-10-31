@@ -400,10 +400,14 @@ def analyse_q2():
             first = lambda per: next((d for d in per if d is not None), None)
             x = np.asarray(run["ch"].get("V1M_I", []))
             v1 = float(x[int(round((T_FAULT + 2.5 / 60 - float(run["t"][0])) * run["fs"]))]) if len(x) else None
-            _, y_st = ibr_state(net, sg, st, c)
+            yN_st, _, _ = solve(net, sg, st, None, spn["lim_rule"])
+            s_st, y_st = ibr_state(net, sg, st, c, spn["lim_rule"])
+            i1e, i2e = injections(run, sp, T_FAULT + 2.5 / 60)["I"]
+            ipk = float(max(abs(i1e * A3 ** (-k) + i2e * A3 ** k) for k in range(3)))
             res["cases"].append(dict(name=sp["name"], case=list(c), clean=ok, peak=pk, hf=hf, q=first(q_per), q_per=q_per,
                                      inc=first(inc_per), inc_per=inc_per, ratio_min=min(ratio), v1_I=v1,
-                                     weak=v1 is not None and v1 < 0.2, q_static=dir32q(y_st, c[2] == "ag")[0]))
+                                     weak=v1 is not None and v1 < 0.2, q_static=dir32q(y_st, c[2] == "ag")[0],
+                                     inc_static=direction_pk(yN_st, y_st), ibr_phase_peak=ipk, ibr_phase_peak_static=s_st["peak"]))
         q = [r for r in res["cases"] if r["clean"]]
         n = max(len(q), 1)
         res["summary"] = dict(n=len(q), of=len(res["cases"]), want=want,
@@ -413,13 +417,19 @@ def analyse_q2():
                               inc_wrong=sum(r["inc"] not in (want, None) for r in q) / n,
                               ratio_over_10pct=sum(r["ratio_min"] > 0.1 for r in q) / n,
                               emt_vs_static_q_differ=sum(r["q"] != r["q_static"] for r in q),
+                              emt_vs_static_inc_differ=sum(r["inc"] != r["inc_static"] for r in q),
+                              ibr_peak_max=max((r["ibr_phase_peak"] for r in res["cases"]), default=None),
+                              beyond_fig16_envelope=sum(r["ibr_phase_peak"] > 1.5 for r in res["cases"]),
+                              excluded=[dict(name=r["name"], peak=r["peak"], hf=r["hf"]) for r in res["cases"] if not r["clean"]],
                               weak=[r["name"] for r in q if r["weak"]])
         out[key] = res
         s = res["summary"]
         print(f"[{key}] gate {'PASSED' if gate else 'FAILED'} (|I1| {res['gate']['I1_emt']:.3f}/{res['gate']['I1_static']:.3f}) | "
               f"{s['n']} of {s['of']} clean | report element right {s['q_right']:.2f} none {s['q_none']:.2f} wrong {s['q_wrong']:.2f} | "
               f"incremental right {s['inc_right']:.2f} none {s['inc_none']:.2f} wrong {s['inc_wrong']:.2f} | 3I2 > 10 % I1 "
-              f"{s['ratio_over_10pct']:.2f} | EMT vs static (report element) differ {s['emt_vs_static_q_differ']} | weak {len(s['weak'])}", flush=True)
+              f"{s['ratio_over_10pct']:.2f} | EMT vs static differ: report element {s['emt_vs_static_q_differ']}, incremental "
+              f"{s['emt_vs_static_inc_differ']} | IBR phase peak max {s['ibr_peak_max']:.2f} (> 1.5 pu: {s['beyond_fig16_envelope']}) | "
+              f"weak {len(s['weak'])} | excluded {[(e['name'][-10:], round(e['peak'], 2), f'{e[chr(104)+chr(102)]:.1e}') for e in s['excluded']]}", flush=True)
     name = "kiuc_q2_fig16.json" if "--only-fig16" in sys.argv else ("kiuc_q2_lim1.json" if lim1 else "kiuc_q2.json")
     json.dump(out, open(os.path.join(OUT, name), "w"), indent=1, default=str)
     print(f"-> results/network/{name}")

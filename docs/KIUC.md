@@ -256,6 +256,60 @@ At 2.5 cycles: |I2| = 4.73 |V2| (static 4.86), ∠I2 − ∠V2 = 90.5° (static 
 beyond the 1.5 pu envelope). The EMT converges to the static state by 4 cycles; inside the relay's 2–3-cycle window the
 FRT is still rising (it acts on the 15 Hz-filtered |V1|), which is the real controller and registered as such.
 
+### Q2 result, EMT (31 Oct 2026)
+
+`src/kiuc.py analyse` (and `--lim1`) → `results/network/kiuc_q2.json`, `kiuc_q2_lim1.json`. 143 PSCAD runs, nominal
+source point, TF2 ΔYg, K2 = 5, K1 = 4, TANG = TV2 = 15 Hz; decisions on windows ending 2–3 cycles after inception
+(first decided window). Every group's pre-fault gate passed (|I1| within 0.3 % of static). "Right" is forward at R2
+and on R1's forward set, reverse on R1's reverse set.
+
+| relay, set | grid | mode | limiter | clean | report element: right / not enabled / wrong | incremental: right / none / wrong | 3I2 > 10 % I1 | EMT ≠ static (report el. / incremental) | IBR phase peak max (> 1.5 pu) |
+|---|---|---|---|---|---|---|---|---|---|
+| R2 forward | hydro off | suppressed | LIM 2 | 12/12 | 0 / 1.00 / 0 | 1.00 / 0 / 0 | 0 | 0 / 0 | 1.22 (0) |
+| R2 forward | hydro off | IEEE 2800 | LIM 2 | 12/12 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.23 (12) |
+| R2 forward | two sources | suppressed | LIM 2 | 12/12 | **0 / 1.00 / 0** | 1.00 / 0 / 0 | 0 | 0 / 0 | 1.23 (0) |
+| R2 forward | two sources | IEEE 2800 | LIM 2 | 12/12 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.25 (12) |
+| R2 forward, P 1.0 / Q 0 | hydro off | suppressed | LIM 2 | 12/12 | 0 / 1.00 / 0 | 0.92 / 0 / 0.08 | 0 | 0 / 5 | 1.24 (0) |
+| R1 reverse | hydro off | suppressed | LIM 2 | 12/12 | **0 / 1.00 / 0** | 0.75 / 0.17 / **0.08** | 0 | 0 / 1 | 1.22 (0) |
+| R1 reverse | hydro off | IEEE 2800 | LIM 2 | 12/12 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.24 (9) |
+| R1 forward (control) | hydro off | suppressed | LIM 2 | 12/12 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 1.22 (0) |
+| R1 forward (control) | hydro off | IEEE 2800 | LIM 2 | 12/12 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 2.23 (12) |
+| R2 forward | two sources | IEEE 2800 | **LIM 1** | **6/12** | 1.00 / 0 / 0 (of 6) | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 1.21 (0) |
+| R1 reverse | hydro off | IEEE 2800 | **LIM 1** | **7/12** | 1.00 / 0 / 0 (of 7) | 1.00 / 0 / 0 | 1.00 | 0 / 0 | 1.22 (0) |
+
+No weak frame anywhere (|V1| at the inverter ≥ 0.2 pu).
+
+**Go / no-go (registered):**
+- **Reproduction holds at R2.** IEEE 2800: forward on 12 of 12 (≥ 90 %) and reverse on none, in both grid cases;
+  suppressed: not enabled on 12 of 12 (≥ 50 %); 3I2 > 10 % I1 on every IEEE 2800 case and on no suppressed case
+  (≥ 70 %).
+- **Reproduction holds at R1 (direction).** IEEE 2800: reverse on 12 of 12 and forward on none; suppressed: not
+  enabled on 12 of 12; the forward control right in both modes.
+- **EMT agrees with static on every report-element decision** (0 of 107 clean fault runs differ).
+
+**The FRT sub-question (pre-registered):** under suppression, the positive-sequence FRT (K1 = 4) restores our
+incremental element: R2 forward 12 of 12 right in both grid cases (static 0.97–0.98); **R1 reverse 0.75 right,
+0.17 none, 0.08 wrong** (static 0.79 / 0.10 / 0.11): fewer wrong and more undecided than static, as the TANG lag
+predicted. At P 1.0 / Q 0 (less reactive headroom) R2 drops to 0.92 right, 0.08 wrong.
+
+**LIM 1 (ours, per phase, I2 first) is numerically unstable on B-C faults at K2 = 5.** Every excluded run is a B-C
+case (11 of 12 B-C across the two groups; peaks 9–30 × nominal, 5–10 kHz share 0.03–0.13); every A-G run is clean and
+decides as under LIM 2 with the phase peak held at 1.21–1.22 pu. TV2 = 15 Hz does not prevent it. So under a real
+per-phase limit, K = 5 on a phase-to-phase fault is not runnable in this model; the B-C cells of the LIM 1 column
+are "not interpretable", and LIM 1 confirms the A-G result only.
+
+**Reading.**
+- **The report's finding reproduces in EMT with our own inverter, at both relays:** with I2 suppressed, the
+  negative-sequence directional elements are never enabled (I2 below pickup); with the IEEE 2800 law (K = 5) they
+  decide right on every case, forward at the IBR end and reverse at the grid end for faults behind it.
+- **The I2 study's s = 1 result stands for inverters without reactive-current support; with IEEE 2800-style FRT the
+  positive-sequence element recovers, the negative-sequence one does not.** That is the K-factor limitation of the
+  I2 study, measured: R2 fully, R1 at 0.75 with 8 % wrong-way.
+- **LIM 2's unphysical side**: with the K2 law active, the IBR's phase peak is 2.2 pu on most cases, beyond the report's
+  Fig.-16 envelope; LIM 1 holds 1.2 pu on the A-G cases with the same decisions and cannot run B-C.
+- Caveats: one system, nominal source point, one point on wave, clean measurements, TF2 ΔYg only in EMT, the hydro as
+  a source behind X''d.
+
 ### Deviations during Q2 (recorded)
 
 - **Launch order:** the batch was started before the review asked for the EMT Fig.-16 pair first; the pair was then
