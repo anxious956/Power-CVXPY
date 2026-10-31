@@ -417,6 +417,8 @@ def run_fast(path):
             key += "_sh" + "".join(sorted(sp["shunts"]))
         if sp.get("dt_us"):
             key += f"_dt{sp['dt_us']:g}".replace(".", "p")
+        if sp.get("key_extra"):                      # update() rewrites only the faulted line: other changes need their own build
+            key += f"_{sp['key_extra']}"
         key += "_" + "".join(sorted(sp["ibrs"]))
         if key not in projects:
             pname = "fastnet_" + key

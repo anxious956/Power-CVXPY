@@ -202,10 +202,13 @@ R1 reverse 0.79 right / 0.11 wrong).
   decide right on every point, at R2 (forward) and at R1 for faults behind it (reverse), with no wrong decision.
   R1's forward set (grid behind) is right in both modes, the control. The outcome holds under LIM 1, K1 = 2, K2 = 2
   and X'd 0.25: on this system the decision does not depend on the limiter, only on whether I2 is controlled.
-- **A difference from the report:** on YgΔ A-G the k2 restraint (|I2| > 0.2 |I0|) does not block our 32QG; the
-  report found it blocked on its own A-G cases. Our I2 is saturated at 1.2 pu (the unresolved 0.45 vs 1.2 pu gap,
-  §1c), so |I2|/|I0| is larger than theirs; with their I2 the restraint would bind more easily. Recorded, not
-  explained.
+- **The 32QG's zero-sequence restraint depends on the inverter's I2 magnitude** (a small finding beyond the report).
+  On YgΔ A-G the k2 restraint (|I2| > 0.2 |I0|) does not block our 32QG; the report found it blocked on its own A-G
+  cases. A static check with |I2| capped at the report's 0.45 pu (information only, registered runs unchanged) gives
+  |I2|/|I0| = 0.11–0.14 at R2 and **k2 blocks 96 of 96** points, hydro off and on. So whether the restraint blocks
+  the element on a grounded-transformer A-G fault depends on the inverter's I2 magnitude: at the report's 0.45 pu
+  it blocks, at our saturated 1.2 pu it does not. It therefore depends on the limiter and on where V2 is measured,
+  not only on the fault; reproducing a relay result needs the inverter's limiter as part of the specification.
 - **The positive-sequence response (FRT) restores our incremental element under suppression**: with K1 = 4 the
   superimposed positive-sequence element decides R2 right on 97–98 % (from ≤ 4 % without FRT) and R1's reverse set
   on 79 %, with 11 % wrong-way. This is the limitation the I2 study wrote down ("the K-factor would likely restore
