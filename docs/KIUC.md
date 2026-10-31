@@ -35,6 +35,54 @@ Report §4.2, Fig. 41, Table 14; §4.3 scenarios; Table 15 fixed parameters.
 Not in the report and therefore assumed, with a sensitivity each: X'd and X_TF1 of the hydro branch (±50 %),
 X_TF2 (3–9 %), the EMF angle. The CT/VT ratios (80 and 3500) matter only for secondary ohms and are not used.
 
+## 1b. Changes from the review, before the first run (31 Oct 2026)
+
+- **Two synchronous sources for Q1 and Q2**, as the report has it: the grid (stiff, 0.001j) at G behind EQ, and the
+  hydro at Bus-1 behind **X''d + X_TF1 = 0.20 + 0.07 pu on 7.5 MVA (0.54 pu on 15 MVA)**, no zero-sequence path;
+  X'd 0.25 (0.64 pu) as the sensitivity. Both EMFs 1.0∠0 at the nominal point; the hydro's EMF is held at nominal
+  (outside the source box). The Thevenin equivalent is a Q3 (design) device only; the pre-flight checks once that
+  it gives the same pre-fault state and the same bolted-AG currents at R2 as the two-source network. A source branch
+  has no rotor angle or frequency drift; fine for 3 cycles.
+- **The inverter's positive-sequence fault response (FRT)**, added to gfl_avm and to network.solve_v1ref (one rule,
+  `network.frt_command`): when |V1| < 0.9 pu at Bus-2, I_Q+ = I_Q0 + K1 (0.9 − |V1|), clipped at i_max, and I_P+ cut
+  so the command fits i_max (q priority). **K1 = 2** (IEEE 2800's range 2–6; the report states none), **K1 = 4** and
+  **K1 = 0** as sensitivities (0 keeps the comparison to our earlier results). In EMT |V1| is low-passed with the
+  reference filter's τ = TANG = 1/(2π·15 Hz) so the response does not chatter on the DFT ripple. At the phase limit
+  the I2 law keeps priority (LIM 1): I_Q+ and I_P+ give way to I2, in that order of what is left.
+- **Q3 is a different inverter from Q2's**: the δ design here is for the inverter without reactive-current support
+  (FRT off), and its EMT check runs FRT off too, so design and check describe the same controller; FRT inside
+  FrameModel is the follow-up. No Q3 result before the review has seen Q2. The deadband form (0.9 − |V1|) is registered
+  here; the reviewer's (1 − |V1|) differs by 0.1 K1 = 0.2 pu, which saturates either way on the close-in faults.
+  FRT = 0 reproduces every earlier result (regressions 2.7·10⁻¹³ / 7.4·10⁻¹³ pu; BUILD_VERSION 6).
+- **Limiter with K2 = 5**: I2 = 5 V2 reaches 1.2 pu at |V2| = 0.24. LIM 1 (I2 priority) applies: I2 is kept and I1
+  (after the FRT command) is scaled until every phase peak fits 1.2 pu; I_sat = 1.2 pu is per phase peak, as the
+  report's. K2 = 2 as a one-line sensitivity.
+- **MODE2 1 in EMT gets TV2 = 1/(2π·15 Hz)** from the start (Bus-2 has no load and no passive positive/negative
+  shunt: the undamped cut-set of the I2 study), with the per-run numerical check (peak |vA| ≤ 2 × nominal, 5–10 kHz
+  energy share ≤ 10⁻³) and the caveat "mode slowed, not removed" if it shows.
+- **The report's element, two-sided, three outcomes.** 32Q (B-C) and 32QG (A-G): z2 = Re[V2·(I2·1∠Z1L)*]/|I2|²;
+  **forward if z2 < Z2F = 0.4 |Z1L|, reverse if z2 > Z2R = 0.6 |Z1L|** (|Z1L|/2 ∓ 0.1 |Z1L|); enabled only if
+  3|I2| > 0.1 pu (50Q pickup, the report's "10 % of rated"), |I2| > 0.1 |I1| (a2) and, for 32QG, |I2| > 0.2 |I0|
+  (k2, the zero-sequence restraint the report found blocking its own A-G cases). Each case counts forward, reverse
+  or not enabled (with the blocking reason).
+- **TF2 in PSCAD is ΔYg only** (the builder has no grounded path at an inverter bus): A-G with ΔYg is the report's
+  scenario 2, and all its B-C cases are ΔYg. **Every YgΔ cell is static only** and outside the EMT go/no-go; there
+  the report's k2 blocking of 32QG on A-G "in both modes" is the expected outcome. A grounding transformer at Bus-2
+  is the follow-up, its zero-sequence impedance then the registered X_TF2.
+- **Expectation per mode at R2, ΔYg, written before Q1:** beyond R2 there is no zero-sequence path, so I0 = 0 and
+  k2 never binds; suppressed: no negative-sequence path either, so 50Q does not pick up (not enabled); IEEE 2800:
+  I2 = K·V2 appears and the element declares forward.
+- **ABC** is not in the forward-set counts (the static solver has no three-phase fault; it has no I2 by
+  construction); a bolted ABC run in EMT is a limiter check only.
+- **Weak frame at R2**: |V1| at Bus-2 < 0.2 pu flags a run (read separately, not excluded). The inverter's
+  reference is the Bus-2 (HV) V1, since TF2's series impedance is dropped; with the real TF2 the terminal voltage
+  would sit higher than Bus-2's during the fault.
+- **R1's reverse set is the direction question** (faults on EQ, hydro off): the I2 R1 measures for them comes only
+  from the IBR, so suppressed → no I2 → nothing, IEEE 2800 → reverse; the s = 1 result of the I2 study in their
+  topology. R1's forward set (Line-2) is the control (the grid behind R1).
+- Pre-flight states the pre-fault flow (IBR → grid, no load). The SIR is about 4 (Z_eq 0.0576 vs the line's
+  0.0148): faults 50–80 % from Bus-2 are electrically close to Bus-1.
+
 ## 2. Pre-flight
 
 - Load flow with `network.solve_v1ref` at both operating points, hydro on and off, TF2 both ways: converges, every
@@ -68,10 +116,14 @@ Then δ* injected in EMT at the nominal point for the forward set (and the R1 re
 
 ## 4. Go / no-go, fixed now
 
-- **Reproduction holds** if in EMT (Q2), at R2, the 32QG declares forward on ≥ 90 % of the forward set in the
-  IEEE 2800 mode and declares nothing or reverse on ≥ 50 % of it in the suppressed mode, and 3I2 > 10 % I1 holds in
-  the IEEE 2800 mode on every case and fails in the suppressed mode on most (≥ 70 %). Partial outcomes are reported
-  as such; a failure at the pre-flight sanity check is a model problem, not a finding.
+- **Reproduction holds at R2** if in EMT (Q2), on the forward set with TF2 ΔYg, the report's element (32Q for B-C,
+  32QG for A-G) declares forward on ≥ 90 % and **reverse on none** in the IEEE 2800 mode, and declares nothing or
+  reverse on ≥ 50 % in the suppressed mode; and 3I2 > 10 % I1 holds in the IEEE 2800 mode on every case and fails
+  in the suppressed mode on ≥ 70 %.
+- **Reproduction holds at R1 (direction)** if on R1's reverse set (EQ, hydro off) the element declares reverse on
+  ≥ 90 % and forward on none in the IEEE 2800 mode, and nothing or forward on ≥ 50 % in the suppressed mode; R1's
+  forward set is reported as the control.
+- Partial outcomes are reported as such; a failure at the pre-flight sanity check is a model problem, not a finding.
 - **δ on this system**: reported per design with the same wording as before: whether δ* exists within the cap,
   its price, and whether it holds in EMT (consistent with, not confirmed); whether the conventional elements change
   with δ. The prior from step 3 and I2_DIRECTION is "δ buys the guarantee, not the decision"; a different outcome

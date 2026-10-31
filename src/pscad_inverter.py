@@ -17,7 +17,9 @@ Control: one user component, gfl_avm, written here in Fortran:
   - phase-peak current limit IMAX (pu of Ibase). LIM = 0: I1 and I2 scaled together. LIM = 1: I2 priority,
     I2 kept and I1 alone scaled down until every phase peak fits (I1 and I2 scaled together only if I2
     alone exceeds the limit). LIM = 1 is the limiter the TAC25 design with the limit inside assumes:
-    the inverter delivers the full delta and only positive-sequence realisations that fit beside it occur;
+    the inverter delivers the full delta and only positive-sequence realisations that fit beside it occur.
+    LIM = 2 (docs/KIUC.md): |I1| and |I2| each limited to IMAX separately, no combined phase limit, as the NREL
+    report's inverter shows (I_Q+ = 1.2 and I_Q- = 0.45 at once, its Fig. 16);
   - references ramp in over the third cycle (the DFT needs one full cycle first);
   - TANG > 0 (s): the angle reference is the V1 angle through a first-order low-pass on its unit phasor, a PLL-like
     reference of bandwidth 1/(2 pi TANG); TANG = 0 is the bare DFT angle (the default, and every run before it);
@@ -25,8 +27,9 @@ Control: one user component, gfl_avm, written here in Fortran:
     60 Hz law is unchanged in steady state; TV2 = 0 is the bare DFT V2 (the default, docs/I2_DIRECTION.md);
   - FRT > 0: the IEEE 2800 positive-sequence fault response (docs/KIUC.md). When |V1| < 0.9 pu the reactive
     command becomes IQ + FRT (0.9 - |V1|), and the positive-sequence command is saturated at IMAX with q priority
-    (ID cut first). FRT is the K factor (2-6 in IEEE 2800). FRT = 0 is the fixed command (the default, and every
-    run before it).
+    (ID cut first); |V1| is low-passed with the reference filter's TANG (when TANG > 0) so the response does not
+    chatter on the DFT ripple. FRT is the K factor (2-6 in IEEE 2800). FRT = 0 is the fixed command (the default,
+    and every run before it). With LIM 1 the I2 law (MODE2 1 or 2) keeps priority over this I1 at the phase limit.
 Outputs: the three phase current references (kA), |V1|, |V2| (pu of Vbase), |I1|, |I2| (pu of Ibase), and the
 reference angle ANG (deg, in the DFT's absolute frame e^{j w t}).
 
@@ -149,6 +152,15 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
       G_QQ = $IQ
       IF ($FRT .GT. 0.0) THEN
         G_VM = SQRT(G_V1R**2 + G_V1I**2)/$VBASE
+        IF ($TANG .GT. 0.0) THEN
+          G_J = NSTORF + 7 + 6*%(nmax)d + 4
+          IF (TIME*$F0 .LT. 1.0) THEN
+            STORF(G_J) = G_VM
+          ELSE
+            STORF(G_J) = STORF(G_J) + DELT/$TANG*(G_VM - STORF(G_J))
+          END IF
+          G_VM = STORF(G_J)
+        END IF
         IF (G_VM .LT. 0.9) G_QQ = $IQ + $FRT*(0.9 - G_VM)
         IF (G_QQ .GT. $IMAX) G_QQ = $IMAX
         IF (G_QQ .LT. -$IMAX) G_QQ = -$IMAX
@@ -179,7 +191,18 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
         G_I2R = $D2MAG*$IBASE*COS(G_AN + 0.017453293*$D2ANG)
         G_I2I = $D2MAG*$IBASE*SIN(G_AN + 0.017453293*$D2ANG)
       END IF
-      IF ($LIM .GT. 0.5) THEN
+      IF ($LIM .GT. 1.5) THEN
+        G_LL = SQRT(G_I1R**2 + G_I1I**2)
+        IF (G_LL .GT. $IMAX*$IBASE) THEN
+          G_I1R = G_I1R*$IMAX*$IBASE/G_LL
+          G_I1I = G_I1I*$IMAX*$IBASE/G_LL
+        END IF
+        G_LL = SQRT(G_I2R**2 + G_I2I**2)
+        IF (G_LL .GT. $IMAX*$IBASE) THEN
+          G_I2R = G_I2R*$IMAX*$IBASE/G_LL
+          G_I2I = G_I2I*$IMAX*$IBASE/G_LL
+        END IF
+      ELSE IF ($LIM .GT. 0.5) THEN
         G_LL = ($IMAX*$IBASE)**2
         G_S1 = 1.0
         DO G_K = 0, 2
@@ -225,7 +248,7 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
      & + G_PBI**2))
       G_PK = MAX(G_PK, SQRT(G_PCR**2 + G_PCI**2))
       G_SC = 1.0
-      IF (G_PK .GT. $IMAX*$IBASE) G_SC = $IMAX*$IBASE/G_PK
+      IF (G_PK .GT. $IMAX*$IBASE .AND. $LIM .LT. 1.5) G_SC = $IMAX*$IBASE/G_PK
       G_RMP = (TIME*$F0 - 2.0)
       IF (G_RMP .LT. 0.0) G_RMP = 0.0
       IF (G_RMP .GT. 1.0) G_RMP = 1.0

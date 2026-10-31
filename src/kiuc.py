@@ -29,7 +29,9 @@ ZB = VLL ** 2 / SB                                     # 217.4 ohm
 Z_EQ1, Z_EQ0 = complex(5.91, 12.53) / ZB, complex(5.65, 18.93) / ZB          # grid to POI (Table 14)
 Z_L1, Z_L0 = complex(1.0433, 3.218) / ZB, complex(1.5649, 4.827) / ZB        # Line-2, Bus-1 to Bus-2
 ZS_STIFF = 0.001j                                      # the stiff grid source
-X_HYDRO = (0.25 + 0.07) * SB / 7.5                     # assumed X'd + X_TF1 on 7.5 MVA, on 15 MVA: 0.64 pu
+X_TF1 = 0.07                                           # assumed, on 7.5 MVA
+X_HYDRO = {"X''d 0.20": (0.20 + X_TF1) * SB / 7.5,     # assumed X''d + X_TF1 on 7.5 MVA, on 15 MVA: 0.54 pu (primary)
+           "X'd 0.25": (0.25 + X_TF1) * SB / 7.5}      # 0.64 pu (sensitivity)
 X_TF2 = 0.06                                           # assumed, on 15 MVA
 K2_IEEE, K_FRT = 5.0, 2.0                              # the report's K for I2; IEEE 2800's K for I_Q+ (range 2-6)
 OPS = {"P0.25Q0.15": (0.25, 0.15), "P1.0Q0": (1.0, 0.0)}
@@ -39,49 +41,67 @@ RF_OHM = (0.01, 5.0)
 # the forward set at R2: Line-2 runs Bus-1 (a) -> Bus-2 (b), so m from Bus-2 is 1 - m from a
 FWD = [("L2", round(1 - m, 4), s, OHM(r)) for s in ("ag", "ab") for m in M_IBR for r in RF_OHM]
 REV_R1 = [("EQ", round(m, 4), s, OHM(r)) for s in ("ag", "ab") for m in M_IBR for r in RF_OHM]   # EQ: G (a) -> Bus-1 (b)
-MODES = {"suppressed": 1e6, "IEEE 2800 K2=5": 1.0 / (-1j * K2_IEEE)}             # shunt: I2 = j K2 V2 injected
+MODES = {"suppressed": 0.0, "IEEE 2800 K2=5": K2_IEEE}  # MODE2 1's K2 inside the controller, through the limiter
+LIM = int(os.environ.get("KIUC_LIM", "2"))             # 2: the report's per-sequence limits; 1: ours (per phase, I2 first)
 
 
-def network(hydro=False, tf2="DYg", neg_z=1e6, relay=("L2", "b"), op="P0.25Q0.15", inject=False):
-    """The KIUC system in per unit of 15 MVA. hydro off: a stiff source at G behind the equivalent line EQ (Z_eq) to
-    Bus-1. hydro on: one Thevenin source at Bus-1, the grid behind Z_eq in parallel with the hydro behind X_HYDRO
-    (no zero-sequence path through the hydro's delta), as the design tool takes one synchronous source.
-    tf2: "DYg" (delta facing the line: no zero-sequence path at Bus-2) or "YgD" (X_TF2 to ground in zero sequence)."""
+HYDRO_OPEN0 = 1e3                                      # the hydro behind TF1's delta: no zero-sequence path
+
+
+def network(hydro="off", tf2="DYg", neg_z=1e6, relay=("L2", "b"), op="P0.25Q0.15", inject=False, xh="X''d 0.20"):
+    """The KIUC system in per unit of 15 MVA. The grid: a stiff source at G behind the equivalent line EQ (Z_eq) to
+    Bus-1. hydro "off": nothing else; "sg": a second synchronous source at Bus-1 behind X_HYDRO[xh] (Q1, Q2, as the
+    report has it); "thevenin": one source at Bus-1, the grid behind Z_eq in parallel with the hydro (Q3: the design
+    tool takes one synchronous source; no EQ line then). tf2: "DYg" (delta facing the line: no zero-sequence path at
+    Bus-2) or "YgD" (X_TF2 to ground in zero sequence)."""
     p, q = OPS[op]
     i0 = complex(p, -q)                                # the command in the inverter's frame; about absolute at |V| ~ 1
     zero_z = 1j * X_TF2 if tf2 == "YgD" else 1e6
     ibrs = {"I": nw.IBR("B2", i0, (0.1, 0.3), neg_z, zero_z, inject=inject, i_max=1.2)}
     lines = {"L2": nw.Line("B1", "B2", Z_L1, Z_L0)}
-    if not hydro:
+    zh = 1j * X_HYDRO[xh]
+    if hydro in ("off", "sg"):
         sgs = {"G": nw.SG("G", {1: ZS_STIFF, 2: ZS_STIFF, 0: ZS_STIFF}, 1.0 + 0j)}
         lines = {"EQ": nw.Line("G", "B1", Z_EQ1, Z_EQ0), **lines}
+        if hydro == "sg":
+            sgs["H"] = nw.SG("B1", {1: zh, 2: zh, 0: HYDRO_OPEN0 * 1j}, 1.0 + 0j, gen=(0.0, 0.0))
     else:
-        zg, zh = ZS_STIFF + Z_EQ1, 1j * X_HYDRO
+        zg = ZS_STIFF + Z_EQ1
         z1 = zg * zh / (zg + zh)
         e = (1.0 / zg + 1.0 / zh) * z1                 # both EMFs 1.0 at 0 deg (assumed)
         sgs = {"G": nw.SG("B1", {1: z1, 2: z1, 0: ZS_STIFF + Z_EQ0}, e)}
     return nw.Network(lines=lines, sgs=sgs, ibrs=ibrs, loads={}, relay=relay, eps=0.08, rF=1.0)
 
 
-def settings(net, sg_val, i_abs, frt=0.0):
-    """The inverter's command in its own V1 frame for an absolute current realisation, at the no-fault state."""
-    _, V = nw.solve(net, {"G": sg_val, "I": i_abs}, full=True)
+def sgvals(net, v):
+    return {k: v[k] for k in net.sgs}
+
+
+def nominal_sg(net):
+    return {k: g.e0 for k, g in net.sgs.items()}
+
+
+def settings(net, sg, i_abs, frt=0.0, k2=0.0):
+    """The inverter's command in its own V1 frame for an absolute current realisation, at the no-fault state.
+    sg: {source name: EMF}; k2 > 0: MODE2 1 (the IEEE 2800 law) with that K."""
+    _, V = nw.solve(net, {**sg, "I": i_abs}, full=True)
     u = V["B2"][0] / abs(V["B2"][0])
     c = i_abs / u
-    return {"I": dict(ID=float(c.real), IQ=float(-c.imag), D2MAG=0.0, D2ANG=0.0, FRT=float(frt))}
+    return {"I": dict(ID=float(c.real), IQ=float(-c.imag), D2MAG=0.0, D2ANG=0.0, FRT=float(frt), K2=float(k2))}
 
 
-def solve(net, sg_val, st, fault):
+def solve(net, sg, st, fault, lim=None):
+    lim = LIM if lim is None else lim
     try:
-        return nw.solve_v1ref(net, {"G": sg_val}, st, fault, relax=0.5, max_iter=2000)
+        return nw.solve_v1ref(net, sg, st, fault, lim=lim, relax=0.5, max_iter=2000)
     except RuntimeError:
-        return nw.solve_v1ref(net, {"G": sg_val}, st, fault, relax=0.2, max_iter=8000)
+        return nw.solve_v1ref(net, sg, st, fault, lim=lim, relax=0.2, max_iter=8000)
 
 
-def ibr_state(net, sg_val, st, fault):
+def ibr_state(net, sg, st, fault):
     """The IBR's delivered I1 in its own frame (I_P+, I_Q+), its I2 and the Bus-2 V1, V2."""
-    y, inj, _ = solve(net, sg_val, st, fault)
-    vals = {"G": sg_val, "I": inj["I"][0]}
+    y, inj, _ = solve(net, sg, st, fault)
+    vals = {**sg, "I": inj["I"][0]}
     _, V = nw.solve(net, vals, {"I": inj["I"][1]}, fault, full=True)
     v1, v2 = V["B2"][0], V["B2"][1]
     u = v1 / abs(v1)
@@ -117,34 +137,52 @@ def dir32q(y, ground, z_line=Z_L1):
 
 
 # ------------------------------------------------------------------ pre-flight
+def flow(net, sg, inj):
+    """Active and reactive power into Line-2 at Bus-2 (positive: the IBR exports towards the grid)."""
+    _, V = nw.solve(net, {**sg, "I": inj["I"][0]}, full=True)
+    i = (V["B2"][0] - V["B1"][0]) / net.lines["L2"].z1
+    s = V["B2"][0] * np.conj(i)
+    return V, float(s.real), float(s.imag)
+
+
 def preflight():
-    out = {"loadflow": [], "fig16": []}
+    out = {"loadflow": [], "thevenin_check": [], "fig16": []}
     ok_all = True
-    for hydro in (False, True):
+    for hydro in ("off", "sg"):
         for op in OPS:
-            net = network(hydro, "DYg", 1e6, op=op)
-            st = settings(net, 1.0 if not hydro else net.sgs["G"].e0, net.ibrs["I"].i0)
-            sg = net.sgs["G"].e0
+            net = network(hydro, "DYg", op=op)
+            sg = nominal_sg(net)
+            st = settings(net, sg, net.ibrs["I"].i0)
             _, inj, it = solve(net, sg, st, None)
-            _, V = nw.solve(net, {"G": sg, "I": inj["I"][0]}, full=True)
+            V, p, q = flow(net, sg, inj)
             v = {b: float(abs(V[b][0])) for b in V}
             ok = all(0.95 <= x <= 1.05 for x in v.values())
             ok_all &= ok
-            out["loadflow"].append(dict(hydro=hydro, op=op, iterations=it, bus_v1=v, ok=ok))
-            print(f"load flow, hydro {'on ' if hydro else 'off'}, {op}: " + ", ".join(f"{b} {x:.4f}" for b, x in v.items())
-                  + f"  ({it} it) {'OK' if ok else 'OUT of 0.95-1.05'}", flush=True)
-    # Fig. 16: bolted AG at 5 % from the IBR end, IEEE 2800 sequence control, P 0.25 / Q 0.15, I_sat 1.2, K = 5
+            out["loadflow"].append(dict(hydro=hydro, op=op, iterations=it, bus_v1=v, P_into_line2_at_B2=p, Q_into_line2_at_B2=q, ok=ok))
+            print(f"load flow, hydro {hydro:3s}, {op}: |V1| " + ", ".join(f"{b} {x:.4f}" for b, x in v.items())
+                  + f"; P, Q from Bus-2 into Line-2 {p:+.3f}, {q:+.3f} pu ({'IBR -> grid' if p > 0 else 'grid -> IBR'})  ({it} it) "
+                  + ("OK" if ok else "OUT of 0.95-1.05"), flush=True)
+    # the Thevenin equivalent (Q3's) against the two-source network: pre-fault and the bolted AG at 5 % from Bus-2, at R2
     fault = ("L2", 0.95, "ag", OHM(0.01))
+    for xh in X_HYDRO:
+        a, b = network("sg", "DYg", xh=xh), network("thevenin", "DYg", xh=xh)
+        sa, sb = nominal_sg(a), nominal_sg(b)
+        st = settings(a, sa, a.ibrs["I"].i0)
+        d = max(float(np.max(np.abs(solve(a, sa, st, f)[0] - solve(b, sb, st, f)[0]))) for f in (None, fault))
+        out["thevenin_check"].append(dict(xh=xh, largest_difference_at_R2=d))
+        print(f"two-source vs Thevenin hydro ({xh}): largest difference at R2, pre-fault and bolted AG at 5 %: {d:.1e} pu", flush=True)
+    # Fig. 16: bolted AG at 5 % from the IBR end, IEEE 2800 sequence control, P 0.25 / Q 0.15, I_sat 1.2, K = 5
     for tf2 in ("YgD", "DYg"):
-        for frt in (0.0, K_FRT):
-            net = network(False, tf2, MODES["IEEE 2800 K2=5"])
-            st = settings(net, 1.0, net.ibrs["I"].i0, frt)
-            s, _ = ibr_state(net, 1.0, st, fault)
+        for frt in (0.0, K_FRT, 4.0):
+            net = network("off", tf2)
+            sg = nominal_sg(net)
+            st = settings(net, sg, net.ibrs["I"].i0, frt, K2_IEEE)
+            s, _ = ibr_state(net, sg, st, fault)
             chk = dict(IQ_12=abs(s["IQ"] - 1.2) <= 0.12, IP_0=abs(s["IP"]) <= 0.12,
                        K_5=s["K_meas"] is not None and abs(s["K_meas"] - 5.0) <= 0.5,
                        ang_90=s["ang_I2_V2"] is not None and abs(s["ang_I2_V2"] - 90.0) <= 15.0)
             out["fig16"].append(dict(tf2=tf2, frt=frt, state=s, checks=chk))
-            print(f"Fig. 16 sanity, TF2 {tf2}, FRT {frt:g}: I_P+ {s['IP']:.3f}, I_Q+ {s['IQ']:.3f} (|I1| {s['I1']:.3f}); "
+            print(f"Fig. 16 sanity, TF2 {tf2}, FRT K1 {frt:g}: I_P+ {s['IP']:.3f}, I_Q+ {s['IQ']:.3f} (|I1| {s['I1']:.3f}); "
                   f"|V1| {s['V1']:.3f}, |V2| {s['V2']:.3f}; |I2| {s['I2']:.3f} = {s['K_meas']:.2f} |V2|, I2 leads V2 by "
                   f"{s['ang_I2_V2']:.1f} deg | checks {chk}", flush=True)
     out["loadflow_ok"] = ok_all
@@ -153,46 +191,90 @@ def preflight():
 
 
 # ------------------------------------------------------------------ Q1
+def corners_for(net):
+    """The 16 corners of the grid source's and the IBR's boxes; the hydro (if any) at its nominal EMF."""
+    out = []
+    for g1, g2, i1, i2 in itertools.product((-1, 1), repeat=4):
+        u = []
+        for kind, name in net.sources:
+            u += [g1, g2] if name == "G" else ([i1, i2] if name == "I" else [0.0, 0.0])
+        out.append(np.array(u, float))
+    return out
+
+
+def run_set(net, cases, frt, want, k2=0.0):
+    """Per case and corner: the report's element (32Q / 32QG), our incremental element, 3|I2|/|I1| at the relay,
+    the IBR's I2 against V2, and |V1| at Bus-2 (weak frame below 0.2 pu)."""
+    rows = []
+    for c in cases:
+        ground = c[2] == "ag"
+        res = dict(case=list(c), q=[], inc=[], ratio=[], ang=[], why=[], v1=[])
+        for u in corners_for(net):
+            v = nw.realisation(net, u)
+            sg = sgvals(net, v)
+            st = settings(net, sg, v["I"], frt, k2)
+            yN, _, _ = solve(net, sg, st, None)
+            s, y = ibr_state(net, sg, st, c)
+            dq, _, why = dir32q(y, ground)
+            res["q"].append(dq)
+            res["why"].append(why)
+            res["inc"].append(direction_pk(yN, y))
+            res["ratio"].append(float(3 * abs(y[4]) / max(abs(y[3]), 1e-12)))
+            res["ang"].append(s["ang_I2_V2"])
+            res["v1"].append(s["V1"])
+        rows.append(res)
+    n = len(rows) * 16
+    cnt = lambda key, val: sum(x == val for r in rows for x in r[key])
+    blocked = {}
+    for r in rows:
+        for x in r["why"]:
+            blocked[x] = blocked.get(x, 0) + 1
+    return rows, dict(n=n, want=want, q_right=cnt("q", want) / n, q_none=cnt("q", None) / n,
+                      q_wrong=sum(x not in (want, None) for r in rows for x in r["q"]) / n,
+                      inc_right=cnt("inc", want) / n, inc_none=cnt("inc", None) / n,
+                      inc_wrong=sum(x not in (want, None) for r in rows for x in r["inc"]) / n,
+                      ratio_over_10pct=sum(x > 0.1 for r in rows for x in r["ratio"]) / n, why=blocked,
+                      weak_frame_points=sum(x < 0.2 for r in rows for x in r["v1"]),
+                      by_type={t: dict(q_right=sum(x == want for r in rows if r["case"][2] == t for x in r["q"]) / (n / 2),
+                                       inc_right=sum(x == want for r in rows if r["case"][2] == t for x in r["inc"]) / (n / 2))
+                               for t in ("ag", "ab")})
+
+
 def static():
-    corners = list(itertools.product((-1, 1), repeat=4))
     out = {}
-    for hydro in (False, True):
+    path = os.path.join(OUT, "kiuc_static.json")
+
+    def record(key, rows, summ):
+        out[key] = dict(summary=summ, rows=rows)
+        print(f"{key}: report element right {summ['q_right']:.2f} none {summ['q_none']:.2f} wrong {summ['q_wrong']:.2f} | incremental "
+              f"right {summ['inc_right']:.2f} none {summ['inc_none']:.2f} wrong {summ['inc_wrong']:.2f} | 3I2 > 10 % I1 "
+              f"{summ['ratio_over_10pct']:.2f} | by type {summ['by_type']} | enable: {summ['why']} | weak-frame points "
+              f"{summ['weak_frame_points']}", flush=True)
+        json.dump(dict(fwd=FWD, rev_r1=REV_R1, results=out), open(path, "w"), indent=1, default=str)
+
+    # R2, the forward set (dependability): hydro off / on (two sources), TF2 DYg (EMT too) and YgD (static only)
+    for hydro in ("off", "sg"):
         for tf2 in ("DYg", "YgD"):
-            for mode, nz in MODES.items():
+            for mode, k2 in MODES.items():
                 for frt in (0.0, K_FRT):
-                    net = network(hydro, tf2, nz)
-                    key = f"hydro {'on' if hydro else 'off'} | TF2 {tf2} | {mode} | FRT {frt:g}"
-                    rows = []
-                    for c in FWD:
-                        ground = c[2] == "ag"
-                        res = dict(case=list(c), q=[], inc=[], ratio=[], ang=[], why=[])
-                        for u in corners:
-                            v = nw.realisation(net, u)
-                            st = settings(net, v["G"], v["I"], frt)
-                            yN, _, _ = solve(net, v["G"], st, None)
-                            s, y = ibr_state(net, v["G"], st, c)
-                            dq, _, why = dir32q(y, ground)
-                            res["q"].append(dq)
-                            res["why"].append(why)
-                            res["inc"].append(direction_pk(yN, y))
-                            res["ratio"].append(float(3 * abs(y[4]) / max(abs(y[3]), 1e-12)))
-                            res["ang"].append(s["ang_I2_V2"])
-                        rows.append(res)
-                    n = len(rows) * len(corners)
-                    cnt = lambda key, val: sum(x == val for r in rows for x in r[key])
-                    summ = dict(n=n, q_fwd=cnt("q", "f") / n, q_none=cnt("q", None) / n, q_rev=cnt("q", "r") / n,
-                                inc_fwd=cnt("inc", "f") / n, inc_none=cnt("inc", None) / n, inc_rev=cnt("inc", "r") / n,
-                                ratio_over_10pct=sum(x > 0.1 for r in rows for x in r["ratio"]) / n,
-                                why={w: sum(x == w for r in rows for x in r["why"]) for w in {x for r in rows for x in r["why"]}},
-                                by_type={t: dict(q_fwd=sum(x == "f" for r in rows if r["case"][2] == t for x in r["q"]) / (n / 2),
-                                                 inc_fwd=sum(x == "f" for r in rows if r["case"][2] == t for x in r["inc"]) / (n / 2))
-                                         for t in ("ag", "ab")})
-                    out[key] = dict(summary=summ, rows=rows)
-                    print(f"{key}: 32Q/32QG fwd {summ['q_fwd']:.2f} none {summ['q_none']:.2f} rev {summ['q_rev']:.2f} | incremental fwd "
-                          f"{summ['inc_fwd']:.2f} none {summ['inc_none']:.2f} rev {summ['inc_rev']:.2f} | 3I2 > 10 % I1 on "
-                          f"{summ['ratio_over_10pct']:.2f} | by type {summ['by_type']} | blocked by {summ['why']}", flush=True)
-                    json.dump(dict(fwd=FWD, results=out), open(os.path.join(OUT, "kiuc_static.json"), "w"), indent=1, default=str)
-    print("-> results/network/kiuc_static.json")
+                    net = network(hydro, tf2, relay=("L2", "b"))
+                    rows, summ = run_set(net, FWD, frt, "f", k2)
+                    record(f"R2 forward | hydro {hydro} | TF2 {tf2} | {mode} | FRT {frt:g}", rows, summ)
+    # R1, the reverse set (direction, faults on EQ, hydro off) and the forward set (the control)
+    for mode, k2 in MODES.items():
+        for frt in (0.0, K_FRT):
+            net = network("off", "DYg", relay=("L2", "a"))
+            rows, summ = run_set(net, REV_R1, frt, "r", k2)
+            record(f"R1 reverse | hydro off | TF2 DYg | {mode} | FRT {frt:g}", rows, summ)
+            rows, summ = run_set(net, FWD, frt, "f", k2)
+            record(f"R1 forward (control) | hydro off | TF2 DYg | {mode} | FRT {frt:g}", rows, summ)
+    # sensitivities, one line each: K1 = 4; K2 = 2; X'd 0.25
+    net = network("sg", "DYg")
+    record("sens R2 forward | hydro sg | DYg | IEEE 2800 K2=5 | FRT 4", *run_set(net, FWD, 4.0, "f", K2_IEEE))
+    record("sens R2 forward | hydro sg | DYg | IEEE 2800 K2=2 | FRT 2", *run_set(net, FWD, K_FRT, "f", 2.0))
+    net = network("sg", "DYg", xh="X'd 0.25")
+    record("sens R2 forward | hydro sg X'd 0.25 | DYg | IEEE 2800 K2=5 | FRT 2", *run_set(net, FWD, K_FRT, "f", K2_IEEE))
+    print(f"-> {os.path.relpath(path)}")
 
 
 if __name__ == "__main__":
