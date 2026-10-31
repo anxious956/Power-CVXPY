@@ -7,9 +7,12 @@
 >   the IEEE 2800 law (K = 5) they decide right on every case, forward at the IBR end and reverse at the grid end.
 > - **IEEE 2800-style reactive-current support (FRT) restores our positive-sequence incremental element** under
 >   suppression (R2 12/12; R1 reverse 0.75 right, 0.08 wrong): the K-factor limitation of the I2 study, measured.
-> - **The set test needs neither the IEEE 2800 law nor δ here** (Q3): δ* = 0 for detection at R2 and direction at R1
->   in both tiers; in EMT, on runs where both conventional elements decide nothing, it is contained and separated on
->   every case (margins 4.3–70 ε). δ adds margin, not feasibility (+0.31 ε at 1 pu).
+> - **The set test, with the design's sets, needs neither the IEEE 2800 law nor δ here** (Q3; static design, EMT at
+>   the nominal point, clean runs, FRT off): δ* = 0 for detection at R2 and direction at R1 in both tiers; in EMT, on
+>   runs where both conventional elements decide nothing, it is contained and separated on every case (margins
+>   4.3–70 ε). δ adds margin, not feasibility (+0.31 ε at 1 pu). Three remedies, kept apart: the IEEE 2800 law
+>   repairs the negative-sequence elements, FRT the positive-sequence incremental element, and the set test needs
+>   neither. "Free" is a statement about this system's design and its EMT check, not a field claim.
 > - Side findings: whether the 32QG's k2 restraint blocks it depends on the inverter's I2 magnitude (the limiter is
 >   part of a relay result's specification); our per-phase limiter with K = 5 is numerically unstable on B-C faults;
 >   a static-model bug (the IEEE 2800 law outside the limiter, REVIEW row 60) was found and fixed.
