@@ -345,6 +345,31 @@ B-C stays "not runnable at K = 5".
   (the diagnostic says K = 2 is clean, but Q3 has no K2 law: MODE2 2 with LIM 1 is the I2 study's configuration, clean
   there), otherwise A-G only, said so.
 
+## Q3 result, static design (31 Oct 2026)
+
+`src/kiuc.py design` → `results/network/kiuc_q3_design.json`. Q3's inverter (FRT off, LIM 1, I2 suppressed),
+main configuration, both tiers, ρ 0.1 and 0:
+
+| design | tier | cases (pairs) not apart at δ = 0 | δ* | margin at δ = 0, ρ 0.1 (ρ 0) | binding | price |
+|---|---|---|---|---|---|---|
+| detection R2, hydro off | box | 0 of 12 | **0** | 1.67 ε (1.87) | L2 A-G 80 % from Bus-2, 5 Ω | none (\|I1\| 0.287 / 0.287) |
+| detection R2, hydro off | structured | 0 of 12 | **0** | 12.6 ε (12.8) | same | none |
+| detection R2, hydro on (Thevenin) | box | 0 of 12 | **0** | 1.91 ε (2.11) | same | none |
+| detection R2, hydro on (Thevenin) | structured | 0 of 12 | **0** | 13.5 ε (13.7) | same | none |
+| direction R1, hydro off | box | 0 of 144 | **0** | 29.8 ε (30.0) | L2 A-G 5 % from Bus-2 vs EQ A-G 50 %, 5 Ω | none |
+| direction R1, hydro off | structured | 0 of 144 | **0** | 60.4 ε (60.6) | L2 A-G 5 % vs EQ B-C 50 % | none |
+
+No dead frames; no inadmissible candidate (the search never ran: δ = 0 already separates).
+
+**Reading, static model, before EMT:** on this system the designed δ has nothing to do. With I2 suppressed, the set
+test separates every fault from normal operation at the IBR-end relay (R2) and every forward fault from every reverse
+fault at the grid-end relay (R1), at δ = 0, under both noise tiers, with margins of 1.7–13.7 ε (detection) and
+30–60 ε (direction). The conventional negative-sequence elements need the IEEE 2800 law for the same job (Q2), and
+the designed δ would have to replace that law open-loop; it does not have to, because the set test does not need
+I2 at all here: it uses the voltages and the positive sequence. **The prior "δ buys the guarantee, not the decision"
+becomes "the set test needs no δ for the guarantee either" on this system** (strong grid behind R1, SIR about 4,
+short line). The EMT check therefore runs at δ = 0, below.
+
 ### Deviations during Q2 (recorded)
 
 - **Launch order:** the batch was started before the review asked for the EMT Fig.-16 pair first; the pair was then
