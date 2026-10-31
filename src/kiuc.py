@@ -16,7 +16,7 @@ quantity here is in per unit of the 15 MVA base.
     python src/kiuc.py preflight   -> results/network/kiuc_preflight.json
     python src/kiuc.py static      -> results/network/kiuc_static.json
 """
-import os, sys, json, itertools
+import os, sys, json, itertools, time
 import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -435,6 +435,171 @@ def analyse_q2():
     print(f"-> results/network/{name}")
 
 
+# ------------------------------------------------------------------ Q3: the designed delta on this system
+import frames as fr
+from scipy.optimize import linprog
+deg = np.pi / 180
+TIERS = {"box": dict(eps=None, instr=None),
+         "structured": dict(eps=np.array([0.02] * 3 + [0.04] * 3 + [0.02] * 3 + [0.04] * 3),
+                            instr=dict(N=(0.005, 0.3 * deg, 0.01, 0.3 * deg), F=(0.005, 0.3 * deg, 0.01, 0.3 * deg)))}
+CAP, Q3_RHO = 1.14, 0.1
+STUDIES = {"detection R2 | hydro off": ("off", ("L2", "b"), FWD, None),
+           "detection R2 | hydro on (Thevenin)": ("thevenin", ("L2", "b"), FWD, None),
+           "direction R1 | hydro off": ("off", ("L2", "a"), FWD, REV_R1)}
+Q3_PATH = os.path.join(OUT, "kiuc_q3_design.json")
+_W = {}
+
+
+def q3_model(study, tier):
+    hydro, relay, A, B = STUDIES[study]
+    net = network(hydro, "DYg", relay=relay, inject=True)
+    probe = fr.FrameModel(net, A[:1], n_samples=400, face_pts=5, seed=2)
+    v1min = float(np.min(np.abs(probe.measure(np.vstack(probe.samples), 0j, None)[:, 0])))
+    phi = 4.0 * 0.01 / (np.sqrt(3) * v1min)            # the main configuration's rule (frames_main.py)
+    kw = dict(factor=1.1, drift_deg=3.0, ref_phi=phi, model_err=0.008, instr=TIERS[tier]["instr"], lim=1)
+    if TIERS[tier]["eps"] is not None:
+        kw["eps"] = TIERS[tier]["eps"]
+    cases = list(A) + (list(B) if B else [])
+    return fr.FrameModel(net, cases, n_samples=150, face_pts=3, seed=1, **kw), phi, len(A)
+
+
+def q3_apart(fm, d, rho, nA, direction, order):
+    """All cases apart from N (detection) or every forward case apart from every reverse case (direction) at d.
+    order: the list of indices (cases or pairs) to test, the last binding one moved to the front."""
+    b = 2 * fm.eps * (1 + rho)
+    Ns = None if direction else fm.zonotopes(d, None)
+    for idx in list(order):
+        if direction:
+            i, j = idx
+            hit = fr._meet_union(fm.zonotopes(d, i), fm.zonotopes(d, j), b)
+        else:
+            hit = fr._meet_union(Ns, fm.zonotopes(d, idx), b)
+        if hit:
+            order.remove(idx)
+            order.insert(0, idx)
+            return False
+    return True
+
+
+def _q3_init(study, tier, order):
+    import warnings
+    warnings.filterwarnings("ignore")
+    fm, _, nA = q3_model(study, tier)
+    _W.update(fm=fm, nA=nA, direction=STUDIES[study][3] is not None, order=list(map(lambda x: tuple(x) if isinstance(x, list) else x, order)))
+
+
+def _q3_eval(args):
+    r, a, rho = args
+    fm = _W["fm"]
+    try:
+        ok = q3_apart(fm, r * np.exp(1j * np.radians(a)), rho, _W["nA"], _W["direction"], _W["order"])
+        bad = False
+    except RuntimeError:
+        ok, bad = False, True
+    fm._cache.clear()
+    return a, ok, bad
+
+
+def q3_gap(cA, GA, cB, GB, w):
+    n, ka, kb = cA.size, GA.shape[1], GB.shape[1]
+    c = np.zeros(ka + kb + n + 1)
+    c[-1] = 1
+    A_eq = np.hstack([GA, -GB, np.eye(n), np.zeros((n, 1))])
+    W = w.reshape(n, 1)
+    A_ub = np.vstack([np.hstack([np.zeros((n, ka + kb)), np.eye(n), -W]), np.hstack([np.zeros((n, ka + kb)), -np.eye(n), -W])])
+    res = linprog(c, A_ub=A_ub, b_ub=np.zeros(2 * n), A_eq=A_eq, b_eq=cB - cA,
+                  bounds=[(-1, 1)] * (ka + kb) + [(None, None)] * n + [(0, None)], method="highs")
+    assert res.status == 0, res.message
+    return float(res.x[-1])
+
+
+def q3_margin(fm, d, rho, nA, direction):
+    w = np.broadcast_to(np.asarray(fm.eps, float), (12,))
+    best = (np.inf, None)
+    if direction:
+        Z = {k: fm.zonotopes(d, k) for k in range(len(fm.cases))}
+        for i in range(nA):
+            for j in range(nA, len(fm.cases)):
+                g = min(q3_gap(a1, g1, a2, g2, w) for a1, g1 in Z[i] for a2, g2 in Z[j])
+                if g < best[0]:
+                    best = (g, [list(fm.cases[i]), list(fm.cases[j])])
+    else:
+        Ns = fm.zonotopes(d, None)
+        for k in range(len(fm.cases)):
+            g = min(q3_gap(a1, g1, a2, g2, w) for a1, g1 in Ns for a2, g2 in fm.zonotopes(d, k))
+            if g < best[0]:
+                best = (g, list(fm.cases[k]))
+    fm._cache.clear()
+    return dict(gap_eps=best[0], margin_eps=best[0] - 2 * (1 + rho), binding=best[1])
+
+
+def q3_price(fm, d):
+    S = np.zeros((1, 4))
+    _, ic = fm.sources(S)
+    _, _, u = fm.normal_state(S, d)
+    i1, _ = fr.limiter_vec(ic * u, d * u, fm.i_max, 1)
+    return dict(I1_delivered=float(abs(i1[0])), I1_commanded=float(abs(ic[0])))
+
+
+def design_q3():
+    from concurrent.futures import ProcessPoolExecutor
+    out = json.load(open(Q3_PATH)) if os.path.exists(Q3_PATH) else {}
+    for study, (hydro, relay, A, B) in STUDIES.items():
+        direction = B is not None
+        for tier in TIERS:
+            fm, phi, nA = q3_model(study, tier)
+            for rho in (Q3_RHO, 0.0):
+                key = f"{study} | {tier} | rho {rho}"
+                if key in out:
+                    continue
+                t0 = time.time()
+                b = 2 * fm.eps * (1 + rho)
+                if direction:
+                    idx = [(i, j) for i in range(nA) for j in range(nA, len(fm.cases))]
+                    hard = [p for p in idx if fr._meet_union(fm.zonotopes(0j, p[0]), fm.zonotopes(0j, p[1]), b)]
+                    hard_named = [[list(fm.cases[i]), list(fm.cases[j])] for i, j in hard]
+                else:
+                    Ns = fm.zonotopes(0j, None)
+                    idx = list(range(len(fm.cases)))
+                    hard = [k for k in idx if fr._meet_union(Ns, fm.zonotopes(0j, k), b)]
+                    hard_named = [list(fm.cases[k]) for k in hard]
+                fm._cache.clear()
+                res = dict(study=study, tier=tier, rho=rho, phi_ref=phi, unseparated_at_0=len(hard), of=len(idx), unseparated=hard_named)
+                print(f"[{key}] not apart at delta = 0: {len(hard)} of {len(idx)}  [{time.time() - t0:.0f} s]", flush=True)
+                if not hard:
+                    res.update(abs_delta=0.0, separating_angles_deg="all", carried_angle_deg=None, margin=q3_margin(fm, 0j, rho, nA, direction),
+                               price=q3_price(fm, 0j), dead_frames=[], inadmissible=0)
+                else:
+                    order = hard + [k for k in idx if k not in hard]
+                    found, angles, n_bad = None, [], 0
+                    with ProcessPoolExecutor(6, initializer=_q3_init, initargs=(study, tier, order)) as pool:
+                        for r in np.arange(0.02, CAP + 1e-9, 0.02):
+                            rr = list(pool.map(_q3_eval, [(float(r), a, rho) for a in range(0, 360, 5)]))
+                            n_bad += sum(x[2] for x in rr)
+                            ok = [a for a, good, _ in rr if good]
+                            if ok:
+                                found, angles = float(round(r, 4)), ok
+                                break
+                    res.update(abs_delta=found, separating_angles_deg=angles, feasible=found is not None, inadmissible=n_bad)
+                    if found is not None:
+                        ms = {a: q3_margin(fm, found * np.exp(1j * np.radians(a)), rho, nA, direction) for a in angles}
+                        a_star = max(ms, key=lambda a: ms[a]["margin_eps"])
+                        d = found * np.exp(1j * np.radians(a_star))
+                        res.update(margins_by_angle={str(a): m for a, m in ms.items()}, carried_angle_deg=a_star, margin=ms[a_star],
+                                   price=q3_price(fm, d), dead_frames=[list(c) for c in fm.dead_frames(d)])
+                res["seconds"] = time.time() - t0
+                out[key] = res
+                json.dump(out, open(Q3_PATH, "w"), indent=1, default=str)
+                if res.get("abs_delta") is not None:
+                    m = res["margin"]
+                    print(f"[{key}] delta* {res['abs_delta']} pu; angles {res['separating_angles_deg']}; carried {res['carried_angle_deg']}; margin "
+                          f"{m['margin_eps']:.3f} eps ({m['binding']}); |I1| {res['price']['I1_delivered']:.3f} / {res['price']['I1_commanded']:.3f}; "
+                          f"dead frames {len(res['dead_frames'])}; inadmissible {res.get('inadmissible', 0)}  [{res['seconds']:.0f} s]", flush=True)
+                else:
+                    print(f"[{key}] no delta within the {CAP} pu cap (full grid); inadmissible {res['inadmissible']}  [{res['seconds']:.0f} s]", flush=True)
+    print(f"-> {os.path.relpath(Q3_PATH)}")
+
+
 def fig16_emt():
     """The EMT Fig.-16 pair (R2, hydro off, IEEE 2800, K1 4, LIM 2): the IBR's I_P+, I_Q+, |I2|, |I2|/|V2| and the angle
     of I2 against V2 at Bus-2, 2.5 cycles after inception, against static."""
@@ -464,4 +629,5 @@ def fig16_emt():
 
 
 if __name__ == "__main__":
-    {"preflight": preflight, "static": static, "spec": make_q2, "analyse": analyse_q2, "fig16": fig16_emt}[sys.argv[1]]()
+    {"preflight": preflight, "static": static, "spec": make_q2, "analyse": analyse_q2, "fig16": fig16_emt,
+     "design": design_q3}[sys.argv[1]]()

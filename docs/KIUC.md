@@ -310,6 +310,41 @@ are "not interpretable", and LIM 1 confirms the A-G result only.
 - Caveats: one system, nominal source point, one point on wave, clean measurements, TF2 ΔYg only in EMT, the hydro as
   a source behind X''d.
 
+### The LIM 1 B-C diagnostic (information only)
+
+`results/network/kiuc_diag_lim1_specs.json`; one B-C case (R2, hydro off, IEEE 2800, bolted at 50 %), LIM 1, K1 = 4:
+
+| run | numerically clean | peak / nominal | 5–10 kHz share |
+|---|---|---|---|
+| (a) K2 = 2, TV2 15 Hz | **yes** | 1.00 | 1.4·10⁻⁵ |
+| (b) K2 = 5, TV2 5 Hz | no | 7.26 | 4.7·10⁻² |
+| (c) K2 = 5, TV2 15 Hz (the batch's setting) | no | 32.3 | 1.3·10⁻¹ |
+
+K = 5 with a per-phase, I2-priority limiter is not stable in this controller; K = 2 is. A narrower V2 bandwidth slows
+the mode but does not remove it. This is a statement about the limiter–law pair, not about the grid (the likely
+mechanism: the I2 demand saturates the phase budget, the per-phase rescaling changes V2, the law changes I2). LIM 1
+B-C stays "not runnable at K = 5".
+
+## Q3, registered before any design run (31 Oct 2026)
+
+- **The question is sharper here than in the I2 study.** On this system the IEEE 2800 law already gives direction at
+  R1 and the 3I2 the negative-sequence elements need (Q2). The designed δ (MODE2 2, no V2 law, I2 otherwise
+  suppressed) must do that job open-loop. The prior, from REVIEW row 58: it certifies the set test and does not
+  repair the conventional element. A different outcome is the finding.
+- **Q3's inverter is "ours", not Q2's:** FRT off (the design tool, `frames.FrameModel`, has no FRT yet) and LIM 1 (a
+  guarantee needs a physical limit; LIM 1 is clean in EMT on A-G). Q2 ran K1 = 4 and LIM 2, the report's.
+- **Designs** (`src/kiuc.py design`), both tiers (0.08 pu box; structured design tier), ρ 0.1 (ρ 0 reported), full
+  polar search (5° × 0.02 pu to the 1.14 pu cap), δ = 0 pairwise first, dead frames, price as |I1| delivered /
+  commanded at the nominal point, the separating angle set and the largest-margin angle carried:
+  - **detection at R2**: the forward set against normal operation, hydro off (the network has one source) and hydro
+    on (the Thevenin network);
+  - **direction at R1**: every forward-set case against every reverse-set case (EQ faults), hydro off.
+  "Yes" as before: separation within the cap at ρ 0.1.
+- **The EMT check** at the nominal point, δ* injected, the same 12-case sets: the set test (contained ≤ 0.1 ε,
+  separated) and the two conventional elements; B-C at R1 reverse under LIM 1 only if a clean configuration exists
+  (the diagnostic says K = 2 is clean, but Q3 has no K2 law: MODE2 2 with LIM 1 is the I2 study's configuration, clean
+  there), otherwise A-G only, said so.
+
 ### Deviations during Q2 (recorded)
 
 - **Launch order:** the batch was started before the review asked for the EMT Fig.-16 pair first; the pair was then
