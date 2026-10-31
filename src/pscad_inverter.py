@@ -22,7 +22,11 @@ Control: one user component, gfl_avm, written here in Fortran:
   - TANG > 0 (s): the angle reference is the V1 angle through a first-order low-pass on its unit phasor, a PLL-like
     reference of bandwidth 1/(2 pi TANG); TANG = 0 is the bare DFT angle (the default, and every run before it);
   - TV2 > 0 (s): the demodulated V2 phasor through a first-order low-pass before the MODE2 1 law (and V2M), so the
-    60 Hz law is unchanged in steady state; TV2 = 0 is the bare DFT V2 (the default, docs/I2_DIRECTION.md).
+    60 Hz law is unchanged in steady state; TV2 = 0 is the bare DFT V2 (the default, docs/I2_DIRECTION.md);
+  - FRT > 0: the IEEE 2800 positive-sequence fault response (docs/KIUC.md). When |V1| < 0.9 pu the reactive
+    command becomes IQ + FRT (0.9 - |V1|), and the positive-sequence command is saturated at IMAX with q priority
+    (ID cut first). FRT is the K factor (2-6 in IEEE 2800). FRT = 0 is the fixed command (the default, and every
+    run before it).
 Outputs: the three phase current references (kA), |V1|, |V2| (pu of Vbase), |I1|, |I2| (pu of Ibase), and the
 reference angle ANG (deg, in the DFT's absolute frame e^{j w t}).
 
@@ -37,7 +41,7 @@ import xml.etree.ElementTree as ET
 WORK = r"D:\JOSHUA_TAYLOR_data\data\pscad_work\inverter"
 
 INPUTS = ["VA", "VB", "VC", "F0", "ID", "IQ", "MODE2", "K2", "D2MAG", "D2ANG", "IBASE", "VBASE", "IMAX", "LIM", "TANG",
-          "TV2"]
+          "TV2", "FRT"]
 OUTPUTS = ["IA", "IB", "IC", "V1M", "V2M", "I1M", "I2M", "ANG"]
 NMAX = 1700                                   # samples per cycle the DFT buffer can hold
 NSTOR = 7 + 6 * NMAX + 5                      # then the low-passed reference (TANG > 0, 2) and V2 (TV2 > 0, 2)
@@ -86,6 +90,9 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
 #LOCAL REAL G_RI
 #LOCAL REAL G_LL
 #LOCAL REAL G_SK
+#LOCAL REAL G_DQ
+#LOCAL REAL G_QQ
+#LOCAL REAL G_VM
       G_W  = 6.283185307*$F0
       G_NS = NINT(1.0/($F0*DELT))
       IF (G_NS .GT. %(nmax)d) G_NS = %(nmax)d
@@ -138,8 +145,19 @@ FORTRAN = """#STORAGE REAL:%(nstor)d
         G_CA = COS(G_AN)
         G_SA = SIN(G_AN)
       END IF
-      G_I1R = $IBASE*($ID*G_CA + $IQ*G_SA)
-      G_I1I = $IBASE*($ID*G_SA - $IQ*G_CA)
+      G_DQ = $ID
+      G_QQ = $IQ
+      IF ($FRT .GT. 0.0) THEN
+        G_VM = SQRT(G_V1R**2 + G_V1I**2)/$VBASE
+        IF (G_VM .LT. 0.9) G_QQ = $IQ + $FRT*(0.9 - G_VM)
+        IF (G_QQ .GT. $IMAX) G_QQ = $IMAX
+        IF (G_QQ .LT. -$IMAX) G_QQ = -$IMAX
+        IF (G_DQ**2 + G_QQ**2 .GT. $IMAX**2) THEN
+          G_DQ = SIGN(SQRT(MAX($IMAX**2 - G_QQ**2, 0.0)), $ID)
+        END IF
+      END IF
+      G_I1R = $IBASE*(G_DQ*G_CA + G_QQ*G_SA)
+      G_I1I = $IBASE*(G_DQ*G_SA - G_QQ*G_CA)
       IF ($TV2 .GT. 0.0) THEN
         G_J = NSTORF + 7 + 6*%(nmax)d + 2
         IF (TIME*$F0 .LT. 1.0) THEN
@@ -246,7 +264,7 @@ def definition_xml(name="gfl_avm"):
         e = ET.SubElement(svg, "port", model="Transfer", name=p, x=str(x), y=str(y), dim="1",
                           mode="Input" if p in INPUTS else "Output", type="Real", internal="")
         e.text = "true"
-    ET.SubElement(svg, "rect", x="-72", y="-126", width="144", height="306", stroke="Black",
+    ET.SubElement(svg, "rect", x="-72", y="-126", width="144", height="324", stroke="Black",
                   **{"stroke-dasharray": "none", "stroke-width": "0.2", "fill-style": "Hollow",
                      "fill-fg": "Black", "fill-bg": "", "port": ""})
     t = ET.SubElement(svg, "text", x="0", y="0", stroke="Black", fill="Black",
@@ -266,7 +284,7 @@ def definition_xml(name="gfl_avm"):
         for k, v in (("name", p), ("internal", "false"), ("cond", "true"),
                      ("mode", "1" if p in INPUTS else "2"), ("datatype", "3"), ("electype", "0"), ("dim", "1")):
             ET.SubElement(ppl, "param", name=k, value=v)
-    gx = ET.SubElement(g, "Gfx", classid="Graphics.Rectangle", id=_rid(), x="-72", y="-126", w="144", h="306")
+    gx = ET.SubElement(g, "Gfx", classid="Graphics.Rectangle", id=_rid(), x="-72", y="-126", w="144", h="324")
     gpl = ET.SubElement(gx, "paramlist")
     for k, v in (("color", "Black"), ("dasharray", "0"), ("thickness", "0"), ("port", ""), ("fill_style", "0"),
                  ("fill_fg", "Black"), ("fill_bg", "White"), ("cond", "true")):
@@ -349,7 +367,7 @@ def build_test(pscad, name="inv_test", mode2=0, k2=2.0, d2mag=0.1, d2ang=90.0, i
     cx, cy = 60, 30
     c.create_component(defn, cx, cy)
     values = dict(F0=60.0, ID=idref, IQ=iqref, MODE2=float(mode2), K2=k2, D2MAG=d2mag, D2ANG=d2ang,
-                  IBASE=ibase_pk, VBASE=vbase_pk, IMAX=1.2, LIM=0.0, TANG=0.0, TV2=0.0)
+                  IBASE=ibase_pk, VBASE=vbase_pk, IMAX=1.2, LIM=0.0, TANG=0.0, TV2=0.0, FRT=0.0)
     for p in INPUTS:
         px, py = port_xy(p)
         gx, gy = cx + px // 18, cy + py // 18
