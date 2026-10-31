@@ -213,6 +213,27 @@ R1 reverse 0.79 right / 0.11 wrong).
 - **LIM 2's unphysical side is visible**: with FRT on and the K2 law active, every point exceeds 1.5 pu of phase
   peak (up to 2.40 pu); LIM 1 keeps 1.20 pu and gives the same decisions.
 
+## Q2, registered after Q1 and before any Q2 result is read (31 Oct 2026)
+
+- **The batch**: 117 runs at K2 = 5, LIM 2, K1 = 4, TANG = TV2 = 1/(2π·15 Hz), nominal source point (13-run groups:
+  R2 × {hydro off, two sources} × {suppressed, IEEE 2800}; R1 reverse and R1 forward × both modes, hydro off; P 1.0 /
+  Q 0 suppressed at R2), **plus a LIM 1 group of 26 runs** (R2 two sources IEEE 2800; R1 reverse IEEE 2800), since
+  LIM 2's phase peaks reach 2.3 pu. Reading rules as registered: per-case static prediction with the same settings,
+  three outcomes per element (right / not enabled / wrong), per-run peak and 5–10 kHz check, LIM 2 peaks flagged
+  above 1.5 pu.
+- **Launch order, stated:** the 117-run batch was started before the review asked for an EMT Fig.-16 pair first. The
+  pair (the normal run and the bolted AG at 5 % from Bus-2, R2, hydro off, IEEE 2800) is inside the batch's first
+  group; it is checked as soon as it exists, before anything else in the batch is read, and the batch is stopped and
+  nothing interpreted if it fails (I_Q+ near 1.2 and I_P+ near 0 at K1 = 4, I2 leading V2 by about 90°, pre-fault
+  gate).
+- **Sub-question, the FRT finding, pre-registered:** under suppression, does the positive-sequence FRT (K1 = 4) restore
+  our incremental element's direction at R2 and R1, as static says (R2 0.97 right; R1 reverse 0.79 right, **0.11
+  wrong**)? The wrong-way share at R1 is the number to watch; in EMT the TANG lag turns the frame less, so fewer
+  wrong and more undecided are expected, as in the I2 study.
+- **How the outcome will be phrased** (if EMT agrees): the I2 study's s = 1 result stands for inverters without
+  reactive-current support; with IEEE 2800-style FRT the positive-sequence element recovers, the negative-sequence one
+  does not. That is the K-factor limitation of the I2 study, measured.
+
 ## 5. What this does not do
 
 Their GFM inverter (we have none yet), their switching model, momentary cessation, slow/fast controller tunings,

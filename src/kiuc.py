@@ -323,20 +323,26 @@ def make_q2():
         groups.append(("R1rev", "off", mode, k2, "P0.25Q0.15", REV_R1, ("L2", "a")))
         groups.append(("R1fwd", "off", mode, k2, "P0.25Q0.15", FWD, ("L2", "a")))
     groups.append(("R2", "off", "suppressed", 0.0, "P1.0Q0", FWD, ("L2", "b")))
+    lim1 = "--lim1" in sys.argv
+    if lim1:                                           # the LIM 1 group (review): ours, per phase, I2 first
+        groups = [("R2", "sg", "IEEE 2800 K2=5", K2_IEEE, "P0.25Q0.15", FWD, ("L2", "b")),
+                  ("R1rev", "off", "IEEE 2800 K2=5", K2_IEEE, "P0.25Q0.15", REV_R1, ("L2", "a"))]
+    lim = 1 if lim1 else LIM
     specs = []
     for rel, hydro, mode, k2, op, cases, relay in groups:
         net = network(hydro, "DYg", relay=relay, op=op)
         st = emt_settings(net, FRT_PRIMARY, k2)
-        pre = f"k{rel}_{hydro}_{'m1' if k2 > 0 else 'm0'}_{op.replace('.', 'p')}_"
+        pre = f"k{rel}_{hydro}_{'m1' if k2 > 0 else 'm0'}_{op.replace('.', 'p')}_" + ("L1_" if lim1 else "")
         for c in [None] + list(cases):
-            sp = make_spec(pre + ("N" if c is None else tag(c)), net, c, nominal_sg(net), {}, LIM)
+            sp = make_spec(pre + ("N" if c is None else tag(c)), net, c, nominal_sg(net), {}, lim)
             sp["settings"] = json.loads(json.dumps(st))
             sp["key_extra"] = f"kiuc_{hydro}_{rel}"
             sp.update(kind="normal" if c is None else "fault", case=None if c is None else list(c), relay_name=rel, hydro=hydro,
-                      mode=mode, k2=k2, op=op, frt=FRT_PRIMARY, lim_rule=LIM, side=None if c is None else ("reverse" if rel == "R1rev" else "forward"))
+                      mode=mode, k2=k2, op=op, frt=FRT_PRIMARY, lim_rule=lim, side=None if c is None else ("reverse" if rel == "R1rev" else "forward"))
             specs.append(sp)
-    json.dump(specs, open(Q2_SPECS, "w"), indent=1)
-    print(f"{len(specs)} runs, FRT K1 {FRT_PRIMARY:g}, LIM {LIM} -> {os.path.relpath(Q2_SPECS)}")
+    path = Q2_SPECS.replace(".json", "_lim1.json") if lim1 else Q2_SPECS
+    json.dump(specs, open(path, "w"), indent=1)
+    print(f"{len(specs)} runs, FRT K1 {FRT_PRIMARY:g}, LIM {lim} -> {os.path.relpath(path)}")
 
 
 def numerically_clean(run):
@@ -355,7 +361,11 @@ def analyse_q2():
     from pscad_network import WORK
     from pscad_network_check import injections
     from step3_frontend import Relay, CYCLE
-    specs = json.load(open(Q2_SPECS))
+    lim1 = "--lim1" in sys.argv
+    specs = json.load(open(Q2_SPECS.replace(".json", "_lim1.json") if lim1 else Q2_SPECS))
+    if "--only-fig16" in sys.argv:                     # the EMT Fig.-16 pair: R2, hydro off, IEEE 2800, normal + bolted AG 5 %
+        specs = [s for s in specs if s["relay_name"] == "R2" and s["hydro"] == "off" and s["k2"] > 0 and s["op"] == "P0.25Q0.15"
+                 and (s["kind"] == "normal" or tuple(s["case"][:3]) == ("L2", 0.95, "ag") and s["case"][3] < 1e-3)]
     out, rows = {}, []
     groups = sorted({(s["relay_name"], s["hydro"], s["mode"], s["op"]) for s in specs})
     for rel, hydro, mode, op in groups:
@@ -410,9 +420,38 @@ def analyse_q2():
               f"{s['n']} of {s['of']} clean | report element right {s['q_right']:.2f} none {s['q_none']:.2f} wrong {s['q_wrong']:.2f} | "
               f"incremental right {s['inc_right']:.2f} none {s['inc_none']:.2f} wrong {s['inc_wrong']:.2f} | 3I2 > 10 % I1 "
               f"{s['ratio_over_10pct']:.2f} | EMT vs static (report element) differ {s['emt_vs_static_q_differ']} | weak {len(s['weak'])}", flush=True)
-    json.dump(out, open(os.path.join(OUT, "kiuc_q2.json"), "w"), indent=1, default=str)
-    print("-> results/network/kiuc_q2.json")
+    name = "kiuc_q2_fig16.json" if "--only-fig16" in sys.argv else ("kiuc_q2_lim1.json" if lim1 else "kiuc_q2.json")
+    json.dump(out, open(os.path.join(OUT, name), "w"), indent=1, default=str)
+    print(f"-> results/network/{name}")
+
+
+def fig16_emt():
+    """The EMT Fig.-16 pair (R2, hydro off, IEEE 2800, K1 4, LIM 2): the IBR's I_P+, I_Q+, |I2|, |I2|/|V2| and the angle
+    of I2 against V2 at Bus-2, 2.5 cycles after inception, against static."""
+    from pscad_io import read_case
+    from pscad_network import WORK
+    from pscad_network_check import injections, relay_y
+    specs = json.load(open(Q2_SPECS))
+    sp = [s for s in specs if s["relay_name"] == "R2" and s["hydro"] == "off" and s["k2"] > 0 and s["op"] == "P0.25Q0.15"
+          and s["kind"] == "fault" and tuple(s["case"][:3]) == ("L2", 0.95, "ag") and s["case"][3] < 1e-3][0]
+    run = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
+    t = T_FAULT + 2.5 / 60
+    i1, i2 = injections(run, sp, t)["I"]
+    y = relay_y(run, t, mimic_tau=MIMIC_TAU)          # R2 sits at Bus-2: its V1, V2 are the IBR's
+    v1, v2 = y[0], y[1]
+    u = v1 / abs(v1)
+    emt = dict(IP=float((i1 / u).real), IQ=float(-(i1 / u).imag), I1=float(abs(i1)), V1=float(abs(v1)), V2=float(abs(v2)),
+               I2=float(abs(i2)), K_meas=float(abs(i2) / abs(v2)), ang_I2_V2=float(np.degrees(np.angle(i2 / v2))),
+               peak=float(max(abs(i1 * A3 ** (-k) + i2 * A3 ** k) for k in range(3))))
+    net = network("off", "DYg")
+    sg = nominal_sg(net)
+    st = settings(net, sg, net.ibrs["I"].i0, sp["frt"], sp["k2"])
+    stat, _ = ibr_state(net, sg, st, tuple(sp["case"]), sp["lim_rule"])
+    for lab, s in (("EMT   ", emt), ("static", stat)):
+        print(f"Fig. 16 pair, {lab}: I_P+ {s['IP']:.3f}, I_Q+ {s['IQ']:.3f} (|I1| {s['I1']:.3f}); |V1| {s['V1']:.3f}, |V2| {s['V2']:.3f}; "
+              f"|I2| {s['I2']:.3f} = {s['K_meas']:.2f} |V2|, angle {s['ang_I2_V2']:.1f} deg; phase peak {s['peak']:.2f}", flush=True)
+    json.dump(dict(case=sp["name"], emt=emt, static=stat), open(os.path.join(OUT, "kiuc_fig16_emt.json"), "w"), indent=1)
 
 
 if __name__ == "__main__":
-    {"preflight": preflight, "static": static, "spec": make_q2, "analyse": analyse_q2}[sys.argv[1]]()
+    {"preflight": preflight, "static": static, "spec": make_q2, "analyse": analyse_q2, "fig16": fig16_emt}[sys.argv[1]]()
