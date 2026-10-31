@@ -1,5 +1,11 @@
 # Review of the KIUC study (branch `kiuc`, `209c3f2`; results as of `5c883b8`)
 
+> **Status, 31 Oct 2026 (evening).** Every fix asked for below is on `kiuc` as commit `8821d1d` (PR #65): the
+> window aggregation registered as a dated addition (majority over the five windows, per-window counts kept), the
+> incremental column re-read (R2 P 1.0 / Q 0: 6 / 0 / 6; R1 reverse: 10 / 2 / 0), row 62 and the entry points reworded
+> to "on ground faults only at full output, no wrong-way decision at R1", 108 runs, the §6 base sentence, the TF2
+> candidate struck, the Q3 framing sentence added. Checked against the diff `209c3f2..8821d1d`.
+
 31 Oct 2026. Reviewed in a separate worktree. Read `docs/KIUC.md` in full, `src/kiuc.py`, the branch's diffs of
 `src/network.py` (LIM 2, `frt_command`, the K2 law inside `solve_v1ref`), `src/pscad_inverter.py` (FRT and LIM 2 in
 the Fortran block), `src/frames.py` (under-relaxed fixed point), `src/pscad_network.py` (BUILD_VERSION 6, `key_extra`),
