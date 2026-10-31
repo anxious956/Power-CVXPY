@@ -33,7 +33,9 @@ X_TF1 = 0.07                                           # assumed, on 7.5 MVA
 X_HYDRO = {"X''d 0.20": (0.20 + X_TF1) * SB / 7.5,     # assumed X''d + X_TF1 on 7.5 MVA, on 15 MVA: 0.54 pu (primary)
            "X'd 0.25": (0.25 + X_TF1) * SB / 7.5}      # 0.64 pu (sensitivity)
 X_TF2 = 0.06                                           # assumed, on 15 MVA
-K2_IEEE, K_FRT = 5.0, 2.0                              # the report's K for I2; IEEE 2800's K for I_Q+ (range 2-6)
+K2_IEEE, K_FRT = 5.0, 4.0                              # the report's K for I2; K1 for I_Q+ (4: reproduces Fig. 16; 2-6 IEEE 2800)
+K_FRT_SENS = 2.0
+A3 = np.exp(2j * np.pi / 3)
 OPS = {"P0.25Q0.15": (0.25, 0.15), "P1.0Q0": (1.0, 0.0)}
 OHM = lambda r: r / ZB
 M_IBR = (0.05, 0.50, 0.80)                             # from the IBR end (Bus-2)
@@ -98,16 +100,18 @@ def solve(net, sg, st, fault, lim=None):
         return nw.solve_v1ref(net, sg, st, fault, lim=lim, relax=0.2, max_iter=8000)
 
 
-def ibr_state(net, sg, st, fault):
-    """The IBR's delivered I1 in its own frame (I_P+, I_Q+), its I2 and the Bus-2 V1, V2."""
-    y, inj, _ = solve(net, sg, st, fault)
+def ibr_state(net, sg, st, fault, lim=None):
+    """The IBR's delivered I1 in its own frame (I_P+, I_Q+), its I2, its per-phase peak and the Bus-2 V1, V2."""
+    y, inj, _ = solve(net, sg, st, fault, lim)
     vals = {**sg, "I": inj["I"][0]}
     _, V = nw.solve(net, vals, {"I": inj["I"][1]}, fault, full=True)
     v1, v2 = V["B2"][0], V["B2"][1]
     u = v1 / abs(v1)
     i1 = inj["I"][0] / u
     i2 = inj["I"][1] - v2 / net.ibrs["I"].neg_z      # injected: the designed delta plus the IEEE 2800 law
+    peak = max(abs(inj["I"][0] * A3 ** (-k) + i2 * A3 ** k) for k in range(3))
     return dict(IP=float(i1.real), IQ=float(-i1.imag), I1=float(abs(inj["I"][0])), V1=float(abs(v1)), V2=float(abs(v2)),
+                peak=float(peak),
                 I2=float(abs(i2)), K_meas=float(abs(i2) / abs(v2)) if abs(v2) > 1e-9 else None,
                 ang_I2_V2=float(np.degrees(np.angle(i2 / v2))) if abs(v2) > 1e-9 and abs(i2) > 1e-9 else None), y
 
@@ -202,19 +206,20 @@ def corners_for(net):
     return out
 
 
-def run_set(net, cases, frt, want, k2=0.0):
+def run_set(net, cases, frt, want, k2=0.0, lim=None):
     """Per case and corner: the report's element (32Q / 32QG), our incremental element, 3|I2|/|I1| at the relay,
-    the IBR's I2 against V2, and |V1| at Bus-2 (weak frame below 0.2 pu)."""
+    the IBR's I2 against V2, its per-phase peak (flag > 1.5 pu under LIM 2), and |V1| at Bus-2 (weak below 0.2)."""
     rows = []
     for c in cases:
         ground = c[2] == "ag"
-        res = dict(case=list(c), q=[], inc=[], ratio=[], ang=[], why=[], v1=[])
+        res = dict(case=list(c), q=[], inc=[], ratio=[], ang=[], why=[], v1=[], peak=[])
         for u in corners_for(net):
             v = nw.realisation(net, u)
             sg = sgvals(net, v)
             st = settings(net, sg, v["I"], frt, k2)
-            yN, _, _ = solve(net, sg, st, None)
-            s, y = ibr_state(net, sg, st, c)
+            yN, _, _ = solve(net, sg, st, None, lim)
+            s, y = ibr_state(net, sg, st, c, lim)
+            res["peak"].append(s["peak"])
             dq, _, why = dir32q(y, ground)
             res["q"].append(dq)
             res["why"].append(why)
@@ -235,6 +240,8 @@ def run_set(net, cases, frt, want, k2=0.0):
                       inc_wrong=sum(x not in (want, None) for r in rows for x in r["inc"]) / n,
                       ratio_over_10pct=sum(x > 0.1 for r in rows for x in r["ratio"]) / n, why=blocked,
                       weak_frame_points=sum(x < 0.2 for r in rows for x in r["v1"]),
+                      peak_max=max(x for r in rows for x in r["peak"]),
+                      beyond_fig16_envelope=sum(x > 1.5 for r in rows for x in r["peak"]),
                       by_type={t: dict(q_right=sum(x == want for r in rows if r["case"][2] == t for x in r["q"]) / (n / 2),
                                        inc_right=sum(x == want for r in rows if r["case"][2] == t for x in r["inc"]) / (n / 2))
                                for t in ("ag", "ab")})
@@ -249,7 +256,8 @@ def static():
         print(f"{key}: report element right {summ['q_right']:.2f} none {summ['q_none']:.2f} wrong {summ['q_wrong']:.2f} | incremental "
               f"right {summ['inc_right']:.2f} none {summ['inc_none']:.2f} wrong {summ['inc_wrong']:.2f} | 3I2 > 10 % I1 "
               f"{summ['ratio_over_10pct']:.2f} | by type {summ['by_type']} | enable: {summ['why']} | weak-frame points "
-              f"{summ['weak_frame_points']}", flush=True)
+              f"{summ['weak_frame_points']} | phase peak max {summ['peak_max']:.2f}, > 1.5 pu at {summ['beyond_fig16_envelope']} points",
+              flush=True)
         json.dump(dict(fwd=FWD, rev_r1=REV_R1, results=out), open(path, "w"), indent=1, default=str)
 
     # R2, the forward set (dependability): hydro off / on (two sources), TF2 DYg (EMT too) and YgD (static only)
@@ -268,14 +276,143 @@ def static():
             record(f"R1 reverse | hydro off | TF2 DYg | {mode} | FRT {frt:g}", rows, summ)
             rows, summ = run_set(net, FWD, frt, "f", k2)
             record(f"R1 forward (control) | hydro off | TF2 DYg | {mode} | FRT {frt:g}", rows, summ)
-    # sensitivities, one line each: K1 = 4; K2 = 2; X'd 0.25
-    net = network("sg", "DYg")
-    record("sens R2 forward | hydro sg | DYg | IEEE 2800 K2=5 | FRT 4", *run_set(net, FWD, 4.0, "f", K2_IEEE))
-    record("sens R2 forward | hydro sg | DYg | IEEE 2800 K2=2 | FRT 2", *run_set(net, FWD, K_FRT, "f", 2.0))
+    # sensitivities, one line each (primary: K2 5, LIM 2, K1 4): K1 = 2; LIM 1; K2 = 2; X'd 0.25
+    for rel, cases, want, relay, hydro in (("R2 forward", FWD, "f", ("L2", "b"), "sg"), ("R1 reverse", REV_R1, "r", ("L2", "a"), "off")):
+        net = network(hydro, "DYg", relay=relay)
+        record(f"sens {rel} | hydro {hydro} | DYg | IEEE 2800 K2=5 | FRT {K_FRT_SENS:g}", *run_set(net, cases, K_FRT_SENS, want, K2_IEEE))
+        for mode, k2 in MODES.items():
+            record(f"sens {rel} | hydro {hydro} | DYg | {mode} | FRT {K_FRT:g} | LIM 1", *run_set(net, cases, K_FRT, want, k2, lim=1))
+        record(f"sens {rel} | hydro {hydro} | DYg | IEEE 2800 K2=2 | FRT {K_FRT:g}", *run_set(net, cases, K_FRT, want, 2.0))
     net = network("sg", "DYg", xh="X'd 0.25")
-    record("sens R2 forward | hydro sg X'd 0.25 | DYg | IEEE 2800 K2=5 | FRT 2", *run_set(net, FWD, K_FRT, "f", K2_IEEE))
+    record(f"sens R2 forward | hydro sg X'd 0.25 | DYg | IEEE 2800 K2=5 | FRT {K_FRT:g}", *run_set(net, FWD, K_FRT, "f", K2_IEEE))
     print(f"-> {os.path.relpath(path)}")
 
 
+# ------------------------------------------------------------------ Q2: EMT
+TANG = TV2 = 1.0 / (2 * np.pi * 15.0)
+T_FAULT = 0.30
+WIN = np.arange(2.0, 3.0001, 0.25)
+MIMIC_TAU = (Z_L1.imag / Z_L1.real) / (2 * np.pi)      # Line-2's X/R / 2 pi, cycles
+FRT_PRIMARY = float(os.environ.get("KIUC_FRT", "4"))   # registered after the review (docs/KIUC.md)
+Q2_SPECS = os.path.join(OUT, "kiuc_q2_specs.json")
+
+
+def emt_settings(net, frt, k2):
+    """The PSCAD inverter's settings at the nominal point: the command in its own frame, MODE2 0 / 1 with K2,
+    TANG 15 Hz, TV2 15 Hz with the K2 law, FRT."""
+    sg = nominal_sg(net)
+    st = settings(net, sg, net.ibrs["I"].i0, frt, k2)["I"]
+    return {"I": dict(ID=st["ID"], IQ=st["IQ"], MODE2=1.0 if k2 > 0 else 0.0, K2=float(k2 if k2 > 0 else 2.0),
+                      D2MAG=0.0, D2ANG=0.0, TANG=TANG, TV2=TV2 if k2 > 0 else 0.0, FRT=float(frt))}
+
+
+def tag(c):
+    ln, m, s, rf = c
+    return f"{ln}{s}{int(round(m * 100)):02d}r{int(round(rf * ZB * 100)):04d}"
+
+
+def make_q2():
+    """The Q2 runs: R2 forward set (both modes, hydro off / two-source), R1 reverse set and forward control (both
+    modes, hydro off), the P 1.0 / Q 0 sensitivity (suppressed, hydro off, R2); each with its normal run."""
+    from pscad_network import make_spec
+    groups = []
+    for hydro in ("off", "sg"):
+        for mode, k2 in MODES.items():
+            groups.append(("R2", hydro, mode, k2, "P0.25Q0.15", FWD, ("L2", "b")))
+    for mode, k2 in MODES.items():
+        groups.append(("R1rev", "off", mode, k2, "P0.25Q0.15", REV_R1, ("L2", "a")))
+        groups.append(("R1fwd", "off", mode, k2, "P0.25Q0.15", FWD, ("L2", "a")))
+    groups.append(("R2", "off", "suppressed", 0.0, "P1.0Q0", FWD, ("L2", "b")))
+    specs = []
+    for rel, hydro, mode, k2, op, cases, relay in groups:
+        net = network(hydro, "DYg", relay=relay, op=op)
+        st = emt_settings(net, FRT_PRIMARY, k2)
+        pre = f"k{rel}_{hydro}_{'m1' if k2 > 0 else 'm0'}_{op.replace('.', 'p')}_"
+        for c in [None] + list(cases):
+            sp = make_spec(pre + ("N" if c is None else tag(c)), net, c, nominal_sg(net), {}, LIM)
+            sp["settings"] = json.loads(json.dumps(st))
+            sp["key_extra"] = f"kiuc_{hydro}_{rel}"
+            sp.update(kind="normal" if c is None else "fault", case=None if c is None else list(c), relay_name=rel, hydro=hydro,
+                      mode=mode, k2=k2, op=op, frt=FRT_PRIMARY, lim_rule=LIM, side=None if c is None else ("reverse" if rel == "R1rev" else "forward"))
+            specs.append(sp)
+    json.dump(specs, open(Q2_SPECS, "w"), indent=1)
+    print(f"{len(specs)} runs, FRT K1 {FRT_PRIMARY:g}, LIM {LIM} -> {os.path.relpath(Q2_SPECS)}")
+
+
+def numerically_clean(run):
+    tt, fs = np.asarray(run["t"]), run["fs"]
+    v = np.asarray(run["ch"]["VLA"])
+    nm = np.abs(v[(tt > 0.2) & (tt < 0.29)]).max()
+    seg = v[(tt >= 0.30) & (tt < 0.40)]
+    f = np.fft.rfftfreq(len(seg), 1 / fs)
+    P = np.abs(np.fft.rfft((seg - seg.mean()) * np.hanning(len(seg)))) ** 2
+    pk, hf = float(np.abs(seg).max() / nm), float(P[(f >= 5000) & (f <= 10000)].sum() / P.sum())
+    return pk <= 2.0 and hf <= 1e-3, pk, hf
+
+
+def analyse_q2():
+    from pscad_io import read_case
+    from pscad_network import WORK
+    from pscad_network_check import injections
+    from step3_frontend import Relay, CYCLE
+    specs = json.load(open(Q2_SPECS))
+    out, rows = {}, []
+    groups = sorted({(s["relay_name"], s["hydro"], s["mode"], s["op"]) for s in specs})
+    for rel, hydro, mode, op in groups:
+        g = [s for s in specs if (s["relay_name"], s["hydro"], s["mode"], s["op"]) == (rel, hydro, mode, op)]
+        spn = [s for s in g if s["kind"] == "normal"][0]
+        net = network(hydro, "DYg", relay=tuple(spn["relay"]), op=op)
+        sg = nominal_sg(net)
+        st = settings(net, sg, net.ibrs["I"].i0, spn["frt"], spn["k2"])
+        _, inj_st, _ = solve(net, sg, st, None, lim=spn["lim_rule"])
+        run = read_case(os.path.join(WORK, spn["name"] + ".gf46"), spn["name"])
+        i25, i28 = injections(run, spn, 0.25), injections(run, spn, 0.28)
+        e1 = abs(abs(i28["I"][0]) / abs(inj_st["I"][0]) - 1)
+        s1 = abs(abs(i28["I"][0]) / max(abs(i25["I"][0]), 1e-9) - 1)
+        gate = e1 <= 0.03 and s1 <= 0.03
+        key = f"{rel} | hydro {hydro} | {mode} | {op}"
+        res = dict(gate=dict(I1_emt=abs(i28["I"][0]), I1_static=abs(inj_st["I"][0]), err=e1, settled=s1, passed=gate), cases=[])
+        want = "r" if rel == "R1rev" else "f"
+        for sp in [s for s in g if s["kind"] == "fault"]:
+            c = tuple(sp["case"])
+            run = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
+            ok, pk, hf = numerically_clean(run)
+            rl = Relay(sp["name"], tier="clean", mimic_tau=MIMIC_TAU)
+            inc0 = rl.idx(T_FAULT)
+            ends = inc0 - CYCLE // 2 - np.arange(0, 2 * CYCLE + 1, CYCLE // 4)
+            mem = np.mean([rl.y(e) for e in ends], axis=0)
+            q_per, inc_per, ratio = [], [], []
+            for cyc in WIN:
+                y = rl.y(inc0 + int(round(cyc * CYCLE)))
+                q_per.append(dir32q(y, c[2] == "ag")[0])
+                inc_per.append(direction_pk(mem, y))
+                ratio.append(float(3 * abs(y[4]) / max(abs(y[3]), 1e-12)))
+            first = lambda per: next((d for d in per if d is not None), None)
+            x = np.asarray(run["ch"].get("V1M_I", []))
+            v1 = float(x[int(round((T_FAULT + 2.5 / 60 - float(run["t"][0])) * run["fs"]))]) if len(x) else None
+            _, y_st = ibr_state(net, sg, st, c)
+            res["cases"].append(dict(name=sp["name"], case=list(c), clean=ok, peak=pk, hf=hf, q=first(q_per), q_per=q_per,
+                                     inc=first(inc_per), inc_per=inc_per, ratio_min=min(ratio), v1_I=v1,
+                                     weak=v1 is not None and v1 < 0.2, q_static=dir32q(y_st, c[2] == "ag")[0]))
+        q = [r for r in res["cases"] if r["clean"]]
+        n = max(len(q), 1)
+        res["summary"] = dict(n=len(q), of=len(res["cases"]), want=want,
+                              q_right=sum(r["q"] == want for r in q) / n, q_none=sum(r["q"] is None for r in q) / n,
+                              q_wrong=sum(r["q"] not in (want, None) for r in q) / n,
+                              inc_right=sum(r["inc"] == want for r in q) / n, inc_none=sum(r["inc"] is None for r in q) / n,
+                              inc_wrong=sum(r["inc"] not in (want, None) for r in q) / n,
+                              ratio_over_10pct=sum(r["ratio_min"] > 0.1 for r in q) / n,
+                              emt_vs_static_q_differ=sum(r["q"] != r["q_static"] for r in q),
+                              weak=[r["name"] for r in q if r["weak"]])
+        out[key] = res
+        s = res["summary"]
+        print(f"[{key}] gate {'PASSED' if gate else 'FAILED'} (|I1| {res['gate']['I1_emt']:.3f}/{res['gate']['I1_static']:.3f}) | "
+              f"{s['n']} of {s['of']} clean | report element right {s['q_right']:.2f} none {s['q_none']:.2f} wrong {s['q_wrong']:.2f} | "
+              f"incremental right {s['inc_right']:.2f} none {s['inc_none']:.2f} wrong {s['inc_wrong']:.2f} | 3I2 > 10 % I1 "
+              f"{s['ratio_over_10pct']:.2f} | EMT vs static (report element) differ {s['emt_vs_static_q_differ']} | weak {len(s['weak'])}", flush=True)
+    json.dump(out, open(os.path.join(OUT, "kiuc_q2.json"), "w"), indent=1, default=str)
+    print("-> results/network/kiuc_q2.json")
+
+
 if __name__ == "__main__":
-    {"preflight": preflight, "static": static}[sys.argv[1]]()
+    {"preflight": preflight, "static": static, "spec": make_q2, "analyse": analyse_q2}[sys.argv[1]]()

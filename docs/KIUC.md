@@ -83,6 +83,43 @@ X_TF2 (3–9 %), the EMF angle. The CT/VT ratios (80 and 3500) matter only for s
 - Pre-flight states the pre-fault flow (IBR → grid, no load). The SIR is about 4 (Z_eq 0.0576 vs the line's
   0.0148): faults 50–80 % from Bus-2 are electrically close to Bus-1.
 
+## 1c. Decisions after the pre-flight, before Q1 (31 Oct 2026)
+
+`src/kiuc.py preflight` → `results/network/kiuc_preflight.json`.
+
+| grid case | operating point | \|V1\| G / B1 / B2 | P, Q from Bus-2 into Line-2 |
+|---|---|---|---|
+| hydro off | P 0.25 / Q 0.15 | 1.000 / 1.016 / 1.019 | +0.253, +0.156 (IBR → grid) |
+| hydro off | P 1.0 / Q 0 | 1.000 / 1.029 / 1.035 | +1.032, +0.073 |
+| two sources (hydro X''d) | P 0.25 / Q 0.15 | 1.000 / 1.014 / 1.017 | +0.252, +0.156 |
+| two sources | P 1.0 / Q 0 | 1.000 / 1.024 / 1.029 | +1.027, +0.069 |
+
+Two-source against Thevenin at R2, pre-fault and bolted AG at 5 %: 1.9·10⁻⁵ pu (X''d and X'd).
+
+- **A bug found and fixed (REVIEW §7 row 60):** the static IEEE 2800 law was a shunt in `network.solve`, outside the
+  limiter; at K2 = 5 it gave |I2| = 1.67–1.78 pu, above i_max. The law now sits in `solve_v1ref` as a V2-referenced
+  injection through the same limiter as PSCAD (|V2| in the fixed point); regression against the shunt form where
+  the limiter does not bind: ≤ 4·10⁻⁷ pu.
+- **Primary limiter: LIM 2, "the report's limiter as its Fig. 16 shows it"** (I_Q+ = 1.2 and I_Q− = 0.45 at once):
+  |I1| ≤ i_max with q priority via the FRT rule, |I2| ≤ i_max separately, no combined phase limit. This is not a
+  physical claim: the phase peak can reach 2·i_max, which no real inverter delivers; every LIM 2 case reports its
+  per-phase peak and is flagged "beyond their Fig. 16 envelope" above 1.5 pu. **LIM 1 (ours, per phase, I2 first)**
+  is the sensitivity, the comparison's honest frame: their result under their limiter, and what a per-phase limit
+  does to it.
+- **Primary K1 = 4** (changed from 2, recorded before Q1): their I_Q+ = 1.2 with I_P+ → 0 needs K1 (0.9 − |V1|) ≥ 1.05,
+  i.e. K1 ≥ 3.4 at our |V1| ≈ 0.6, so K1 = 2 cannot reproduce their figure; 4 is inside IEEE 2800's range; their own
+  K1 and fault location are not stated. Sensitivities K1 = 2 and K1 = 0 (FRT off, "our inverter so far").
+- **The Fig.-16 sanity reads**: met at K1 = 4 on YgΔ (I_P+ 0.000, I_Q+ 1.200, ∠I2 − ∠V2 = 90.0°); K1 = 2 fails on I1
+  and passes on I2. The check is defined on the YgΔ case, the one the figure most likely shows (a ground fault with
+  a grounded transformer); with ΔYg the dip is shallower and I_P+ stays 0.248 at K1 = 4. The I2 sanity is "law
+  K = 5, angle 90°; measured K lower where I2 saturates at 1.2 pu"; the go/no-go's 3I2 > 10 % I1 test is unaffected,
+  and the reported K is the measured one.
+- **Unresolved difference:** their I_Q− = 0.45 pu at K = 5 (V2 ≈ 0.09 at their terminal) against our 1.2 pu
+  (V2 0.23–0.38 at Bus-2, saturated). Two candidates: their V2 is measured behind TF2's series impedance, or their
+  fault is farther. Not a model error of ours as far as the evidence goes, and it does not touch the direction
+  questions: the elements use the angle, which matches.
+- Q1 runs with K2 = 5, LIM 2, K1 = 4 (FRT on); sensitivities K1 = 2, K1 = 0, LIM 1, K2 = 2.
+
 ## 2. Pre-flight
 
 - Load flow with `network.solve_v1ref` at both operating points, hydro on and off, TF2 both ways: converges, every
