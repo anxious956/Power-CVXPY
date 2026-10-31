@@ -1,5 +1,9 @@
 # WP1 review: auxiliary-signal design tool (convex optimization and protection)
 
+> **Status, 19 Oct 2026.** The design numbers here (September, `321e12b`) are superseded by
+> [results/DESIGN.md](../results/DESIGN.md) in the TAC25 formulation (REVIEW rows 3 and 49: the presets sit at
+> 0.32–0.52 pu with the current limit inside) and by the multi-bus tool and its EMT checks (rows 49–51).
+
 Reviewed commit 321e12b. Branch `review-wp1`. Author files in `src/` and `results/*.json|png` are not modified.
 Every number below gives the command that reproduces it and the JSON file/key it comes from
 (all JSON paths are relative to `results/review_wp1/`). Set `OMP_NUM_THREADS=2`. Runtimes were measured

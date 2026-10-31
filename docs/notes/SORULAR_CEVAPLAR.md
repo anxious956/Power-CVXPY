@@ -192,6 +192,8 @@ sıralı yöntem en iyi sonuca varacağını garanti etmez. İlk yayımlanan 0.5
 
 ## 6. Gittiğimiz yön kötü mü, anlamsız bir şey mi yapıyoruz?
 
+**[Tarihsel cevap, 27 Eyl 2026; güncel durum için Soru 42, docs/STEP3.md (adım 3 tamamlandı, REVIEW.md §7 satır 51–55) ve docs/I2_DIRECTION.md (satır 56–59).]**
+
 **Hayır, anlamsız değil.** Ama şu anki sonuçlar projenin **asıl sorusunu henüz cevaplamıyor**.
 
 **Neden anlamlı:**
@@ -752,6 +754,8 @@ daha fazla veriyle çözülecek bir sorun.
 
 ## 18. Deney istediğimiz sonuçları verdi mi? Başarılı mı, başarısız mı?
 
+**[Tarihsel cevap, 27 Eyl 2026; güncel durum için Soru 42, docs/STEP3.md (adım 3 tamamlandı, REVIEW.md §7 satır 51–55) ve docs/I2_DIRECTION.md (satır 56–59).]**
+
 **Kısa cevap:** bugünkü deney başarılı; projenin genel hedefine göre ise kısmen başarılı. Sağlam bir temel
 var, ama asıl soru henüz cevaplanmadı.
 
@@ -1256,7 +1260,7 @@ Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
 - **Pratik çözüm:** bir şebeke kodu gereksinimi ("I2'yi V2'nin önünde, yeterli kazançla bas"), tasarlanmış bir δ değil.
 - **Taylor'a sorulacak soru:** Tasarım çerçevesi V2'ye göre ayarlanan, yani geri beslemeli bir sinyal üretebilir mi? Yoksa bu durumda doğru araç şebeke kodu mu?
 - **Sınırlar:**
-  - Statik model; EMT'de denenmedi.
+  - Statik model; EMT'de denenmedi. **[19 Eki 2026: EMT'de denendi (PR #57, #58): bastırma yönü yalnızca rölenin arkasındaki invertör bağlantılı yük payı s → 1 olunca bozuyor; IEEE 2800'ün V2'ye referanslı akımı EMT'de (iki kontrol aralığında da) yönü düzeltiyor; tasarlanmış δ küme testi için yönü sertifikalıyor ama klasik elemanı düzeltmiyor ("δ garantiyi satın alır, kararı değil"); REVIEW.md §7 satır 56–59; bkz. docs/I2_DIRECTION.md.]**
   - Sinyal akım sınırlayıcıdan sonra eklendi; 0,1 pu sığıyor.
   - Sadece ilk çevrimdeki fazör elemanları test edildi.
 
@@ -1286,7 +1290,7 @@ Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
 - Yöntemin yeri büyük ihtimalle ikisinin arası: daha uzun hatlar ve zayıf, invertör ağırlıklı kaynaklar. Şebeke kurucu (grid-forming) invertörlü sistemler de aday.
 
 ### Verinin gerçek sınırları
-- Hiçbir kayıtta enjekte edilmiş sinyal yok. Sinyalli sonuçlarımızın hepsi statik modelden; EMT'de doğrulanmadı.
+- Hiçbir kayıtta enjekte edilmiş sinyal yok. Sinyalli sonuçlarımızın hepsi statik modelden; EMT'de doğrulanmadı. **[19 Eki 2026: artık doğrulandı: adım 3'te δ kendi üç baralı PSCAD şebekemizde EMT'de gerçekten enjekte edildi (17–18 Eki, PR #44, #56); tasarım noktası 225°'de 1,12 pu, ρ = 0,1, invertörün yaklaşık %93'ü; "δ garantiyi satın alır, tespiti değil": gerçekçi gürültüde her dedektör her arızayı δ'sız yakalıyor; REVIEW.md §7 satır 51–55; bkz. docs/STEP3.md, results/FRAMES.md.]**
 - Sadece şebekeyi izleyen invertörler var; şebeke kurucu yok.
 - Sadece iki şebeke var; uzun hatlı, invertörlü bir şebeke yok.
 
@@ -1301,6 +1305,8 @@ Bütün eşikleri olaylara bakmadan, mühendislik kuralıyla belirledim:
 ## 34. Taylor'ın yönteminin (tasarlanmış sinyal δ) nerede çalışmasını umuyoruz?
 
 **Kısa cevap:** Üç koşulun bir arada olduğu yerde: uzun hat, invertör ağırlıklı (zayıf) kaynak ve haberleşme kanalı olmaması. Sinyalin biçimi de önemli: ölçülen gerilime göre ayarlanan, kapalı çevrim bir sinyal olmalı. Bu henüz bir hipotez; açık veride bu koşulları birlikte taşıyan şebeke yok.
+
+**[19 Eki 2026: adım 3 tamamlandı; δ kendi üç baralı PSCAD şebekemizde EMT'de enjekte edildi (PR #44, #56); REVIEW.md §7 satır 51–55; bkz. docs/STEP3.md. Uzun hat koşulu: statik model, Q2/Q3 bekliyor; ön kontrol uzunluk çarpanını 1–2× ile sınırlıyor ve kayıtlı ölçütte sunumun iddiası bu şebekede 2×'e kadar tespit için tutmuyor (klasik eleman 1, 1,5, 2×'te 48 arızanın 0'ını kaçırıyor); bkz. docs/LONG_LINES.md.]**
 
 ### Neden bu üç koşul
 Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çıkıyor:
@@ -1328,7 +1334,7 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 
 ### Nasıl kontrol ederiz
 1. **Modelde, hemen:** B1 taramasını hatları uzatılmış CIGRE MV modelinde tekrar koşmak. Sinyalin erişime katkısı hat boyuyla artıyor mu?
-2. **EMT'de:** Taylor'ın 14 baralı modelinde ya da kendi simülasyonumuzda sinyali gerçekten basmak.
+2. **EMT'de:** Taylor'ın 14 baralı modelinde ya da kendi simülasyonumuzda sinyali gerçekten basmak. **[19 Eki 2026: yapıldı, kendi üç baralı PSCAD şebekemizde (PR #44, #56); REVIEW.md §7 satır 51–55; bkz. docs/STEP3.md. Madde 1 için bkz. docs/LONG_LINES.md: statik model, Q2/Q3 bekliyor.]**
 
 *Kaynak: Soru 26, 31–33; `results/CIGREMV.md` §3–§4; `results/ADAPTGRID.md`; REVIEW.md §7 satır 42, 44–46.*
 
@@ -1389,6 +1395,8 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 - Statik model, EMT değil; 20 kV.
 - Gerçekten uzun hatlar (yüksek gerilimde onlarca km) bu modelle test edilemiyor. Onun için Taylor'ın modeli ya da IRTSD gerekiyor (Soru 35).
 
+**[19 Eki 2026: bu hâlâ erişim sonucu (REVIEW.md §7 satır 47); tespit sorusu docs/LONG_LINES.md'de (dal long-lines): ön kontrol uzunluk çarpanını 1–2× ile sınırlıyor (temel şebekenin yük akışı); kayıtlı ölçütte sunumun iddiası bu şebekede 2×'e kadar tespit için tutmuyor (klasik eleman 1, 1,5, 2×'te 48 arızanın 0'ını kaçırıyor); statik model, Q2/Q3 bekliyor.]**
+
 *Kaynak: `results/CIGREMV.md` §3 (B1, "Longer lines"); `results/cigremv/b1_long_lines_coarse.json`; `src/review/b1_long_lines.py`; REVIEW.md §7 satır 47.*
 
 ---
@@ -1401,11 +1409,11 @@ Her koşul, yöntemin bizim iki şebekemizde neden işe yaramadığından çık�
 |---|---|---|
 | Tasarımı CVXPY ile iki baralı örnekte yeniden kurduk | Yapıldı | `src/aux_signal_toy.py` (CVXPY + Clarabel). Aracın bulduğu sinyaller tam en küçük değil: 0,51 pu yerine kesin minimum 0,50 pu (REVIEW.md §7 satır 1, 5) |
 | Güçlü senkron kaynakta sinyal gerekmiyor | Tutuyor | Bu iki baralı modelde kanıtlı (satır 2). 110 kV gerçek EMT verisinde de aynısı çıktı |
-| Zayıf kaynak/invertörde yüksek dirençli toprak arızaları ayrılamıyor, ~0,4–0,7 pu gerekiyor | Kısmen | Ayrılamama doğru (30 arızanın 5–7'si). Akım sınırı olmayan modelde 0,50–0,69 pu: mailde dediğimiz. Ama sayı modele bağlı: %10 güvenlik payıyla 0,67–1,36 pu; açı belirsizliği doğru modellenince 0,55–1,05 pu; invertörün faz başına akım sınırı probleme eklenince 0,16–0,26 pu (B5). O küçük sinyalleri her durumda basmak için de invertörün faz başına 1,4–1,8 pu verebilmesi gerekiyor (satır 1, 3) |
+| Zayıf kaynak/invertörde yüksek dirençli toprak arızaları ayrılamıyor, ~0,4–0,7 pu gerekiyor | Kısmen | Ayrılamama doğru (30 arızanın 5–7'si). Akım sınırı olmayan modelde 0,50–0,69 pu: mailde dediğimiz. Ama sayı modele bağlı: %10 güvenlik payıyla 0,67–1,36 pu; açı belirsizliği doğru modellenince 0,55–1,05 pu; invertörün faz başına akım sınırı probleme eklenince ~~0,16–0,26 pu~~ (B5) **[geri çekildi, REVIEW.md §7 satır 49: limit problemin içindeyken tasarım 0,52 / 0,32 / 0,40 pu veriyor; 0,16–0,26 asla alıntılanmamalı]**. O küçük sinyalleri her durumda basmak için de invertörün faz başına 1,4–1,8 pu verebilmesi gerekiyor (satır 1, 3) |
 | Gürültü %50 artınca iki kat daha çok belirsiz durum, sinyal 1 pu'yu geçiyor, invertörün verebileceğinden fazla | Tutuyor | İki kat doğru (30'da 5 → 10). Akım sınırı olmayan modelde 1,32 pu. Sınır faz başına doğru eklenince (B5) 1,2 pu'da güvenceli bir tasarım yok: en küçük aday 0,72 pu, arıza noktalarının arasında tutmuyor; onu basmak için de faz başına ~1,9 pu gerekir. Ara kontroldeki "0,76 pu ile çözülür" yanlıştı (satır 4) |
 | İkimizin ISAIA'da kabul edilmiş makalesi var | Repoda yok | Kontrol edilemedi |
 
-**Not (B5, 5 Oct 2026):** Akım sınırlı sayılar düzgün yeniden koşuldu. Ara kontrol (0,20–0,32 pu ve ~0,76 pu), gerçekte invertörün taşıyamayacağı akımları da kabul eden gevşek bir kural kullanmıştı. Doğru per-faz kuralıyla 0,16–0,26 pu ve %50 fazla gürültüde güvenceli tasarım yok (`results/DESIGN.md` §3, §4.1; REVIEW.md §7 satır 3–4).
+**Not (B5, 5 Oct 2026):** Akım sınırlı sayılar düzgün yeniden koşuldu. Ara kontrol (0,20–0,32 pu ve ~0,76 pu), gerçekte invertörün taşıyamayacağı akımları da kabul eden gevşek bir kural kullanmıştı. Doğru per-faz kuralıyla ~~0,16–0,26 pu~~ **[geri çekildi, REVIEW.md §7 satır 49: limit problemin içindeyken tasarım 0,52 / 0,32 / 0,40 pu veriyor; 0,16–0,26 asla alıntılanmamalı]** ve %50 fazla gürültüde güvenceli tasarım yok (`results/DESIGN.md` §3, §4.1; REVIEW.md §7 satır 3–4).
 
 ### Görüşmede sorulursa
 > ~~"In the email I quoted 0.4–0.7 pu; that holds without the current limit. With the inverter's per-phase limit inside the problem it drops to about 0.16–0.26 pu, but injecting it on top of the inverter's own current needs 1.4–1.8 pu per phase. With 50 % more noise we find no certified design at a 1.2 pu limit."~~
@@ -1460,7 +1468,7 @@ Güneş paneli, rüzgâr türbini ve batarya DC ya da düzensiz bir akım üreti
 Gerçek bir invertör kullanmıyoruz, modelliyoruz:
 - açık veride (EvEMTBench) invertörlerin arızadaki davranışını inceledik;
 - kendi modellerimizde δ basmayı hesapladık;
-- önerdiğimiz EMT simülasyonunda invertör modeli δ'yı gerçekten basacak ve röle/detektörlerin bunu yakalayıp yakalamadığını test edeceğiz.
+- önerdiğimiz EMT simülasyonunda invertör modeli δ'yı gerçekten basacak ve röle/detektörlerin bunu yakalayıp yakalamadığını test edeceğiz. **[19 Eki 2026: yapıldı; adım 3'te invertör modeli δ'yı kendi üç baralı PSCAD şebekemizde gerçekten bastı ve dört dedektör sınandı (PR #44, #56): δ garantiyi satın alıyor, tespiti değil; REVIEW.md §7 satır 51–55; bkz. docs/STEP3.md.]**
 
 *Görüşmede:* "The inverter is both the cause and the cure: it limits fault current, which confuses distance relays, but because it is software-controlled it can also inject the designed signal that helps them decide."
 
@@ -1511,6 +1519,56 @@ Gerçek bir invertör kullanmıyoruz, modelliyoruz:
 - **Olumlu sonuç:** Yöntem ilk kez EMT'de, sinyal gerçekten enjekte edilerek sınandı ve en kötü durum garantisi tutuyor. Zor A-G arızalarında garantili oran δ olmadan %33, tasarım δ'sının ¾'ünde %100. Yolda gerçek bir sistemin şartları bulundu ve çözüldü: limiter tipi, inverterin kendi çerçevesi, PLL benzeri referans, rölenin hafıza çerçevesi, DC filtresi.
 - **Beklenmeyen sonuç:** Bu ağda klasik koruma da arızaları görüyor. Artımlı 50N, sinyal olmadan zor arızaları yakalıyor. Sinyal yalnızca "en kötü gürültüde bile garanti" için gerekiyor. Bedelini ölçü trafolarının doğruluğu belirliyor: nominale yakın doğrulukta bedava, arıza koşulundaki sınıf hatalarında inverterin yaklaşık %93'ü.
 - **Asıl önemli nokta:** Test ağı hocanın hedeflediği ortam değil. Hocanın motivasyonu, arıza akımını inverterlerin sınırladığı ve klasik korumanın arızayı göremediği şebekeler. Bizim üç baralı ağda rölenin arkasında topraklı bir senkron kaynak var, bu yüzden 3I0 büyük ve 50N çalışıyor. CIGRE MV gibi inverter ağırlıklı fiderde ise sıfır yanlış açmada hiçbir tek uçlu dedektör %15.8'i geçemedi. Bu sonuç sinyalsiz EMT verisinden; δ enjekte edilerek sınanmadı.
-- **Sonraki adım:** Aynı altyapıyla rölenin bulunduğu uçtaki senkron kaynak bir inverterle değiştirilir (tüm kaynaklar inverter) ve adım 3 tekrarlanır. Bu, sunumdaki "yönteminizin hâlâ önemli olabileceği yerler"in karşılığı; dört adımın içinde.
+- **Sonraki adım:** Aynı altyapıyla rölenin bulunduğu uçtaki senkron kaynak bir inverterle değiştirilir (tüm kaynaklar inverter) ve adım 3 tekrarlanır. Bu, sunumdaki "yönteminizin hâlâ önemli olabileceği yerler"in karşılığı; dört adımın içinde. **[19 Eki 2026: durum: tüm-invertör şebeke taraması statik modelde yapıldı (results/IBR_GRID_SCREEN.md); I2 bastıran invertörde yön çalışması tamamlandı (PR #57, #58; REVIEW.md §7 satır 56–59; bkz. docs/I2_DIRECTION.md); uzun hatlar sürüyor (docs/LONG_LINES.md: statik model, Q2/Q3 bekliyor); şebeke kurucu (grid-forming) senaryo başlamadı.]**
 
 *Kaynak: `results/STEP3_PILOT.md`, `results/FRAMES.md`, `review/STEP3_STRUCTURED_REVIEW.md`; README "Detection, inverter-rich feeder"; REVIEW.md §7 satır 52–53.*
+
+## 43. Milestone olarak neredeyiz? (19 Ekim 2026)
+
+Sunumda hocaya anlattığımız dört adımın (docs/PLAN.md §2) üçü ve "yönteminizin hâlâ önemli olabileceği yerler"in
+ilki bitti; Ekim planına göre yaklaşık dört ay öndeyiz (docs/PLAN.md §5).
+
+| Adım / senaryo | Durum (19 Eki) | Planlanan |
+|---|---|---|
+| 1 · Tasarım aracı, çok baralı | **bitti** (PR #38–#41) | Kasım |
+| 2 · EMT şebekesi, sinyali basan inverter | **bitti** (16 Eki; PR #33–#37) | Ekim |
+| 1 → 2 · Tasarlanan δ EMT'de enjekte, vaat edilen ayrışma kontrol | **bitti** (PR #44) | Aralık |
+| 3 · Tespit: dedektörler EMT verisinde, en kötü durum eğrisi | **bitti** (18 Eki; PR #44, #56) | Oca–Şub 2027 |
+| Senaryo 1 · I₂ bastıran inverter, yön, δ enjekte | **bitti** (19 Eki; PR #57, inceleme #58) | Kas–Ara |
+| Senaryo 2 · Uzun hatlar | **sürüyor**: ön kontrol eğriyi 1–2× ile sınırlıyor; kayıtlı ölçüte göre iddia 2×'e kadar tutmuyor (statik, Q1); δ*(k_L) ve EMT yarıları koşuyor | Kas–Ara |
+| Senaryo 3 · Şebeke kurucu (grid-forming) inverter | açık; PSCAD'de model gerekiyor | Kas–Ara |
+| Hocaya paket ve e-posta | **ertelendi** (18 Eki: şimdilik kendi başımıza); güncel tutuluyor | Kasım |
+| Güz raporu | açık | Aralık |
+| 4 · Gerçek zaman: kart üzerinde gecikme; makale | açık | Oca–Nis 2027 |
+| NAPS 2027'ye gönderim | | Haziran 2027 |
+
+Bugünkü ana bulgu, üç çalışmada da aynı: **δ kararı değil, en kötü durum garantisini satın alıyor**; bedelini ölçü
+trafolarının doğruluğu belirliyor (REVIEW.md §7 satır 51–58). Hepsi tek bir üç baralı şebekede, nominal çalışma
+noktasında; inverterlerin arıza akımını taşıdığı şebekede tespit hâlâ sınanmadı.
+
+*Kaynak: `docs/PLAN.md` §3–§5; REVIEW.md §7 satır 47–59.*
+
+## 44. Verdiğimiz sözün ne kadarı tutuldu? (19 Ekim 2026)
+
+6 Ekim sunumunda hocaya verdiğimiz söz: yöntemini EMT'de dört adımda test etmek (docs/PLAN.md §2) ve "hâlâ önemli
+olabileceği" üç yerde denemek. Toplantıda o da iki şey istedi: PSCAD'i öğrenmek, inverterlerin nasıl çalıştığını
+çalışmak (§6).
+
+| Söz | Tutuldu mu | Eksik / sınır |
+|---|---|---|
+| Adım 1: iki baralı tasarımı çok baralı araca çevirmek | **evet** | radyal şebekeler; 14 baralı örnek yeniden üretilmedi |
+| Adım 2: sinyali basan inverterle EMT şebekesi | **evet** | kendi üç baralı PSCAD şebekemiz; onun 14 baralı modeli değil |
+| Adım 3: yük ve gürültü altında, onun Kalman filtresi ile öğrenen dedektör, δ'yı her biri bozulana kadar küçültmek | **kısmen** | dedektörler EMT verisinde koştu; ama δ taraması yapılmadı, çünkü gerçekçi gürültüde her dedektör pilotun 20 zor senaryosunu δ olmadan buldu; yerine en kötü durum eğrisi ölçüldü. D2 onun MMKF'si değil, "Pirani ve diğerleri anlamında, röleye taşınmış" bir uyarlama |
+| Adım 4: dedektör gömülü kartta, bir çevrim içinde | **hayır** | başlanmadı (Oca–Nis 2027) |
+| Senaryo 1: I₂ bastıran inverter | **evet** | yön için; δ enjekte edilmiş EMT (PR #57) |
+| Senaryo 2: uzun hatlar | **sürüyor** | temel şebekenin yük akışı eğriyi 2× ile sınırlıyor; statik sonuç "tutmuyor", EMT bekliyor |
+| Senaryo 3: şebeke kurucu (grid-forming) inverter | **hayır** | PSCAD'de model yok; onun Baeckeland modeli istenmedi |
+| PSCAD'i öğrenmek | **evet** | Python'dan sürülen kendi şebekelerimiz, 600'den fazla koşu |
+| İnverterleri çalışmak | **kısmen** | ortalamalı grid-following modeli kurarak; yazılı not yok, grid-forming yok |
+| Sonuçları ona götürmek | **henüz değil** | paket hazır ve güncel (docs/notes/step3_for_taylor.md), 18 Ekim'de ertelendi |
+
+Özet: dört adımın ikisi tam, biri kısmen, biri hiç; üç senaryonun biri tam, biri sürüyor, biri hiç. Hepsi tek bir
+küçük şebekede, nominal çalışma noktasında. Sözün "onun modelinde, inverterlerin arıza akımını taşıdığı yerde"
+kısmı tutulmadı; sözün karşılığı olan sonuçlar da henüz ona gitmedi.
+
+*Kaynak: `docs/PLAN.md` §2, §5, §6; `docs/STEP3.md`; REVIEW.md §7 satır 47–59.*

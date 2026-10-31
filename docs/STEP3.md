@@ -5,6 +5,16 @@ filter against a learned detector, shrinking δ until each fails."* The draft pl
 ([review/STEP3_PLAN_REVIEW.md](../review/STEP3_PLAN_REVIEW.md)); this is the plan after that review. Every
 change from the draft is marked with the review section that asked for it.
 
+> **Status, 19 Oct 2026: step 3 is done and merged** (PR #44, 17 Oct; PR #56, 18 Oct; reviews #45–#54). Results:
+> [results/STEP3_PILOT.md](../results/STEP3_PILOT.md), [results/FRAMES.md](../results/FRAMES.md),
+> [results/HIGHR.md](../results/HIGHR.md), [results/IBR_GRID_SCREEN.md](../results/IBR_GRID_SCREEN.md); the write-up
+> [notes/step3_for_taylor.md](notes/step3_for_taylor.md) (deferred). The design point is **1.12 pu at 225°, ρ = 0.1,
+> with the PLL-like reference filter and the mimic filter**, and it holds in EMT. The pilot's go/no-go **(b) did not
+> hold**: with δ = 0 every detector, D0 included, detected every pilot fault under realistic noise, so the 3000–4000-run
+> sweep below was not run; the worst-case curve was measured instead (70 dense scenarios: hard A-G 33 % → 100 % at
+> ¾ δ*). Headline: **δ buys the worst-case guarantee, not detection**; its price is set by instrument accuracy
+> (REVIEW.md §7 rows 51–55). The sections below are the plan as registered.
+
 ## Detectors
 
 | | What | Why |
@@ -80,11 +90,11 @@ The result is the curve of δ* against the relay reference's rotation budget and
 | parameter | value | label |
 |---|---|---|
 | reference rotation φ_ref | k·σ_white / (√n_mem · min\|V1_L\|), k = 4, σ_white = 0.01 pu, n_mem = 3 cycles | k and σ chosen (the generator's random-noise model); n_mem from the relay memory |
-| model-error box | 0.1 ε | **provisional**: measured on random interior source points at 225° (`src/frames_emt_check.py`, 168 runs), EMT points outside their own set by ≤ 0.073 ε; no A-G case at 1.00 / 1.05 pu. The earlier 0.25 ε was the distance to the settled point, which the frame symbols already cover. To be confirmed at the design point's witnesses (review/STEP3_PART3_REVIEW.md §5) |
-| largest \|δ\| | 1.05 pu | measured at 225° on ab faults, inside the 2–3-cycle window, for this controller (one-cycle DFT reference, no PLL): at 1.14 pu it does not settle on bolted ab faults; at 1.05 pu 3 of 8 bolted ab runs drift up to 21° after 3 cycles |
+| model-error box | 0.1 ε | **provisional**: measured on random interior source points at 225° (`src/frames_emt_check.py`, 168 runs), EMT points outside their own set by ≤ 0.073 ε; no A-G case at 1.00 / 1.05 pu. The earlier 0.25 ε was the distance to the settled point, which the frame symbols already cover. To be confirmed at the design point's witnesses (review/STEP3_PART3_REVIEW.md §5). *[17 Oct: confirmed at the design point — with the mimic filter no EMT point leaves its own bare set over 95 fault runs, so the box is not used; without it the plain DFT reaches 0.112 ε (FRAMES.md, "The step-3 design point")]* |
+| largest \|δ\| | 1.05 pu | measured at 225° on ab faults, inside the 2–3-cycle window, for this controller (one-cycle DFT reference, no PLL): at 1.14 pu it does not settle on bolted ab faults; at 1.05 pu 3 of 8 bolted ab runs drift up to 21° after 3 cycles. *[17 Oct: bare-DFT value; with the PLL-like reference filter the cap is 1.14 pu (FRAMES.md, "The cap with the PLL-like reference filter")]* |
 | drift margin | 3° | measured (≤ 2.2° in that window) |
 | decision window | [2, 3] cycles after inception | chosen |
-| margin ρ | 0.04 | chosen for feasibility: at ρ = 0.1 no δ ≤ 1.05 pu separates; at 1.05 pu, 225° the largest is 0.05. Total margin 0.08 ε against 0.073 ε seen outside the sets; remainder factor 1.1 is further headroom |
+| margin ρ | 0.04 | chosen for feasibility: at ρ = 0.1 no δ ≤ 1.05 pu separates; at 1.05 pu, 225° the largest is 0.05. Total margin 0.08 ε against 0.073 ε seen outside the sets; remainder factor 1.1 is further headroom. *[17 Oct: bare-DFT value; the design point below uses ρ = 0.1]* |
 | **design point** | **δ = 1.12 pu at 225°, ρ = 0.1, PLL-like reference filter (first order, 15 Hz)** | about 93 % of the inverter's rating. Window 223–230°; `results/network/frames_main_pll.json`. The bare-DFT design (1.05 pu, ρ 0.04, `frames_main_fixed.json`) is kept as the controller-specific result |
 | D1's phasor chain | one-cycle DFT with a mimic filter on the currents (L1's X/R) | the window-start excursions are DC offset (`src/frames_mimic_check.py`); faults inside and outside the design ranges reported separately |
 
@@ -117,7 +127,9 @@ D1 decides only on windows wholly after the starter's inception estimate; mixed 
   pilot, pretraining on synthetic data, more windows per run, 1000–1500 runs at the deciding levels, ≥ 5 seeds.
 - **D0**, a conventional ground element, as the training-free floor; the CNN's stated role is the δ = 0
   counterfactual.
-- **Ask Taylor first** about D2 (draft email in this repository, sent by the user).
+- **Ask Taylor first** about D2 (draft email in this repository, sent by the user). *[18 Oct 2026: not sent; the
+  question is folded into [notes/step3_for_taylor.md](notes/step3_for_taylor.md), which the user deferred ("we work on
+  our own for now"). D2 is described as an adaptation, not as his MMKF.]*
 
 ## The front end and the noise model (review/STEP3_PART5_REVIEW.md, verdict of 17 Oct 2026)
 
@@ -172,3 +184,7 @@ No sweep until all six hold. Faults inside and outside the design ranges are rep
 
 Five δ levels × ~300 paired scenarios, plus normals and confusers, and 1000–1500 runs at the levels that decide the
 headline: about 3000–4000 PSCAD runs, one to two nights in fast mode.
+
+*[19 Oct 2026: not run. Go/no-go (b) did not hold on the pilot, so the sweep was replaced by the worst-case curve
+(70 dense scenarios), the structured-error and class-tier designs, and the high-R and inverter-fed screens
+(results/STEP3_PILOT.md, HIGHR.md, IBR_GRID_SCREEN.md).]*

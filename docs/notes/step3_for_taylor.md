@@ -1,6 +1,7 @@
-# Step 3 for Prof. Taylor: summary and draft email (not sent)
+# Step 3 for Prof. Taylor: summary and draft email (not sent; deferred)
 
-17 Oct 2026. For Asmar to send if she agrees. Every number below is from EMT (PSCAD) with the designed δ injected by
+17 Oct 2026; finding 6 added 18 Oct, findings 8–9 on 19 Oct. **Deferred on 18 Oct 2026** (the team works on its own
+for now); kept current, not to be sent yet. Every number below is from EMT (PSCAD) with the designed δ injected by
 the inverter, unless marked *static*. One three-bus network, faults up to 40 Ω, task: any fault vs no fault at the
 relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); design: [results/FRAMES.md](../../results/FRAMES.md).
 
@@ -58,6 +59,20 @@ relay. Full write-up: [results/STEP3_PILOT.md](../../results/STEP3_PILOT.md); de
    elements go blind when its sequence paths are open, but 59N then sees |V0| = 0.31–0.57 pu on every hard ground
    fault. Behind a YNd transformer, 50N sees 0.44–1.2 pu; with IEEE 2800 negative-sequence current, 50Q sees
    0.10–0.18 pu. What fails from one end is selectivity: telling a fault on the line from one beyond it.
+8. **The I₂-suppressing inverter, the first of the three places your deck slide named** (added 19 Oct;
+   [docs/I2_DIRECTION.md](../I2_DIRECTION.md), REVIEW.md rows 56–59). Direction at the inverter's relay, on the same
+   three-bus network, with every load behind the relay inverter-interfaced:
+   - suppression breaks direction only in that regime (s → 1): in EMT 80 % of forward faults are lost with grid-side
+     current control, 68 % with converter-side control; reverse faults are never misdirected;
+   - IEEE 2800's V2-referenced negative-sequence current restores direction completely in both;
+   - a designed δ, injected in EMT, **certifies direction for your set test** (50 of 50 runs contained and separated,
+     at 0.20 pu with the structured instrument set and at 0.98 pu with the 0.08 pu box) and **does not repair the
+     conventional superimposed element** (0.44 and 0.96 of forward faults misdirected). The 0.98 pu point costs 46 %
+     of the inverter's normal output; the 0.20 pu point costs nothing.
+   - The same pattern as finding 3: δ buys the guarantee, not the decision.
+9. **Longer lines** (in progress, [docs/LONG_LINES.md](../LONG_LINES.md), *static so far*): the three-bus grid's own
+   load flow limits the length factor to 2×; up to there the conventional element misses none of the hard set, so the
+   deck's claim does not hold for detection on this network; the δ*(length) curve and the EMT halves are pending.
 
 **Questions for you**
 - Is "the guarantee's price is set by instrument accuracy" the result you would expect, and is it worth a write-up?
@@ -80,8 +95,8 @@ EMT. A one-page summary is attached. In short:
 
 - The design holds in PSCAD with the inverter injecting it. On our three-bus network it needs 1.12 pu, about 93 %
   of the inverter, at ε = 0.08 pu.
-- With realistic noise, all our detectors, including a conventional incremental element, detect every fault
-  without the signal.
+- With realistic noise, all our detectors, including a conventional incremental element, detected every fault in
+  the pilot (20 hard-set scenarios, R_f ≤ 40 Ω) without the signal.
 - What the signal buys is your worst-case guarantee. The share of high-resistance faults that no admissible noise
   can hide rises from about a third at δ = 0 to all of them at three quarters of the design δ.
 - Its price is set by the instruments: free with near-nominal accuracy, about 93 % of the inverter with
@@ -89,10 +104,13 @@ EMT. A one-page summary is attached. In short:
 
 We would value your view on two things:
 1. Is this worth writing up as it stands?
-2. Where should step 3 go next? We checked high-resistance faults statically: where the conventional element starts
-   to fail (about 160 Ω), no signal within the inverter's limit can guarantee detection either. The remaining
-   candidate is selectivity at an inverter-fed relay. There conventional single-ended elements still detect faults
-   but cannot tell where they are.
+2. Where should the work go next? High-resistance faults: the signal certifies ground-fault detection to about
+   160 Ω in EMT, and whether a conventional incremental 50N element fails first depends on its pickup (at 0.15–0.2 pu
+   it fails from about 115–160 Ω, at 0.1 pu it reaches 250 Ω), so the band where the signal certifies what 50N
+   misses is narrow. Of the three places your slide named, the I₂-suppressing inverter is done (direction: your set
+   test is certified by δ, the conventional element is not repaired, IEEE 2800's current restores it) and longer
+   lines are being run; the remaining candidates are grid-forming inverters and selectivity at an inverter-fed relay,
+   where conventional single-ended elements still detect faults but cannot tell where they are.
 
 We also kept your multiple-model structure, moved to the relay's phasor model, and would like to know whether that
 is an acceptable stand-in for your MMKF.
@@ -105,7 +123,9 @@ Asmar
 Notes for Asmar, not for the email:
 - Limits to say if asked: one network, faults to 40 Ω, task "any fault vs no fault", 20 pilot + 70 dense
   scenarios; the per-detector worst case is a stress bound (D2/D3 numbers are lower bounds); 80 Ω is static only.
-- Withdrawn along the way (REVIEW.md §7 rows 51–53): the static δ* = 1.14 pu (EMT does not settle there); "the
+- Withdrawn along the way (REVIEW.md §7 rows 51–55): the static δ* = 1.14 pu (EMT does not settle there); "the
   signal hurts 50Q" (an artefact of a total-I2 element); "no guarantee at class accuracy" (an artefact of a box
-  error model).
+  error model); "no fault-resistance band where 50N fails and the signal certifies" (mixed fault types; the band
+  exists and is pickup-dependent). The earlier draft of email question 2 restated the withdrawn row-54 sentence;
+  corrected 19 Oct.
 - The earlier draft about D2 (docs/notes/email_taylor_step3_draft.md) was not sent; its question is folded in here.

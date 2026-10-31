@@ -1,7 +1,8 @@
 # Project plan
 
-Last updated **18 Oct 2026** (status and milestones, §3–§5: steps 1 and 2 done on the three-bus grid, step 3 in
-progress, about three months ahead of the October schedule). The 15 Oct revision follows the technical review ([REVIEW.md](../REVIEW.md)),
+Last updated **19 Oct 2026** (status and milestones, §3–§6: steps 1–3 done on the three-bus grid; the first of the
+deck's scenarios, I₂ suppression, done with δ injected; longer lines next; about four months ahead of the October
+schedule). The 15 Oct revision follows the technical review ([REVIEW.md](../REVIEW.md)),
 the CIGRE MV runs and the B1 screening, which moved the project away from the plan written on
 16 Sep 2026. The old plan is in git history; what changed is stated in §1 so the shift is on record.
 Evidence for every statement below is in [REVIEW.md](../REVIEW.md) §7 (the claim register) and the
@@ -12,7 +13,10 @@ result documents it cites.
 The September plan was: implement Taylor's auxiliary-signal design, put it on EMT data, inject the
 signal, show it helps. Four screening findings changed the direction.
 
-> **What none of this is.** No result in this repository comes from data with an injected signal.
+> **What none of this is** (as written on 15 Oct 2026; **superseded on 16–19 Oct**: the designed δ has since been
+> injected in PSCAD on a two-bus and a three-bus grid, REVIEW rows 49–51, 55–58, and §3–§4 below carry the
+> results; the box is kept because the September-to-15-Oct findings it qualifies still carry its limit).
+> No result in this repository comes from data with an injected signal.
 > No public EMT dataset contains one, and we have not simulated one yet. The reach and longer-line
 > verdicts come from a **static sequence model** of the feeder (optimistic for δ: each fault gets its
 > best δ angle); the direction and inverter-trip verdicts come from EMT data **without** injection,
@@ -96,7 +100,8 @@ V1-referenced as its controller runs.
 - The relay chain has a mimic filter.
 - **The design point holds in EMT** at its witnesses, window edges and random inception, and over all 48 cases (0
   points outside their own sets in the 2–3-cycle window).
-- Still open: the deck's scenarios (I₂ suppressed, longer lines, grid-forming) with δ injected.
+- The deck's scenarios with δ injected: I₂ suppressed done (19 Oct, under step 3 below); longer lines next;
+  grid-forming open.
 
 The history up to 16 Oct:
 
@@ -117,7 +122,8 @@ normal operation leaves the design's normal set, so the current limit must be in
 And ([results/PSCAD_TAC25.md](../results/PSCAD_TAC25.md)): **the TAC25 design (limit inside) holds in EMT** on the
 two-bus circuit, 124 runs, for a δ-priority limiter; not for one that scales both. The test exposed a sign error in
 the design code's limit rows (REVIEW.md row 49): with the limit inside, δ is about the unconstrained value, not half.
-Next:
+Next, as written on 16 Oct (all three done since: 1 in PR #38–#41, 2 in PR #44, 3's first scenario in PR #57; the
+other two scenarios are in §5):
 1. the design must name its limiter and the frame of δ (the inverter's own V1 turns δ when the limiter acts);
    then a small multi-bus grid (source, protected line, inverter at the remote bus, adjacent line),
    with faults whose location, resistance and type are swept from Python;
@@ -126,22 +132,36 @@ Next:
    model if shared, otherwise our own).
 Owner: Asmar Hasanova.
 
-### Step 3 · Detection — in progress on the EMT data with δ injected
+### Step 3 · Detection — done on the EMT data with δ injected; the deck's scenarios follow
 
-Done 17–18 Oct 2026 ([docs/STEP3.md](STEP3.md), [results/STEP3_PILOT.md](../results/STEP3_PILOT.md)):
+Done 17–19 Oct 2026 ([docs/STEP3.md](STEP3.md), [results/STEP3_PILOT.md](../results/STEP3_PILOT.md)):
 - **Front end:** a common chain with instrument errors on the samples, the mimic filter, a starter and the memory
   frame.
 - **Detectors:** D1 the set test, D0 incremental 50N/50Q, D2 the multiple-model test (Pirani et al., moved to the
   relay), and D3 the CNN.
-- **Pilot, with realistic noise:** every detector, 50N included, detects the hard faults without δ. That is why the
+- **Pilot, with realistic noise:** every detector, 50N included, detected the pilot's 20 hard-set scenarios
+  (R_f ≤ 40 Ω) without δ. That is why the
   δ sweep was not run as planned.
 - **Worst case:** D1's worst-case curve on 350 clean runs (hard A-G guaranteed 0.33 at δ = 0 → 1.00 at ¾ δ*), plus
   each detector against its own worst case (a stress bound).
 - **Two screens:**
   - an inverter-fed relay end ([results/IBR_GRID_SCREEN.md](../results/IBR_GRID_SCREEN.md)): 59N detects without δ;
     selectivity (T2) is the open question;
-  - high resistance (`results/HIGHR.md`, branch `step3-highR`): around **160 Ω the signal certifies ground-fault
-    detection where incremental 50N fails** (static, ρ = 0, 5° window); the EMT check is next.
+  - high resistance ([results/HIGHR.md](../results/HIGHR.md), PR #56): **the band where the signal certifies
+    ground-fault detection and incremental 50N fails depends on the 50N pickup**, crossover about 115 / 160 / 250 Ω
+    at a 0.20 / 0.15 / 0.10 pu pickup; the 160 Ω design holds in EMT; a 0.2 pu load step is a certain D1 false
+    alarm at that design (REVIEW row 55).
+- **Deck scenario 1, the I₂-suppressing inverter** ([docs/I2_DIRECTION.md](I2_DIRECTION.md), PR #57, review PR #58,
+  REVIEW rows 56–59), direction at the inverter's relay, δ designed and injected in EMT:
+  - suppression breaks direction **only when nearly all of the load behind the relay is inverter-interfaced**
+    (s → 1): in EMT 80 % (grid-side control) or 68 % (converter-side) of the forward set is lost, 20 % or 40 % of it
+    wrong-way; at s = 0.8 only dependability is lost (static);
+  - IEEE 2800's V2-referenced current **restores direction in both control brackets** (0 % misdirected);
+  - a designed δ **does not fix the conventional element** (REVIEW row 46's prior holds in EMT); the set test decides
+    direction without δ for every B-C run and gets the worst-case guarantee from δ: 0.20 pu at the structured tier,
+    free in I1; 0.98 pu at the box tier, displacing 46 % of the inverter's normal output. **δ buys the guarantee,
+    not the decision**, as in the step-3 detection results.
+  - One network, nominal source point, one point on wave, clean runs.
 
 The history up to 16 Oct:
 
@@ -149,7 +169,10 @@ Done on public data without injection: the conventional ladder (R0–R4, T1, T2)
 supervision, a sequence-trajectory CNN, engineered features, the re-implemented Hasan et al. (2026)
 SVM, on EvEMTBench DoubleLine, TestGrid110kV, adapt_grid-TestGrid and CIGRE MV, with grouped folds
 and held-out reverse faults.
-Open:
+Open on 16 Oct (1 and 2 done since in step 3, above: D2 is the multiple-model test in the sense of Pirani et al.,
+and the δ sweep was replaced by the worst-case curve because every detector detected the pilot's 20 hard-set
+scenarios (R_f ≤ 40 Ω) without δ under realistic
+noise; 3 is still open):
 1. **MMKF** (Pirani & Taylor 2022), the detector the deck names;
 2. both on the step-2 EMT data, under load and noise, **shrinking δ until each fails**;
 3. rung R5, the IBR-appropriate conventional baseline (Kasztenny 2022), before inverter-dominated data.
@@ -171,25 +194,34 @@ Claim (REVIEW §10 item 8):
 - (18 Oct) on one three-bus grid, EMT with δ injected: Taylor's design keeps its promise. The guarantee it buys is a
   worst-case one, and its price is set by the instruments: free at near-nominal accuracy, about 93 % of the
   inverter at protection-class fault-condition errors. Under realistic noise, conventional incremental 50N already
-  detects the faults it was designed for, up to about 120 Ω.
+  detects the faults it was designed for; where it stops depends on its pickup (crossover about 115 / 160 / 250 Ω
+  at a 0.20 / 0.15 / 0.10 pu pickup, REVIEW row 55), and from there the signal certifies ground-fault detection,
+  at 160 Ω in EMT.
+- (19 Oct) the deck's I₂-suppression scenario, in EMT with δ injected: suppression costs the relay its direction
+  only on an inverter-dominated back side (s → 1); IEEE 2800's negative-sequence current restores it; a designed δ
+  certifies direction for the set test and does not repair the conventional element. Same scope as above.
 
 Cannot claim:
-- that auxiliary signals help detection on inverter-dominated grids (untested — that is WP2);
+- that auxiliary signals help detection on inverter-dominated grids: on the synchronous-source three-bus grid the
+  signal buys the worst-case guarantee, not detection (step 3); where inverters carry the fault current it is
+  untested, except for direction at s = 1 (the I₂ study);
 - that learning as such beats protection logic;
 - that any of this holds where inverters carry a material share of the fault current.
 
 ## 5. Milestones from here
 
-Revised 18 Oct 2026. The October schedule is kept below the new one for the record.
+Revised 19 Oct 2026. The October schedule is kept below the new one for the record.
 
 | When | What | Status |
 |---|---|---|
 | Oct 2026 | Step 2: the injecting inverter; PSCAD and inverter groundwork, as Prof. Taylor asked | **done** (16 Oct) |
 | Oct 2026 (planned Nov) | Steps 1 and 2: the three-bus PSCAD grid with swept faults; the multi-bus design tool on it | **done** (PR #38–#41) |
 | Oct 2026 (planned Dec) | Steps 1 → 2: the designed δ injected in EMT and the promised separation checked | **done** (PR #44: both frames, filtered reference, mimic chain) |
-| Oct–Nov 2026 (planned Jan–Feb 2027) | Step 3: detectors on the EMT data, the worst-case sweep | **in progress**: pilot, worst-case curve, structured errors, inverter-fed and high-R screens done; the high-R EMT check next |
-| Nov 2026 | The package for Prof. Taylor (`docs/notes/step3_for_taylor.md`) and the email (draft); his call on selectivity (T2) | open |
-| Nov–Dec 2026 | The deck's scenarios with δ injected: I₂ suppressed, longer lines, grid-forming | open |
+| Oct 2026 (planned Jan–Feb 2027) | Step 3: detectors on the EMT data, the worst-case sweep | **done** (18 Oct): pilot, worst-case curve, structured errors, inverter-fed and high-R screens, the high-R EMT check (PR #56) |
+| Oct 2026 (planned Nov–Dec) | Deck scenario 1: I₂ suppressed, direction, δ designed and injected in EMT | **done** (19 Oct, PR #57, review PR #58) |
+| Oct–Nov 2026 | Deck scenario 2: longer lines, with the same machinery (static δ*(length), conventional element vs set test, EMT check where the conventional element first fails), pre-registered ([docs/LONG_LINES.md](LONG_LINES.md), branch `long-lines`) | **in progress** (19 Oct): the pre-flight limits the curve to 1–2× the line, a limit of the base network's load flow, not of the claim; on the registered criterion the claim does not hold up to 2× on this network (the conventional element misses nothing; static, Q1); δ*(k_L) and the two EMT halves pending |
+| Nov–Dec 2026 | Deck scenario 3: grid-forming (needs a grid-forming inverter model in PSCAD) | open |
+| — | The package for Prof. Taylor (`docs/notes/step3_for_taylor.md`) and the email (draft); his call on selectivity (T2) | **deferred** (18 Oct): the team works on its own for now; the package is kept current |
 | Dec 2026 | Fall report | open |
 | Jan–Apr 2027 | Step 4: latency on a board; the paper | open |
 | Jun 2027 | Submit to NAPS 2027 | |
@@ -205,11 +237,14 @@ Both halves of the work are ours: the convex design in CVXPY and the EMT evaluat
 **study how inverters work**. Those come first (§5).
 
 The deck named three places his method still has room (I₂-suppressing inverters, longer lines,
-grid-forming systems) and asked to test it there. Two have since been screened **in the static model
-only**: the I₂ case points to a V2-referenced current rather than a designed δ, and the longer-line
-case did not behave as the deck suggested. That correction is ours to deliver, with its limit
-attached: neither was tested with δ injected in EMT. What is left of the promise is the test that
-can settle all three, an EMT study with δ injected.
+grid-forming systems) and asked to test it there. The I₂ case is now **tested in EMT with δ injected**
+([docs/I2_DIRECTION.md](I2_DIRECTION.md)): suppression breaks direction only on an inverter-dominated back side,
+a V2-referenced current (IEEE 2800) restores it, and a designed δ certifies direction for the set test without
+repairing the conventional element. The longer-line case was screened **in the static model only**, for reach on
+CIGRE MV (REVIEW row 47: not supported up to 3× length); its test for detection on the three-bus grid, with the
+step-3 machinery, is pre-registered and running ([docs/LONG_LINES.md](LONG_LINES.md)): the base network's load flow
+limits it to 1–2× the line, and there the conventional element misses nothing (static, Q1), so on the registered
+criterion the claim does not hold up to 2×; δ*(length) and the EMT halves are pending. Grid-forming is untested.
 
 ## 7. Questions for Prof. Taylor
 
@@ -219,22 +254,24 @@ These are the deck's four questions, in the deck's order, with what we have lear
    from just-beyond faults on 2–4 Ω lines, as Theorem 1 predicts. Does that match his expectation,
    and **is there an observable — time domain, wideband — where the difference is larger?**
 2. **Where to test δ next.** We offered I₂-suppressing inverters, longer lines, grid-forming systems.
-   Since the deck, the static model pointed the first towards a grid-code question and did not
-   support the second, which leaves grid-forming as the strongest case. None of the three has been
-   tested with δ injected in EMT; which should the first injected EMT run target?
+   Since the deck, the first has been tested with δ injected in EMT (a grid-code question: IEEE 2800 restores
+   direction, a designed δ does not repair the conventional element), the static model did not support the
+   second for reach, and grid-forming is untested. Longer lines are being run next; is grid-forming the case
+   he would want first?
 3. **The current limit.** During a fault the inverter already runs near 1.2 pu, so δ has to fit in
    what is left. Should the limit in the design include δ, **checked phase by phase or as one
    total?** (Our own correction: the limit belongs inside the problem, not as an outer check.)
 4. **The Baeckeland 14-bus Simulink model** with five grid-forming inverters. Neither IRTSD nor
    CIGRE MV has grid-forming inverters, and PSCAD does not change that.
-2. Our B1 result says a suppliable δ barely moves the reach boundary on a distribution feeder, and
+5. Our B1 result says a suppliable δ barely moves the reach boundary on a distribution feeder, and
    that direction is settled passively. **Is the reach problem the one the method should target, or
    is the intended target fault-type separation on the relay's own line**, as in the Geometry paper?
-3. Which injection regime: triggered on the limiter indicator (2022) or designed offline and injected
+6. Which injection regime: triggered on the limiter indicator (2022) or designed offline and injected
    continuously (2025)?
-4. The negative-sequence suppression case: is a V2-referenced current (IEEE 2800) the intended
+7. The negative-sequence suppression case: is a V2-referenced current (IEEE 2800) the intended
    mechanism, in which case the design question becomes gain selection rather than δ selection?
-5. Co-authorship and target venue, if this becomes a paper.
+   (19 Oct: in EMT it restores direction where suppression breaks it, and a designed δ does not; REVIEW rows 57–58.)
+8. Co-authorship and target venue, if this becomes a paper.
 
 ## 8. Risks
 
@@ -242,6 +279,6 @@ These are the deck's four questions, in the deck's order, with what we have lear
 |---|---|---|
 | PSCAD edition turns out to be Free (15 nodes) | IRTSD out | Two-bus EMT model as the positive control; decide fast ([PSCAD.md](PSCAD.md)) |
 | Snapshot and simulation compute | Weeks lost | Keep the case list small until one documented case is reproduced; build snapshots once |
-| IRTSD has no grid-forming inverters | The hardest regime stays untested | Ask for the Baeckeland model (question 1); state the limit in any claim |
+| IRTSD has no grid-forming inverters | The hardest regime stays untested | Ask for the Baeckeland model (§7 question 4); state the limit in any claim |
 | Carrying today's ladder to inverter-dominated data | Repeats the unfair-baseline error in the opposite direction | Rung R5 before that data arrives (WP3) |
 | "This is just replication" | Fatal in review | The contribution is the evaluation and the map of §1, not the method |

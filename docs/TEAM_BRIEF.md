@@ -2,6 +2,16 @@
 
 Read this once before the first meeting.
 
+> **Status, 19 Oct 2026.** This is the September onboarding note, kept as written. Since then: the project is
+> **independent research supervised by Prof. Taylor**, not the ECE 414 senior design project (README.md); the
+> simulation is in **PSCAD**, not Simulink, driven from Python with an inverter we built; steps 1–3 of the plan shown
+> to him on 6 Oct are done (the multi-bus design tool, the EMT grid with the designed δ injected, detection under load
+> and noise: [docs/PLAN.md](PLAN.md) §3–§5, [docs/STEP3.md](STEP3.md)); the result so far is that **the signal buys
+> the worst-case guarantee, not detection** (REVIEW.md §7 rows 51–59); the first of the deck's scenarios, the
+> I₂-suppressing inverter, is done ([I2_DIRECTION.md](I2_DIRECTION.md)); longer lines are in progress
+> ([LONG_LINES.md](LONG_LINES.md)); grid-forming and the embedded step are open. The "0.5 pu" below is the September
+> two-bus toy number, superseded by the step-3 design point (1.12 pu at 225°, [results/FRAMES.md](../results/FRAMES.md)).
+
 ## The problem in plain words
 
 A relay is the device that says "there's a fault, open the breaker." For a century it worked by watching for a big current spike, because generators push huge current into a fault. Solar, wind and batteries connect through inverters, and inverters cap their current at roughly 1.1 to 1.2 times normal. So in a modern grid a fault can look almost like normal load, and the relay can miss it. This is a real, unsolved industry problem and an NSF-funded project in Prof. Taylor's group.
@@ -29,12 +39,12 @@ A toy version of his method in Python with CVXPY (the tool he recommended). On a
 
 ## Output
 
-Working tool + simulation + demo by December for senior design. A conference paper in spring, most likely NAPS 2027. Taylor as advisor and likely co-author.
+Working tool + simulation + demo by December for senior design. A conference paper in spring, most likely NAPS 2027. Taylor as advisor and likely co-author. *[19 Oct 2026: independent research, not senior design; the milestones are in [PLAN.md](PLAN.md) §5.]*
 
 ## What each person should do this week
 
 - Everyone: clone the repo, run `python src/aux_signal_toy.py weak_sg`, open the PNG, read Sections I, II and VI of the Geometry paper (link in `papers/README.md`).
-- Reply with: are you in, first and second role choice, Simulink experience 1 to 5.
+- Reply with: are you in, first and second role choice, Simulink experience 1 to 5. *[19 Oct 2026: the project uses PSCAD; see [PSCAD.md](PSCAD.md).]*
 
 ## Vocabulary you will hear
 

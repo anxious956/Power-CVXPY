@@ -1,5 +1,8 @@
 # Independent review of the multi-bus tool (PR #38) and the limit-row sign fix (PR #37)
 
+> **Status, 19 Oct 2026.** All twelve findings were fixed in PR #40 ([NETWORK_REVIEW_ROUND2.md](NETWORK_REVIEW_ROUND2.md));
+> the withdrawn numbers of §5 are struck in REVIEW row 3 and corrected in row 49 (0.32–0.52 pu with the limit inside).
+
 16 Oct 2026. Reviewed on `main` at `e9a7894`. PR #38 was already merged (09:11 today) when this review
 started, so every reference below is to the merged code. Nothing in `src/`, `tests/` or `results/` was
 changed. The check scripts are in [`review/checks/`](checks/); each prints the numbers quoted here.

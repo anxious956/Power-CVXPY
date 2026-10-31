@@ -1,5 +1,9 @@
 # Review of PR #44, part 5: the cap with the reference filter, and the 1.12 pu design point
 
+> **Status, 19 Oct 2026.** The 117-run design-point batch that was still running is reported in
+> [results/FRAMES.md](../results/FRAMES.md) and REVIEW row 51: the 1.12 pu design holds in EMT at its witnesses, window
+> edges and random inception, and the 1.14 pu point does not settle on bolted B-C faults. PR #44 is merged.
+
 17 Oct 2026. Reviewed `step3-detection` at `51cfd2d`, `a96b736`, `8a8a391` and `fb89f1b`, in a separate worktree,
 reading #44's stored outputs: `results/network/frames_pll_check.json`, `frames_main_pll.json`,
 `frames_design_specs_pll.json`. Nothing in `src/`, `tests/` or `results/` was changed, and no PSCAD or design runs were

@@ -60,7 +60,7 @@ L2; 0.011 pu for a bolted fault on L1 (the decaying DC component).
 |---|---|
 | cases not separable at δ = 0 | **8 of 48**: A-G through 40 Ω at every point of L1 (5) **and of the adjacent line L2 (3)** |
 | smallest separating δ, no margin | 0.62 pu |
-| smallest separating δ, ρ = 0.1 | **0.90 pu** at 210° (the design tested) |
+| smallest separating δ, ρ = 0.1 | **0.90 pu** at 210° (the design tested) **[19 Oct 2026: absolute-frame design; superseded by the two-frame design point 1.12 pu at 225°, results/FRAMES.md; REVIEW.md §7 row 51.]** |
 
 The adjacent line makes the problem harder than the two-bus one (0.38 pu with the margin there): its high-
 resistance faults also fall inside the normal set.
@@ -127,4 +127,7 @@ must account for that frame moving.
   for one); the inverter's zero-sequence path (the PSCAD build needs it open); meshed networks (supported by
   the solver, not yet built or tested in PSCAD).
 - The IEEE 14-bus example of the Geometry paper: needs the Baeckeland thesis line data, which is not in the repo.
-- A relay algorithm (step 3): the test is still the design's own set test.
+- A relay algorithm (step 3): the test is still the design's own set test. **[19 Oct 2026: done (17–18 Oct 2026,
+  PRs #44, #56): the set test, an incremental 50N, a Gaussian detector and a CNN ran on PSCAD runs with δ injected,
+  design point 1.12 pu at 225°; δ buys the worst-case guarantee, not detection; REVIEW.md §7 rows 51–55; see
+  docs/STEP3.md and results/FRAMES.md.]**

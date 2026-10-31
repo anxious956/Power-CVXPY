@@ -1,5 +1,7 @@
 # Review of the I2-direction study (PR #57, `i2-direction` at `1b7e5d3`)
 
+> **Status, 19 Oct 2026.** The three fixes of §5 were made (`8d3fb26`); PR #57 and this review (PR #58) are merged.
+
 18 Oct 2026. The whole branch was reviewed in a separate worktree: `docs/I2_DIRECTION.md`, `src/i2dir_*.py`,
 `src/frames_multi.py`, the `pscad_inverter.py` and `pscad_network.py` changes, the result JSONs and REVIEW rows 56–59.
 The stages were also reviewed one by one as they were written (messages to the research session). This file is the

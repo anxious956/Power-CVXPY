@@ -343,6 +343,11 @@ forward:
 Limits: static model, no EMT check; first-cycle phasor elements only; δ added after the limiter (0.1 pu fits
 at a design angle, above); one injecting inverter for the δ laws.
 
+**[19 Oct 2026: the EMT check is done (PRs #57, #58): suppression breaks direction only as the share s of
+inverter-interfaced load behind the relay → 1; IEEE 2800's V2-referenced current restores direction in EMT (both
+control brackets); a designed δ certifies direction for the set test but does not fix the conventional element,
+"δ buys the guarantee, not the decision"; REVIEW.md §7 rows 56–59; see docs/I2_DIRECTION.md.]**
+
 ### Telling a fault from an inverter disconnecting
 
 **The problem.** The one failure the direction elements leave is the bus-3 inverter tripping. It is a real
@@ -479,6 +484,9 @@ control of the tool, because TestGrid's boundary separates without δ. The inver
 the passive baseline above leaves open: I2-suppressing inverters and the inverter trip. It also continues on
 Taylor's 14-bus model if that becomes available.
 
+**[19 Oct 2026: still the reach result (REVIEW.md §7 row 47); the detection question is in docs/LONG_LINES.md
+(branch long-lines) — static model, Q2/Q3 pending.]**
+
 **Longer lines (coarse first look).** `b1_long_lines.py --coarse` re-runs the screening with the protected line
 and the lines beyond it 2× and 3× longer, everything else unchanged
 ([`cigremv/b1_long_lines_coarse.json`](cigremv/b1_long_lines_coarse.json)). It tests the hypothesis left for the
@@ -565,7 +573,10 @@ TestGrid — while R2 and the POTT-equivalent change by at most 7 trips.
   elements already settle the inverter buses in the first cycle (§3). With inverters that suppress I2 the
   model says direction does need a negative-sequence current. The one that works is referenced to the
   measured V2, as IEEE 2800 asks, with enough gain at small V2; a δ fixed in advance in the inverter's frame does not
-  (§3). An injection cannot tell a fault from the inverter tripping, because the tripping inverter is the
+  (§3). **[19 Oct 2026: now tested in EMT (PRs #57, #58): suppression breaks direction only as the inverter-load share
+  s behind the relay → 1; the V2-referenced current restores direction in both control brackets; a designed δ
+  certifies direction for the set test but does not fix the conventional element; REVIEW.md §7 rows 56–59; see
+  docs/I2_DIRECTION.md.]** An injection cannot tell a fault from the inverter tripping, because the tripping inverter is the
   only source on its feeder (§3).
 
 ## 5. Limits

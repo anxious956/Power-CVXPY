@@ -1,5 +1,9 @@
 # Review of step 3's class-tier results (PR #44, `52bf7bd`, `2c469f4`, `20eaf59`, `950e194`)
 
+> **Status, 19 Oct 2026.** The structured re-run asked for here was done: at the class tier the structured
+> instrument-error set needs 1.12 pu (about 93 % of the inverter), not "none within the cap", and the design tier
+> needs no signal (REVIEW row 53, [STEP3_STRUCTURED_REVIEW.md](STEP3_STRUCTURED_REVIEW.md)).
+
 17 Oct 2026. Reviewed in a separate worktree, reading `src/step3_multiplicative.py`, `src/frames_eps_curve.py` and
 `results/STEP3_PILOT.md`. No `src/`, `tests/` or `results/` change and no PSCAD runs. One static number was computed
 (§1).

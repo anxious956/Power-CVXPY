@@ -1,5 +1,9 @@
 # Draft email to Prof. Taylor: the detector for step 3 (not sent)
 
+**[19 Oct 2026: folded into docs/notes/step3_for_taylor.md; the Taylor write-up was deferred on 18 Oct 2026 ("the
+team works on its own for now"), so this is kept current but is not to send; step 3 is done, docs/STEP3.md, REVIEW.md
+§7 rows 51–55.]**
+
 16 Oct 2026. To be sent by Asmar if she agrees. Short on purpose (review/STEP3_PLAN_REVIEW.md §1).
 
 ---
@@ -27,4 +31,5 @@ Asmar
 
 Notes for Asmar, not for the email: the step-1 and step-2 results that this builds on, with their limits, are in
 results/MULTIBUS.md and REVIEW.md rows 49–50. If he asks about the cost: the three-bus design curtails the inverter's
-normal output to ≤ 0.46 pu.
+normal output to ≤ 0.46 pu. **[19 Oct 2026: superseded by the two-frame design point, 1.12 pu at 225°, ρ = 0.1, about
+93 % of the inverter; results/FRAMES.md ("The step-3 design point: 1.12 pu at 225°"); REVIEW.md §7 row 51.]**

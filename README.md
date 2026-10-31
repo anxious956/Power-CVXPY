@@ -21,17 +21,29 @@ corrections, are kept in [archive/README.md](archive/README.md); the verdict on 
 here is the register in [REVIEW.md](REVIEW.md) §7.
 
 **The question now:** where does a designed auxiliary signal earn its cost, and where does a passive
-element, a channel or a grid-code requirement do the job instead? Four candidate uses have been
-screened on an inverter-rich grid. Three look closed **in the screening**, with the limit stated
-under the table:
+element, a channel or a grid-code requirement do the job instead? Four candidate uses were
+screened on an inverter-rich grid in early October (table below, **no injected data**). Since then
+the signal has been **injected in PSCAD** on our own two- and three-bus grids, and the answer so far
+is the same in both finished studies: **δ buys the worst-case guarantee, not the detection or the decision**
+(step 3, [docs/STEP3.md](docs/STEP3.md); the I₂ case, [docs/I2_DIRECTION.md](docs/I2_DIRECTION.md);
+longer lines in progress, [docs/LONG_LINES.md](docs/LONG_LINES.md)). The screening table is kept as
+it was written, with the register rows that narrowed it:
 
 | Candidate use for an injected signal | What the screening found (no injected data, see below) | Register row |
 |---|---|---|
-| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Not supported in the static model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more | 42, 47 |
+| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Not supported in the static model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more. *[19 Oct 2026: still the reach result. The longer-line **detection** question is being tested with δ injected on the three-bus grid, [docs/LONG_LINES.md](docs/LONG_LINES.md): the deck's claim does not hold up to 2× on that network (static model, Q2/Q3 pending).]* | 42, 47 |
 | **Direction** at inverter buses | **Not needed in the EMT data (no injection).** Passive superimposed-quantity elements settle it in the first cycle, forward and reverse, for unbalanced and three-phase faults | 44 |
-| Direction when inverters **suppress negative sequence** | **In the static model, a current is needed, but a V2-referenced one** (IEEE 2800), not a δ fixed in advance — which failed at all 48 magnitudes and angles tried | 46 |
+| Direction when inverters **suppress negative sequence** | **In the static model, a current is needed, but a V2-referenced one** (IEEE 2800), not a δ fixed in advance — which failed at all 48 magnitudes and angles tried. *[19 Oct 2026: tested in EMT with δ injected, [docs/I2_DIRECTION.md](docs/I2_DIRECTION.md), rows 56–59: suppression breaks direction only when nearly all load behind the relay is inverter-interfaced; IEEE 2800 restores it; a designed δ certifies direction for the set test and does not repair the conventional element.]* | 46, 56–59 |
 | Telling a remote **inverter trip** from a fault | **No injection can help** (EMT data, no injection, plus the static model); the tripping inverter is the only source on its feeder. The remedy is an inverter-status channel | 45 |
 
+> **[19 Oct 2026: the box below was true until 16 Oct 2026 and is kept for the record; superseded by
+> REVIEW.md §7 rows 51–59.]** Since 16 Oct the designed signal has been injected in PSCAD: the step-3 detection study (two-frame design
+> point 1.12 pu at 225°, ρ = 0.1, about 93 % of the inverter, holds in EMT; under realistic noise every
+> detector, 50N included, detected the pilot's 20 hard-set scenarios (R_f ≤ 40 Ω) without δ, while the
+> worst-case guarantee on hard A-G needs δ; REVIEW.md rows 51–55), the I₂-suppression direction study
+> (rows 56–59) and the longer-lines study (in progress). No public EMT dataset contains an injected
+> signal; ours do.
+>
 > **What none of this is.** No result in this repository comes from data with an injected signal.
 > No public EMT dataset contains one, and we have not simulated one yet. The reach and longer-line
 > verdicts come from a **static sequence model** of the feeder (optimistic for δ: each fault gets its
@@ -59,36 +71,44 @@ What the deck told him:
 **What he asked for after the deck:** he arranged the PSCAD licence, and asked us to **learn PSCAD**
 (he does not use it himself) and to **study how inverters work**: their control, current limiting,
 grid-following versus grid-forming behaviour. That is the immediate work; see [docs/PLAN.md](docs/PLAN.md) §5.
+*[19 Oct 2026: done. PSCAD is driven from Python on our own grids with an inverter we built; steps 1–3
+of the deck followed ([docs/PLAN.md](docs/PLAN.md) §3–§5).]*
 
 What we committed to, and where it stands:
 
 | Promised | Status |
 |---|---|
-| A model test with **I₂-suppressing inverters** | **Done in the static model** ([PR #27](https://github.com/anxious956/Power-CVXPY/pull/27)). Direction fails there; a **V2-referenced** current with gain at small V2 (IEEE 2800) repairs it, a δ fixed in advance in the inverter's frame did not at any of 48 magnitudes and angles. Not yet checked in EMT |
-| **Longer lines**, where we expected δ to separate more strongly | **Done in the static model (coarse), and it narrowed our own claim**: up to 3× line length, separability without δ rises 12–35 points while an affordable δ adds 1–11. He should hear this, because the deck offered it as a reason for optimism. Not yet checked in EMT |
-| **An EMT study with δ injected**, ideally on his 14-bus grid-forming model | **Open, and the one that can actually test the method.** It is the critical path, after the PSCAD and inverter groundwork above ([docs/PSCAD.md](docs/PSCAD.md)) |
+| A model test with **I₂-suppressing inverters** | **Done in the static model** ([PR #27](https://github.com/anxious956/Power-CVXPY/pull/27)). Direction fails there; a **V2-referenced** current with gain at small V2 (IEEE 2800) repairs it, a δ fixed in advance in the inverter's frame did not at any of 48 magnitudes and angles. Not yet checked in EMT. *[19 Oct 2026: **done in EMT with δ injected** ([docs/I2_DIRECTION.md](docs/I2_DIRECTION.md), PRs #57, #58, rows 56–59): suppression breaks direction only as the inverter-interfaced share of the load behind the relay → 1; IEEE 2800 restores it in both control designs; a designed δ (0.20 pu structured tier; 0.98 pu box tier, costing 46 % of the inverter's normal output) certifies direction for the set test in 50/50 runs and does not fix the conventional element.]* |
+| **Longer lines**, where we expected δ to separate more strongly | **Done in the static model (coarse), and it narrowed our own claim**: up to 3× line length, separability without δ rises 12–35 points while an affordable δ adds 1–11. He should hear this, because the deck offered it as a reason for optimism. Not yet checked in EMT. *[19 Oct 2026: the **detection** question is in progress on the three-bus grid with δ injected ([docs/LONG_LINES.md](docs/LONG_LINES.md)): the base network's load flow limits the length factor to 1–2×, and on the registered criterion the claim does not hold up to 2× there — static model, Q2/Q3 pending.]* |
+| **An EMT study with δ injected**, ideally on his 14-bus grid-forming model | **Open, and the one that can actually test the method.** It is the critical path, after the PSCAD and inverter groundwork above ([docs/PSCAD.md](docs/PSCAD.md)). *[19 Oct 2026: **done on our own three-bus grid**: step 3 ([docs/STEP3.md](docs/STEP3.md), PRs #44, #56) and the I₂ study above. The 14-bus grid-forming model remains the open scenario.]* |
 
 The four questions put to him in the deck are restated, with what we have learned since, in
 [docs/PLAN.md](docs/PLAN.md) §7.
 
 | # | Part | Status | Owner |
 |---|------|--------|-------|
-| 1 | **Design tool** | Largely done in the TAC25 formulation: current limit inside the problem, margin, sound source set, global solve ([results/DESIGN.md](results/DESIGN.md); limit-row sign error corrected 16 Oct, REVIEW.md row 49). Open: multi-bus aggregation, limiter type in the uncertainty set | Asmar Hasanova |
-| 2 | **Simulation** | **Critical path.** PSCAD 5.0.1 Educational, driven from Python and connected to our relay code. An inverter that injects a designed negative-sequence δ is built and verified ([results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md)); next, the grid around it | Asmar Hasanova |
-| 3 | **Detection** | Done on four grids with one protocol: conventional ladder, sequence-trajectory CNN, engineered features, re-implemented Hasan et al. (2026) SVM. Open: an IBR-appropriate ladder rung, MMKF | Asmar Hasanova |
+| 1 | **Design tool** | Largely done in the TAC25 formulation: current limit inside the problem, margin, sound source set, global solve ([results/DESIGN.md](results/DESIGN.md); limit-row sign error corrected 16 Oct, REVIEW.md row 49). Open: multi-bus aggregation, limiter type in the uncertainty set. *[19 Oct: **done** — the multi-bus tool `src/network.py` (PR #38, [results/MULTIBUS.md](results/MULTIBUS.md)) and the two-frame model `src/frames.py` with the inverter's own V1 frame and the δ-priority limiter inside ([results/FRAMES.md](results/FRAMES.md)).]* | Asmar Hasanova |
+| 2 | **Simulation** | **Critical path.** PSCAD 5.0.1 Educational, driven from Python and connected to our relay code. An inverter that injects a designed negative-sequence δ is built and verified ([results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md)); next, the grid around it. *[19 Oct: **done** — any radial network built and run in PSCAD from a spec (`src/pscad_network.py`, fast mode), the designed δ injected in the inverter's own frame, about 2 000 run folders so far across steps 2–3 and the I₂ study.]* | Asmar Hasanova |
+| 3 | **Detection** | Done on four grids with one protocol: conventional ladder, sequence-trajectory CNN, engineered features, re-implemented Hasan et al. (2026) SVM. Open: an IBR-appropriate ladder rung, MMKF. *[19 Oct: **step 3 done** on the EMT data with δ injected ([docs/STEP3.md](docs/STEP3.md), [results/STEP3_PILOT.md](results/STEP3_PILOT.md)): the set test D1, incremental 50N/50Q, the multiple-model test D2 (Pirani et al., at the relay) and the CNN; every one detected the pilot's 20 hard-set scenarios (R_f ≤ 40 Ω) without δ under realistic noise; δ buys the worst-case guarantee.]* | Asmar Hasanova |
 | 4 | **Embedded** | Open: 87 µs on the laptop, no board, no causal end-to-end protocol | TBD |
 
-## Where things stand (15 Oct 2026)
+## Where things stand (19 Oct 2026)
 
-Every line below says what kind of data it comes from. **None of it comes from data with an injected
-signal.**
+Every line below says what kind of data it comes from. The rows marked **δ injected** come from PSCAD
+with the designed signal injected by our own inverter model; the others from EMT benchmark data
+without injection, or from the static model.
 
 | Area | Current result | Data | Details |
 |---|---|---|---|
+| **Step 3: detection with δ injected** | The two-frame design (the inverter's own V1 frame, the relay's memory frame, the δ-priority current limit inside): **design point 1.12 pu at 225°, ρ = 0.1, about 93 % of the inverter**, with a PLL-like reference filter (15 Hz) and a mimic filter at the relay; it holds in EMT at its witnesses, window edges, random inception and all 48 cases. Four detectors on the same chain (D1 set test, D0 incremental 50N/50Q, D2 multiple-model, D3 CNN): **with realistic noise every one, 50N included, detected the pilot's 20 hard-set scenarios (R_f ≤ 40 Ω) without δ**; the signal buys only the worst-case guarantee (hard A-G 33 % → 100 % at ¾ δ*), and its price is set by instrument accuracy (free at near-nominal, about 93 % at protection-class errors) | EMT, PSCAD, δ injected | [docs/STEP3.md](docs/STEP3.md), [results/FRAMES.md](results/FRAMES.md), [results/STEP3_PILOT.md](results/STEP3_PILOT.md); REVIEW.md rows 51–53 |
+| High fault resistance | The design certifies ground-fault detection to 160 Ω in EMT; whether incremental 50N fails first depends on its pickup (crossover about 115 / 160 / 250 Ω at 0.20 / 0.15 / 0.10 pu); a 0.2 pu load step is a certain false alarm at that design | static model + EMT, δ injected | [results/HIGHR.md](results/HIGHR.md); rows 54–55 |
+| Inverter-fed relay end | 59N / 50N / 50Q still detect without δ; only selectivity (T2) is open | static model | [results/IBR_GRID_SCREEN.md](results/IBR_GRID_SCREEN.md) |
+| **I₂-suppressing inverter: direction** | Suppression breaks direction at the inverter's relay **only as the inverter-interfaced share of the load behind it → 1** (80 % of forward faults lost with grid-side control, 68 % with converter-side; reverse never misdirected); **IEEE 2800's V2-referenced current restores direction** in both; a designed δ (0.20 pu structured tier, free in I1; 0.98 pu box tier, displacing 46 % of the inverter's normal output) **certifies direction for the set test in 50/50 runs and does not fix the conventional element** (0.44 / 0.96 forward misdirected). δ buys the guarantee, not the decision | static model + EMT, PSCAD, δ injected | [docs/I2_DIRECTION.md](docs/I2_DIRECTION.md); rows 56–59 |
+| **Longer lines: detection** (in progress) | The base network's load flow limits the length factor to 1–2× (loads keep ≥ 75 % of their power). On the registered criterion the deck's claim **does not hold for detection up to 2× on this network**: the conventional element misses 0 of 48 at 1, 1.5 and 2×, while the δ = 0 set design gets harder (7 → 11 → 14 guaranteed misses under the box tier). δ*(length), margin, price and the EMT halves pending | static model; Q2/Q3 pending | [docs/LONG_LINES.md](docs/LONG_LINES.md) |
 | Design tool | The TAC25 formulation: the current limit inside the problem, a margin in measurement units, a sound source set, a global solve. On the two-bus model only | static model | [results/DESIGN.md](results/DESIGN.md) |
 | Detection, synchronous-dominated grid | A single-ended sequence-trajectory CNN covers 94.6–99.4 % of in-zone faults at relay A with 0–3 of 2,888 off-line trips; relay B is unstable (45–77 %). A settable quadrilateral covers 5–10 % | EMT, EvEMTBench adapt_grid TestGrid 110 kV, no injection | [results/ADAPTGRID.md](results/ADAPTGRID.md) |
 | Detection, inverter-rich feeder | No single-ended detector exceeds 15.8 % at zero false trips; two-ended 67N/67Q schemes reach 75–82 % with a channel | EMT, EvEMTBench CIGRE MV 20 kV, no injection | [results/CIGREMV.md](results/CIGREMV.md) |
-| **Multi-bus design tool (step 1)** | `src/network.py`: any network of buses, lines, sources, inverters and loads; Minkowski aggregation of the uncertainty sets; the reviewed design on it. Reproduces the two- and three-bus models exactly; `src/pscad_network.py` builds it in PSCAD if radial or of uniform z0/z1. On a three-bus network with an adjacent line: 8 of 48 cases need a signal (0.90 pu with margin), at the cost of curtailing the inverter's normal output to ≤ 0.46 pu; in 128 PSCAD runs, each started at its worst realisation, the EMT system separates all 48 with the margin and keeps normal operation in its set for a δ-priority limiter, but the runs leave the design's realisation once the fault starts (δ turns up to 29°), so this is not a case-by-case check of the design; with a limiter scaling both, 8 corners give a certain false alarm (REVIEW.md row 50) | static model + EMT, PSCAD, δ injected | [results/MULTIBUS.md](results/MULTIBUS.md) |
+| **Multi-bus design tool (step 1)** | `src/network.py`: any network of buses, lines, sources, inverters and loads; Minkowski aggregation of the uncertainty sets; the reviewed design on it. Reproduces the two- and three-bus models exactly; `src/pscad_network.py` builds it in PSCAD if radial or of uniform z0/z1. On a three-bus network with an adjacent line: 8 of 48 cases need a signal (0.90 pu with margin), at the cost of curtailing the inverter's normal output to ≤ 0.46 pu; in 128 PSCAD runs, each started at its worst realisation, the EMT system separates all 48 with the margin and keeps normal operation in its set for a δ-priority limiter, but the runs leave the design's realisation once the fault starts (δ turns up to 29°), so this is not a case-by-case check of the design; with a limiter scaling both, 8 corners give a certain false alarm (REVIEW.md row 50). *[Absolute-frame design; superseded by the two-frame design point above, row 51.]* | static model + EMT, PSCAD, δ injected | [results/MULTIBUS.md](results/MULTIBUS.md) |
 | **TAC25 design (limit inside) in EMT** | The reviewed design with the current limit inside the problem, 0.38 pu with a 10 % margin, tested on 124 PSCAD runs: every fault case separated with its margin, and normal operation stays inside the normal set at all 16 corners, for an inverter that keeps δ and cuts I1. Not for one that scales both. Building the test exposed a **sign error in the design code's limit rows**: with it fixed, the limit inside no longer halves δ (REVIEW.md row 49) | EMT, PSCAD, δ injected, both limiter types | [results/PSCAD_TAC25.md](results/PSCAD_TAC25.md) |
 | **All cases and corners** | 124 PSCAD runs: with a 10 % margin (δ = 0.34 pu) every fault case is separated at its worst realisation and the two hard cases at all 16 corners. But where the inverter's 1.2 pu limiter cuts δ (8 of 16 corners), normal operation leaves the design's normal set: the design must contain the current limit, and a margin makes false alarms more likely | EMT, PSCAD, δ injected, limiter active | [results/PSCAD_DELTA_SWEEP.md](results/PSCAD_DELTA_SWEEP.md) |
 | **Designed δ injected in EMT** | First test of the method with the signal injected: on the design tool's two-bus circuit, the 2 fault cases it cannot separate at δ = 0 (A-G 75 %, 95 %, 40 Ω) are reproduced in PSCAD at the tool's worst-case realisation: not separated without δ (1.93, 1.80 ε), **separated with the designed 0.18 pu** (2.18, 2.05 ε; threshold 2), normal operation stays inside the normal set. EMT and design agree to 1e-5 pu. Margins thin by construction | EMT, PSCAD, our own model, δ injected | [results/PSCAD_DELTA_TEST.md](results/PSCAD_DELTA_TEST.md) |
@@ -161,6 +181,10 @@ results/    DESIGN.md    the design tool in the TAC25 formulation: certificate, 
             PSCAD_DELTA_SWEEP.md all 30 cases and the box corners, with a margin, and the current limit
             PSCAD_TAC25.md    the TAC25 design (limit inside) in EMT, and the sign error it exposed
             MULTIBUS.md       step 1: the multi-bus design tool, and its EMT test on a three-bus network; network/ holds the runs
+            FRAMES.md         the two-frame design (inverter frame, relay memory frame, limiter inside): the step-3 design point and its EMT checks
+            STEP3_PILOT.md    step 3: the detectors on the EMT data with δ injected, the worst-case curve, structured instrument errors
+            HIGHR.md          high fault resistance: where incremental 50N fails and the signal certifies detection, static and EMT
+            IBR_GRID_SCREEN.md  an inverter-fed relay end: what still detects without δ
             aux_signal_toy_weak_sg.json  the designed δ the synthetic detectors read; kept in place
             review/, review_wp1/, review_synth/, adaptgrid/, cigremv/  re-run JSONs and generated tables
 REVIEW.md   the technical review: findings, claim-by-claim verdict, roadmap
@@ -178,8 +202,12 @@ archive/    README.md the September result sections and completed status items, 
                       REAL_DOUBLELINE, REAL_TESTGRID, REAL_ML), each replaced by a later re-run
 docs/       PLAN.md   project plan, milestones, deliverables, target venues
             PSCAD.md  the simulation plan: license check, which model, what a run must produce
-            TEAM_BRIEF.md   onboarding note for the team
-            notes/    drafts (taylor_matrix_note.md: note to the author on the Fig. 3 matrix, not sent)
+            STEP3.md  step 3 plan and main configuration: detectors, data, the two frames, the pilot's go/no-go
+            I2_DIRECTION.md  the I2-suppressing-inverter direction study, pre-registered stage by stage, with results
+            LONG_LINES.md    the longer-lines detection study, pre-registered, in progress
+            TEAM_BRIEF.md   onboarding note for the team (September; status header added 19 Oct)
+            notes/    SORULAR_CEVAPLAR.md (the project's Q&A, Turkish), step3_for_taylor.md (write-up and draft email, deferred),
+                      taylor_matrix_note.md (note to the author on the Fig. 3 matrix, not sent)
 ```
 
 ## Reading order
@@ -201,20 +229,22 @@ Completed items are listed in [archive/README.md](archive/README.md). What is op
 
 1. ~~Fix the faulted-phase selector~~ **withdrawn**: the defect was an artefact of misaligned phasor windows
    in our analysis script, fixed on 16 Oct 2026; the selector was right all along (REVIEW.md §7 row 48).
-2. **PSCAD groundwork** (Prof. Taylor's request): the remaining shipped examples, other fault types,
-   load angles and source strengths on the sweep.
-3. **How inverters work** (Prof. Taylor's request): a written note on grid-following and grid-forming
-   control, current limiters and their negative-sequence behaviour, IEEE 2800 fault response.
-4. **IRTSD in PSCAD**: reproduce one documented fault event, then add the auxiliary signal as an
-   event type.
-5. **The EMT study with δ injected**, which is the first test of the method itself; ideally also on the
-   Baeckeland 14-bus grid-forming model.
+2. ~~**PSCAD groundwork**~~ **done** (16–19 Oct): PSCAD is driven from Python on our own grids; the shipped
+   examples were left after the first runs ([results/PSCAD_FIRST.md](results/PSCAD_FIRST.md)).
+3. **How inverters work** (Prof. Taylor's request): studied by building the averaged grid-following model, with
+   three negative-sequence modes, a settable limiter and a PLL-like reference ([results/PSCAD_INVERTER.md](results/PSCAD_INVERTER.md), [docs/STEP3.md](docs/STEP3.md) §"the two frames"); no written note yet, grid-forming not modelled.
+4. ~~**IRTSD in PSCAD**~~ **not pursued**: the project went via our own two- and three-bus grids (Plan B in [docs/PSCAD.md](docs/PSCAD.md)).
+5. ~~**The EMT study with δ injected**~~ **done** on the three-bus grid: step 3 (PRs #44, #56) and the I₂ study (PRs #57, #58). The Baeckeland 14-bus grid-forming model remains open (item 11).
 6. An IBR-appropriate rung in the conventional baseline (offset quadrilateral, 32G / 32WI / TD32),
    before any inverter-dominated data.
-7. Multiple-model Kalman filter detector (Pirani et al. 2022) in the comparison.
+7. ~~Multiple-model Kalman filter detector (Pirani et al. 2022) in the comparison.~~ **done** as D2 in step 3.
 8. Report the pre-fault label leak and the resampling look-ahead to the EvEMTBench authors.
-9. Embedded latency on a board.
+9. Embedded latency on a board (step 4 of the deck).
 10. Conference paper (target: NAPS 2027).
+11. **The deck's remaining scenarios:** longer lines **in progress** ([docs/LONG_LINES.md](docs/LONG_LINES.md)); grid-forming
+    not started (needs a grid-forming inverter model in PSCAD).
+12. The write-up for Prof. Taylor ([docs/notes/step3_for_taylor.md](docs/notes/step3_for_taylor.md)): **deferred** on 18 Oct 2026
+    (the team works on its own for now); kept current, not to be sent yet.
 
 ## License
 

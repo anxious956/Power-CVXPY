@@ -1,5 +1,10 @@
 # Review of the high-resistance follow-up (`step3-highR`, `fa60d0c`, `988f93e`)
 
+> **Status, 19 Oct 2026.** The A-G-only re-run and the EMT check asked for in §2 and §5 were done (PR #56): the band
+> exists and depends on the 50N pickup, crossover about 115 / 160 / 250 Ω at a 0.20 / 0.15 / 0.10 pu pickup; the
+> 160 Ω design holds in EMT; a 0.2 pu balanced load step is a certain D1 false alarm at that design (REVIEW row 55,
+> [results/HIGHR.md](../results/HIGHR.md)).
+
 17 Oct 2026. Reviewed in a separate worktree: `src/highr_screen.py`, `src/highr_design.py`, `results/HIGHR.md`. No
 `src/`, `tests/` or `results/` change and no PSCAD runs. Two static checks in [`checks/`](checks/):
 `p_highr_lift.py` and `p_highr_types.py`.
