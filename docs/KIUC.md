@@ -168,6 +168,51 @@ Then δ* injected in EMT at the nominal point for the forward set (and the R1 re
 - Stop rules: no re-tuning of thresholds after a result; assumptions stay as registered with their sensitivities
   reported; no δ verdict from runs without injection.
 
+## Q1 result, static (31 Oct 2026)
+
+`src/kiuc.py static` → `results/network/kiuc_static.json`. 12 cases × 16 corners = 192 points per row; the report's
+element is 32Q for B-C and 32QG for A-G with their supervision; "right" is forward at R2 and on R1's forward set,
+reverse on R1's reverse set. Primary: K2 = 5, LIM 2, K1 = 4. No weak-frame point anywhere (|V1| at Bus-2 ≥ 0.2).
+
+| relay, set | grid | TF2 | mode | FRT K1 | report element: right / not enabled / wrong | incremental: right / none / wrong | 3I2 > 10 % I1 | phase peak max (points > 1.5 pu) |
+|---|---|---|---|---|---|---|---|---|
+| R2 forward | hydro off | ΔYg | suppressed | 0 | 0 / 1.00 / 0 | 0 / 0.99 / 0.01 | 0 | 0.41 (0) |
+| R2 forward | hydro off | ΔYg | suppressed | 4 | 0 / 1.00 / 0 | 0.98 / 0 / 0.02 | 0 | 1.20 (0) |
+| R2 forward | hydro off | ΔYg | IEEE 2800 | 0 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | 1.61 (58) |
+| R2 forward | hydro off | ΔYg | IEEE 2800 | 4 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 2.29 (192) |
+| R2 forward | two sources | ΔYg | suppressed | 0 | 0 / 1.00 / 0 | 0.04 / 0.90 / 0.06 | 0 | 0.41 (0) |
+| R2 forward | two sources | ΔYg | suppressed | 4 | **0 / 1.00 / 0** | 0.97 / 0 / 0.03 | 0 | 1.20 (0) |
+| R2 forward | two sources | ΔYg | IEEE 2800 | 0 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | 1.61 (56) |
+| R2 forward | two sources | ΔYg | IEEE 2800 | 4 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 2.26 (189) |
+| R2 forward | either | YgΔ (static only) | as ΔYg | | the same as ΔYg in every row | suppressed FRT 0: 0.07 / 0.82 / 0.10 (two sources) | | up to 2.40 |
+| R1 reverse | hydro off | ΔYg | suppressed | 0 | 0 / 1.00 / 0 | 0.04 / 0.88 / 0.08 | 0 | 0.41 (0) |
+| R1 reverse | hydro off | ΔYg | suppressed | 4 | **0 / 1.00 / 0** | 0.79 / 0.10 / 0.11 | 0 | 1.20 (0) |
+| R1 reverse | hydro off | ΔYg | IEEE 2800 | 0 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | 1.61 (44) |
+| R1 reverse | hydro off | ΔYg | IEEE 2800 | 4 | **1.00 / 0 / 0** | 1.00 / 0 / 0 | 1.00 | 2.34 (141) |
+| R1 forward (control) | hydro off | ΔYg | both | 0, 4 | 1.00 / 0 / 0 | 1.00 / 0 / 0 | 1.00 | |
+
+Sensitivities (one row each, two sources for R2, hydro off for R1): K1 = 2, LIM 1 (both modes), K2 = 2 and X'd 0.25
+give **the same report-element decisions as the primary in every row**; LIM 1 caps the phase peak at 1.20 pu
+without changing a decision; the incremental element under suppression with LIM 1 is unchanged (R2 0.97 right,
+R1 reverse 0.79 right / 0.11 wrong).
+
+**Reading, static model, nominal-to-corner box, before EMT:**
+- **The report's finding reproduces exactly at both relays.** With I2 suppressed, the negative-sequence elements are
+  never enabled (3|I2| below the pickup on every point, R2 and R1 reverse); with the IEEE 2800 law at K = 5 they
+  decide right on every point, at R2 (forward) and at R1 for faults behind it (reverse), with no wrong decision.
+  R1's forward set (grid behind) is right in both modes, the control. The outcome holds under LIM 1, K1 = 2, K2 = 2
+  and X'd 0.25: on this system the decision does not depend on the limiter, only on whether I2 is controlled.
+- **A difference from the report:** on YgΔ A-G the k2 restraint (|I2| > 0.2 |I0|) does not block our 32QG; the
+  report found it blocked on its own A-G cases. Our I2 is saturated at 1.2 pu (the unresolved 0.45 vs 1.2 pu gap,
+  §1c), so |I2|/|I0| is larger than theirs; with their I2 the restraint would bind more easily. Recorded, not
+  explained.
+- **The positive-sequence response (FRT) restores our incremental element under suppression**: with K1 = 4 the
+  superimposed positive-sequence element decides R2 right on 97–98 % (from ≤ 4 % without FRT) and R1's reverse set
+  on 79 %, with 11 % wrong-way. This is the limitation the I2 study wrote down ("the K-factor would likely restore
+  direction even under suppression") now measured; the negative-sequence elements do not benefit from it.
+- **LIM 2's unphysical side is visible**: with FRT on and the K2 law active, every point exceeds 1.5 pu of phase
+  peak (up to 2.40 pu); LIM 1 keeps 1.20 pu and gives the same decisions.
+
 ## 5. What this does not do
 
 Their GFM inverter (we have none yet), their switching model, momentary cessation, slow/fast controller tunings,
