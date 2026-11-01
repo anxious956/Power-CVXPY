@@ -1594,3 +1594,19 @@ Her şebekede hatalar: faz-toprak (A-G) ve faz-faz (B-C), hattın farklı noktal
 **Denenmeyen:** şebeke kurucu (grid-forming) inverter, hocanın 14 baralı modeli ve 2 katından uzun hatlar.
 
 *Kaynak: `docs/KIUC.md` §1; `docs/LONG_LINES.md`; `docs/STEP3.md`; `src/pscad_network.py`.*
+
+## 46. Hocanın verdiği siteden (NREL raporu) hangi devreyi aldık? (1 Kasım 2026)
+
+Raporda (osti.gov/biblio/3011876, NREL/TP-5D00-94430) **tek bir test devresi** var: KIUC (Kauai) iletim sisteminin
+küçültülmüş hâli (Şekil 21 ve 41). Onu aldık: 57.1 kV, şebeke kaynağı ve eşdeğer hat, bara 1'de 7.5 MVA hidro,
+4.6 millik hat, bara 2'de 15 MVA inverter, iki uçta röle. Sayılar raporun Tablo 14–15'inden. Raporun vermediği üç
+değeri (hidronun reaktansı, iki trafonun reaktansı) varsaydık ve duyarlılığını ölçtük. Raporun PSCAD dosyaları
+raporda yok; devreyi tablolardan kendi PSCAD'imizde yeniden kurduk, raporun kendi inverteri yerine bizim inverterimizle.
+
+Raporun içinden yapılan: I₂ bastırılmış ve IEEE 2800 (K = 5) modları, akım sınırlayıcı, 32Q/32QG yön elemanı, FRT.
+Yapılmayan: grid-forming inverterler (droop ve VSM), momentary cessation, yavaş/hızlı kontrolcü ayarları, mesafe
+(mho, quad), 87L, FID ve TD21/TD32 elemanları.
+
+Üç baralı ve iki baralı şebekeler raporla ilgili değil; onları link gelmeden önce kendimiz kurmuştuk.
+
+*Kaynak: `docs/KIUC.md` §1; raporun §3.1 ve §4.2'si.*
