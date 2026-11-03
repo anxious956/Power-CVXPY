@@ -1820,3 +1820,11 @@ yalnızca yüzlerce koşuyu otomatik yapmak için.
 
 Bizim inverter kendi componentimiz; elle kurarken onu Python'un oluşturduğu projeden kopyalamak en kolayı.
 Tam menü isimleri PSCAD sürümüne göre biraz değişebilir; ekranda birlikte bakarak (teach mode) öğrenmek planlı.
+
+## 59. PSCAD çizimindeki VLA, VLB, VLC, VLG röle mi? (3 Kasım 2026)
+
+Hayır, bunlar voltmetre (VT): BUS2'de her fazın toprağa göre gerilimini ölçüyorlar (VLA, VLB, VLC); VLG, hatların toprak
+dönüş yolunun gerilimi. Hemen solundaki "Relay R2 / CT" etiketli üç ampermetre (IL_A, IL_B, IL_C) Hat 2'nin akımını
+ölçüyor. PSCAD'de röle diye bir parça yok: PSCAD rölenin göreceği gerilimi ve akımı kaydediyor, rölenin kendisi
+(32Q yön elemanı, artımsal eleman) koşudan sonra Python'da bu kayıtlardan hesaplanıyor (`src/kiuc.py`,
+`src/step3_frontend.py`). Gerçek bir röle de aynısını yapar: VT'den gerilimi, CT'den akımı alır, kararı içinde hesaplar.
