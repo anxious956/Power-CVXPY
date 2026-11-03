@@ -1763,3 +1763,11 @@ hata basit statik modelde de çözülüyor; EMT ile statik model her rapor elema
 
 "İkisi de" = aynı 13 koşuluk test önce bastırılmış, sonra IEEE 2800 ayarıyla koşuldu (13 + 13 = 26). İki ayar da
 raporda var; tek değişen bu ayar. Sunumun 143 koşu tablosunda artık "no I₂, then IEEE 2800" yazıyor.
+
+## 55. Hepsi inverter olan sistemi çizdik mi? (3 Kasım 2026)
+
+Hayır. KIUC'ta tek inverter var; yanında şebeke kaynağı (EQ) ve hidro jeneratör duruyor. "Hidro kapalı" durumda bile
+şebeke kaynağı açık, yani hiçbir koşu hepsi inverter değil. Hepsi inverter olan sistem `docs/KIUC_MULTI.md`'de
+planlı (M5-island: 2 GFM + 3 GFL, M5-allGFM: 5 GFM; şebeke kapalı, BUS1'de yük ve topraklama), ama ne PSCAD'de
+kuruldu ne çizildi. Önce grid-forming inverter (Adım A) gerekiyor, çünkü şebeke kapalıyken gerilimi ve frekansı
+tutacak bir kaynak lazım; grid-following inverter tek başına bunu yapamaz.
