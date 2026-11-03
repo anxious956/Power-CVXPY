@@ -1610,3 +1610,24 @@ Yapılmayan: grid-forming inverterler (droop ve VSM), momentary cessation, yava�
 Üç baralı ve iki baralı şebekeler raporla ilgili değil; onları link gelmeden önce kendimiz kurmuştuk.
 
 *Kaynak: `docs/KIUC.md` §1; raporun §3.1 ve §4.2'si.*
+
+## 47. Hangi devreleri neden seçtik, hepsi tek inverterli mi? (3 Kasım 2026)
+
+**Evet: PSCAD'de kendimiz kurduğumuz her devrede tek inverter var**, o da grid-following (bizim modelimiz). İki
+inverterli tek sistem CIGRE MV, ama o hazır veri: biz koşmadık, δ basamıyoruz. Hiçbir devrede grid-forming yok.
+
+| Devre | Inverter | Neden seçtik |
+|---|---|---|
+| 110 kV TestGrid (hazır veri) | yok (iki 30 GVA şebeke) | öğrenen dedektörün ilk denendiği güçlü şebeke |
+| CIGRE MV 20 kV (hazır veri, EvEMTBench) | 2 × 15 MVA grid-following (bara 3 ve 14) | inverterli bir fiderde aynı sonucun tutup tutmadığı |
+| İki baralı (PSCAD) | 1 grid-following | inverter modelini ve δ basmayı denemek için en basit devre |
+| Üç baralı (PSCAD, asıl şebeke) | 1 grid-following (+ yükler) | deck'teki dört adımın şebekesi: zayıf kaynak, röle, adım 3, I₂, uzun hatlar |
+| KIUC (PSCAD, NREL raporu) | 1 grid-following (15 MVA) + 7.5 MVA hidro (senkron makine) | hocanın gönderdiği rapor; 20 Ekim istekleri: sert olmayan kaynak, değerleri yayınlanmış gerçek sistem |
+
+Tek inverterin nedeni: hocanın yöntemi δ'yı bir inverter için tasarlıyor, tek inverterde δ'nın etkisi ayrılabiliyor;
+KIUC'ta da raporun kendisi tek inverterli. (Bu gerekçe bizim çıkarımımız, belgelerde ayrıca yazılı bir karar yok.)
+
+**Eksik:** 20 Ekim toplantısı tam bunu istedi: hepsi inverter olan sistem, yarı grid-forming yarı grid-following,
+ve internette hazır çok inverterli sistemler (2, 7 inverterli…). Bunların hiçbiri henüz yapılmadı.
+
+*Kaynak: `results/CIGREMV.md` tablo "Sources"; `docs/KIUC.md` §1; `docs/meetings/2026-10-20_biweekly.md`; Q45–46.*
