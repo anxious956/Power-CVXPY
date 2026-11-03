@@ -1771,3 +1771,16 @@ Hayır. KIUC'ta tek inverter var; yanında şebeke kaynağı (EQ) ve hidro jener
 planlı (M5-island: 2 GFM + 3 GFL, M5-allGFM: 5 GFM; şebeke kapalı, BUS1'de yük ve topraklama), ama ne PSCAD'de
 kuruldu ne çizildi. Önce grid-forming inverter (Adım A) gerekiyor, çünkü şebeke kapalıyken gerilimi ve frekansı
 tutacak bir kaynak lazım; grid-following inverter tek başına bunu yapamaz.
+
+## 56. "IEEE 2800'de inverter jeneratör gibi davranıyor" ne demek? (3 Kasım 2026)
+
+Senkron jeneratör dengesiz bir hatada **kendiliğinden** I₂ verir: içinde negatif-bileşen reaktansı X₂ var, gerilimde
+V₂ oluşunca ondan I₂ = V₂ / X₂ büyüklüğünde, V₂'nin 90° önünde bir akım akar. Röleler (32Q) yıllardır buna göre
+ayarlanıyor: "I₂ V₂'nin önündeyse hata ileride".
+
+İnverterde böyle bir şey kendiliğinden yok; ne vereceğini yazılım belirler. IEEE 2800 (ABD standardı, 2022) inverterden
+aynı davranışı ister: I₂ = K·V₂, V₂'nin 90° önünde. Bizim K = 5 değeri X₂ = 1/5 = 0.2 pu'luk bir jeneratör gibi
+demek. Röle farkı görmez ve doğru karar verir.
+
+Farkı: yalnız I₂ tarafında jeneratör gibi. İnverterin akımı 1.2 pu'da sınırlı, jeneratör ise 5–10 katı verebilir.
+Bastırılmış modda (I₂ = 0) inverter bu davranışı hiç göstermez; röle bu yüzden karar veremiyor.
