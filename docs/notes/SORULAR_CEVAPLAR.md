@@ -1713,3 +1713,23 @@ karar veriyor. Bunu kendi inverterimizle tekrar ettik (sunumun 5. ve 6. slaytı)
 "oradaki değerleri deneyin", yani KIUC'u kurup kendi modlarımızı denemek.
 
 *Kaynak: NREL/TP-5D00-94430 §1, §2.2, §3.1; `docs/KIUC.md`.*
+
+## 52. Hocanın 20 Ekim isteklerinden kaçını yaptık? (3 Kasım 2026)
+
+`docs/meetings/2026-10-20_biweekly.md`'deki istekler:
+
+| istek | durum |
+|---|---|
+| Hata simülasyonu yapacak bir sistem | **yapıldı**: KIUC PSCAD'de, 143 koşu (PR #65) |
+| Raporu gözden geçir (NREL) | **yapıldı**: KIUC'u kurduk, bulgusunu kendi inverterimizle tekrar ettik |
+| Slaytlara devrelerin nereden geldiğini yaz | **yapıldı**: sunumda her devre slaytında nereden / nedir / ne işe yarar |
+| Hazır çok inverterli sistemler bul | **kısmen**: Taylor'ın 14 baralı ağı (optimizasyonda Şekil 5 tekrarlandı, PSCAD'de yok), Reachability makalesi, NREL PyPSCAD bulundu; e-posta atılmadı |
+| Sert (stiff) olmayan kaynak | yapılmadı: `docs/KIUC_MULTI.md` ada durumları (şebeke kapalı) |
+| Hepsi inverter, bir kısmı GFM bir kısmı GFL | yapılmadı: KIUC_MULTI M5-island |
+| Hepsi GFM: önce denge, sonra hata | yapılmadı: KIUC_MULTI M5-allGFM (B1 denge kontrolü) |
+| Yarı GFM yarı GFL | yapılmadı: KIUC_MULTI M5-mixR2 / M5-island |
+
+Hocanın "GFL'nin iç ve dış döngüsü var" cümlesi bir iş değil, açıklama; bizim GFL modelimiz ortalama (averaged).
+
+Kalan dört istek tek planda: önce raporun grid-forming inverteri (Adım A), sonra KIUC'a 3–5 inverter (Adım B). Plan
+yazıldı ve incelendi (PR #70); kurulum henüz başlamadı.
