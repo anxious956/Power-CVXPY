@@ -1690,3 +1690,26 @@ inverter olan IEEE 9 bara, grid-forming'li 39 bara, Maui 3 bara. Sonuçları kar
 
 *Kaynak: `papers/Taylor_2025_Geometry_of_Distance_Protection.pdf` §IV-C, §VI-D;
 `papers/Taylor_2026_Reachability_Time_Domain_Distance_Protection.pdf` §V; `papers/notes/F_taylor_tac_and_gfm_model.md`.*
+
+## 51. NREL nedir, hocanın gönderdiği raporun amacı ne? (3 Kasım 2026)
+
+**NREL:** National Renewable Energy Laboratory. ABD Enerji Bakanlığı'na bağlı, Colorado'daki devlet
+araştırma laboratuvarı; güneş, rüzgâr ve şebekeye bağlı inverterler üzerine çalışıyor.
+
+**Rapor:** NREL/TP-5D00-94430 (Kasım 2025), "A Comprehensive Study of the Impact of Inverter-Based Resource (IBR)
+Modeling and Control on Protection Relay Elements" (osti.gov/biblio/3011876).
+
+**Amacı, iki soru:**
+1. Hatayı jeneratör yerine inverter beslediğinde röleler (mesafe, yön/32Q vb.) hâlâ doğru karar veriyor mu?
+2. İnverteri nasıl modellediğin ve kontrolünü nasıl ayarladığın (grid-following / grid-forming, akım sınırı, I₂
+   kontrolü) bu cevabı değiştiriyor mu?
+
+**Nasıl:** PSCAD'de GFL ve GFM inverter modelleri kuruyorlar ve bunları KIUC'un (Kauai, Hawaii) 57.1 kV iki baralı
+gerçek hattında hata altında röle elemanlarına karşı deniyorlar. Her seferinde tek inverter var; GFL ile GFM'yi
+karıştırmıyorlar.
+
+**Bize ne söylüyor:** İnverter I₂'yi bastırırsa yön elemanı (32Q) karar veremiyor; IEEE 2800'e göre I₂ basarsa doğru
+karar veriyor. Bunu kendi inverterimizle tekrar ettik (sunumun 5. ve 6. slaytı). Hocanın raporu göndermesinin sebebi:
+"oradaki değerleri deneyin", yani KIUC'u kurup kendi modlarımızı denemek.
+
+*Kaynak: NREL/TP-5D00-94430 §1, §2.2, §3.1; `docs/KIUC.md`.*
