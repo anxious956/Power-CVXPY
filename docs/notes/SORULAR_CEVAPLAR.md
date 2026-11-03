@@ -1733,3 +1733,22 @@ Hocanın "GFL'nin iç ve dış döngüsü var" cümlesi bir iş değil, açıkla
 
 Kalan dört istek tek planda: önce raporun grid-forming inverteri (Adım A), sonra KIUC'a 3–5 inverter (Adım B). Plan
 yazıldı ve incelendi (PR #70); kurulum henüz başlamadı.
+
+## 53. Sunumdaki "143 koşu" ne, neden ve nasıl yaptık? (3 Kasım 2026)
+
+**Koşu:** PSCAD'de devreyi bir kez baştan sona simüle etmek (yaklaşık 0.4 s'lik bir simülasyon).
+
+**Neden:** raporun bulgusunun ("I₂ bastırılırsa yön rölesi karar veremez, IEEE 2800 ile doğru karar verir") bizim
+inverterimizle de tutup tutmadığını görmek; tek bir hatayla değil, farklı hata yerleri ve tipleriyle.
+
+**143 nereden geliyor:** her grup 13 koşu = 1 normal çalışma (hatasız; inverter doğru çalışıyor mu kontrolü) + 12 hata
+(Hat 2'de 3 yer: %5, %50, %80 × 2 tip: A-toprak ve B-C × 2 hata direnci: 0.01 ve 5 Ω).
+- 9 grup × 13 = 117: R2 rölesi (hidro kapalı / açık), R1 rölesi (ileri ve geri yönde), her biri bastırılmış ve IEEE
+  2800 modlarında; bir de P 1.0 çalışma noktası.
+- 2 grup × 13 = 26: farklı akım sınırlayıcıyla (LIM 1, faz akımını 1.2 pu'da tutuyor) tekrar.
+
+**Nasıl:** `src/kiuc.py` Python'dan PSCAD'i kullanarak (mhi.pscad) devreyi kuruyor, her koşunun ayarını değiştirip
+çalıştırıyor ve sonuçları okuyor. Rölenin kararı, hatadan 2–3 çevrim sonraki akım ve gerilimden hesaplanıyor. Aynı
+hata basit statik modelde de çözülüyor; EMT ile statik model her rapor elemanı kararında aynı çıktı.
+
+*Kaynak: `docs/KIUC.md` Q2 sonucu; `results/network/kiuc_q2.json`, `kiuc_q2_lim1.json`.*
