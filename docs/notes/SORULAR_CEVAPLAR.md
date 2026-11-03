@@ -1805,3 +1805,18 @@ yapılan her şeyi komutla yapıyor (`src/pscad_inverter.py`, `src/pscad_network
 
 Elle: Master Library'den sürükle bırak, çift tıklayıp ayarları yaz, uçları tel ile birleştir. Aynı işlemler; Python
 yalnızca yüzlerce koşuyu otomatik yapmak için.
+
+## 58. PSCAD'de devreyi elle nasıl kurarız? (3 Kasım 2026)
+
+İlk deneme için en basit devre: kaynak → direnç → toprak.
+1. **Yeni proje:** File → New → Case; projeye çift tıklayınca boş çizim sayfası (Main) açılır.
+2. **Parça koy:** üstteki Components sekmesinden (ya da boş sayfaya sağ tıklayıp) Sources → üç fazlı kaynak, Passive
+   → Resistor, bir de Ground; tıklayıp sayfaya bırak. Döndürmek için parça seçiliyken Ctrl+R.
+3. **Ayar ver:** parçaya çift tıkla, açılan pencereye değeri birimiyle yaz (`0.5 [ohm]`, `20 [kV]`, `60 [Hz]`), OK.
+4. **Bağla:** Wire (tel) aracıyla bir uca tıkla, diğer uca tıkla, sağ tıkla bitir. Uçlar üst üste gelince de bağlanır.
+5. **Ölç:** Meters'tan ampermetre (Ammeter) ya da voltmetre koy, adını ver; ölçümü bir Output Channel'a bağla, kanala
+   sağ tıklayıp grafiğe ekle.
+6. **Çalıştır:** yeşil Run tuşu; simülasyon bitince grafik dolar.
+
+Bizim inverter kendi componentimiz; elle kurarken onu Python'un oluşturduğu projeden kopyalamak en kolayı.
+Tam menü isimleri PSCAD sürümüne göre biraz değişebilir; ekranda birlikte bakarak (teach mode) öğrenmek planlı.
