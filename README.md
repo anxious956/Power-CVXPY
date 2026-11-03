@@ -26,12 +26,14 @@ screened on an inverter-rich grid in early October (table below, **no injected d
 the signal has been **injected in PSCAD** on our own two- and three-bus grids, and the answer so far
 is the same in both finished studies: **δ buys the worst-case guarantee, not the detection or the decision**
 (step 3, [docs/STEP3.md](docs/STEP3.md); the I₂ case, [docs/I2_DIRECTION.md](docs/I2_DIRECTION.md);
-longer lines in progress, [docs/LONG_LINES.md](docs/LONG_LINES.md)). The screening table is kept as
+longer lines in progress, [docs/LONG_LINES.md](docs/LONG_LINES.md)). *[31 Oct 2026: the longer-lines
+study is done and gives the same answer up to 2× line length on the three-bus network, REVIEW rows 66–68.]*
+The screening table is kept as
 it was written, with the register rows that narrowed it:
 
 | Candidate use for an injected signal | What the screening found (no injected data, see below) | Register row |
 |---|---|---|
-| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Not supported in the static model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more. *[19 Oct 2026: still the reach result. The longer-line **detection** question is being tested with δ injected on the three-bus grid, [docs/LONG_LINES.md](docs/LONG_LINES.md): the deck's claim does not hold up to 2× on that network (static model, Q2/Q3 pending).]* | 42, 47 |
+| Zone-1 **reach**: make in-zone faults separable from faults past the remote bus | **Not supported in the static model.** A δ the inverter can supply (0.4 pu) adds 2–4 points of separability; the inverter's whole current adds 8–13; longer lines help the passive measurement more. *[19 Oct 2026: still the reach result. The longer-line **detection** question is being tested with δ injected on the three-bus grid, [docs/LONG_LINES.md](docs/LONG_LINES.md): the deck's claim does not hold up to 2× on that network (static model, Q2/Q3 pending).]* *[31 Oct 2026: Q2 and Q3 done, the verdict unchanged and checked in EMT with δ injected at the nominal point, rows 66–68.]* | 42, 47, 66–68 |
 | **Direction** at inverter buses | **Not needed in the EMT data (no injection).** Passive superimposed-quantity elements settle it in the first cycle, forward and reverse, for unbalanced and three-phase faults | 44 |
 | Direction when inverters **suppress negative sequence** | **In the static model, a current is needed, but a V2-referenced one** (IEEE 2800), not a δ fixed in advance — which failed at all 48 magnitudes and angles tried. *[19 Oct 2026: tested in EMT with δ injected, [docs/I2_DIRECTION.md](docs/I2_DIRECTION.md), rows 56–59: suppression breaks direction only when nearly all load behind the relay is inverter-interfaced; IEEE 2800 restores it; a designed δ certifies direction for the set test and does not repair the conventional element.]* | 46, 56–59 |
 | Telling a remote **inverter trip** from a fault | **No injection can help** (EMT data, no injection, plus the static model); the tripping inverter is the only source on its feeder. The remedy is an inverter-status channel | 45 |
@@ -79,7 +81,7 @@ What we committed to, and where it stands:
 | Promised | Status |
 |---|---|
 | A model test with **I₂-suppressing inverters** | **Done in the static model** ([PR #27](https://github.com/anxious956/Power-CVXPY/pull/27)). Direction fails there; a **V2-referenced** current with gain at small V2 (IEEE 2800) repairs it, a δ fixed in advance in the inverter's frame did not at any of 48 magnitudes and angles. Not yet checked in EMT. *[19 Oct 2026: **done in EMT with δ injected** ([docs/I2_DIRECTION.md](docs/I2_DIRECTION.md), PRs #57, #58, rows 56–59): suppression breaks direction only as the inverter-interfaced share of the load behind the relay → 1; IEEE 2800 restores it in both control designs; a designed δ (0.20 pu structured tier; 0.98 pu box tier, costing 46 % of the inverter's normal output) certifies direction for the set test in 50/50 runs and does not fix the conventional element.]* |
-| **Longer lines**, where we expected δ to separate more strongly | **Done in the static model (coarse), and it narrowed our own claim**: up to 3× line length, separability without δ rises 12–35 points while an affordable δ adds 1–11. He should hear this, because the deck offered it as a reason for optimism. Not yet checked in EMT. *[19 Oct 2026: the **detection** question is in progress on the three-bus grid with δ injected ([docs/LONG_LINES.md](docs/LONG_LINES.md)): the base network's load flow limits the length factor to 1–2×, and on the registered criterion the claim does not hold up to 2× there — static model, Q2/Q3 pending.]* |
+| **Longer lines**, where we expected δ to separate more strongly | **Done in the static model (coarse), and it narrowed our own claim**: up to 3× line length, separability without δ rises 12–35 points while an affordable δ adds 1–11. He should hear this, because the deck offered it as a reason for optimism. Not yet checked in EMT. *[19 Oct 2026: the **detection** question is in progress on the three-bus grid with δ injected ([docs/LONG_LINES.md](docs/LONG_LINES.md)): the base network's load flow limits the length factor to 1–2×, and on the registered criterion the claim does not hold up to 2× there — static model, Q2/Q3 pending.]* *[31 Oct 2026: **done, EMT with δ injected at the nominal point** ([docs/LONG_LINES.md](docs/LONG_LINES.md), rows 66–68). **Not supported up to 2× on this network, both tiers**: the conventional incremental element misses none of the 48 hard cases at any length, so δ has no detection gap to fill. The designed δ grows with the line (structured tier 0 → 0.06 → 0.48 pu; the box tier leaves the 1.14 pu cap from 1.5×) and holds in EMT where it exists. A longer range needs a second network with a stiffer source or lighter loads.]* |
 | **An EMT study with δ injected**, ideally on his 14-bus grid-forming model | **Open, and the one that can actually test the method.** It is the critical path, after the PSCAD and inverter groundwork above ([docs/PSCAD.md](docs/PSCAD.md)). *[19 Oct 2026: **done on our own three-bus grid**: step 3 ([docs/STEP3.md](docs/STEP3.md), PRs #44, #56) and the I₂ study above. The 14-bus grid-forming model remains the open scenario.]* |
 
 The four questions put to him in the deck are restated, with what we have learned since, in
@@ -205,7 +207,7 @@ docs/       PLAN.md   project plan, milestones, deliverables, target venues
             PSCAD.md  the simulation plan: license check, which model, what a run must produce
             STEP3.md  step 3 plan and main configuration: detectors, data, the two frames, the pilot's go/no-go
             I2_DIRECTION.md  the I2-suppressing-inverter direction study, pre-registered stage by stage, with results
-            LONG_LINES.md    the longer-lines detection study, pre-registered, in progress
+            LONG_LINES.md    the longer-lines detection study, pre-registered, with results (done 31 Oct 2026)
             TEAM_BRIEF.md   onboarding note for the team (September; status header added 19 Oct)
             notes/    SORULAR_CEVAPLAR.md (the project's Q&A, Turkish), step3_for_taylor.md (write-up and draft email, deferred),
                       taylor_matrix_note.md (note to the author on the Fig. 3 matrix, not sent)
@@ -242,7 +244,7 @@ Completed items are listed in [archive/README.md](archive/README.md). What is op
 8. Report the pre-fault label leak and the resampling look-ahead to the EvEMTBench authors.
 9. Embedded latency on a board (step 4 of the deck).
 10. Conference paper (target: NAPS 2027).
-11. **The deck's remaining scenarios:** longer lines **in progress** ([docs/LONG_LINES.md](docs/LONG_LINES.md)); grid-forming
+11. **The deck's remaining scenarios:** longer lines ~~in progress~~ **done** 31 Oct 2026 ([docs/LONG_LINES.md](docs/LONG_LINES.md), rows 66–68: not supported up to 2× on the three-bus network); grid-forming
     not started (needs a grid-forming inverter model in PSCAD).
 12. The write-up for Prof. Taylor ([docs/notes/step3_for_taylor.md](docs/notes/step3_for_taylor.md)): **deferred** on 18 Oct 2026
     (the team works on its own for now); kept current, not to be sent yet.

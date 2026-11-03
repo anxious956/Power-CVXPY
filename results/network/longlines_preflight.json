@@ -1,0 +1,114 @@
+{
+ "rule": "B: load power >= 75 % of k_L 1, V <= 1.1, solve_v1ref converges, frame settles on the probe and at every (case, corner)",
+ "rows": {
+  "1": {
+   "k_L": 1,
+   "converged": true,
+   "iterations": 37,
+   "bus_v1": {
+    "L": 0.9047948834856943,
+    "R": 0.856586085691899,
+    "S": 0.8045918912867704
+   },
+   "i1_delivered": 0.4466502366844206,
+   "load_power_ratio": {
+    "R": 1.0,
+    "S": 1.0
+   },
+   "v_ok": true,
+   "frame_settles": true,
+   "unsettled_points": 0,
+   "phi_ref": 0.030333432167374483,
+   "min_V1L": 0.761338533673222,
+   "in_set": true
+  },
+  "1.5": {
+   "k_L": 1.5,
+   "converged": true,
+   "iterations": 39,
+   "bus_v1": {
+    "L": 0.9047902084988658,
+    "R": 0.8326166121254833,
+    "S": 0.7551106241153624
+   },
+   "i1_delivered": 0.4466502366844205,
+   "load_power_ratio": {
+    "R": 0.944817899060722,
+    "S": 0.8807848957978546
+   },
+   "v_ok": true,
+   "frame_settles": true,
+   "unsettled_points": 0,
+   "phi_ref": 0.030192591969306067,
+   "min_V1L": 0.7648899700649257,
+   "in_set": true
+  },
+  "2": {
+   "k_L": 2,
+   "converged": true,
+   "iterations": 40,
+   "bus_v1": {
+    "L": 0.9068951895311894,
+    "R": 0.8129275790438582,
+    "S": 0.7106166414609393
+   },
+   "i1_delivered": 0.4466502366844205,
+   "load_power_ratio": {
+    "R": 0.9006616771241163,
+    "S": 0.7800446177864829
+   },
+   "v_ok": true,
+   "frame_settles": true,
+   "unsettled_points": 0,
+   "phi_ref": 0.02998109281598981,
+   "min_V1L": 0.7702858234463124,
+   "in_set": true
+  },
+  "4": {
+   "k_L": 4,
+   "converged": true,
+   "iterations": 48,
+   "bus_v1": {
+    "L": 0.9229535868129772,
+    "R": 0.7695919050289524,
+    "S": 0.5760712158779729
+   },
+   "i1_delivered": 0.4466502366844206,
+   "load_power_ratio": {
+    "R": 0.8071959066213271,
+    "S": 0.5126264946564434
+   },
+   "v_ok": false,
+   "frame_settles": true,
+   "unsettled_points": 30,
+   "phi_ref": 0.030262140744940453,
+   "min_V1L": 0.7631320917521717,
+   "in_set": false
+  },
+  "8": {
+   "k_L": 8,
+   "converged": true,
+   "iterations": 68,
+   "bus_v1": {
+    "L": 0.9521921933756287,
+    "R": 0.7756029238430235,
+    "S": 0.4309666041910405
+   },
+   "i1_delivered": 0.44665023668442055,
+   "load_power_ratio": {
+    "R": 0.8198546122995388,
+    "S": 0.28690355706677423
+   },
+   "v_ok": false,
+   "frame_settles": false,
+   "unsettled_points": null,
+   "frame_error": "frames.fixed_point: not converged even under-relaxed (step 3.4e-01)",
+   "in_set": false
+  }
+ },
+ "k_L_set": [
+  1,
+  1.5,
+  2
+ ]
+}

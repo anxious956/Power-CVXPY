@@ -1,0 +1,4944 @@
+{
+ "half": "zero",
+ "k_L": 2,
+ "tier": null,
+ "d_cmd": [
+  0.0,
+  0.0
+ ],
+ "gate": {
+  "checks": {
+   "I1": {
+    "emt": 0.4466875568610146,
+    "static": 0.4466502366844205,
+    "err": 8.355570764084774e-05,
+    "settled": 2.989922376350762e-08
+   }
+  },
+  "passed": true
+ },
+ "summary": {
+  "n": 48,
+  "of": 48,
+  "weak_frame": [],
+  "d0_missed_clean": 0,
+  "d0_missed_design": 0,
+  "d0_missed_clean_cases": [],
+  "box": {
+   "contained": 48,
+   "separated": 39,
+   "model_err_bare_max": 0.0,
+   "to_N_min": 1.297969600583874,
+   "d1_alarm_missed": 0,
+   "d1_guaranteed_missed": 7,
+   "weak": []
+  },
+  "structured": {
+   "contained": 48,
+   "separated": 48,
+   "model_err_bare_max": 0.0,
+   "to_N_min": 3.722176427938796,
+   "d1_alarm_missed": 0,
+   "d1_guaranteed_missed": 0,
+   "weak": []
+  }
+ },
+ "rows": [
+  {
+   "name": "ll2_L1ag15r000",
+   "case": [
+    "L1",
+    0.15,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.18635217064015613,
+   "hf": 3.068892883674748e-06,
+   "weak_frame": false,
+   "v1_I": 0.64421827912571,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.322594258996662,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.306621384335478,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.278494184401828,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.2849563374638695,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.2923044048683066,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.278494184401828
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.757546577649006,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.741978486396174,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.711768637933215,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.692290337576658,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.662429289971243,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 19.662429289971243
+   },
+   "d0_clean": 1.5496969782782937,
+   "d0_design": 1.54167958090293
+  },
+  {
+   "name": "ll2_L1ag15r050",
+   "case": [
+    "L1",
+    0.15,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.7171267914003561,
+   "hf": 1.1205617294664713e-07,
+   "weak_frame": false,
+   "v1_I": 0.71746231305242,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.27718730183343,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.284938763937251,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.291894676745522,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.293941316615931,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.2961653893106573,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.27718730183343
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.050998023062412,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.083635966782591,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.10448045606744,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.111909388335123,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.118087052452893,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 10.050998023062412
+   },
+   "d0_clean": 1.1252423211408273,
+   "d0_design": 1.172454824862066
+  },
+  {
+   "name": "ll2_L1ag15r100",
+   "case": [
+    "L1",
+    0.15,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8659401726548988,
+   "hf": 4.021672634497933e-08,
+   "weak_frame": false,
+   "v1_I": 0.7673988678142,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.6110640752772363,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.6168024157659886,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.616657642133904,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.619528925025044,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.619446709125153,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.6110640752772363
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.916341501928045,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.934367582532658,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.934208316319162,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.943146125513881,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.942943603592006,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 7.916341501928045
+   },
+   "d0_clean": 0.7476749940500648,
+   "d0_design": 0.8179598357484559
+  },
+  {
+   "name": "ll2_L1ag35r000",
+   "case": [
+    "L1",
+    0.35,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.353714504318816,
+   "hf": 3.3772942651783933e-06,
+   "weak_frame": false,
+   "v1_I": 0.65051729575746,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.1601513669030075,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.143455633964712,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.114981029888798,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.122186768861926,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.1306346153777325,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.114981029888798
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.01958358552659,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.016730825468635,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.00245228498697,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 15.973548059727069,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 15.934208903649264,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 15.934208903649264
+   },
+   "d0_clean": 1.2716406641373377,
+   "d0_design": 1.2612606743573025
+  },
+  {
+   "name": "ll2_L1ag35r050",
+   "case": [
+    "L1",
+    0.35,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.7129431601902172,
+   "hf": 5.550014498448403e-07,
+   "weak_frame": false,
+   "v1_I": 0.70869682303757,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.0299302628805407,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.037737890999378,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.044987015379257,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.0460367292004356,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.0474856611459407,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.0299302628805407
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.25803360878031,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.292275883809861,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.315288182044837,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.318592551766299,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.322351974285727,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.25803360878031
+   },
+   "d0_clean": 0.9791518097568714,
+   "d0_design": 1.0193245210550976
+  },
+  {
+   "name": "ll2_L1ag35r100",
+   "case": [
+    "L1",
+    0.35,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8499431330609437,
+   "hf": 1.8873242873346369e-07,
+   "weak_frame": false,
+   "v1_I": 0.75752234486512,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.278601584634036,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.284682970684817,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.284233152123753,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.2870635215523962,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.2868341834401,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.278601584634036
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.852365462442456,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.871749634120707,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.870429485429509,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.879328616763303,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.8785600215938825,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.852365462442456
+   },
+   "d0_clean": 0.6870513159442416,
+   "d0_design": 0.7516038271143632
+  },
+  {
+   "name": "ll2_L1ag55r000",
+   "case": [
+    "L1",
+    0.55,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.4684741559526124,
+   "hf": 2.9997921189568284e-06,
+   "weak_frame": false,
+   "v1_I": 0.65527613790318,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.339791043266566,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.324948051519913,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.299743304619934,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.305302672242542,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.311387550321072,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.299743304619934
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 13.39344708570155,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 13.397680770525664,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 13.392489496966325,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 13.35894013381877,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 13.31542230906672,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 13.31542230906672
+   },
+   "d0_clean": 1.0750506742398505,
+   "d0_design": 1.063680520669441
+  },
+  {
+   "name": "ll2_L1ag55r050",
+   "case": [
+    "L1",
+    0.55,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.7253839507772935,
+   "hf": 1.0304480891828191e-06,
+   "weak_frame": false,
+   "v1_I": 0.7029189396906,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.7739765097508284,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.781737208182722,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.7890776713566603,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.78922364529617,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.7898182139491237,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.7739765097508284
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.437179438992176,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.472628156318606,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.497249038802934,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.496691921025516,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.497733820098293,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 8.437179438992176
+   },
+   "d0_clean": 0.8614872274060079,
+   "d0_design": 0.8962864455282054
+  },
+  {
+   "name": "ll2_L1ag55r100",
+   "case": [
+    "L1",
+    0.55,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8438530521736131,
+   "hf": 4.5183353381754275e-07,
+   "weak_frame": false,
+   "v1_I": 0.74917793405644,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.9885226117366526,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.9948033409430423,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.9940868446438584,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.9967179631046432,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.9963800863628558,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 1.9885226117366526
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.92404579709719,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.944338621986543,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.94192608421191,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.9502867091992915,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.9491273680610215,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.92404579709719
+   },
+   "d0_clean": 0.6316376809669553,
+   "d0_design": 0.6911440196045332
+  },
+  {
+   "name": "ll2_L1ag75r000",
+   "case": [
+    "L1",
+    0.75,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.5520326661261161,
+   "hf": 3.1549579587849175e-06,
+   "weak_frame": false,
+   "v1_I": 0.65910329025247,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.7306920181742265,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.7177532589792435,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.695764740013457,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.699669239155915,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.7034478305799325,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.695764740013457
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.448123768604459,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.455571982042398,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.454762896944294,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.419732317608526,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.375349331983434,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 11.375349331983434
+   },
+   "d0_clean": 0.9288496335218563,
+   "d0_design": 0.9169105440300076
+  },
+  {
+   "name": "ll2_L1ag75r050",
+   "case": [
+    "L1",
+    0.75,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.7436516201043702,
+   "hf": 1.4205582626354124e-06,
+   "weak_frame": false,
+   "v1_I": 0.69913699807312,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.533058043902014,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.540630890564366,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.5478844046231757,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.5472690348779152,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.547056993938967,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.533058043902014
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.664836145457827,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.700802430860515,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.726325392424388,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.722358162778174,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.7207499432153295,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 7.664836145457827
+   },
+   "d0_clean": 0.7659852681389738,
+   "d0_design": 0.7962771571956005
+  },
+  {
+   "name": "ll2_L1ag75r100",
+   "case": [
+    "L1",
+    0.75,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8437998695845275,
+   "hf": 6.677616627232532e-07,
+   "weak_frame": false,
+   "v1_I": 0.7422704850524,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7391674463022972,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7455668014703294,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7446310198246064,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7469677325858457,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7465666806932347,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 1.7391674463022972
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.126060672858696,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.146986481711684,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.143650498146324,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.15104819999575,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.149629016053626,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.126060672858696
+   },
+   "d0_clean": 0.581571403857809,
+   "d0_design": 0.6366950404614915
+  },
+  {
+   "name": "ll2_L1ag95r000",
+   "case": [
+    "L1",
+    0.95,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.6155813817162314,
+   "hf": 2.9482040282013997e-06,
+   "weak_frame": false,
+   "v1_I": 0.66233336063772,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.2606982140850613,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.249325806145958,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.22996552361339,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.2325425827945864,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.2345282016837085,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.22996552361339
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.949236471119313,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.957682178798164,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.958750812208038,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.923772439192385,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.880225421343697,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.880225421343697
+   },
+   "d0_clean": 0.8158761519387079,
+   "d0_design": 0.803537302184144
+  },
+  {
+   "name": "ll2_L1ag95r050",
+   "case": [
+    "L1",
+    0.95,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.7627489702395722,
+   "hf": 1.6905493208450214e-06,
+   "weak_frame": false,
+   "v1_I": 0.6967111382026,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.314760567419057,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.3220099348496483,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.3290168315397977,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.327792717265797,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.326875331358957,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.314760567419057
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.965364004318588,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.001087432963687,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.026975346370248,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.0201817284864765,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.015981172760187,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.965364004318588
+   },
+   "d0_clean": 0.6871237217626922,
+   "d0_design": 0.7139015459707367
+  },
+  {
+   "name": "ll2_L1ag95r100",
+   "case": [
+    "L1",
+    0.95,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8475591637748164,
+   "hf": 9.108940997807403e-07,
+   "weak_frame": false,
+   "v1_I": 0.73663029890851,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.5261758051495389,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.5326447263416982,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.5315360946290955,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.5335281875511606,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.5331060237750875,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 1.5261758051495389
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.444461487935718,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.4659256950246125,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.461757251948448,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.468107610652809,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.466647788159023,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.444461487935718
+   },
+   "d0_clean": 0.53659214765357,
+   "d0_design": 0.5879387876405627
+  },
+  {
+   "name": "ll2_L1ab15r000",
+   "case": [
+    "L1",
+    0.15,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.9993048454946818,
+   "hf": 6.715134228445836e-07,
+   "weak_frame": false,
+   "v1_I": 0.41837298601686,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.839731934304732,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.82763395142488,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.797908984395473,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.791826098331814,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.77174384810591,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 11.77174384810591
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 23.48919592641491,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 23.464999960655213,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 23.405550026596398,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 23.39338425446908,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 23.35321975401727,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 23.35321975401727
+   },
+   "d0_clean": 0.9553074594249382,
+   "d0_design": 0.9614714336005942
+  },
+  {
+   "name": "ll2_L1ab15r050",
+   "case": [
+    "L1",
+    0.15,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.0237965407113594,
+   "hf": 4.832953004511208e-07,
+   "weak_frame": false,
+   "v1_I": 0.58030720133031,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.094939871376678,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.074828359909713,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.149653917798068,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.151065281999843,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.189214504006298,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 8.074828359909713
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 15.999611800558805,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 15.959388777624877,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.109039893401587,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.111862621805138,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.188161065818047,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 15.959388777624877
+   },
+   "d0_clean": 0.7549618382126431,
+   "d0_design": 0.7516201106069154
+  },
+  {
+   "name": "ll2_L1ab15r100",
+   "case": [
+    "L1",
+    0.15,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.023621720833692,
+   "hf": 4.746135492009176e-07,
+   "weak_frame": false,
+   "v1_I": 0.68845342532736,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.720894123738817,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.690190631348553,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.754543662016229,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.7407580766290405,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.776262526972346,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.690190631348553
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.251520305283085,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.190113320502558,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.31881938183791,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.291248211063532,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.362257111750143,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.190113320502558
+   },
+   "d0_clean": 0.5433107748125009,
+   "d0_design": 0.540247175004471
+  },
+  {
+   "name": "ll2_L1ab35r000",
+   "case": [
+    "L1",
+    0.35,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.9994958738963167,
+   "hf": 6.189468701444948e-07,
+   "weak_frame": false,
+   "v1_I": 0.41349069640348,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.847946791512415,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.839158111665913,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.818820060418117,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.815411967101094,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.801057759269616,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.801057759269616
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.505625640830278,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.488048281137278,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.447372178641686,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.44055599200764,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 19.411847576344684,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 19.411847576344684
+   },
+   "d0_clean": 0.795971688637757,
+   "d0_design": 0.8019847299069052
+  },
+  {
+   "name": "ll2_L1ab35r050",
+   "case": [
+    "L1",
+    0.35,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.0231631573809867,
+   "hf": 6.375842279687541e-07,
+   "weak_frame": false,
+   "v1_I": 0.56413013505901,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.10973149201144,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.093953254314238,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.166073867025776,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.16850949972021,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.205203953506291,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 7.093953254314238
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.029195041828329,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 13.997638566433926,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.141879791857004,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.14675105724587,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.220139964818031,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 13.997638566433926
+   },
+   "d0_clean": 0.6444343497625087,
+   "d0_design": 0.6412884053090312
+  },
+  {
+   "name": "ll2_L1ab35r100",
+   "case": [
+    "L1",
+    0.35,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.0243621075830853,
+   "hf": 5.532878735742453e-07,
+   "weak_frame": false,
+   "v1_I": 0.67009692672222,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.468221215820637,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.439801723940652,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.506475323984759,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.494643907444322,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.531286326501372,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.439801723940652
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.746174489446725,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.689335505686756,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.82268270577497,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.799019872694098,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.872304710808198,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 8.689335505686756
+   },
+   "d0_clean": 0.479303121277265,
+   "d0_design": 0.47609353616826416
+  },
+  {
+   "name": "ll2_L1ab55r000",
+   "case": [
+    "L1",
+    0.55,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.9996122907377217,
+   "hf": 3.196122610421923e-07,
+   "weak_frame": false,
+   "v1_I": 0.40955307199302,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.383333529599723,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.378475742225778,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.368414941360543,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.367421042972477,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.359369483463439,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 8.359369483463439
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.576399117004893,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.566683542257007,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.546561940526534,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.544574143750403,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 16.528471024732326,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 16.528471024732326
+   },
+   "d0_clean": 0.6787486868587598,
+   "d0_design": 0.6847889344265861
+  },
+  {
+   "name": "ll2_L1ab55r050",
+   "case": [
+    "L1",
+    0.55,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.0231694595810326,
+   "hf": 6.833138550096634e-07,
+   "weak_frame": false,
+   "v1_I": 0.55288925439649,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.282083775136233,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.270032544294891,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.340384512445768,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.342976675382795,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.379018054128861,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.270032544294891
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.373899608077917,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.349797146395234,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.490501082696987,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.495685408571044,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.567768166063173,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 12.349797146395234
+   },
+   "d0_clean": 0.5581327791775951,
+   "d0_design": 0.5551305328271219
+  },
+  {
+   "name": "ll2_L1ab55r100",
+   "case": [
+    "L1",
+    0.55,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.0247626872364297,
+   "hf": 5.444277314711978e-07,
+   "weak_frame": false,
+   "v1_I": 0.65553815976363,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.179268079699546,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.153053193522426,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.220917371691322,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.2106284277099455,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.247834083182588,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.153053193522426
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.168268217204544,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.115838444850306,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.251566801188096,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.230988913225342,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.305400224170628,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 8.115838444850306
+   },
+   "d0_clean": 0.42527460543534235,
+   "d0_design": 0.4220327774498731
+  },
+  {
+   "name": "ll2_L1ab75r000",
+   "case": [
+    "L1",
+    0.75,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.9993366432440337,
+   "hf": 3.2994224372256795e-07,
+   "weak_frame": false,
+   "v1_I": 0.40679125887203,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.267554980462812,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.266887257577319,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.267974366103405,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.269212217521659,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.267781604327861,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 7.266887257577319
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.344842018731073,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.343506572960088,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.34568079001226,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.348156492848767,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 14.345295266461171,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 14.343506572960088
+   },
+   "d0_clean": 0.5895602280695839,
+   "d0_design": 0.595602313185319
+  },
+  {
+   "name": "ll2_L1ab75r050",
+   "case": [
+    "L1",
+    0.75,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.0238250710488794,
+   "hf": 6.620012924731329e-07,
+   "weak_frame": false,
+   "v1_I": 0.54530366085751,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.588975459641036,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.579778877735024,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.649455611051834,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.651765533223428,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.687854549183697,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.579778877735024
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.987682977087523,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.9692898132755,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.108643279909119,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.113263124252308,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.185441156172846,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 10.9692898132755
+   },
+   "d0_clean": 0.489419592683293,
+   "d0_design": 0.4864688604669574
+  },
+  {
+   "name": "ll2_L1ab75r100",
+   "case": [
+    "L1",
+    0.75,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.02525350882598,
+   "hf": 5.168204325838938e-07,
+   "weak_frame": false,
+   "v1_I": 0.64422423559555,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.88530293019732,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.860997601217057,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.9294946875557826,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.9203305922618177,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.95785016946876,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.860997601217057
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.580337918200092,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.531727260239565,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.668721432917017,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.650393242329087,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.725432396742971,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 7.531727260239565
+   },
+   "d0_clean": 0.379575308127424,
+   "d0_design": 0.3763609486421158
+  },
+  {
+   "name": "ll2_L1ab95r000",
+   "case": [
+    "L1",
+    0.95,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.9993598184699913,
+   "hf": 6.796501714017052e-07,
+   "weak_frame": false,
+   "v1_I": 0.4054303779263,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.395052068430725,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.398460966873278,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.411392392471396,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.414685661634237,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.419946262045084,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.395052068430725
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.5998361946669,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.606653991552008,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.632516842748242,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.639103381073923,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 12.649624581895619,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 12.5998361946669
+   },
+   "d0_clean": 0.5216000060803586,
+   "d0_design": 0.5259776912771377
+  },
+  {
+   "name": "ll2_L1ab95r050",
+   "case": [
+    "L1",
+    0.95,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.024479212785758,
+   "hf": 6.773051021105144e-07,
+   "weak_frame": false,
+   "v1_I": 0.54059861489941,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.00671242086173,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.99976014788766,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.069526456588519,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.071247460527324,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.107912377421765,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.99976014788766
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.823156899528913,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.80925235358077,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.948784970982489,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.9522269788601,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 10.025556812648981,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.80925235358077
+   },
+   "d0_clean": 0.43382883021766,
+   "d0_design": 0.430861559856528
+  },
+  {
+   "name": "ll2_L1ab95r100",
+   "case": [
+    "L1",
+    0.95,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.025914223353346,
+   "hf": 3.6652649321154327e-07,
+   "weak_frame": false,
+   "v1_I": 0.63569226891794,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.602389876948414,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.5798283398762396,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.648544770938821,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.6401193492571267,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.677835263574183,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.5798283398762396
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.01451181170228,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.9693887375579315,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.106821599683094,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.089970756319705,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.165402584953817,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.9693887375579315
+   },
+   "d0_clean": 0.3408049561319922,
+   "d0_design": 0.33766115639335464
+  },
+  {
+   "name": "ll2_L2ag05r000",
+   "case": [
+    "L2",
+    0.05,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.6459095470900048,
+   "hf": 2.6503923775430903e-06,
+   "weak_frame": false,
+   "v1_I": 0.67028407048653,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.033677079816543,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.023312863047887,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.0055213416416047,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.007634818864683,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.008995861582829,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.0055213416416047
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.225618743099055,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.235124370387148,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.237492734812388,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.203509559980974,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.161305791093147,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.161305791093147
+   },
+   "d0_clean": 0.7600048116954294,
+   "d0_design": 0.7475287751695221
+  },
+  {
+   "name": "ll2_L2ag05r050",
+   "case": [
+    "L2",
+    0.05,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.7728033977050398,
+   "hf": 1.5503802592988295e-06,
+   "weak_frame": false,
+   "v1_I": 0.69956720263012,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.209860118085802,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.216514786696545,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.222909244059712,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.221222456370533,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.2197131068877503,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.209860118085802
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.629413443894938,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.66331599902129,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.688041977787348,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.679200567566427,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.6731134976260265,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.629413443894938
+   },
+   "d0_clean": 0.6467537954795909,
+   "d0_design": 0.6709232249006826
+  },
+  {
+   "name": "ll2_L2ag05r100",
+   "case": [
+    "L2",
+    0.05,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8489397941393164,
+   "hf": 1.0835657786174026e-06,
+   "weak_frame": false,
+   "v1_I": 0.73590178347696,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.4052693568082208,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.411214974360983,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.4101041706970752,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.411600970438102,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.4112365314914415,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 1.4052693568082208
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.132342791970359,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.151585804515992,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.153223836560222,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.158195484701892,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.159164325387165,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.132342791970359
+   },
+   "d0_clean": 0.5123511495006361,
+   "d0_design": 0.5611124729424
+  },
+  {
+   "name": "ll2_L2ag25r000",
+   "case": [
+    "L2",
+    0.25,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.7018180063034379,
+   "hf": 2.2647699025426523e-06,
+   "weak_frame": false,
+   "v1_I": 0.69479256559225,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.608891062494851,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.600787276457543,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.586355237223266,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.58790227370517,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.588492576301216,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.586355237223266
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.8720329882091615,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.884297309267374,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.889654447585475,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.859103538321088,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 7.821021722590103,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 7.821021722590103
+   },
+   "d0_clean": 0.6540753033610218,
+   "d0_design": 0.6414021100417271
+  },
+  {
+   "name": "ll2_L2ag25r050",
+   "case": [
+    "L2",
+    0.25,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.7930774147673749,
+   "hf": 1.4141624380115273e-06,
+   "weak_frame": false,
+   "v1_I": 0.71241095379628,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.007623268575321,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.0129256786475818,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.017791167052221,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.0152450995003357,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.012503397803096,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 2.007623268575321
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.982006963263736,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.011484461618853,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.0327727951393895,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.020053749395721,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.009942739999185,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.982006963263736
+   },
+   "d0_clean": 0.5675608366737775,
+   "d0_design": 0.5849784779385825
+  },
+  {
+   "name": "ll2_L2ag25r100",
+   "case": [
+    "L2",
+    0.25,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8533286673643367,
+   "hf": 8.296775046132031e-07,
+   "weak_frame": false,
+   "v1_I": 0.73919380224956,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.3617281372087071,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.3646768095286796,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.367249463030833,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.367680450139376,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.3681961885570908,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 1.3617281372087071
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.92622336458813,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.939060973490241,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.9471347518198585,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.94851755149483,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.949859469824043,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.92622336458813
+   },
+   "d0_clean": 0.46226588757835313,
+   "d0_design": 0.5043815839353034
+  },
+  {
+   "name": "ll2_L2ag50r000",
+   "case": [
+    "L2",
+    0.5,
+    "ag",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.7548531882659701,
+   "hf": 2.0327786714463136e-06,
+   "weak_frame": false,
+   "v1_I": 0.71826403779359,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.207379247310393,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.2013208302300873,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.189934232140639,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.1910260014713483,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.1910356567836846,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 2.189934232140639
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.593605781366363,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.607370157727909,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.614481008945843,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.587927965917391,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.554569311329113,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.554569311329113
+   },
+   "d0_clean": 0.5549314422648488,
+   "d0_design": 0.542016745257988
+  },
+  {
+   "name": "ll2_L2ag50r050",
+   "case": [
+    "L2",
+    0.5,
+    "ag",
+    0.5
+   ],
+   "clean": true,
+   "peak": 0.817397140811012,
+   "hf": 1.4683039803280252e-06,
+   "weak_frame": false,
+   "v1_I": 0.72707821312522,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7873522524350371,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7917556053402428,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7955182725832106,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7925553708027115,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.7890298986256516,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 1.7873522524350371
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.27702382418547,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.303609359550335,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.32251654129425,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.3076257117174706,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.294646708088713,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.27702382418547
+   },
+   "d0_clean": 0.489825502846322,
+   "d0_design": 0.4998989421407546
+  },
+  {
+   "name": "ll2_L2ag50r100",
+   "case": [
+    "L2",
+    0.5,
+    "ag",
+    1.0
+   ],
+   "clean": true,
+   "peak": 0.8624773356125802,
+   "hf": 1.3532921433853807e-06,
+   "weak_frame": false,
+   "v1_I": 0.74506291062444,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.297969600583874,
+      "separated": false
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.299938744519974,
+      "separated": false
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.3015787418031055,
+      "separated": false
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.3012326473534455,
+      "separated": false
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 1.3009466463220063,
+      "separated": false
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": false,
+    "to_N_min": 1.297969600583874
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.722176427938796,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.7316264172521048,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.737446255880649,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.7357392386201873,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.7347208289131095,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.722176427938796
+   },
+   "d0_clean": 0.40972638707869374,
+   "d0_design": 0.44384988612188264
+  },
+  {
+   "name": "ll2_L2ab05r000",
+   "case": [
+    "L2",
+    0.05,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.9992735218437913,
+   "hf": 6.267800458376087e-07,
+   "weak_frame": false,
+   "v1_I": 0.42042368782198,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.9369763002561164,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.939111917639388,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.9503397122183355,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.95317928618184,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.95743669645902,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.9369763002561164
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.683684658317684,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.687955893084228,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.710411482242124,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.71609063016913,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 11.724605450723491,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 11.683684658317684
+   },
+   "d0_clean": 0.4847023673211235,
+   "d0_design": 0.48928420568723435
+  },
+  {
+   "name": "ll2_L2ab05r050",
+   "case": [
+    "L2",
+    0.05,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.022207703527715,
+   "hf": 4.241003886089788e-07,
+   "weak_frame": false,
+   "v1_I": 0.54405392642585,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.7106963334741545,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.703627660462959,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.76509207176446,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.7656576702598334,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.797997870163717,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.703627660462959
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.23112472475376,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.21698737873137,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.339916201334372,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.34104739832512,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.405727798132885,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.21698737873137
+   },
+   "d0_clean": 0.404667709813091,
+   "d0_design": 0.4026724296071852
+  },
+  {
+   "name": "ll2_L2ab05r100",
+   "case": [
+    "L2",
+    0.05,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.0241788589927918,
+   "hf": 4.919562876840419e-07,
+   "weak_frame": false,
+   "v1_I": 0.63362971705553,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.4568466482335647,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.435540318062807,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.498378412793456,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.4903188045483793,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.5247033928132345,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.435540318062807
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.723425354272582,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.680812693931065,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.8064888833923645,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.79036966690221,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.8591388434319205,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.680812693931065
+   },
+   "d0_clean": 0.32087180927518544,
+   "d0_design": 0.31842214329008767
+  },
+  {
+   "name": "ll2_L2ab25r000",
+   "case": [
+    "L2",
+    0.25,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.999276534682055,
+   "hf": 6.045231079797716e-07,
+   "weak_frame": false,
+   "v1_I": 0.47320815887897,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.02763419828338,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.02590848395649,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.025155405325486,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.026632159681321,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.024194900302695,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.024194900302695
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.865000454372211,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.861549025718432,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.860042868456423,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.862996377168095,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 9.858121858410842,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 9.858121858410842
+   },
+   "d0_clean": 0.41140133645112115,
+   "d0_design": 0.4173056615355678
+  },
+  {
+   "name": "ll2_L2ab25r050",
+   "case": [
+    "L2",
+    0.25,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.0132741516447774,
+   "hf": 2.133681945470742e-07,
+   "weak_frame": false,
+   "v1_I": 0.56341129958227,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.119220005898049,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.11214500154451,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.147998729660943,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.146476858156366,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.165172541446451,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.11214500154451
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.048172069601549,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.034022060894472,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.105729517127337,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.102685774118184,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.140077140698354,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 8.034022060894472
+   },
+   "d0_clean": 0.3467282641370008,
+   "d0_design": 0.3477653311316451
+  },
+  {
+   "name": "ll2_L2ab25r100",
+   "case": [
+    "L2",
+    0.25,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.0173891515298217,
+   "hf": 4.871507840461475e-07,
+   "weak_frame": false,
+   "v1_I": 0.63620343562156,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.152171644851604,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.134557864756411,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.1777063902081486,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.170902426906519,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.194115633389221,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.134557864756411
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.114075347508659,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.078847787318273,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.165144838221749,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.151536911618488,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.197963324583893,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.078847787318273
+   },
+   "d0_clean": 0.2810147755715949,
+   "d0_design": 0.2808362570214123
+  },
+  {
+   "name": "ll2_L2ab50r000",
+   "case": [
+    "L2",
+    0.5,
+    "ab",
+    0.0
+   ],
+   "clean": true,
+   "peak": 0.9989060890299984,
+   "hf": 3.3594620374055247e-07,
+   "weak_frame": false,
+   "v1_I": 0.52547164358434,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.162154026173088,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.1607113385583965,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.153004308186378,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.155088552274851,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 4.148802252876741,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 4.148802252876741
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.134040110151627,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.131154734922244,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.115740674178207,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.119909162355155,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 8.107336563558933,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 8.107336563558933
+   },
+   "d0_clean": 0.3447273779792133,
+   "d0_design": 0.35070036388395115
+  },
+  {
+   "name": "ll2_L2ab50r050",
+   "case": [
+    "L2",
+    0.5,
+    "ab",
+    0.5
+   ],
+   "clean": true,
+   "peak": 1.0050874381675596,
+   "hf": 3.213149935120125e-07,
+   "weak_frame": false,
+   "v1_I": 0.58897767516282,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.5097307845104133,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.5056367942907625,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.521813896130338,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.519761996764082,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 3.5283753392641737,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 3.5056367942907625
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.829193626826278,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.821005646386976,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.853359850066128,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.849256051333616,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 6.8664827363338,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 6.821005646386976
+   },
+   "d0_clean": 0.29134174620344816,
+   "d0_design": 0.2947841558126419
+  },
+  {
+   "name": "ll2_L2ab50r100",
+   "case": [
+    "L2",
+    0.5,
+    "ab",
+    1.0
+   ],
+   "clean": true,
+   "peak": 1.0101635284975303,
+   "hf": 4.2169796187112414e-07,
+   "weak_frame": false,
+   "v1_I": 0.64485719997418,
+   "box": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.794941338715664,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.782527956046599,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.808019362937629,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.803004939503271,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 2.8164860781345453,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 2.782527956046599
+   },
+   "structured": {
+    "windows": [
+     {
+      "cycles": 2.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.3996147352367805,
+      "separated": true
+     },
+     {
+      "cycles": 2.25,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.374787969898652,
+      "separated": true
+     },
+     {
+      "cycles": 2.5,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.4257707836807105,
+      "separated": true
+     },
+     {
+      "cycles": 2.75,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.415741936811994,
+      "separated": true
+     },
+     {
+      "cycles": 3.0,
+      "own_main": 0.0,
+      "own_bare": 0.0,
+      "to_N": 5.442704214074543,
+      "separated": true
+     }
+    ],
+    "contained": true,
+    "model_err_bare": 0.0,
+    "separated": true,
+    "to_N_min": 5.374787969898652
+   },
+   "d0_clean": 0.24060417084932217,
+   "d0_design": 0.2425367306023551
+  }
+ ]
+}

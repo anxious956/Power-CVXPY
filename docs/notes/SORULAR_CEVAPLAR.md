@@ -1572,3 +1572,121 @@ küçük şebekede, nominal çalışma noktasında. Sözün "onun modelinde, inv
 kısmı tutulmadı; sözün karşılığı olan sonuçlar da henüz ona gitmedi.
 
 *Kaynak: `docs/PLAN.md` §2, §5, §6; `docs/STEP3.md`; REVIEW.md §7 satır 47–59.*
+
+## 45. Hangi devreleri (şebekeleri) denedik? (31 Ekim 2026)
+
+İki tür devre var: başkalarının hazır EMT verisi (biz koşmadık, sinyal yok) ve PSCAD'de kendi kurduğumuz şebekeler
+(kendi inverterimizle; δ'yı içine basabiliyoruz).
+
+**Hazır veri, δ yok:** 110 kV güçlü şebeke ve inverterli 20 kV CIGRE MV fideri (EvEMTBench). Öğrenen dedektör,
+menzil (reach), yön ve inverter açması burada tarandı; δ ayrıca statik modelde denendi.
+
+**PSCAD'de kendi şebekelerimiz:**
+
+| Şebeke | Kuruluşu | Ne denendi |
+|---|---|---|
+| İki baralı | kaynak, hat, inverter | inverterin ilk testi; δ'nın ilk kez EMT'ye basılması |
+| Üç baralı (asıl şebeke) | zayıf kaynak (bara L), hat L1, inverter ve yük (bara R), hat L2, yük (bara S); röle L'de, L1'e bakıyor; 20 kV | adım 3 (tespit, δ enjekte); I₂ bastıran inverter ve yön; uzun hatlar (L1 ve L2 1, 1.5, 2 katına uzatıldı) |
+| KIUC (hocanın NREL raporu) | şebeke kaynağı, eşdeğer hat, bara 1 (hidro jeneratör açık/kapalı), 4.6 millik hat 2, bara 2'de 15 MVA inverter; röleler R1 ve R2; 57.1 kV | raporun bulgusunun tekrarı; I₂ modları (bastırılmış, IEEE 2800 K = 5); FRT; iki akım sınırlayıcı; set testi ve δ |
+
+Her şebekede hatalar: faz-toprak (A-G) ve faz-faz (B-C), hattın farklı noktalarında, birkaç arıza direnciyle.
+
+**Denenmeyen:** şebeke kurucu (grid-forming) inverter, hocanın 14 baralı modeli ve 2 katından uzun hatlar.
+
+*Kaynak: `docs/KIUC.md` §1; `docs/LONG_LINES.md`; `docs/STEP3.md`; `src/pscad_network.py`.*
+
+## 46. Hocanın verdiği siteden (NREL raporu) hangi devreyi aldık? (1 Kasım 2026)
+
+Raporda (osti.gov/biblio/3011876, NREL/TP-5D00-94430) **tek bir test devresi** var: KIUC (Kauai) iletim sisteminin
+küçültülmüş hâli (Şekil 21 ve 41). Onu aldık: 57.1 kV, şebeke kaynağı ve eşdeğer hat, bara 1'de 7.5 MVA hidro,
+4.6 millik hat, bara 2'de 15 MVA inverter, iki uçta röle. Sayılar raporun Tablo 14–15'inden. Raporun vermediği üç
+değeri (hidronun reaktansı, iki trafonun reaktansı) varsaydık ve duyarlılığını ölçtük. Raporun PSCAD dosyaları
+raporda yok; devreyi tablolardan kendi PSCAD'imizde yeniden kurduk, raporun kendi inverteri yerine bizim inverterimizle.
+
+Raporun içinden yapılan: I₂ bastırılmış ve IEEE 2800 (K = 5) modları, akım sınırlayıcı, 32Q/32QG yön elemanı, FRT.
+Yapılmayan: grid-forming inverterler (droop ve VSM), momentary cessation, yavaş/hızlı kontrolcü ayarları, mesafe
+(mho, quad), 87L, FID ve TD21/TD32 elemanları.
+
+Üç baralı ve iki baralı şebekeler raporla ilgili değil; onları link gelmeden önce kendimiz kurmuştuk.
+
+*Kaynak: `docs/KIUC.md` §1; raporun §3.1 ve §4.2'si.*
+
+## 47. Hangi devreleri neden seçtik, hepsi tek inverterli mi? (3 Kasım 2026)
+
+**Evet: PSCAD'de kendimiz kurduğumuz her devrede tek inverter var**, o da grid-following (bizim modelimiz). İki
+inverterli tek sistem CIGRE MV, ama o hazır veri: biz koşmadık, δ basamıyoruz. Hiçbir devrede grid-forming yok.
+
+| Devre | Inverter | Neden seçtik |
+|---|---|---|
+| 110 kV TestGrid (hazır veri) | yok (iki 30 GVA şebeke) | öğrenen dedektörün ilk denendiği güçlü şebeke |
+| CIGRE MV 20 kV (hazır veri, EvEMTBench) | 2 × 15 MVA grid-following (bara 3 ve 14) | inverterli bir fiderde aynı sonucun tutup tutmadığı |
+| İki baralı (PSCAD) | 1 grid-following | inverter modelini ve δ basmayı denemek için en basit devre |
+| Üç baralı (PSCAD, asıl şebeke) | 1 grid-following (+ yükler) | deck'teki dört adımın şebekesi: zayıf kaynak, röle, adım 3, I₂, uzun hatlar |
+| KIUC (PSCAD, NREL raporu) | 1 grid-following (15 MVA) + 7.5 MVA hidro (senkron makine) | hocanın gönderdiği rapor; 20 Ekim istekleri: sert olmayan kaynak, değerleri yayınlanmış gerçek sistem |
+
+Tek inverterin nedeni: hocanın yöntemi δ'yı bir inverter için tasarlıyor, tek inverterde δ'nın etkisi ayrılabiliyor;
+KIUC'ta da raporun kendisi tek inverterli. (Bu gerekçe bizim çıkarımımız, belgelerde ayrıca yazılı bir karar yok.)
+
+**Eksik:** 20 Ekim toplantısı tam bunu istedi: hepsi inverter olan sistem, yarı grid-forming yarı grid-following,
+ve internette hazır çok inverterli sistemler (2, 7 inverterli…). Bunların hiçbiri henüz yapılmadı.
+
+*Kaynak: `results/CIGREMV.md` tablo "Sources"; `docs/KIUC.md` §1; `docs/meetings/2026-10-20_biweekly.md`; Q45–46.*
+
+## 48. Eski devrelerden mi devam ediyoruz? Hocanın şimdiki isteği farklı (3 Kasım 2026)
+
+Hayır, eski devreler (TestGrid, CIGRE MV, iki ve üç baralı) bundan sonrasının temeli değil; sadece geçmiş iş.
+Temel, 20 Ekim toplantısındaki istekler:
+
+| Hocanın isteği | Durum |
+|---|---|
+| Sert olmayan kaynakla hata simülasyonu | kısmen: KIUC'ta raporun sert olmayan kaynak seçeneği var, asıl hedef inverterli sistem |
+| Hepsi inverter olan sistem, bir kısmı GFM bir kısmı GFL | yapılmadı |
+| Hepsi GFM: önce dengede çalışıyor mu, sonra hata | yapılmadı |
+| Yarı GFM yarı GFL sistem | yapılmadı |
+| İnternette hazır sistemler (2, 7 inverterli…), gerekirse mail | yapılmadı |
+| Devrelerin nereden geldiği slaytta | yapıldı (KIUC deck'i) |
+| Raporu gözden geçir | yapıldı |
+
+Eksiklerin hepsi grid-forming inverter modeline ve çok inverterli bir sisteme bağlı. Önce internette hazır sistem
+aranmalı; hangi sistemi kuracağımızı o belirler.
+
+*Kaynak: `docs/meetings/2026-10-20_biweekly.md`.*
+
+## 49. Optimizasyonda birden fazla inverter var mı, veri aynı şekilde üretilebilir mi? (3 Kasım 2026)
+
+**Optimizasyon (`src/network.py`):** şebekeye istenen sayıda inverter konabiliyor; her biri belirsiz bir akım
+kaynağı ve belirsizlik kümeleri toplanıyor (Minkowski toplamı). Ama tasarım araması (`min_delta`) tek bir sinyal
+basan inverter için yazılmış; birkaç inverterin birlikte tasarımı yok. Bütün inverterler grid-following; grid-forming
+model yok.
+
+**Veri üretimi (`src/pscad_network.py`):** kurucu her inverter için aynı bloğu (üç kontrollü akım kaynağı ve
+denetleyici) kuruyor; I₂ çalışmasında üç inverterli EMT koşuldu (bir asıl, iki yük-inverter). Yani birden fazla
+grid-following inverterli veri aynı yolla üretilebiliyor. Sınır: her devrede en az bir senkron kaynak gerekiyor
+(topraklama ona bağlı, grid-following inverterler gerilimi ondan alıyor). Hepsi inverter olan sistem için
+grid-forming inverter modeli lazım, o yok.
+
+*Kaynak: `src/network.py` (`IBR`, `affine_case`, `min_delta`); `src/pscad_network.py`; `src/i2dir_emt.py`.*
+
+## 50. Karşılaştırabileceğimiz çok inverterli hazır sistem var mı? Hocanın kullandığı var mı? (3 Kasım 2026)
+
+**Var, hocanın kendi sistemi: IEEE 14 baralı şebeke.** İki makalesinde kullanıyor:
+
+1. **Geometry of Distance Protection (2025), optimizasyon tarafı:** statik model, CVXPY. Senkron kaynaklar bara
+   1, 3, 5, 14'te; inverterler 2, 4, 7, 8, 12'de (5 inverter); yükler 6, 10, 11, 13'te. Röle bara 2'de, 2-3 hattında.
+   §VI-D'de bütün kaynakları inverter yapıyor: **7 inverter** (toplantıdaki "7 inverterli" muhtemelen bu). Önce
+   bütün inverterler aynı sinyali basıyor (Şekil 5), sonra her inverter farklı sinyal basıyor (ADMM): sinyalin
+   büyüklüğü ≈ 4.35, en iyi ızgara noktasından %4 küçük. Bu sayıları kendi optimizasyonumuzla tekrar edip
+   karşılaştırabiliriz.
+2. **Reachability (2026, Baeckeland ile), EMT tarafı:** Simulink modeli; 14 baralı şebekede **5 grid-forming
+   inverter** (bara 1 ve 4'te dVOC, 2 ve 5'te droop, 3'te VSM), 12 yük; 3. hattın ortasında faz-faz hata, 100 ms;
+   röle bara 2'de. İnverter parametreleri Baeckeland, Yang & Seo (2026) Tablo III'te, sonuçları Şekil 22'de. Model
+   dosyası yayınlanmamış; Baeckeland hocanın ortak yazarı.
+
+Hat verisi: Geometry makalesi Baeckeland'ın 2022 doktora tezinin Tablo 3.1'ini kullanıyor (tez internette
+bulunamadı); Baeckeland 2026 standart IEEE 14 bara verisini aynen aldıklarını söylüyor.
+
+**Yedek:** NREL PyPSCAD (github.com/NREL/PyPSCAD): ücretsiz PSCAD grid-following/grid-forming modelleri; hepsi
+inverter olan IEEE 9 bara, grid-forming'li 39 bara, Maui 3 bara. Sonuçları kararlılık üzerine, koruma üzerine değil.
+
+*Kaynak: `papers/Taylor_2025_Geometry_of_Distance_Protection.pdf` §IV-C, §VI-D;
+`papers/Taylor_2026_Reachability_Time_Domain_Distance_Protection.pdf` §V; `papers/notes/F_taylor_tac_and_gfm_model.md`.*
