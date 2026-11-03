@@ -1,7 +1,12 @@
 # Taylor's IEEE 14-bus: reproduce his auxiliary-signal design, then build it in PSCAD
 
-> **Status, 3 Nov 2026: pre-registered and reviewed (PR #69: cleared once §2–§3 carry the review's amendments,
-> which they now do); Q1 not yet run.**
+> **Status, 3 Nov 2026: Q1 done (static).** The primary, as registered, is **not reproduced** (§3's rule): every
+> minimum is one grid step off and the maps agree on 94.6 % / 89.1 %. Of the registered variants, **V4 (IBR angles
+> `linspace(0, 2π/3, 8)[:7]`, endpoint excluded) reproduces Fig. 5**: (a) j0.2 unique, (b) −1.2 + j0.2 and
+> 1.2 − j0.2 at 3.22, (c) {±(1.6 + j0.6)} at 4.52, maps 100 % / 99.5 % (2 of 441 cells differ), both pair readings
+> identical. Per §3 this is information on the paper's unstated choice, not "the reproduction". **The sound
+> relaxation (V3) gives the same maps as the literal one, with and without V4**, so the paper's Fig. 5 stands on a
+> valid certificate. Q2 not yet run.
 
 ## 0. Why this system
 
@@ -112,3 +117,43 @@ the same network (§IV-C case: SGs plus our grid-following inverters) is Q4, reg
 ## 5. Code
 
 `src/ieee14.py` (network, Appendix A matrices, primal feasibility LP, grid, ADMM); results in `results/ieee14/`.
+
+## Q1 result, static (3 Nov 2026)
+
+`python src/ieee14.py q1 [variant flags]`, 0.2 grid, max-slack rule (no undecided cell in any run). Files
+`results/ieee14/q1_*.json`, log `results/ieee14/q1_variants.log`. Minima as |δ| (‖Δ‖ = |δ|√7), argmin sets in
+the files; R9 and R21 coincide in every vid run.
+
+| run | (a) N–ag, N–ab, ag–ab | (b) N vs all LG / LL | (c) N vs all six | left map | right map |
+|---|---|---|---|---|---|
+| Fig. 5 (target) | j0.2 (0.529) | −1.2 + j0.2 / 1.2 − j0.2 (3.219) | ±(1.6 + j0.6) (4.521) | — | — |
+| **primary** (literal) | j0.4 (1.058) | 0.6 ± j1.0 / −0.6 ± j1.0 (3.085) | ±1.4 ± j0.8 (4.266) | 94.6 % | 89.1 % |
+| V1 positive-sequence noise | j0.4 | 3.085 | 4.266 | 94.3 % | 88.7 % |
+| V2 line charging | j0.4 | 3.085 | 4.266 | 94.6 % | 89.1 % |
+| V3 sound | j0.4 | 3.085 | 4.266 | 94.6 % | 89.1 % |
+| **V4 angles, endpoint excluded** | **j0.2 (0.529)** | **−1.2 + j0.2 / 1.2 − j0.2 (3.219)** | **±(1.6 + j0.6) (4.521)** | **100 %** | **99.5 %** |
+| V3 + V4 (sound, endpoint excluded) | j0.2 | same as V4 | same as V4 | 100 % | 99.5 % |
+| V5 z0 = 3 z1 | j0.4 | 3.085 | 4.266 | 94.6 % | 89.1 % |
+| LL resistor 2 m̂_r r_F | j0.4 | 3.085 | 4.266 | 94.6 % | 89.1 % |
+
+- **Verdict by §3:** primary not reproduced (not even "approximately": (b)'s argmin is not within one grid step).
+  V4 meets every "reproduced" condition; it is reported as the paper's likely unstated choice, not substituted.
+- **What the primary's miss is:** the primary maps are mirror-symmetric about Re δ = 0's axis (conjugation), the
+  figure is the same pattern turned by about 10°; V4 moves the IBR angles' mean from 60° to 51.4°, which is that
+  turn. Line charging, the zero-sequence ratio, the LL resistor and the noise direction change nothing visible.
+- **V3 = literal on every cell** in both settings: the review's point that the literal set is not a relaxation of
+  W is right, and on this example it makes no difference to any separation decision.
+- **The text's 3.02 is a 0.1-grid value, not a typo.** With V4's angles on the 0.1 grid (information run), the
+  smallest δ separating N from all LG faults is **0.7 + j0.9, |δ| = 1.1402, ‖Δ‖ = 3.017** (LL: −0.7 − j0.9), which
+  is the printed 3.02; on the 0.2 grid it is 3.22 (Fig. 5). (a) is j0.2 on both grids; (c) on the 0.1 grid is
+  ±(1.3 − j1.1), 4.506, against the printed 4.52 at 1.6 + j0.6, the 0.2-grid value. So the text quotes (b) from a
+  finer grid than the figure and (c) from the figure's grid. With the primary angles no 0.1-grid δ of |δ| 1.141 or
+  1.131 separates all LG faults. *[The review (PR #69) and a draft of this section called 3.02 a likely typo; it is
+  not.]*
+- **§IV-C case (information):** with four SGs and Σ = 0.1 I, δ = 0 already separates every R9 pair; under R21 the
+  LL fault–fault pairs need |δ| = 2.44 (2.0 − j1.4), the only grid point(s) at the edge, i.e. essentially not
+  separable on the grid.
+- Two right-panel cells differ under V4: (−1.8, 0.4) and (1.8, −0.4), one on each side, both "+" in ours where the
+  figure has "." / "v" — a region edge, point-symmetric as the figure is.
+
+**Q2 runs next, on V4's angles (stated before it runs), pair set R9 = R21 (they coincide on Q1).**

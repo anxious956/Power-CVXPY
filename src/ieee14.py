@@ -12,7 +12,7 @@ arXiv 2510.04379, §IV-C, §V, §VI-D, Appendices A-C), rebuilt to check our opt
                     nonempty). variant "literal" (as printed) or "sound" (docs/IEEE14.md V3);
   - grid()          §VI-D1: a common signal delta at every IBR on a grid of the complex plane.
 
-    python src/ieee14.py q1 [--variant literal|sound] [--noise neg|pos] [--charging] [--endpoint-off] [--z0 3]
+    python src/ieee14.py q1 [--variant literal|sound] [--noise neg|pos] [--charging] [--endpoint-off] [--z0 3] [--ll 2]
 """
 import argparse, json, os, sys
 import numpy as np
@@ -61,7 +61,7 @@ def _zabc(z1, z0):
     return A @ np.diag([z0, z1, z1]) @ np.linalg.inv(A)
 
 
-def fault_admittance(eta, rf):
+def fault_admittance(eta, rf, ll_factor=1.0):
     """3x3 admittance of fault model eta at F (i into the fault = Y v_F); eta None for normal operation."""
     Y = np.zeros((3, 3), complex)
     if eta is None:
@@ -71,11 +71,11 @@ def fault_admittance(eta, rf):
         Y[k, k] = 1.0 / rf
     else:
         i, j = "abc".index(eta[0]), "abc".index(eta[1])
-        Y[np.ix_([i, j], [i, j])] = np.array([[1, -1], [-1, 1]]) / rf
+        Y[np.ix_([i, j], [i, j])] = np.array([[1, -1], [-1, 1]]) / (ll_factor * rf)
     return Y
 
 
-def net_matrices(cs, eta, mz_hat=0.5, mr_hat=0.5, rF=1.0, charging=False, z0_ratio=1.0):
+def net_matrices(cs, eta, mz_hat=0.5, mr_hat=0.5, rF=1.0, charging=False, z0_ratio=1.0, ll_factor=1.0):
     """Appendix A for model eta (None: normal operation). Returns Gamma, Theta, Phi, Psi (3 x 3ns each) with
     i_L = Gamma x, i_R = Theta x, v_L = Phi x, v_R = Psi x, x = [i_C; v_S] in bus order within each group."""
     nodes = list(range(1, 15)) + ["F"]
@@ -104,7 +104,7 @@ def net_matrices(cs, eta, mz_hat=0.5, mr_hat=0.5, rF=1.0, charging=False, z0_rat
         s = slice(3 * ix[bus], 3 * ix[bus] + 3)
         Y[s, s] += y * np.eye(3)
     sF = slice(3 * ix["F"], 3 * ix["F"] + 3)
-    Y[sF, sF] += fault_admittance(eta, mr_hat * rF)
+    Y[sF, sF] += fault_admittance(eta, mr_hat * rF, ll_factor)
 
     ibr, sg = cs["ibr"], cs["sg"]
     nx = 3 * (len(ibr) + len(sg))
@@ -383,11 +383,11 @@ def symmetric(rows):
 
 def q1(args):
     cs = case(args.case, endpoint=not args.endpoint_off)
-    mods = models(cs, charging=args.charging, z0_ratio=args.z0)
+    mods = models(cs, charging=args.charging, z0_ratio=args.z0, ll_factor=args.ll)
     tmap = grid(cs, mods, step=args.step, noise=args.noise, variant=args.variant)
     n = len(cs["ibr"])
     res = dict(settings=dict(case=args.case, variant=args.variant, noise=args.noise, charging=args.charging,
-                             endpoint=not args.endpoint_off, z0_ratio=args.z0, step=args.step, tol=TOL))
+                             endpoint=not args.endpoint_off, z0_ratio=args.z0, ll_factor=args.ll, step=args.step, tol=TOL))
     res["a_N_ag_ab"] = smallest(tmap, [("N", "ag"), ("N", "ab"), ("ag", "ab")], n)
     for rd in ("R9", "R21"):
         res[rd] = dict(b_LG=smallest(tmap, pair_set(LG, rd), n), b_LL=smallest(tmap, pair_set(LL, rd), n),
@@ -410,7 +410,7 @@ def q1(args):
     res["tstar"] = {f"{d.real:+.2f}{d.imag:+.2f}j": {f"{a}-{b}": t for (a, b), t in s.items()} for d, s in tmap.items()}
     os.makedirs(OUT, exist_ok=True)
     tag = "_".join([args.case, args.variant, args.noise, f"s{args.step:g}"] + (["charging"] if args.charging else [])
-                   + (["noend"] if args.endpoint_off else []) + ([f"z0x{args.z0:g}"] if args.z0 != 1 else []))
+                   + (["noend"] if args.endpoint_off else []) + ([f"z0x{args.z0:g}"] if args.z0 != 1 else []) + (["ll2"] if args.ll != 1 else []))
     path = os.path.join(OUT, f"q1_{tag}.json")
     with open(path, "w") as f:
         json.dump(res, f, indent=1, default=lambda v: None if not np.isfinite(v) else v)
@@ -436,5 +436,6 @@ if __name__ == "__main__":
     ap.add_argument("--endpoint-off", action="store_true")
     ap.add_argument("--z0", type=float, default=1.0)
     ap.add_argument("--step", type=float, default=0.2)
+    ap.add_argument("--ll", type=float, default=1.0, help="LL fault resistor factor (2: Appendix A literal)")
     a = ap.parse_args()
     {"q1": q1}[a.cmd](a)

@@ -1,0 +1,124 @@
+=== V3 --variant sound
+{"settings": {"case": "vid", "variant": "sound", "noise": "neg", "charging": false, "endpoint": true, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.4, "norm_Delta": 1.058, "argmin": [[-0.0, 0.4]], "n_points": 323}}
+R9 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R9 left agree 0.9456 right agree 0.8912 symmetry violations 0
+R21 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R21 left agree 0.9456 right agree 0.8912 symmetry violations 0
+undecided cells: 0
+=== V1 --noise pos
+{"settings": {"case": "vid", "variant": "literal", "noise": "pos", "charging": false, "endpoint": true, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.4, "norm_Delta": 1.058, "argmin": [[-0.0, 0.4]], "n_points": 324}}
+R9 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 252}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 252}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 210}}
+R9 left agree 0.9433 right agree 0.8866 symmetry violations 0
+R21 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 252}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 252}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 210}}
+R21 left agree 0.9433 right agree 0.8866 symmetry violations 0
+undecided cells: 0
+=== V2 --charging
+Traceback (most recent call last):
+  File "C:\Users\Esmer\AppData\Local\Temp\claude\C--Users-Esmer-OneDrive-Masa-st--JOSHUA-TAYLOR\ec74ed79-6c9e-41aa-8587-ec2a6c37eeb3\scratchpad\ieee14wt\src\ieee14.py", line 19, in <module>
+    from scipy.optimize import linprog
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\optimize\__init__.py", line 422, in <module>
+    from ._optimize import *
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\optimize\_optimize.py", line 34, in <module>
+    from scipy.linalg import cholesky, issymmetric, LinAlgError
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\linalg\__init__.py", line 204, in <module>
+    from ._cythonized_array_utils import *
+  File "scipy/linalg/_cythonized_array_utils.pyx", line 11, in init scipy.linalg._cythonized_array_utils
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\_lib\_util.py", line 14, in <module>
+    from scipy._lib._array_api import (Array, array_namespace, is_lazy_array,
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\_lib\_array_api.py", line 25, in <module>
+    from scipy._lib.array_api_compat import (
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\_lib\array_api_compat\numpy\__init__.py", line 4, in <module>
+    from numpy import *  # noqa: F403  # pyright: ignore[reportWildcardImportFromLibrary]
+    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\numpy\__init__.py", line 368, in __getattr__
+    import numpy.testing as testing
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\numpy\testing\__init__.py", line 11, in <module>
+    from ._private.utils import *
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\numpy\testing\_private\utils.py", line 23, in <module>
+    import importlib.metadata
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 19, in <module>
+    from . import _adapters, _meta
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\_adapters.py", line 5, in <module>
+    import email.message
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\email\message.py", line 15, in <module>
+    from email import utils
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\email\utils.py", line 29, in <module>
+    import socket
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\socket.py", line 52, in <module>
+    import _socket
+ImportError: DLL load failed while importing _socket: The paging file is too small for this operation to complete.
+=== V4 --endpoint-off
+{"settings": {"case": "vid", "variant": "literal", "noise": "neg", "charging": false, "endpoint": false, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.2, "norm_Delta": 0.529, "argmin": [[-0.0, 0.2]], "n_points": 320}}
+R9 {'b_LG': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[-1.2, 0.2]], 'n_points': 238}, 'b_LL': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[1.2, -0.2]], 'n_points': 238}, 'c_all': {'abs_delta': 1.7088, 'norm_Delta': np.float64(4.521), 'argmin': [[-1.6, -0.6], [1.6, 0.6]], 'n_points': 194}}
+R9 left agree 1.0 right agree 0.9955 symmetry violations 0
+R21 {'b_LG': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[-1.2, 0.2]], 'n_points': 238}, 'b_LL': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[1.2, -0.2]], 'n_points': 238}, 'c_all': {'abs_delta': 1.7088, 'norm_Delta': np.float64(4.521), 'argmin': [[-1.6, -0.6], [1.6, 0.6]], 'n_points': 194}}
+R21 left agree 1.0 right agree 0.9955 symmetry violations 0
+undecided cells: 0
+=== V5 --z0 3
+{"settings": {"case": "vid", "variant": "literal", "noise": "neg", "charging": false, "endpoint": true, "z0_ratio": 3.0, "ll_factor": 1.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.4, "norm_Delta": 1.058, "argmin": [[-0.0, 0.4]], "n_points": 323}}
+R9 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R9 left agree 0.9456 right agree 0.8912 symmetry violations 0
+R21 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R21 left agree 0.9456 right agree 0.8912 symmetry violations 0
+undecided cells: 0
+=== LL2 --ll 2
+{"settings": {"case": "vid", "variant": "literal", "noise": "neg", "charging": false, "endpoint": true, "z0_ratio": 1.0, "ll_factor": 2.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.4, "norm_Delta": 1.058, "argmin": [[-0.0, 0.4]], "n_points": 323}}
+R9 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R9 left agree 0.9456 right agree 0.8912 symmetry violations 0
+R21 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R21 left agree 0.9456 right agree 0.8912 symmetry violations 0
+undecided cells: 0
+=== S01 --step 0.1
+Traceback (most recent call last):
+  File "C:\Users\Esmer\AppData\Local\Temp\claude\C--Users-Esmer-OneDrive-Masa-st--JOSHUA-TAYLOR\ec74ed79-6c9e-41aa-8587-ec2a6c37eeb3\scratchpad\ieee14wt\src\ieee14.py", line 19, in <module>
+    from scipy.optimize import linprog
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\optimize\__init__.py", line 422, in <module>
+    from ._optimize import *
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\optimize\_optimize.py", line 34, in <module>
+    from scipy.linalg import cholesky, issymmetric, LinAlgError
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\linalg\__init__.py", line 222, in <module>
+    from ._sketches import *
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\linalg\_sketches.py", line 10, in <module>
+    from scipy.sparse import csc_matrix, issparse
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\sparse\__init__.py", line 304, in <module>
+    from ._base import *
+  File "C:\Users\Esmer\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\scipy\sparse\_base.py", line 8, in <module>
+    from ._sputils import (asmatrix, check_reshape_kwargs, check_shape,
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1128, in get_code
+  File "<frozen importlib._bootstrap_external>", line 757, in _compile_bytecode
+MemoryError
+=== IVC --case ivc
+{"settings": {"case": "ivc", "variant": "literal", "noise": "neg", "charging": false, "endpoint": true, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.0, "norm_Delta": 0.0, "argmin": [[-0.0, -0.0]], "n_points": 441}}
+R9 {'b_LG': {'abs_delta': 0.0, 'norm_Delta': np.float64(0.0), 'argmin': [[-0.0, -0.0]], 'n_points': 441}, 'b_LL': {'abs_delta': 0.0, 'norm_Delta': np.float64(0.0), 'argmin': [[-0.0, -0.0]], 'n_points': 441}, 'c_all': {'abs_delta': 0.0, 'norm_Delta': np.float64(0.0), 'argmin': [[-0.0, -0.0]], 'n_points': 441}}
+R21 {'b_LG': {'abs_delta': 0.0, 'norm_Delta': np.float64(0.0), 'argmin': [[-0.0, -0.0]], 'n_points': 441}, 'b_LL': {'abs_delta': 2.4413, 'norm_Delta': np.float64(5.459), 'argmin': [[2.0, -1.4]], 'n_points': 14}, 'c_all': {'abs_delta': 2.4413, 'norm_Delta': np.float64(5.459), 'argmin': [[2.0, -1.4]], 'n_points': 14}}
+undecided cells: 0
+=== --charging
+{"settings": {"case": "vid", "variant": "literal", "noise": "neg", "charging": true, "endpoint": true, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.4, "norm_Delta": 1.058, "argmin": [[-0.0, 0.4]], "n_points": 323}}
+R9 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R9 left agree 0.9456 right agree 0.8912 symmetry violations 0
+R21 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 251}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 251}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 208}}
+R21 left agree 0.9456 right agree 0.8912 symmetry violations 0
+undecided cells: 0
+=== --step 0.1
+{"settings": {"case": "vid", "variant": "literal", "noise": "neg", "charging": false, "endpoint": true, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.1, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.3, "norm_Delta": 0.794, "argmin": [[0.0, 0.3]], "n_points": 1210}}
+R9 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 910}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 910}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 746}}
+R21 {'b_LG': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[0.6, -1.0], [0.6, 1.0]], 'n_points': 910}, 'b_LL': {'abs_delta': 1.1662, 'norm_Delta': np.float64(3.085), 'argmin': [[-0.6, -1.0], [-0.6, 1.0]], 'n_points': 910}, 'c_all': {'abs_delta': 1.6125, 'norm_Delta': np.float64(4.266), 'argmin': [[-1.4, -0.8], [-1.4, 0.8], [1.4, -0.8], [1.4, 0.8]], 'n_points': 746}}
+undecided cells: 0
+|delta| = 1.141 / 1.131: {'-1.1-0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-1.1+0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.9-0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.9+0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.8-0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.8+0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.7-0.9j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.7+0.9j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.3-1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.3+1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.3-1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.3+1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.7-0.9j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.7+0.9j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.8-0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.8+0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.9-0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.9+0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+1.1-0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+1.1+0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}}
+=== --variant sound --endpoint-off
+{"settings": {"case": "vid", "variant": "sound", "noise": "neg", "charging": false, "endpoint": false, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.2, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.2, "norm_Delta": 0.529, "argmin": [[-0.0, 0.2]], "n_points": 320}}
+R9 {'b_LG': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[-1.2, 0.2]], 'n_points': 238}, 'b_LL': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[1.2, -0.2]], 'n_points': 238}, 'c_all': {'abs_delta': 1.7088, 'norm_Delta': np.float64(4.521), 'argmin': [[-1.6, -0.6], [1.6, 0.6]], 'n_points': 194}}
+R9 left agree 1.0 right agree 0.9955 symmetry violations 0
+R21 {'b_LG': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[-1.2, 0.2]], 'n_points': 238}, 'b_LL': {'abs_delta': 1.2166, 'norm_Delta': np.float64(3.219), 'argmin': [[1.2, -0.2]], 'n_points': 238}, 'c_all': {'abs_delta': 1.7088, 'norm_Delta': np.float64(4.521), 'argmin': [[-1.6, -0.6], [1.6, 0.6]], 'n_points': 194}}
+R21 left agree 1.0 right agree 0.9955 symmetry violations 0
+undecided cells: 0
+=== --step 0.1 --endpoint-off
+{"settings": {"case": "vid", "variant": "literal", "noise": "neg", "charging": false, "endpoint": false, "z0_ratio": 1.0, "ll_factor": 1.0, "step": 0.1, "tol": 1e-07}, "a_N_ag_ab": {"abs_delta": 0.2, "norm_Delta": 0.529, "argmin": [[0.0, 0.2]], "n_points": 1199}}
+R9 {'b_LG': {'abs_delta': 1.1402, 'norm_Delta': np.float64(3.017), 'argmin': [[0.7, 0.9]], 'n_points': 874}, 'b_LL': {'abs_delta': 1.1402, 'norm_Delta': np.float64(3.017), 'argmin': [[-0.7, -0.9]], 'n_points': 874}, 'c_all': {'abs_delta': 1.7029, 'norm_Delta': np.float64(4.506), 'argmin': [[-1.3, 1.1], [1.3, -1.1]], 'n_points': 690}}
+R21 {'b_LG': {'abs_delta': 1.1402, 'norm_Delta': np.float64(3.017), 'argmin': [[0.7, 0.9]], 'n_points': 874}, 'b_LL': {'abs_delta': 1.1402, 'norm_Delta': np.float64(3.017), 'argmin': [[-0.7, -0.9]], 'n_points': 874}, 'c_all': {'abs_delta': 1.7029, 'norm_Delta': np.float64(4.506), 'argmin': [[-1.3, 1.1], [1.3, -1.1]], 'n_points': 690}}
+undecided cells: 0
+|delta| = 1.141 / 1.131: {'-1.1-0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-1.1+0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.9-0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.9+0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.8-0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.8+0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.7-0.9j': {'R9': {'LG': False, 'LL': True}, 'R21': {'LG': False, 'LL': True}}, '-0.7+0.9j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.3-1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '-0.3+1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.3-1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.3+1.1j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.7-0.9j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.7+0.9j': {'R9': {'LG': True, 'LL': False}, 'R21': {'LG': True, 'LL': False}}, '+0.8-0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.8+0.8j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.9-0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+0.9+0.7j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+1.1-0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}, '+1.1+0.3j': {'R9': {'LG': False, 'LL': False}, 'R21': {'LG': False, 'LL': False}}}
