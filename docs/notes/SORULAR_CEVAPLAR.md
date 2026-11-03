@@ -1905,3 +1905,35 @@ Rapordan: P 0.25 / Q 0.15 pu, raporun Şekil 16'sının ve yavaş/hızlı denetl
 (`docs/KIUC.md` §1). Devre 1'de raporla karşılaştırabilmek için aynısını aldık. Çok inverterli devrelerde her eklenen
 inverteri aynı noktaya koyduk (`docs/KIUC_MULTI.md`, ön kayıt); bu bizim seçimimiz, raporun değil. Sonucu: 3 ve 5
 inverterde gerilim 1.06 ve 1.09 pu. Q = 0 ile 1.03 ve 1.04 olurdu; röle kararlarını o durumda koşmadık.
+
+## 66. Röle: ne kullandık, nerede ve nasıl ölçüyor? (3 Kasım 2026, toplantıda hocanın sorusu)
+
+**Ne:** raporun KIUC rölesi SEL-411L (her barada bir tane; SEL-T400L da var). İçindeki elemanlardan yalnız birini
+modelledik: **negatif-bileşen yön elemanı 32Q** (faz-faz hataları) / **32QG** (toprak hataları). Mesafe (21), diferansiyel
+(87), 32V vb. yok. Rapor da röleyi kendisi MATLAB'da, röle kılavuzundan modellemiş; saha verisi ve ticari röleyle
+doğrulamış (rapor özet). Bizimki raporun denkleminden Python'da yazılmış, doğrulanmamış bir model (`src/kiuc.py` `dir32q`).
+
+**Nerede ölçüyor (R2):** BUS2'de. CT: Hat 2'nin BUS2 ucunda, BUS2'den Hat 2'ye akan üç faz akımı (PSCAD'de IL_A..C).
+VT: BUS2'nin faz-toprak gerilimleri (VLA..C; VLG dönüş yolu). Rapordaki R2 de aynı yer ve yön (§4, "from Bus-2 to Bus-1").
+
+**Nasıl karar veriyor:**
+1. Dalga şekilleri örnekleniyor, bir çevrimlik pencereden fazör çıkarılıyor.
+2. Simetrili bileşenler: V2, I2 (ve I1, I0).
+3. Denetim: 3|I2| > 0.1 pu, |I2| > 0.1 |I1| (a2), toprak hatasında |I2| > 0.2 |I0| (k2). Biri tutmazsa **karar yok**
+   (I₂ bastırılınca olan budur).
+4. z2 = Re[V2 · (I2 · 1∠Z1L)*] / |I2|² (rapor denklem 39). Hata öndeyse röle arkasındaki kaynağın negatif-bileşen
+   empedansını görür, z2 negatif çıkar; arkadaysa hattı ve karşı ucu görür, z2 pozitif.
+5. z2 < Z2F → ileri, z2 > Z2R → geri (Z2F, Z2R = |Z2L|/2 ∓ ε).
+
+**Raporun röle modelinden farklarımız (açıkça söylenmeli):**
+| | rapor | biz |
+|---|---|---|
+| örnekleme | 8 örnek/çevrim (480 Hz COMTRADE) | 128 örnek/çevrim |
+| fazör filtresi | bir çevrimlik kosinüs filtresi, sanal kısım çeyrek çevrim gecikmeli kosinüs | bir çevrimlik tam DFT (kosinüs + sinüs) |
+| akım filtresi | — (raporda yazılı değil) | mimic filtre (Hat 2'nin X/R'si) |
+| eşikler | \|Z2L\|/2 ∓ ε + "ek güvenlik hesapları" | yalnız \|Z2L\|/2 ∓ 0.1 \|Z2L\| |
+| zaman | ilk üç çevrim | hata anı biliniyor; 2–3 çevrim sonrası pencereler |
+| doğrulama | saha verisi + ticari röle | yok |
+
+Sıradaki: rölemizin ön ucunu raporunkine benzetmek (8 örnek/çevrim, kosinüs filtresi) ve mevcut PSCAD kayıtlarında
+kararların değişip değişmediğine bakmak; yeni PSCAD koşusu gerekmez.
