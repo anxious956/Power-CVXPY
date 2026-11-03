@@ -1897,4 +1897,4 @@ hatadan önce:
 | BUS2, Q 0 (karşılaştırma) | 1.008 | 1.025 | 1.041 |
 
 Yani yükselişin çoğu, her inverterin sabit Q 0.15 basmasından. Gerçek inverterler gerilim yükselince Q'yu azaltır
-(volt-var kontrolü, IEEE 2800); bizim inverterlerde bu yok, Q sabit. Rölenin kararı her iki durumda aynı.
+(volt-var kontrolü, IEEE 2800); bizim inverterlerde bu yok, Q sabit. Q 0 ile yalnız gerilime baktık; röle kararlarını o durumda koşmadık.
