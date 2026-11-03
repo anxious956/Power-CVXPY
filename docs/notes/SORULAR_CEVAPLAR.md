@@ -1839,3 +1839,16 @@ PSCAD'de: Hat 2 F noktasında ikiye bölünüyor (part 1, part 2; F, BUS2'den %5
 bir anahtar (breaker) duruyor; anahtar 0.30 s'de kapanıp A fazını direnç üzerinden toprağa (ya da B'yi C'ye)
 bağlıyor, 0.10 s sonra açılıyor. Anahtarı zamanlayan küçük blok (timed breaker logic) en alttaki. Rölenin işi bu kısa
 devreyi görüp yönünü bulmak.
+
+## 61. PSCAD'de röle yok mu? (3 Kasım 2026)
+
+PSCAD'in kütüphanesinde koruma bileşenleri var (aşırı akım, mesafe rölesi gibi); biz kullanmadık, bilerek:
+1. Raporun baktığı eleman, SEL'in negatif-bileşen yön elemanı (32Q/32QG, a2, k2, pickup ayarlarıyla); bunu biz
+   raporun tarifinden Python'da yazdık (`src/kiuc.py` `dir32q`). Yanına kendi artımsal elemanımızı ve hocanın küme
+   testini koyuyoruz; bunlar hiçbir kütüphanede yok.
+2. Aynı röle kodu hem statik modelde hem PSCAD kayıtlarında çalışıyor; "statik = EMT" karşılaştırması bu yüzden
+   mümkün.
+3. Kayıtlar bir kez alınıyor; rölenin ayarı değişince PSCAD'i yeniden koşmak gerekmiyor.
+
+Rapor da benzerini yapıyor: PSCAD'den dalga şekillerini COMTRADE dosyası olarak kaydedip (480 Hz ve 10 kHz) röle
+modellerine veriyor.
