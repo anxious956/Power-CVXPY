@@ -1868,3 +1868,15 @@ raporun verdiği denklem (z2 = Re[V2 (I2 ∠Z1L)*] / |I2|²) ve SEL'in varsayıl
 Rapor da gerçek cihaz değil, kayıtları (COMTRADE, 480 Hz ve 10 kHz) koruma elemanlarına ve röle modeline veriyor
 (rapor §4, §5). Gerçek röleyle sınamak için kayıtları COMTRADE olarak verip bir röle test setine ya da SEL'in
 yazılımına oynatmak gerekir; yapmadık. Sunumdaki ifade: "our model of the report's relay element (SEL 32Q)".
+
+## 63. İnverter slaytındaki P, Q ve "fault ride-through K₁" ne? (3 Kasım 2026)
+
+**P ve Q (çalışma noktası):** P aktif (gerçek) güç, Q reaktif güç. "pu" inverterin anma gücünün (15 MVA) payı:
+P 0.25 pu = 3.75 MW, Q 0.15 pu = 2.25 Mvar. İnverter hatadan önce gücünün dörtte birinde çalışıyor; değer raporun
+Şekil 16'sından.
+
+**Fault ride-through (FRT), K₁:** hata sırasında inverterin şebekeden kopmayıp çalışmaya devam etmesi ve gerilimi
+desteklemesi. Bizim inverterde gerilim (|V1|) 0.9 pu'nun altına düşünce reaktif akım artıyor:
+IQ = IQ0 + K₁ (0.9 − |V1|), en fazla 1.2 pu; yer açmak için aktif akım kısılıyor. K₁ = 4: gerilim 0.1 pu düştükçe
+0.4 pu daha fazla reaktif akım. IEEE 2800 K için 2–6 aralığı veriyor; rapor değer vermediği için 4'ü biz seçtik
+(raporun Şekil 16'sını tutturuyor). Bu pozitif bileşen için; I₂ kuralı (K = 5) ayrı.
