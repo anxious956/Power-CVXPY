@@ -1651,3 +1651,18 @@ Eksiklerin hepsi grid-forming inverter modeline ve çok inverterli bir sisteme b
 aranmalı; hangi sistemi kuracağımızı o belirler.
 
 *Kaynak: `docs/meetings/2026-10-20_biweekly.md`.*
+
+## 49. Optimizasyonda birden fazla inverter var mı, veri aynı şekilde üretilebilir mi? (3 Kasım 2026)
+
+**Optimizasyon (`src/network.py`):** şebekeye istenen sayıda inverter konabiliyor; her biri belirsiz bir akım
+kaynağı ve belirsizlik kümeleri toplanıyor (Minkowski toplamı). Ama tasarım araması (`min_delta`) tek bir sinyal
+basan inverter için yazılmış; birkaç inverterin birlikte tasarımı yok. Bütün inverterler grid-following; grid-forming
+model yok.
+
+**Veri üretimi (`src/pscad_network.py`):** kurucu her inverter için aynı bloğu (üç kontrollü akım kaynağı ve
+denetleyici) kuruyor; I₂ çalışmasında üç inverterli EMT koşuldu (bir asıl, iki yük-inverter). Yani birden fazla
+grid-following inverterli veri aynı yolla üretilebiliyor. Sınır: her devrede en az bir senkron kaynak gerekiyor
+(topraklama ona bağlı, grid-following inverterler gerilimi ondan alıyor). Hepsi inverter olan sistem için
+grid-forming inverter modeli lazım, o yok.
+
+*Kaynak: `src/network.py` (`IBR`, `affine_case`, `min_delta`); `src/pscad_network.py`; `src/i2dir_emt.py`.*
