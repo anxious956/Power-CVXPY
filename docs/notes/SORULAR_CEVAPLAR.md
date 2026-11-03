@@ -1752,3 +1752,14 @@ inverterimizle de tutup tutmadığını görmek; tek bir hatayla değil, farklı
 hata basit statik modelde de çözülüyor; EMT ile statik model her rapor elemanı kararında aynı çıktı.
 
 *Kaynak: `docs/KIUC.md` Q2 sonucu; `results/network/kiuc_q2.json`, `kiuc_q2_lim1.json`.*
+
+## 54. Sunumdaki "ikisi de" ve "bastırılmış" ne demek? (3 Kasım 2026)
+
+İnverterin hata sırasında negatif-bileşen akımı (I₂) için iki ayarı var:
+- **Bastırılmış (suppressed, "no I₂"):** inverter I₂ hiç vermiyor. Rölenin yön elemanı (32Q) I₂ ile çalıştığı için hiçbir
+  şey göremiyor ve karar veremiyor.
+- **IEEE 2800:** ABD standardının istediği gibi inverter I₂ veriyor (I₂ = K·V₂, K = 5, V₂'nin 90° önünde), bir
+  jeneratör gibi. Röle yönü doğru buluyor.
+
+"İkisi de" = aynı 13 koşuluk test önce bastırılmış, sonra IEEE 2800 ayarıyla koşuldu (13 + 13 = 26). İki ayar da
+raporda var; tek değişen bu ayar. Sunumun 143 koşu tablosunda artık "no I₂, then IEEE 2800" yazıyor.
