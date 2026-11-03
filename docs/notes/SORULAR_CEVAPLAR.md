@@ -1898,3 +1898,10 @@ hatadan önce:
 
 Yani yükselişin çoğu, her inverterin sabit Q 0.15 basmasından. Gerçek inverterler gerilim yükselince Q'yu azaltır
 (volt-var kontrolü, IEEE 2800); bizim inverterlerde bu yok, Q sabit. Q 0 ile yalnız gerilime baktık; röle kararlarını o durumda koşmadık.
+
+## 65. Neden Q 0.15 pu? (3 Kasım 2026)
+
+Rapordan: P 0.25 / Q 0.15 pu, raporun Şekil 16'sının ve yavaş/hızlı denetleyici vakalarının çalışma noktası
+(`docs/KIUC.md` §1). Devre 1'de raporla karşılaştırabilmek için aynısını aldık. Çok inverterli devrelerde her eklenen
+inverteri aynı noktaya koyduk (`docs/KIUC_MULTI.md`, ön kayıt); bu bizim seçimimiz, raporun değil. Sonucu: 3 ve 5
+inverterde gerilim 1.06 ve 1.09 pu. Q = 0 ile 1.03 ve 1.04 olurdu; röle kararlarını o durumda koşmadık.
