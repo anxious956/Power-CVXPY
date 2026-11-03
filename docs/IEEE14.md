@@ -18,9 +18,11 @@ network then goes to PSCAD (Q4, registered later). It is also the system of his 
 **Network.** IEEE 14-bus, "line admittances from Table 3.1" of Baeckeland's 2022 KU Leuven thesis, which we could
 not find. **Primary:** the standard IEEE 14-bus branch data (Baeckeland, Yang & Seo 2026 say their 14-bus lines are
 "one-to-one translated from the standard IEEE 14-bus benchmark"): series R + jX of the 20 branches on 100 MVA,
-no line charging, no transformer taps. Zero sequence: z0 = 3 z1 on every branch (k = z0/z − 1 = 2, the paper's
-value for the relay line; it gives no other zero-sequence data). Lines symmetrical and transposed, phase-domain
-3×3 impedances A diag(z0, z1, z1) A⁻¹.
+no line charging, no transformer taps. *[Amended 3 Nov 2026, before any code ran: the first draft had z0 = 3 z1 on
+every branch. Appendix A computes i_L = (v_L − v_F)/(m̂_z z) and i_R with the scalar z, which is exact only if the
+network's lines have no phase coupling, so the primary is now:]* each branch is the scalar admittance 1/(R + jX)
+in every phase, no mutual coupling (z0 = z1 in the network); k = 2 enters only the relay's ground-fault loop
+(Ω_z^{ag}), as the paper writes it. Variant V5 below has z0 = 3 z1 in the network with exact 3×3 line currents.
 
 **Sources and loads (§VI-D case).** All sources are IBRs, C = {1, 2, 3, 4, 5, 8, 14}: ideal current sources,
 i_k = A [0, i_k⁺, Δ_k] with |i_k⁺| = 1 and angles `linspace(0, 2π/3, 7)` in bus order. Loads 0.1 + j0.01 at buses
@@ -66,8 +68,10 @@ IBRs at 2, 4, 7, 8, 12; Σ = 0.1 I): Q1's three grid minima. The paper gives no 
   paper's unstated choices are; none becomes "the reproduction" after the fact:
   - **V1:** noise along the positive-sequence direction [1, α², α]ᵀ;
   - **V2:** line charging B/2 at both branch ends (standard IEEE 14-bus B);
-  - **V3:** the sound relaxation: λ in u_z, u_r free in Λ and in m_zΛ, m_rΛ, not tied to the i_L noise;
-  - **V4:** IBR angles `linspace(0, 2π/3, 8)[:7]` (endpoint excluded).
+  - **V3:** a sound relaxation of W: u_z = m_z u⁰ + Σλ_z, u_r = m_r u⁰ + Σλ_r with Pλ_z ≤ m_z 1, Pλ_r ≤ m_r 1,
+    tied to the i_L noise λ only by the valid P(λ − λ_z) ≤ (1 − m_z)1 and P(λ − λ_r) ≤ (1 − m_r)1;
+  - **V4:** IBR angles `linspace(0, 2π/3, 8)[:7]` (endpoint excluded);
+  - **V5:** z0 = 3 z1 on every branch in the network, i_L and i_R from the 3×3 segment impedances.
 - Q2 runs whatever Q1 gives, on the formulation that Q1 settles on (primary unless Q1 failed; then stated).
 
 ## 4. What this does not do
