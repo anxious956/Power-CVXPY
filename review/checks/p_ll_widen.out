@@ -1,0 +1,7 @@
+# p_ll_widen.py (angles 150-230) and the 240-300 variant, 31 Oct 2026, long-lines dc6cf60; both ended in MemoryError at the third radius (machine full)
+===== 2|structured|0.1: stored delta* 0.48 angles [190] carried 190 margin 0.0113 eps
+  r 0.50: separating angles [190, 195] (2 of 17 tried in [150, 230])  [876 s]
+  r 0.54: separating angles [190, 195] (2 of 17 tried in [150, 230])  [1764 s]
+--- variant: angles 240-300
+  r 0.50: separating angles [] (0 of 13 tried in [240, 300])  [895 s]
+  r 0.54: separating angles [] (0 of 13 tried in [240, 300])  [1786 s]

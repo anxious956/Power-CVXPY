@@ -369,7 +369,10 @@ def noise_to_normal(ms: NetModelSet, y, dv=0j, limit=None):
 
 def limiter(i1, d, i_max, lim=1):
     """The EMT inverter's limiter (src/pscad_inverter.py): LIM 1 keeps d and scales i1 so every phase
-    |i1 a^-k + d a^k| fits; then (and for LIM 0) both scaled by i_max / peak if still over."""
+    |i1 a^-k + d a^k| fits; then (and for LIM 0) both scaled by i_max / peak if still over. LIM 2 (docs/KIUC.md,
+    the NREL report's limiter): each sequence magnitude limited to i_max separately, no combined phase limit."""
+    if lim == 2:
+        return (i1 if abs(i1) <= i_max else i1 * i_max / abs(i1)), (d if abs(d) <= i_max else d * i_max / abs(d))
     if lim == 1:
         s = 1.0
         for k in range(3):
@@ -383,6 +386,20 @@ def limiter(i1, d, i_max, lim=1):
     return sc * i1, sc * d
 
 
+def frt_command(id_, iq, k_frt, v1, i_max, v_th=0.9):
+    """The positive-sequence command in the inverter's own frame, ID - j IQ, with the IEEE 2800 fault response of
+    src/pscad_inverter.py (FRT): below v_th the reactive part rises by k_frt (v_th - |V1|), clipped at i_max, and
+    the active part is cut so the command fits i_max (q priority). k_frt = 0: the fixed command."""
+    if k_frt <= 0:
+        return complex(id_, -iq)
+    q = iq + k_frt * (v_th - v1) if v1 < v_th else iq
+    q = max(-i_max, min(i_max, q))
+    d = id_
+    if d * d + q * q > i_max * i_max:
+        d = np.copysign(np.sqrt(max(i_max * i_max - q * q, 0.0)), id_)
+    return complex(d, -q)
+
+
 def solve_v1ref(net: Network, sg_values, settings, fault=None, lim=1, tol=1e-12, max_iter=200, relax=1.0):
     """Like solve(), but with the inverters as the EMT controller actually runs them (src/pscad_inverter.py):
     each inverter injects I1 = (ID - j IQ) u and delta = D2MAG e^{j D2ANG} u, with u = V1/|V1| at its own bus,
@@ -390,19 +407,34 @@ def solve_v1ref(net: Network, sg_values, settings, fault=None, lim=1, tol=1e-12,
     settings: {inverter: dict(ID=, IQ=, D2MAG=, D2ANG= deg)} in pu of the inverter base, as in the PSCAD spec.
     Returns (relay measurement, {inverter: (I1, delta) delivered}, iterations). This is the realistic,
     V1-referenced inverter of the step-3 plan (docs/STEP3.md; review/STEP3_PLAN_REVIEW.md 3.2, 3.3).
-    relax < 1 under-relaxes the frame update (the EMT controller updates it once per cycle)."""
+    relax < 1 under-relaxes the frame update (the EMT controller updates it once per cycle).
+    A setting FRT > 0 is the IEEE 2800 positive-sequence fault response of the EMT inverter (docs/KIUC.md): when
+    |V1| < 0.9 the reactive command is IQ + FRT (0.9 - |V1|), saturated at i_max with q priority (frt_command);
+    |V1| then joins the fixed point. A setting K2 > 0 is MODE2 1, the IEEE 2800 law I2 = j K2 V2 at the inverter's
+    own bus, as the delta that goes through the limiter (the network's neg_z must then be open); V2 joins the
+    fixed point. K2 and D2MAG are exclusive, as MODE2 is in PSCAD."""
     u = {k: 1.0 + 0j for k in settings}
     _, V = solve(net, sg_values, {}, None, full=True)
+    mag, v2s = {}, {}
     for k in settings:
         v1 = V[net.ibrs[k].bus][0]
         u[k] = v1 / abs(v1)
+        mag[k] = abs(v1)
+        v2s[k] = V[net.ibrs[k].bus][1]
     inj = {}
     for it in range(1, max_iter + 1):
         vals, dels = dict(sg_values), {}
         for k, st in settings.items():
-            i_req = complex(st["ID"], -st["IQ"]) * u[k]
-            d_req = st["D2MAG"] * np.exp(1j * np.radians(st["D2ANG"])) * u[k] if st.get("D2MAG", 0) else 0j
-            i1, d = limiter(i_req, d_req, net.ibrs[k].i_max or 1.2, lim)
+            i_max = net.ibrs[k].i_max or 1.2
+            idq = frt_command(st["ID"], st["IQ"], st.get("FRT", 0.0), mag[k], i_max)
+            i_req = idq * u[k]
+            if st.get("K2", 0.0) > 0:
+                assert not st.get("D2MAG", 0), "K2 (MODE2 1) and D2MAG (MODE2 2) are exclusive"
+                assert abs(net.ibrs[k].neg_z) >= 1e5, "with the K2 law in the controller the network's neg_z must be open"
+                d_req = 1j * st["K2"] * v2s[k]
+            else:
+                d_req = st["D2MAG"] * np.exp(1j * np.radians(st["D2ANG"])) * u[k] if st.get("D2MAG", 0) else 0j
+            i1, d = limiter(i_req, d_req, i_max, lim)
             vals[k], dels[k] = i1, d
             inj[k] = (i1, d)
         y, V = solve(net, vals, dels, fault, full=True)
@@ -414,6 +446,14 @@ def solve_v1ref(net: Network, sg_values, settings, fault=None, lim=1, tol=1e-12,
             new /= abs(new)
             step = max(step, abs(new - u[k]))
             u[k] = new
+            if settings[k].get("FRT", 0.0) > 0:
+                m_new = (1 - relax) * mag[k] + relax * abs(v1)
+                step = max(step, abs(m_new - mag[k]))
+                mag[k] = m_new
+            if settings[k].get("K2", 0.0) > 0:
+                v2_new = (1 - relax) * v2s[k] + relax * V[net.ibrs[k].bus][1]
+                step = max(step, abs(v2_new - v2s[k]))
+                v2s[k] = v2_new
         if step < tol:
             return y, inj, it
     raise RuntimeError(f"solve_v1ref: no fixed point within {max_iter} iterations (last step {step:.2e})")
