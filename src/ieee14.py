@@ -137,7 +137,8 @@ def models(cs, k=2.0, rF=1.0, **kw):
     """psi, Omega_z, Omega_r per fault model (§V-A, V-B), and Omega^N, Gamma^N (§V-C)."""
     out = {}
     nm = net_matrices(cs, None, rF=rF, **kw)
-    out["N"] = dict(psi=np.eye(3), Omega=nm["z"] * nm["Gamma"] + nm["Psi"], Gamma=nm["Gamma"])
+    Zl = _zabc(nm["z"], kw.get("z0_ratio", 1.0) * nm["z"])      # = z I for the decoupled primary (§V-C)
+    out["N"] = dict(psi=np.eye(3), Omega=Zl @ nm["Gamma"] + nm["Psi"], Gamma=nm["Gamma"])
     for eta in FAULTS:
         m = net_matrices(cs, eta, rF=rF, **kw)
         z, G, T = m["z"], m["Gamma"], m["Theta"]
@@ -203,13 +204,19 @@ class _LP:
             mats.append(m); rhs.append(r)
         return np.vstack(mats), np.concatenate(rhs)
 
-    def feasible(self):
+    def max_slack(self):
+        """max t s.t. every inequality row <= rhs - t, t <= 1; -inf if the equalities cannot hold."""
         Ae, be = self._stack(self.eq)
         Au, bu = self._stack(self.ub)
-        res = linprog(np.zeros(self.nv), A_ub=Au, b_ub=bu, A_eq=Ae, b_eq=be, bounds=self.bounds, method="highs")
-        if res.status not in (0, 2):
+        Ae = np.hstack([Ae, np.zeros((Ae.shape[0], 1))])
+        Au = np.hstack([Au, np.ones((Au.shape[0], 1))])
+        c = np.zeros(self.nv + 1); c[-1] = -1.0
+        res = linprog(c, A_ub=Au, b_ub=bu, A_eq=Ae, b_eq=be, bounds=self.bounds + [(None, 1.0)], method="highs")
+        if res.status == 2:
+            return -np.inf
+        if res.status != 0:
             raise RuntimeError(res.message)
-        return res.status == 0
+        return float(res.x[-1])
 
 
 def _real_vec(c):
@@ -261,8 +268,16 @@ def _fault_block(lp, md, x0, M, P, mz_lo, variant, vL):
     return lam
 
 
-def separated(mods, pair, x0, M, mz_lo=0.15, variant="literal", n_phi=20):
+TOL = 1e-7
+
+
+def separated(mods, pair, x0, M, **kw):
     """True if the relaxed intersection of the pair's pre-test sets is empty (Lemma 7, second bullet)."""
+    return slack(mods, pair, x0, M, **kw) < -TOL
+
+
+def slack(mods, pair, x0, M, mz_lo=0.15, variant="literal", n_phi=20):
+    """Max slack t* of the pair's relaxed intersection: < -TOL empty (separated), > TOL feasible."""
     P = polygon_P(n_phi)
     lp = _LP()
     vL = lp.var(6)
@@ -282,56 +297,132 @@ def separated(mods, pair, x0, M, mz_lo=0.15, variant="literal", n_phi=20):
     G1, G2 = _re(mods[e1]["Gamma"]), _re(mods[e2]["Gamma"])
     # (20a): Gamma1 (x0 + M lam1) = Gamma2 (x0 + M lam2)
     lp.add_eq([(lams[e1], G1 @ Mr), (lams[e2], -G2 @ Mr)], (G2 - G1) @ x0r)
-    return not lp.feasible()
+    return lp.max_slack()
 
 
-def grid(cs, mods, pairs, step=0.1, half=2.0, noise="neg", variant="literal"):
-    """Common signal delta at every IBR on a square grid; returns {pair-set name: list of separating deltas}."""
+MODELS = ["N"] + FAULTS
+ALL_PAIRS = [(MODELS[i], MODELS[j]) for i in range(len(MODELS)) for j in range(i + 1, len(MODELS))]
+LG, LL = ["ag", "bg", "cg"], ["ab", "bc", "ca"]
+
+
+def pair_set(faults, reading):
+    """R9: (N, eta) for eta in faults; R21: every pair among {N} + faults."""
+    if reading == "R9":
+        return [("N", f) for f in faults]
+    group = ["N"] + list(faults)
+    return [p for p in ALL_PAIRS if p[0] in group and p[1] in group]
+
+
+def grid(cs, mods, step=0.2, half=2.0, noise="neg", variant="literal"):
+    """Common signal delta at every IBR on a square grid: {delta: {pair: t*}} over all 21 pairs."""
     vals = np.round(np.arange(-half, half + 1e-9, step), 10)
-    sep = {}
+    out = {}
     for re_ in vals:
         for im_ in vals:
             d = complex(re_, im_)
             x0, M = source_vector(cs, d, noise)
-            sep[d] = {p: separated(mods, p, x0, M, variant=variant) for p in pairs}
-    return sep
+            out[d] = {p: slack(mods, p, x0, M, variant=variant) for p in ALL_PAIRS}
+    return out
 
 
-def smallest(sep, need, n_ibr):
-    ok = [d for d, s in sep.items() if all(s[p] for p in need)]
+def smallest(tmap, need, n_ibr):
+    """Minimum |delta| over grid points separating every pair in `need`, and all its minimisers."""
+    ok = [d for d, s in tmap.items() if all(s[p] < -TOL for p in need)]
     if not ok:
         return None
-    d = min(ok, key=lambda c: (abs(c), c.real, c.imag))
-    return dict(delta=[d.real, d.imag], norm_Delta=abs(d) * np.sqrt(n_ibr), n_points=len(ok))
+    r = min(abs(d) for d in ok)
+    arg = sorted([d for d in ok if abs(abs(d) - r) < 1e-9], key=lambda c: (c.real, c.imag))
+    return dict(abs_delta=round(r, 4), norm_Delta=round(r * np.sqrt(n_ibr), 3),
+                argmin=[[round(d.real, 2), round(d.imag, 2)] for d in arg], n_points=len(ok))
+
+
+def panel_maps(tmap, reading):
+    """Class maps in the digitised figure's layout: rows Im +2 .. -2, columns Re -2 .. +2."""
+    sep = {d: {p: t < -TOL for p, t in s.items()} for d, s in tmap.items()}
+    re_vals = sorted({d.real for d in sep})
+    im_vals = sorted({d.imag for d in sep}, reverse=True)
+
+    def cls_left(s):
+        a, b, c = s[("N", "ag")], s[("N", "ab")], s[("ag", "ab")]
+        return "+" if a and b and c else "b" if a and b else "v" if b else "." if a else " "
+
+    def cls_right(s):
+        lg = all(s[p] for p in pair_set(LG, reading))
+        ll = all(s[p] for p in pair_set(LL, reading))
+        six = all(s[p] for p in pair_set(FAULTS, reading))
+        return "+" if six else "b" if lg and ll else "v" if ll else "." if lg else " "
+
+    def rows(fn):
+        return [f"{im:+.1f}".replace("+0.0", "-0.0") + " " + " ".join(fn(sep[complex(re_, im)]) for re_ in re_vals)
+                for im in im_vals]
+    return dict(left=rows(cls_left), right=rows(cls_right))
+
+
+def compare_maps(ours, fig):
+    """Fraction of cells whose class matches the digitised figure; mismatches as (Re, Im, ours, figure)."""
+    n, ok, mism = 0, 0, []
+    for ro, rf in zip(ours, fig):
+        im = float(rf[:4])
+        for k in range(21):
+            a, b = ro[5 + 2 * k], rf[5 + 2 * k]
+            n += 1
+            if a == b:
+                ok += 1
+            else:
+                mism.append([round(-2 + 0.2 * k, 1), im, a, b])
+    return dict(agree=round(ok / n, 4), n_cells=n, mismatches=mism)
+
+
+def symmetric(rows):
+    """Right panel: LG <-> LL ('.' <-> 'v') under delta -> -delta."""
+    swap = {".": "v", "v": ".", "+": "+", " ": " ", "b": "b"}
+    g = [[r[5 + 2 * k] for k in range(21)] for r in rows]
+    bad = [(i, k) for i in range(21) for k in range(21) if g[i][k] != swap[g[20 - i][20 - k]]]
+    return len(bad)
 
 
 def q1(args):
     cs = case(args.case, endpoint=not args.endpoint_off)
     mods = models(cs, charging=args.charging, z0_ratio=args.z0)
-    pairs = [("N", "ag"), ("N", "ab"), ("ag", "ab")] + [("N", f) for f in FAULTS if f not in ("ag", "ab")]
-    sep = grid(cs, mods, pairs, step=args.step, noise=args.noise, variant=args.variant)
+    tmap = grid(cs, mods, step=args.step, noise=args.noise, variant=args.variant)
     n = len(cs["ibr"])
-    res = dict(
-        settings=dict(case=args.case, variant=args.variant, noise=args.noise, charging=args.charging,
-                      endpoint=not args.endpoint_off, z0_ratio=args.z0, step=args.step),
-        a_N_ag_ab=smallest(sep, [("N", "ag"), ("N", "ab"), ("ag", "ab")], n),
-        b_N_all_LG=smallest(sep, [("N", f) for f in ("ag", "bg", "cg")], n),
-        b_N_all_LL=smallest(sep, [("N", f) for f in ("ab", "bc", "ca")], n),
-        c_N_all=smallest(sep, [("N", f) for f in FAULTS], n),
-        delta0=sep[0j],
-    )
-    res["delta0"] = {f"{a}-{b}": bool(v) for (a, b), v in res["delta0"].items()}
-    res["map"] = {f"{d.real:+.2f}{d.imag:+.2f}j": [int(bool(v)) for v in s.values()] for d, s in sep.items()}
-    res["map_pairs"] = [f"{a}-{b}" for a, b in pairs]
+    res = dict(settings=dict(case=args.case, variant=args.variant, noise=args.noise, charging=args.charging,
+                             endpoint=not args.endpoint_off, z0_ratio=args.z0, step=args.step, tol=TOL))
+    res["a_N_ag_ab"] = smallest(tmap, [("N", "ag"), ("N", "ab"), ("ag", "ab")], n)
+    for rd in ("R9", "R21"):
+        res[rd] = dict(b_LG=smallest(tmap, pair_set(LG, rd), n), b_LL=smallest(tmap, pair_set(LL, rd), n),
+                       c_all=smallest(tmap, pair_set(FAULTS, rd), n))
+    res["undecided"] = [[d.real, d.imag, f"{p[0]}-{p[1]}", t] for d, s in tmap.items() for p, t in s.items()
+                        if abs(t) <= TOL]
+    if abs(args.step - 0.2) < 1e-9 and args.case == "vid":
+        fig = json.load(open(os.path.join(OUT, "fig5_digitised.json")))
+        for rd in ("R9", "R21"):
+            m = panel_maps(tmap, rd)
+            res[rd]["maps"] = m
+            res[rd]["left_vs_fig"] = compare_maps(m["left"], fig["left"]["map"])
+            res[rd]["right_vs_fig"] = compare_maps(m["right"], fig["right"]["map"])
+            res[rd]["right_symmetry_violations"] = symmetric(m["right"])
+    if abs(args.step - 0.1) < 1e-9:
+        res["text_3p02"] = {f"{d.real:+.1f}{d.imag:+.1f}j": {rd: dict(LG=all(tmap[d][p] < -TOL for p in pair_set(LG, rd)),
+                                                                     LL=all(tmap[d][p] < -TOL for p in pair_set(LL, rd)))
+                                                             for rd in ("R9", "R21")}
+                            for d in tmap if abs(abs(d) - 1.141) < 2e-3 or abs(abs(d) - 1.131) < 2e-3}
+    res["tstar"] = {f"{d.real:+.2f}{d.imag:+.2f}j": {f"{a}-{b}": t for (a, b), t in s.items()} for d, s in tmap.items()}
     os.makedirs(OUT, exist_ok=True)
-    tag = "_".join([args.case, args.variant, args.noise] + (["charging"] if args.charging else [])
+    tag = "_".join([args.case, args.variant, args.noise, f"s{args.step:g}"] + (["charging"] if args.charging else [])
                    + (["noend"] if args.endpoint_off else []) + ([f"z0x{args.z0:g}"] if args.z0 != 1 else []))
     path = os.path.join(OUT, f"q1_{tag}.json")
     with open(path, "w") as f:
-        json.dump(res, f, indent=1)
-    for key in ("a_N_ag_ab", "b_N_all_LG", "b_N_all_LL", "c_N_all"):
-        print(key, res[key])
-    print("delta = 0 separates:", res["delta0"])
+        json.dump(res, f, indent=1, default=lambda v: None if not np.isfinite(v) else v)
+    print(json.dumps({k: res[k] for k in ("settings", "a_N_ag_ab")}, indent=None))
+    for rd in ("R9", "R21"):
+        print(rd, {k: v for k, v in res[rd].items() if k in ("b_LG", "b_LL", "c_all")})
+        if "left_vs_fig" in res[rd]:
+            print(rd, "left agree", res[rd]["left_vs_fig"]["agree"], "right agree", res[rd]["right_vs_fig"]["agree"],
+                  "symmetry violations", res[rd]["right_symmetry_violations"])
+    print("undecided cells:", len(res["undecided"]))
+    if "text_3p02" in res:
+        print("|delta| = 1.141 / 1.131:", res["text_3p02"])
     print("wrote", path)
 
 
@@ -344,6 +435,6 @@ if __name__ == "__main__":
     ap.add_argument("--charging", action="store_true")
     ap.add_argument("--endpoint-off", action="store_true")
     ap.add_argument("--z0", type=float, default=1.0)
-    ap.add_argument("--step", type=float, default=0.1)
+    ap.add_argument("--step", type=float, default=0.2)
     a = ap.parse_args()
     {"q1": q1}[a.cmd](a)
