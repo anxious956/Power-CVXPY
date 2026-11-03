@@ -1784,3 +1784,24 @@ demek. Röle farkı görmez ve doğru karar verir.
 
 Farkı: yalnız I₂ tarafında jeneratör gibi. İnverterin akımı 1.2 pu'da sınırlı, jeneratör ise 5–10 katı verebilir.
 Bastırılmış modda (I₂ = 0) inverter bu davranışı hiç göstermez; röle bu yüzden karar veremiyor.
+
+## 57. PSCAD'de componentleri nasıl yerleştiriyoruz, ayarları nasıl veriyoruz? (3 Kasım 2026)
+
+Elle değil, Python'dan: PSCAD'in kendi kütüphanesi `mhi.pscad` (Python 3.7) açık PSCAD'e bağlanıyor ve elle
+yapılan her şeyi komutla yapıyor (`src/pscad_inverter.py`, `src/pscad_network.py`).
+
+1. **Bağlan, proje aç:** `pscad = mhi.pscad.application()`, `prj = pscad.create_case(yol)`, `c = prj.canvas("Main")`.
+2. **Component koy:** `c.create_component("master:resistor", x, y, R="0.5 [ohm]")`. İlk kısım kütüphanedeki adı
+   (`master:` = PSCAD'in Master Library'si), x, y ızgaradaki yeri (bir kare = 18 piksel), geri kalanı ayarları.
+   Ayarlar, elle çift tıklayınca açılan penceredeki alanların aynısı: kaynak için `Vm="20.0 [kV]"`,
+   `F="60.0 [Hz]"`, endüktans için `L="0.01 [H]"`.
+3. **Bağla:** iki ucu aynı isimli düğüm etiketine (`master:nodelabel`) koyunca PSCAD onları birbirine bağlı sayıyor;
+   sinyaller için `master:datalabel`. Okunabilir çizimde (`src/pscad_view.py`) gerçek teller kullanılıyor.
+4. **İnverter:** PSCAD'de hazır yok; kendi componentimizi tanımlıyoruz: girişleri, çıkışları ve davranışını yazan
+   Fortran kodu. Ayarları (15 MVA, 1.2 pu, K = 5...) bloğun girişlerine `master:const` sabitleri olarak bağlanıyor;
+   çizimdeki yeşil etiketler bunlar.
+5. **Çalıştır, oku:** `prj.parameters(time_duration="0.5", time_step="10")`, `prj.run()`; çıktı dosyaları Python'da
+   okunup rölenin kararı hesaplanıyor.
+
+Elle: Master Library'den sürükle bırak, çift tıklayıp ayarları yaz, uçları tel ile birleştir. Aynı işlemler; Python
+yalnızca yüzlerce koşuyu otomatik yapmak için.
