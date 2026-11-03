@@ -1880,3 +1880,21 @@ desteklemesi. Bizim inverterde gerilim (|V1|) 0.9 pu'nun altına düşünce reak
 IQ = IQ0 + K₁ (0.9 − |V1|), en fazla 1.2 pu; yer açmak için aktif akım kısılıyor. K₁ = 4: gerilim 0.1 pu düştükçe
 0.4 pu daha fazla reaktif akım. IEEE 2800 K için 2–6 aralığı veriyor; rapor değer vermediği için 4'ü biz seçtik
 (raporun Şekil 16'sını tutturuyor). Bu pozitif bileşen için; I₂ kuralı (K = 5) ayrı.
+
+## 64. Fazladan inverter koyunca gerilim neden yükseliyor? Hangi tip inverterleri koyduk? (3 Kasım 2026)
+
+**Tip:** eklenen inverterlerin hepsi Devre 1'deki ile aynı: `gfl_avm`, bizim ortalama (averaged) **grid-following**
+inverterimiz, 15 MVA, aynı ayarlar (P 0.25 / Q 0.15 pu, akım sınırı 1.2 pu, FRT K₁ = 4, iki I₂ modu). Grid-forming
+inverter henüz yok; KIUC_MULTI Adım A'da kurulacak.
+
+**Gerilim:** her inverter şebekeye güç basıyor; akım hatların empedansından geçerken inverter tarafındaki gerilimi
+yükseltiyor (ΔV ≈ R·P + X·Q). En büyük pay reaktif güçten (Q), çünkü hatlar çoğunlukla reaktif (X > R). Statik model,
+hatadan önce:
+
+| | 1 inverter | 3 inverter | 5 inverter |
+|---|---|---|---|
+| BUS2, Q 0.15 (bizim ayar) | 1.019 | 1.058 | 1.090 |
+| BUS2, Q 0 (karşılaştırma) | 1.008 | 1.025 | 1.041 |
+
+Yani yükselişin çoğu, her inverterin sabit Q 0.15 basmasından. Gerçek inverterler gerilim yükselince Q'yu azaltır
+(volt-var kontrolü, IEEE 2800); bizim inverterlerde bu yok, Q sabit. Rölenin kararı her iki durumda aynı.
