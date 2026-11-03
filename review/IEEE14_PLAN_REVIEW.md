@@ -1,4 +1,4 @@
-# Review of the IEEE 14-bus pre-registration (branch `ieee14`, docs/IEEE14.md at `35f8d22`)
+# Review of the IEEE 14-bus pre-registration and Q1 result (branch `ieee14`, docs/IEEE14.md at `35f8d22`; Q1 at `cc1d6f6`)
 
 Reviewer: the independent review session. Read against the PDF in `papers/Taylor_2025_Geometry_of_Distance_Protection.pdf`
 (arXiv 2510.04379**v2**, 10 Oct 2025; §II, §IV-C, §V, §VI, Appendices A–C) and the code on the branch
@@ -76,7 +76,9 @@ So:
   information.
 - **Target (b) is 3.22 by the figure.** 3.02 corresponds to |δ| = 1.141, which is not a 0.2-grid magnitude (nearest
   2.99 at 0.8 + j0.8 and 3.09 at 1.0 + j0.6, neither marked); it is |1.1 + j0.3| on a 0.1 grid, but the figure's
-  grid is 0.2. Treat 3.02 as inconsistent with Fig. 5 (a likely typo for 3.22) and register: reproduced if the LG
+  grid is 0.2. Treat 3.02 as inconsistent with Fig. 5 (a likely typo for 3.22) *[withdrawn 3 Nov 2026, after Q1:
+  3.02 is not a typo but the 0.1-grid value; with V4's angles the 0.1-grid minimum is 0.7 + j0.9, |δ| = 1.1402,
+  ‖Δ‖ = 3.017; see §6 below]* and register: reproduced if the LG
   and LL minima are at |δ| = 1.2166 with argmin −1.2 + j0.2 (LG) and 1.2 − j0.2 (LL); report whether anything at
   |δ| = 1.141 or 1.131 separates, so the 3.02 question is answered either way. **With the current ±0.05 band around
   3.02, a correct reproduction would be scored "not reproduced".**
@@ -127,3 +129,48 @@ So:
 
 Q1 itself (not run); the ADMM (not written); whether the standard-branch primary is Taylor's network (the thesis
 table is unavailable); PSCAD (Q4, not registered).
+
+## 6. Q1 result (ieee14 at `cc1d6f6`), checked 3 Nov 2026
+
+**Registration integrity.** The amendments (88603ca, 04:26: 0.2 grid, figure targets, set rule, map comparison,
+R9/R21, max-slack rule, V5's Ω^N) precede the run (cc1d6f6, 04:51). Every registered variant ran and is in the
+table; the §3 verdict is applied as written: **primary not reproduced**; **V4 (angles `linspace(0, 2π/3, 8)[:7]`,
+i.e. multiples of 2π/21) meets every "reproduced" condition and is reported as information, not substituted**.
+Q2 on V4's angles follows §3's "primary unless Q1 failed; then stated".
+
+**Independent recomputation** from the stored t* values (`results/ieee14/q1_*.json`, my own classification and
+comparison code against `review/checks/p_i14_fig5_map.json`, which `results/ieee14/fig5_digitised.json` equals
+byte for byte):
+
+| run | (a) | (b) LG / LL | (c) | left | right |
+|---|---|---|---|---|---|
+| primary | j0.4 (1.058) | 0.6 ± j1.0 / −0.6 ± j1.0 (3.085) | ±1.4 ± j0.8, four (4.266) | 94.56 % | 89.12 % |
+| V4 | j0.2 unique (0.529) | −1.2 + j0.2 / 1.2 − j0.2 (3.219) | ±(1.6 + j0.6) (4.521) | 100 % | 99.55 % |
+| V1 | j0.4 | 3.085 | 4.266 | 94.33 % | 88.66 % |
+| V2, V5, LL 2 m̂_r r_F | as primary | as primary | as primary | 94.56 % | 89.12 % |
+
+All as the doc reports. The sound variant (V3) gives the same decision on all 9 261 (cell, pair) entries as the
+literal one, with and without V4; R9 and R21 give identical maps in every run; no undecided cell (smallest |t*|
+over all runs 1.6 × 10⁻⁴, above the 10⁻⁷ tolerance). The §IV-C information run: δ = 0 separates every R9 pair; under
+R21 the LL fault–fault pairs need 2.0 − j1.4 (|δ| = 2.44), the grid's edge.
+
+**Symmetry.** The primary's right-panel map is conjugate-symmetric (0 cells differ between δ and δ̄) and point-
+symmetric with LG ↔ LL (0 violations). V4 breaks the conjugate symmetry (70 cells) and keeps the point symmetry
+(0 violations), as the figure does. That is the measurable form of the doc's "same pattern turned by about 10°".
+
+**The two V4 cells that differ from the figure**, (−1.8, 0.4) and (1.8, −0.4): the figure has LG-only and LL-only
+(re-read at 900 dpi: the (−1.8, 0.4) marker is a disc), ours has all six. The deciding pair's slack is
+t* = −0.0031 (N–ca at the first, N–bg at the second; −0.0030 under V3) on the 20-gon's unit scale, i.e. 0.3 % of
+the noise radius: a region-edge cell that a solver tolerance or a different polygon orientation moves.
+
+**3.02, corrected.** My §2 called the printed 3.02 a likely typo. Research's 0.1-grid information run with V4's
+angles gives the N-vs-all-LG minimum at 0.7 + j0.9, |δ| = 1.1402, ‖Δ‖ = 3.017 (LL at −0.7 − j0.9), which I confirm
+from the stored t*. So the text quotes (b) from a 0.1 grid and (c) from the 0.2 grid (on the 0.1 grid (c) is
+4.506 at ±(1.3 − j1.1)); with the primary angles nothing at |δ| = 1.141 or 1.131 separates all LG faults. The
+claim is withdrawn in §2 with a dated bracket; it goes into REVIEW.md §7 at the PR as a refuted reviewer claim,
+beside "the primary as registered reproduces Fig. 5" (refuted) and the V4 finding.
+
+**Determinism.** Rerunning `q1` (primary) and `q1 --endpoint-off` (V4) on a scratch checkout of cc1d6f6 reproduces every stored t* exactly (max difference 0 over 2 × 9 261 entries), the same minima and the same agreement figures.
+
+**For Q2, before it runs:** state the ADMM termination rule and iteration cap (the paper gives none), and run the
+primal re-check of the result under V3 as well as the literal set, so the 4.35 carries a valid certificate.
