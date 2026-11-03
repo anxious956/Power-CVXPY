@@ -1631,3 +1631,23 @@ KIUC'ta da raporun kendisi tek inverterli. (Bu gerekçe bizim çıkarımımız, 
 ve internette hazır çok inverterli sistemler (2, 7 inverterli…). Bunların hiçbiri henüz yapılmadı.
 
 *Kaynak: `results/CIGREMV.md` tablo "Sources"; `docs/KIUC.md` §1; `docs/meetings/2026-10-20_biweekly.md`; Q45–46.*
+
+## 48. Eski devrelerden mi devam ediyoruz? Hocanın şimdiki isteği farklı (3 Kasım 2026)
+
+Hayır, eski devreler (TestGrid, CIGRE MV, iki ve üç baralı) bundan sonrasının temeli değil; sadece geçmiş iş.
+Temel, 20 Ekim toplantısındaki istekler:
+
+| Hocanın isteği | Durum |
+|---|---|
+| Sert olmayan kaynakla hata simülasyonu | kısmen: KIUC'ta raporun sert olmayan kaynak seçeneği var, asıl hedef inverterli sistem |
+| Hepsi inverter olan sistem, bir kısmı GFM bir kısmı GFL | yapılmadı |
+| Hepsi GFM: önce dengede çalışıyor mu, sonra hata | yapılmadı |
+| Yarı GFM yarı GFL sistem | yapılmadı |
+| İnternette hazır sistemler (2, 7 inverterli…), gerekirse mail | yapılmadı |
+| Devrelerin nereden geldiği slaytta | yapıldı (KIUC deck'i) |
+| Raporu gözden geçir | yapıldı |
+
+Eksiklerin hepsi grid-forming inverter modeline ve çok inverterli bir sisteme bağlı. Önce internette hazır sistem
+aranmalı; hangi sistemi kuracağımızı o belirler.
+
+*Kaynak: `docs/meetings/2026-10-20_biweekly.md`.*
