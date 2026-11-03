@@ -1666,3 +1666,27 @@ grid-following inverterli veri aynı yolla üretilebiliyor. Sınır: her devrede
 grid-forming inverter modeli lazım, o yok.
 
 *Kaynak: `src/network.py` (`IBR`, `affine_case`, `min_delta`); `src/pscad_network.py`; `src/i2dir_emt.py`.*
+
+## 50. Karşılaştırabileceğimiz çok inverterli hazır sistem var mı? Hocanın kullandığı var mı? (3 Kasım 2026)
+
+**Var, hocanın kendi sistemi: IEEE 14 baralı şebeke.** İki makalesinde kullanıyor:
+
+1. **Geometry of Distance Protection (2025), optimizasyon tarafı:** statik model, CVXPY. Senkron kaynaklar bara
+   1, 3, 5, 14'te; inverterler 2, 4, 7, 8, 12'de (5 inverter); yükler 6, 10, 11, 13'te. Röle bara 2'de, 2-3 hattında.
+   §VI-D'de bütün kaynakları inverter yapıyor: **7 inverter** (toplantıdaki "7 inverterli" muhtemelen bu). Önce
+   bütün inverterler aynı sinyali basıyor (Şekil 5), sonra her inverter farklı sinyal basıyor (ADMM): sinyalin
+   büyüklüğü ≈ 4.35, en iyi ızgara noktasından %4 küçük. Bu sayıları kendi optimizasyonumuzla tekrar edip
+   karşılaştırabiliriz.
+2. **Reachability (2026, Baeckeland ile), EMT tarafı:** Simulink modeli; 14 baralı şebekede **5 grid-forming
+   inverter** (bara 1 ve 4'te dVOC, 2 ve 5'te droop, 3'te VSM), 12 yük; 3. hattın ortasında faz-faz hata, 100 ms;
+   röle bara 2'de. İnverter parametreleri Baeckeland, Yang & Seo (2026) Tablo III'te, sonuçları Şekil 22'de. Model
+   dosyası yayınlanmamış; Baeckeland hocanın ortak yazarı.
+
+Hat verisi: Geometry makalesi Baeckeland'ın 2022 doktora tezinin Tablo 3.1'ini kullanıyor (tez internette
+bulunamadı); Baeckeland 2026 standart IEEE 14 bara verisini aynen aldıklarını söylüyor.
+
+**Yedek:** NREL PyPSCAD (github.com/NREL/PyPSCAD): ücretsiz PSCAD grid-following/grid-forming modelleri; hepsi
+inverter olan IEEE 9 bara, grid-forming'li 39 bara, Maui 3 bara. Sonuçları kararlılık üzerine, koruma üzerine değil.
+
+*Kaynak: `papers/Taylor_2025_Geometry_of_Distance_Protection.pdf` §IV-C, §VI-D;
+`papers/Taylor_2026_Reachability_Time_Domain_Distance_Protection.pdf` §V; `papers/notes/F_taylor_tac_and_gfm_model.md`.*
