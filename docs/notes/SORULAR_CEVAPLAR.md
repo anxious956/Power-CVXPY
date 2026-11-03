@@ -1828,3 +1828,14 @@ dönüş yolunun gerilimi. Hemen solundaki "Relay R2 / CT" etiketli üç amperme
 ölçüyor. PSCAD'de röle diye bir parça yok: PSCAD rölenin göreceği gerilimi ve akımı kaydediyor, rölenin kendisi
 (32Q yön elemanı, artımsal eleman) koşudan sonra Python'da bu kayıtlardan hesaplanıyor (`src/kiuc.py`,
 `src/step3_frontend.py`). Gerçek bir röle de aynısını yapar: VT'den gerilimi, CT'den akımı alır, kararı içinde hesaplar.
+
+## 60. "Fault here" derken neyin arızası? (3 Kasım 2026)
+
+Hattın **kısa devresi**: Hat 2'de iletkenin toprağa ya da başka bir faza değmesi (gerçekte ağaç dalı, yıldırım, kopan
+tel, kırılan izolatör). İki tip deniyoruz: **A-toprak** (A fazı toprağa değiyor, en sık görülen) ve **B-C** (iki faz
+birbirine değiyor). Hata direnci 0.01 Ω (tam kısa devre) ya da 5 Ω (dokunma direnci var).
+
+PSCAD'de: Hat 2 F noktasında ikiye bölünüyor (part 1, part 2; F, BUS2'den %5, %50 ya da %80 uzaklıkta). F'nin altında
+bir anahtar (breaker) duruyor; anahtar 0.30 s'de kapanıp A fazını direnç üzerinden toprağa (ya da B'yi C'ye)
+bağlıyor, 0.10 s sonra açılıyor. Anahtarı zamanlayan küçük blok (timed breaker logic) en alttaki. Rölenin işi bu kısa
+devreyi görüp yönünü bulmak.
