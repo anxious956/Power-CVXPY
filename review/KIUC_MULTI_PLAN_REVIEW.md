@@ -6,7 +6,15 @@ main, and the 20 Oct minutes. Nothing has been built or run.
 
 ## Verdict
 
-**Not cleared as written; cleared once §1–§4 below are in the doc.** None of it is tuning: four of the items are
+> **Status, 3 Nov 2026: cleared.** The amendment f541b98 on `kiuc-multi` (before anything was built) carries all four
+> items: saturation limiter primary with the virtual-impedance one as information (1.32 pu expectation written), X_c = 0.06,
+> A3 "expected to pass" with the |I2| / angle / ratio outputs, VSM dropped on Table 26; three I2 modes with their 32Q
+> priors; GFMs behind R2 (M5-mixR2), an all-GFM island, the KIUC 5/50/80 % set (12 cases; ABC was never in `FWD`);
+> islands balanced by a 1.25 + j0.75 pu load at BUS1 and grounded by a bank of X0 = j0.06 there, droop power flow
+> with the reference at B3; B2's "changed" rule and per-case priors. One stale pointer left ("§2.2.2.4" in the
+> report-summary paragraph; the mode list cites §2.3.1). Step A may be built.
+
+**Not cleared as written; cleared once §1–§4 below are in the doc.** *[Superseded by the status line above.]* None of it is tuning: four of the items are
 things the plan would fail or mis-measure by construction, knowable now from the report and from arithmetic, which
 is exactly what a pre-registration is for. The three points research asked about are answered in §1 (stand-in),
 §3 (layout) and §4 (island thresholds).
