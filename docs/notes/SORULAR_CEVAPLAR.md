@@ -1736,7 +1736,7 @@ yazıldı ve incelendi (PR #70); kurulum henüz başlamadı.
 
 ## 53. Sunumdaki "143 koşu" ne, neden ve nasıl yaptık? (3 Kasım 2026)
 
-**Koşu:** PSCAD'de devreyi bir kez baştan sona simüle etmek (yaklaşık 0.4 s'lik bir simülasyon).
+**Koşu:** PSCAD'de devreyi bir kez baştan sona simüle etmek (0.5 s'lik bir simülasyon; hata 0.30 s'de başlıyor, 0.10 s sürüyor).
 
 **Neden:** raporun bulgusunun ("I₂ bastırılırsa yön rölesi karar veremez, IEEE 2800 ile doğru karar verir") bizim
 inverterimizle de tutup tutmadığını görmek; tek bir hatayla değil, farklı hata yerleri ve tipleriyle.
