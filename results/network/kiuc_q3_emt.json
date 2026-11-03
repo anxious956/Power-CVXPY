@@ -1,0 +1,1496 @@
+{
+ "R2 | hydro off": {
+  "gate": {
+   "err": 8.355570476825669e-05,
+   "settled": 2.9878796881099845e-08,
+   "passed": "True"
+  },
+  "tiers": {
+   "box": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.026723545155085703,
+    "nearest_other_min": 4.311663933699007,
+    "rows": [
+     {
+      "name": "kq3_R2_off_L2ag95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.022055329658866515,
+      "nearest_other": 5.223575147149694
+     },
+     {
+      "name": "kq3_R2_off_L2ag95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.014895601636573516,
+      "nearest_other": 4.505241756259113
+     },
+     {
+      "name": "kq3_R2_off_L2ag50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02467273242637547,
+      "nearest_other": 5.200816223540606
+     },
+     {
+      "name": "kq3_R2_off_L2ag50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.01648031890040787,
+      "nearest_other": 4.396634316289068
+     },
+     {
+      "name": "kq3_R2_off_L2ag20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.026723545155085703,
+      "nearest_other": 5.183768650128235
+     },
+     {
+      "name": "kq3_R2_off_L2ag20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.01777309883660642,
+      "nearest_other": 4.311663933699007
+     },
+     {
+      "name": "kq3_R2_off_L2ab95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.008843615042783047,
+      "nearest_other": 6.266425770002162
+     },
+     {
+      "name": "kq3_R2_off_L2ab95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02325506629042793,
+      "nearest_other": 5.830155631397089
+     },
+     {
+      "name": "kq3_R2_off_L2ab50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.00866699635861033,
+      "nearest_other": 6.256764607414867
+     },
+     {
+      "name": "kq3_R2_off_L2ab50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02398187028191791,
+      "nearest_other": 5.767251953916236
+     },
+     {
+      "name": "kq3_R2_off_L2ab20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.008549735194530686,
+      "nearest_other": 6.250317429563501
+     },
+     {
+      "name": "kq3_R2_off_L2ab20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02451145550897624,
+      "nearest_other": 5.718371302228553
+     }
+    ]
+   },
+   "structured": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.10627491764771245,
+    "nearest_other_min": 16.887581832734845,
+    "rows": [
+     {
+      "name": "kq3_R2_off_L2ag95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.08818885474937126,
+      "nearest_other": 20.53522668653759
+     },
+     {
+      "name": "kq3_R2_off_L2ag95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.059489085881062054,
+      "nearest_other": 17.66189312297527
+     },
+     {
+      "name": "kq3_R2_off_L2ag50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.09832889974589103,
+      "nearest_other": 20.44419099210124
+     },
+     {
+      "name": "kq3_R2_off_L2ag50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.06565157874052953,
+      "nearest_other": 17.22746336309509
+     },
+     {
+      "name": "kq3_R2_off_L2ag20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.10627491764771245,
+      "nearest_other": 20.376000698451758
+     },
+     {
+      "name": "kq3_R2_off_L2ag20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.07068137973600332,
+      "nearest_other": 16.887581832734845
+     },
+     {
+      "name": "kq3_R2_off_L2ab95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.017687230085566094,
+      "nearest_other": 24.708535101561786
+     },
+     {
+      "name": "kq3_R2_off_L2ab95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.04651013512422676,
+      "nearest_other": 22.96345454714149
+     },
+     {
+      "name": "kq3_R2_off_L2ab50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.01733399271722066,
+      "nearest_other": 24.66989045121261
+     },
+     {
+      "name": "kq3_R2_off_L2ab50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.04796374339549984,
+      "nearest_other": 22.71183983721808
+     },
+     {
+      "name": "kq3_R2_off_L2ab20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.017099470389061372,
+      "nearest_other": 24.64410173980714
+     },
+     {
+      "name": "kq3_R2_off_L2ab20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.04902291381510494,
+      "nearest_other": 22.516317230467347
+     }
+    ]
+   }
+  }
+ },
+ "R2 | hydro sg": {
+  "gate": {
+   "err": 8.355570344686924e-05,
+   "settled": 2.987876068782924e-08,
+   "passed": "True"
+  },
+  "tiers": {
+   "box": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.02892781800533145,
+    "nearest_other_min": 4.560216075517655,
+    "rows": [
+     {
+      "name": "kq3_R2_sg_L2ag95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.023951580585961238,
+      "nearest_other": 5.478541818322999
+     },
+     {
+      "name": "kq3_R2_sg_L2ag95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.015991103902157414,
+      "nearest_other": 4.727009603138502
+     },
+     {
+      "name": "kq3_R2_sg_L2ag50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02674002722176593,
+      "nearest_other": 5.4828066629919885
+     },
+     {
+      "name": "kq3_R2_sg_L2ag50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.017759371730277335,
+      "nearest_other": 4.634085037046458
+     },
+     {
+      "name": "kq3_R2_sg_L2ag20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02892781800533145,
+      "nearest_other": 5.487122048936776
+     },
+     {
+      "name": "kq3_R2_sg_L2ag20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.01913550283818464,
+      "nearest_other": 4.560216075517655
+     },
+     {
+      "name": "kq3_R2_sg_L2ab95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.008857183734469741,
+      "nearest_other": 6.254025473142688
+     },
+     {
+      "name": "kq3_R2_sg_L2ab95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.024595721395143533,
+      "nearest_other": 5.801820332224999
+     },
+     {
+      "name": "kq3_R2_sg_L2ab50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.008681084301772618,
+      "nearest_other": 6.244367895145319
+     },
+     {
+      "name": "kq3_R2_sg_L2ab50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02553416063595755,
+      "nearest_other": 5.7323593923100775
+     },
+     {
+      "name": "kq3_R2_sg_L2ab20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.008564302411506351,
+      "nearest_other": 6.237922864631056
+     },
+     {
+      "name": "kq3_R2_sg_L2ab20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.026228391996950772,
+      "nearest_other": 5.677418925079427
+     }
+    ]
+   },
+   "structured": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.11497760973487045,
+    "nearest_other_min": 17.882006028576242,
+    "rows": [
+     {
+      "name": "kq3_R2_sg_L2ag95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.09576772642565663,
+      "nearest_other": 21.555308999797617
+     },
+     {
+      "name": "kq3_R2_sg_L2ag95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.06386126141796453,
+      "nearest_other": 18.54918013905963
+     },
+     {
+      "name": "kq3_R2_sg_L2ag50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.106532984814524,
+      "nearest_other": 21.572368378473573
+     },
+     {
+      "name": "kq3_R2_sg_L2ag50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.07073702559509754,
+      "nearest_other": 18.177481874691452
+     },
+     {
+      "name": "kq3_R2_sg_L2ag20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.11497760973487045,
+      "nearest_other": 21.589629922252726
+     },
+     {
+      "name": "kq3_R2_sg_L2ag20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.07608437074933376,
+      "nearest_other": 17.882006028576242
+     },
+     {
+      "name": "kq3_R2_sg_L2ab95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.017714367468939483,
+      "nearest_other": 24.659671313748795
+     },
+     {
+      "name": "kq3_R2_sg_L2ab95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.04919144574306857,
+      "nearest_other": 22.850850750078035
+     },
+     {
+      "name": "kq3_R2_sg_L2ab50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.017362168603545235,
+      "nearest_other": 24.621041001759323
+     },
+     {
+      "name": "kq3_R2_sg_L2ab50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.051068324606457154,
+      "nearest_other": 22.57300699041835
+     },
+     {
+      "name": "kq3_R2_sg_L2ab20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.017128604823012702,
+      "nearest_other": 24.595260879702266
+     },
+     {
+      "name": "kq3_R2_sg_L2ab20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.05245678758588861,
+      "nearest_other": 22.35324512149575
+     }
+    ]
+   }
+  }
+ },
+ "R1rev | hydro off": {
+  "gate": {
+   "err": 8.355570476692442e-05,
+   "settled": 2.987880109994734e-08,
+   "passed": "True"
+  },
+  "tiers": {
+   "box": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.031793949466042956,
+    "nearest_other_min": 32.41832090333636,
+    "rows": [
+     {
+      "name": "kq3_R1rev_off_EQag05r0001",
+      "case": [
+       "EQ",
+       0.05,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.02397113247691472,
+      "nearest_other": 32.42383018737858
+     },
+     {
+      "name": "kq3_R1rev_off_EQag05r0500",
+      "case": [
+       "EQ",
+       0.05,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.005647823564475335,
+      "nearest_other": 32.45142379894798
+     },
+     {
+      "name": "kq3_R1rev_off_EQag50r0001",
+      "case": [
+       "EQ",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.028861666446156134,
+      "nearest_other": 32.419117659728215
+     },
+     {
+      "name": "kq3_R1rev_off_EQag50r0500",
+      "case": [
+       "EQ",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.015520612091829943,
+      "nearest_other": 32.47229486571287
+     },
+     {
+      "name": "kq3_R1rev_off_EQag80r0001",
+      "case": [
+       "EQ",
+       0.8,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.029801840049314465,
+      "nearest_other": 32.419384698672594
+     },
+     {
+      "name": "kq3_R1rev_off_EQag80r0500",
+      "case": [
+       "EQ",
+       0.8,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.018210898433306606,
+      "nearest_other": 32.46498386963821
+     },
+     {
+      "name": "kq3_R1rev_off_EQab05r0001",
+      "case": [
+       "EQ",
+       0.05,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.007762974323497456,
+      "nearest_other": 32.41833904339853
+     },
+     {
+      "name": "kq3_R1rev_off_EQab05r0500",
+      "case": [
+       "EQ",
+       0.05,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.016646236847642392,
+      "nearest_other": 32.483443944505204
+     },
+     {
+      "name": "kq3_R1rev_off_EQab50r0001",
+      "case": [
+       "EQ",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0078109891255886115,
+      "nearest_other": 32.41832090333636
+     },
+     {
+      "name": "kq3_R1rev_off_EQab50r0500",
+      "case": [
+       "EQ",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.031793949466042956,
+      "nearest_other": 32.49209705448127
+     },
+     {
+      "name": "kq3_R1rev_off_EQab80r0001",
+      "case": [
+       "EQ",
+       0.8,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.008208030412026905,
+      "nearest_other": 32.419484536828065
+     },
+     {
+      "name": "kq3_R1rev_off_EQab80r0500",
+      "case": [
+       "EQ",
+       0.8,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.027196587769853665,
+      "nearest_other": 32.476829113936205
+     }
+    ]
+   },
+   "structured": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.11845217046103562,
+    "nearest_other_min": 63.577229574311986,
+    "rows": [
+     {
+      "name": "kq3_R1rev_off_EQag05r0001",
+      "case": [
+       "EQ",
+       0.05,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.09317939147277725,
+      "nearest_other": 63.58991560768442
+     },
+     {
+      "name": "kq3_R1rev_off_EQag05r0500",
+      "case": [
+       "EQ",
+       0.05,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.022459619930010926,
+      "nearest_other": 63.643840652697605
+     },
+     {
+      "name": "kq3_R1rev_off_EQag50r0001",
+      "case": [
+       "EQ",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.11365129928051688,
+      "nearest_other": 63.58043758512296
+     },
+     {
+      "name": "kq3_R1rev_off_EQag50r0500",
+      "case": [
+       "EQ",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0615309099730647,
+      "nearest_other": 63.68380844584811
+     },
+     {
+      "name": "kq3_R1rev_off_EQag80r0001",
+      "case": [
+       "EQ",
+       0.8,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.11845217046103562,
+      "nearest_other": 63.58097509760765
+     },
+     {
+      "name": "kq3_R1rev_off_EQag80r0500",
+      "case": [
+       "EQ",
+       0.8,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0724593114345608,
+      "nearest_other": 63.67022862335349
+     },
+     {
+      "name": "kq3_R1rev_off_EQab05r0001",
+      "case": [
+       "EQ",
+       0.05,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.015525951725742641,
+      "nearest_other": 63.57727238328305
+     },
+     {
+      "name": "kq3_R1rev_off_EQab05r0500",
+      "case": [
+       "EQ",
+       0.05,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.03329247595808475,
+      "nearest_other": 63.70434771205522
+     },
+     {
+      "name": "kq3_R1rev_off_EQab50r0001",
+      "case": [
+       "EQ",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.015621978250903973,
+      "nearest_other": 63.577229574311986
+     },
+     {
+      "name": "kq3_R1rev_off_EQab50r0500",
+      "case": [
+       "EQ",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.06358790496368286,
+      "nearest_other": 63.717204994320355
+     },
+     {
+      "name": "kq3_R1rev_off_EQab80r0001",
+      "case": [
+       "EQ",
+       0.8,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.01641606082405381,
+      "nearest_other": 63.5794411668666
+     },
+     {
+      "name": "kq3_R1rev_off_EQab80r0500",
+      "case": [
+       "EQ",
+       0.8,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.05439317957263764,
+      "nearest_other": 63.68817005868179
+     }
+    ]
+   }
+  }
+ },
+ "R1fwd | hydro off": {
+  "gate": {
+   "err": 8.355570476692442e-05,
+   "settled": 2.987880109994734e-08,
+   "passed": "True"
+  },
+  "tiers": {
+   "box": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.09058916286781209,
+    "nearest_other_min": 34.89152458239677,
+    "rows": [
+     {
+      "name": "kq3_R1fwd_off_L2ag95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.046157501747733434,
+      "nearest_other": 43.426655454011886
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.023463168602730955,
+      "nearest_other": 34.89152458239677
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.07003574355444302,
+      "nearest_other": 47.56805676772734
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.025059491527722487,
+      "nearest_other": 37.22767231181218
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.09058916286781209,
+      "nearest_other": 50.801096649553486
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.026167217942381946,
+      "nearest_other": 38.93020805516131
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 73.31092701319209
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 64.57030623219522
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 79.96022023788841
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 69.33387519743415
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 85.10293969862926
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 72.87316555732178
+     }
+    ]
+   },
+   "structured": {
+    "n": 12,
+    "of": 12,
+    "contained": 12,
+    "separated": 12,
+    "model_err_max": 0.18117832573562417,
+    "nearest_other_min": 69.67069048873212,
+    "rows": [
+     {
+      "name": "kq3_R1fwd_off_L2ag95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.12648048402756373,
+      "nearest_other": 86.74082031993728
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.08518802897240305,
+      "nearest_other": 69.67069048873212
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.14007148710888603,
+      "nearest_other": 95.02347215991506
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0906449917435533,
+      "nearest_other": 74.34267562504007
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.18117832573562417,
+      "nearest_other": 101.48943661424326
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ag20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ag",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.09465881319265278,
+      "nearest_other": 77.74754580389884
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab95r0001",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 146.48422605891983
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab95r0500",
+      "case": [
+       "L2",
+       0.95,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 129.0029844969261
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab50r0001",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 159.78281250831247
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab50r0500",
+      "case": [
+       "L2",
+       0.5,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 138.530122427404
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab20r0001",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       4.600648384712352e-05
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 170.0682514297942
+     },
+     {
+      "name": "kq3_R1fwd_off_L2ab20r0500",
+      "case": [
+       "L2",
+       0.2,
+       "ab",
+       0.02300324192356176
+      ],
+      "clean": true,
+      "contained": true,
+      "separated": true,
+      "model_err": 0.0,
+      "nearest_other": 145.60870314717923
+     }
+    ]
+   }
+  }
+ },
+ "conventional_control": {
+  "R2 | hydro off": {
+   "report_right": 0.0,
+   "report_none": 1.0,
+   "report_wrong": 0.0,
+   "inc_right": 0.0,
+   "inc_none": 1.0,
+   "inc_wrong": 0.0
+  },
+  "R2 | hydro sg": {
+   "report_right": 0.0,
+   "report_none": 1.0,
+   "report_wrong": 0.0,
+   "inc_right": 0.0,
+   "inc_none": 1.0,
+   "inc_wrong": 0.0
+  },
+  "R1rev | hydro off": {
+   "report_right": 0.0,
+   "report_none": 1.0,
+   "report_wrong": 0.0,
+   "inc_right": 0.0,
+   "inc_none": 1.0,
+   "inc_wrong": 0.0
+  },
+  "R1fwd | hydro off": {
+   "report_right": 1.0,
+   "report_none": 0.0,
+   "report_wrong": 0.0,
+   "inc_right": 1.0,
+   "inc_none": 0.0,
+   "inc_wrong": 0.0
+  }
+ }
+}

@@ -83,22 +83,25 @@ def limiter_vec(i1, d, i_max, lim=1):
 
 
 def fixed_point(mv, e, i_cmd, d_cmd, i_max, lim, u0, iters=200, tol=1e-12):
-    """Vectorised V1-referenced fixed point: (u, i1, d, |V1_R|). Raises if any sample has not converged
-    (the scalar network.solve_v1ref does the same)."""
-    u = u0.copy()
-    for _ in range(iters):
-        i1, d = limiter_vec(i_cmd * u, d_cmd * u, i_max, lim)
-        v = mv[0] * e + mv[1] * i1 + mv[2] * d
-        un = v / np.maximum(np.abs(v), 1e-12)
-        step = np.max(np.abs(un - u))
-        u = un
-        if step < tol:
-            break
-    else:
-        raise RuntimeError(f"frames.fixed_point: not converged after {iters} iterations (step {step:.1e})")
-    i1, d = limiter_vec(i_cmd * u, d_cmd * u, i_max, lim)
-    v = mv[0] * e + mv[1] * i1 + mv[2] * d
-    return u, i1, d, np.abs(v)
+    """Vectorised V1-referenced fixed point: (u, i1, d, |V1_R|). Plain iteration first; where it does not converge
+    (a period-2 swing of the frame, seen on longer lines, docs/LONG_LINES.md), under-relaxed iteration from the
+    same start, as frames_multi.FrameModelMulti._fixed and network.solve_v1ref's relax: the relaxation changes the
+    path, not the fixed point, and never runs where plain iteration converges. Raises if no relaxation converges."""
+    for relax, n in ((1.0, iters), (0.5, 2000), (0.25, 6000)):
+        u = u0.copy()
+        for _ in range(n):
+            i1, d = limiter_vec(i_cmd * u, d_cmd * u, i_max, lim)
+            v = mv[0] * e + mv[1] * i1 + mv[2] * d
+            un = v / np.maximum(np.abs(v), 1e-12)
+            un = un if relax == 1.0 else (1 - relax) * u + relax * un
+            un = un / np.maximum(np.abs(un), 1e-12)
+            step = np.max(np.abs(un - u))
+            u = un
+            if step < tol:
+                i1, d = limiter_vec(i_cmd * u, d_cmd * u, i_max, lim)
+                v = mv[0] * e + mv[1] * i1 + mv[2] * d
+                return u, i1, d, np.abs(v)
+    raise RuntimeError(f"frames.fixed_point: not converged even under-relaxed (step {step:.1e})")
 
 
 def lawson_minimax(A, Y, iters=25):

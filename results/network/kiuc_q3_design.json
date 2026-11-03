@@ -1,0 +1,382 @@
+{
+ "detection R2 | hydro off | box | rho 0.1": {
+  "study": "detection R2 | hydro off",
+  "tier": "box",
+  "rho": 0.1,
+  "phi_ref": 0.02423202073298646,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 3.874038705901548,
+   "margin_eps": 1.6740387059015478,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 13.093227863311768
+ },
+ "detection R2 | hydro off | box | rho 0.0": {
+  "study": "detection R2 | hydro off",
+  "tier": "box",
+  "rho": 0.0,
+  "phi_ref": 0.02423202073298646,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 3.874038705901548,
+   "margin_eps": 1.874038705901548,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 12.51148271560669
+ },
+ "detection R2 | hydro off | structured | rho 0.1": {
+  "study": "detection R2 | hydro off",
+  "tier": "structured",
+  "rho": 0.1,
+  "phi_ref": 0.02423202073298646,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 14.797952660113857,
+   "margin_eps": 12.597952660113858,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 50.12044358253479
+ },
+ "detection R2 | hydro off | structured | rho 0.0": {
+  "study": "detection R2 | hydro off",
+  "tier": "structured",
+  "rho": 0.0,
+  "phi_ref": 0.02423202073298646,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 14.797952660113857,
+   "margin_eps": 12.797952660113857,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 51.39094543457031
+ },
+ "detection R2 | hydro on (Thevenin) | box | rho 0.1": {
+  "study": "detection R2 | hydro on (Thevenin)",
+  "tier": "box",
+  "rho": 0.1,
+  "phi_ref": 0.024259643498312514,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 4.108837322647753,
+   "margin_eps": 1.908837322647753,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.2872700007018974,
+   "I1_commanded": 0.2872700007018974
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 13.648371696472168
+ },
+ "detection R2 | hydro on (Thevenin) | box | rho 0.0": {
+  "study": "detection R2 | hydro on (Thevenin)",
+  "tier": "box",
+  "rho": 0.0,
+  "phi_ref": 0.024259643498312514,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 4.108837322647753,
+   "margin_eps": 2.1088373226477533,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.2872700007018974,
+   "I1_commanded": 0.2872700007018974
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 12.870524883270264
+ },
+ "detection R2 | hydro on (Thevenin) | structured | rho 0.1": {
+  "study": "detection R2 | hydro on (Thevenin)",
+  "tier": "structured",
+  "rho": 0.1,
+  "phi_ref": 0.024259643498312514,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 15.728809638369745,
+   "margin_eps": 13.528809638369744,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.2872700007018974,
+   "I1_commanded": 0.2872700007018974
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 51.066099405288696
+ },
+ "detection R2 | hydro on (Thevenin) | structured | rho 0.0": {
+  "study": "detection R2 | hydro on (Thevenin)",
+  "tier": "structured",
+  "rho": 0.0,
+  "phi_ref": 0.024259643498312514,
+  "unseparated_at_0": 0,
+  "of": 12,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 15.728809638369745,
+   "margin_eps": 13.728809638369745,
+   "binding": [
+    "L2",
+    0.2,
+    "ag",
+    0.02300324192356176
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.2872700007018974,
+   "I1_commanded": 0.2872700007018974
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 50.344507932662964
+ },
+ "direction R1 | hydro off | box | rho 0.1": {
+  "study": "direction R1 | hydro off",
+  "tier": "box",
+  "rho": 0.1,
+  "phi_ref": 0.024257506309501714,
+  "unseparated_at_0": 0,
+  "of": 144,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 31.987010597405924,
+   "margin_eps": 29.787010597405924,
+   "binding": [
+    [
+     "L2",
+     0.95,
+     "ag",
+     0.02300324192356176
+    ],
+    [
+     "EQ",
+     0.5,
+     "ag",
+     0.02300324192356176
+    ]
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 27.291410446166992
+ },
+ "direction R1 | hydro off | box | rho 0.0": {
+  "study": "direction R1 | hydro off",
+  "tier": "box",
+  "rho": 0.0,
+  "phi_ref": 0.024257506309501714,
+  "unseparated_at_0": 0,
+  "of": 144,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 31.987010597405924,
+   "margin_eps": 29.987010597405924,
+   "binding": [
+    [
+     "L2",
+     0.95,
+     "ag",
+     0.02300324192356176
+    ],
+    [
+     "EQ",
+     0.5,
+     "ag",
+     0.02300324192356176
+    ]
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 28.329522132873535
+ },
+ "direction R1 | hydro off | structured | rho 0.1": {
+  "study": "direction R1 | hydro off",
+  "tier": "structured",
+  "rho": 0.1,
+  "phi_ref": 0.024257506309501714,
+  "unseparated_at_0": 0,
+  "of": 144,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 62.615660311468524,
+   "margin_eps": 60.41566031146852,
+   "binding": [
+    [
+     "L2",
+     0.95,
+     "ag",
+     0.02300324192356176
+    ],
+    [
+     "EQ",
+     0.5,
+     "ab",
+     0.02300324192356176
+    ]
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 104.76593470573425
+ },
+ "direction R1 | hydro off | structured | rho 0.0": {
+  "study": "direction R1 | hydro off",
+  "tier": "structured",
+  "rho": 0.0,
+  "phi_ref": 0.024257506309501714,
+  "unseparated_at_0": 0,
+  "of": 144,
+  "unseparated": [],
+  "abs_delta": 0.0,
+  "separating_angles_deg": "all",
+  "carried_angle_deg": null,
+  "margin": {
+   "gap_eps": 62.615660311468524,
+   "margin_eps": 60.615660311468524,
+   "binding": [
+    [
+     "L2",
+     0.95,
+     "ag",
+     0.02300324192356176
+    ],
+    [
+     "EQ",
+     0.5,
+     "ab",
+     0.02300324192356176
+    ]
+   ]
+  },
+  "price": {
+   "I1_delivered": 0.28727000070189745,
+   "I1_commanded": 0.28727000070189745
+  },
+  "dead_frames": [],
+  "inadmissible": 0,
+  "seconds": 102.91959428787231
+ }
+}

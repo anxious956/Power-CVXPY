@@ -1,0 +1,59 @@
+{
+ "R2 | hydro off | IEEE 2800 K2=5 | P0.25Q0.15": {
+  "gate": {
+   "I1_emt": 0.2914739910992727,
+   "I1_static": 0.291547594742265,
+   "err": 0.0002524584126902818,
+   "settled": 2.986701908014311e-08,
+   "passed": "True"
+  },
+  "cases": [
+   {
+    "name": "kR2_off_m1_P0p25Q0p15_L2ag95r0001",
+    "case": [
+     "L2",
+     0.95,
+     "ag",
+     4.600648384712352e-05
+    ],
+    "clean": true,
+    "peak": 0.15361422788999923,
+    "hf": 9.994282721260428e-08,
+    "q": "f",
+    "q_per": [
+     "f",
+     "f",
+     "f",
+     "f",
+     "f"
+    ],
+    "inc": "f",
+    "inc_per": [
+     "f",
+     "f",
+     "f",
+     "f",
+     "f"
+    ],
+    "ratio_min": 4.32109859443574,
+    "v1_I": 0.72970486821557,
+    "weak": false,
+    "q_static": "f"
+   }
+  ],
+  "summary": {
+   "n": 1,
+   "of": 1,
+   "want": "f",
+   "q_right": 1.0,
+   "q_none": 0.0,
+   "q_wrong": 0.0,
+   "inc_right": 1.0,
+   "inc_none": 0.0,
+   "inc_wrong": 0.0,
+   "ratio_over_10pct": 1.0,
+   "emt_vs_static_q_differ": 0,
+   "weak": []
+  }
+ }
+}

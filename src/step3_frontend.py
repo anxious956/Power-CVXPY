@@ -72,7 +72,7 @@ def noise_gains(n_trials=4000, seed=0):
 class Relay:
     """One run seen by the relay through one noise tier and seed."""
 
-    def __init__(self, name, tier="clean", seed=0, mimic_on=True, work=WORK):
+    def __init__(self, name, tier="clean", seed=0, mimic_on=True, work=WORK, mimic_tau=None):
         run = read_case(os.path.join(work, name + ".gf46"), name)
         v = np.array([run["ch"][f"VL{p}"] - run["ch"]["VLG"] for p in "ABC"]) / VBASE_PK
         i = np.array([run["ch"][f"IL{p}"] for p in "ABC"]) / IBASE_PK
@@ -93,8 +93,8 @@ class Relay:
             v = v + rng.normal(0, cfg["sigma_v"] / g_plain, v.shape)
             i = i + rng.normal(0, cfg["sigma_i"] / (g_mimic if mimic_on else g_plain), i.shape)
         self.v = v
-        if mimic_on:
-            self.i, self.H = mimic(i)
+        if mimic_on:                                 # mimic_tau: the protected line's X/R / 2 pi, cycles (default L1's)
+            self.i, self.H = mimic(i, MIMIC_TAU if mimic_tau is None else mimic_tau)
         else:
             self.i, self.H = i, 1.0
         self.i_raw = i

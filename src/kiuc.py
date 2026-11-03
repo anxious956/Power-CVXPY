@@ -1,0 +1,755 @@
+"""
+The NREL / KIUC two-bus 57.1 kV system (NREL/TP-5D00-94430, Fig. 41, Table 14) with our inverter: docs/KIUC.md.
+
+Per unit on 15 MVA / 57.1 kV (the IBR's rating). The PSCAD builder runs every network in per unit of its own base
+(10 MVA / 20 kV); the per-unit circuit is the same, so the EMT runs reproduce this one in per unit, and every
+quantity here is in per unit of the 15 MVA base.
+
+  preflight  load flow at both operating points, hydro off / on; the Fig.-16 sanity (bolted AG at 5 % from the IBR
+             end, IEEE 2800 mode, K2 = 5): the IBR's I_P+, I_Q+ (FRT off / on), |I2| / |V2| and the angle of I2
+             against V2
+  static     Q1: at R2 (Bus-2, IBR end, looking into Line-2), the forward set, modes suppressed / IEEE 2800 (K2 = 5),
+             FRT off / on, hydro off / on, TF2 DYg (and YgD, static only), the 16 corners of the source box: the
+             report's negative-sequence directional elements (32Q for B-C, 32QG for A-G, with their supervision),
+             our incremental element, 3|I2| / |I1| and the angle of the IBR's I2 against V2
+
+    python src/kiuc.py preflight   -> results/network/kiuc_preflight.json
+    python src/kiuc.py static      -> results/network/kiuc_static.json
+"""
+import os, sys, json, itertools, time
+import numpy as np
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import network as nw
+from i2dir_static import direction_pk
+
+OUT = os.path.join(HERE, "..", "results", "network")
+SB, VLL = 15.0, 57.1                                   # MVA, kV
+ZB = VLL ** 2 / SB                                     # 217.4 ohm
+Z_EQ1, Z_EQ0 = complex(5.91, 12.53) / ZB, complex(5.65, 18.93) / ZB          # grid to POI (Table 14)
+Z_L1, Z_L0 = complex(1.0433, 3.218) / ZB, complex(1.5649, 4.827) / ZB        # Line-2, Bus-1 to Bus-2
+ZS_STIFF = 0.001j                                      # the stiff grid source
+X_TF1 = 0.07                                           # assumed, on 7.5 MVA
+X_HYDRO = {"X''d 0.20": (0.20 + X_TF1) * SB / 7.5,     # assumed X''d + X_TF1 on 7.5 MVA, on 15 MVA: 0.54 pu (primary)
+           "X'd 0.25": (0.25 + X_TF1) * SB / 7.5}      # 0.64 pu (sensitivity)
+X_TF2 = 0.06                                           # assumed, on 15 MVA
+K2_IEEE, K_FRT = 5.0, 4.0                              # the report's K for I2; K1 for I_Q+ (4: reproduces Fig. 16; 2-6 IEEE 2800)
+K_FRT_SENS = 2.0
+A3 = np.exp(2j * np.pi / 3)
+OPS = {"P0.25Q0.15": (0.25, 0.15), "P1.0Q0": (1.0, 0.0)}
+OHM = lambda r: r / ZB
+M_IBR = (0.05, 0.50, 0.80)                             # from the IBR end (Bus-2)
+RF_OHM = (0.01, 5.0)
+# the forward set at R2: Line-2 runs Bus-1 (a) -> Bus-2 (b), so m from Bus-2 is 1 - m from a
+FWD = [("L2", round(1 - m, 4), s, OHM(r)) for s in ("ag", "ab") for m in M_IBR for r in RF_OHM]
+REV_R1 = [("EQ", round(m, 4), s, OHM(r)) for s in ("ag", "ab") for m in M_IBR for r in RF_OHM]   # EQ: G (a) -> Bus-1 (b)
+MODES = {"suppressed": 0.0, "IEEE 2800 K2=5": K2_IEEE}  # MODE2 1's K2 inside the controller, through the limiter
+LIM = int(os.environ.get("KIUC_LIM", "2"))             # 2: the report's per-sequence limits; 1: ours (per phase, I2 first)
+
+
+HYDRO_OPEN0 = 1e3                                      # the hydro behind TF1's delta: no zero-sequence path
+
+
+def network(hydro="off", tf2="DYg", neg_z=1e6, relay=("L2", "b"), op="P0.25Q0.15", inject=False, xh="X''d 0.20"):
+    """The KIUC system in per unit of 15 MVA. The grid: a stiff source at G behind the equivalent line EQ (Z_eq) to
+    Bus-1. hydro "off": nothing else; "sg": a second synchronous source at Bus-1 behind X_HYDRO[xh] (Q1, Q2, as the
+    report has it); "thevenin": one source at Bus-1, the grid behind Z_eq in parallel with the hydro (Q3: the design
+    tool takes one synchronous source; no EQ line then). tf2: "DYg" (delta facing the line: no zero-sequence path at
+    Bus-2) or "YgD" (X_TF2 to ground in zero sequence)."""
+    p, q = OPS[op]
+    i0 = complex(p, -q)                                # the command in the inverter's frame; about absolute at |V| ~ 1
+    zero_z = 1j * X_TF2 if tf2 == "YgD" else 1e6
+    ibrs = {"I": nw.IBR("B2", i0, (0.1, 0.3), neg_z, zero_z, inject=inject, i_max=1.2)}
+    lines = {"L2": nw.Line("B1", "B2", Z_L1, Z_L0)}
+    zh = 1j * X_HYDRO[xh]
+    if hydro in ("off", "sg"):
+        sgs = {"G": nw.SG("G", {1: ZS_STIFF, 2: ZS_STIFF, 0: ZS_STIFF}, 1.0 + 0j)}
+        lines = {"EQ": nw.Line("G", "B1", Z_EQ1, Z_EQ0), **lines}
+        if hydro == "sg":
+            sgs["H"] = nw.SG("B1", {1: zh, 2: zh, 0: HYDRO_OPEN0 * 1j}, 1.0 + 0j, gen=(0.0, 0.0))
+    else:
+        zg = ZS_STIFF + Z_EQ1
+        z1 = zg * zh / (zg + zh)
+        e = (1.0 / zg + 1.0 / zh) * z1                 # both EMFs 1.0 at 0 deg (assumed)
+        sgs = {"G": nw.SG("B1", {1: z1, 2: z1, 0: ZS_STIFF + Z_EQ0}, e)}
+    return nw.Network(lines=lines, sgs=sgs, ibrs=ibrs, loads={}, relay=relay, eps=0.08, rF=1.0)
+
+
+def sgvals(net, v):
+    return {k: v[k] for k in net.sgs}
+
+
+def nominal_sg(net):
+    return {k: g.e0 for k, g in net.sgs.items()}
+
+
+def settings(net, sg, i_abs, frt=0.0, k2=0.0):
+    """The inverter's command in its own V1 frame for an absolute current realisation, at the no-fault state.
+    sg: {source name: EMF}; k2 > 0: MODE2 1 (the IEEE 2800 law) with that K."""
+    _, V = nw.solve(net, {**sg, "I": i_abs}, full=True)
+    u = V["B2"][0] / abs(V["B2"][0])
+    c = i_abs / u
+    return {"I": dict(ID=float(c.real), IQ=float(-c.imag), D2MAG=0.0, D2ANG=0.0, FRT=float(frt), K2=float(k2))}
+
+
+def solve(net, sg, st, fault, lim=None):
+    lim = LIM if lim is None else lim
+    try:
+        return nw.solve_v1ref(net, sg, st, fault, lim=lim, relax=0.5, max_iter=2000)
+    except RuntimeError:
+        return nw.solve_v1ref(net, sg, st, fault, lim=lim, relax=0.2, max_iter=8000)
+
+
+def ibr_state(net, sg, st, fault, lim=None):
+    """The IBR's delivered I1 in its own frame (I_P+, I_Q+), its I2, its per-phase peak and the Bus-2 V1, V2."""
+    y, inj, _ = solve(net, sg, st, fault, lim)
+    vals = {**sg, "I": inj["I"][0]}
+    _, V = nw.solve(net, vals, {"I": inj["I"][1]}, fault, full=True)
+    v1, v2 = V["B2"][0], V["B2"][1]
+    u = v1 / abs(v1)
+    i1 = inj["I"][0] / u
+    i2 = inj["I"][1] - v2 / net.ibrs["I"].neg_z      # injected: the designed delta plus the IEEE 2800 law
+    peak = max(abs(inj["I"][0] * A3 ** (-k) + i2 * A3 ** k) for k in range(3))
+    return dict(IP=float(i1.real), IQ=float(-i1.imag), I1=float(abs(inj["I"][0])), V1=float(abs(v1)), V2=float(abs(v2)),
+                peak=float(peak),
+                I2=float(abs(i2)), K_meas=float(abs(i2) / abs(v2)) if abs(v2) > 1e-9 else None,
+                ang_I2_V2=float(np.degrees(np.angle(i2 / v2))) if abs(v2) > 1e-9 and abs(i2) > 1e-9 else None), y
+
+
+# ------------------------------------------------------------------ the report's negative-sequence directional element
+A2, K2_RATIO, Q_PICKUP = 0.10, 0.20, 0.10              # SEL defaults: |I2|/|I1| > a2; |I2|/|I0| > k2 (32QG); 3|I2| > 0.1 pu
+Z2F_FRAC, Z2R_FRAC = 0.4, 0.6                          # Z2F = |Z2L| / 2 - eps, Z2R = |Z2L| / 2 + eps, eps = 0.1 |Z2L|
+
+
+def dir32q(y, ground, z_line=Z_L1):
+    """The report's 32Q (phase faults) / 32QG (ground faults, with the zero-sequence restraint k2): z2 =
+    Re[V2 (I2 e^{j angle Z1L})*] / |I2|^2; forward if z2 < Z2F, reverse if z2 > Z2R. Returns (decision, z2, why)."""
+    v2, i1, i2, i0 = y[1], y[3], y[4], y[5]
+    if 3 * abs(i2) <= Q_PICKUP:
+        return None, None, "3I2 below pickup"
+    if abs(i2) <= A2 * abs(i1):
+        return None, None, "a2: |I2| <= 0.1 |I1|"
+    if ground and abs(i0) > 1e-9 and abs(i2) <= K2_RATIO * abs(i0):
+        return None, None, "k2: |I2| <= 0.2 |I0|"
+    z2 = (v2 * np.conj(i2 * np.exp(1j * np.angle(z_line)))).real / abs(i2) ** 2
+    zl = abs(z_line)
+    if z2 < Z2F_FRAC * zl:
+        return "f", float(z2), "ok"
+    if z2 > Z2R_FRAC * zl:
+        return "r", float(z2), "ok"
+    return None, float(z2), "between thresholds"
+
+
+# ------------------------------------------------------------------ pre-flight
+def flow(net, sg, inj):
+    """Active and reactive power into Line-2 at Bus-2 (positive: the IBR exports towards the grid)."""
+    _, V = nw.solve(net, {**sg, "I": inj["I"][0]}, full=True)
+    i = (V["B2"][0] - V["B1"][0]) / net.lines["L2"].z1
+    s = V["B2"][0] * np.conj(i)
+    return V, float(s.real), float(s.imag)
+
+
+def preflight():
+    out = {"loadflow": [], "thevenin_check": [], "fig16": []}
+    ok_all = True
+    for hydro in ("off", "sg"):
+        for op in OPS:
+            net = network(hydro, "DYg", op=op)
+            sg = nominal_sg(net)
+            st = settings(net, sg, net.ibrs["I"].i0)
+            _, inj, it = solve(net, sg, st, None)
+            V, p, q = flow(net, sg, inj)
+            v = {b: float(abs(V[b][0])) for b in V}
+            ok = all(0.95 <= x <= 1.05 for x in v.values())
+            ok_all &= ok
+            out["loadflow"].append(dict(hydro=hydro, op=op, iterations=it, bus_v1=v, P_into_line2_at_B2=p, Q_into_line2_at_B2=q, ok=ok))
+            print(f"load flow, hydro {hydro:3s}, {op}: |V1| " + ", ".join(f"{b} {x:.4f}" for b, x in v.items())
+                  + f"; P, Q from Bus-2 into Line-2 {p:+.3f}, {q:+.3f} pu ({'IBR -> grid' if p > 0 else 'grid -> IBR'})  ({it} it) "
+                  + ("OK" if ok else "OUT of 0.95-1.05"), flush=True)
+    # the Thevenin equivalent (Q3's) against the two-source network: pre-fault and the bolted AG at 5 % from Bus-2, at R2
+    fault = ("L2", 0.95, "ag", OHM(0.01))
+    for xh in X_HYDRO:
+        a, b = network("sg", "DYg", xh=xh), network("thevenin", "DYg", xh=xh)
+        sa, sb = nominal_sg(a), nominal_sg(b)
+        st = settings(a, sa, a.ibrs["I"].i0)
+        d = max(float(np.max(np.abs(solve(a, sa, st, f)[0] - solve(b, sb, st, f)[0]))) for f in (None, fault))
+        out["thevenin_check"].append(dict(xh=xh, largest_difference_at_R2=d))
+        print(f"two-source vs Thevenin hydro ({xh}): largest difference at R2, pre-fault and bolted AG at 5 %: {d:.1e} pu", flush=True)
+    # Fig. 16: bolted AG at 5 % from the IBR end, IEEE 2800 sequence control, P 0.25 / Q 0.15, I_sat 1.2, K = 5
+    for tf2 in ("YgD", "DYg"):
+        for frt in (0.0, K_FRT, 4.0):
+            net = network("off", tf2)
+            sg = nominal_sg(net)
+            st = settings(net, sg, net.ibrs["I"].i0, frt, K2_IEEE)
+            s, _ = ibr_state(net, sg, st, fault)
+            chk = dict(IQ_12=abs(s["IQ"] - 1.2) <= 0.12, IP_0=abs(s["IP"]) <= 0.12,
+                       K_5=s["K_meas"] is not None and abs(s["K_meas"] - 5.0) <= 0.5,
+                       ang_90=s["ang_I2_V2"] is not None and abs(s["ang_I2_V2"] - 90.0) <= 15.0)
+            out["fig16"].append(dict(tf2=tf2, frt=frt, state=s, checks=chk))
+            print(f"Fig. 16 sanity, TF2 {tf2}, FRT K1 {frt:g}: I_P+ {s['IP']:.3f}, I_Q+ {s['IQ']:.3f} (|I1| {s['I1']:.3f}); "
+                  f"|V1| {s['V1']:.3f}, |V2| {s['V2']:.3f}; |I2| {s['I2']:.3f} = {s['K_meas']:.2f} |V2|, I2 leads V2 by "
+                  f"{s['ang_I2_V2']:.1f} deg | checks {chk}", flush=True)
+    out["loadflow_ok"] = ok_all
+    json.dump(out, open(os.path.join(OUT, "kiuc_preflight.json"), "w"), indent=1)
+    print("-> results/network/kiuc_preflight.json")
+
+
+# ------------------------------------------------------------------ Q1
+def corners_for(net):
+    """The 16 corners of the grid source's and the IBR's boxes; the hydro (if any) at its nominal EMF."""
+    out = []
+    for g1, g2, i1, i2 in itertools.product((-1, 1), repeat=4):
+        u = []
+        for kind, name in net.sources:
+            u += [g1, g2] if name == "G" else ([i1, i2] if name == "I" else [0.0, 0.0])
+        out.append(np.array(u, float))
+    return out
+
+
+def run_set(net, cases, frt, want, k2=0.0, lim=None):
+    """Per case and corner: the report's element (32Q / 32QG), our incremental element, 3|I2|/|I1| at the relay,
+    the IBR's I2 against V2, its per-phase peak (flag > 1.5 pu under LIM 2), and |V1| at Bus-2 (weak below 0.2)."""
+    rows = []
+    for c in cases:
+        ground = c[2] == "ag"
+        res = dict(case=list(c), q=[], inc=[], ratio=[], ang=[], why=[], v1=[], peak=[])
+        for u in corners_for(net):
+            v = nw.realisation(net, u)
+            sg = sgvals(net, v)
+            st = settings(net, sg, v["I"], frt, k2)
+            yN, _, _ = solve(net, sg, st, None, lim)
+            s, y = ibr_state(net, sg, st, c, lim)
+            res["peak"].append(s["peak"])
+            dq, _, why = dir32q(y, ground)
+            res["q"].append(dq)
+            res["why"].append(why)
+            res["inc"].append(direction_pk(yN, y))
+            res["ratio"].append(float(3 * abs(y[4]) / max(abs(y[3]), 1e-12)))
+            res["ang"].append(s["ang_I2_V2"])
+            res["v1"].append(s["V1"])
+        rows.append(res)
+    n = len(rows) * 16
+    cnt = lambda key, val: sum(x == val for r in rows for x in r[key])
+    blocked = {}
+    for r in rows:
+        for x in r["why"]:
+            blocked[x] = blocked.get(x, 0) + 1
+    return rows, dict(n=n, want=want, q_right=cnt("q", want) / n, q_none=cnt("q", None) / n,
+                      q_wrong=sum(x not in (want, None) for r in rows for x in r["q"]) / n,
+                      inc_right=cnt("inc", want) / n, inc_none=cnt("inc", None) / n,
+                      inc_wrong=sum(x not in (want, None) for r in rows for x in r["inc"]) / n,
+                      ratio_over_10pct=sum(x > 0.1 for r in rows for x in r["ratio"]) / n, why=blocked,
+                      weak_frame_points=sum(x < 0.2 for r in rows for x in r["v1"]),
+                      peak_max=max(x for r in rows for x in r["peak"]),
+                      beyond_fig16_envelope=sum(x > 1.5 for r in rows for x in r["peak"]),
+                      by_type={t: dict(q_right=sum(x == want for r in rows if r["case"][2] == t for x in r["q"]) / (n / 2),
+                                       inc_right=sum(x == want for r in rows if r["case"][2] == t for x in r["inc"]) / (n / 2))
+                               for t in ("ag", "ab")})
+
+
+def static():
+    out = {}
+    path = os.path.join(OUT, "kiuc_static.json")
+
+    def record(key, rows, summ):
+        out[key] = dict(summary=summ, rows=rows)
+        print(f"{key}: report element right {summ['q_right']:.2f} none {summ['q_none']:.2f} wrong {summ['q_wrong']:.2f} | incremental "
+              f"right {summ['inc_right']:.2f} none {summ['inc_none']:.2f} wrong {summ['inc_wrong']:.2f} | 3I2 > 10 % I1 "
+              f"{summ['ratio_over_10pct']:.2f} | by type {summ['by_type']} | enable: {summ['why']} | weak-frame points "
+              f"{summ['weak_frame_points']} | phase peak max {summ['peak_max']:.2f}, > 1.5 pu at {summ['beyond_fig16_envelope']} points",
+              flush=True)
+        json.dump(dict(fwd=FWD, rev_r1=REV_R1, results=out), open(path, "w"), indent=1, default=str)
+
+    # R2, the forward set (dependability): hydro off / on (two sources), TF2 DYg (EMT too) and YgD (static only)
+    for hydro in ("off", "sg"):
+        for tf2 in ("DYg", "YgD"):
+            for mode, k2 in MODES.items():
+                for frt in (0.0, K_FRT):
+                    net = network(hydro, tf2, relay=("L2", "b"))
+                    rows, summ = run_set(net, FWD, frt, "f", k2)
+                    record(f"R2 forward | hydro {hydro} | TF2 {tf2} | {mode} | FRT {frt:g}", rows, summ)
+    # R1, the reverse set (direction, faults on EQ, hydro off) and the forward set (the control)
+    for mode, k2 in MODES.items():
+        for frt in (0.0, K_FRT):
+            net = network("off", "DYg", relay=("L2", "a"))
+            rows, summ = run_set(net, REV_R1, frt, "r", k2)
+            record(f"R1 reverse | hydro off | TF2 DYg | {mode} | FRT {frt:g}", rows, summ)
+            rows, summ = run_set(net, FWD, frt, "f", k2)
+            record(f"R1 forward (control) | hydro off | TF2 DYg | {mode} | FRT {frt:g}", rows, summ)
+    # sensitivities, one line each (primary: K2 5, LIM 2, K1 4): K1 = 2; LIM 1; K2 = 2; X'd 0.25
+    for rel, cases, want, relay, hydro in (("R2 forward", FWD, "f", ("L2", "b"), "sg"), ("R1 reverse", REV_R1, "r", ("L2", "a"), "off")):
+        net = network(hydro, "DYg", relay=relay)
+        record(f"sens {rel} | hydro {hydro} | DYg | IEEE 2800 K2=5 | FRT {K_FRT_SENS:g}", *run_set(net, cases, K_FRT_SENS, want, K2_IEEE))
+        for mode, k2 in MODES.items():
+            record(f"sens {rel} | hydro {hydro} | DYg | {mode} | FRT {K_FRT:g} | LIM 1", *run_set(net, cases, K_FRT, want, k2, lim=1))
+        record(f"sens {rel} | hydro {hydro} | DYg | IEEE 2800 K2=2 | FRT {K_FRT:g}", *run_set(net, cases, K_FRT, want, 2.0))
+    net = network("sg", "DYg", xh="X'd 0.25")
+    record(f"sens R2 forward | hydro sg X'd 0.25 | DYg | IEEE 2800 K2=5 | FRT {K_FRT:g}", *run_set(net, FWD, K_FRT, "f", K2_IEEE))
+    print(f"-> {os.path.relpath(path)}")
+
+
+# ------------------------------------------------------------------ Q2: EMT
+TANG = TV2 = 1.0 / (2 * np.pi * 15.0)
+T_FAULT = 0.30
+WIN = np.arange(2.0, 3.0001, 0.25)
+MIMIC_TAU = (Z_L1.imag / Z_L1.real) / (2 * np.pi)      # Line-2's X/R / 2 pi, cycles
+FRT_PRIMARY = float(os.environ.get("KIUC_FRT", "4"))   # registered after the review (docs/KIUC.md)
+Q2_SPECS = os.path.join(OUT, "kiuc_q2_specs.json")
+
+
+def emt_settings(net, frt, k2):
+    """The PSCAD inverter's settings at the nominal point: the command in its own frame, MODE2 0 / 1 with K2,
+    TANG 15 Hz, TV2 15 Hz with the K2 law, FRT."""
+    sg = nominal_sg(net)
+    st = settings(net, sg, net.ibrs["I"].i0, frt, k2)["I"]
+    return {"I": dict(ID=st["ID"], IQ=st["IQ"], MODE2=1.0 if k2 > 0 else 0.0, K2=float(k2 if k2 > 0 else 2.0),
+                      D2MAG=0.0, D2ANG=0.0, TANG=TANG, TV2=TV2 if k2 > 0 else 0.0, FRT=float(frt))}
+
+
+def tag(c):
+    ln, m, s, rf = c
+    return f"{ln}{s}{int(round(m * 100)):02d}r{int(round(rf * ZB * 100)):04d}"
+
+
+def make_q2():
+    """The Q2 runs: R2 forward set (both modes, hydro off / two-source), R1 reverse set and forward control (both
+    modes, hydro off), the P 1.0 / Q 0 sensitivity (suppressed, hydro off, R2); each with its normal run."""
+    from pscad_network import make_spec
+    groups = []
+    for hydro in ("off", "sg"):
+        for mode, k2 in MODES.items():
+            groups.append(("R2", hydro, mode, k2, "P0.25Q0.15", FWD, ("L2", "b")))
+    for mode, k2 in MODES.items():
+        groups.append(("R1rev", "off", mode, k2, "P0.25Q0.15", REV_R1, ("L2", "a")))
+        groups.append(("R1fwd", "off", mode, k2, "P0.25Q0.15", FWD, ("L2", "a")))
+    groups.append(("R2", "off", "suppressed", 0.0, "P1.0Q0", FWD, ("L2", "b")))
+    lim1 = "--lim1" in sys.argv
+    if lim1:                                           # the LIM 1 group (review): ours, per phase, I2 first
+        groups = [("R2", "sg", "IEEE 2800 K2=5", K2_IEEE, "P0.25Q0.15", FWD, ("L2", "b")),
+                  ("R1rev", "off", "IEEE 2800 K2=5", K2_IEEE, "P0.25Q0.15", REV_R1, ("L2", "a"))]
+    lim = 1 if lim1 else LIM
+    specs = []
+    for rel, hydro, mode, k2, op, cases, relay in groups:
+        net = network(hydro, "DYg", relay=relay, op=op)
+        st = emt_settings(net, FRT_PRIMARY, k2)
+        pre = f"k{rel}_{hydro}_{'m1' if k2 > 0 else 'm0'}_{op.replace('.', 'p')}_" + ("L1_" if lim1 else "")
+        for c in [None] + list(cases):
+            sp = make_spec(pre + ("N" if c is None else tag(c)), net, c, nominal_sg(net), {}, lim)
+            sp["settings"] = json.loads(json.dumps(st))
+            sp["key_extra"] = f"kiuc_{hydro}_{rel}"
+            sp.update(kind="normal" if c is None else "fault", case=None if c is None else list(c), relay_name=rel, hydro=hydro,
+                      mode=mode, k2=k2, op=op, frt=FRT_PRIMARY, lim_rule=lim, side=None if c is None else ("reverse" if rel == "R1rev" else "forward"))
+            specs.append(sp)
+    path = Q2_SPECS.replace(".json", "_lim1.json") if lim1 else Q2_SPECS
+    json.dump(specs, open(path, "w"), indent=1)
+    print(f"{len(specs)} runs, FRT K1 {FRT_PRIMARY:g}, LIM {lim} -> {os.path.relpath(path)}")
+
+
+def numerically_clean(run):
+    tt, fs = np.asarray(run["t"]), run["fs"]
+    v = np.asarray(run["ch"]["VLA"])
+    nm = np.abs(v[(tt > 0.2) & (tt < 0.29)]).max()
+    seg = v[(tt >= 0.30) & (tt < 0.40)]
+    f = np.fft.rfftfreq(len(seg), 1 / fs)
+    P = np.abs(np.fft.rfft((seg - seg.mean()) * np.hanning(len(seg)))) ** 2
+    pk, hf = float(np.abs(seg).max() / nm), float(P[(f >= 5000) & (f <= 10000)].sum() / P.sum())
+    return pk <= 2.0 and hf <= 1e-3, pk, hf
+
+
+def analyse_q2():
+    from pscad_io import read_case
+    from pscad_network import WORK
+    from pscad_network_check import injections
+    from step3_frontend import Relay, CYCLE
+    lim1 = "--lim1" in sys.argv
+    specs = json.load(open(Q2_SPECS.replace(".json", "_lim1.json") if lim1 else Q2_SPECS))
+    if "--only-fig16" in sys.argv:                     # the EMT Fig.-16 pair: R2, hydro off, IEEE 2800, normal + bolted AG 5 %
+        specs = [s for s in specs if s["relay_name"] == "R2" and s["hydro"] == "off" and s["k2"] > 0 and s["op"] == "P0.25Q0.15"
+                 and (s["kind"] == "normal" or tuple(s["case"][:3]) == ("L2", 0.95, "ag") and s["case"][3] < 1e-3)]
+    out, rows = {}, []
+    groups = sorted({(s["relay_name"], s["hydro"], s["mode"], s["op"]) for s in specs})
+    for rel, hydro, mode, op in groups:
+        g = [s for s in specs if (s["relay_name"], s["hydro"], s["mode"], s["op"]) == (rel, hydro, mode, op)]
+        spn = [s for s in g if s["kind"] == "normal"][0]
+        net = network(hydro, "DYg", relay=tuple(spn["relay"]), op=op)
+        sg = nominal_sg(net)
+        st = settings(net, sg, net.ibrs["I"].i0, spn["frt"], spn["k2"])
+        _, inj_st, _ = solve(net, sg, st, None, lim=spn["lim_rule"])
+        run = read_case(os.path.join(WORK, spn["name"] + ".gf46"), spn["name"])
+        i25, i28 = injections(run, spn, 0.25), injections(run, spn, 0.28)
+        e1 = abs(abs(i28["I"][0]) / abs(inj_st["I"][0]) - 1)
+        s1 = abs(abs(i28["I"][0]) / max(abs(i25["I"][0]), 1e-9) - 1)
+        gate = e1 <= 0.03 and s1 <= 0.03
+        key = f"{rel} | hydro {hydro} | {mode} | {op}"
+        res = dict(gate=dict(I1_emt=abs(i28["I"][0]), I1_static=abs(inj_st["I"][0]), err=e1, settled=s1, passed=gate), cases=[])
+        want = "r" if rel == "R1rev" else "f"
+        for sp in [s for s in g if s["kind"] == "fault"]:
+            c = tuple(sp["case"])
+            run = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
+            ok, pk, hf = numerically_clean(run)
+            rl = Relay(sp["name"], tier="clean", mimic_tau=MIMIC_TAU)
+            inc0 = rl.idx(T_FAULT)
+            ends = inc0 - CYCLE // 2 - np.arange(0, 2 * CYCLE + 1, CYCLE // 4)
+            mem = np.mean([rl.y(e) for e in ends], axis=0)
+            q_per, inc_per, ratio = [], [], []
+            for cyc in WIN:
+                y = rl.y(inc0 + int(round(cyc * CYCLE)))
+                q_per.append(dir32q(y, c[2] == "ag")[0])
+                inc_per.append(direction_pk(mem, y))
+                ratio.append(float(3 * abs(y[4]) / max(abs(y[3]), 1e-12)))
+            first = lambda per: next((d for d in per if d is not None), None)
+            x = np.asarray(run["ch"].get("V1M_I", []))
+            v1 = float(x[int(round((T_FAULT + 2.5 / 60 - float(run["t"][0])) * run["fs"]))]) if len(x) else None
+            yN_st, _, _ = solve(net, sg, st, None, spn["lim_rule"])
+            s_st, y_st = ibr_state(net, sg, st, c, spn["lim_rule"])
+            i1e, i2e = injections(run, sp, T_FAULT + 2.5 / 60)["I"]
+            ipk = float(max(abs(i1e * A3 ** (-k) + i2e * A3 ** k) for k in range(3)))
+            res["cases"].append(dict(name=sp["name"], case=list(c), clean=ok, peak=pk, hf=hf, q=first(q_per), q_per=q_per,
+                                     inc=first(inc_per), inc_per=inc_per, ratio_min=min(ratio), v1_I=v1,
+                                     weak=v1 is not None and v1 < 0.2, q_static=dir32q(y_st, c[2] == "ag")[0],
+                                     inc_static=direction_pk(yN_st, y_st), ibr_phase_peak=ipk, ibr_phase_peak_static=s_st["peak"]))
+        q = [r for r in res["cases"] if r["clean"]]
+        n = max(len(q), 1)
+        res["summary"] = dict(n=len(q), of=len(res["cases"]), want=want,
+                              q_right=sum(r["q"] == want for r in q) / n, q_none=sum(r["q"] is None for r in q) / n,
+                              q_wrong=sum(r["q"] not in (want, None) for r in q) / n,
+                              inc_right=sum(r["inc"] == want for r in q) / n, inc_none=sum(r["inc"] is None for r in q) / n,
+                              inc_wrong=sum(r["inc"] not in (want, None) for r in q) / n,
+                              ratio_over_10pct=sum(r["ratio_min"] > 0.1 for r in q) / n,
+                              emt_vs_static_q_differ=sum(r["q"] != r["q_static"] for r in q),
+                              emt_vs_static_inc_differ=sum(r["inc"] != r["inc_static"] for r in q),
+                              ibr_peak_max=max((r["ibr_phase_peak"] for r in res["cases"]), default=None),
+                              beyond_fig16_envelope=sum(r["ibr_phase_peak"] > 1.5 for r in res["cases"]),
+                              excluded=[dict(name=r["name"], peak=r["peak"], hf=r["hf"]) for r in res["cases"] if not r["clean"]],
+                              weak=[r["name"] for r in q if r["weak"]])
+        out[key] = res
+        s = res["summary"]
+        print(f"[{key}] gate {'PASSED' if gate else 'FAILED'} (|I1| {res['gate']['I1_emt']:.3f}/{res['gate']['I1_static']:.3f}) | "
+              f"{s['n']} of {s['of']} clean | report element right {s['q_right']:.2f} none {s['q_none']:.2f} wrong {s['q_wrong']:.2f} | "
+              f"incremental right {s['inc_right']:.2f} none {s['inc_none']:.2f} wrong {s['inc_wrong']:.2f} | 3I2 > 10 % I1 "
+              f"{s['ratio_over_10pct']:.2f} | EMT vs static differ: report element {s['emt_vs_static_q_differ']}, incremental "
+              f"{s['emt_vs_static_inc_differ']} | IBR phase peak max {s['ibr_peak_max']:.2f} (> 1.5 pu: {s['beyond_fig16_envelope']}) | "
+              f"weak {len(s['weak'])} | excluded {[(e['name'][-10:], round(e['peak'], 2), f'{e[chr(104)+chr(102)]:.1e}') for e in s['excluded']]}", flush=True)
+    name = "kiuc_q2_fig16.json" if "--only-fig16" in sys.argv else ("kiuc_q2_lim1.json" if lim1 else "kiuc_q2.json")
+    json.dump(out, open(os.path.join(OUT, name), "w"), indent=1, default=str)
+    print(f"-> results/network/{name}")
+
+
+# ------------------------------------------------------------------ Q3: the designed delta on this system
+import frames as fr
+from scipy.optimize import linprog
+deg = np.pi / 180
+TIERS = {"box": dict(eps=None, instr=None),
+         "structured": dict(eps=np.array([0.02] * 3 + [0.04] * 3 + [0.02] * 3 + [0.04] * 3),
+                            instr=dict(N=(0.005, 0.3 * deg, 0.01, 0.3 * deg), F=(0.005, 0.3 * deg, 0.01, 0.3 * deg)))}
+CAP, Q3_RHO = 1.14, 0.1
+STUDIES = {"detection R2 | hydro off": ("off", ("L2", "b"), FWD, None),
+           "detection R2 | hydro on (Thevenin)": ("thevenin", ("L2", "b"), FWD, None),
+           "direction R1 | hydro off": ("off", ("L2", "a"), FWD, REV_R1)}
+Q3_PATH = os.path.join(OUT, "kiuc_q3_design.json")
+_W = {}
+
+
+def q3_model(study, tier, seed=1):
+    hydro, relay, A, B = STUDIES[study]
+    net = network(hydro, "DYg", relay=relay, inject=True)
+    probe = fr.FrameModel(net, A[:1], n_samples=400, face_pts=5, seed=2)
+    v1min = float(np.min(np.abs(probe.measure(np.vstack(probe.samples), 0j, None)[:, 0])))
+    phi = 4.0 * 0.01 / (np.sqrt(3) * v1min)            # the main configuration's rule (frames_main.py)
+    kw = dict(factor=1.1, drift_deg=3.0, ref_phi=phi, model_err=0.008, instr=TIERS[tier]["instr"], lim=1)
+    if TIERS[tier]["eps"] is not None:
+        kw["eps"] = TIERS[tier]["eps"]
+    cases = list(A) + (list(B) if B else [])
+    return fr.FrameModel(net, cases, n_samples=150, face_pts=3, seed=seed, **kw), phi, len(A)
+
+
+def q3_apart(fm, d, rho, nA, direction, order):
+    """All cases apart from N (detection) or every forward case apart from every reverse case (direction) at d.
+    order: the list of indices (cases or pairs) to test, the last binding one moved to the front."""
+    b = 2 * fm.eps * (1 + rho)
+    Ns = None if direction else fm.zonotopes(d, None)
+    for idx in list(order):
+        if direction:
+            i, j = idx
+            hit = fr._meet_union(fm.zonotopes(d, i), fm.zonotopes(d, j), b)
+        else:
+            hit = fr._meet_union(Ns, fm.zonotopes(d, idx), b)
+        if hit:
+            order.remove(idx)
+            order.insert(0, idx)
+            return False
+    return True
+
+
+def _q3_init(study, tier, order):
+    import warnings
+    warnings.filterwarnings("ignore")
+    fm, _, nA = q3_model(study, tier)
+    _W.update(fm=fm, nA=nA, direction=STUDIES[study][3] is not None, order=list(map(lambda x: tuple(x) if isinstance(x, list) else x, order)))
+
+
+def _q3_eval(args):
+    r, a, rho = args
+    fm = _W["fm"]
+    try:
+        ok = q3_apart(fm, r * np.exp(1j * np.radians(a)), rho, _W["nA"], _W["direction"], _W["order"])
+        bad = False
+    except RuntimeError:
+        ok, bad = False, True
+    fm._cache.clear()
+    return a, ok, bad
+
+
+def q3_gap(cA, GA, cB, GB, w):
+    n, ka, kb = cA.size, GA.shape[1], GB.shape[1]
+    c = np.zeros(ka + kb + n + 1)
+    c[-1] = 1
+    A_eq = np.hstack([GA, -GB, np.eye(n), np.zeros((n, 1))])
+    W = w.reshape(n, 1)
+    A_ub = np.vstack([np.hstack([np.zeros((n, ka + kb)), np.eye(n), -W]), np.hstack([np.zeros((n, ka + kb)), -np.eye(n), -W])])
+    res = linprog(c, A_ub=A_ub, b_ub=np.zeros(2 * n), A_eq=A_eq, b_eq=cB - cA,
+                  bounds=[(-1, 1)] * (ka + kb) + [(None, None)] * n + [(0, None)], method="highs")
+    assert res.status == 0, res.message
+    return float(res.x[-1])
+
+
+def q3_margin(fm, d, rho, nA, direction):
+    w = np.broadcast_to(np.asarray(fm.eps, float), (12,))
+    best = (np.inf, None)
+    if direction:
+        Z = {k: fm.zonotopes(d, k) for k in range(len(fm.cases))}
+        for i in range(nA):
+            for j in range(nA, len(fm.cases)):
+                g = min(q3_gap(a1, g1, a2, g2, w) for a1, g1 in Z[i] for a2, g2 in Z[j])
+                if g < best[0]:
+                    best = (g, [list(fm.cases[i]), list(fm.cases[j])])
+    else:
+        Ns = fm.zonotopes(d, None)
+        for k in range(len(fm.cases)):
+            g = min(q3_gap(a1, g1, a2, g2, w) for a1, g1 in Ns for a2, g2 in fm.zonotopes(d, k))
+            if g < best[0]:
+                best = (g, list(fm.cases[k]))
+    fm._cache.clear()
+    return dict(gap_eps=best[0], margin_eps=best[0] - 2 * (1 + rho), binding=best[1])
+
+
+def q3_price(fm, d):
+    S = np.zeros((1, 4))
+    _, ic = fm.sources(S)
+    _, _, u = fm.normal_state(S, d)
+    i1, _ = fr.limiter_vec(ic * u, d * u, fm.i_max, 1)
+    return dict(I1_delivered=float(abs(i1[0])), I1_commanded=float(abs(ic[0])))
+
+
+def design_q3():
+    from concurrent.futures import ProcessPoolExecutor
+    out = json.load(open(Q3_PATH)) if os.path.exists(Q3_PATH) else {}
+    for study, (hydro, relay, A, B) in STUDIES.items():
+        direction = B is not None
+        for tier in TIERS:
+            fm, phi, nA = q3_model(study, tier)
+            for rho in (Q3_RHO, 0.0):
+                key = f"{study} | {tier} | rho {rho}"
+                if key in out:
+                    continue
+                t0 = time.time()
+                b = 2 * fm.eps * (1 + rho)
+                if direction:
+                    idx = [(i, j) for i in range(nA) for j in range(nA, len(fm.cases))]
+                    hard = [p for p in idx if fr._meet_union(fm.zonotopes(0j, p[0]), fm.zonotopes(0j, p[1]), b)]
+                    hard_named = [[list(fm.cases[i]), list(fm.cases[j])] for i, j in hard]
+                else:
+                    Ns = fm.zonotopes(0j, None)
+                    idx = list(range(len(fm.cases)))
+                    hard = [k for k in idx if fr._meet_union(Ns, fm.zonotopes(0j, k), b)]
+                    hard_named = [list(fm.cases[k]) for k in hard]
+                fm._cache.clear()
+                res = dict(study=study, tier=tier, rho=rho, phi_ref=phi, unseparated_at_0=len(hard), of=len(idx), unseparated=hard_named)
+                print(f"[{key}] not apart at delta = 0: {len(hard)} of {len(idx)}  [{time.time() - t0:.0f} s]", flush=True)
+                if not hard:
+                    res.update(abs_delta=0.0, separating_angles_deg="all", carried_angle_deg=None, margin=q3_margin(fm, 0j, rho, nA, direction),
+                               price=q3_price(fm, 0j), dead_frames=[], inadmissible=0)
+                else:
+                    order = hard + [k for k in idx if k not in hard]
+                    found, angles, n_bad = None, [], 0
+                    with ProcessPoolExecutor(6, initializer=_q3_init, initargs=(study, tier, order)) as pool:
+                        for r in np.arange(0.02, CAP + 1e-9, 0.02):
+                            rr = list(pool.map(_q3_eval, [(float(r), a, rho) for a in range(0, 360, 5)]))
+                            n_bad += sum(x[2] for x in rr)
+                            ok = [a for a, good, _ in rr if good]
+                            if ok:
+                                found, angles = float(round(r, 4)), ok
+                                break
+                    res.update(abs_delta=found, separating_angles_deg=angles, feasible=found is not None, inadmissible=n_bad)
+                    if found is not None:
+                        ms = {a: q3_margin(fm, found * np.exp(1j * np.radians(a)), rho, nA, direction) for a in angles}
+                        a_star = max(ms, key=lambda a: ms[a]["margin_eps"])
+                        d = found * np.exp(1j * np.radians(a_star))
+                        res.update(margins_by_angle={str(a): m for a, m in ms.items()}, carried_angle_deg=a_star, margin=ms[a_star],
+                                   price=q3_price(fm, d), dead_frames=[list(c) for c in fm.dead_frames(d)])
+                res["seconds"] = time.time() - t0
+                out[key] = res
+                json.dump(out, open(Q3_PATH, "w"), indent=1, default=str)
+                if res.get("abs_delta") is not None:
+                    m = res["margin"]
+                    print(f"[{key}] delta* {res['abs_delta']} pu; angles {res['separating_angles_deg']}; carried {res['carried_angle_deg']}; margin "
+                          f"{m['margin_eps']:.3f} eps ({m['binding']}); |I1| {res['price']['I1_delivered']:.3f} / {res['price']['I1_commanded']:.3f}; "
+                          f"dead frames {len(res['dead_frames'])}; inadmissible {res.get('inadmissible', 0)}  [{res['seconds']:.0f} s]", flush=True)
+                else:
+                    print(f"[{key}] no delta within the {CAP} pu cap (full grid); inadmissible {res['inadmissible']}  [{res['seconds']:.0f} s]", flush=True)
+    print(f"-> {os.path.relpath(Q3_PATH)}")
+
+
+def q3_extras():
+    """Review additions, static: (a) seed robustness of the thinnest margin (detection R2, hydro off, box): every
+    case's gap at delta = 0 with the sets rebuilt from seeds 1, 2, 3; (b) information only: the R2 box margin against
+    |delta| at its best angle (5 deg grid) and the price in I1 there."""
+    study, out = "detection R2 | hydro off", {}
+    w = None
+    seeds = {}
+    for sd in (1, 2, 3):
+        fm, _, _ = q3_model(study, "box", seed=sd)
+        w = np.broadcast_to(np.asarray(fm.eps, float), (12,))
+        Ns = fm.zonotopes(0j, None)
+        gaps = {tag(c): min(q3_gap(a1, g1, a2, g2, w) for a1, g1 in Ns for a2, g2 in fm.zonotopes(0j, k)) for k, c in enumerate(fm.cases)}
+        seeds[sd] = gaps
+        low = sorted(gaps.items(), key=lambda x: x[1])[:3]
+        print(f"seed {sd}: smallest gaps at delta = 0 (eps): " + ", ".join(f"{n} {g:.3f}" for n, g in low) + f"; margin (rho 0.1) {low[0][1] - 2.2:.3f}", flush=True)
+        fm._cache.clear()
+    out["seeds"] = {str(k): v for k, v in seeds.items()}
+    fm, _, nA = q3_model(study, "box", seed=1)
+    curve = []
+    for r in (0.0, 0.2, 0.5, 1.0):
+        best = None
+        for a in ([0] if r == 0 else range(0, 360, 5)):
+            d = r * np.exp(1j * np.radians(a))
+            try:
+                m = q3_margin(fm, d, Q3_RHO, nA, False)
+            except (RuntimeError, AssertionError):
+                continue
+            if best is None or m["margin_eps"] > best[1]["margin_eps"]:
+                best = (a, m)
+        a, m = best
+        pr = q3_price(fm, r * np.exp(1j * np.radians(a)))
+        curve.append(dict(abs_delta=r, best_angle_deg=a, margin_eps=m["margin_eps"], binding=m["binding"], **pr))
+        print(f"|delta| {r:.1f} pu: best angle {a} deg, margin {m['margin_eps']:.3f} eps ({m['binding']}); |I1| {pr['I1_delivered']:.3f} / {pr['I1_commanded']:.3f}", flush=True)
+    out["margin_vs_delta"] = curve
+    json.dump(out, open(os.path.join(OUT, "kiuc_q3_extras.json"), "w"), indent=1)
+    print("-> results/network/kiuc_q3_extras.json")
+
+
+Q3_SPECS = os.path.join(OUT, "kiuc_q3_specs.json")
+Q3_GROUPS = [("R2", "off", "detection R2 | hydro off", FWD, ("L2", "b")),
+             ("R2", "sg", "detection R2 | hydro on (Thevenin)", FWD, ("L2", "b")),
+             ("R1rev", "off", "direction R1 | hydro off", REV_R1, ("L2", "a")),
+             ("R1fwd", "off", "direction R1 | hydro off", FWD, ("L2", "a"))]
+
+
+def make_q3():
+    """The Q3 EMT check at delta* = 0 on Q3's inverter: FRT off, LIM 1, MODE2 0, TANG 15 Hz, nominal point."""
+    from pscad_network import make_spec
+    specs = []
+    for rel, hydro, study, cases, relay in Q3_GROUPS:
+        net = network(hydro, "DYg", relay=relay)
+        st = emt_settings(net, 0.0, 0.0)
+        for c in [None] + list(cases):
+            sp = make_spec(f"kq3_{rel}_{hydro}_" + ("N" if c is None else tag(c)), net, c, nominal_sg(net), {}, 1)
+            sp["settings"] = json.loads(json.dumps(st))
+            sp["key_extra"] = f"q3{hydro}{rel}"
+            sp.update(kind="normal" if c is None else "fault", case=None if c is None else list(c), relay_name=rel, hydro=hydro,
+                      study=study, k2=0.0, frt=0.0, lim_rule=1, op="P0.25Q0.15")
+            specs.append(sp)
+    json.dump(specs, open(Q3_SPECS, "w"), indent=1)
+    print(f"{len(specs)} runs -> {os.path.relpath(Q3_SPECS)}")
+
+
+def analyse_q3():
+    """The set test at delta = 0 on the Q3 runs: each window's distance to its own case set (main and bare) and to N
+    (R2) or to the nearest opposite-side set (R1), per tier; and the two conventional elements."""
+    from pscad_io import read_case
+    from pscad_network import WORK
+    from pscad_network_check import injections
+    from step3_frontend import Relay, CYCLE
+    specs = json.load(open(Q3_SPECS))
+    out = {}
+    for rel, hydro, study, cases, relay in Q3_GROUPS:
+        g = [s for s in specs if s["relay_name"] == rel and s["hydro"] == hydro]
+        spn = [s for s in g if s["kind"] == "normal"][0]
+        net = network(hydro, "DYg", relay=relay)
+        sg = nominal_sg(net)
+        st = settings(net, sg, net.ibrs["I"].i0, 0.0, 0.0)
+        _, inj_st, _ = solve(net, sg, st, None, 1)
+        run = read_case(os.path.join(WORK, spn["name"] + ".gf46"), spn["name"])
+        i25, i28 = injections(run, spn, 0.25), injections(run, spn, 0.28)
+        e1 = abs(abs(i28["I"][0]) / abs(inj_st["I"][0]) - 1)
+        s1 = abs(abs(i28["I"][0]) / max(abs(i25["I"][0]), 1e-9) - 1)
+        res = dict(gate=dict(err=e1, settled=s1, passed=e1 <= 0.03 and s1 <= 0.03), tiers={})
+        direction = STUDIES[study][3] is not None
+        for tier in TIERS:
+            fm, _, nA = q3_model(study, tier)
+            w = np.broadcast_to(np.asarray(fm.eps, float), (12,))
+            bare = fr.FrameModel(fm.net, fm.cases, n_samples=150, face_pts=3, seed=1, factor=1.0, drift_deg=3.0, ref_phi=0.0,
+                                 model_err=0.0, lim=1, **({} if TIERS[tier]["eps"] is None else dict(eps=TIERS[tier]["eps"])))
+            N = None if direction else fm.zonotopes(0j, None)
+            rows = []
+            for sp in [s for s in g if s["kind"] == "fault"]:
+                c = tuple(sp["case"])
+                k = [tuple(x) for x in fm.cases].index(c)
+                rl = Relay(sp["name"], tier="clean", mimic_tau=MIMIC_TAU)
+                rr = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
+                ok, pk, hf = numerically_clean(rr)
+                own_m, own_b = fm.zonotopes(0j, k), bare.zonotopes(0j, k)
+                opp = [j for j in range(len(fm.cases)) if (j >= nA) != (k >= nA)] if direction else None
+                win = []
+                for cyc, y in rl.windows(rl.idx(T_FAULT)):
+                    om, ob = fr.distance_to_set(own_m, y, w), fr.distance_to_set(own_b, y, w)
+                    dn = (min(fr.distance_to_set(fm.zonotopes(0j, j), y, w) for j in opp) if direction
+                          else fr.distance_to_set(N, y, w))
+                    win.append(dict(cycles=float(cyc), own=float(om), own_bare=float(ob), other=float(dn), separated=bool(dn > 2 * (1 + Q3_RHO) - om)))
+                rows.append(dict(name=sp["name"], case=list(c), clean=ok, contained=all(x["own"] <= 0.1 for x in win),
+                                 separated=all(x["separated"] for x in win), model_err=max(x["own_bare"] for x in win),
+                                 nearest_other=min(x["other"] for x in win)))
+            q = [r for r in rows if r["clean"]]
+            res["tiers"][tier] = dict(n=len(q), of=len(rows), contained=sum(r["contained"] for r in q), separated=sum(r["separated"] for r in q),
+                                      model_err_max=max((r["model_err"] for r in q), default=None),
+                                      nearest_other_min=min((r["nearest_other"] for r in q), default=None), rows=rows)
+            t = res["tiers"][tier]
+            print(f"[{rel} | hydro {hydro} | {tier}] gate {'PASSED' if res['gate']['passed'] else 'FAILED'} | {t['n']} of {t['of']} clean | "
+                  f"contained {t['contained']}, separated {t['separated']} | bare-set model error max {t['model_err_max']:.3f} eps | nearest "
+                  f"{'opposite set' if direction else 'N'} {t['nearest_other_min']:.2f} eps (needs > 2.2)", flush=True)
+        out[f"{rel} | hydro {hydro}"] = res
+    json.dump(out, open(os.path.join(OUT, "kiuc_q3_emt.json"), "w"), indent=1, default=str)
+    print("-> results/network/kiuc_q3_emt.json")
+
+
+def fig16_emt():
+    """The EMT Fig.-16 pair (R2, hydro off, IEEE 2800, K1 4, LIM 2): the IBR's I_P+, I_Q+, |I2|, |I2|/|V2| and the angle
+    of I2 against V2 at Bus-2, 2.5 cycles after inception, against static."""
+    from pscad_io import read_case
+    from pscad_network import WORK
+    from pscad_network_check import injections, relay_y
+    specs = json.load(open(Q2_SPECS))
+    sp = [s for s in specs if s["relay_name"] == "R2" and s["hydro"] == "off" and s["k2"] > 0 and s["op"] == "P0.25Q0.15"
+          and s["kind"] == "fault" and tuple(s["case"][:3]) == ("L2", 0.95, "ag") and s["case"][3] < 1e-3][0]
+    run = read_case(os.path.join(WORK, sp["name"] + ".gf46"), sp["name"])
+    t = T_FAULT + 2.5 / 60
+    i1, i2 = injections(run, sp, t)["I"]
+    y = relay_y(run, t, mimic_tau=MIMIC_TAU)          # R2 sits at Bus-2: its V1, V2 are the IBR's
+    v1, v2 = y[0], y[1]
+    u = v1 / abs(v1)
+    emt = dict(IP=float((i1 / u).real), IQ=float(-(i1 / u).imag), I1=float(abs(i1)), V1=float(abs(v1)), V2=float(abs(v2)),
+               I2=float(abs(i2)), K_meas=float(abs(i2) / abs(v2)), ang_I2_V2=float(np.degrees(np.angle(i2 / v2))),
+               peak=float(max(abs(i1 * A3 ** (-k) + i2 * A3 ** k) for k in range(3))))
+    net = network("off", "DYg")
+    sg = nominal_sg(net)
+    st = settings(net, sg, net.ibrs["I"].i0, sp["frt"], sp["k2"])
+    stat, _ = ibr_state(net, sg, st, tuple(sp["case"]), sp["lim_rule"])
+    for lab, s in (("EMT   ", emt), ("static", stat)):
+        print(f"Fig. 16 pair, {lab}: I_P+ {s['IP']:.3f}, I_Q+ {s['IQ']:.3f} (|I1| {s['I1']:.3f}); |V1| {s['V1']:.3f}, |V2| {s['V2']:.3f}; "
+              f"|I2| {s['I2']:.3f} = {s['K_meas']:.2f} |V2|, angle {s['ang_I2_V2']:.1f} deg; phase peak {s['peak']:.2f}", flush=True)
+    json.dump(dict(case=sp["name"], emt=emt, static=stat), open(os.path.join(OUT, "kiuc_fig16_emt.json"), "w"), indent=1)
+
+
+if __name__ == "__main__":
+    {"preflight": preflight, "static": static, "spec": make_q2, "analyse": analyse_q2, "fig16": fig16_emt,
+     "design": design_q3, "spec3": make_q3, "analyse3": analyse_q3, "extras3": q3_extras}[sys.argv[1]]()
