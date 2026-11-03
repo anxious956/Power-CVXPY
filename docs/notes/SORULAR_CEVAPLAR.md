@@ -1852,3 +1852,19 @@ PSCAD'in kütüphanesinde koruma bileşenleri var (aşırı akım, mesafe röles
 
 Rapor da benzerini yapıyor: PSCAD'den dalga şekillerini COMTRADE dosyası olarak kaydedip (480 Hz ve 10 kHz) röle
 modellerine veriyor.
+
+## 62. Python'daki röle gerçek röleyle aynı sonucu mu veriyor? (3 Kasım 2026)
+
+**Bunu iddia etmiyoruz; kanıtlamadık.** Bizimki gerçek SEL-411L değil, onun 32Q/32QG yön elemanının **modeli**:
+raporun verdiği denklem (z2 = Re[V2 (I2 ∠Z1L)*] / |I2|²) ve SEL'in varsayılan ayarları (a2 0.1, k2 0.2, 3I2 pickup
+0.1 pu), kendi filtremizle (bir çevrimlik DFT, mimic filtre, 2–3 çevrim pencere).
+
+- **Aynı olanlar:** elemanın mantığı ve ayarları; genel bulgu (bastırılmış I₂ → karar yok, IEEE 2800 → doğru) raporla
+  aynı çıkıyor.
+- **Farklı olabilecekler:** gerçek rölenin filtreleri, zamanlaması (kaç çevrimde karar verdiği) ve bizim modellemediğimiz
+  ek denetim mantığı. Raporun vaka vaka röle çıktılarıyla karşılaştırmadık.
+- **"Statik = PSCAD"** iki veri kaynağında aynı röle modelini karşılaştırıyor; gerçek röleyle karşılaştırma değil.
+
+Rapor da gerçek cihaz değil, kayıtları (COMTRADE, 480 Hz ve 10 kHz) koruma elemanlarına ve röle modeline veriyor
+(rapor §4, §5). Gerçek röleyle sınamak için kayıtları COMTRADE olarak verip bir röle test setine ya da SEL'in
+yazılımına oynatmak gerekir; yapmadık. Sunumdaki ifade: "our model of the report's relay element (SEL 32Q)".
