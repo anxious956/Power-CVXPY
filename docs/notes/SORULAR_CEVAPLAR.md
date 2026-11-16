@@ -1842,6 +1842,10 @@ devreyi görüp yönünü bulmak.
 
 ## 61. PSCAD'de röle yok mu? (3 Kasım 2026)
 
+*[16 Kasım 2026 düzeltmesi: aşağıdaki "raporun baktığı eleman PSCAD'de hazır yok" iddiası **yanlış**. PSCAD'in Master
+Library'sinde hazır bir negatif-bileşen yön elemanı var (`dir_neg32`); kontrol etmeden yazmıştım. Ayrıca "röle yok,
+ampermetre/voltmetre var" anlatımı 3 Kasım toplantısında yanlış anlaşıldı. Güncel durum: soru 67.]*
+
 PSCAD'in kütüphanesinde koruma bileşenleri var (aşırı akım, mesafe rölesi gibi); biz kullanmadık, bilerek:
 1. Raporun baktığı eleman, SEL'in negatif-bileşen yön elemanı (32Q/32QG, a2, k2, pickup ayarlarıyla); bunu biz
    raporun tarifinden Python'da yazdık (`src/kiuc.py` `dir32q`). Yanına kendi artımsal elemanımızı ve hocanın küme
@@ -1937,3 +1941,24 @@ VT: BUS2'nin faz-toprak gerilimleri (VLA..C; VLG dönüş yolu). Rapordaki R2 de
 
 Sıradaki: rölemizin ön ucunu raporunkine benzetmek (8 örnek/çevrim, kosinüs filtresi) ve mevcut PSCAD kayıtlarında
 kararların değişip değişmediğine bakmak; yeni PSCAD koşusu gerekmez.
+
+## 67. PSCAD'de hangi röle parçaları var, bize hangisi uygun? (16 Kasım 2026)
+
+Kaynak: bilgisayardaki `C:\Program Files (x86)\PSCAD50\master.pslx`, "Protection: Relays and Instrument
+Transformers" sayfası (tanım adları dosyadan okundu).
+
+| ne | PSCAD parçası |
+|---|---|
+| ölçü trafoları | CT (JA modeli, `ct_double`), PT (`pt1`), CCVT (`ccvt1`) |
+| fazör / bileşen | FFT, `seq_filter` (Sequence Filter) |
+| aşırı akım (50/51) | `over_current`, `itoc51` (Inverse Time Over Current) |
+| mesafe (21) | `l2g_imp`, `l2l_imp` (empedans hesabı), `mho_circle`, `trip_polygon`, `apple21`, `lens21` |
+| **yön (32Q)** | **`dir_neg32` (Negative sequence directional element)** |
+| diferansiyel (87) | `dscd87` (Dual Slope Current Differential) |
+| salınım (68) | `oos_mho68`, `oos_lens68`, `oos_poly68` |
+| kesici / hata | `breaker1`, `tfault` (Timed Fault Logic), `tpflt` (Three Phase Fault) |
+
+Gerçek bir röle = CT/VT → fazör → eleman (ayarlarıyla) → trip sinyali → kesici. Hocanın istediği: önce bunu küçük bir
+devrede kurup ayarlamayı öğrenmek. Plan: (1) tek kaynak + hat + yük + hata, CT → FFT → aşırı akım rölesi (51) → kesici;
+ayarlar: pickup ve zaman; (2) aynı devrede mesafe rölesi (mho, erişim ayarı); (3) `dir_neg32` yön elemanı ve ayarları;
+sonra KIUC'a geri dönüp Python modelimizi PSCAD'in kendi `dir_neg32` elemanıyla karşılaştırmak.
