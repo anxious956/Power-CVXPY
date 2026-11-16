@@ -1962,3 +1962,24 @@ Gerçek bir röle = CT/VT → fazör → eleman (ayarlarıyla) → trip sinyali 
 devrede kurup ayarlamayı öğrenmek. Plan: (1) tek kaynak + hat + yük + hata, CT → FFT → aşırı akım rölesi (51) → kesici;
 ayarlar: pickup ve zaman; (2) aynı devrede mesafe rölesi (mho, erişim ayarı); (3) `dir_neg32` yön elemanı ve ayarları;
 sonra KIUC'a geri dönüp Python modelimizi PSCAD'in kendi `dir_neg32` elemanıyla karşılaştırmak.
+
+## 68. Röle ne yapar, nasıl çalışır? (16 Kasım 2026)
+
+**Ne yapar:** korumanın "beyni". Hattı sürekli izler, kendi bölgesinde hata (kısa devre) olup olmadığına karar verir ve
+kesiciye "aç" (trip) sinyali gönderir. Akımı röle kesmez; kesici keser.
+
+**Zincir:** CT ve VT (büyük akımı ve gerilimi küçültüp röleye taşır) → röle (ölçer, karar verir) → trip sinyali →
+kesici (hattı açar).
+
+**İçinde:** (1) akım ve gerilimi örnekler; (2) filtreleyip 60 Hz fazörlerini çıkarır; (3) bir büyüklük hesaplar
+(akımın genliği, V/I empedansı, I₂ ile V₂ arasındaki açı...); (4) bunu **ayarlarıyla** karşılaştırır; (5) koşul yeterince
+uzun sürerse trip verir.
+
+**Tipler ve ana ayarları:** aşırı akım (50/51): pickup akımı ve zaman; mesafe (21): erişim (hattın yüzde kaçı), Z = V/I;
+yön (32/67): hata önde mi arkada mı; diferansiyel (87): hatta giren akım = çıkan akım mı.
+
+**İyi rölenin dört özelliği:** seçicilik (yalnız kendi bölgesi), hız, duyarlılık (küçük hatayı da görmek), güvenlik
+(hata yokken açmamak).
+
+**Bizim konuyla bağı:** röleler jeneratörlerin hata davranışına göre tasarlanmış (büyük akım, kendiliğinden I₂).
+İnverter akımı 1.2 pu ile sınırlıyor ve I₂'yi yazılımı belirliyor; bu yüzden aşırı akım ve yön elemanları şaşabiliyor.
