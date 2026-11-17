@@ -1690,3 +1690,820 @@ inverter olan IEEE 9 bara, grid-forming'li 39 bara, Maui 3 bara. Sonuçları kar
 
 *Kaynak: `papers/Taylor_2025_Geometry_of_Distance_Protection.pdf` §IV-C, §VI-D;
 `papers/Taylor_2026_Reachability_Time_Domain_Distance_Protection.pdf` §V; `papers/notes/F_taylor_tac_and_gfm_model.md`.*
+
+## 51. NREL nedir, hocanın gönderdiği raporun amacı ne? (3 Kasım 2026)
+
+**NREL:** National Renewable Energy Laboratory. ABD Enerji Bakanlığı'na bağlı, Colorado'daki devlet
+araştırma laboratuvarı; güneş, rüzgâr ve şebekeye bağlı inverterler üzerine çalışıyor.
+
+**Rapor:** NREL/TP-5D00-94430 (Kasım 2025), "A Comprehensive Study of the Impact of Inverter-Based Resource (IBR)
+Modeling and Control on Protection Relay Elements" (osti.gov/biblio/3011876).
+
+**Amacı, iki soru:**
+1. Hatayı jeneratör yerine inverter beslediğinde röleler (mesafe, yön/32Q vb.) hâlâ doğru karar veriyor mu?
+2. İnverteri nasıl modellediğin ve kontrolünü nasıl ayarladığın (grid-following / grid-forming, akım sınırı, I₂
+   kontrolü) bu cevabı değiştiriyor mu?
+
+**Nasıl:** PSCAD'de GFL ve GFM inverter modelleri kuruyorlar ve bunları KIUC'un (Kauai, Hawaii) 57.1 kV iki baralı
+gerçek hattında hata altında röle elemanlarına karşı deniyorlar. Her seferinde tek inverter var; GFL ile GFM'yi
+karıştırmıyorlar.
+
+**Bize ne söylüyor:** İnverter I₂'yi bastırırsa yön elemanı (32Q) karar veremiyor; IEEE 2800'e göre I₂ basarsa doğru
+karar veriyor. Bunu kendi inverterimizle tekrar ettik (sunumun 5. ve 6. slaytı). Hocanın raporu göndermesinin sebebi:
+"oradaki değerleri deneyin", yani KIUC'u kurup kendi modlarımızı denemek.
+
+*Kaynak: NREL/TP-5D00-94430 §1, §2.2, §3.1; `docs/KIUC.md`.*
+
+## 52. Hocanın 20 Ekim isteklerinden kaçını yaptık? (3 Kasım 2026)
+
+`docs/meetings/2026-10-20_biweekly.md`'deki istekler:
+
+| istek | durum |
+|---|---|
+| Hata simülasyonu yapacak bir sistem | **yapıldı**: KIUC PSCAD'de, 143 koşu (PR #65) |
+| Raporu gözden geçir (NREL) | **yapıldı**: KIUC'u kurduk, bulgusunu kendi inverterimizle tekrar ettik |
+| Slaytlara devrelerin nereden geldiğini yaz | **yapıldı**: sunumda her devre slaytında nereden / nedir / ne işe yarar |
+| Hazır çok inverterli sistemler bul | **kısmen**: Taylor'ın 14 baralı ağı (optimizasyonda Şekil 5 tekrarlandı, PSCAD'de yok), Reachability makalesi, NREL PyPSCAD bulundu; e-posta atılmadı |
+| Sert (stiff) olmayan kaynak | yapılmadı: `docs/KIUC_MULTI.md` ada durumları (şebeke kapalı) |
+| Hepsi inverter, bir kısmı GFM bir kısmı GFL | yapılmadı: KIUC_MULTI M5-island |
+| Hepsi GFM: önce denge, sonra hata | yapılmadı: KIUC_MULTI M5-allGFM (B1 denge kontrolü) |
+| Yarı GFM yarı GFL | yapılmadı: KIUC_MULTI M5-mixR2 / M5-island |
+
+Hocanın "GFL'nin iç ve dış döngüsü var" cümlesi bir iş değil, açıklama; bizim GFL modelimiz ortalama (averaged).
+
+Kalan dört istek tek planda: önce raporun grid-forming inverteri (Adım A), sonra KIUC'a 3–5 inverter (Adım B). Plan
+yazıldı ve incelendi (PR #70); kurulum henüz başlamadı.
+
+## 53. Sunumdaki "143 koşu" ne, neden ve nasıl yaptık? (3 Kasım 2026)
+
+**Koşu:** PSCAD'de devreyi bir kez baştan sona simüle etmek (0.5 s'lik bir simülasyon; hata 0.30 s'de başlıyor, 0.10 s sürüyor).
+
+**Neden:** raporun bulgusunun ("I₂ bastırılırsa yön rölesi karar veremez, IEEE 2800 ile doğru karar verir") bizim
+inverterimizle de tutup tutmadığını görmek; tek bir hatayla değil, farklı hata yerleri ve tipleriyle.
+
+**143 nereden geliyor:** her grup 13 koşu = 1 normal çalışma (hatasız; inverter doğru çalışıyor mu kontrolü) + 12 hata
+(Hat 2'de 3 yer: %5, %50, %80 × 2 tip: A-toprak ve B-C × 2 hata direnci: 0.01 ve 5 Ω).
+- 9 grup × 13 = 117: R2 rölesi (hidro kapalı / açık), R1 rölesi (ileri ve geri yönde), her biri bastırılmış ve IEEE
+  2800 modlarında; bir de P 1.0 çalışma noktası.
+- 2 grup × 13 = 26: farklı akım sınırlayıcıyla (LIM 1, faz akımını 1.2 pu'da tutuyor) tekrar.
+
+**Nasıl:** `src/kiuc.py` Python'dan PSCAD'i kullanarak (mhi.pscad) devreyi kuruyor, her koşunun ayarını değiştirip
+çalıştırıyor ve sonuçları okuyor. Rölenin kararı, hatadan 2–3 çevrim sonraki akım ve gerilimden hesaplanıyor. Aynı
+hata basit statik modelde de çözülüyor; EMT ile statik model her rapor elemanı kararında aynı çıktı.
+
+*Kaynak: `docs/KIUC.md` Q2 sonucu; `results/network/kiuc_q2.json`, `kiuc_q2_lim1.json`.*
+
+## 54. Sunumdaki "ikisi de" ve "bastırılmış" ne demek? (3 Kasım 2026)
+
+İnverterin hata sırasında negatif-bileşen akımı (I₂) için iki ayarı var:
+- **Bastırılmış (suppressed, "no I₂"):** inverter I₂ hiç vermiyor. Rölenin yön elemanı (32Q) I₂ ile çalıştığı için hiçbir
+  şey göremiyor ve karar veremiyor.
+- **IEEE 2800:** ABD standardının istediği gibi inverter I₂ veriyor (I₂ = K·V₂, K = 5, V₂'nin 90° önünde), bir
+  jeneratör gibi. Röle yönü doğru buluyor.
+
+"İkisi de" = aynı 13 koşuluk test önce bastırılmış, sonra IEEE 2800 ayarıyla koşuldu (13 + 13 = 26). İki ayar da
+raporda var; tek değişen bu ayar. Sunumun 143 koşu tablosunda artık "no I₂, then IEEE 2800" yazıyor.
+
+## 55. Hepsi inverter olan sistemi çizdik mi? (3 Kasım 2026)
+
+Hayır. KIUC'ta tek inverter var; yanında şebeke kaynağı (EQ) ve hidro jeneratör duruyor. "Hidro kapalı" durumda bile
+şebeke kaynağı açık, yani hiçbir koşu hepsi inverter değil. Hepsi inverter olan sistem `docs/KIUC_MULTI.md`'de
+planlı (M5-island: 2 GFM + 3 GFL, M5-allGFM: 5 GFM; şebeke kapalı, BUS1'de yük ve topraklama), ama ne PSCAD'de
+kuruldu ne çizildi. Önce grid-forming inverter (Adım A) gerekiyor, çünkü şebeke kapalıyken gerilimi ve frekansı
+tutacak bir kaynak lazım; grid-following inverter tek başına bunu yapamaz.
+
+## 56. "IEEE 2800'de inverter jeneratör gibi davranıyor" ne demek? (3 Kasım 2026)
+
+Senkron jeneratör dengesiz bir hatada **kendiliğinden** I₂ verir: içinde negatif-bileşen reaktansı X₂ var, gerilimde
+V₂ oluşunca ondan I₂ = V₂ / X₂ büyüklüğünde, V₂'nin 90° önünde bir akım akar. Röleler (32Q) yıllardır buna göre
+ayarlanıyor: "I₂ V₂'nin önündeyse hata ileride".
+
+İnverterde böyle bir şey kendiliğinden yok; ne vereceğini yazılım belirler. IEEE 2800 (ABD standardı, 2022) inverterden
+aynı davranışı ister: I₂ = K·V₂, V₂'nin 90° önünde. Bizim K = 5 değeri X₂ = 1/5 = 0.2 pu'luk bir jeneratör gibi
+demek. Röle farkı görmez ve doğru karar verir.
+
+Farkı: yalnız I₂ tarafında jeneratör gibi. İnverterin akımı 1.2 pu'da sınırlı, jeneratör ise 5–10 katı verebilir.
+Bastırılmış modda (I₂ = 0) inverter bu davranışı hiç göstermez; röle bu yüzden karar veremiyor.
+
+## 57. PSCAD'de componentleri nasıl yerleştiriyoruz, ayarları nasıl veriyoruz? (3 Kasım 2026)
+
+Elle değil, Python'dan: PSCAD'in kendi kütüphanesi `mhi.pscad` (Python 3.7) açık PSCAD'e bağlanıyor ve elle
+yapılan her şeyi komutla yapıyor (`src/pscad_inverter.py`, `src/pscad_network.py`).
+
+1. **Bağlan, proje aç:** `pscad = mhi.pscad.application()`, `prj = pscad.create_case(yol)`, `c = prj.canvas("Main")`.
+2. **Component koy:** `c.create_component("master:resistor", x, y, R="0.5 [ohm]")`. İlk kısım kütüphanedeki adı
+   (`master:` = PSCAD'in Master Library'si), x, y ızgaradaki yeri (bir kare = 18 piksel), geri kalanı ayarları.
+   Ayarlar, elle çift tıklayınca açılan penceredeki alanların aynısı: kaynak için `Vm="20.0 [kV]"`,
+   `F="60.0 [Hz]"`, endüktans için `L="0.01 [H]"`.
+3. **Bağla:** iki ucu aynı isimli düğüm etiketine (`master:nodelabel`) koyunca PSCAD onları birbirine bağlı sayıyor;
+   sinyaller için `master:datalabel`. Okunabilir çizimde (`src/pscad_view.py`) gerçek teller kullanılıyor.
+4. **İnverter:** PSCAD'de hazır yok; kendi componentimizi tanımlıyoruz: girişleri, çıkışları ve davranışını yazan
+   Fortran kodu. Ayarları (15 MVA, 1.2 pu, K = 5...) bloğun girişlerine `master:const` sabitleri olarak bağlanıyor;
+   çizimdeki yeşil etiketler bunlar.
+5. **Çalıştır, oku:** `prj.parameters(time_duration="0.5", time_step="10")`, `prj.run()`; çıktı dosyaları Python'da
+   okunup rölenin kararı hesaplanıyor.
+
+Elle: Master Library'den sürükle bırak, çift tıklayıp ayarları yaz, uçları tel ile birleştir. Aynı işlemler; Python
+yalnızca yüzlerce koşuyu otomatik yapmak için.
+
+## 58. PSCAD'de devreyi elle nasıl kurarız? (3 Kasım 2026)
+
+İlk deneme için en basit devre: kaynak → direnç → toprak.
+1. **Yeni proje:** File → New → Case; projeye çift tıklayınca boş çizim sayfası (Main) açılır.
+2. **Parça koy:** üstteki Components sekmesinden (ya da boş sayfaya sağ tıklayıp) Sources → üç fazlı kaynak, Passive
+   → Resistor, bir de Ground; tıklayıp sayfaya bırak. Döndürmek için parça seçiliyken Ctrl+R.
+3. **Ayar ver:** parçaya çift tıkla, açılan pencereye değeri birimiyle yaz (`0.5 [ohm]`, `20 [kV]`, `60 [Hz]`), OK.
+4. **Bağla:** Wire (tel) aracıyla bir uca tıkla, diğer uca tıkla, sağ tıkla bitir. Uçlar üst üste gelince de bağlanır.
+5. **Ölç:** Meters'tan ampermetre (Ammeter) ya da voltmetre koy, adını ver; ölçümü bir Output Channel'a bağla, kanala
+   sağ tıklayıp grafiğe ekle.
+6. **Çalıştır:** yeşil Run tuşu; simülasyon bitince grafik dolar.
+
+Bizim inverter kendi componentimiz; elle kurarken onu Python'un oluşturduğu projeden kopyalamak en kolayı.
+Tam menü isimleri PSCAD sürümüne göre biraz değişebilir; ekranda birlikte bakarak (teach mode) öğrenmek planlı.
+
+## 59. PSCAD çizimindeki VLA, VLB, VLC, VLG röle mi? (3 Kasım 2026)
+
+Hayır, bunlar voltmetre (VT): BUS2'de her fazın toprağa göre gerilimini ölçüyorlar (VLA, VLB, VLC); VLG, hatların toprak
+dönüş yolunun gerilimi. Hemen solundaki "Relay R2 / CT" etiketli üç ampermetre (IL_A, IL_B, IL_C) Hat 2'nin akımını
+ölçüyor. PSCAD'de röle diye bir parça yok: PSCAD rölenin göreceği gerilimi ve akımı kaydediyor, rölenin kendisi
+(32Q yön elemanı, artımsal eleman) koşudan sonra Python'da bu kayıtlardan hesaplanıyor (`src/kiuc.py`,
+`src/step3_frontend.py`). Gerçek bir röle de aynısını yapar: VT'den gerilimi, CT'den akımı alır, kararı içinde hesaplar.
+
+## 60. "Fault here" derken neyin arızası? (3 Kasım 2026)
+
+Hattın **kısa devresi**: Hat 2'de iletkenin toprağa ya da başka bir faza değmesi (gerçekte ağaç dalı, yıldırım, kopan
+tel, kırılan izolatör). İki tip deniyoruz: **A-toprak** (A fazı toprağa değiyor, en sık görülen) ve **B-C** (iki faz
+birbirine değiyor). Hata direnci 0.01 Ω (tam kısa devre) ya da 5 Ω (dokunma direnci var).
+
+PSCAD'de: Hat 2 F noktasında ikiye bölünüyor (part 1, part 2; F, BUS2'den %5, %50 ya da %80 uzaklıkta). F'nin altında
+bir anahtar (breaker) duruyor; anahtar 0.30 s'de kapanıp A fazını direnç üzerinden toprağa (ya da B'yi C'ye)
+bağlıyor, 0.10 s sonra açılıyor. Anahtarı zamanlayan küçük blok (timed breaker logic) en alttaki. Rölenin işi bu kısa
+devreyi görüp yönünü bulmak.
+
+## 61. PSCAD'de röle yok mu? (3 Kasım 2026)
+
+*[16 Kasım 2026 düzeltmesi: aşağıdaki "raporun baktığı eleman PSCAD'de hazır yok" iddiası **yanlış**. PSCAD'in Master
+Library'sinde hazır bir negatif-bileşen yön elemanı var (`dir_neg32`); kontrol etmeden yazmıştım. Ayrıca "röle yok,
+ampermetre/voltmetre var" anlatımı 3 Kasım toplantısında yanlış anlaşıldı. Güncel durum: soru 67.]*
+
+PSCAD'in kütüphanesinde koruma bileşenleri var (aşırı akım, mesafe rölesi gibi); biz kullanmadık, bilerek:
+1. Raporun baktığı eleman, SEL'in negatif-bileşen yön elemanı (32Q/32QG, a2, k2, pickup ayarlarıyla); bunu biz
+   raporun tarifinden Python'da yazdık (`src/kiuc.py` `dir32q`). Yanına kendi artımsal elemanımızı ve hocanın küme
+   testini koyuyoruz; bunlar hiçbir kütüphanede yok.
+2. Aynı röle kodu hem statik modelde hem PSCAD kayıtlarında çalışıyor; "statik = EMT" karşılaştırması bu yüzden
+   mümkün.
+3. Kayıtlar bir kez alınıyor; rölenin ayarı değişince PSCAD'i yeniden koşmak gerekmiyor.
+
+Rapor da benzerini yapıyor: PSCAD'den dalga şekillerini COMTRADE dosyası olarak kaydedip (480 Hz ve 10 kHz) röle
+modellerine veriyor.
+
+## 62. Python'daki röle gerçek röleyle aynı sonucu mu veriyor? (3 Kasım 2026)
+
+**Bunu iddia etmiyoruz; kanıtlamadık.** Bizimki gerçek SEL-411L değil, onun 32Q/32QG yön elemanının **modeli**:
+raporun verdiği denklem (z2 = Re[V2 (I2 ∠Z1L)*] / |I2|²) ve SEL'in varsayılan ayarları (a2 0.1, k2 0.2, 3I2 pickup
+0.1 pu), kendi filtremizle (bir çevrimlik DFT, mimic filtre, 2–3 çevrim pencere).
+
+- **Aynı olanlar:** elemanın mantığı ve ayarları; genel bulgu (bastırılmış I₂ → karar yok, IEEE 2800 → doğru) raporla
+  aynı çıkıyor.
+- **Farklı olabilecekler:** gerçek rölenin filtreleri, zamanlaması (kaç çevrimde karar verdiği) ve bizim modellemediğimiz
+  ek denetim mantığı. Raporun vaka vaka röle çıktılarıyla karşılaştırmadık.
+- **"Statik = PSCAD"** iki veri kaynağında aynı röle modelini karşılaştırıyor; gerçek röleyle karşılaştırma değil.
+
+Rapor da gerçek cihaz değil, kayıtları (COMTRADE, 480 Hz ve 10 kHz) koruma elemanlarına ve röle modeline veriyor
+(rapor §4, §5). Gerçek röleyle sınamak için kayıtları COMTRADE olarak verip bir röle test setine ya da SEL'in
+yazılımına oynatmak gerekir; yapmadık. Sunumdaki ifade: "our model of the report's relay element (SEL 32Q)".
+
+## 63. İnverter slaytındaki P, Q ve "fault ride-through K₁" ne? (3 Kasım 2026)
+
+**P ve Q (çalışma noktası):** P aktif (gerçek) güç, Q reaktif güç. "pu" inverterin anma gücünün (15 MVA) payı:
+P 0.25 pu = 3.75 MW, Q 0.15 pu = 2.25 Mvar. İnverter hatadan önce gücünün dörtte birinde çalışıyor; değer raporun
+Şekil 16'sından.
+
+**Fault ride-through (FRT), K₁:** hata sırasında inverterin şebekeden kopmayıp çalışmaya devam etmesi ve gerilimi
+desteklemesi. Bizim inverterde gerilim (|V1|) 0.9 pu'nun altına düşünce reaktif akım artıyor:
+IQ = IQ0 + K₁ (0.9 − |V1|), en fazla 1.2 pu; yer açmak için aktif akım kısılıyor. K₁ = 4: gerilim 0.1 pu düştükçe
+0.4 pu daha fazla reaktif akım. IEEE 2800 K için 2–6 aralığı veriyor; rapor değer vermediği için 4'ü biz seçtik
+(raporun Şekil 16'sını tutturuyor). Bu pozitif bileşen için; I₂ kuralı (K = 5) ayrı.
+
+## 64. Fazladan inverter koyunca gerilim neden yükseliyor? Hangi tip inverterleri koyduk? (3 Kasım 2026)
+
+**Tip:** eklenen inverterlerin hepsi Devre 1'deki ile aynı: `gfl_avm`, bizim ortalama (averaged) **grid-following**
+inverterimiz, 15 MVA, aynı ayarlar (P 0.25 / Q 0.15 pu, akım sınırı 1.2 pu, FRT K₁ = 4, iki I₂ modu). Grid-forming
+inverter henüz yok; KIUC_MULTI Adım A'da kurulacak.
+
+**Gerilim:** her inverter şebekeye güç basıyor; akım hatların empedansından geçerken inverter tarafındaki gerilimi
+yükseltiyor (ΔV ≈ R·P + X·Q). En büyük pay reaktif güçten (Q), çünkü hatlar çoğunlukla reaktif (X > R). Statik model,
+hatadan önce:
+
+| | 1 inverter | 3 inverter | 5 inverter |
+|---|---|---|---|
+| BUS2, Q 0.15 (bizim ayar) | 1.019 | 1.058 | 1.090 |
+| BUS2, Q 0 (karşılaştırma) | 1.008 | 1.025 | 1.041 |
+
+Yani yükselişin çoğu, her inverterin sabit Q 0.15 basmasından. Gerçek inverterler gerilim yükselince Q'yu azaltır
+(volt-var kontrolü, IEEE 2800); bizim inverterlerde bu yok, Q sabit. Q 0 ile yalnız gerilime baktık; röle kararlarını o durumda koşmadık.
+
+## 65. Neden Q 0.15 pu? (3 Kasım 2026)
+
+Rapordan: P 0.25 / Q 0.15 pu, raporun Şekil 16'sının ve yavaş/hızlı denetleyici vakalarının çalışma noktası
+(`docs/KIUC.md` §1). Devre 1'de raporla karşılaştırabilmek için aynısını aldık. Çok inverterli devrelerde her eklenen
+inverteri aynı noktaya koyduk (`docs/KIUC_MULTI.md`, ön kayıt); bu bizim seçimimiz, raporun değil. Sonucu: 3 ve 5
+inverterde gerilim 1.06 ve 1.09 pu. Q = 0 ile 1.03 ve 1.04 olurdu; röle kararlarını o durumda koşmadık.
+
+## 66. Röle: ne kullandık, nerede ve nasıl ölçüyor? (3 Kasım 2026, toplantıda hocanın sorusu)
+
+**Ne:** raporun KIUC rölesi SEL-411L (her barada bir tane; SEL-T400L da var). İçindeki elemanlardan yalnız birini
+modelledik: **negatif-bileşen yön elemanı 32Q** (faz-faz hataları) / **32QG** (toprak hataları). Mesafe (21), diferansiyel
+(87), 32V vb. yok. Rapor da röleyi kendisi MATLAB'da, röle kılavuzundan modellemiş; saha verisi ve ticari röleyle
+doğrulamış (rapor özet). Bizimki raporun denkleminden Python'da yazılmış, doğrulanmamış bir model (`src/kiuc.py` `dir32q`).
+
+**Nerede ölçüyor (R2):** BUS2'de. CT: Hat 2'nin BUS2 ucunda, BUS2'den Hat 2'ye akan üç faz akımı (PSCAD'de IL_A..C).
+VT: BUS2'nin faz-toprak gerilimleri (VLA..C; VLG dönüş yolu). Rapordaki R2 de aynı yer ve yön (§4, "from Bus-2 to Bus-1").
+
+**Nasıl karar veriyor:**
+1. Dalga şekilleri örnekleniyor, bir çevrimlik pencereden fazör çıkarılıyor.
+2. Simetrili bileşenler: V2, I2 (ve I1, I0).
+3. Denetim: 3|I2| > 0.1 pu, |I2| > 0.1 |I1| (a2), toprak hatasında |I2| > 0.2 |I0| (k2). Biri tutmazsa **karar yok**
+   (I₂ bastırılınca olan budur).
+4. z2 = Re[V2 · (I2 · 1∠Z1L)*] / |I2|² (rapor denklem 39). Hata öndeyse röle arkasındaki kaynağın negatif-bileşen
+   empedansını görür, z2 negatif çıkar; arkadaysa hattı ve karşı ucu görür, z2 pozitif.
+5. z2 < Z2F → ileri, z2 > Z2R → geri (Z2F, Z2R = |Z2L|/2 ∓ ε).
+
+**Raporun röle modelinden farklarımız (açıkça söylenmeli):**
+| | rapor | biz |
+|---|---|---|
+| örnekleme | 8 örnek/çevrim (480 Hz COMTRADE) | 128 örnek/çevrim |
+| fazör filtresi | bir çevrimlik kosinüs filtresi, sanal kısım çeyrek çevrim gecikmeli kosinüs | bir çevrimlik tam DFT (kosinüs + sinüs) |
+| akım filtresi | — (raporda yazılı değil) | mimic filtre (Hat 2'nin X/R'si) |
+| eşikler | \|Z2L\|/2 ∓ ε + "ek güvenlik hesapları" | yalnız \|Z2L\|/2 ∓ 0.1 \|Z2L\| |
+| zaman | ilk üç çevrim | hata anı biliniyor; 2–3 çevrim sonrası pencereler |
+| doğrulama | saha verisi + ticari röle | yok |
+
+Sıradaki: rölemizin ön ucunu raporunkine benzetmek (8 örnek/çevrim, kosinüs filtresi) ve mevcut PSCAD kayıtlarında
+kararların değişip değişmediğine bakmak; yeni PSCAD koşusu gerekmez.
+
+## 67. PSCAD'de hangi röle parçaları var, bize hangisi uygun? (16 Kasım 2026)
+
+Kaynak: bilgisayardaki `C:\Program Files (x86)\PSCAD50\master.pslx`, "Protection: Relays and Instrument
+Transformers" sayfası (tanım adları dosyadan okundu).
+
+| ne | PSCAD parçası |
+|---|---|
+| ölçü trafoları | CT (JA modeli, `ct_double`), PT (`pt1`), CCVT (`ccvt1`) |
+| fazör / bileşen | FFT, `seq_filter` (Sequence Filter) |
+| aşırı akım (50/51) | `over_current`, `itoc51` (Inverse Time Over Current) |
+| mesafe (21) | `l2g_imp`, `l2l_imp` (empedans hesabı), `mho_circle`, `trip_polygon`, `apple21`, `lens21` |
+| **yön (32Q)** | **`dir_neg32` (Negative sequence directional element)** |
+| diferansiyel (87) | `dscd87` (Dual Slope Current Differential) |
+| salınım (68) | `oos_mho68`, `oos_lens68`, `oos_poly68` |
+| kesici / hata | `breaker1`, `tfault` (Timed Fault Logic), `tpflt` (Three Phase Fault) |
+
+Gerçek bir röle = CT/VT → fazör → eleman (ayarlarıyla) → trip sinyali → kesici. Hocanın istediği: önce bunu küçük bir
+devrede kurup ayarlamayı öğrenmek. Plan: (1) tek kaynak + hat + yük + hata, CT → FFT → aşırı akım rölesi (51) → kesici;
+ayarlar: pickup ve zaman; (2) aynı devrede mesafe rölesi (mho, erişim ayarı); (3) `dir_neg32` yön elemanı ve ayarları;
+sonra KIUC'a geri dönüp Python modelimizi PSCAD'in kendi `dir_neg32` elemanıyla karşılaştırmak.
+
+## 68. Röle ne yapar, nasıl çalışır? (16 Kasım 2026)
+
+**Ne yapar:** korumanın "beyni". Hattı sürekli izler, kendi bölgesinde hata (kısa devre) olup olmadığına karar verir ve
+kesiciye "aç" (trip) sinyali gönderir. Akımı röle kesmez; kesici keser.
+
+**Zincir:** CT ve VT (büyük akımı ve gerilimi küçültüp röleye taşır) → röle (ölçer, karar verir) → trip sinyali →
+kesici (hattı açar).
+
+**İçinde:** (1) akım ve gerilimi örnekler; (2) filtreleyip 60 Hz fazörlerini çıkarır; (3) bir büyüklük hesaplar
+(akımın genliği, V/I empedansı, I₂ ile V₂ arasındaki açı...); (4) bunu **ayarlarıyla** karşılaştırır; (5) koşul yeterince
+uzun sürerse trip verir.
+
+**Tipler ve ana ayarları:** aşırı akım (50/51): pickup akımı ve zaman; mesafe (21): erişim (hattın yüzde kaçı), Z = V/I;
+yön (32/67): hata önde mi arkada mı; diferansiyel (87): hatta giren akım = çıkan akım mı.
+
+**İyi rölenin dört özelliği:** seçicilik (yalnız kendi bölgesi), hız, duyarlılık (küçük hatayı da görmek), güvenlik
+(hata yokken açmamak).
+
+**Bizim konuyla bağı:** röleler jeneratörlerin hata davranışına göre tasarlanmış (büyük akım, kendiliğinden I₂).
+İnverter akımı 1.2 pu ile sınırlıyor ve I₂'yi yazılımı belirliyor; bu yüzden aşırı akım ve yön elemanları şaşabiliyor.
+
+## 69. Röle dersi 1: mini devre ve aşırı akım rölesi (51) PSCAD'de nasıl kurulur, nasıl ayarlanır? (16 Kasım 2026)
+
+Soru 67'deki planın 1. adımı. Referans devre PSCAD'de kuruldu ve koşturuldu (`src/pscad_relay51.py`, proje
+`D:\JOSHUA_TAYLOR_data\data\pscad_work\relay\r51_base.pscx`); aşağıdaki her sayı hem elle hesaplandı hem PSCAD'de
+ölçüldü (`src/pscad_relay51_check.py`). Çizim: `docs/figures/relay51/r51_base_pscad.jpg`, grafik:
+`docs/figures/relay51/r51_base.png`.
+
+**Devre (tek hat gösterimi, beş parça):** kaynak 13.8 kV (arkasında 0.5 Ω reaktans) → kesici BRK → CT → hat 2 + j4 Ω →
+BARA2: yük 2.4 MW ve üç fazlı hata (0.5 s'de başlıyor). 13.8 kV bir dağıtım fideri; aşırı akım rölesinin gerçekte en
+çok kullanıldığı yer.
+
+**Röle zinciri (her blok gerçek rölenin bir parçası):**
+
+| blok (PSCAD adı) | ne yapıyor | ayarı |
+|---|---|---|
+| Multimeter (`multimeter`) | hattın akımını ölçüyor (Iabc, kA) | "Instantaneous Current = Yes" |
+| Data tap (`datatap`) | üç fazdan A fazını seçiyor | Index 1 |
+| Gain (`gain`) = ideal CT | büyük akımı rölenin seviyesine indiriyor: 200:5 | 25 (kA → sekonder A: 1000 × 5/200) |
+| FFT (`fft`) | dalgadan 60 Hz bileşenin RMS genliğini çıkarıyor | 1 Phase, 60 Hz, RMS |
+| Data tap | FFT'nin 7 harmoniğinden 1.sini (60 Hz) seçiyor | Index 1 |
+| **51 rölesi (`itoc51`)** | akım pickup'ı geçince saymaya başlıyor, sayaç 1'e varınca trip = 1 | pickup 5 A, TD 1, IEEE "Very inverse" |
+| Monostable (`monostable`) = kilit | trip bir kez 1 olunca 1'de tutuyor | 100 s |
+| Kesici (`breaker3`, adı BRK) | BRK sinyali 1 olunca açıyor | — |
+
+**Üç ayar ve nasıl seçilir:**
+1. **CT oranı (200:5):** yük akımı 100 A; primer anma akımı bunun üstünde olmalı. Röle sekonder amperi görür.
+2. **Pickup (5 A sekonder = 200 A primer):** rölenin "hata var" demeye başladığı akım. **Yük akımının üstünde**
+   (yoksa hata yokken açar), **en küçük hata akımının altında** (yoksa hatayı görmez) olmalı. Burada yükün 2 katı.
+3. **Time dial (TD) ve eğri:** ne kadar bekleyeceği. Ters zamanlı: akım büyüdükçe süre kısalır.
+   IEEE C37.112 "very inverse": **t = TD × (19.61 / (M² − 1) + 0.491)**, M = akım / pickup. (Sabitler PSCAD'in
+   `itoc51` kodundan okundu. Dikkat: aynı kodda "(Standard) inverse" seçeneği de bu sabitleri veriyor.)
+
+**Elle hesap (temel durum):** faz gerilimi 13.8/√3 = 7.97 kV. Hata yolu j0.5 + 2 + j4 = 2 + j4.5 Ω, |Z| = 4.92 Ω →
+hata akımı 1617 A → sekonder 40.4 A → M = 40.4/5 = 8.08 → t = 19.61/64.3 + 0.491 = **0.796 s**. Yük akımı: 98 A →
+sekonder 2.45 A (pickup'ın yarısı).
+
+**Denemeler (hesap / PSCAD):**
+
+| deneme | röle akımı (A sekonder) | açma süresi, hesap | PSCAD |
+|---|---|---|---|
+| hata yok | 2.45 | açmaz | açmadı |
+| üç fazlı hata, pickup 5, TD 1 | 40.4 | 0.796 s | 0.806 s |
+| aynısı, **TD 0.5** | 40.4 | 0.398 s | 0.408 s |
+| **hata direnci 5 Ω** (akım küçük) | 24.7 | 1.331 s | 1.344 s |
+| **hata direnci 80 Ω** (akım pickup'ın altında) | 4.73 | açmaz | açmadı (2.5 s) |
+| hata yok, **pickup 1 A** (yükün altında) | 2.45 | 4.43 s sonra yanlış açma | 4.48 s'de açtı |
+| kilit (monostable) yok | 40.4 | — | kesici sinyali 1.2 s içinde 95 kez durum değiştirdi (aç-kapa-aç...) |
+
+PSCAD hep ~10 ms geç: FFT'nin yeni genliği görmesi yaklaşık bir çevrim sürüyor (benim yorumum, ayrıca sınamadım).
+
+**Öğrendiklerimiz:**
+- TD süreyi doğru orantılı değiştiriyor (yarısı → yarı süre); pickup hem "görür mü"yü hem süreyi (M üzerinden) belirliyor.
+- Pickup yükün altındaysa röle hata yokken açıyor (güvenlik); hata akımı pickup'ın altındaysa hiç görmüyor (duyarlılık).
+- Kilit şart: kesici açınca akım sıfırlanıyor, rölenin çıkışı 21 ms sonra 0'a dönüyor, kesici hatanın üstüne geri
+  kapanıyor. Gerçek rölelerde bunu trip mühürleme / kilitleme rölesi (86) yapar.
+- 51'in içindeki sayaç (`IntOP`) hata boyunca 0'dan 1'e düz çıkıyor; akım kesilince yavaşça geri iniyor (eski
+  disk rölelerin geri dönüşünü taklit ediyor).
+- **Bizim konuyla bağı (hesap, simüle edilmedi):** bu fideri 2.4 MVA'lık bir inverter besleseydi, akımı 1.2 pu ile
+  sınırlı olduğu için hata akımı en çok 1.2 × 100 = 120 A olurdu; pickup 200 A → 51 rölesi hiç açmaz. Aşırı akım
+  korumasının inverterli sistemde zorlanmasının sebebi bu.
+
+**Elle kurarken (parçaların Master Library'deki grubu, kütüphane dosyasından):** kaynak "Three Phase Voltage Source
+Model 2" (Sources); kesici "3 Phase Breaker", hata "Three Phase Fault" ve "Timed Fault Logic" (Breakers Faults);
+Multimeter (Meters; Components sekmesinde de var); direnç, endüktans, "Three phase resistive load" (Passive);
+"Inverse Time Over Current Relay" (Protection); "On-Line Frequency Scanner" = FFT, Gain, Monostable (CSMF); Data tap ve
+Data label (Miscellaneous), Output Channel (I/O Devices); bu üçü Components sekmesinin Data & I/O bölümünde de olmalı
+(simgeleri var, isimlerini ekranda birlikte doğrulayacağız). Yöntem: "master" sekmesinden parçayı kopyala (Ctrl+C),
+kendi sayfana yapıştır (Ctrl+V), çift tıklayıp ayarı yaz, Wire Mode ile bağla.
+
+**Bu derste olmayanlar (sınırlar):** CT ideal (doyma yok; gerçek CT `ct_double` sonraki iş); yalnız A fazına
+bakılıyor (gerçek rölede üç faz + toprak elemanı 51N); yalnız üç fazlı hata; tek röle (başka röleyle zaman
+koordinasyonu yok); anlık eleman (50) yok. Sıradaki: 2. adım, aynı devrede mesafe rölesi (mho).
+
+## 70. Hangi rölede, hangi devrede çalışacağız, amacımız ne? (16 Kasım 2026)
+
+**Amaç (hocanın 3 Kasım isteği):** rölenin ne olduğunu, tiplerini ve **ayarlarını** kendimiz anlatabilmek ve PSCAD'de
+kendimiz ayarlayabilmek; sonra bize hangi röle tipinin uygun olduğuna karar vermek.
+
+**Hangi röleler (sırayla, üç tane):**
+
+| sıra | röle | neye bakar | ana ayarı | durum |
+|---|---|---|---|---|
+| 1 | aşırı akım (51) | akımın büyüklüğü | pickup, time dial | referans kuruldu (soru 69), elle kurulacak |
+| 2 | mesafe (21, mho) | V/I = empedans, hata ne kadar uzakta | erişim (hattın yüzde kaçı) | sırada |
+| 3 | **negatif-bileşen yön (32Q, `dir_neg32`)** | hata önde mi arkada mı | Z2F, Z2R, a2, k2 | sırada; **bizim asıl rölemiz** |
+
+1 ve 2 öğrenmek için (en basit ve en yaygın iki tip); 3 projenin kendisi: NREL raporunun baktığı ve bizim Python'da
+modellediğimiz eleman.
+
+**Hangi devre:**
+- **Şimdi: mini devre** (soru 69): tek kaynak, tek hat, yük, hata. Üç röle de bunun üstünde, küçük eklemelerle:
+  mesafe ve yön için gerilim ölçümü (VT); yön için hattın öbür ucuna ikinci bir kaynak (tek kaynakta hata hep
+  "önde" olur, yönün anlamı kalmaz). Bu iki ekleme benim planım, henüz kurulmadı.
+- **Sonra: KIUC iki baralı devre** (NREL raporu, 57.1 kV, inverterli): PSCAD'in kendi `dir_neg32` elemanını koyup
+  bizim Python 32Q modelimizle aynı kararı verip vermediğine bakmak (soru 62'deki açık).
+
+**En son hedef:** inverterli sistemde hangi röle elemanının neden şaştığını gerçek röle bloğuyla göstermek ve hocanın
+sinyalinin (δ) buna yardım edip etmediğini aynı blokla sınamak. Çok inverterli / grid-forming işler bu bitene kadar
+bekliyor.
+
+## 71. Hangi tip röleler var, şebekenin neresinde kullanılır, terimler ne demek? (16 Kasım 2026)
+
+Genel ders kitabı bilgisi (kaynak gösterilerek doğrulanmadı; hocaya sunmadan önce bir koruma kitabıyla, örn.
+Blackburn & Domin ya da IEEE C37.2, karşılaştırılmalı).
+
+**Temel fikir:** şebeke **koruma bölgelerine** ayrılır (her jeneratör, trafo, bara, hat ayrı bölge). Her bölgenin
+kendi rölesi ve kesicileri vardır; hata olunca yalnız o bölge kesilir. Her röle tipi **tek bir soru** sorar.
+
+**Numaralar:** röle tiplerinin dünyaca kullanılan kısa adları (ANSI / IEEE C37.2 cihaz numaraları).
+
+| no | adı | sorduğu soru | en çok nerede | ana ayarı |
+|---|---|---|---|---|
+| 50 | anlık aşırı akım | akım çok mu büyük? (beklemeden açar) | dağıtım fideri | pickup |
+| 51 | zamanlı aşırı akım | akım büyük mü, ne kadar süredir? | dağıtım fideri; her yerde yedek | pickup, time dial |
+| 67 | yönlü aşırı akım | akım büyük mü **ve** hata önümde mi? | iki taraftan beslenen hatlar | pickup + yön |
+| 21 | mesafe | V/I'ya göre hata ne kadar uzakta? | iletim hatları | erişim (hattın yüzdesi) |
+| 87 | diferansiyel | giren akım = çıkan akım mı? | jeneratör, trafo, bara, kısa hat | fark eşiği, eğim |
+| 27 / 59 | düşük / yüksek gerilim | gerilim sınırların dışında mı? | jeneratör, inverter bağlantısı | gerilim eşiği, süre |
+| 81 | frekans | frekans sınırların dışında mı? | jeneratör, inverter, yük atma | frekans eşiği, süre |
+| 79 | tekrar kapama | hata geçici miydi? (kesiciyi geri kapatır) | havai dağıtım ve iletim hatları | deneme sayısı, bekleme |
+| 86 | kilitleme | (trip'i tutar, elle sıfırlanır) | her yerde | — |
+| 52 | kesici | (röle değil; akımı kesen cihaz) | her yerde | — |
+
+Sonuna eklenen harfler: **N** ya da **G** = toprak (51N: toprak aşırı akımı), **Q** = negatif bileşen. **32Q**, SEL
+rölelerinde negatif-bileşen **yön elemanının** adı; tek başına açmaz, 67 ve 21'e "hata önde / arkada" bilgisini verir.
+(ANSI'de 32 aslında "yönlü güç" rölesidir; SEL yön elemanlarını 32 ile adlandırıyor.)
+
+**Neden farklı yerde farklı röle:**
+- **Dağıtım fideri** tek taraftan beslenir, akım hep aynı yöne akar → en basit röle yeter: aşırı akım (50/51).
+- **İletim hattı** iki taraftan beslenir, hata akımı kaynağa göre değişir → akımın büyüklüğü yetmez; mesafe (21) ve
+  yön (67/32Q) gerekir; önemli hatlarda hat diferansiyeli (87L).
+- **Jeneratör, trafo, bara** küçük ve iki ucu aynı yerde → giren ve çıkan akımı karşılaştırmak kolay: diferansiyel (87).
+- **Ana ve yedek koruma:** her bölgenin bir ana rölesi olur; o çalışmazsa daha yavaş ayarlanmış bir yedek (çoğunlukla
+  51 ya da komşu hattın mesafe rölesi) açar.
+
+**Terimler:**
+- **Hata (fault):** kısa devre; iletkenin toprağa ya da başka faza değmesi.
+- **CT / VT (PT):** akım ve gerilim trafosu; büyük akımı ve gerilimi rölenin ölçebileceği seviyeye indirir (200:5 gibi).
+- **Primer / sekonder:** CT'nin hat tarafı / röle tarafı. Röle ayarları sekonder amper ile yazılır.
+- **Pickup:** rölenin "hata var" demeye başladığı eşik.
+- **Time dial (TD):** ters zamanlı rölede bekleme süresini ölçekleyen ayar.
+- **Trip:** rölenin kesiciye gönderdiği "aç" sinyali.
+- **Erişim (reach):** mesafe rölesinin hattın ne kadarını koruduğu (örn. %80).
+- **Koordinasyon:** hataya en yakın rölenin önce, uzaktakinin sonra açması için sürelerin sıralanması.
+- **Fazör:** 60 Hz dalganın genliği ve açısı; röle hesaplarını bununla yapar.
+- **Pozitif / negatif / sıfır bileşen (I1, I2, I0):** üç faz akımının üç parçası. I1 dengeli normal kısım; I2 ve I0
+  yalnız dengesizlikte (çoğu hatada) ortaya çıkar; yön elemanı bu yüzden I2'ye bakar.
+
+**Bizim yerimiz:** inverterli bir kaynağa bağlı **hat** koruması; yani tablodaki 21, 67 ve 32Q. İnverter akımı
+sınırladığı ve I2'yi yazılımı belirlediği için en çok etkilenenler 50/51 (akım küçük kalır) ve 32Q (I2 bastırılırsa
+karar veremez). Ders sırası (51 → 21 → 32Q) bu yüzden.
+
+## 72. Gerçek bir tesis çiziminde röleler nasıl gösteriliyor? (16 Kasım 2026, örnek fotoğraf)
+
+Kullanıcının gösterdiği bir tek hat şemasının "Relay information" bölümü (fotoğraf depoya **eklenmedi**: depo açık,
+çizim bir tesise ait olabilir). Fotoğraf eğik; numaralar benim okumam, birkaçı yanlış okunmuş olabilir. Numaraların
+anlamları genel bilgi (IEEE C37.2); çizimin kendi açıklama listesi fotoğrafta kesik.
+
+**Çizim nasıl okunur:** her kutu **bir fiziksel röle cihazı**. Üstte marka/model ve ne koruduğu; soldaki sütun
+cihazın **ölçüp gösterdikleri** (A, V, W, VAr, Hz, pf); sağdaki sütun cihazda **açık olan koruma fonksiyonlarının
+numaraları**; altta haberleşme (IEC 61850 + Modbus) ve sipariş kodu. Yani modern röle = tek kutu, içinde birçok
+numaralı fonksiyon. Bizim "SEL-411L'in içindeki 32Q elemanı" dediğimiz de bu.
+
+| kutu | cihaz, ne koruyor | fonksiyonlar (okunan) |
+|---|---|---|
+| 1, 3, 5 | ABB REF615 / REF620, fider | 50, 51, 51G, 51V, 27, 25, 64, 50BF, 74TC, 86 |
+| 2 | ABB REM620, motor | 14, 26, 27, 46, 49, 66, 81U, 74TC, 86 (+ "50S") |
+| 4, 9 | jeneratör koruma | 87, 40, 32, 46, 27, 59, 81O, 81U, 50, 51, 51N, 67N, 50/27, 50BF, 24, 78, 74TC, 86 |
+| 6 | ABB RET620, trafo | 87, 50, 51, 51G, 64, 27, 25, 50BF, 74TC, 86 |
+| 7 | ABB RED615, hat diferansiyeli | 87, 86 |
+| 8 | PQM | röle değil, ölçü cihazı (V, A, W, pf, Hz, VAr) |
+
+Soru 71 ile uyumu: fiderde aşırı akım (50/51), trafo ve jeneratörde diferansiyel (87), hepsinde kilit (86).
+
+**Soru 71'de olmayan numaralar:** 14 düşük hız; 24 aşırı uyarma (V/Hz); 25 senkron kontrol (kesiciyi kapatmadan önce
+iki taraf uyumlu mu); 26 sıcaklık; 32 yönlü güç (jeneratörde ters güç); 40 uyarma kaybı; 46 negatif-bileşen akımı
+(dengesizlik); 49 termik aşırı yük; 50BF kesici arızası (trip verildi, kesici açmadı → komşuları aç); 50/27 yanlışlıkla
+enerjilendirme; 51V gerilime bağlı aşırı akım; 64 toprak hatası; 66 saatte yol alma sayısı; 67N yönlü toprak aşırı
+akımı; 74TC trip devresi denetimi; 78 senkron dışı kalma; 81O / 81U yüksek / düşük frekans. VTS = gerilim trafosu
+denetimi (VT sigortası atarsa gerilime bakan fonksiyonları kilitler). "50S"in anlamından emin değilim.
+
+**Bizim için üç not:**
+- Buradaki **32**, ANSI anlamıyla yönlü güç; SEL'in 32Q yön elemanıyla aynı şey değil (soru 71).
+- **46** ve **67N**: negatif bileşen ve yön, gerçek cihazlarda sıradan fonksiyonlar.
+- **51V** jeneratörün hata akımı zamanla düştüğü için var: gerilim düşünce pickup'ı indirir. İnverterin düşük hata
+  akımı sorununa en yakın klasik çözüm (genel bilgi; bizim çalışmamızda denenmedi).
+
+Bu bilgisayarda ABB'nin bu röleleri ayarlama programı (PCM600 2.14) kurulu görünüyor; gerçek bir rölenin ayar
+listesinin nasıl göründüğüne oradan bakılabilir (açıp bakmadım).
+
+## 73. Bizim projede dijital röle mi, eski röle tipleri mi olacak? (16 Kasım 2026)
+
+Genel ders kitabı bilgisi (kaynakla tek tek karşılaştırılmadı).
+
+**Cevap: dijital** (mikroişlemcili, "numerik") röle. Eski tiplerle çalışmıyoruz.
+
+| kuşak | içinde ne var | nasıl karar verir |
+|---|---|---|
+| elektromekanik (eski) | bobin, dönen disk, yay | akım diski döndürür, disk kontağa değince açar |
+| statik (ara dönem) | analog elektronik devre | devre akımı bir eşikle karşılaştırır |
+| **dijital (bugün)** | mikroişlemci | akımı ve gerilimi örnekler, fazör hesaplar, ayarlarla karşılaştırır |
+
+**Neden dijital:**
+1. NREL raporundaki (NREL/TP-5D00-94430) röle SEL-411L; dijital bir röle.
+2. Baktığımız yön elemanı (32Q) V₂ ve I₂ fazörlerinden bir sayı (z₂) hesaplıyor: dijital rölenin içindeki bir hesap
+   (soru 66).
+3. PSCAD'deki zincir aynı: CT/VT → FFT (fazör) → röle bloğu → trip. PSCAD rölenin kutusunu değil, içindeki hesabı
+   modelliyor (soru 67, 69).
+4. İnverterlerin koruma sorunu bugünün şebekesinin sorunu; orada dijital röleler var.
+
+**Eski rölelerden kalan:** isimler ve ayarlar. 50, 51, 21, 67 numaraları, "pickup" ve "time dial" eski rölelerden
+geliyor (time dial, disk rölenin üstündeki gerçek bir ayar düğmesiydi). Dijital röle aynı işleri hesapla yapıyor;
+51'in ters-zaman eğrisi eski diskin davranışını taklit ediyor. 51'i öğrenmek bu yüzden boşa gitmiyor.
+
+**Hocaya tek cümle:** "We model a digital (microprocessor) relay, like the SEL-411L in the NREL report: it samples
+the CT and VT signals, computes phasors and compares them with its settings."
+
+## 73. Çizimdeki "2500/1A" yuvarlak şey ne, neden gerekli; röledeki "VTS" ne? (16 Kasım 2026)
+
+Soru 72'deki çizimden; genel bilgi, çizimin kendi açıklama listesiyle doğrulanmadı.
+
+**Hattın üstündeki daire = akım trafosu (CT).** Etiketi: **2500/1A** oran (hatta 2500 A → sekonderde 1 A); yanındaki
+**3** = üç tane, faz başına bir; **CLASS 1** doğruluk sınıfı (anma akımında ~%1 hata; ölçü sınıfı, PQM ölçü cihazını
+beslediği için; koruma CT'leri 5P20 gibi sınıflar taşır); **5VA** anma yükü (kablo + bağlı cihaz). Hattaki üç çizgi
+(///) = üç tel. İkinci daire ("1/1A ... CT to PMS") büyük olasılıkla 1:1 ara CT: aynı sinyali başka bir sisteme,
+devreleri ayırarak taşır.
+
+**CT neden gerekli (daha iyi ölçmek için değil; CT küçük bir hata ekler):**
+1. Akım çok büyük: röle/ölçü cihazı 1 A ya da 5 A girişe göre yapılır; CT bilinen oranla küçültür.
+2. Gerilim tehlikeli: CT ölçü devresini hattan yalıtır; röle ve panel düşük, topraklı gerilimde kalır.
+3. Standart: her CT anma akımında 1 A ya da 5 A verdiği için aynı röle her hatta kullanılır.
+Bedeli: gerçek CT çok büyük hata akımında doyabilir, röle akımı olduğundan küçük ve bozuk görür. Mini devremizdeki
+CT ideal (kazanç bloğu), doymaz. VT aynı işi gerilim için yapar (kV → ~100 V).
+
+**VTS = voltage transformer supervision (gerilim trafosu denetimi; "fuse failure" da denir).** Fotoğrafta "VTB" gibi
+de okunuyor; yazı tipi yüzünden emin değilim, büyük olasılıkla VTS. Bir koruma değil, bir **denetim**: VT'nin
+sigortası atarsa ya da kablosu koparsa röle gerilimi sıfır görür ve bunu hata sanabilir (27 düşük gerilim, 21 mesafe,
+51V yanlış açar). VTS bunu ayırt eder (gerilim kayboldu ama akım normal; ya da V2 var ama I2 yok), gerilime bakan
+fonksiyonları kilitler ve alarm verir. (Gerçekten "VTB" ise bara gerilim trafosu anlamına gelebilir; çizimin
+açıklama listesi söyler.)
+
+## 74. Çizimdeki Relay 6 (trafo) ve Relay 7 (hat diferansiyeli) ne yapıyor? (16 Kasım 2026)
+
+Soru 72'deki çizimden. Fonksiyon numaraları fotoğraftan benim okumam; açıklamalar genel bilgi (ABB kılavuzlarıyla
+karşılaştırılmadı, cihazların gerçek ayarları çizimde yok).
+
+**İkisinin ortak fikri, diferansiyel (87):** korunan bölgenin iki ucuna CT konur; röle giren ve çıkan akımı
+karşılaştırır. Eşitse (yük ya da dış hata) açmaz; fark varsa akım bölgenin **içinde** bir yere kaçıyordur → trip.
+Yalnız kendi bölgesini görür, bu yüzden beklemeden (zaman koordinasyonu olmadan) açabilir.
+
+**Relay 6: ABB RET620, trafo koruma rölesi.** Fonksiyonlar: 87, 50, 51, 51G, 64, 27, 25, 50BF, 74TC, 86; sol sütunda VTS.
+
+| no | bu trafoda ne işe yarıyor |
+|---|---|
+| **87** (ana koruma) | trafonun iki tarafının akımını karşılaştırır; trafonun içindeki hatayı yakalar |
+| 50 / 51 | yedek aşırı akım: 87 çalışmazsa ya da hata trafonun dışındaysa |
+| 51G | toprak aşırı akımı (trafonun toprak bağlantısındaki akım) |
+| 64 | toprak hatası; trafolarda çoğunlukla "sınırlı toprak hatası" (restricted earth fault), sargıdaki toprak hatasına duyarlı — çizimde hangisi olduğu yazmıyor |
+| 27 | düşük gerilim |
+| 25 | senkron kontrol: kesici kapatılmadan önce iki taraf uyumlu mu |
+| 50BF | kesici arızası: trip verildi, kesici açmadı → komşu kesicileri aç |
+| 74TC, 86, VTS | trip devresi denetimi, kilit, gerilim trafosu denetimi |
+
+Trafoda 87'nin üç zorluğu ve ayarları: (1) iki taraftaki akım **farklı büyüklükte** (gerilim oranı) ve **farklı
+açıda** (bağlantı grubu, örn. Dyn11) → röleye trafo oranı, bağlantı grubu ve CT oranları girilir, röle düzeltir;
+(2) **enerjilendirme akımı (inrush)**: trafo devreye alınırken yalnız bir taraftan büyük akım çeker, iç hataya
+benzer → röle akımdaki 2. harmoniğe bakıp o sırada kilitler; (3) CT hataları → **eğimli (bias) karakteristik**: akım
+büyüdükçe trip için gereken fark da büyür. Ana ayarlar: fark pickup'ı, eğim, 2. harmonik kilitleme eşiği.
+
+**Relay 7: ABB RED615, hat diferansiyel rölesi.** Fonksiyonlar: 87 (87L), 86.
+
+Aynı fikir, ama bölge bir **hat ya da kablo**; iki ucu birbirinden uzak. Bu yüzden **iki röle** gerekir (her uçta
+bir RED615); röleler ölçtükleri akımı bir **haberleşme kanalı** (çoğunlukla fiber optik) üzerinden birbirine yollar,
+her biri kendi akımını karşı uçtan gelenle karşılaştırır; fark varsa iki uç birden açar. Bu çizimde tek kutu var;
+eşi büyük olasılıkla hattın öbür ucundaki tesiste (çizimde görünmüyor). Ana ayarlar: fark pickup'ı, eğim, CT oran
+düzeltmesi; haberleşme koparsa ne yapılacağı (çoğunlukla yedek aşırı akıma düşer).
+
+**Fark özeti:** Relay 6 = 87T, tek röle, iki CT aynı trafo merkezinde, oran/açı düzeltmesi ve inrush kilidi gerekir,
+yanında yedek fonksiyonlar var. Relay 7 = 87L, iki röle + haberleşme, yalnız diferansiyel.
+
+**Bizim konuyla bağı (genel bilgi, bizim çalışmamızda denenmedi):** diferansiyel, akımın büyüklüğüne ya da yönüne değil
+iki ucun farkına baktığı için inverterli sistemlerde en az etkilenen koruma olarak anılır; bedeli haberleşme kanalı.
+
+## 75. Çizimde mesafe koruması (21) var mı? (16 Kasım 2026)
+
+**Görünen kısımda yok.** Dokuz kutunun hiçbirinde 21 numarası okunmuyor; çizimin sağındaki açıklama listesi numara
+sırasıyla gidiyor ve 14'ten sonra 24 geliyor, yani 21 listede de yok. (Relay 9 kutusunun altı ve listenin sonu
+fotoğrafta kesik; 21 için bu fark etmez, çünkü liste sıralı.)
+
+Hatlar burada aşırı akımla (50/51, fider röleleri 1, 3, 5) ve hat diferansiyeliyle (87, Relay 7) korunuyor.
+Olası sebep (genel bilgi, çizimden doğrulanamaz): tesis orta gerilimli bir sanayi / üretim tesisine benziyor
+(motor, jeneratör, trafo, fider); kablolar kısa. Mesafe rölesi uzun iletim hatları içindir; kısa kabloda empedans
+çok küçük olduğu için "hata ne kadar uzakta" sorusu ayırt edici olmaz, onun yerine diferansiyel kullanılır.
+
+## 76. İçinde mesafe koruması (21) olan benzer örnekleri nerede bulurum? (16 Kasım 2026)
+
+21, iletim seviyesindeki (yaklaşık 69 kV ve üstü) hat koruma çizimlerinde görünür; soru 72'deki gibi orta gerilimli
+tesis çizimlerinde çoğunlukla olmaz. Aşağıdakilerden yalnız 1. madde bu bilgisayarda dosyadan doğrulandı; diğerleri
+16 Kasım 2026 web aramasının sonuçları, sayfaları açıp şekillerine bakmadım.
+
+1. **Bu bilgisayarda, çalışan örnek:** `C:\Users\Public\Documents\PSCAD\5.0\Examples\Protection\Protection_x4.pscx`
+   (PSCAD'in kendi örneği; içinde `mho_circle`, `l2l_imp`, `l2g_imp` ve `dist_relay1` modülü var). Çizim değil,
+   koşan bir mesafe rölesi; 2. adımın (mho) başlangıç noktası.
+2. **GE Vernova (Multilin) iletim koruma rehberi:** tipik hat paketlerini numaralarıyla listeliyor (21P, 21G, 67P,
+   67N, 50BF, 25, 79). https://www.gegridsolutions.com/Multilin/family/transmission/transmission_guide.htm
+3. **GE L90 kılavuzu:** hat diferansiyeli (87L) yanında 21P, 21G, 67N, 50BF, 25, 79 fonksiyon tablosu.
+   https://www.manualslib.com/manual/1243803/Ge-L90.html?page=26
+4. **SEL-311C (mesafe rölesi) dokümanları** ve SEL'in mesafe şemaları uygulama notu (iki uçta röle, Z1–Z4 bölgeleri).
+   https://selinc.com/products/311C/docs/ , https://selinc.com/api/download/2867/?lang=en
+5. **ENTSO-E, HV/EHV iletim sistemi için en iyi koruma uygulamaları** (ücretsiz PDF).
+   https://eepublicdownloads.entsoe.eu/clean-documents/SOC%20documents/Best_protection_practices_for_HV_EHV_AC_transmission_system.pdf
+6. **Network Protection & Automation Guide (NPAG), bölüm 10–11 (Distance protection, schemes):** ders kitabı
+   düzeyinde, ayar örnekli. Resmi indirme bağlantısını doğrulayamadım; bulunan kopyaların çoğu üçüncü taraf yüklemesi.
+
+Hocanın gönderdiği NREL raporundaki röle (SEL-411L) da bir hat rölesi ve içinde mesafe elemanları var (soru 66);
+raporda bu tarz bir fonksiyon çizimi olup olmadığına yeniden bakmadım.
+
+## 77. Mini devrede neden 13.8 kV? (17 Kasım 2026)
+
+Benim seçimim; röle dersi için gerekli bir değer değil, herhangi bir orta gerilim olabilirdi. Neden bu:
+1. **Gerçekçi:** 13.8 kV, Kuzey Amerika'da yaygın bir dağıtım (fider) gerilimi (12.47, 13.2, 13.8, 34.5 kV gibi);
+   aşırı akım rölesi (51) de en çok bu seviyedeki fiderlerde kullanılıyor (soru 71). Büyük jeneratörlerin çıkış
+   gerilimi de çoğunlukla 13.8 kV. (Genel bilgi.)
+2. **Sayılar yuvarlak çıkıyor:** 2.4 MW yük → yaklaşık 100 A; hata → yaklaşık 1600 A. CT 200:5 ile röle 2.45 A ve
+   40 A görüyor; elle hesap kolay.
+
+Gerilim değişirse akımlar değişir, pickup ve CT oranı da ona göre seçilir; rölenin çalışma mantığı aynı kalır.
+
+Elle kurulan devrede (`r51_hand`) kaynak 17 Kasım'da kontrol edildi: `source_3`, Inductive, 13.8 kV, 60 Hz,
+L = 0.001326 H (0.5 Ω), yıldız noktası topraklı. "Base Voltage 230 kV" alanı yalnız "At the Terminal" seçilince
+kullanılıyor; bizde etkisiz.
+
+## 78. Kaynakta neden 0.5 Ω? (17 Kasım 2026)
+
+**Ne temsil ediyor:** kaynağın arkasındaki bütün şebekeyi (trafo merkezi, üstteki iletim sistemi). Gerçek bir şebeke
+sonsuz güçlü değildir; hata olunca akımı bir iç empedans sınırlar. Bu reaktans o iç empedans (Thevenin eşdeğeri).
+Değer benim seçimim.
+
+**Ne kadar güçlü bir şebeke demek:** kaynak çıkışında kısa devre olsa akım 7.97 kV / 0.5 Ω = **15.9 kA**, kısa devre
+gücü 13.8² / 0.5 = **381 MVA**. Bir dağıtım trafo merkezi için makul bir değer (genel bilgi; kaynakla doğrulanmadı).
+
+**Neden küçük:** hattın empedansından (2 + j4 Ω) küçük seçildi; böylece hata akımını çoğunlukla hat belirliyor ve
+hatanın hattın neresinde olduğu akımı değiştiriyor (aşırı akım rölesinin işi bu farkı görmek).
+
+**Değişse ne olur (BARA2'de üç fazlı hata, pickup 5 A, TD 1; elle hesap, PSCAD'de koşturulmadı):**
+
+| kaynak reaktansı | hata akımı | röle akımı (sekonder) | M | açma süresi |
+|---|---|---|---|---|
+| 0 Ω (sonsuz güçlü şebeke) | 1782 A | 44.5 A | 8.91 | 0.741 s |
+| **0.5 Ω (bizim)** | 1617 A | 40.4 A | 8.08 | 0.796 s |
+| 5 Ω (zayıf şebeke) | 864 A | 21.6 A | 4.32 | 1.60 s |
+
+Şebeke zayıfladıkça hata akımı küçülür, röle yavaşlar; daha da zayıflarsa pickup'ın altına düşer ve hiç görmez.
+İnverterli kaynakla olan da bunun uç hali: inverter akımı ~1.2 pu ile sınırlıyor, yani çok zayıf bir kaynak gibi.
+
+## 79. Mini devredeki aşırı akım rölesi ayarları olağan mı, gerçekte böyle mi kurulur? (17 Kasım 2026)
+
+Genel uygulama bilgisi; bir koruma kitabı ya da kurum standardıyla karşılaştırılmadı.
+
+**Yapı olağan, ayrıntı basitleştirilmiş.** Gerçek bir sayısal röle de aynı zinciri içinde yapar: CT akımı → örnekleme
+ve filtre → 60 Hz genliği → pickup ve ters zaman eğrisiyle karşılaştırma → trip kontağı → kesicinin açma bobini.
+Bizde farklı olanlar:
+
+| bizde | gerçekte |
+|---|---|
+| yalnız A fazı | üç faz ayrı ayrı (en büyüğü karar verir) + toprak elemanı 51N |
+| ideal CT (kazanç 25) | gerçek CT, büyük hatada doyabilir |
+| PSCAD FFT bloğu | rölenin kendi filtresi (çoğunlukla bir çevrimlik Fourier) |
+| monostable kilit | trip mühürleme ve kilitleme rölesi (86) |
+| yalnız 51 | 51 + anlık eleman 50, çoğu fiderde tekrar kapama 79 |
+
+**Değerler olağan aralıkta:**
+- **CT 200:5:** primer anma akımı en büyük yükün biraz üstünde seçilir (yük ~100 A). 5 A sekonder Kuzey Amerika'da
+  yaygın; Avrupa/IEC'de 1 A (soru 73'teki 2500/1A gibi).
+- **Pickup 200 A (yükün 2 katı):** faz 51'i için yaygın kural en büyük yükün yaklaşık 1.25–2 katı; aynı zamanda en
+  uzak hatanın akımının rahatça altında (bizde 1617 A, 8 kat). İki koşul da sağlanıyor.
+- **Eğri, IEEE "very inverse":** fiderlerde yaygın. Eğri, aşağıdaki cihazlara (sigorta, başka röle) uyum için seçilir;
+  sigortayla uyum için çoğunlukla "extremely inverse".
+- **Time dial 1:** gerçekte **koordinasyonla** seçilir: alttaki cihazdan belli bir süre (çoğunlukla ~0.2–0.4 s) sonra
+  açacak şekilde. Bizim devrede altta başka cihaz yok, bu yüzden TD 1 keyfi bir seçim.
+
+**PSCAD notu:** `itoc51`'in IEEE seçeneklerinde "(Standard) inverse" ile "Very inverse" aynı sabitleri kullanıyor
+(19.61, 0.491, p = 2; soru 69). IEEE C37.112'de üç eğri var (moderately, very, extremely inverse); "standard inverse"
+IEC'nin adı. Biz "Very inverse"i seçtik, IEEE'nin very inverse eğrisiyle aynı.
+
+## 80. Neden ters zamanlı (inverse time)? (17 Kasım 2026)
+
+**Ters zamanlı:** akım ne kadar büyükse röle o kadar çabuk açar. Bizim eğri (IEEE very inverse, pickup 200 A, TD 1;
+eğri formülünden hesap):
+
+| akım / pickup (M) | hat akımı | açma süresi |
+|---|---|---|
+| 1.2 | 240 A | 45 s |
+| 1.5 | 300 A | 16.2 s |
+| 2 | 400 A | 7.03 s |
+| 4 | 800 A | 1.80 s |
+| 8.08 (bizim hata) | 1617 A | 0.80 s |
+| 20 | 4000 A | 0.54 s |
+
+**Neden böyle (genel bilgi):**
+1. **Hasar akımla hızlı artar.** Kablo ve trafodaki ısınma akımın karesiyle orantılı (I²t). Küçük bir aşırı akıma
+   cihaz bir süre dayanır; büyük hata akımına dayanmaz. Röle de buna göre bekler ya da hemen açar.
+2. **Zararsız kısa aşırı akımlara izin verir.** Motor kalkışı, trafo enerjilendirme (inrush), uzun kesintiden sonra
+   yüklerin hep birlikte devreye girmesi birkaç saniye pickup'ı geçebilir; sabit ve kısa bir süre bunlarda yanlış açardı.
+3. **Koordinasyon.** Aynı fiderde art arda birkaç röle/sigorta varsa, hataya en yakın olan önce açmalı, kaynağa yakın
+   olan yedek olarak sonra. Ters eğriler, farklı time dial'larla bu sırayı geniş bir akım aralığında korur; sigortalar
+   ve cihazların hasar eğrileri de zaten ters zamanlı olduğu için onlarla uyumlu çizilebilir.
+
+**Seçenekler:** anlık (50: hiç beklemez, çok büyük akımlar için), sabit zamanlı (akım ne olursa olsun aynı süre),
+ters zamanlı (51). Fiderlerde çoğunlukla 50 + 51 birlikte kullanılır.
+
+## 81. Elle kurulan devre (r51_hand) referansla aynı sonucu verdi mi? (17 Kasım 2026)
+
+**Evet, birebir.** Devreyi kullanıcı PSCAD'de kendisi kurdu (`D:\JOSHUA_TAYLOR_data\data\pscad_work\relay\r51_hand.pscx`):
+kaynak, kesici, CT, hat, hata + zamanlayıcı, yük; röle sırası Iabc → datatap → kazanç 25 → FFT → datatap → itoc51 →
+monostable → BRK; üç çıkış kanalı. Her parça Python'dan (`mhi.pscad`, `ports()`) ve derleme mesajlarıyla kontrol edildi;
+0 hata ile derlendi. Koşu 2.5 s, adım 50 µs, kayıt 250 µs.
+
+| | elle hesap | r51_base (betikle kurulan) | **r51_hand (elle kurulan)** |
+|---|---|---|---|
+| röle akımı, hatadan önce | 2.44 A | 2.45 A | 2.45 A |
+| röle akımı, hata sırasında | 40.42 A | 40.40 A | 40.40 A |
+| açma süresi (hatadan sonra) | 0.796 s | 0.806 s | 0.806 s |
+| kesici | — | 1.306 s'de açtı, açık kaldı | 1.306 s'de açtı, açık kaldı |
+
+Grafik: `docs/figures/relay51/r51_hand.png`.
+
+**Kurarken öğrenilenler:**
+- Her parçanın bağlantı noktası belli bir yerde (ör. datatap'ta girişi sol üst uç; datalabel'da küçük daire); yazının
+  durduğu yer değil.
+- PSCAD, bir telin **ortasına** denk gelen girişi de bağlı sayıyor (derlemeyle doğrulandı). Benim "yalnız uçlar
+  birleşince bağlanır" demem yanlıştı.
+- Gerçekten bağlanmamış bir giriş derlemede "Input port ... is floating" hatası verir; en güvenilir kontrol bu.
+- `itoc51`'in varsayılan eğrisi "Extremely inverse"; "Very inverse" elle seçilmeli (yoksa açma 0.56 s olurdu).
+
+## 82. Hocaya gösterirken değerleri nereden göstereceğim ("oldu, kesici açtı" diye)? (17 Kasım 2026)
+
+**PSCAD'in içinden, grafikle.** `r51_base`'e PSCAD'in kendi grafiği eklendi (`src/pscad_relay51.py`, devrenin altında):
+üç panel, Run'a basınca canlı çizilir.
+
+1. **Hattaki akım, A fazı (kA):** hatadan önce küçük (~0.14 kA tepe), 0.5 s'de büyür (~2.3 kA tepe), 1.31 s'de sıfır.
+2. **Rölenin gördüğü akım (A, sekonder):** 2.45 A → 40.4 A → 0. Pickup 5 A.
+3. **TRIP51 ve BRK:** röle 1.306 s'de 1 verir; BRK 1 olur ve öyle kalır (kesici açık).
+
+Sağdaki okumalar iki zaman işaretinin değerlerini gösterir: **×** hata anında (0.5 s), **○** açma anında (1.306 s).
+Örneğin röle akımı × 2.445 A, ○ 40.396 A; BRK × 0, ○ 1. İşaretler fareyle sürüklenebilir (PSCAD'de denenmedi).
+
+**Sunumda sıra:** devreyi göster (her parçanın üstünde ne olduğu yazıyor) → Run → grafikte "hata 0.5 s'de başladı,
+röle 40 A gördü, 0.806 s sonra trip verdi, kesici açtı ve açık kaldı" → elle hesapla karşılaştır (0.796 s).
+
+**Dikkat:** betikle yeniden kurulunca grafiklerin dikey ölçeği −1…1'de kalıyor (API ile ayarlanamadı). Koşudan sonra
+grafiğe sağ tıkla → **Zoom → Reset All Extents** (bütün grafikleri veriye sığdırır), gerekirse her panelde
+**Zoom → Y Extents**. Resim: `docs/figures/relay51/r51_base_pscad_graph.jpg`.
+
+## 83. Simülasyon her koşuda aynı hatayı alıp aynı değeri mi verir? (17 Kasım 2026)
+
+**Evet.** PSCAD'de rastgelelik yok: aynı devre, aynı ayarlar → her koşuda birebir aynı sonuç. 17 Kasım'da `r51_base`
+birkaç kez yeniden kurulup koşturuldu, elle kurulan `r51_hand` de koşturuldu; hepsinde röle akımı 40.40 A, açma
+0.806 s çıktı.
+
+Farklı sonuç için bir şeyi değiştirmek gerekir: hata direnci, hatanın yeri ya da tipi, pickup, time dial, eğri. Hatanın
+başladığı an (0.5 s yerine 0.505 s gibi, dalganın başka bir noktası) ilk çevrimlerde akımı biraz değiştirir; açma
+süresine etkisi küçük olmalı ama denenmedi.
+
+Gerçek dünyada her hata farklıdır (direnç, yer, an); simülasyonun faydası da bu: bir şeyi bilerek değiştirip etkisini
+tek başına görmek.
+
+## 84. Trip verdikten sonra devre bir süre sonra kendiliğinden düzeliyor mu? (17 Kasım 2026)
+
+**Ders devresinde (`r51_base`, `r51_hand`) hayır:** kilit (monostable) trip'i 100 s tutuyor, kesici açık kalıyor, hat
+enerjisiz. Rölenin kendi çıkışı (TRIP51) 21 ms sonra 0'a dönüyor ama kesici açık kalıyor. Gerçekte bunun karşılığı
+kilitleme rölesi (86): biri elle sıfırlamadan kesici kapanmaz.
+
+**Gerçek havai hatlarda çoğunlukla evet: tekrar kapama (79).** Havai hat hatalarının çoğu geçicidir (yıldırım,
+dokunup geçen dal); kesici açınca ark söner. 79 kesiciyi bir süre sonra kendisi kapatır; hata gittiyse enerji geri
+gelir, hâlâ varsa röle yeniden açar ve birkaç denemeden sonra kilitlenir. (Genel bilgi.)
+
+**Deneme (ders devresi değişmedi, iki ayrı geçici proje):** kilidin süresi 0.5 s yapıldı, yani kesici her trip'ten
+0.5 s sonra kendisi kapanıyor (`src/pscad_relay51.py`'e `fdur`, `tlatch` seçenekleri eklendi; varsayılanlar 100 s,
+eski davranış).
+
+| | hata | sonuç |
+|---|---|---|
+| `r51_reclose_temp` | 0.5–1.5 s (geçici) | 1.306 s trip, 1.806 s geri kapama; hata gitmiş, röle akımı 2.45 A'ya döndü, enerji geri geldi |
+| `r51_reclose_perm` | 0.5 s'den itibaren (kalıcı) | 1.806 s'de hatanın üstüne kapandı, **31 ms sonra** yeniden açtı; 3.5 s içinde 5 kez aç-kapa |
+
+Kalıcı hatada ikinci açma çok hızlı: rölenin sayacı (IntOP) sıfırlanmamış (0.99'da duruyor, yavaşça iniyor), yani
+röle önceki hatayı "hatırlıyor". Bizim basit modelde deneme sayısını sayan ve kilitleyen bir mantık yok, bu yüzden
+sonsuza kadar aç-kapa yapıyor; gerçek 79 birkaç denemeden sonra durur. Grafik: `docs/figures/relay51/r51_reclose.png`.
+Deneme projeleri PSCAD'den kapatıldı; `r51_base` ve `r51_hand` dokunulmadı.
+
+## 85. Hocaya bu devreyi gösterince ne sormalı, hangi yöne gitmeli? (17 Kasım 2026)
+
+3 Kasım'daki dört istek (`docs/meetings/2026-11-03_meeting.md`): (1) röle nedir, tipleri, **ayarları**; (2) içinde röle
+olan küçük, basit bir devre; (3) PSCAD'de röleye ayar vermek; (4) bize hangi röle tiplerinin uygun olduğuna karar vermek.
+
+**Gösterilecek (1–3'e cevap):** `r51_base`/`r51_hand`: 13.8 kV fider, gerçek PSCAD röle bloğu (`itoc51`), CT 200:5,
+pickup 200 A, TD 1, IEEE very inverse; hata 0.5 s → trip 0.806 s (elle 0.796 s) → kesici açık kalır. Ayar
+değişince sonuç değişir (TD 0.5 → 0.41 s; 5 Ω hata → 1.34 s; 80 Ω → açmaz; pickup yükün altında → yanlış açar).
+Röle tipleri ve yerleri: soru 71; gerçek çizim örneği: soru 72–74.
+
+**Sorulacaklar (4'e ve sonrasına):**
+1. Bu devre istediğiniz seviyede mi, yoksa eksik gördüğünüz bir şey var mı (gerçek CT, üç faz + 51N, anlık 50)?
+2. Bizim konu (inverter beslenen hat) için uygun röleler 21 (mesafe), 67/32Q (yön) ve 87L (hat diferansiyeli)
+   diye düşünüyoruz. Katılıyor musunuz, önce hangisine bakalım?
+3. Ayarları kendimiz ilkelerden mi seçelim (burada yaptığımız gibi), yoksa NREL raporundaki SEL ayarlarını mı alalım?
+4. Bir sonraki adım aynı küçük devrede mesafe rölesi (mho) ve `dir_neg32` mi olsun, yoksa doğrudan raporun KIUC
+   devresine röle bloklarını mı koyalım?
+5. Python'daki 32Q modelimizi PSCAD'in `dir_neg32` bloğuyla karşılaştırmak yeterli bir doğrulama mı?
+6. Üniversitede gerçek röle ya da test seti (SEL, Omicron) görebileceğimiz bir laboratuvar var mı?
+
+**Önerilen yön (tek):** hocanın listesinde kal. Aynı küçük devrede önce mesafe (21), sonra yön (32Q, ikinci kaynak
+eklenerek); sonra `dir_neg32`'yi KIUC'a koyup Python modelimizle karşılaştır. Çok inverterli / grid-forming işler
+bundan sonra.
+
+**Hocanın sorabilecekleri ve kısa cevapları:**
+- Pickup neden 200 A? Yükün (98 A) ~2 katı, en uzak hatanın (1617 A) çok altında.
+- TD neden 1? Koordinasyon yapılacak alt cihaz yok; keyfi seçim, gerçekte koordinasyonla seçilir.
+- Neden very inverse? Fiderlerde yaygın; sigortayla uyum gerekirse extremely inverse.
+- 0.8 s nereden? Eğri formülü: M = 40.4/5 = 8.08 → 0.796 s; PSCAD 0.806 s (FFT'nin bir çevrim gecikmesi).
+- Yalnız A fazı mı? Evet, üç fazlı hatada yeterli; B-C hatasını görmez (sınır, bilerek).
+- İnverter olsaydı? Akım ~1.2 pu ile sınırlı; 2.4 MVA inverter için ~120 A < 200 A pickup → 51 açmaz
+  (elle hesap, simüle edilmedi).
